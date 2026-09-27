@@ -1,2 +1,0 @@
-# TNOGame
-Vibe code game
