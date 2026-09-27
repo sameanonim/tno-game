@@ -1,0 +1,263 @@
+[gd_scene format=3 uid="uid://c6l812m8laq1a"]
+
+[ext_resource type="Script" path="res://ui/screens/settings_language.gd" id="1_lang"]
+[ext_resource type="Shader" path="res://shaders/crt_terminal.gdshader" id="2_crt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.04, 0.08, 0.06, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.18, 0.55, 0.38, 1)
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.03, 0.06, 0.05, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.45, 0.3, 1)
+content_margin_left = 14.0
+content_margin_top = 14.0
+content_margin_right = 14.0
+content_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.05, 0.12, 0.08, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.6, 0.4, 1)
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.1, 0.25, 0.16, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.95, 0.65, 1)
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("2_crt")
+shader_parameter/curvature = 0.025
+shader_parameter/vignette_strength = 0.8
+shader_parameter/scanline_count = 540.0
+shader_parameter/scanline_intensity = 0.14
+shader_parameter/chromatic_aberration = 0.002
+shader_parameter/phosphor_tint = Color(0.95, 1, 0.98, 1)
+shader_parameter/brightness_boost = 1.05
+shader_parameter/flicker_speed = 8.0
+shader_parameter/flicker_strength = 0.01
+
+[node name="SettingsLanguage" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lang")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.03, 1)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 24.0
+offset_right = -32.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="HeaderPanel" type="PanelContainer" parent="VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="VBox" type="VBoxContainer" parent="VBox/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HeaderLabel" type="Label" parent="VBox/HeaderPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.75, 1)
+theme_override_font_sizes/font_size = 20
+text = "СИСТЕМА УПРАВЛЕНИЯ БУНКЕРОМ // СЕТЬ TNO-NET 1962"
+
+[node name="SubheaderLabel" type="Label" parent="VBox/HeaderPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.7, 0.55, 1)
+theme_override_font_sizes/font_size = 14
+text = "[КОНФИГУРАЦИЯ СИСТЕМЫ / СИСТЕМНЫЙ ЯЗЫК]"
+
+[node name="MainSplit" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="LeftColumn" type="VBoxContainer" parent="VBox/MainSplit"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="LangListPanel" type="PanelContainer" parent="VBox/MainSplit/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="VBox/MainSplit/LeftColumn/LangListPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="VBox/MainSplit/LeftColumn/LangListPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.95, 0.7, 1)
+theme_override_font_sizes/font_size = 15
+text = "┌── [SYS-LANG] ВЫБОР ЯЗЫКОВОГО ПАКЕТА ТЕРМИНАЛА ──┐"
+
+[node name="HSeparator" type="HSeparator" parent="VBox/MainSplit/LeftColumn/LangListPanel/VBox"]
+layout_mode = 2
+
+[node name="LangList" type="VBoxContainer" parent="VBox/MainSplit/LeftColumn/LangListPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="BiosPanel" type="PanelContainer" parent="VBox/MainSplit/LeftColumn"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="BiosInfoLabel" type="Label" parent="VBox/MainSplit/LeftColumn/BiosPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.65, 0.5, 1)
+theme_override_font_sizes/font_size = 12
+text = "СИСТЕМНЫЙ БИОС: ЭЛТ-ПЗУ 8-БИТ // ПАМЯТЬ СТРОК: 269 107 КЛЮЧЕЙ TNO"
+autowrap_mode = 2
+
+[node name="RightColumn" type="VBoxContainer" parent="VBox/MainSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="PreviewPanel" type="PanelContainer" parent="VBox/MainSplit/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="VBox/MainSplit/RightColumn/PreviewPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PreviewHeader" type="Label" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.95, 0.7, 1)
+theme_override_font_sizes/font_size = 14
+text = "[ МОНИТОР ДЕПЕШ // ТЕСТОВЫЙ КАНАЛ ВЕРХОВНОГО КОМАНДОВАНИЯ ]"
+
+[node name="PreviewClass" type="Label" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.4, 0.35, 1)
+theme_override_font_sizes/font_size = 12
+text = "УРОВЕНЬ УГРОЗЫ: КРИТИЧЕСКИЙ // ГРИФ СЕКРЕТНОСТИ: ОСОБАЯ ПАПКА"
+
+[node name="HSeparator" type="HSeparator" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox"]
+layout_mode = 2
+
+[node name="PreviewTitle" type="Label" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 16
+text = "ДЕПЕША #0892: КРИЗИС НА ВОСТОЧНОЙ ГРАНИЦЕ"
+
+[node name="PreviewBody" type="RichTextLabel" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.65, 0.85, 0.75, 1)
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "Срочное донесение пограничной комендатуры..."
+
+[node name="HSeparator2" type="HSeparator" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox"]
+layout_mode = 2
+
+[node name="OptionsVBox" type="VBoxContainer" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="OptionABtn" type="Button" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox/OptionsVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.9, 0.7, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "ОПЦИЯ [А]: МОБИЛИЗОВАТЬ ПОГРАНИЧНЫЙ ЗАСЛОН"
+
+[node name="OptionBBtn" type="Button" parent="VBox/MainSplit/RightColumn/PreviewPanel/VBox/OptionsVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.9, 0.7, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "ОПЦИЯ [Б]: ОРГАНИЗОВАТЬ ОТВЕТНЫЙ КАРАТЕЛЬНЫЙ НАБЕГ"
+
+[node name="BottomBar" type="VBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBox" type="HBoxContainer" parent="VBox/BottomBar"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ApplyBiosButton" type="Button" parent="VBox/BottomBar/HBox"]
+custom_minimum_size = Vector2(300, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "[ ПРИМЕНИТЬ И СОХРАНИТЬ В BIOS ]"
+
+[node name="BackButton" type="Button" parent="VBox/BottomBar/HBox"]
+custom_minimum_size = Vector2(220, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "[ ВЕРНУТЬСЯ В ГЛАВНЫЙ ТЕРМИНАЛ ]"
+
+[node name="StatusLabel" type="Label" parent="VBox/BottomBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.85, 0.55, 1)
+theme_override_font_sizes/font_size = 13
+text = "[ СТАТУС: ГОТОВНОСТЬ К ВЫБОРУ СИСТЕМНОГО ЯЗЫКА ]"
+
+[node name="CRTOverlay" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_crt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

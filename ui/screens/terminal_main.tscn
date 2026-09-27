@@ -1,0 +1,335 @@
+[gd_scene format=3 uid="uid://c7nan4v8y2p1k"]
+
+[ext_resource type="Script" path="res://ui/screens/terminal_main.gd" id="1_term"]
+[ext_resource type="Script" path="res://core/systems/turn_manager.gd" id="2_turn"]
+[ext_resource type="Script" path="res://scripts/map_controller.gd" id="3_map"]
+[ext_resource type="Shader" path="res://shaders/province_map.gdshader" id="4_shdr"]
+[ext_resource type="Texture2D" path="res://map_data/provinces_mask.png" id="5_mask"]
+[ext_resource type="Shader" path="res://shaders/crt_terminal.gdshader" id="6_crt"]
+[ext_resource type="PackedScene" uid="uid://b5k8mqy9f2d1e" path="res://ui/components/directive_tree_view.tscn" id="7_tree"]
+[ext_resource type="PackedScene" uid="uid://d3yq8m1k5n9v2" path="res://ui/components/region_management_panel.tscn" id="8_reg"]
+[ext_resource type="PackedScene" path="res://ui/components/province_inspector_panel.tscn" id="9_insp"]
+[ext_resource type="PackedScene" path="res://ui/components/tno_topbar.tscn" id="10_topbar"]
+[ext_resource type="PackedScene" path="res://ui/screens/tno_economy_screen.tscn" id="11_econ"]
+[ext_resource type="PackedScene" path="res://ui/screens/politics_panel.tscn" id="12_pol"]
+[ext_resource type="PackedScene" path="res://ui/components/tno_super_event_modal.tscn" id="13_super"]
+[ext_resource type="PackedScene" path="res://ui/components/decisions_panel.tscn" id="14_dec"]
+[ext_resource type="PackedScene" path="res://ui/components/russian_smuta_panel.tscn" id="15_smuta"]
+[ext_resource type="PackedScene" uid="uid://espionage_terminal_001" path="res://ui/screens/espionage_terminal_view.tscn" id="16_esp"]
+[ext_resource type="PackedScene" uid="uid://research_terminal_001" path="res://ui/screens/research_terminal_view.tscn" id="17_rd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_map"]
+shader = ExtResource("4_shdr")
+shader_parameter/hovered_province_id = 0
+shader_parameter/selected_province_id = 0
+shader_parameter/default_color = Color(0.2, 0.22, 0.25, 1)
+shader_parameter/border_color = Color(0.08, 0.08, 0.08, 0.95)
+shader_parameter/hover_color = Color(1, 1, 1, 0.35)
+shader_parameter/select_color = Color(1, 0.85, 0.25, 0.45)
+shader_parameter/border_thickness = 1.0
+shader_parameter/enable_borders = true
+shader_parameter/enable_hover_highlight = true
+shader_parameter/enable_selection_highlight = true
+shader_parameter/hover_pulse_speed = 3.0
+shader_parameter/provinces_mask = ExtResource("5_mask")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("6_crt")
+shader_parameter/curvature = 0.03
+shader_parameter/vignette_strength = 0.85
+shader_parameter/scanline_count = 540.0
+shader_parameter/scanline_intensity = 0.16
+shader_parameter/chromatic_aberration = 0.002
+shader_parameter/phosphor_tint = Color(0.95, 1, 0.98, 1)
+shader_parameter/brightness_boost = 1.05
+shader_parameter/flicker_speed = 8.0
+shader_parameter/flicker_strength = 0.012
+
+[node name="TerminalMain" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_term")
+
+[node name="TurnManager" type="Node" parent="."]
+script = ExtResource("2_turn")
+
+[node name="TNOTopBar" parent="." instance=ExtResource("10_topbar")]
+layout_mode = 1
+
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 48.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+
+[node name="TacticalMap" type="Control" parent="TabContainer"]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="TabContainer/TacticalMap"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="TabContainer/TacticalMap/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 552)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="TabContainer/TacticalMap/SubViewportContainer/SubViewport"]
+position = Vector2(576, 276)
+
+[node name="MapController" type="Sprite2D" parent="TabContainer/TacticalMap/SubViewportContainer/SubViewport"]
+material = SubResource("ShaderMaterial_map")
+position = Vector2(576, 276)
+scale = Vector2(2, 2)
+texture = ExtResource("5_mask")
+script = ExtResource("3_map")
+mask_texture = ExtResource("5_mask")
+manifest_file_path = "res://map_data/map_manifest.json"
+
+[node name="MapModeHUD" type="PanelContainer" parent="TabContainer/TacticalMap"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -640.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 52.0
+grow_horizontal = 0
+
+[node name="HBox" type="HBoxContainer" parent="TabContainer/TacticalMap/MapModeHUD"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BtnPolitical" type="Button" parent="TabContainer/TacticalMap/MapModeHUD/HBox"]
+layout_mode = 2
+text = "[ ПОЛИТИКА ]"
+
+[node name="BtnEconomy" type="Button" parent="TabContainer/TacticalMap/MapModeHUD/HBox"]
+layout_mode = 2
+text = "[ ВПК/IC ]"
+
+[node name="BtnUnrest" type="Button" parent="TabContainer/TacticalMap/MapModeHUD/HBox"]
+layout_mode = 2
+text = "[ БУНТЫ ]"
+
+[node name="BtnDiplomacy" type="Button" parent="TabContainer/TacticalMap/MapModeHUD/HBox"]
+layout_mode = 2
+text = "[ СФЕРЫ ]"
+
+[node name="BtnRulerFocus" type="Button" parent="TabContainer/TacticalMap/MapModeHUD/HBox"]
+layout_mode = 2
+text = "[ ПРАВИТЕЛЬ: ВЫКЛ ]"
+
+[node name="BtnRaidToggle" type="Button" parent="TabContainer/TacticalMap/MapModeHUD/HBox"]
+layout_mode = 2
+text = "[ РЕЙД: ВЫКЛ ]"
+
+[node name="RegionManagementPanel" parent="TabContainer/TacticalMap" instance=ExtResource("8_reg")]
+visible = false
+layout_mode = 1
+
+[node name="ProvinceInspectorPanel" parent="TabContainer/TacticalMap" instance=ExtResource("9_insp")]
+visible = false
+layout_mode = 1
+
+[node name="RaidPlanningPanel" type="PanelContainer" parent="TabContainer/TacticalMap"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -120.0
+offset_right = 230.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="TabContainer/TacticalMap/RaidPlanningPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="TabContainer/TacticalMap/RaidPlanningPanel/VBox"]
+layout_mode = 2
+text = "=== ПЛАНИРОВАНИЕ ОПЕРАЦИИ СМУТЫ ==="
+horizontal_alignment = 1
+
+[node name="InfoLabel" type="RichTextLabel" parent="TabContainer/TacticalMap/RaidPlanningPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Целевой сектор: [color=#ffcc00]Onega Fortified Sector[/color]
+Владелец: ONE
+Гарнизон: 60% | IC: 2"
+
+[node name="ActionsHBox" type="HBoxContainer" parent="TabContainer/TacticalMap/RaidPlanningPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnRecon" type="Button" parent="TabContainer/TacticalMap/RaidPlanningPanel/VBox/ActionsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "> Разведка боем"
+
+[node name="BtnHeavy" type="Button" parent="TabContainer/TacticalMap/RaidPlanningPanel/VBox/ActionsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "> Тяжелый набег"
+
+[node name="BtnCancel" type="Button" parent="TabContainer/TacticalMap/RaidPlanningPanel/VBox/ActionsHBox"]
+layout_mode = 2
+text = "Отмена"
+
+[node name="Directives" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="DirectiveTreeView" parent="TabContainer/Directives" instance=ExtResource("7_tree")]
+layout_mode = 1
+
+[node name="Economics" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TNOEconomyScreen" parent="TabContainer/Economics" instance=ExtResource("11_econ")]
+layout_mode = 1
+
+[node name="WarlordRaids" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="RussianSmutaPanel" parent="TabContainer/WarlordRaids" instance=ExtResource("15_smuta")]
+layout_mode = 1
+
+[node name="Decisions" type="TabBar" parent="TabContainer"]
+layout_mode = 2
+
+[node name="DecisionsPanel" parent="TabContainer/Decisions" instance=ExtResource("14_dec")]
+layout_mode = 1
+
+[node name="Espionage" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="EspionageTerminalView" parent="TabContainer/Espionage" instance=ExtResource("16_esp")]
+layout_mode = 1
+
+[node name="Research" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ResearchTerminalView" parent="TabContainer/Research" instance=ExtResource("17_rd")]
+layout_mode = 1
+
+[node name="BottomBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -44.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBox" type="HBoxContainer" parent="BottomBar"]
+layout_mode = 2
+
+[node name="LogLabel" type="Label" parent="BottomBar"]
+layout_mode = 2
+text = "SYSTEM LOG: Terminal operational. Standby."
+
+[node name="EndTurnButton" type="Button" parent="BottomBar"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "TRANSMIT ORDERS // END TURN >"
+
+[node name="ModalEventOverlay" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="ModalEventOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.75)
+
+[node name="EventPanel" type="PanelContainer" parent="ModalEventOverlay"]
+custom_minimum_size = Vector2(640, 380)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -190.0
+offset_right = 320.0
+offset_bottom = 190.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ModalEventOverlay/EventPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ClassificationLabel" type="Label" parent="ModalEventOverlay/EventPanel/VBox"]
+layout_mode = 2
+text = "[TOP SECRET // PREKAS]"
+
+[node name="TitleLabel" type="Label" parent="ModalEventOverlay/EventPanel/VBox"]
+layout_mode = 2
+text = "CRISIS EVENT TITLE"
+
+[node name="BodyText" type="RichTextLabel" parent="ModalEventOverlay/EventPanel/VBox"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+text = "Event narrative description..."
+
+[node name="OptionsContainer" type="VBoxContainer" parent="ModalEventOverlay/EventPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PoliticsPanel" parent="." instance=ExtResource("12_pol")]
+visible = false
+layout_mode = 1
+
+[node name="TNOSuperEventModal" parent="." instance=ExtResource("13_super")]
+visible = false
+layout_mode = 1
+
+[node name="CRTPostProcess" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_crt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

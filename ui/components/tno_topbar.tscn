@@ -1,0 +1,344 @@
+[gd_scene format=3 uid="uid://b5tno_topbar_v1"]
+
+[ext_resource type="Script" path="res://ui/components/tno_topbar.gd" id="1_topbar"]
+[ext_resource type="Texture2D" path="res://assets/gfx/flags/KOM.png" id="2_flag"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/flag_overlay_tno.png" id="3_overlay"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/pol_power_icon.png" id="4_pc_icon"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/stability_icon.png" id="5_stab_icon"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/war_support_icon.png" id="6_war_icon"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/manpower_icon.png" id="7_man_icon"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/factory_icon.png" id="8_fac_icon"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/gdp_icon.png" id="9_gdp_icon"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/cold_war_gui/Cold_War_GUI_PB_Defcon5.png" id="10_defcon"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.04, 0.06, 0.08, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16, 0.28, 0.34, 0.9)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="TNOTopBar" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 48)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 48.0
+grow_horizontal = 2
+script = ExtResource("1_topbar")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CountrySection" type="HBoxContainer" parent="HBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FlagContainer" type="Control" parent="HBox/CountrySection"]
+custom_minimum_size = Vector2(52, 36)
+layout_mode = 2
+
+[node name="FlagRect" type="TextureRect" parent="HBox/CountrySection/FlagContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_flag")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="FlagOverlay" type="TextureRect" parent="HBox/CountrySection/FlagContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_overlay")
+expand_mode = 1
+stretch_mode = 6
+mouse_filter = 2
+
+[node name="FlagButton" type="Button" parent="HBox/CountrySection/FlagContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="VBoxInfo" type="VBoxContainer" parent="HBox/CountrySection"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 0
+
+[node name="TagLabel" type="Label" parent="HBox/CountrySection/VBoxInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "KOM"
+
+[node name="NameLabel" type="Label" parent="HBox/CountrySection/VBoxInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 11
+text = "WRRF"
+
+[node name="VSeparator1" type="VSeparator" parent="HBox"]
+layout_mode = 2
+
+[node name="PillsScroll" type="ScrollContainer" parent="HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_scroll_mode = 0
+
+[node name="PillsHBox" type="HBoxContainer" parent="HBox/PillsScroll"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="PillPC" type="PanelContainer" parent="HBox/PillsScroll/PillsHBox"]
+layout_mode = 2
+tooltip_text = "ПОЛИТИЧЕСКИЙ КАПИТАЛ (PC)
+Используется для утверждения законов, кадровых решений и влияния."
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
+
+[node name="HBox" type="HBoxContainer" parent="HBox/PillsScroll/PillsHBox/PillPC"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="HBox/PillsScroll/PillsHBox/PillPC/HBox"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_pc_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ValLabel" type="Label" parent="HBox/PillsScroll/PillsHBox/PillPC/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "100.0 (+5.0)"
+
+[node name="PillCAP" type="PanelContainer" parent="HBox/PillsScroll/PillsHBox"]
+layout_mode = 2
+tooltip_text = "ОЧКИ ДЕЙСТВИЙ КАБИНЕТА (CAP)
+Оперативный резерв для инициатив и тактических приказов."
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
+
+[node name="HBox" type="HBoxContainer" parent="HBox/PillsScroll/PillsHBox/PillCAP"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="HBox/PillsScroll/PillsHBox/PillCAP/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 0.85, 1)
+theme_override_font_sizes/font_size = 11
+text = "CAP:"
+
+[node name="ValLabel" type="Label" parent="HBox/PillsScroll/PillsHBox/PillCAP/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "[■■■■■] 5/5"
+
+[node name="PillStab" type="PanelContainer" parent="HBox/PillsScroll/PillsHBox"]
+layout_mode = 2
+tooltip_text = "ПОЛИТИЧЕСКАЯ СТАБИЛЬНОСТЬ
+Легитимность режима минус уровень общественного недовольства."
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
+
+[node name="HBox" type="HBoxContainer" parent="HBox/PillsScroll/PillsHBox/PillStab"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="HBox/PillsScroll/PillsHBox/PillStab/HBox"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("5_stab_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ValLabel" type="Label" parent="HBox/PillsScroll/PillsHBox/PillStab/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "+35%"
+
+[node name="PillWar" type="PanelContainer" parent="HBox/PillsScroll/PillsHBox"]
+layout_mode = 2
+tooltip_text = "ВОЕННАЯ ПОДДЕРЖКА
+Готовность населения нести тяготы войны и поддерживать ВПК."
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
+
+[node name="HBox" type="HBoxContainer" parent="HBox/PillsScroll/PillsHBox/PillWar"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="HBox/PillsScroll/PillsHBox/PillWar/HBox"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("6_war_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ValLabel" type="Label" parent="HBox/PillsScroll/PillsHBox/PillWar/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "65%"
+
+[node name="PillManpower" type="PanelContainer" parent="HBox/PillsScroll/PillsHBox"]
+layout_mode = 2
+tooltip_text = "МОБИЛИЗАЦИОННЫЙ РЕСУРС
+Доступный контингент для пополнения дивизий и операций."
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
+
+[node name="HBox" type="HBoxContainer" parent="HBox/PillsScroll/PillsHBox/PillManpower"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="HBox/PillsScroll/PillsHBox/PillManpower/HBox"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("7_man_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ValLabel" type="Label" parent="HBox/PillsScroll/PillsHBox/PillManpower/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "45.0K"
+
+[node name="PillFactories" type="PanelContainer" parent="HBox/PillsScroll/PillsHBox"]
+layout_mode = 2
+tooltip_text = "ПРОИЗВОДСТВЕННЫЙ ПОТЕНЦИАЛ (IC)
+Гражданские фабрики (ТНП) / Военные заводы (ВПК)."
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
+
+[node name="HBox" type="HBoxContainer" parent="HBox/PillsScroll/PillsHBox/PillFactories"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="HBox/PillsScroll/PillsHBox/PillFactories/HBox"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("8_fac_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ValLabel" type="Label" parent="HBox/PillsScroll/PillsHBox/PillFactories/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "12 / 8"
+
+[node name="PillEcon" type="PanelContainer" parent="HBox/PillsScroll/PillsHBox"]
+layout_mode = 2
+tooltip_text = "МАКРОЭКОНОМИКА (TOOLBOX THEORY)
+ВВП / Госдолг [Кредитный рейтинг]."
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
+
+[node name="HBox" type="HBoxContainer" parent="HBox/PillsScroll/PillsHBox/PillEcon"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="HBox/PillsScroll/PillsHBox/PillEcon/HBox"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("9_gdp_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ValLabel" type="Label" parent="HBox/PillsScroll/PillsHBox/PillEcon/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "$18.5B / $3.5B [AAA]"
+
+[node name="VSeparator2" type="VSeparator" parent="HBox"]
+layout_mode = 2
+
+[node name="CrisisHBox" type="HBoxContainer" parent="HBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DefconButton" type="Button" parent="HBox/CrisisHBox"]
+custom_minimum_size = Vector2(100, 36)
+layout_mode = 2
+tooltip_text = "ШКАЛА ГОТОВНОСТИ DEFCON
+Нажмите для просмотра глобального баланса сил и очагов кризиса."
+
+[node name="DefconIcon" type="TextureRect" parent="HBox/CrisisHBox/DefconButton"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = -12.0
+offset_right = 30.0
+offset_bottom = 12.0
+grow_vertical = 2
+texture = ExtResource("10_defcon")
+expand_mode = 1
+stretch_mode = 6
+mouse_filter = 2
+
+[node name="DefconLevelLabel" type="Label" parent="HBox/CrisisHBox/DefconButton"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -66.0
+offset_top = -9.0
+offset_right = -6.0
+offset_bottom = 9.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 11
+text = "DEFCON 5"
+horizontal_alignment = 1
+
+[node name="ClockHBox" type="VBoxContainer" parent="HBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 0
+
+[node name="DateLabel" type="Label" parent="HBox/ClockHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.98, 0.97, 1)
+theme_override_font_sizes/font_size = 12
+text = "WEEK 1, JAN 1962"
+horizontal_alignment = 2
+
+[node name="TurnCounterLabel" type="Label" parent="HBox/ClockHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 10
+text = "TURN 1 [W1]"
+horizontal_alignment = 2
+
+[node name="EndTurnButton" type="Button" parent="HBox"]
+custom_minimum_size = Vector2(170, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+text = "ПЕРЕДАТЬ ПРИКАЗЫ >"

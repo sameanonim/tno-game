@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generator": "TNO DataOptimizer",
+    "total_patterns": 5,
+    "export_time": "2026-09-21 11:30:19"
+  },
+  "opcodes": {
+    "effects": {
+      "add_political_power": "MOD_PC",
+      "add_stability": "MOD_STABILITY",
+      "add_war_support": "MOD_WAR_SUPPORT",
+      "set_country_flag": "SET_FLAG",
+      "clr_country_flag": "CLR_FLAG",
+      "country_event": "FIRE_EVENT",
+      "news_event": "FIRE_NEWS",
+      "add_manpower": "MOD_MANPOWER",
+      "add_equipment_to_stockpile": "MOD_STOCKPILE",
+      "transfer_state": "TRANSFER_STATE",
+      "set_rule": "SET_RULE"
+    },
+    "triggers": {
+      "has_country_flag": "HAS_FLAG",
+      "has_global_flag": "HAS_GLOBAL_FLAG",
+      "tag": "IS_TAG",
+      "is_ai": "IS_AI",
+      "has_war": "HAS_WAR",
+      "stability": "CHECK_STABILITY",
+      "has_political_power": "CHECK_PC",
+      "date": "CHECK_DATE"
+    }
+  },
+  "patterns": {
+    "PAT_EFT_0001": {
+      "pattern_id": "PAT_EFT_0001",
+      "category": "effect",
+      "signature": "{add_political_power:VAL,add_stability:VAL}",
+      "template": {
+        "add_political_power": "$add_political_power",
+        "add_stability": "$add_stability"
+      },
+      "variable_keys": [
+        "add_political_power",
+        "add_stability"
+      ],
+      "occurrence_count": 100,
+      "description": "Standard Cabinet Political & Stability Impact"
+    },
+    "PAT_EFT_0002": {
+      "pattern_id": "PAT_EFT_0002",
+      "category": "effect",
+      "signature": "{country_event:{id:VAL,days:VAL}}",
+      "template": {
+        "country_event": {
+          "id": "$id",
+          "days": "$days"
+        }
+      },
+      "variable_keys": [
+        "country_event.id",
+        "country_event.days"
+      ],
+      "occurrence_count": 250,
+      "description": "Delayed Chain Event Trigger"
+    },
+    "PAT_EFT_0003": {
+      "pattern_id": "PAT_EFT_0003",
+      "category": "effect",
+      "signature": "{set_country_flag:VAL}",
+      "template": {
+        "set_country_flag": "$set_country_flag"
+      },
+      "variable_keys": [
+        "set_country_flag"
+      ],
+      "occurrence_count": 500,
+      "description": "Atomic Country Narrative Flag Set"
+    },
+    "PAT_TRG_0001": {
+      "pattern_id": "PAT_TRG_0001",
+      "category": "trigger",
+      "signature": "{has_country_flag:VAL}",
+      "template": {
+        "has_country_flag": "$has_country_flag"
+      },
+      "variable_keys": [
+        "has_country_flag"
+      ],
+      "occurrence_count": 800,
+      "description": "Narrative Flag Prerequisite Check"
+    },
+    "PAT_TRG_0002": {
+      "pattern_id": "PAT_TRG_0002",
+      "category": "trigger",
+      "signature": "{tag:VAL,has_war:VAL}",
+      "template": {
+        "tag": "$tag",
+        "has_war": "$has_war"
+      },
+      "variable_keys": [
+        "tag",
+        "has_war"
+      ],
+      "occurrence_count": 150,
+      "description": "Country Tag and War Condition"
+    }
+  }
+}

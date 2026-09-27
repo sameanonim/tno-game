@@ -1,0 +1,185 @@
+[gd_scene format=3 uid="uid://d1politics_panel_v1"]
+
+[ext_resource type="Script" path="res://ui/screens/politics_panel.gd" id="1_pol"]
+[ext_resource type="PackedScene" uid="uid://df7x8h2p9k1y4" path="res://ui/components/leader_portrait_frame.tscn" id="2_port"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/ideologies/communist_group.png" id="3_ideo"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/pol_piechart_overlay.png" id="4_pie_ov"]
+
+[node name="PoliticsPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(880, 580)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -440.0
+offset_top = -290.0
+offset_right = 440.0
+offset_bottom = 290.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pol")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HeaderHBox" type="HBoxContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBox/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.18, 0.9, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+text = "ГОСУДАРСТВЕННЫЙ АППАРАТ И ПОЛИТИКА // KOM (WRRF)"
+
+[node name="CloseButton" type="Button" parent="VBox/HeaderHBox"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+text = "✕"
+
+[node name="HSeparator" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="ContentHBox" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="LeftCol" type="VBoxContainer" parent="VBox/ContentHBox"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LeaderSection" type="VBoxContainer" parent="VBox/ContentHBox/LeftCol"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="LeaderPortraitFrame" parent="VBox/ContentHBox/LeftCol/LeaderSection" instance=ExtResource("2_port")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="LeaderNameLabel" type="Label" parent="VBox/ContentHBox/LeftCol/LeaderSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "КЛИМЕНТ ВОРОШИЛОВ"
+horizontal_alignment = 1
+
+[node name="LeaderTitleLabel" type="Label" parent="VBox/ContentHBox/LeftCol/LeaderSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 11
+text = "Маршал Советского Союза"
+horizontal_alignment = 1
+
+[node name="IdeologySection" type="VBoxContainer" parent="VBox/ContentHBox/LeftCol"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBox" type="HBoxContainer" parent="VBox/ContentHBox/LeftCol/IdeologySection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="IdeologyIcon" type="TextureRect" parent="VBox/ContentHBox/LeftCol/IdeologySection/HBox"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+texture = ExtResource("3_ideo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBox" type="VBoxContainer" parent="VBox/ContentHBox/LeftCol/IdeologySection/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 0
+
+[node name="PartyNameLabel" type="Label" parent="VBox/ContentHBox/LeftCol/IdeologySection/HBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.98, 0.97, 1)
+theme_override_font_sizes/font_size = 12
+text = "КОММУНИСТИЧЕСКАЯ ПАРТИЯ"
+
+[node name="SubIdeologyLabel" type="Label" parent="VBox/ContentHBox/LeftCol/IdeologySection/HBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.35, 1)
+theme_override_font_sizes/font_size = 11
+text = "Стратократический коммунизм"
+
+[node name="PieChartBox" type="HBoxContainer" parent="VBox/ContentHBox/LeftCol/IdeologySection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PieChartDraw" type="Control" parent="VBox/ContentHBox/LeftCol/IdeologySection/PieChartBox"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="PieChartOverlay" type="TextureRect" parent="VBox/ContentHBox/LeftCol/IdeologySection/PieChartBox/PieChartDraw"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_pie_ov")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="LegendLabel" type="RichTextLabel" parent="VBox/ContentHBox/LeftCol/IdeologySection/PieChartBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "[color=#d92626]■ Комм: 65%[/color]
+[color=#f26626]■ Соц: 15%[/color]
+[color=#668099]■ Десп: 10%[/color]
+[color=#334d73]■ Авт-Дем: 10%[/color]"
+
+[node name="VSeparator" type="VSeparator" parent="VBox/ContentHBox"]
+layout_mode = 2
+
+[node name="RightCol" type="VBoxContainer" parent="VBox/ContentHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="SpiritsSection" type="VBoxContainer" parent="VBox/ContentHBox/RightCol"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="VBox/ContentHBox/RightCol/SpiritsSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "НАЦИОНАЛЬНЫЕ ДУХИ И ОСОБЕННОСТИ РЕЖИМА"
+
+[node name="SpiritsScroll" type="ScrollContainer" parent="VBox/ContentHBox/RightCol/SpiritsSection"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="SpiritsHBox" type="HBoxContainer" parent="VBox/ContentHBox/RightCol/SpiritsSection/SpiritsScroll"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="HSeparator2" type="HSeparator" parent="VBox/ContentHBox/RightCol"]
+layout_mode = 2
+
+[node name="LawsSection" type="VBoxContainer" parent="VBox/ContentHBox/RightCol"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="VBox/ContentHBox/RightCol/LawsSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "СОЦИАЛЬНО-ПОЛИТИЧЕСКИЙ СТРОЙ И ЗАКОНЫ"
+
+[node name="LawsVBox" type="VBoxContainer" parent="VBox/ContentHBox/RightCol/LawsSection"]
+layout_mode = 2
+theme_override_constants/separation = 10

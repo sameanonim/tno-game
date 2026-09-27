@@ -1,0 +1,692 @@
+[gd_scene format=3 uid="uid://b1naq4t7c2n5x"]
+
+[ext_resource type="Script" path="res://ui/screens/main_menu.gd" id="1_menu"]
+[ext_resource type="Shader" path="res://shaders/crt_terminal.gdshader" id="2_crt"]
+[ext_resource type="PackedScene" uid="uid://df7x8h2p9k1y4" path="res://ui/components/leader_portrait_frame.tscn" id="3_port"]
+[ext_resource type="PackedScene" uid="uid://df7x8h2p9k1y6" path="res://ui/components/country_select_map_widget.tscn" id="4_map"]
+[ext_resource type="PackedScene" uid="uid://df7x8h2p9k1y5" path="res://ui/components/focus_tree_preview_widget.tscn" id="5_focus"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("2_crt")
+shader_parameter/curvature = 0.03
+shader_parameter/vignette_strength = 0.85
+shader_parameter/scanline_count = 540.0
+shader_parameter/scanline_intensity = 0.16
+shader_parameter/chromatic_aberration = 0.002
+shader_parameter/phosphor_tint = Color(0.95, 1, 0.98, 1)
+shader_parameter/brightness_boost = 1.05
+shader_parameter/flicker_speed = 8.0
+shader_parameter/flicker_strength = 0.012
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hover"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="BackgroundTexture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BackgroundDim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.02, 0.03, 0.45)
+
+[node name="TopBar" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 120.0
+grow_horizontal = 2
+
+[node name="LogoGame" type="TextureRect" parent="TopBar"]
+layout_mode = 1
+offset_left = 32.0
+offset_top = 20.0
+offset_right = 352.0
+offset_bottom = 95.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LogoTNO" type="TextureRect" parent="TopBar"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -380.0
+offset_top = 16.0
+offset_right = -32.0
+offset_bottom = 110.0
+grow_horizontal = 0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitularPanel" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterArea" type="VBoxContainer" parent="TitularPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -468.0
+offset_top = -240.0
+offset_right = 468.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="MenuPicsContainer" type="Control" parent="TitularPanel/CenterArea"]
+custom_minimum_size = Vector2(935, 375)
+layout_mode = 2
+
+[node name="PicsTexture" type="TextureRect" parent="TitularPanel/CenterArea/MenuPicsContainer"]
+custom_minimum_size = Vector2(935, 375)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HoverZoneLeft" type="Button" parent="TitularPanel/CenterArea/MenuPicsContainer"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 311.0
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hover")
+flat = true
+
+[node name="HoverZoneCenter" type="Button" parent="TitularPanel/CenterArea/MenuPicsContainer"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -156.0
+offset_right = 156.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hover")
+flat = true
+
+[node name="HoverZoneRight" type="Button" parent="TitularPanel/CenterArea/MenuPicsContainer"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -311.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hover")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hover")
+flat = true
+
+[node name="QuoteBadge" type="Label" parent="TitularPanel/CenterArea"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "«Я знаю, чего хочу и как этого добиться.»"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="TitularPanel/CenterArea"]
+layout_mode = 2
+
+[node name="MenuButtons" type="HBoxContainer" parent="TitularPanel/CenterArea"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="NewGameButton" type="Button" parent="TitularPanel/CenterArea/MenuButtons"]
+custom_minimum_size = Vector2(220, 42)
+layout_mode = 2
+text = "[ 1. ОДИНОЧНАЯ ИГРА ]"
+
+[node name="LoadGameButton" type="Button" parent="TitularPanel/CenterArea/MenuButtons"]
+custom_minimum_size = Vector2(220, 42)
+layout_mode = 2
+text = "[ 2. ЗАГРУЗИТЬ АРХИВ ]"
+
+[node name="SettingsButton" type="Button" parent="TitularPanel/CenterArea/MenuButtons"]
+custom_minimum_size = Vector2(220, 42)
+layout_mode = 2
+text = "[ 3. КОНФИГУРАЦИЯ ]"
+
+[node name="ExitButton" type="Button" parent="TitularPanel/CenterArea/MenuButtons"]
+custom_minimum_size = Vector2(220, 42)
+layout_mode = 2
+text = "[ 4. ВЫХОД В DOS ]"
+
+[node name="RadioBar" type="PanelContainer" parent="TitularPanel/CenterArea"]
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="TitularPanel/CenterArea/RadioBar"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="RadioIcon" type="Label" parent="TitularPanel/CenterArea/RadioBar/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+text = "📻"
+
+[node name="RadioLabel" type="Label" parent="TitularPanel/CenterArea/RadioBar/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.8, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "РАДИОСТАНЦИЯ TNO // В ЭФИРЕ:"
+
+[node name="PrevTrackBtn" type="Button" parent="TitularPanel/CenterArea/RadioBar/HBox"]
+custom_minimum_size = Vector2(40, 28)
+layout_mode = 2
+text = "◄"
+
+[node name="PlayPauseBtn" type="Button" parent="TitularPanel/CenterArea/RadioBar/HBox"]
+custom_minimum_size = Vector2(40, 28)
+layout_mode = 2
+text = "❚❚"
+
+[node name="NextTrackBtn" type="Button" parent="TitularPanel/CenterArea/RadioBar/HBox"]
+custom_minimum_size = Vector2(40, 28)
+layout_mode = 2
+text = "►"
+
+[node name="CurrentTrackLabel" type="Label" parent="TitularPanel/CenterArea/RadioBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25, 0.98, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "Modern Tordesillas (TNO Main Theme)"
+vertical_alignment = 1
+
+[node name="UtilityHBox" type="HBoxContainer" parent="TitularPanel/CenterArea"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="ChangeBgButton" type="Button" parent="TitularPanel/CenterArea/UtilityHBox"]
+custom_minimum_size = Vector2(170, 32)
+layout_mode = 2
+text = "[ 🖼 СМЕНИТЬ ФОН ]"
+
+[node name="LanguageButton" type="Button" parent="TitularPanel/CenterArea/UtilityHBox"]
+custom_minimum_size = Vector2(160, 32)
+layout_mode = 2
+text = "[ 🌐 ЯЗЫК: RU ]"
+
+[node name="StatusLabel" type="Label" parent="TitularPanel/CenterArea/UtilityHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.35, 0.65, 0.55, 1)
+theme_override_font_sizes/font_size = 11
+text = "СИСТЕМА: ГОТОВА К АВТОРИЗАЦИИ // УРОВЕНЬ ДОСТУПА: ВЫСШИЙ"
+horizontal_alignment = 2
+
+[node name="FooterHBox" type="HBoxContainer" parent="TitularPanel/CenterArea"]
+layout_mode = 2
+
+[node name="TnoTitleLabel" type="Label" parent="TitularPanel/CenterArea/FooterHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.55, 0.48, 1)
+theme_override_font_sizes/font_size = 11
+text = "THE NEW ORDER // LAST DAYS OF EUROPE"
+
+[node name="Spacer" type="Control" parent="TitularPanel/CenterArea/FooterHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VersionLabel" type="Label" parent="TitularPanel/CenterArea/FooterHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.55, 0.48, 1)
+theme_override_font_sizes/font_size = 11
+text = "STRATEGIC MAINFRAME // v4.7.2"
+
+[node name="TheaterPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="TheaterPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 20.0
+offset_right = -30.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="TheaterPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 15
+text = "=== ТЕАТРЫ ВОЕННЫХ ДЕЙСТВИЙ И ДОСЬЕ ПРЕТЕНДЕНТОВ ==="
+
+[node name="TheaterTabBar" type="HBoxContainer" parent="TheaterPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MainHBox" type="HBoxContainer" parent="TheaterPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="LeftColumn" type="VBoxContainer" parent="TheaterPanel/VBox/MainHBox"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SearchBox" type="LineEdit" parent="TheaterPanel/VBox/MainHBox/LeftColumn"]
+layout_mode = 2
+placeholder_text = "ПОИСК ТЕГА / СТРАНЫ..."
+
+[node name="Scroll" type="ScrollContainer" parent="TheaterPanel/VBox/MainHBox/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CardsList" type="VBoxContainer" parent="TheaterPanel/VBox/MainHBox/LeftColumn/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="MapColumn" type="VBoxContainer" parent="TheaterPanel/VBox/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.3
+
+[node name="CountrySelectMapWidget" parent="TheaterPanel/VBox/MainHBox/MapColumn" instance=ExtResource("4_map")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Dossier" type="PanelContainer" parent="TheaterPanel/VBox/MainHBox"]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Scroll" type="ScrollContainer" parent="TheaterPanel/VBox/MainHBox/Dossier"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="HeaderHBox" type="HBoxContainer" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DossierPortraitFrame" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox" instance=ExtResource("3_port")]
+custom_minimum_size = Vector2(110, 150)
+layout_mode = 2
+mode = 1
+
+[node name="MetaVBox" type="VBoxContainer" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="CountryName" type="Label" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox/MetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "┌── НАЗВАНИЕ ГОСУДАРСТВА ──"
+
+[node name="LeaderName" type="Label" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox/MetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 11
+text = "│ ЛИДЕР: НЕИЗВЕСТНО"
+
+[node name="IdeologyLabel" type="Label" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox/MetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.85, 0.65, 1)
+theme_override_font_sizes/font_size = 10
+text = "│ ИДЕОЛОГИЯ: НЕИЗВЕСТНО"
+
+[node name="LoyaltyLabel" type="Label" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox/MetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.8, 0.7, 1)
+theme_override_font_sizes/font_size = 10
+text = "│ ЛОЯЛЬНОСТЬ: [████░] 75%"
+
+[node name="BonusLabel" type="Label" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox/MetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.75, 0.3, 1)
+theme_override_font_sizes/font_size = 10
+text = "│ БОНУС К ВЛАСТИ: +1.5 CAP"
+
+[node name="StatsLabel" type="Label" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox/MetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.75, 0.65, 1)
+theme_override_font_sizes/font_size = 10
+text = "│ ВВП: -- | РЕЗЕРВ: --"
+
+[node name="TraitsLabel" type="Label" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox/HeaderHBox/MetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.7, 0.8, 1)
+theme_override_font_sizes/font_size = 10
+text = "└─ ЧЕРТЫ: --"
+
+[node name="FocusTreePreviewWidget" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox" instance=ExtResource("5_focus")]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox"]
+layout_mode = 2
+
+[node name="LoreText" type="RichTextLabel" parent="TheaterPanel/VBox/MainHBox/Dossier/Scroll/VBox"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[color=#77aa99]Историческая справка и стратегические ориентиры...[/color]"
+
+[node name="BottomBar" type="HBoxContainer" parent="TheaterPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackToTitleButton" type="Button" parent="TheaterPanel/VBox/BottomBar"]
+custom_minimum_size = Vector2(200, 38)
+layout_mode = 2
+text = "< НАЗАД В ТЕРМИНАЛ"
+
+[node name="ProceedToSetupButton" type="Button" parent="TheaterPanel/VBox/BottomBar"]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "ПАРАМЕТРЫ КАМПАНИИ >"
+
+[node name="SetupPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelDim" type="ColorRect" parent="SetupPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.05, 0.85)
+
+[node name="VBox" type="VBoxContainer" parent="SetupPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -340.0
+offset_top = -220.0
+offset_right = 340.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="SetupPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "=== ПАРАМЕТРЫ И СЛОЖНОСТЬ СТРАТЕГИЧЕСКОЙ СЕССИИ ==="
+horizontal_alignment = 1
+
+[node name="DiffLabel" type="Label" parent="SetupPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.75, 0.65, 1)
+theme_override_font_sizes/font_size = 12
+text = "УРОВЕНЬ ЭКОНОМИЧЕСКОЙ И ВОЕННОЙ СЛОЖНОСТИ:"
+
+[node name="DiffHBox" type="HBoxContainer" parent="SetupPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ObserverButton" type="Button" parent="SetupPanel/VBox/DiffHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "[ ОБОЗРЕВАТЕЛЬ ]"
+
+[node name="StrategistButton" type="Button" parent="SetupPanel/VBox/DiffHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "[ СТРАТЕГ ]"
+
+[node name="CrisisButton" type="Button" parent="SetupPanel/VBox/DiffHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "[ КРИЗИС ЭПОХИ ]"
+
+[node name="HSeparator" type="HSeparator" parent="SetupPanel/VBox"]
+layout_mode = 2
+
+[node name="RulesLabel" type="Label" parent="SetupPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.75, 0.65, 1)
+theme_override_font_sizes/font_size = 12
+text = "СПЕЦИАЛЬНЫЕ ПРАВИЛА МИРА:"
+
+[node name="RulesGrid" type="GridContainer" parent="SetupPanel/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="AnarchyCheck" type="CheckBox" parent="SetupPanel/VBox/RulesGrid"]
+layout_mode = 2
+button_pressed = true
+text = "Таймер Анархии в Германии"
+
+[node name="DefconCheck" type="CheckBox" parent="SetupPanel/VBox/RulesGrid"]
+layout_mode = 2
+button_pressed = true
+text = "Динамическая шкала DEFCON"
+
+[node name="IncidentsCheck" type="CheckBox" parent="SetupPanel/VBox/RulesGrid"]
+layout_mode = 2
+button_pressed = true
+text = "Боевые инциденты на фронтах"
+
+[node name="IronmanCheck" type="CheckBox" parent="SetupPanel/VBox/RulesGrid"]
+layout_mode = 2
+text = "Режим одной жизни (Ironman)"
+
+[node name="TimeStepButton" type="Button" parent="SetupPanel/VBox/RulesGrid"]
+custom_minimum_size = Vector2(260, 34)
+layout_mode = 2
+text = "ШАГ ВРЕМЕНИ: [ 1 ХОД = 1 НЕДЕЛЯ ]"
+
+[node name="BottomBar" type="HBoxContainer" parent="SetupPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackToLeadersButton" type="Button" parent="SetupPanel/VBox/BottomBar"]
+custom_minimum_size = Vector2(180, 38)
+layout_mode = 2
+text = "< К ДОСЬЕ"
+
+[node name="StartCampaignButton" type="Button" parent="SetupPanel/VBox/BottomBar"]
+custom_minimum_size = Vector2(240, 38)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "[ НАЧАТЬ КАМПАНИЮ ]"
+
+[node name="SettingsPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelDim" type="ColorRect" parent="SettingsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.05, 0.85)
+
+[node name="VBox" type="VBoxContainer" parent="SettingsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="SettingsPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "=== КАЛИБРОВКА CRT-ТЕРМИНАЛА И АУДИОТРАКТА ==="
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="SettingsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="Label1" type="Label" parent="SettingsPanel/VBox/Grid"]
+layout_mode = 2
+text = "Кривизна линзы CRT:"
+
+[node name="CurvatureSlider" type="HSlider" parent="SettingsPanel/VBox/Grid"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+max_value = 0.15
+step = 0.005
+value = 0.03
+
+[node name="Label2" type="Label" parent="SettingsPanel/VBox/Grid"]
+layout_mode = 2
+text = "Интенсивность сканлайнов:"
+
+[node name="ScanlineSlider" type="HSlider" parent="SettingsPanel/VBox/Grid"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+max_value = 0.6
+step = 0.02
+value = 0.16
+
+[node name="Label3" type="Label" parent="SettingsPanel/VBox/Grid"]
+layout_mode = 2
+text = "Фосфорное свечение:"
+
+[node name="GlowSlider" type="HSlider" parent="SettingsPanel/VBox/Grid"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+min_value = 0.8
+max_value = 1.4
+step = 0.02
+value = 1.05
+
+[node name="Label4" type="Label" parent="SettingsPanel/VBox/Grid"]
+layout_mode = 2
+text = "Хроматическая аберрация:"
+
+[node name="AberrationSlider" type="HSlider" parent="SettingsPanel/VBox/Grid"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+max_value = 0.01
+step = 0.0005
+value = 0.002
+
+[node name="Label5" type="Label" parent="SettingsPanel/VBox/Grid"]
+layout_mode = 2
+text = "Громкость терминала:"
+
+[node name="VolumeSlider" type="HSlider" parent="SettingsPanel/VBox/Grid"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="BottomBar" type="HBoxContainer" parent="SettingsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="LangSettingsButton" type="Button" parent="SettingsPanel/VBox/BottomBar"]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+text = "[ ЯЗЫКОВОЙ ПАКЕТ / LANGUAGE ]"
+
+[node name="SaveSettingsButton" type="Button" parent="SettingsPanel/VBox/BottomBar"]
+custom_minimum_size = Vector2(240, 38)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "[ ПРИМЕНИТЬ И ВЕРНУТЬСЯ ]"
+
+[node name="CRTOverlay" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_crt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

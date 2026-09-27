@@ -1,0 +1,482 @@
+[gd_scene format=3 uid="uid://c8sett_terminal_v1"]
+
+[ext_resource type="Script" path="res://ui/screens/settings_terminal.gd" id="1_term"]
+[ext_resource type="Shader" path="res://shaders/crt_terminal.gdshader" id="2_crt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.04, 0.08, 0.06, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.18, 0.55, 0.38, 1)
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_content"]
+bg_color = Color(0.03, 0.06, 0.05, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.45, 0.3, 1)
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
+bg_color = Color(0.05, 0.09, 0.07, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95, 0.35, 0.35, 1)
+content_margin_left = 24.0
+content_margin_top = 20.0
+content_margin_right = 24.0
+content_margin_bottom = 20.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("2_crt")
+shader_parameter/curvature = 0.025
+shader_parameter/vignette_strength = 0.8
+shader_parameter/aspect_ratio = 1.77778
+shader_parameter/scanline_count = 540.0
+shader_parameter/scanline_intensity = 0.14
+shader_parameter/chromatic_aberration = 0.002
+shader_parameter/phosphor_tint = Color(0.95, 1, 0.98, 1)
+shader_parameter/brightness_boost = 1.05
+shader_parameter/flicker_speed = 8.0
+shader_parameter/flicker_strength = 0.01
+
+[node name="SettingsTerminal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_term")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.03, 1)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 28.0
+offset_right = -40.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="HeaderPanel" type="PanelContainer" parent="VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="VBox" type="VBoxContainer" parent="VBox/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="VBox/HeaderPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 18
+text = "=== КОНФИГУРАЦИЯ СИСТЕМЫ И ПАРАМЕТРЫ ДИСПЛЕЯ ==="
+
+[node name="SubLabel" type="Label" parent="VBox/HeaderPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.6, 0.45, 1)
+theme_override_font_sizes/font_size = 12
+text = "МОДУЛЬ УПРАВЛЕНИЯ ВИДЕОСИСТЕМОЙ, CRT-ТЕРМИНАЛОМ И ЗВУКОМ // EEPROM BIOS"
+
+[node name="TabBar" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnDisplay" type="Button" parent="VBox/TabBar"]
+custom_minimum_size = Vector2(180, 36)
+layout_mode = 2
+text = "[ 1. ДИСПЛЕЙ ]"
+
+[node name="BtnCRT" type="Button" parent="VBox/TabBar"]
+custom_minimum_size = Vector2(180, 36)
+layout_mode = 2
+text = "[ 2. ЭЛТ / CRT ]"
+
+[node name="BtnAudio" type="Button" parent="VBox/TabBar"]
+custom_minimum_size = Vector2(180, 36)
+layout_mode = 2
+text = "[ 3. ЗВУК ]"
+
+[node name="BtnLanguage" type="Button" parent="VBox/TabBar"]
+custom_minimum_size = Vector2(180, 36)
+layout_mode = 2
+text = "[ 4. ЯЗЫКИ ]"
+
+[node name="ContentPanel" type="PanelContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_content")
+
+[node name="TabDisplay" type="VBoxContainer" parent="VBox/ContentPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Grid" type="GridContainer" parent="VBox/ContentPanel/TabDisplay"]
+layout_mode = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 14
+columns = 2
+
+[node name="LabelRes" type="Label" parent="VBox/ContentPanel/TabDisplay/Grid"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+text = "РАЗРЕШЕНИЕ ЭКРАНА:"
+
+[node name="OptResolution" type="OptionButton" parent="VBox/ContentPanel/TabDisplay/Grid"]
+custom_minimum_size = Vector2(340, 36)
+layout_mode = 2
+
+[node name="LabelMode" type="Label" parent="VBox/ContentPanel/TabDisplay/Grid"]
+layout_mode = 2
+text = "РЕЖИМ ОТОБРАЖЕНИЯ:"
+
+[node name="OptWindowMode" type="OptionButton" parent="VBox/ContentPanel/TabDisplay/Grid"]
+custom_minimum_size = Vector2(340, 36)
+layout_mode = 2
+
+[node name="LabelVSync" type="Label" parent="VBox/ContentPanel/TabDisplay/Grid"]
+layout_mode = 2
+text = "ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ:"
+
+[node name="OptVSync" type="OptionButton" parent="VBox/ContentPanel/TabDisplay/Grid"]
+custom_minimum_size = Vector2(340, 36)
+layout_mode = 2
+
+[node name="LabelScale" type="Label" parent="VBox/ContentPanel/TabDisplay/Grid"]
+layout_mode = 2
+text = "МАСШТАБ ИНТЕРФЕЙСА (UI SCALE):"
+
+[node name="OptUIScale" type="OptionButton" parent="VBox/ContentPanel/TabDisplay/Grid"]
+custom_minimum_size = Vector2(340, 36)
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="VBox/ContentPanel/TabDisplay"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ApplyDisplayButton" type="Button" parent="VBox/ContentPanel/TabDisplay/Actions"]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+text = "[ ПРИМЕНИТЬ ВИДЕОРЕЖИМ ]"
+
+[node name="InfoLabel" type="Label" parent="VBox/ContentPanel/TabDisplay"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.6, 0.45, 1)
+theme_override_font_sizes/font_size = 12
+text = "ФИЗИЧЕСКИЙ ЭКРАН: 1920x1080 // ОКНО ТЕРМИНАЛА: 1920x1080 (АСПЕКТ: 16:9)"
+
+[node name="TabCRT" type="VBoxContainer" parent="VBox/ContentPanel"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Grid" type="GridContainer" parent="VBox/ContentPanel/TabCRT"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 3
+
+[node name="ChkCRTEnable" type="CheckBox" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+button_pressed = true
+text = "ВКЛЮЧИТЬ ЭЛТ-ПОСТПРОЦЕССИНГ"
+
+[node name="Placeholder1" type="Control" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+
+[node name="Placeholder2" type="Control" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+
+[node name="LabelCurv" type="Label" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+text = "Кривизна линзы CRT:"
+
+[node name="CurvatureSlider" type="HSlider" parent="VBox/ContentPanel/TabCRT/Grid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+max_value = 0.12
+step = 0.005
+value = 0.03
+
+[node name="ValCurvature" type="Label" parent="VBox/ContentPanel/TabCRT/Grid"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "0.030"
+
+[node name="LabelScan" type="Label" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+text = "Интенсивность сканлайнов:"
+
+[node name="ScanlinesSlider" type="HSlider" parent="VBox/ContentPanel/TabCRT/Grid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+max_value = 0.5
+step = 0.02
+value = 0.16
+
+[node name="ValScanlines" type="Label" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+text = "0.16"
+
+[node name="ChkAutoScanlines" type="CheckBox" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+button_pressed = true
+text = "Авто-плотность сканлайнов"
+
+[node name="Placeholder3" type="Control" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+
+[node name="Placeholder4" type="Control" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+
+[node name="LabelGlow" type="Label" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+text = "Фосфорное свечение:"
+
+[node name="GlowSlider" type="HSlider" parent="VBox/ContentPanel/TabCRT/Grid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+min_value = 0.8
+max_value = 1.4
+step = 0.02
+value = 1.05
+
+[node name="ValGlow" type="Label" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+text = "1.05"
+
+[node name="LabelAberr" type="Label" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+text = "Хроматическая аберрация:"
+
+[node name="AberrationSlider" type="HSlider" parent="VBox/ContentPanel/TabCRT/Grid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+max_value = 0.008
+step = 0.0005
+value = 0.002
+
+[node name="ValAberration" type="Label" parent="VBox/ContentPanel/TabCRT/Grid"]
+layout_mode = 2
+text = "0.0020"
+
+[node name="TabAudio" type="VBoxContainer" parent="VBox/ContentPanel"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Grid" type="GridContainer" parent="VBox/ContentPanel/TabAudio"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 14
+columns = 3
+
+[node name="LabelMaster" type="Label" parent="VBox/ContentPanel/TabAudio/Grid"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "Общая громкость (Master):"
+
+[node name="MasterSlider" type="HSlider" parent="VBox/ContentPanel/TabAudio/Grid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="ValMaster" type="Label" parent="VBox/ContentPanel/TabAudio/Grid"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "80%"
+
+[node name="LabelSFX" type="Label" parent="VBox/ContentPanel/TabAudio/Grid"]
+layout_mode = 2
+text = "Эффекты и реле (SFX):"
+
+[node name="SFXSlider" type="HSlider" parent="VBox/ContentPanel/TabAudio/Grid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.85
+
+[node name="ValSFX" type="Label" parent="VBox/ContentPanel/TabAudio/Grid"]
+layout_mode = 2
+text = "85%"
+
+[node name="LabelAmbient" type="Label" parent="VBox/ContentPanel/TabAudio/Grid"]
+layout_mode = 2
+text = "Фоновый гул бункера:"
+
+[node name="AmbientSlider" type="HSlider" parent="VBox/ContentPanel/TabAudio/Grid"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.7
+
+[node name="ValAmbient" type="Label" parent="VBox/ContentPanel/TabAudio/Grid"]
+layout_mode = 2
+text = "70%"
+
+[node name="Actions" type="HBoxContainer" parent="VBox/ContentPanel/TabAudio"]
+layout_mode = 2
+
+[node name="TestSFXButton" type="Button" parent="VBox/ContentPanel/TabAudio/Actions"]
+custom_minimum_size = Vector2(260, 36)
+layout_mode = 2
+text = "[ ТЕСТОВЫЙ ЩЕЛЧОК РЕЛЕ ]"
+
+[node name="TabLanguage" type="VBoxContainer" parent="VBox/ContentPanel"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="LangListPanel" type="PanelContainer" parent="VBox/ContentPanel/TabLanguage"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="VBox/ContentPanel/TabLanguage/LangListPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LangList" type="VBoxContainer" parent="VBox/ContentPanel/TabLanguage/LangListPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LangInfoLabel" type="Label" parent="VBox/ContentPanel/TabLanguage"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.6, 0.45, 1)
+theme_override_font_sizes/font_size = 12
+text = "СМЕНА ЯЗЫКОВОГО ПАКЕТА ПРИМЕНЯЕТСЯ МГНОВЕННО БЕЗ ПЕРЕЗАГРУЗКИ"
+
+[node name="BottomBar" type="VBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StatusLabel" type="Label" parent="VBox/BottomBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 12
+text = "[ СИСТЕМА: ГОТОВА К КАЛИБРОВКЕ ]"
+
+[node name="HBox" type="HBoxContainer" parent="VBox/BottomBar"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="VBox/BottomBar/HBox"]
+custom_minimum_size = Vector2(160, 38)
+layout_mode = 2
+text = "[ < ВЕРНУТЬСЯ ]"
+
+[node name="SaveGameButton" type="Button" parent="VBox/BottomBar/HBox"]
+custom_minimum_size = Vector2(180, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "[ 💾 СОХРАНИТЬ ИГРУ ]"
+
+[node name="LoadGameButton" type="Button" parent="VBox/BottomBar/HBox"]
+custom_minimum_size = Vector2(180, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+text = "[ 📂 ЗАГРУЗИТЬ ИГРУ ]"
+
+[node name="SaveBiosButton" type="Button" parent="VBox/BottomBar/HBox"]
+custom_minimum_size = Vector2(240, 38)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+text = "[ ЗАПИСАТЬ В EEPROM BIOS ]"
+
+[node name="RevertModalOverlay" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.02, 0.01, 0.85)
+
+[node name="RevertPanel" type="PanelContainer" parent="RevertModalOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -100.0
+offset_right = 280.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="RevertModalOverlay/RevertPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="RevertModalOverlay/RevertPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.35, 0.35, 1)
+theme_override_font_sizes/font_size = 15
+text = "=== ПОДТВЕРЖДЕНИЕ СМЕНЫ РАЗРЕШЕНИЯ ==="
+horizontal_alignment = 1
+
+[node name="MessageLabel" type="Label" parent="RevertModalOverlay/RevertPanel/VBox"]
+layout_mode = 2
+text = "СОХРАНИТЬ НОВОЕ РАЗРЕШЕНИЕ? АВТООТКАТ ЧЕРЕЗ: 15 СЕК"
+horizontal_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="RevertModalOverlay/RevertPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="RevertModalOverlay/RevertPanel/VBox/HBox"]
+custom_minimum_size = Vector2(180, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+text = "[ СОХРАНИТЬ ]"
+
+[node name="RevertButton" type="Button" parent="RevertModalOverlay/RevertPanel/VBox/HBox"]
+custom_minimum_size = Vector2(180, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.4, 0.4, 1)
+text = "[ ОТМЕНИТЬ ]"
+
+[node name="CRTOverlay" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_crt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

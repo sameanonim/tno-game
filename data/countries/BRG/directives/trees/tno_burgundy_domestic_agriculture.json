@@ -1,0 +1,1109 @@
+{
+  "tree_id": "tno_burgundy_domestic_agriculture",
+  "country_tag": "BRG",
+  "nodes": {
+    "BRG_das_landwirtschaftsamt": {
+      "id": "BRG_das_landwirtschaftsamt",
+      "title": "{root_getbrgfocusdas_landwirtschaftsamt}",
+      "description": "Хотя арийская раса сможет жить самодостаточно после того, как весь упадок будет очищен от Фатерлянда и люди будут привиты истинной национал-социалистической мысли, мы ещё не достигли этого.\n\nК сожалению, запасы еды Орденсштаата сокращаются. Это необходимо устранить путем создания нового органа для более эффективного управления этими ценными ресурсами. Рейхсфюрером СС было подчёркнуто, что эти меры носят временный характер и будут отменены, как только эта преграда на пути к утопии будет преодолена.",
+      "raw_icon": "GFX_focus_BRG_das_landwirtschaftsamt",
+      "grid_position": [
+        31.0,
+        0.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [],
+      "prerequisites_groups": [],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.1"
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_das_landwirtschaftsamt.png"
+    },
+    "BRG_food_for_factories": {
+      "id": "BRG_food_for_factories",
+      "title": "{root_getbrgfocusfood_for_factories}",
+      "description": "Неважно, хватит ли нашим лидерам еды, если вся наша промышленная база рухнет от голода. Мы должны сделать своим главным приоритетом обеспечение того, чтобы рабочие на наших самых важных заводах получали надлежащее питание для поддержания уровня производства. \n\nВ разумных пределах, конечно. Мы не хотим дать бельгийскому рабу на лагерной фабрике такое же качество жизни, как немецкому мастеру или инженеру. Это было бы безумием!",
+      "raw_icon": "GFX_focus_BRG_food_for_the_factories",
+      "grid_position": [
+        28.0,
+        1.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_das_landwirtschaftsamt"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_das_landwirtschaftsamt"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {
+        "operator": "OR",
+        "conditions": [
+          {
+            "operator": "NOT",
+            "conditions": [
+              {
+                "type": "has_country_flag",
+                "flag": "BRG_cop_priority_flag"
+              }
+            ]
+          },
+          {
+            "operator": "AND",
+            "conditions": [
+              {
+                "type": "has_country_flag",
+                "flag": "tooltip_BRG_Enough_Food_Reserves_TT"
+              },
+              {
+                "type": "check_variable",
+                "which": "brg_national_food_reserve",
+                "operator": ">",
+                "value": 24999.0
+              }
+            ]
+          }
+        ]
+      },
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [
+        {
+          "opcode": "HAS_FLAG",
+          "flag": "BRG_cop_priority_flag"
+        }
+      ],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.03
+        },
+        {
+          "opcode": "SET_FLAG",
+          "flag": "BRG_worker_priority_flag",
+          "value": true
+        },
+        {
+          "opcode": "CLR_FLAG",
+          "flag": "BRG_cop_priority_flag"
+        },
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.3"
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_food_for_the_factories.png"
+    },
+    "BRG_a_simple_ration": {
+      "id": "BRG_a_simple_ration",
+      "title": "{root_getbrgfocusa_simple_ration}",
+      "description": "Во время войны (или подобного бедствия) представление о «рационе» варьируется в зависимости от военной и гражданской жизни. Для первых им диктуют, какую пищу они могут есть и когда. Что касается последних, им по-прежнему предоставляется большая свобода действий, и они ограничены только ингредиентами. \n\nНо почему так должно быть? Почему бы рядовому рабочему не дать те же указания, что и его товарищу по окопу? Разве это не пошло бы на пользу народам, если бы им давали такие же питательные, сытные и простые в приготовлении блюда?",
+      "raw_icon": "GFX_focus_BRG_a_simple_ration",
+      "grid_position": [
+        27.0,
+        2.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_food_for_factories"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_food_for_factories"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_a_simple_ration.png"
+    },
+    "BRG_industrial_aids": {
+      "id": "BRG_industrial_aids",
+      "title": "{root_getbrgfocusindustrial_aids}",
+      "description": "Национал-социалисты - не луддиты. Хотя они стремятся сохранить физическую и моральную чистоту арийской расы на протяжении тысячелетий, они признают ценность современной промышленности и используют её для улучшения окружающей среды. Агрономия, конечно, не исключение.\n\nТрадиционная сельская жизнь будущего не должна сочетаться с примитивными сельскохозяйственными орудиями. Плуги и сеялки уступят место тракторам и комбайнам.",
+      "raw_icon": "GFX_focus_BRG_automated_agricultural_practices",
+      "grid_position": [
+        26.0,
+        3.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_a_simple_ration"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_a_simple_ration"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_automated_agricultural_practices.png"
+    },
+    "BRG_expand_rodomo_sillos": {
+      "id": "BRG_expand_rodomo_sillos",
+      "title": "{root_getbrgfocusexpand_rodomo_sillos}",
+      "description": "Арийский мужчина может неустанно трудиться на своих полях, собирая непредвиденные урожаи в их щедрости. Однако без надлежащих условий для хранения плодов арийского труда все было бы напрасно. Зерно сгниет, и немецкий народ останется голодным. Такое положение дел не должно произойти, поскольку Орденсштаат предпринимает грандиозное расширение сети хранения и распределения продуктов питания.\n\nЭта сеть должна быть сосредоточена вокруг производственных мощностей промышленного района Родомо, где рабочие должны построить большие центральные складские помещения, а также распределительные центры в тандеме. Скоро урожай сельскохозяйственных культур больше не будет пропадать, поскольку продукты питания распределяются по Орденсштаату наиболее своевременно.",
+      "raw_icon": "GFX_focus_BRG_expand_rodomo_silos",
+      "grid_position": [
+        28.0,
+        3.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_a_simple_ration"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_a_simple_ration"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_expand_rodomo_silos.png"
+    },
+    "BRG_fields_of_grain": {
+      "id": "BRG_fields_of_grain",
+      "title": "{root_getbrgfocusfields_of_grain}",
+      "description": "Чтобы прокормить жителей Орденсштаата, необходимо увеличить урожайность сельскохозяйственных культур. Конечно, земля, по которой мы ступаем, плодородна и подходит для сельскохозяйственных целей. Однако использование потенциала нашей почвы потребует немалых усилий. Чтобы предотвратить ужасный голод, мы построим большие промышленные фермы, каждая из которых будет настроена на получение максимальной продукции, которую может дать земля.\n\nРесурсы, необходимые для этого предприятия, будут огромными, но необходимыми. Заросшие поля и дикие луга должны быть засеяны зерном, поскольку силосы Орденсштаата снова заполнятся. Такие усилия, скорее всего, немного замедлят наши усилия по дальнейшей индустриализации, однако рабочий не может предложить никакой продукции, если он умрет от голода.",
+      "raw_icon": "GFX_focus_BRG_a_simpler_life",
+      "grid_position": [
+        27.0,
+        4.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_industrial_aids",
+        "BRG_expand_rodomo_sillos"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_industrial_aids"
+        ],
+        [
+          "BRG_expand_rodomo_sillos"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_a_simpler_life.png"
+    },
+    "BRG_food_for_those_who_matter": {
+      "id": "BRG_food_for_those_who_matter",
+      "title": "{root_getbrgfocusfood_for_those_who_matter}",
+      "description": "Не имеет значения, есть ли у людей достаточно еды, если люди, которые ими руководят, голодают. Если лидеры Орденсштаата недоедают, это рискует поставить под угрозу все, над чем работал Рейхсфюрер СС. Они будут медлительными и склонными к ошибкам, и в сегодняшнем напряженном мире это недопустимо.\n\nОтвет ясен, лидеры должны есть в первую очередь. Начиная с тех, которые Рейхсфюрер СС считает первостепенными, те, которые имеют жизненно важное значение для Орденсштаата, должны быть сыты ежедневно.",
+      "raw_icon": "GFX_focus_BRG_food_for_the_elite",
+      "grid_position": [
+        34.0,
+        1.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_das_landwirtschaftsamt"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_das_landwirtschaftsamt"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {
+        "operator": "OR",
+        "conditions": [
+          {
+            "operator": "NOT",
+            "conditions": [
+              {
+                "type": "has_country_flag",
+                "flag": "BRG_worker_priority_flag"
+              }
+            ]
+          },
+          {
+            "operator": "AND",
+            "conditions": [
+              {
+                "type": "has_country_flag",
+                "flag": "tooltip_BRG_Enough_Food_Reserves_TT"
+              },
+              {
+                "type": "check_variable",
+                "which": "brg_national_food_reserve",
+                "operator": ">",
+                "value": 24999.0
+              }
+            ]
+          }
+        ]
+      },
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [
+        {
+          "opcode": "HAS_FLAG",
+          "flag": "BRG_worker_priority_flag"
+        }
+      ],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_WAR_SUPPORT",
+          "value": 0.03
+        },
+        {
+          "opcode": "SET_FLAG",
+          "flag": "BRG_cop_priority_flag",
+          "value": true
+        },
+        {
+          "opcode": "CLR_FLAG",
+          "flag": "BRG_worker_priority_flag"
+        },
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.4"
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_food_for_the_elite.png"
+    },
+    "BRG_establish_priority_lists": {
+      "id": "BRG_establish_priority_lists",
+      "title": "{root_getbrgfocusestablish_priority_lists}",
+      "description": "Распределение чего-то столь важного, как еда, не может быть просто спонтанным процессом. Необходима всеобъемлющая и стандартизированная система, чтобы правильно организовать и максимально повысить эффективность распределения пайков, обеспечивая при этом приоритетность наиболее достойных.\n\nВсе должно быть принято во внимание: возраст, звание, военная деятельность, текущая должность, прошлые обязанности, государственная важность их проектов, рекомендации Рейхсфюрера СС, никакие детали не являются слишком мелкими. Последствия слишком велики, чтобы оставлять что-либо на волю случая.",
+      "raw_icon": "GFX_focus_BRG_write_down_priority_lists",
+      "grid_position": [
+        35.0,
+        2.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_food_for_those_who_matter"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_food_for_those_who_matter"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.2"
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_write_down_priority_lists.png"
+    },
+    "BRG_forget_outer_circle": {
+      "id": "BRG_forget_outer_circle",
+      "title": "{root_getbrgfocusforget_outer_circle}",
+      "description": "К сожалению, даже в СС на всех не хватает еды. Запасы истощаются быстрее, чем некоторые прогнозировали, к большому огорчению Рейхсфюрера СС. Он знает, что вскоре должны быть приняты некоторые трудные решения о том, кто получит ограниченные запасы высококачественной еды, и это жертва, на которую он готов пойти. В конце концов, что может быть для арийца более благородным и добродетельным страданием, чем во благо его расы и нации?",
+      "raw_icon": "GFX_focus_BRG_forget_the_outer_circle",
+      "grid_position": [
+        34.0,
+        3.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_establish_priority_lists"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_establish_priority_lists"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_forget_the_outer_circle.png"
+    },
+    "BRG_crack_the_whip": {
+      "id": "BRG_crack_the_whip",
+      "title": "{root_getbrgfocuscrack_the_whip}",
+      "description": "Благодаря реквизиции определенных запасов продовольствия у менее желательных и их перераспределению между тем основным персоналом, который обеспечивает работу Орденсштаата, мы можем быть уверены, что, когда продовольствие начинает заканчиваться, а государственный аппарат остается сытым, их лояльность будет без вопросов.\n\nДо тех пор предстоит проделать большую работу. От рабочих мы должны требовать большего, а от людей мы должны требовать высшего обслуживания. Повышенные квоты и увеличение призыва в армию вскоре станут необходимыми мерами, и как таковые люди неизбежно станут все более неуправляемыми. Однако наш лояльный и сытый персонал позаботится о том, чтобы народ не вышел из-под контроля. Мы можем не сомневаться в этом.",
+      "raw_icon": "GFX_focus_generic_crack_the_whip",
+      "grid_position": [
+        36.0,
+        3.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_establish_priority_lists"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_establish_priority_lists"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_political.59",
+          "days": 21
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_generic_crack_the_whip.png"
+    },
+    "BRG_waste_not_or_want_not": {
+      "id": "BRG_waste_not_or_want_not",
+      "title": "{root_getbrgfocuswaste_not_or_want_not}",
+      "description": "При таком тщательном обращении с таким драгоценным товаром штрафы за незаконное присвоение должны быть соответственно скорректированы, чтобы отразить его важность. Накапливать и тратить пищу в разгар ухудшающейся ситуации - это возрождение тех же вырождающихся идей, которые лежали в основе еврейского капитализма: использование ошибочных суждений для того, чтобы поставить потребности человека над потребностями народа.\n\nНеобходимо принять тот же подход. Неосторожная растрата приведёт к аресту и допросу в гестапо. Преднамеренное расточительство или накопление заслуживают гораздо более интенсивного процесса.",
+      "raw_icon": "GFX_focus_BRG_punish_food_waste",
+      "grid_position": [
+        35.0,
+        4.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_forget_outer_circle",
+        "BRG_crack_the_whip"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_forget_outer_circle"
+        ],
+        [
+          "BRG_crack_the_whip"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_punish_food_waste.png"
+    },
+    "BRG_emergency_stockpile_measures": {
+      "id": "BRG_emergency_stockpile_measures",
+      "title": "{root_getbrgfocusemergency_stockpile_measures}",
+      "description": "Каждый способный человек важен для Орденсштаата, но некоторые из них важнее других. Должны быть сохранены высшие должностные лица, члены групп критического реагирования и ключевой государственный аппарат, а также другие подобные лица, способствующие осуществлению плана Рейхсфюрера СС. Таким образом, с каждым днем надвигающимся все ближе и ближе надвигающийся голод, мы должны принять меры, чтобы обеспечить наличие ресурсов для того, чтобы этот персонал был сытым. Это неизбежно потребует выделения продовольствия у тех, кто не заслуживает этого, и которым предстоит расплачиваться за грядущие сражения.",
+      "raw_icon": "GFX_focus_BRG_the_burgundian_diet",
+      "grid_position": [
+        31.0,
+        2.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_das_landwirtschaftsamt"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_das_landwirtschaftsamt"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.13",
+          "days": 4
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_the_burgundian_diet.png"
+    },
+    "BRG_develop_new_fertilizers": {
+      "id": "BRG_develop_new_fertilizers",
+      "title": "{root_getbrgfocusdevelop_new_fertilizers}",
+      "description": "В прошлом мало что было опаснее для цивилизации, чем чрезмерное земледелие. Они эксплуатировали землю до такой степени, что это сделало бы невозможным выращивание сельскохозяйственных культур, и они увядали бы и исчезли в истории, как умирающие растения на полях.\n\nК счастью, благодаря достижениям в области сельскохозяйственных наук, удобрения позволяют фермерам восстанавливать питательные вещества почвы и год за годом выращивать одни и те же культуры. Если Орденсштаат хочет выжить и процветать, мы должны использовать это в полной мере.",
+      "raw_icon": "GFX_focus_BRG_develop_new_fertilizers",
+      "grid_position": [
+        30.0,
+        3.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_emergency_stockpile_measures"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_emergency_stockpile_measures"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_develop_new_fertilizers.png"
+    },
+    "BRG_specialized_assistance": {
+      "id": "BRG_specialized_assistance",
+      "title": "{root_getbrgfocusspecialized_assistance}",
+      "description": "Нигде в мире промышленные пожары не разгорались так жарко, как в Орденсштаате. Администрацией Рейхсфюрера СС и арийским народом были предприняты важные шаги по превращению Орденсштаата в мастерскую мира. Такой всплеск промышленного мастерства привел к появлению большого числа промышленных специалистов и экспертов по логистике.\n\nХотя их навыки больше всего подходят для промышленного производства, они все же могут быть довольно эффективными в сельскохозяйственном планировании. Таким образом, должны быть составлены планы переориентации немецких специалистов на точную настройку полей, а не кузниц, если в этом возникнет необходимость.",
+      "raw_icon": "GFX_focus_generic_specialized_assistance",
+      "grid_position": [
+        32.0,
+        3.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_emergency_stockpile_measures"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_emergency_stockpile_measures"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_generic_specialized_assistance.png"
+    },
+    "BRG_industriebauernhof_projekte": {
+      "id": "BRG_industriebauernhof_projekte",
+      "title": "{root_getbrgfocusindustriebauernhof_projekte}",
+      "description": "Поскольку промышленность значительно расширилась, это потребовало централизации населения в сплоченных городских центрах, чтобы люди могли работать на недавно построенных литейных заводах и фабриках, разбросанных по земле. Орденсштаат предпринял амбициозные усилия по урбанизации, многие из которых были стимулированы или принуждены перебраться в города. Тем не менее, хотя город может обеспечить впечатляющие результаты в том, что касается оружия или промышленных товаров, он не дает ничего с точки зрения еды, действуя как сток, в который выгружаются продовольственные склады Орденсштаата.\n\nПоэтому сейчас мы стоим перед трудным решением отказаться от таких инициатив, поскольку рабочие сейчас нужны на полях больше, чем когда-либо. И они нужны в спешке. Мы сделаем то, что должны, чтобы сейчас прогнать людей обратно в поля, даже если для этого нам придется снести целые кварталы.",
+      "raw_icon": "GFX_focus_BRG_make_some_space",
+      "grid_position": [
+        31.0,
+        4.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_specialized_assistance",
+        "BRG_develop_new_fertilizers"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_specialized_assistance"
+        ],
+        [
+          "BRG_develop_new_fertilizers"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_make_some_space.png"
+    },
+    "BRG_the_final_measures": {
+      "id": "BRG_the_final_measures",
+      "title": "{root_getbrgfocusthe_final_measures}",
+      "description": "Орденсштаат старательно предпринимает все возможные меры, имеющиеся в его распоряжении, чтобы преодолеть угрозу, которую представляет голод. Лояльность основного персонала была обеспечена, труд народа активизирован и мобилизован, а ранее необузданные поля теперь засеяны зерном.\n\nНесмотря на всё это, гибель более слабых и менее достойных людей в нашем обществе была неизбежна в эти тяжёлые времена. Это неважно. Их рты больше не нужно кормить, и вместе с этим наши запасы еды скоро снова начнут увеличиваться. Когда самые слабые люди будут принесены в жертву, чтобы накормить народ, и с приготовлениями, организованными Рейхсфюрером СС, голод скоро превратится в тусклое воспоминание.",
+      "raw_icon": "GFX_focus_BRG_the_basic_crops",
+      "grid_position": [
+        31.0,
+        5.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_fields_of_grain",
+        "BRG_waste_not_or_want_not",
+        "BRG_industriebauernhof_projekte"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_fields_of_grain",
+          "BRG_waste_not_or_want_not"
+        ],
+        [
+          "BRG_industriebauernhof_projekte"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.5"
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_the_basic_crops.png"
+    },
+    "BRG_a_second_try": {
+      "id": "BRG_a_second_try",
+      "title": "{root_getbrgfocusa_second_try}",
+      "description": "Усилия, предпринятые Орденсштаатом для предотвращения надвигающегося великого голода, были колоссальными. В наших решениях было оставлено очень мало подводных камней, чтобы избежать трудных времен. Все выглядело хорошо, поскольку наши зернохранилища снова начали заполняться меньшим количеством ртов для кормления.\n\nНо это длилось недолго. Немногочисленные камни, которые остались необратимыми, принесли Орденсштаату расплату, поскольку голод снова вернулся, как болезненное воспоминание, которое вернулось, чтобы преследовать арийский народ. Оставшиеся камни, из-под которых просачиваются эти неприятности, должны быть уничтожены независимо от стоимости.",
+      "raw_icon": "GFX_focus_BRG_a_second_try",
+      "grid_position": [
+        31.0,
+        6.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_the_final_measures"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_the_final_measures"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 40.0
+        },
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.6"
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_a_second_try.png"
+    },
+    "BRG_raze_the_cities": {
+      "id": "BRG_raze_the_cities",
+      "title": "{root_getbrgfocusraze_the_cities}",
+      "description": "Чтобы получить необходимое количество зерна и прокормить население во время этого усложняющегося кризиса, необходимо принять радикальные меры. Меры, благодаря которым все наши предыдущие усилия будут казаться не более чем символическими жестами. Все начинается с наших промышленных центров. \n\nХотя самые промышленные из наших городов, безусловно, хорошо производят механические и промышленные товары, нельзя отрицать, что эти регионы также потребляют больше всего продуктов питания, но при этом не производят ничего. Если мы хотим окончательно решить этот затяжной голод, мы должны разрушить эти фабрики и вымостить регионы крупными промышленными фермами, подобных которым ещё не было в этом мире. Мы не можем колебаться в выборе между зерном или винтиком. Винтик не будет ни кормить арийца, ни питать рабочего.",
+      "raw_icon": "GFX_focus_BRG_raze_the_cities",
+      "grid_position": [
+        30.0,
+        7.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_a_second_try"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_a_second_try"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_raze_the_cities.png"
+    },
+    "BRG_survival_of_the_fittest": {
+      "id": "BRG_survival_of_the_fittest",
+      "title": "{root_getbrgfocussurvival_of_the_fittest}",
+      "description": "Поскольку предпринимаются самые радикальные меры, в краткосрочной перспективе мы должны столкнуться с разочаровывающим фактом, что в настоящее время не существует еды, чтобы накормить всех субъектов Орденсштаата. Таким образом, те, кто хочет, чтобы их накормили, должны доказать свою ценность, выполнив целый день исключительного труда. Тех, кто просто выживает, и тех, кто не выкладывается на максимум во всех своих трудах, просто не накормят. Если предыдущих соблазнов было недостаточно, чтобы побудить рабочую силу добиваться хороших результатов, то перспектива пустого желудка в конце дня и ранняя могила должны выступить в качестве более сильного поощрения.",
+      "raw_icon": "GFX_focus_BRG_workers_are_resources",
+      "grid_position": [
+        29.0,
+        8.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_raze_the_cities"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_raze_the_cities"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_political.60",
+          "days": 7
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_workers_are_resources.png"
+    },
+    "BRG_tighten_the_belts": {
+      "id": "BRG_tighten_the_belts",
+      "title": "{root_getbrgfocustighten_the_belts}",
+      "description": "Однажды, когда мы столкнулись с голодом, у нас было достаточно еды в резерве, чтобы гарантировать самым важным и верным солдатам Орденсштаата, что они будут сыты и довольны. Однако по мере того, как кризис становится все более тревожным, это может быть уже не так. Чтобы у всех сотрудников было хоть что-то поесть, рацион даже самых преданных членов СС должен быть сокращен. Все, даже самые важные солдаты, теперь должны внести свой вклад в самопожертвование ради этого дела.",
+      "raw_icon": "GFX_focus_BRG_tighten_the_belts",
+      "grid_position": [
+        32.0,
+        7.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_a_second_try"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_a_second_try"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_tighten_the_belts.png"
+    },
+    "BRG_grab_it_all": {
+      "id": "BRG_grab_it_all",
+      "title": "{root_getbrgfocusgrab_it_all}",
+      "description": "Каждый день люди, недостойные и несущественные для планов Рейхсфюрера СС, продолжают гноиться в Орденсштаате. Подобно ленточному червю, они питаются продуктами, которые были созданы для питания арийского человека. Это больше не будет продолжаться. Мы заберем ещё больше положений от тех, кого сочтем несущественными для планов Рейхсфюрера, чтобы те, кто имеет решающее значение для этого плана, остались в живых. В конце концов, смерть тех, кого лишили, значения не имеет.",
+      "raw_icon": "GFX_focus_BRG_the_burgundian_diet",
+      "grid_position": [
+        33.0,
+        8.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_tighten_the_belts"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_tighten_the_belts"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_the_burgundian_diet.png"
+    },
+    "BRG_burgundian_diet": {
+      "id": "BRG_burgundian_diet",
+      "title": "{root_getbrgfocusburgundian_diet}",
+      "description": "Немецкая диета, французская диета, бельгийская диета. Это кулинарные традиции, влияние которых насчитывает сотни лет, полные богатых и ярких характеристик, которые делают их уникальными и ценными для поваров всего мира.\n\nЭто также одни из самых декадентских, вызывающих разногласия и неарийских обычаев жизни, когда-либо известной.\n\nВ это скудное время нет места колбасам, шоколаду и изысканным винам. Это должно быть время единообразия, время жесткой экономии, время исключительной преданности делу видения Рейхсфюрера СС.",
+      "raw_icon": "GFX_focus_BRG_single_meal_days",
+      "grid_position": [
+        31.0,
+        9.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_survival_of_the_fittest",
+        "BRG_grab_it_all"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_survival_of_the_fittest"
+        ],
+        [
+          "BRG_grab_it_all"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.7"
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_single_meal_days.png"
+    },
+    "BRG_nothing_shall_remain": {
+      "id": "BRG_nothing_shall_remain",
+      "title": "{root_getbrgfocusnothing_shall_remain}",
+      "description": "Поскольку многие важные люди и немецкие семьи по всему Орденсштаату оказываются на грани голодной смерти, некоторые, кажется, даже не заметили этого. Многие декадентские бюрократы и генералы продолжают вести излишне чрезмерный образ жизни, не зная о тяжелом положении Орденсштаата. Обильные ужины, обеды из нескольких блюд, десерты. Для каждого приема пищи или приема пищи пятьдесят арийцев можно было заставить работать здоровым образом. \n\nЭто закончится сейчас.\n\nЭта расточительность немедленно прекратится. Со стороны сотрудников Шарлемань может быть негативная реакция, но это не имеет значения. Их гордость и чрезмерная жизнь терпеть не могут, а с их гневом столкнуться намного легче, чем с голодом тысяч людей, необходимых для этого плана.",
+      "raw_icon": "GFX_focus_BRG_nothing_shall_remain",
+      "grid_position": [
+        29.0,
+        10.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_burgundian_diet"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_burgundian_diet"
+        ]
+      ],
+      "mutually_exclusive": [
+        "BRG_some_can_stay"
+      ],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_nothing_shall_remain.png"
+    },
+    "BRG_root_of_indulgence": {
+      "id": "BRG_root_of_indulgence",
+      "title": "{root_getbrgfocusroot_of_indulgence}",
+      "description": "Как выясняется, на самом деле существует такая вещь, как расточительное производство продуктов питания. Действительно, не вся производимая пища способствует нашим усилиям по питанию арийского народа. Унаследовав свои территории, Орденсштаат унаследовал упадочную пищевую промышленность, столь любимую дегенеративными французами. Сыроделие. Винодельни. Все такие щедрые и чрезмерные продукты питания должны быть уничтожены, поскольку зерно и домашний скот делают их ненужными. Все внимание должно быть сосредоточено на этих областях, и только на этих областях. Орденсштаат не занимается изысканным ужином для избранных.",
+      "raw_icon": "GFX_focus_BRG_ban_regional_food",
+      "grid_position": [
+        29.0,
+        11.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_nothing_shall_remain"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_nothing_shall_remain"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 50.0
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_ban_regional_food.png"
+    },
+    "BRG_some_can_stay": {
+      "id": "BRG_some_can_stay",
+      "title": "{root_getbrgfocussome_can_stay}",
+      "description": "Сотрудники Шарлемань, обогащенные своим сотрудничеством с Орденсштаатом, известны своей щедрой кухней и декадентским укладом. Обеды и грандиозные обеды, которыми могли бы накормить десятки трудолюбивых арийцев, вместо этого глотаются немногими счастливцами. Отвратительно думать, что каждый раз, когда они обедают, еда перекачивается у десятков трудолюбивых арийцев.\n\nОднако, к сожалению, сотрудники играют важную роль как в плане, так и в повседневной работе Орденсштаата. Мы не можем рисковать их прямым неодобрением. Таким образом, некоторые из их особо расточительных действий должны быть запрещены, однако никто не обратит на них особого внимания, если они решат продолжать их, несмотря на правила.",
+      "raw_icon": "GFX_focus_BRG_some_can_stay",
+      "grid_position": [
+        33.0,
+        10.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_burgundian_diet"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_burgundian_diet"
+        ]
+      ],
+      "mutually_exclusive": [
+        "BRG_nothing_shall_remain"
+      ],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": 10.0
+        },
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.02
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_some_can_stay.png"
+    },
+    "BRG_needs_of_the_few_outwiegh_the_many": {
+      "id": "BRG_needs_of_the_few_outwiegh_the_many",
+      "title": "{root_getbrgfocusneeds_of_the_few_outwiegh_the_many}",
+      "description": "Чтобы ещё больше расположить Шарлемань к Рейхсфюреру СС, было выдвинуто предложение: предоставить коллаборационистам участки сельскохозяйственных угодий, которыми они могут распоряжаться по своему усмотрению, чтобы прокормить себя и своих людей, прежде всего. Конечно, наличие больших участков земли, на которых мы не можем извлечь наиболее эффективное количество зерна и домашнего скота, значительно сократит производство и, несомненно, поставит под угрозу жизни многих сотрудников, которые уже находятся на грани. Тем не менее, несмотря на то, сколько это будет стоить производительности и жизней, преданность Шарлемань гораздо ценнее.",
+      "raw_icon": "GFX_focus_BRG_the_needs_of_few",
+      "grid_position": [
+        33.0,
+        11.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_some_can_stay"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_some_can_stay"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_PC",
+          "value": -50.0
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_the_needs_of_few.png"
+    },
+    "BRG_a_solved_problem": {
+      "id": "BRG_a_solved_problem",
+      "title": "{root_getbrgfocusa_solved_problem}",
+      "description": "Наконец, мы можем утверждать, что в борьбе с великим голодом не осталось камня на камне. Орденсштаат предпринял все возможные меры для того, чтобы в должное время положить конец голоду. По мере того, как посевы цветут и урожайность увеличивается в течение всего сезона, проблемы со временем разрешатся. Это не означает, что наша борьба подошла к концу, потому что голод ещё некоторое время будет мучить Орденсштаат и его людей. Нам просто не о чем беспокоиться, так как сейчас это проблема, решение которой должно быть гарантировано.\n\nНаконец, мы можем обратить наше внимание на планы Рейхсфюрера СС и сделать все возможное с нашей нынешней рабочей силой, прежде чем она продолжит истекать.",
+      "raw_icon": "GFX_focus_BRG_the_burgundian_diet",
+      "grid_position": [
+        31.0,
+        12.0
+      ],
+      "turns_to_complete": 2,
+      "cost_per_turn": 0.05,
+      "cost_initial_cap": 1,
+      "cost_initial_pc": 10.0,
+      "prerequisites": [
+        "BRG_root_of_indulgence",
+        "BRG_needs_of_the_few_outwiegh_the_many"
+      ],
+      "prerequisites_groups": [
+        [
+          "BRG_root_of_indulgence",
+          "BRG_needs_of_the_few_outwiegh_the_many"
+        ]
+      ],
+      "mutually_exclusive": [],
+      "available_ast": {},
+      "bypass_ast": {},
+      "cancel_if_invalid": true,
+      "available_triggers": [],
+      "completion_rewards": [
+        {
+          "opcode": "MOD_STABILITY",
+          "value": 0.03
+        },
+        {
+          "opcode": "MOD_WAR_SUPPORT",
+          "value": 0.03
+        },
+        {
+          "opcode": "FIRE_EVENT",
+          "event_id": "BRG_agri.8"
+        }
+      ],
+      "icon_path": "res://assets/gfx/interface/goals/focus_BRG_the_burgundian_diet.png"
+    }
+  }
+}
