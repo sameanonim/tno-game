@@ -845,6 +845,7 @@ func to_dict() -> Dictionary:
 			"parliament_seats": parliament_seats.duplicate(true),
 			"total_parliament_seats": total_parliament_seats,
 			"parties": parties_serialized,
+			"initial_parties": parties_serialized,
 			"national_spirits": national_spirits.duplicate(true),
 			"societal_laws": societal_laws.duplicate(true),
 			"active_laws": active_laws_serialized,
@@ -1059,8 +1060,9 @@ static func from_dict(data: Dictionary) -> CountryState:
 		"ultranationalism": "Ультранационализм"
 	}
 
-	if pol.has("parties") and pol["parties"] is Array:
-		for p_data in pol["parties"]:
+	if (pol.has("parties") or pol.has("initial_parties")) and (pol.get("parties") is Array or pol.get("initial_parties") is Array):
+		var raw_arr = pol.get("parties", pol.get("initial_parties", []))
+		for p_data in raw_arr:
 			if p_data is Dictionary:
 				state.initial_parties.append(PartyData.from_dict(p_data))
 	elif pol.has("party_popularities") and pol["party_popularities"] is Dictionary:
@@ -1106,11 +1108,11 @@ static func from_dict(data: Dictionary) -> CountryState:
 	state.normalize_parties_popularity()
 
 	state.gdp_billions = float(eco.get("gdp_billions", 15.0))
-	state.real_gdp_growth = float(eco.get("real_gdp_growth", 0.04))
+	state.real_gdp_growth = float(eco.get("real_gdp_growth", eco.get("gdp_growth_rate", 0.04)))
 	state.liquid_reserves_billions = float(eco.get("liquid_reserves_billions", 1.0))
 	state.national_debt_billions = float(eco.get("national_debt_billions", 2.0))
 	state.debt_ceiling_ratio = float(eco.get("debt_ceiling_ratio", 1.0))
-	state.is_in_fiscal_crisis = bool(eco.get("is_in_fiscal_crisis", false))
+	state.is_in_fiscal_crisis = bool(eco.get("is_in_fiscal_crisis", eco.get("fiscal_crisis_active", false)))
 	state.central_bank_rate = float(eco.get("central_bank_rate", 0.06))
 	state.inflation_rate = float(eco.get("inflation_rate", 0.05))
 	state.tax_rate = float(eco.get("tax_rate", 0.20))

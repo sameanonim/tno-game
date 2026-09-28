@@ -45,7 +45,24 @@ var gcw_manager: GermanCivilWarManager = null
 var current_tab: String = "frontlines"
 
 
+func _tr(key: String, default_text: String) -> String:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, default_text)
+	return tr(key) if tr(key) != key else default_text
+
+
+func _on_locale_changed(_locale: String) -> void:
+	refresh_ui()
+
+
 func _ready() -> void:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_signal("locale_changed"):
+			if not loc.locale_changed.is_connected(_on_locale_changed):
+				loc.locale_changed.connect(_on_locale_changed)
 	_connect_buttons()
 	_apply_terminal_styles()
 	_switch_tab("frontlines")
@@ -108,9 +125,9 @@ func refresh_ui() -> void:
 
 	# Заголовок фазы
 	if header_title != null:
-		header_title.text = "ОПЕРАТИВНЫЙ ШТАБ // %s" % gcw_manager.get_phase_name()
+		header_title.text = _tr("GCW_HEADER_TITLE", "ОПЕРАТИВНЫЙ ШТАБ // %s") % gcw_manager.get_phase_name()
 	if phase_badge != null:
-		phase_badge.text = "[ ФАЗА %d ]" % int(gcw_manager.active_phase)
+		phase_badge.text = _tr("GCW_PHASE_BADGE", "[ ФАЗА %d ]") % int(gcw_manager.active_phase)
 
 	# Очки действий кабинета
 	if cap_indicator_label != null and gcw_manager.player_state_ref != null:
@@ -145,9 +162,9 @@ func _render_frontlines_tab() -> void:
 	if frontlines.is_empty():
 		var empty_lbl = Label.new()
 		if gcw_manager.active_phase == GermanCivilWarManager.GCWPhase.PHASE_1_AGONY:
-			empty_lbl.text = "ФАЗА АГОНИИ: Фронты не сформированы. До взрыва гражданской войны: %d ходов.\nИспользуйте очки кабинета и политический капитал для интриг во вкладке «ПРЕТЕНДЕНТЫ»." % gcw_manager.turns_until_hitler_death
+			empty_lbl.text = _tr("GCW_AGONY_NO_FRONTLINES", "ФАЗА АГОНИИ: Фронты не сформированы. До взрыва гражданской войны: %d ходов.\nИспользуйте очки кабинета и политический капитал для интриг во вкладке «ПРЕТЕНДЕНТЫ».") % gcw_manager.turns_until_hitler_death
 		else:
-			empty_lbl.text = "АКТИВНЫХ ФРОНТОВ НЕТ. Территории Рейха стабилизированы под единым контролем."
+			empty_lbl.text = _tr("GCW_NO_FRONTLINES", "АКТИВНЫХ ФРОНТОВ НЕТ. Территории Рейха стабилизированы под единым контролем.")
 		empty_lbl.modulate = Color(0.7, 0.9, 0.8)
 		axes_display_box.add_child(empty_lbl)
 		return
@@ -160,7 +177,7 @@ func _render_frontlines_tab() -> void:
 		f_panel.add_child(f_box)
 
 		var f_title = Label.new()
-		f_title.text = "ТЕАТР: %s [%s vs %s] | НАПРЯЖЕННОСТЬ: %0.0f%%" % [front.name.to_upper(), front.attacker_tag, front.defender_tag, front.tension]
+		f_title.text = _tr("GCW_THEATER_FMT", "ТЕАТР: %s [%s vs %s] | НАПРЯЖЕННОСТЬ: %0.0f%%") % [front.name.to_upper(), front.attacker_tag, front.defender_tag, front.tension]
 		f_title.modulate = Color(0.0, 0.9, 1.0)
 		f_box.add_child(f_title)
 
@@ -181,14 +198,14 @@ func _render_frontlines_tab() -> void:
 			bar_lbl.modulate = Color(0.2, 1.0, 0.4) if axis.progress > 50.0 else Color(1.0, 0.8, 0.2)
 			ax_hbox.add_child(bar_lbl)
 
-			var status_str = "АТАКА"
+			var status_str = _tr("GCW_STATUS_ATTACK", "АТАКА")
 			match axis.posture:
-				OperationalAxis.Posture.DEFENSIVE: status_str = "ОБОРОНА"
-				OperationalAxis.Posture.AGGRESSIVE_BREAKTHROUGH: status_str = "ПРОРЫВ"
-			if axis.is_stalled: status_str += " [ТУПИК]"
+				OperationalAxis.Posture.DEFENSIVE: status_str = _tr("GCW_STATUS_DEFENSE", "ОБОРОНА")
+				OperationalAxis.Posture.AGGRESSIVE_BREAKTHROUGH: status_str = _tr("GCW_STATUS_BREAKTHROUGH", "ПРОРЫВ")
+			if axis.is_stalled: status_str += _tr("GCW_STATUS_STALLED", " [ТУПИК]")
 
 			var ax_stat = Label.new()
-			ax_stat.text = "СИЛЫ: %d чел. | %s" % [axis.assigned_manpower, status_str]
+			ax_stat.text = _tr("GCW_FORCES_FMT", "СИЛЫ: %d чел. | %s") % [axis.assigned_manpower, status_str]
 			ax_stat.modulate = Color(0.7, 0.7, 0.7)
 			ax_hbox.add_child(ax_stat)
 
@@ -212,7 +229,7 @@ func _render_contenders_tab() -> void:
 		return
 
 	var p_title = Label.new()
-	p_title.text = "БАЛАНС СИЛ ПРЕТЕНДЕНТОВ И УНИКАЛЬНЫЕ МЕХАНИКИ:"
+	p_title.text = _tr("GCW_CONTENDERS_TITLE", "БАЛАНС СИЛ ПРЕТЕНДЕНТОВ И УНИКАЛЬНЫЕ МЕХАНИКИ:")
 	p_title.modulate = Color(0.0, 0.9, 1.0)
 	section_contenders.add_child(p_title)
 
@@ -232,7 +249,7 @@ func _render_contenders_tab() -> void:
 		var inf_bar = _generate_ascii_bar(inf / 100.0, 12)
 
 		var head = Label.new()
-		head.text = "%s [%s] | ВЛИЯНИЕ: [%s] %0.1f%%" % [c["name"].to_upper(), c["tag"], inf_bar, inf]
+		head.text = _tr("GCW_CONTENDER_FMT", "%s [%s] | ВЛИЯНИЕ: [%s] %0.1f%%") % [c["name"].to_upper(), c["tag"], inf_bar, inf]
 		head.modulate = Color(1.0, 0.9, 0.3)
 		vbox.add_child(head)
 
@@ -273,7 +290,7 @@ func _render_contenders_tab() -> void:
 		if gcw_manager.active_phase == GermanCivilWarManager.GCWPhase.PHASE_1_AGONY:
 			var acts_hbox = HBoxContainer.new()
 			var btn_bribe = Button.new()
-			btn_bribe.text = "ПОДКУПИТЬ ГАУЛЯЙТЕРА (25 PC)"
+			btn_bribe.text = _tr("GCW_BTN_BRIBE", "ПОДКУПИТЬ ГАУЛЯЙТЕРА (25 PC)")
 			btn_bribe.pressed.connect(func():
 				gcw_manager.bribe_gauleiter(c["key"], 55)
 				intrigue_action_clicked.emit("bribe", c["key"])
@@ -282,7 +299,7 @@ func _render_contenders_tab() -> void:
 			acts_hbox.add_child(btn_bribe)
 
 			var btn_gen = Button.new()
-			btn_gen.text = "СВЕРБОВАТЬ ГЕНЕРАЛА (1 CAP)"
+			btn_gen.text = _tr("GCW_BTN_GENERAL", "СВЕРБОВАТЬ ГЕНЕРАЛА (1 CAP)")
 			btn_gen.pressed.connect(func():
 				gcw_manager.sway_general(c["key"], "Кадровый Офицер")
 				intrigue_action_clicked.emit("sway_general", c["key"])
@@ -291,7 +308,7 @@ func _render_contenders_tab() -> void:
 			acts_hbox.add_child(btn_gen)
 
 			var btn_dep = Button.new()
-			btn_dep.text = "ПЕРЕТЯНУТЬ СКЛАДЫ (20 PC, 1 CAP)"
+			btn_dep.text = _tr("GCW_BTN_DEPOT", "ПЕРЕТЯНУТЬ СКЛАДЫ (20 PC, 1 CAP)")
 			btn_dep.pressed.connect(func():
 				gcw_manager.seize_depot(c["key"], 8000)
 				intrigue_action_clicked.emit("seize_depot", c["key"])
@@ -306,7 +323,7 @@ func _render_contenders_tab() -> void:
 
 func _render_post_cw_reforms_tab() -> void:
 	var p_title = Label.new()
-	p_title.text = "=== ШТАБ РЕФОРМ И ВНУТРЕННЯЯ ПОЛИТИКА ВЕЛИКОЙ ГЕРМАНИИ ==="
+	p_title.text = _tr("GCW_POST_CW_TITLE", "=== ШТАБ РЕФОРМ И ВНУТРЕННЯЯ ПОЛИТИКА ВЕЛИКОЙ ГЕРМАНИИ ===")
 	p_title.modulate = Color(0.0, 0.95, 1.0)
 	section_contenders.add_child(p_title)
 
@@ -348,7 +365,7 @@ func _render_post_cw_reforms_tab() -> void:
 			vbox.add_child(btn_grid)
 
 			var b_erhard = Button.new()
-			b_erhard.text = "ДЕКРЕТ ЭРХАРДА (25 PC, 1 CAP)"
+			b_erhard.text = _tr("GCW_BTN_ERHARD", "ДЕКРЕТ ЭРХАРДА (25 PC, 1 CAP)")
 			b_erhard.pressed.connect(func():
 				var r = gcw_manager.execute_speer_reform("erhard_decree")
 				status_bar_label.text = r["message"]
@@ -357,7 +374,7 @@ func _render_post_cw_reforms_tab() -> void:
 			btn_grid.add_child(b_erhard)
 
 			var b_slave = Button.new()
-			b_slave.text = "ЭМАНСИПАЦИЯ РАБОВ (35 PC, $5B)"
+			b_slave.text = _tr("GCW_BTN_SLAVE", "ЭМАНСИПАЦИЯ РАБОВ (35 PC, $5B)")
 			b_slave.pressed.connect(func():
 				var r = gcw_manager.execute_speer_reform("slave_emancipation")
 				status_bar_label.text = r["message"]
@@ -366,7 +383,7 @@ func _render_post_cw_reforms_tab() -> void:
 			btn_grid.add_child(b_slave)
 
 			var b_tres = Button.new()
-			b_tres.text = "РЕФОРМА ВЕРМАХТА (30 PC, 1 CAP)"
+			b_tres.text = _tr("GCW_BTN_TRESCKOW", "РЕФОРМА ВЕРМАХТА (30 PC, 1 CAP)")
 			b_tres.pressed.connect(func():
 				var r = gcw_manager.execute_speer_reform("tresckow_wehrmacht")
 				status_bar_label.text = r["message"]
@@ -375,7 +392,7 @@ func _render_post_cw_reforms_tab() -> void:
 			btn_grid.add_child(b_tres)
 
 			var b_zoll = Button.new()
-			b_zoll.text = "РАСШИРИТЬ ЦОЛЬФЕРАЙН ($8B)"
+			b_zoll.text = _tr("GCW_BTN_ZOLLVEREIN", "РАСШИРИТЬ ЦОЛЬФЕРАЙН ($8B)")
 			b_zoll.pressed.connect(func():
 				var r = gcw_manager.execute_speer_reform("zollverein_expansion")
 				status_bar_label.text = r["message"]
@@ -404,7 +421,7 @@ func _render_post_cw_reforms_tab() -> void:
 			vbox.add_child(btn_grid)
 
 			var b_purge = Button.new()
-			b_purge.text = "ЗАЧИСТКА ПО КАРТОТЕКЕ (30 PC, 1 CAP)"
+			b_purge.text = _tr("GCW_BTN_PURGE", "ЗАЧИСТКА ПО КАРТОТЕКЕ (30 PC, 1 CAP)")
 			b_purge.pressed.connect(func():
 				var r = gcw_manager.execute_bormann_action("card_index_purge")
 				status_bar_label.text = r["message"]
@@ -413,7 +430,7 @@ func _render_post_cw_reforms_tab() -> void:
 			btn_grid.add_child(b_purge)
 
 			var b_mega = Button.new()
-			b_mega.text = "МЕГАПРОЕКТЫ РЕЙХА ($6B)"
+			b_mega.text = _tr("GCW_BTN_MEGAPROJECT", "МЕГАПРОЕКТЫ РЕЙХА ($6B)")
 			b_mega.pressed.connect(func():
 				var r = gcw_manager.execute_bormann_action("megaproject_build")
 				status_bar_label.text = r["message"]
@@ -422,7 +439,7 @@ func _render_post_cw_reforms_tab() -> void:
 			btn_grid.add_child(b_mega)
 
 			var b_rk = Button.new()
-			b_rk.text = "ЦЕНТРАЛИЗАЦИЯ КОЛОНИЙ (40 PC)"
+			b_rk.text = _tr("GCW_BTN_INTEGRATE_RK", "ЦЕНТРАЛИЗАЦИЯ КОЛОНИЙ (40 PC)")
 			b_rk.pressed.connect(func():
 				var r = gcw_manager.execute_bormann_action("integrate_rk")
 				status_bar_label.text = r["message"]
@@ -459,7 +476,7 @@ func _render_superpower_tab() -> void:
 	defcon_panel.add_child(def_vbox)
 
 	var def_lbl = Label.new()
-	def_lbl.text = "ГЛОБАЛЬНАЯ ЯДЕРНАЯ ШКАЛА: DEFCON %d" % gcw_manager.current_defcon
+	def_lbl.text = _tr("GCW_SUPERPOWER_DEFCON", "ГЛОБАЛЬНАЯ ЯДЕРНАЯ ШКАЛА: DEFCON %d") % gcw_manager.current_defcon
 	var def_col = Color(0.2, 1.0, 0.4)
 	match gcw_manager.current_defcon:
 		4: def_col = Color(0.7, 1.0, 0.2)
@@ -471,17 +488,17 @@ func _render_superpower_tab() -> void:
 
 	var def_desc = Label.new()
 	match gcw_manager.current_defcon:
-		5: def_desc.text = "СТАТУС: МИРНОЕ ВРЕМЯ. Стратегические силы на дежурстве."
-		4: def_desc.text = "СТАТУС: ПОВЫШЕННАЯ ГОТОВНОСТЬ. Усилена разведка в прокси-зонах."
-		3: def_desc.text = "СТАТУС: КРИЗИС В СВЕРХДЕРЖАВАХ. Эскалация локальных конфликтов."
-		2: def_desc.text = "СТАТУС: ПРЕДВОЕННОЕ ПОЛОЖЕНИЕ. Бомбардировщики подняты в воздух."
-		1: def_desc.text = "СТАТУС: ЯДЕРНЫЙ АРМАГЕДДОН. Запуск межконтинентальных ракет."
+		5: def_desc.text = _tr("GCW_DEFCON_5", "СТАТУС: МИРНОЕ ВРЕМЯ. Стратегические силы на дежурстве.")
+		4: def_desc.text = _tr("GCW_DEFCON_4", "СТАТУС: ПОВЫШЕННАЯ ГОТОВНОСТЬ. Усилена разведка в прокси-зонах.")
+		3: def_desc.text = _tr("GCW_DEFCON_3", "СТАТУС: КРИЗИС В СВЕРХДЕРЖАВАХ. Эскалация локальных конфликтов.")
+		2: def_desc.text = _tr("GCW_DEFCON_2", "СТАТУС: ПРЕДВОЕННОЕ ПОЛОЖЕНИЕ. Бомбардировщики подняты в воздух.")
+		1: def_desc.text = _tr("GCW_DEFCON_1", "СТАТУС: ЯДЕРНЫЙ АРМАГЕДДОН. Запуск межконтинентальных ракет.")
 	def_vbox.add_child(def_desc)
 	section_superpower.add_child(defcon_panel)
 
 	# Прокси-войны
 	var p_title = Label.new()
-	p_title.text = "ПРОКСИ-ВОЙНЫ И ВНЕШНИЕ ТЕАТРЫ ВОЕННЫХ ДЕЙСТВИЙ:"
+	p_title.text = _tr("GCW_PROXIES_TITLE", "ПРОКСИ-ВОЙНЫ И ВНЕШНИЕ ТЕАТРЫ ВОЕННЫХ ДЕЙСТВИЙ:")
 	p_title.modulate = Color(0.0, 0.9, 1.0)
 	section_superpower.add_child(p_title)
 
@@ -523,7 +540,7 @@ func _render_superpower_tab() -> void:
 		act_hbox.add_theme_constant_override("separation", 8)
 
 		var btn_aid = Button.new()
-		btn_aid.text = "[ ОТПРАВИТЬ ДИВИЗИЮ (-10k чел, -2.5k винт, -$0.5B) ]"
+		btn_aid.text = _tr("GCW_BTN_SEND_AID", "[ ОТПРАВИТЬ ДИВИЗИЮ (-10k чел, -2.5k винт, -$0.5B) ]")
 		btn_aid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		btn_aid.pressed.connect(func():
 			var ok = gcw_manager.send_proxy_aid(p_key, 1, 0.5)
@@ -541,7 +558,7 @@ func _render_superpower_tab() -> void:
 		act_hbox.add_child(btn_aid)
 
 		var btn_lend = Button.new()
-		btn_lend.text = "[ ЛЕНД-ЛИЗ (-2.5k винт, -100 танков, -$0.2B) ]"
+		btn_lend.text = _tr("GCW_BTN_LEND_LEASE", "[ ЛЕНД-ЛИЗ (-2.5k винт, -100 танков, -$0.2B) ]")
 		btn_lend.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		btn_lend.pressed.connect(func():
 			var res = gcw_manager.send_proxy_lend_lease(p_key, 2500, 100, 0.2)
@@ -555,7 +572,7 @@ func _render_superpower_tab() -> void:
 		act_hbox.add_child(btn_lend)
 
 		var btn_radar = Button.new()
-		btn_radar.text = "[ ДАННЫЕ ТВД ]"
+		btn_radar.text = _tr("GCW_BTN_THEATER_DATA", "[ ДАННЫЕ ТВД ]")
 		btn_radar.pressed.connect(func():
 			var provs = p.get("key_provinces", [])
 			proxy_theater_focus_requested.emit(p_key, provs)

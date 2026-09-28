@@ -637,19 +637,21 @@ func _switch_directives_tree(turn_manager: TurnManager, stage_suffix: String) ->
 			_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s" % found_tree_id)
 			return
 
-	# 2. Fallback через UI-контроллер сцены
-	var root = turn_manager.get_parent()
-	if root != null and root.has_node("TabContainer/Directives/DirectiveTreeView"):
-		var tree_view = root.get_node_or_null("TabContainer/Directives/DirectiveTreeView")
-		if tree_view != null and "available_trees" in tree_view and not tree_view.available_trees.is_empty():
-			for t in tree_view.available_trees:
-				var tid = str(t.get("tree_id", "")).to_lower()
-				if tid.contains(stage_suffix):
-					var p = str(t.get("path", ""))
-					if tree_view.has_method("load_tree_from_file"):
-						tree_view.load_tree_from_file(p)
-						_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s" % t.get("tree_id", ""))
+	# 2. Fallback через файловую систему и FocusStageController
+	var dir_path = "res://data/countries/%s/directives" % player_tag.to_upper()
+	if DirAccess.dir_exists_absolute(dir_path):
+		var dir = DirAccess.open(dir_path)
+		if dir != null:
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			while file_name != "":
+				if not dir.current_is_dir() and file_name.ends_with(".json") and file_name.to_lower().contains(stage_suffix.to_lower()):
+					var tree_id = file_name.trim_suffix(".json")
+					if turn_manager.focus_stage_controller != null:
+						turn_manager.focus_stage_controller.switch_focus_tree(tree_id, true)
+						_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s" % tree_id)
 						break
+				file_name = dir.get_next()
 
 
 func _log(msg: String) -> void:

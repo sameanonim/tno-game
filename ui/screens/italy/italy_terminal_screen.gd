@@ -49,15 +49,19 @@ func setup(mgr: ItalyEmpireManager) -> void:
 			italy_manager.triumvirate_tension_changed.connect(_on_manager_update)
 		if not italy_manager.triumvirate_collapsed.is_connected(_on_manager_update):
 			italy_manager.triumvirate_collapsed.connect(_on_manager_update)
+		if not italy_manager.mediterranean_influence_updated.is_connected(_on_manager_update):
+			italy_manager.mediterranean_influence_updated.connect(_on_manager_update)
 		if not italy_manager.atlantropa_project_completed.is_connected(_on_manager_update):
 			italy_manager.atlantropa_project_completed.connect(_on_manager_update)
+		if not italy_manager.council_power_shifted.is_connected(_on_manager_update):
+			italy_manager.council_power_shifted.connect(_on_manager_update)
 		if not italy_manager.ideology_path_chosen.is_connected(_on_manager_update):
 			italy_manager.ideology_path_chosen.connect(_on_manager_update)
 
 	refresh_ui()
 
 
-func _on_manager_update(_arg1 = null, _arg2 = null) -> void:
+func _on_manager_update(_arg1: Variant = null, _arg2: Variant = null) -> void:
 	refresh_ui()
 
 

@@ -127,18 +127,33 @@ static func simulate_frontlines(
 		if all_axes_finished:
 			front.active = false
 			fronts_to_close.append(front.front_id)
+			var def_regions_count = 0
+			if defender != null and not regions.is_empty():
+				for r in regions.values():
+					if r is RegionData and r.owner_tag == front.defender_tag:
+						def_regions_count += 1
+
+			# Полная капитуляция происходит, если у обороняющегося не осталось регионов либо силы истощены (< 3000 чел. и <= 2 регионов)
+			var is_true_capitulation = (def_regions_count == 0) or (defender != null and defender.manpower_pool <= 3000 and def_regions_count <= 2)
+			var cap_summary = ""
+			if is_true_capitulation:
+				cap_summary = _tr_str("FRONT_CAPITULATION_SUMMARY", {
+					"victor": front.attacker_tag,
+					"defeated": front.defender_tag
+				}, "ПОЛНАЯ КАПИТУЛЯЦИЯ: Войска %s сломили сопротивление %s! Держава полностью капитулировала." % [front.attacker_tag, front.defender_tag])
+			else:
+				cap_summary = "ТРИУМФ НА ТВД: Войска %s выполнили все директивы на фронте «%s». Противник сохраняет контроль над частью регионов (%d)." % [front.attacker_tag, front.name, def_regions_count]
+
 			var cap_rep: Dictionary = {
 				"front_id": front.front_id,
-				"capitulation": true,
+				"capitulation": is_true_capitulation,
+				"theater_cleared": not is_true_capitulation,
 				"victor_tag": front.attacker_tag,
 				"defeated_tag": front.defender_tag,
 				"attacker_tag": front.attacker_tag,
 				"defender_tag": front.defender_tag,
 				"captured_region_id": -1,
-				"summary": _tr_str("FRONT_CAPITULATION_SUMMARY", {
-					"victor": front.attacker_tag,
-					"defeated": front.defender_tag
-				}, "ПОЛНАЯ КАПИТУЛЯЦИЯ: Войска %s сломили организованное сопротивление %s! Фронт закрыт безоговорочной победой." % [front.attacker_tag, front.defender_tag])
+				"summary": cap_summary
 			}
 			reports.append(cap_rep)
 

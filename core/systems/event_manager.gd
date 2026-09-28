@@ -190,6 +190,8 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 		state.political_capital += float(effects["modify_pc"])
 	elif effects.has("MOD_PC"):
 		state.political_capital += float(effects["MOD_PC"])
+	elif effects.has("add_political_power"):
+		state.political_capital += float(effects["add_political_power"])
 
 	if effects.has("modify_gdp"):
 		state.gdp_billions = maxf(state.gdp_billions + float(effects["modify_gdp"]), 0.1)
@@ -210,15 +212,23 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 		state.legitimacy = clampf(state.legitimacy + float(effects["modify_stability"]) * 50.0, 0.0, 100.0)
 	elif effects.has("MOD_STABILITY"):
 		state.legitimacy = clampf(state.legitimacy + float(effects["MOD_STABILITY"]) * 50.0, 0.0, 100.0)
+	elif effects.has("add_stability"):
+		var stab_val = float(effects["add_stability"])
+		var mult = 50.0 if absf(stab_val) <= 1.0 else 0.5
+		state.legitimacy = clampf(state.legitimacy + (stab_val * mult), 0.0, 100.0)
 
 	if effects.has("modify_war_support"):
 		state.war_support_percent = clampf(state.war_support_percent + float(effects["modify_war_support"]), 0.0, 100.0)
 	elif effects.has("MOD_WAR_SUPPORT"):
-		# If expressed as fraction (e.g. 0.20 -> +20%) or percentage
 		var ws_val = float(effects["MOD_WAR_SUPPORT"])
 		if absf(ws_val) <= 1.0:
 			ws_val *= 100.0
 		state.war_support_percent = clampf(state.war_support_percent + ws_val, 0.0, 100.0)
+	elif effects.has("add_war_support"):
+		var ws_val2 = float(effects["add_war_support"])
+		if absf(ws_val2) <= 1.0:
+			ws_val2 *= 100.0
+		state.war_support_percent = clampf(state.war_support_percent + ws_val2, 0.0, 100.0)
 
 	if effects.has("modify_reserves"):
 		state.liquid_reserves_billions = maxf(state.liquid_reserves_billions + float(effects["modify_reserves"]), 0.0)
@@ -229,6 +239,8 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 		state.manpower_pool = maxi(state.manpower_pool + int(effects["modify_manpower"]), 0)
 	elif effects.has("MOD_MANPOWER"):
 		state.manpower_pool = maxi(state.manpower_pool + int(effects["MOD_MANPOWER"]), 0)
+	elif effects.has("add_manpower"):
+		state.manpower_pool = maxi(state.manpower_pool + int(effects["add_manpower"]), 0)
 
 	if effects.has("modify_weapons"):
 		state.infantry_weapons_stockpile = maxi(state.infantry_weapons_stockpile + int(effects["modify_weapons"]), 0)
@@ -253,6 +265,14 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 	if effects.has("SET_FLAG"):
 		var single_flag = str(effects["SET_FLAG"])
 		state.set_flag(single_flag, true)
+
+	if effects.has("set_country_flag"):
+		var cf = effects["set_country_flag"]
+		if cf is String:
+			state.set_flag(cf, true)
+		elif cf is Dictionary:
+			for k in cf:
+				state.set_flag(str(k), cf[k])
 
 	if effects.has("clr_country_flag"):
 		state.story_flags.erase(str(effects["clr_country_flag"]))
@@ -296,11 +316,35 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 			if sub_ev != null:
 				pending_modal_events.append(sub_ev)
 
+	if effects.has("country_event"):
+		var ce = effects["country_event"]
+		var ev_id = ""
+		if ce is String:
+			ev_id = ce
+		elif ce is Dictionary:
+			ev_id = str(ce.get("id", ""))
+		if not ev_id.is_empty():
+			var sub_ev2 = get_or_load_event(ev_id)
+			if sub_ev2 != null:
+				pending_modal_events.append(sub_ev2)
+
 	if effects.has("news_events"):
 		for news_id in effects["news_events"]:
 			var n_ev = get_or_load_event(str(news_id))
 			if n_ev != null:
 				pending_modal_events.append(n_ev)
+
+	if effects.has("news_event"):
+		var ne = effects["news_event"]
+		var nev_id = ""
+		if ne is String:
+			nev_id = ne
+		elif ne is Dictionary:
+			nev_id = str(ne.get("id", ""))
+		if not nev_id.is_empty():
+			var n_ev2 = get_or_load_event(nev_id)
+			if n_ev2 != null:
+				pending_modal_events.append(n_ev2)
 
 	if effects.has("super_event"):
 		super_event_triggered.emit(str(effects["super_event"]))
@@ -317,16 +361,16 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 
 	# Валидация неизвестных кодов эффектов
 	const KNOWN_EFFECT_KEYS: Array[String] = [
-		"modify_pc", "MOD_PC", "modify_gdp", "MOD_GDP", "modify_legitimacy", "MOD_LEGITIMACY",
-		"modify_radicalization", "MOD_RADICALIZATION", "modify_stability", "MOD_STABILITY",
-		"modify_war_support", "MOD_WAR_SUPPORT", "modify_reserves", "MOD_RESERVES",
-		"modify_manpower", "MOD_MANPOWER", "modify_weapons", "MOD_WEAPONS",
+		"modify_pc", "MOD_PC", "add_political_power", "modify_gdp", "MOD_GDP", "modify_legitimacy", "MOD_LEGITIMACY",
+		"modify_radicalization", "MOD_RADICALIZATION", "modify_stability", "MOD_STABILITY", "add_stability",
+		"modify_war_support", "MOD_WAR_SUPPORT", "add_war_support", "modify_reserves", "MOD_RESERVES",
+		"modify_manpower", "MOD_MANPOWER", "add_manpower", "modify_weapons", "MOD_WEAPONS",
 		"modify_heavy_equipment", "MOD_HEAVY_EQUIPMENT", "modify_factions", "set_flags",
-		"SET_FLAG", "clr_country_flag", "CLR_FLAG", "transfer_state", "TRANSFER_STATE",
+		"SET_FLAG", "set_country_flag", "clr_country_flag", "CLR_FLAG", "transfer_state", "TRANSFER_STATE",
 		"transfer_states", "annex_country", "ANNEX_COUNTRY", "set_rule", "SET_RULE",
-		"add_equipment_to_stockpile", "MOD_STOCKPILE", "country_events", "news_events",
-		"super_event", "SUPER_EVENT", "FIRE_SUPER_EVENT", "fire_super_event",
-		"load_focus_tree", "LOAD_FOCUS_TREE"
+		"add_equipment_to_stockpile", "MOD_STOCKPILE", "country_events", "country_event",
+		"news_events", "news_event", "super_event", "SUPER_EVENT", "FIRE_SUPER_EVENT", "fire_super_event",
+		"load_focus_tree", "LOAD_FOCUS_TREE", "log"
 	]
 	for k in effects.keys():
 		if not KNOWN_EFFECT_KEYS.has(str(k)):

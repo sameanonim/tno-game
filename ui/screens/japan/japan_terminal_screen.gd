@@ -53,11 +53,17 @@ func setup(mgr: JapanEmpireManager) -> void:
 			japan_manager.prime_minister_elected.connect(_on_manager_update)
 		if not japan_manager.ija_ijn_balance_shifted.is_connected(_on_manager_update):
 			japan_manager.ija_ijn_balance_shifted.connect(_on_manager_update)
+		if not japan_manager.zaibatsu_influence_changed.is_connected(_on_manager_update):
+			japan_manager.zaibatsu_influence_changed.connect(_on_manager_update)
+		if not japan_manager.diet_vote_called.is_connected(_on_manager_update):
+			japan_manager.diet_vote_called.connect(_on_manager_update)
+		if not japan_manager.sphere_incident_reported.is_connected(_on_manager_update):
+			japan_manager.sphere_incident_reported.connect(_on_manager_update)
 
 	refresh_ui()
 
 
-func _on_manager_update(_arg1 = null, _arg2 = null) -> void:
+func _on_manager_update(_arg1: Variant = null, _arg2: Variant = null) -> void:
 	refresh_ui()
 
 

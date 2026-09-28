@@ -7,7 +7,7 @@ extends PanelContainer
 ##
 
 signal closed()
-signal vote_passed(bill_id: String)
+signal vote_passed(bill_id: String, effects: Dictionary)
 
 @onready var btn_close: Button = $VBox/HeaderHBox/CloseButton
 @onready var lbl_header_title: Label = $VBox/HeaderHBox/TitleLabel
@@ -66,6 +66,14 @@ func setup(state: CountryState, parliament_engine: Variant = null) -> void:
 	else:
 		engine = ParliamentEngineScript.new()
 		engine.initialize_for_country(country_state)
+
+	if engine != null:
+		if not engine.vote_completed.is_connected(_on_engine_vote_completed):
+			engine.vote_completed.connect(_on_engine_vote_completed)
+		if not engine.favor_granted.is_connected(_on_engine_favor_granted):
+			engine.favor_granted.connect(_on_engine_favor_granted)
+		if not engine.seats_updated.is_connected(_on_engine_seats_updated):
+			engine.seats_updated.connect(_on_engine_seats_updated)
 
 	_refresh_all()
 
@@ -307,7 +315,21 @@ func _on_call_vote_pressed() -> void:
 	if lbl_vote_log != null:
 		lbl_vote_log.text = str(res.get("message", ""))
 
-	if res.get("passed", false):
-		vote_passed.emit(selected_bill_id)
+	_refresh_all()
 
+
+func _on_engine_vote_completed(bill_id: String, passed: bool, result: Dictionary) -> void:
+	if lbl_vote_log != null and not str(result.get("message", "")).is_empty():
+		lbl_vote_log.text = str(result.get("message", ""))
+	if passed:
+		var eff: Dictionary = result.get("effects", {})
+		vote_passed.emit(bill_id, eff)
+	_refresh_all()
+
+
+func _on_engine_favor_granted(_party_key: String, _deal_type: String, _bonus_votes: int) -> void:
+	_refresh_all()
+
+
+func _on_engine_seats_updated() -> void:
 	_refresh_all()

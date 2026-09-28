@@ -117,6 +117,8 @@ func setup(state: CountryState, electoral_engine: USElectoralEngine = null) -> v
 		engine.president_elected.connect(_on_president_elected)
 	if not engine.bill_vote_completed.is_connected(_on_bill_vote_completed):
 		engine.bill_vote_completed.connect(_on_bill_vote_completed)
+	if not engine.civil_rights_tension_changed.is_connected(_on_civil_rights_changed):
+		engine.civil_rights_tension_changed.connect(_on_civil_rights_changed)
 
 	_refresh_all()
 
@@ -438,3 +440,8 @@ func _on_president_elected(_result: Dictionary) -> void:
 func _on_bill_vote_completed(_b_id: String, _passed: bool, _result: Dictionary) -> void:
 	_update_electoral_college()
 	_update_president_card()
+
+
+func _on_civil_rights_changed(_new_tension: float) -> void:
+	_update_electoral_college()
+

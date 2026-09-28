@@ -45,12 +45,20 @@ func setup_for_region(region: RegionData, player_state: CountryState) -> void:
 	visible = true
 
 
+func _tr(key: String, default_text: String) -> String:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, default_text)
+	return tr(key) if tr(key) != key else default_text
+
+
 func refresh_display() -> void:
 	if current_region == null or current_player == null:
 		return
 
 	if title_label != null:
-		title_label.text = "РЕГИОН // %s [ID: %d]" % [current_region.province_name.to_upper(), current_region.province_id]
+		title_label.text = _tr("REG_PANEL_TITLE", "РЕГИОН // {name} [ID: {id}]").replace("{name}", current_region.province_name.to_upper()).replace("{id}", str(current_region.province_id))
 
 	# Формирование псевдографических шкал
 	var infra_level = clampi(current_region.civilian_infrastructure, 0, 10)
@@ -66,15 +74,15 @@ func refresh_display() -> void:
 	var infra_color = "#00e5ff"
 
 	var text = ""
-	text += "[color=#aaaaaa]СТАТУС СУВЕРЕНИТЕТА:[/color] [color=#00e5ff]ПРЯМОЙ КОНТРОЛЬ ПРАВИТЕЛЯ[/color]\n"
-	text += "[color=#aaaaaa]ТИП МЕСТНОСТИ:[/color] %s\n\n" % current_region.terrain_type.to_upper()
-	text += "[color=#aaaaaa]ИНДУСТРИАЛЬНЫЙ ПОТЕНЦИАЛ (IC):[/color] [color=#33ff66]%d ФАБРИК[/color]\n" % current_region.industrial_capacity
-	text += "[color=%s]ИНФРАСТРУКТУРА:[/color] [%s] %d/10\n" % [infra_color, infra_bar, infra_level]
-	text += "[color=%s]СОЦИАЛЬНАЯ НАПРЯЖЕННОСТЬ:[/color] [%s] %d%%\n" % [unrest_color, unrest_bar, int(unrest_val)]
-	text += "[color=#ffaa00]БОЕГОТОВНОСТЬ ГАРНИЗОНА:[/color] [%s] %d%%\n" % [garrison_bar, int(garrison_val)]
+	text += "[color=#aaaaaa]%s[/color] [color=#00e5ff]%s[/color]\n" % [_tr("REG_SOVEREIGNTY", "СТАТУС СУВЕРЕНИТЕТА:"), _tr("REG_DIRECT_CONTROL", "ПРЯМОЙ КОНТРОЛЬ ПРАВИТЕЛЯ")]
+	text += "[color=#aaaaaa]%s[/color] %s\n\n" % [_tr("REG_TERRAIN", "ТИП МЕСТНОСТИ:"), current_region.terrain_type.to_upper()]
+	text += "[color=#aaaaaa]%s[/color] [color=#33ff66]%s[/color]\n" % [_tr("REG_IC", "ИНДУСТРИАЛЬНЫЙ ПОТЕНЦИАЛ (IC):"), _tr("REG_FACTORIES_VAL", "{count} ФАБРИК").replace("{count}", str(current_region.industrial_capacity))]
+	text += "[color=%s]%s[/color] [%s] %d/10\n" % [infra_color, _tr("REG_INFRA", "ИНФРАСТРУКТУРА:"), infra_bar, infra_level]
+	text += "[color=%s]%s[/color] [%s] %d%%\n" % [unrest_color, _tr("REG_UNREST", "СОЦИАЛЬНАЯ НАПРЯЖЕННОСТЬ:"), unrest_bar, int(unrest_val)]
+	text += "[color=#ffaa00]%s[/color] [%s] %d%%\n" % [_tr("REG_GARRISON", "БОЕГОТОВНОСТЬ ГАРНИЗОНА:"), garrison_bar, int(garrison_val)]
 
 	if unrest_val >= 50.0:
-		text += "\n[color=#ff4444]⚠ ВНИМАНИЕ: Высокий риск забастовок и подпольного саботажа![/color]"
+		text += "\n[color=#ff4444]%s[/color]" % _tr("REG_RISK_WARNING", "⚠ ВНИМАНИЕ: Высокий риск забастовок и подпольного саботажа!")
 
 	if stats_text != null:
 		stats_text.text = text
@@ -83,25 +91,25 @@ func refresh_display() -> void:
 	if btn_invest_infra != null:
 		var can_invest = current_player.liquid_reserves_billions >= 0.15 and current_region.civilian_infrastructure < 10
 		btn_invest_infra.disabled = not can_invest
-		btn_invest_infra.text = "ИНВЕСТИРОВАТЬ В ИНФРАСТРУКТУРУ (-$0.15B, +1)" if current_region.civilian_infrastructure < 10 else "ИНФРАСТРУКТУРА НА МАКСИМУМЕ"
+		btn_invest_infra.text = _tr("REG_BTN_INVEST", "ИНВЕСТИРОВАТЬ В ИНФРАСТРУКТУРУ (-$0.15B, +1)") if current_region.civilian_infrastructure < 10 else _tr("REG_BTN_INFRA_MAX", "ИНФРАСТРУКТУРА НА МАКСИМУМЕ")
 
 	if btn_suppress != null:
 		var can_suppress = current_player.current_cap >= 1 and current_region.unrest > 0.0
 		btn_suppress.disabled = not can_suppress
-		btn_suppress.text = "ЧРЕЗВЫЧАЙНОЕ ПОЛОЖЕНИЕ (-1 CAP, -20% БУНТ)"
+		btn_suppress.text = _tr("REG_BTN_SUPPRESS", "ЧРЕЗВЫЧАЙНОЕ ПОЛОЖЕНИЕ (-1 CAP, -20% БУНТ)")
 
 	if btn_mobilize != null:
 		var can_mobilize = current_player.liquid_reserves_billions >= 0.10 and current_region.industrial_capacity < 12
 		btn_mobilize.disabled = not can_mobilize
-		btn_mobilize.text = "МОБИЛИЗАЦИЯ ВПК (+1 ЗАВОД, -$0.10B)"
+		btn_mobilize.text = _tr("REG_BTN_MOBILIZE", "МОБИЛИЗАЦИЯ ВПК (+1 ЗАВОД, -$0.10B)")
 
 	if btn_garrison != null:
 		var can_garrison = current_player.manpower_pool >= 500 and current_region.garrison_strength < 100.0
 		btn_garrison.disabled = not can_garrison
-		btn_garrison.text = "УСИЛИТЬ ГАРНИЗОН (-500 ЧЕЛ., +25% ОБОРОНА)"
+		btn_garrison.text = _tr("REG_BTN_GARRISON", "УСИЛИТЬ ГАРНИЗОН (-500 ЧЕЛ., +25% ОБОРОНА)")
 
 	if status_label != null:
-		status_label.text = "РЕГИСТРЫ ТЕРМИНАЛА ОБНОВЛЕНЫ"
+		status_label.text = _tr("REG_STATUS_UPDATED", "РЕГИСТРЫ ТЕРМИНАЛА ОБНОВЛЕНЫ")
 
 
 func _on_invest_infra_pressed() -> void:
@@ -113,7 +121,7 @@ func _on_invest_infra_pressed() -> void:
 		invest_infrastructure_requested.emit(current_region.province_id)
 		refresh_display()
 		if status_label != null:
-			status_label.text = "ИНВЕСТИЦИЯ УСПЕШНА: +1 ИНФРАСТРУКТУРА"
+			status_label.text = _tr("REG_STATUS_INVEST_OK", "ИНВЕСТИЦИЯ УСПЕШНА: +1 ИНФРАСТРУКТУРА")
 
 
 func _on_suppress_pressed() -> void:
@@ -125,7 +133,7 @@ func _on_suppress_pressed() -> void:
 		suppress_unrest_requested.emit(current_region.province_id)
 		refresh_display()
 		if status_label != null:
-			status_label.text = "СИЛЫ БЕЗОПАСНОСТИ РАЗВЕРНУТЫ: -20% НАПРЯЖЕННОСТЬ"
+			status_label.text = _tr("REG_STATUS_SUPPRESS_OK", "СИЛЫ БЕЗОПАСНОСТИ РАЗВЕРНУТЫ: -20% НАПРЯЖЕННОСТЬ")
 
 
 func _on_mobilize_pressed() -> void:
@@ -138,7 +146,7 @@ func _on_mobilize_pressed() -> void:
 		convert_military_requested.emit(current_region.province_id)
 		refresh_display()
 		if status_label != null:
-			status_label.text = "ПРОМЫШЛЕННОСТЬ ПЕРЕВЕДЕНА НА ВОЕННЫЕ РЕЛЬСЫ: +1 IC"
+			status_label.text = _tr("REG_STATUS_MOBILIZE_OK", "ПРОМЫШЛЕННОСТЬ ПЕРЕВЕДЕНА НА ВОЕННЫЕ РЕЛЬСЫ: +1 IC")
 
 
 func _on_garrison_pressed() -> void:
@@ -150,7 +158,7 @@ func _on_garrison_pressed() -> void:
 		garrison_reinforce_requested.emit(current_region.province_id)
 		refresh_display()
 		if status_label != null:
-			status_label.text = "ГАРНИЗОН ПОПОЛНЕН: +25% БОЕГОТОВНОСТЬ"
+			status_label.text = _tr("REG_STATUS_GARRISON_OK", "ГАРНИЗОН ПОПОЛНЕН: +25% БОЕГОТОВНОСТЬ")
 
 
 func _on_close_pressed() -> void:

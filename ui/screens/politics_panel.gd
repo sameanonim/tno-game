@@ -179,6 +179,10 @@ func _on_open_legislature() -> void:
 		var parl = GEN_PARLIAMENT_SCENE.instantiate()
 		get_tree().root.add_child(parl)
 		parl.setup(current_state)
+		parl.vote_passed.connect(func(_bill_id: String, _effects: Dictionary):
+			if current_state != null:
+				display_country(current_state)
+		)
 		parl.closed.connect(func():
 			parl.queue_free()
 			if current_state != null:

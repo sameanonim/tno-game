@@ -553,10 +553,10 @@ func _select_theater(theater_idx: int) -> void:
 				var t_data = theaters[i] if i < theaters.size() else {}
 				var default_name = t_data.get("name", "")
 				var loc = get_node_or_null("/root/LocalizationManager")
-				var t_id = str(t_data.get("id", str(i))).to_upper()
+				var tab_theater_id = str(t_data.get("id", str(i))).to_upper()
 				var loc_name = default_name
 				if loc != null:
-					loc_name = loc.tr_key("THEATER_" + t_id + "_NAME", default_name)
+					loc_name = loc.tr_key("THEATER_" + tab_theater_id + "_NAME", default_name)
 				var is_active = (i == selected_theater_index)
 				t_btn.text = "► %s ◄" % loc_name if is_active else "[ %s ]" % loc_name
 				if is_active:
@@ -566,15 +566,15 @@ func _select_theater(theater_idx: int) -> void:
 
 	var active_theater = theaters[theater_idx]
 	var tags = active_theater["tags"]
-	var t_id = str(active_theater.get("id", ""))
+	var active_theater_id = str(active_theater.get("id", ""))
 	if map_widget != null:
-		if t_id == "theater_smuta":
+		if active_theater_id == "theater_smuta":
 			map_widget.focus_preset("RUSSIA")
-		elif t_id == "theater_gcw" or t_id == "theater_europe":
+		elif active_theater_id == "theater_gcw" or active_theater_id == "theater_europe":
 			map_widget.focus_preset("EUROPE")
-		elif t_id == "theater_sphere":
+		elif active_theater_id == "theater_sphere":
 			map_widget.focus_preset("ASIA")
-		elif t_id == "theater_superpowers":
+		elif active_theater_id == "theater_superpowers":
 			map_widget.focus_preset("WORLD")
 		else:
 			map_widget.focus_preset("WORLD")

@@ -373,6 +373,28 @@ func _on_rebellion_hotspot_clicked(pid: int, _reg: RegionData) -> void:
 		tactical_overlay.add_combat_ping(province_centroids[pid], "danger", 3.0, "ОЧАГ ВОССТАНИЯ")
 
 
+##
+## Фокусировка камеры и плавное центрирование карты на координатах провинции
+##
+func focus_on_province(province_id: int, smooth: bool = true) -> void:
+	if not province_centroids.has(province_id) or map_size == Vector2i.ZERO:
+		return
+	var centroid: Vector2 = province_centroids[province_id]
+	var local_offset = (centroid - Vector2(map_size) * 0.5) if centered else centroid
+	var target_pos = base_position - (local_offset * scale.x)
+	var scaled_half = (Vector2(map_size) * scale) * 0.5
+	var margin = Vector2(300.0, 300.0)
+	target_pos.x = clampf(target_pos.x, base_position.x - scaled_half.x - margin.x, base_position.x + scaled_half.x + margin.x)
+	target_pos.y = clampf(target_pos.y, base_position.y - scaled_half.y - margin.y, base_position.y + scaled_half.y + margin.y)
+
+	if smooth and is_inside_tree():
+		var tw = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tw.tween_property(self, "position", target_pos, 0.35)
+	else:
+		position = target_pos
+	_update_camera_limits()
+
+
 # ==============================================================================
 # DYNAMIC LUT UPDATES (MODULE D SPECIFICATION)
 # ==============================================================================
@@ -398,7 +420,9 @@ func update_province_owner(province_id: int, owner_val: Variant, color: Color = 
 	if col == Color.TRANSPARENT:
 		col = country_colors.get(clean_owner, default_province_color)
 
+	var old_owner: String = ""
 	if provinces_data.has(province_id):
+		old_owner = str(provinces_data[province_id].get("owner", ""))
 		provinces_data[province_id]["owner"] = clean_owner
 
 	var coord = _id_to_lut_coords(province_id)

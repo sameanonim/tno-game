@@ -180,7 +180,9 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 			# Если условие неизвестно, проверяем флаги как запасной вариант
 			if cond.has("flag"):
 				return state.has_flag(str(cond["flag"]))
-			return true
+			if not cond_type.is_empty():
+				push_warning("[ConditionEvaluator] Unhandled condition opcode: '%s' (data: %s)" % [cond_type, str(cond)])
+			return false
 
 
 ## Проверка численных переменных и параметров макроэкономики

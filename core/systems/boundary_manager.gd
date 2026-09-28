@@ -34,6 +34,7 @@ signal frontlines_recalculated(affected_tags: Array[String])
 # EXPORT CONFIGURATION
 # ==============================================================================
 @export_file("*.json") var borders_manifest_path: String = "res://map_data/borders_manifest.json"
+@export_file("*.json") var border_hierarchy_path: String = "res://map_data/border_hierarchy_manifest.json"
 @export_file("*.json") var map_manifest_path: String = "res://map_data/map_manifest.json"
 @export var auto_sync_map_controller: bool = true
 @export var auto_sync_military_engine: bool = true
@@ -130,7 +131,18 @@ func load_manifest_data() -> bool:
 				_parse_borders_manifest(parsed)
 				success = true
 
-	# 2. Загрузка/дополнение из map_manifest.json
+	# 2. Загрузка иерархии штатов и стран из border_hierarchy_manifest.json
+	var hier_path = border_hierarchy_path if FileAccess.file_exists(border_hierarchy_path) else "res://map_data/border_hierarchy_manifest.json"
+	if FileAccess.file_exists(hier_path):
+		var file = FileAccess.open(hier_path, FileAccess.READ)
+		if file != null:
+			var json_str = file.get_as_text()
+			var parsed = JSON.parse_string(json_str)
+			if parsed is Dictionary:
+				_parse_map_manifest(parsed)
+				success = true
+
+	# 3. Загрузка/дополнение из map_manifest.json (водные провинции)
 	if FileAccess.file_exists(map_manifest_path):
 		var file = FileAccess.open(map_manifest_path, FileAccess.READ)
 		if file != null:
@@ -140,7 +152,7 @@ func load_manifest_data() -> bool:
 				_parse_map_manifest(parsed)
 				success = true
 
-	# 3. Построение графа смежности штатов
+	# 4. Построение графа смежности штатов
 	_build_state_adjacency_graph()
 
 	print("[BoundaryManager] Loaded topology: %d provinces, %d states, %d sovereign entities." % [

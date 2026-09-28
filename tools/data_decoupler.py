@@ -929,7 +929,7 @@ class DataDecoupler:
         existing_constants = {}
         if constants_path.exists():
             try:
-                with open(constants_path, "r", encoding="utf-8") as f:
+                with open(constants_path, "r", encoding="utf-8-sig") as f:
                     existing_constants = json.load(f)
             except Exception as e:
                 self.log(f"Warning: Failed to parse existing {constants_path}: {e}")
@@ -1102,7 +1102,7 @@ class DataDecoupler:
         current_ru = {}
         if ru_master_path.exists():
             try:
-                with open(ru_master_path, "r", encoding="utf-8") as f:
+                with open(ru_master_path, "r", encoding="utf-8-sig") as f:
                     current_ru = json.load(f)
             except Exception:
                 pass
@@ -1116,7 +1116,7 @@ class DataDecoupler:
         current_en = {}
         if en_master_path.exists():
             try:
-                with open(en_master_path, "r", encoding="utf-8") as f:
+                with open(en_master_path, "r", encoding="utf-8-sig") as f:
                     current_en = json.load(f)
             except Exception:
                 pass

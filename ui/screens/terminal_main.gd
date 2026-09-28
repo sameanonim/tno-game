@@ -178,11 +178,17 @@ func _ready() -> void:
 	sound_fx.name = "TerminalSoundFx"
 	add_child(sound_fx)
 	_setup_bottom_bar()
+	turn_manager.map_controller = map_controller
 	_setup_initial_game_state()
 	if espionage_terminal_view != null:
 		espionage_terminal_view.setup(turn_manager.player_state, turn_manager)
 	if research_terminal_view != null:
 		research_terminal_view.setup(turn_manager.player_state, turn_manager, turn_manager.research_manager)
+		research_terminal_view.research_action_executed.connect(func(act_type: String, tech_id: String):
+			_update_hud()
+			if sound_fx != null: sound_fx.play_switch_click(1250.0)
+			label_log.text = "НИОКР [%s]: ТЕМА «%s»" % [act_type.to_upper(), tech_id]
+		)
 	_connect_signals()
 	_update_hud()
 	_update_localized_ui()
@@ -204,6 +210,19 @@ func _connect_signals() -> void:
 		label_log.text = "АВТОСОХРАНЕНИЕ: Ход %d успешно записан [%s]" % [turn, save_path]
 	)
 
+	if turn_manager.focus_stage_controller != null:
+		turn_manager.focus_stage_controller.stage_transition_requested.connect(func(target_tree_id: String, reason: String):
+			label_log.text = "СМЕНА ЭПОХИ: Переход на стадию директив [%s] (%s)" % [target_tree_id, reason]
+			if sound_fx != null: sound_fx.play_switch_click(1500.0)
+		)
+
+	if turn_manager.event_manager != null:
+		turn_manager.event_manager.event_triggered.connect(func(ev: GameEvent):
+			if not ev.is_modal:
+				label_log.text = "ДЕПЕША: [%s] %s" % [ev.title, ev.description.substr(0, 80)]
+				if sound_fx != null: sound_fx.play_switch_click(950.0)
+		)
+
 	if turn_manager.russian_unification_manager != null:
 		turn_manager.russian_unification_manager.operational_log_entry.connect(func(txt: String):
 			label_log.text = "СМУТА: %s" % txt
@@ -211,6 +230,32 @@ func _connect_signals() -> void:
 	if turn_manager.german_civil_war_manager != null:
 		turn_manager.german_civil_war_manager.gcw_concluded.connect(func(victor: String):
 			label_log.text = "GCW: Гражданская война в Германии окончена победой %s" % victor
+		)
+		turn_manager.german_civil_war_manager.berlin_captured.connect(func(tag: String):
+			if sound_fx != null: sound_fx.play_alarm_buzz(350.0, 0.4)
+			label_log.text = "ЭКСТРЕННОЕ СООБЩЕНИЕ: БЕРЛИН ВЗЯТ ШТУРМОМ СИЛАМИ [%s]!" % tag.to_upper()
+			_update_hud()
+		)
+		turn_manager.german_civil_war_manager.goebbels_crisis_triggered.connect(func():
+			if sound_fx != null: sound_fx.play_alarm_buzz(300.0, 0.5)
+			label_log.text = "КРАСНАЯ ТРЕВОГА: НАЧАЛАСЬ ФАЗА ВТОРОЙ ГРАЖДАНСКОЙ ВОЙНЫ / КРИЗИС ГЁББЕЛЬСА!"
+			_update_hud()
+		)
+		turn_manager.german_civil_war_manager.red_anarchy_triggered.connect(func():
+			if sound_fx != null: sound_fx.play_alarm_buzz(250.0, 0.6)
+			label_log.text = "КАТАСТРОФА: КРАСНАЯ АНАРХИЯ ОХВАТИЛА ГЕРМАНИЮ! РАСПАД ЦЕНТРАЛЬНОЙ ВЛАСТИ."
+			_update_hud()
+		)
+		turn_manager.german_civil_war_manager.proxy_lend_lease_delivered.connect(func(proxy_key: String, _w: int, _t: int, _cash: float):
+			label_log.text = "ПОСТАВКИ: Ленд-лиз успешно доставлен на ТВД [%s]" % proxy_key.to_upper()
+			_update_hud()
+		)
+
+	if turn_manager.boundary_manager != null:
+		turn_manager.boundary_manager.enclave_detected.connect(func(state_id: int, owner_tag: String, surrounded_by: String):
+			if turn_manager.player_state != null and owner_tag == turn_manager.player_state.country_tag:
+				label_log.text = "ТРЕВОГА: Регион #%d окружен войсками [%s]! Линии снабжения перерезаны." % [state_id, surrounded_by]
+				if sound_fx != null: sound_fx.play_alarm_buzz(320.0, 0.4)
 		)
 
 	if tab_container != null:
@@ -357,16 +402,33 @@ func _connect_signals() -> void:
 		if sound_fx != null: sound_fx.play_switch_click(1050.0)
 	)
 
+	map_controller.map_mode_changed.connect(func(new_mode: int):
+		var mode_names = [
+			"ПОЛИТИЧЕСКАЯ КАРТА (СУВЕРЕНИТЕТ)",
+			"КАРТА ПРОИЗВОДСТВЕННОГО ПОТЕНЦИАЛА (IC)",
+			"КАРТА ОБЩЕСТВЕННОГО НЕДОВОЛЬСТВА (UNREST)",
+			"КАРТА ГЕОПОЛИТИЧЕСКИХ СФЕР ВЛИЯНИЯ (SPHERES)"
+		]
+		var m_name = mode_names[new_mode] if new_mode < mode_names.size() else "КАРТА"
+		label_log.text = "РЕЖИМ КАРТЫ: %s" % m_name
+	)
+
 	btn_ruler_focus.pressed.connect(func():
 		map_controller.toggle_ruler_domain_focus()
-		btn_ruler_focus.text = "[ ПРАВИТЕЛЬ: АКТИВЕН ]" if map_controller.is_ruler_domain_focus else "[ ПРАВИТЕЛЬ: ВЫКЛ ]"
+		var loc = _get_localization_manager()
+		var r_act = loc.tr_key("BTN_RULER_ACTIVE", "[ ПРАВИТЕЛЬ: АКТИВЕН ]") if loc != null else "[ ПРАВИТЕЛЬ: АКТИВЕН ]"
+		var r_inact = loc.tr_key("BTN_RULER_INACTIVE", "[ ПРАВИТЕЛЬ: ВЫКЛ ]") if loc != null else "[ ПРАВИТЕЛЬ: ВЫКЛ ]"
+		btn_ruler_focus.text = r_act if map_controller.is_ruler_domain_focus else r_inact
 		if sound_fx != null: sound_fx.play_switch_click(1150.0)
 		label_log.text = "РЕЖИМ ПРАВИТЕЛЯ (RULER DOMAIN): " + ("АКТИВИРОВАН. Внешний мир затемнен." if map_controller.is_ruler_domain_focus else "ОТКЛЮЧЕН.")
 	)
 
 	btn_raid_toggle.pressed.connect(func():
 		is_raid_mode_active = not is_raid_mode_active
-		btn_raid_toggle.text = "[ РЕЙД: АКТИВЕН ]" if is_raid_mode_active else "[ РЕЙД: ВЫКЛ ]"
+		var loc = _get_localization_manager()
+		var rd_act = loc.tr_key("BTN_RAID_ACTIVE", "[ РЕЙД: АКТИВЕН ]") if loc != null else "[ РЕЙД: АКТИВЕН ]"
+		var rd_inact = loc.tr_key("BTN_RAID_INACTIVE", "[ РЕЙД: ВЫКЛ ]") if loc != null else "[ РЕЙД: ВЫКЛ ]"
+		btn_raid_toggle.text = rd_act if is_raid_mode_active else rd_inact
 		if sound_fx != null: sound_fx.play_switch_click(950.0)
 		label_log.text = "РЕЖИМ НАБЕГОВ СМУТЫ: " + ("АКТИВИРОВАН. Выберите вражеский регион на карте." if is_raid_mode_active else "ОТКЛЮЧЕН.")
 	)
@@ -396,6 +458,9 @@ func _connect_signals() -> void:
 			_update_hud()
 			if sound_fx != null: sound_fx.play_switch_click(850.0)
 		)
+		region_management_panel.panel_closed.connect(func():
+			if sound_fx != null: sound_fx.play_switch_click(800.0)
+		)
 
 	# Province Inspector signals
 	if province_inspector_panel != null:
@@ -417,6 +482,9 @@ func _connect_signals() -> void:
 			btn_raid_toggle.text = "[ РЕЙД: АКТИВЕН ]"
 			_open_raid_planning_panel(pid, map_controller.get_province_data(pid))
 			if sound_fx != null: sound_fx.play_alarm_buzz(520.0, 0.12)
+		)
+		province_inspector_panel.inspector_closed.connect(func():
+			if sound_fx != null: sound_fx.play_switch_click(800.0)
 		)
 
 	# Map signals
@@ -491,9 +559,18 @@ func _setup_initial_game_state() -> void:
 	# Загрузка полноценной мировой географии и государств (13,000+ провинций, 200+ стран)
 	turn_manager.load_world_data()
 
-	# Если сессия запущена через главное меню — подтягиваем сконфигурированный стейт игрока
+	# Если сессия запущена через главное меню — подтягиваем сконфигурированный стейт игрока или загружаем сейв
 	var session_node = get_node_or_null("/root/GameSession")
-	if session_node != null and session_node.active_player_state != null:
+	var is_loading = session_node != null and bool(session_node.get("is_loading_saved_game"))
+	if is_loading:
+		session_node.is_loading_saved_game = false
+		var loaded_ok = turn_manager.load_game("user://savegame.json")
+		if loaded_ok:
+			if map_controller != null:
+				map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
+				map_controller.refresh_tactical_frontlines()
+			label_log.text = "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД %d)" % turn_manager.current_turn
+	elif session_node != null and session_node.active_player_state != null:
 		turn_manager.set_player_state(session_node.active_player_state)
 	else:
 		turn_manager.player_state.turn_count = turn_manager.current_turn
@@ -547,6 +624,20 @@ func _setup_initial_game_state() -> void:
 					map_controller.select_province(provs[0])
 					map_controller.add_combat_incident_ping(provs[0], "theater_radar")
 				label_log.text = "ПРОКСИ-ТЕАТР [%s]: КООРДИНАТЫ ПЕРЕДАНЫ В ОПЕРАТИВНЫЙ ШТАБ" % pk.to_upper()
+			)
+			gcw_operations_panel.tactical_order_clicked.connect(func(order_type, _axis):
+				_update_hud()
+				if map_controller != null:
+					map_controller.refresh_tactical_frontlines()
+				if sound_fx != null:
+					sound_fx.play_switch_click(1200.0)
+				label_log.text = "ГЕНШТАБ: ТАКТИЧЕСКИЙ ПРИКАЗ «%s» ПЕРЕДАН ВОЙСКАМ" % order_type.to_upper()
+			)
+			gcw_operations_panel.intrigue_action_clicked.connect(func(act_type, contender):
+				_update_hud()
+				if sound_fx != null:
+					sound_fx.play_key_click(900.0)
+				label_log.text = "ИНТРИГА: ОПЕРАЦИЯ «%s» ПРОТИВ ФРАКЦИИ [%s] РЕАЛИЗОВАНА" % [act_type.to_upper(), contender.to_upper()]
 			)
 
 
@@ -870,13 +961,13 @@ func _update_localized_ui() -> void:
 		is_italy = (p_tag == "ITA")
 
 		if is_usa:
-			tab_smuta = "КАПИТОЛИЙ // КОНГРЕСС США"
+			tab_smuta = loc.tr_key("TAB_USA_CONGRESS", "КАПИТОЛИЙ // КОНГРЕСС США") if loc != null else "КАПИТОЛИЙ // КОНГРЕСС США"
 		elif is_german:
-			tab_smuta = "ШТАБ РЕЙХА // ГРАЖДАНСКАЯ ВОЙНА"
+			tab_smuta = loc.tr_key("TAB_GCW", "ШТАБ РЕЙХА // ГРАЖДАНСКАЯ ВОЙНА") if loc != null else "ШТАБ РЕЙХА // ГРАЖДАНСКАЯ ВОЙНА"
 		elif is_japan:
-			tab_smuta = "ИМПЕРИЯ // ДАЙЭТ И ДЗАЙБАЦУ"
+			tab_smuta = loc.tr_key("TAB_JAPAN", "ИМПЕРИЯ // ДАЙЭТ И ДЗАЙБАЦУ") if loc != null else "ИМПЕРИЯ // ДАЙЭТ И ДЗАЙБАЦУ"
 		elif is_italy:
-			tab_smuta = "РИМ // ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ"
+			tab_smuta = loc.tr_key("TAB_ITALY", "РИМ // ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ") if loc != null else "РИМ // ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ"
 		elif loc != null:
 			tab_smuta = loc.tr_key("TAB_SMUTA", "РУССКАЯ СМУТА // ВОССОЕДИНЕНИЕ")
 
@@ -900,16 +991,27 @@ func _update_localized_ui() -> void:
 			tab_container.current_tab = 0
 
 	if tab_container.get_tab_count() > 5:
-		tab_container.set_tab_title(5, "ШПИОНАЖ")
+		var tab_esp = loc.tr_key("TAB_ESPIONAGE", "ШПИОНАЖ") if loc != null else "ШПИОНАЖ"
+		tab_container.set_tab_title(5, tab_esp)
 	if tab_container.get_tab_count() > 6:
-		tab_container.set_tab_title(6, "🔬 НИОКР // R&D")
-
+		var tab_rnd = loc.tr_key("TAB_RESEARCH", "🔬 НИОКР // R&D") if loc != null else "🔬 НИОКР // R&D"
+		tab_container.set_tab_title(6, tab_rnd)
 
 	if btn_map_pol != null: btn_map_pol.text = loc.tr_key("MAP_MODE_POL", "ПОЛИТИЧЕСКАЯ") if loc != null else "ПОЛИТИЧЕСКАЯ"
 	if btn_map_econ != null: btn_map_econ.text = loc.tr_key("MAP_MODE_ECON", "ЭКОНОМИКА") if loc != null else "ЭКОНОМИКА"
 	if btn_map_unrest != null: btn_map_unrest.text = loc.tr_key("MAP_MODE_UNREST", "БЕСПОРЯДКИ") if loc != null else "БЕСПОРЯДКИ"
 	if btn_map_diplo != null: btn_map_diplo.text = loc.tr_key("MAP_MODE_DIPLO", "ДИПЛОМАТИЯ") if loc != null else "ДИПЛОМАТИЯ"
 	if btn_end_turn != null: btn_end_turn.text = loc.tr_key("BTN_END_TURN", "ЗАВЕРШИТЬ ХОД >>") if loc != null else "ЗАВЕРШИТЬ ХОД >>"
+	if btn_save_game != null: btn_save_game.text = loc.tr_key("BTN_SAVE_GAME", "СОХРАНИТЬ (F5)") if loc != null else "СОХРАНИТЬ (F5)"
+	if btn_load_game != null: btn_load_game.text = loc.tr_key("BTN_LOAD_GAME", "ЗАГРУЗИТЬ (F9)") if loc != null else "ЗАГРУЗИТЬ (F9)"
+	if btn_ruler_focus != null:
+		var r_act = loc.tr_key("BTN_RULER_ACTIVE", "[ ПРАВИТЕЛЬ: АКТИВЕН ]") if loc != null else "[ ПРАВИТЕЛЬ: АКТИВЕН ]"
+		var r_inact = loc.tr_key("BTN_RULER_INACTIVE", "СТАВКА ВЕРХОВНОГО") if loc != null else "СТАВКА ВЕРХОВНОГО"
+		btn_ruler_focus.text = r_act if (map_controller != null and map_controller.is_ruler_domain_focus) else r_inact
+	if btn_raid_toggle != null:
+		var rd_act = loc.tr_key("BTN_RAID_ACTIVE", "[ ПЛАНИРОВАНИЕ НАБЕГА ]") if loc != null else "[ ПЛАНИРОВАНИЕ НАБЕГА ]"
+		var rd_inact = loc.tr_key("BTN_RAID_INACTIVE", "РЕЙДОВЫЕ ОПЕРАЦИИ") if loc != null else "РЕЙДОВЫЕ ОПЕРАЦИИ"
+		btn_raid_toggle.text = rd_act if is_raid_mode_active else rd_inact
 
 
 func _on_end_turn_pressed() -> void:
@@ -996,6 +1098,9 @@ func _on_us_electoral_report_generated(rep: Dictionary) -> void:
 		us_congress_screen.setup(turn_manager.player_state, turn_manager.us_electoral_engine)
 
 
+var game_over_modal: Control = null
+
+
 func _on_game_over(victory: bool, reason: String) -> void:
 	var status = "ПОБЕДА" if victory else "ПОРАЖЕНИЕ"
 	label_log.text = "ФИНАЛ ИГРЫ: %s // %s" % [status, reason]
@@ -1004,6 +1109,115 @@ func _on_game_over(victory: bool, reason: String) -> void:
 			sound_fx.play_switch_click(1600.0)
 		else:
 			sound_fx.play_switch_click(400.0)
+	_show_game_over_modal(victory, reason)
+
+
+func _show_game_over_modal(victory: bool, reason: String) -> void:
+	if btn_end_turn != null:
+		btn_end_turn.disabled = true
+
+	if game_over_modal != null and is_instance_valid(game_over_modal):
+		game_over_modal.visible = true
+		return
+
+	game_over_modal = Control.new()
+	game_over_modal.name = "GameOverModalOverlay"
+	game_over_modal.set_anchors_preset(Control.PRESET_FULL_RECT)
+	game_over_modal.mouse_filter = Control.MOUSE_FILTER_STOP
+	game_over_modal.z_index = 30
+
+	var backdrop = ColorRect.new()
+	backdrop.name = "Backdrop"
+	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+	backdrop.color = Color(0.02, 0.03, 0.04, 0.92)
+	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
+	game_over_modal.add_child(backdrop)
+
+	var center = CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_PASS
+	game_over_modal.add_child(center)
+
+	var panel = PanelContainer.new()
+	panel.custom_minimum_size = Vector2(720, 460)
+	var border_col = Color(0.20, 0.95, 0.50, 0.95) if victory else Color(0.98, 0.22, 0.16, 0.95)
+	var bg_col = Color(0.04, 0.07, 0.08, 0.98) if victory else Color(0.08, 0.03, 0.03, 0.98)
+	TNOTheme.apply_box_style(panel, border_col, bg_col, 2)
+	center.add_child(panel)
+
+	var margin = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 32)
+	margin.add_theme_constant_override("margin_top", 32)
+	margin.add_theme_constant_override("margin_right", 32)
+	margin.add_theme_constant_override("margin_bottom", 32)
+	panel.add_child(margin)
+
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 16)
+	margin.add_child(vbox)
+
+	var lbl_top = Label.new()
+	lbl_top.text = "[ ВЫСШИЙ ВОЕННЫЙ СОВЕТ // СИСТЕМНЫЙ ЭПИЛОГ ]"
+	lbl_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl_top.add_theme_color_override("font_color", Color(0.5, 0.7, 0.65, 0.8))
+	vbox.add_child(lbl_top)
+
+	var lbl_status = Label.new()
+	lbl_status.text = "★ ВЕЛИКАЯ ПОБЕДА ★" if victory else "▲ ГОСУДАРСТВЕННЫЙ КРАХ ▲"
+	lbl_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl_status.add_theme_color_override("font_color", border_col)
+	lbl_status.add_theme_font_size_override("font_size", 24)
+	vbox.add_child(lbl_status)
+
+	var hs = HSeparator.new()
+	vbox.add_child(hs)
+
+	var lbl_info = Label.new()
+	var c_tag = turn_manager.player_state.country_tag if turn_manager != null and turn_manager.player_state != null else "STATE"
+	var c_name = turn_manager.player_state.country_name if turn_manager != null and turn_manager.player_state != null else "State"
+	var l_name = turn_manager.player_state.leader_name if turn_manager != null and turn_manager.player_state != null else "Leader"
+	var t_num = turn_manager.current_turn if turn_manager != null else 1
+	var date_s = turn_manager.get_formatted_date() if turn_manager != null else "1962"
+	lbl_info.text = "ДЕРЖАВА: %s [%s] | ЛИДЕР: %s\nДАТА: %s | ХОДОВ ПРОЙДЕНО: %d" % [c_name, c_tag, l_name, date_s, t_num]
+	lbl_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl_info.add_theme_color_override("font_color", Color(0.85, 0.90, 0.88, 1.0))
+	vbox.add_child(lbl_info)
+
+	var rtl = RichTextLabel.new()
+	rtl.custom_minimum_size = Vector2(650, 160)
+	rtl.fit_content = false
+	rtl.scroll_active = true
+	rtl.text = reason
+	rtl.add_theme_color_override("default_color", Color(0.80, 0.85, 0.85, 1.0))
+	vbox.add_child(rtl)
+
+	var btn_hbox = HBoxContainer.new()
+	btn_hbox.add_theme_constant_override("separation", 24)
+	btn_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_child(btn_hbox)
+
+	var btn_menu = Button.new()
+	btn_menu.text = "[ ВЕРНУТЬСЯ В ГЛАВНОЕ МЕНЮ ]"
+	btn_menu.custom_minimum_size = Vector2(240, 42)
+	TNOTheme.apply_button_style(btn_menu, border_col, bg_col)
+	btn_menu.pressed.connect(func():
+		get_tree().change_scene_to_file("res://ui/screens/main_menu.tscn")
+	)
+	btn_hbox.add_child(btn_menu)
+
+	var btn_obs = Button.new()
+	btn_obs.text = "[ РЕЖИМ НАБЛЮДАТЕЛЯ (ОСМОТР) ]"
+	btn_obs.custom_minimum_size = Vector2(240, 42)
+	TNOTheme.apply_button_style(btn_obs, Color(0.4, 0.6, 0.7), Color(0.04, 0.08, 0.12))
+	btn_obs.pressed.connect(func():
+		game_over_modal.visible = false
+		if tab_container != null:
+			tab_container.current_tab = 0
+		label_log.text = "РЕЖИМ НАБЛЮДАТЕЛЯ: СВОБОДНЫЙ ОСМОТР КАРТЫ АКТИВИРОВАН."
+	)
+	btn_hbox.add_child(btn_obs)
+
+	add_child(game_over_modal)
 
 
 func _on_espionage_processed(reports: Array[Dictionary]) -> void:
@@ -1017,13 +1231,37 @@ func _on_espionage_processed(reports: Array[Dictionary]) -> void:
 # WARLORD RAIDS
 # ==============================================================================
 func _launch_raid(intensity: String) -> void:
-	var dummy_target = RegionData.new()
-	dummy_target.province_name = "Onega Garrison Sector"
-	dummy_target.garrison_strength = 60.0
-	dummy_target.industrial_capacity = 2
-	dummy_target.terrain_type = "forest"
+	var target_reg: RegionData = null
+	if planned_raid_region_id > 0 and turn_manager.regions_world_state.has(planned_raid_region_id):
+		target_reg = turn_manager.regions_world_state[planned_raid_region_id]
 
-	var res = MilitaryEngine.execute_border_raid(turn_manager.player_state, dummy_target, intensity)
+	if target_reg == null and turn_manager != null:
+		var p_tag = turn_manager.player_state.country_tag
+		for reg in turn_manager.regions_world_state.values():
+			if reg is RegionData and reg.owner_tag != p_tag and not reg.owner_tag.is_empty() and reg.owner_tag != "NEU":
+				if RussianUnificationManager.get_macro_region(reg.owner_tag) == RussianUnificationManager.get_macro_region(p_tag):
+					target_reg = reg
+					planned_raid_region_id = reg.province_id
+					break
+		if target_reg == null:
+			for reg in turn_manager.regions_world_state.values():
+				if reg is RegionData and reg.owner_tag != p_tag and not reg.owner_tag.is_empty():
+					target_reg = reg
+					planned_raid_region_id = reg.province_id
+					break
+
+	if target_reg == null:
+		label_log.text = "ОШИБКА: НЕТ ДОСТУПНЫХ ЦЕЛЕЙ ДЛЯ НАБЕГА ВБЛИЗИ ГРАНИЦ!"
+		return
+
+	var res = MilitaryEngine.execute_border_raid(turn_manager.player_state, target_reg, intensity)
+	if map_controller != null:
+		map_controller.add_combat_incident_ping(target_reg.province_id, "raid")
+		map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
+
+	if sound_fx != null:
+		sound_fx.play_alarm_buzz(440.0, 0.22)
+
 	if russian_smuta_panel != null and russian_smuta_panel.log_display != null:
 		var col_tag = "[color=#55ff55]" if res.success else "[color=#ff5555]"
 		russian_smuta_panel.log_display.text += "\n" + col_tag + res.narrative_summary + "[/color]"
@@ -1136,7 +1374,7 @@ func _populate_sample_directives() -> void:
 	if not extracted_directives.is_empty():
 		for d in extracted_directives:
 			mgr.register_directive(d)
-		directive_tree_view.setup(turn_manager.player_state, turn_manager, mgr)
+		directive_tree_view.setup(turn_manager.player_state, turn_manager, mgr, turn_manager.focus_stage_controller)
 		label_log.text = "ЗАГРУЖЕНО НАЦИОНАЛЬНОЕ ДРЕВО ДИРЕКТИВ [%s]: %d ИНИЦИАТИВ" % [turn_manager.player_state.country_tag, extracted_directives.size()]
 		return
 
@@ -1238,7 +1476,7 @@ func _populate_sample_directives() -> void:
 	d_armor.completion_effects = {"modify_military_factories": 3}
 	mgr.register_directive(d_armor)
 
-	directive_tree_view.setup(turn_manager.player_state, turn_manager, mgr)
+	directive_tree_view.setup(turn_manager.player_state, turn_manager, mgr, turn_manager.focus_stage_controller)
 
 
 
@@ -1328,6 +1566,13 @@ func _toggle_in_game_settings() -> void:
 	var st = SETTINGS_TERMINAL_SCENE.instantiate()
 	_active_settings_terminal = st
 	add_child(st)
+	st.settings_saved.connect(func():
+		var crt_rect: ColorRect = get_node_or_null("CRTOverlay")
+		var s_node = get_node_or_null("/root/GameSession")
+		if crt_rect != null and s_node != null and crt_rect.material is ShaderMaterial:
+			s_node.apply_crt_to_material(crt_rect.material as ShaderMaterial)
+		_update_localized_ui()
+	)
 	st.closed.connect(func():
 		if has_node("CRTPostProcess"):
 			get_node("CRTPostProcess").visible = true

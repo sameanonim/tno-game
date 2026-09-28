@@ -340,7 +340,7 @@ def optimize_dataset(
         optimizer.export_registry(registry_file)
         return
 
-    with open(input_file, "r", encoding="utf-8") as f:
+    with open(input_file, "r", encoding="utf-8-sig") as f:
         data = json.load(f)
 
     optimizer = DataOptimizer(min_frequency_threshold=threshold)

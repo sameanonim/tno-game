@@ -181,7 +181,24 @@ func _ensure_doctrine_panel() -> void:
 		vbox_root.add_child(pnl_warlord_doctrine)
 
 
+func _tr(key: String, default_text: String) -> String:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, default_text)
+	return tr(key) if tr(key) != key else default_text
+
+
+func _on_locale_changed(_locale: String) -> void:
+	refresh_ui()
+
+
 func _ready() -> void:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_signal("locale_changed"):
+			if not loc.locale_changed.is_connected(_on_locale_changed):
+				loc.locale_changed.connect(_on_locale_changed)
 	_connect_ui_signals()
 	if opt_summit_target != null:
 		opt_summit_target.item_selected.connect(_on_summit_target_selected)
@@ -255,7 +272,7 @@ func refresh_ui() -> void:
 
 	# 1. Заголовок и текущая стадия
 	if lbl_header_title != null:
-		lbl_header_title.text = "=== ТЕРМИНАЛ РУССКОЙ СМУТЫ // %s ===" % player_state.country_name.to_upper()
+		lbl_header_title.text = _tr("SMUTA_TERMINAL_TITLE", "=== ТЕРМИНАЛ РУССКОЙ СМУТЫ // %s ===") % player_state.country_name.to_upper()
 	if lbl_stage_info != null:
 		lbl_stage_info.text = RussianUnificationManager.get_stage_title(current_st)
 	if progress_stage != null:
@@ -269,7 +286,7 @@ func refresh_ui() -> void:
 
 	if lbl_control_stats != null:
 		var macro_name = RussianUnificationManager.get_macro_region_name(RussianUnificationManager.get_macro_region(p_tag))
-		lbl_control_stats.text = "СЕКТОР: [color=#00e5ff]%s[/color] | ПОДКОНТРОЛЬНО РЕГИОНОВ: [color=#33ff66]%d[/color]" % [
+		lbl_control_stats.text = _tr("SMUTA_SECTOR_STATS", "СЕКТОР: [color=#00e5ff]%s[/color] | ПОДКОНТРОЛЬНО РЕГИОНОВ: [color=#33ff66]%d[/color]") % [
 			macro_name, total_my_provinces
 		]
 
@@ -448,16 +465,16 @@ func _update_region_card(label: RichTextLabel, macro_key: String) -> void:
 	leader_name = c_obj.country_name if c_obj != null else best_tag
 
 	var is_player_sector = (RussianUnificationManager.get_macro_region(player_state.country_tag) == macro_key)
-	var status_str = "[color=#00e5ff]НАШ СЕКТОР[/color]" if is_player_sector else "[color=#ffcc00]ОПЕРАТИВНАЯ ЗОНА[/color]"
+	var status_str = _tr("SMUTA_STATUS_OUR_SECTOR", "[color=#00e5ff]НАШ СЕКТОР[/color]") if is_player_sector else _tr("SMUTA_STATUS_OP_ZONE", "[color=#ffcc00]ОПЕРАТИВНАЯ ЗОНА[/color]")
 	if best_tag == player_state.country_tag and prov_count >= (total_provs * 0.85):
-		status_str = "[color=#33ff66]ПОЛНЫЙ КОНТРОЛЬ[/color]"
+		status_str = _tr("SMUTA_STATUS_FULL_CONTROL", "[color=#33ff66]ПОЛНЫЙ КОНТРОЛЬ[/color]")
 
-	label.text = (
+	label.text = _tr("SMUTA_CARD_FMT", (
 		"[b]%s[/b]\n" +
 		"Лидер: [color=#ffffff]%s[/color] [%s]\n" +
 		"Регионов: [color=#33ff66]%d[/color] / %d\n" +
 		"Статус: %s"
-	) % [
+	)) % [
 		RussianUnificationManager.get_macro_region_name(macro_key),
 		leader_name, leader_tag, best_c, max(total_provs, 1), status_str
 	]
@@ -485,19 +502,19 @@ func _update_operations_buttons() -> void:
 		match st:
 			RussianUnificationManager.SmutaStage.STAGE_2_REGIONAL:
 				btn_proclamation.visible = true
-				btn_proclamation.text = "ПРОГЛАСИТЬ РЕГИОНАЛЬНОЕ ПРАВИТЕЛЬСТВО >>"
+				btn_proclamation.text = _tr("SMUTA_PROCLAIM_REGIONAL", "ПРОГЛАСИТЬ РЕГИОНАЛЬНОЕ ПРАВИТЕЛЬСТВО >>")
 				btn_proclamation.disabled = not unification_mgr.check_regional_victory(
 					player_state.country_tag, turn_manager.regions_world_state, turn_manager.countries_world_state
 				)
 			RussianUnificationManager.SmutaStage.STAGE_3_SUPERREGIONAL:
 				btn_proclamation.visible = true
-				btn_proclamation.text = "ПРОГЛАСИТЬ СУПЕР-РЕГИОНАЛЬНЫЙ СОЮЗ >>"
+				btn_proclamation.text = _tr("SMUTA_PROCLAIM_SUPERREGIONAL", "ПРОГЛАСИТЬ СУПЕР-РЕГИОНАЛЬНЫЙ СОЮЗ >>")
 				btn_proclamation.disabled = not unification_mgr.check_superregional_victory(
 					player_state.country_tag, turn_manager.regions_world_state, turn_manager.countries_world_state
 				)
 			RussianUnificationManager.SmutaStage.STAGE_4_FINAL:
 				btn_proclamation.visible = true
-				btn_proclamation.text = "★ ВЕЛИКОЕ ВОССОЕДИНЕНИЕ ВСЕЙ РОССИИ ★"
+				btn_proclamation.text = _tr("SMUTA_PROCLAIM_FINAL", "★ ВЕЛИКОЕ ВОССОЕДИНЕНИЕ ВСЕЙ РОССИИ ★")
 				btn_proclamation.disabled = not unification_mgr.check_final_unification(
 					player_state.country_tag, turn_manager.regions_world_state, turn_manager.countries_world_state
 				)
@@ -529,7 +546,7 @@ func _update_summit_targets() -> void:
 			added += 1
 
 	if added == 0:
-		opt_summit_target.add_item("Нет совместимых партнеров")
+		opt_summit_target.add_item(_tr("SMUTA_NO_COMPATIBLE", "Нет совместимых партнеров"))
 		opt_summit_target.disabled = true
 	else:
 		opt_summit_target.disabled = false
@@ -662,8 +679,27 @@ func _on_diplomatic_summit_pressed() -> void:
 	refresh_ui()
 
 
-func _on_summit_target_selected(_index: int) -> void:
-	pass
+func _on_summit_target_selected(index: int) -> void:
+	if opt_summit_target == null or unification_mgr == null or index < 0 or index >= opt_summit_target.item_count:
+		return
+	var target_tag = str(opt_summit_target.get_item_metadata(index))
+	if target_tag.is_empty() or turn_manager == null:
+		return
+	var t_state: CountryState = turn_manager.countries_world_state.get(target_tag, null)
+	if t_state == null or player_state == null:
+		return
+	var compatible = unification_mgr.are_ideologies_compatible(player_state.country_tag, target_tag, turn_manager.countries_world_state)
+	var p_power = player_state.army_readiness * 0.5 + player_state.legitimacy * 0.5
+	var t_power = t_state.army_readiness * 0.5 + t_state.legitimacy * 0.5
+	var ratio = p_power / maxf(t_power, 1.0)
+	var compat_str = _tr("SMUTA_COMPAT_YES", "[color=#55ff55]СОВМЕСТИМА[/color]") if compatible else _tr("SMUTA_COMPAT_NO", "[color=#ff5555]НЕПРИМИРИМЫЙ АНТАГОНИЗМ[/color]")
+	var chance_str = _tr("SMUTA_CHANCE_HIGH", "[color=#55ff55]ВЫСОКИЙ[/color]") if ratio >= 1.2 else (_tr("SMUTA_CHANCE_MED", "[color=#ffff55]СРЕДНИЙ[/color]") if ratio >= 0.9 else _tr("SMUTA_CHANCE_LOW", "[color=#ff5555]НИЗКИЙ[/color]"))
+	if not compatible:
+		chance_str = _tr("SMUTA_CHANCE_BLOCKED", "[color=#ff5555]0% (ИДЕОЛОГИЧЕСКИЙ БЛОК)[/color]")
+	if log_display != null:
+		log_display.text += _tr("SMUTA_SUMMIT_ASSESSMENT", "\n[color=#00e5ff]>> ОЦЕНКА САММИТА С %s [%s]:[/color] Идеология: %s | Шанс договора: %s") % [
+			t_state.country_name, target_tag, compat_str, chance_str
+		]
 
 
 func _on_stage_changed(_new_stage: int, _stage_name: String) -> void:

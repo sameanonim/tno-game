@@ -68,8 +68,21 @@ signal us_electoral_report_generated(report: Dictionary)
 @export var japan_empire_manager: JapanEmpireManager = null
 @export var italy_empire_manager: ItalyEmpireManager = null
 @export var research_manager: ResearchManager = null
-@export var boundary_manager: BoundaryManager = null
-@export var map_controller: Node = null
+@export var boundary_manager: BoundaryManager:
+	get:
+		if boundary_manager == null:
+			boundary_manager = BoundaryManager.new()
+			boundary_manager.name = "BoundaryManager"
+			if is_inside_tree():
+				add_child(boundary_manager)
+		return boundary_manager
+	set(val):
+		boundary_manager = val
+@export var map_controller: Node = null:
+	set(val):
+		map_controller = val
+		if val is MapController and boundary_manager != null:
+			boundary_manager.map_controller = val
 var espionage_engine: EspionageEngine = null
 var us_electoral_engine: USElectoralEngine = null
 var last_espionage_reports: Array[Dictionary] = []
@@ -273,16 +286,12 @@ func transfer_state(state_id: int, new_owner_tag: String) -> bool:
 		elif get_parent() != null and get_parent().has_node("BoundaryManager"):
 			boundary_manager = get_parent().get_node("BoundaryManager") as BoundaryManager
 
-	# 2. Если есть BoundaryManager - используем его для топологического трансфера
+	# 2. Если есть BoundaryManager - запускаем топологический расчет и демаркацию
 	if boundary_manager != null:
-		var prev_tag = boundary_manager.state_to_owner.get(state_id, "")
-		var ok = boundary_manager.transfer_state(state_id, clean_tag)
-		if ok:
-			state_conquered.emit(state_id, clean_tag)
-			state_transferred.emit(state_id, prev_tag, clean_tag)
-			return true
+		old_owner = boundary_manager.state_to_owner.get(state_id, "")
+		boundary_manager.transfer_state(state_id, clean_tag)
 
-	# 3. Fallback трансфер в локальном world_state
+	# 3. Синхронизация провинций в regions_world_state
 	var provs = state_to_provinces.get(state_id, [])
 	for pid in provs:
 		if regions_world_state.has(pid):
@@ -346,9 +355,6 @@ func annex_country(victim_tag: String, annexer_tag: String) -> void:
 
 ## Реактивная синхронизация шейдерной палитры карты
 func _sync_map_controller_reactive(affected_states: Array[int], new_owner_tag: String = "") -> void:
-	if map_controller == null:
-		if has_node("../TabContainer/TacticalMap/SubViewportContainer/SubViewport/MapController"):
-			map_controller = get_node("../TabContainer/TacticalMap/SubViewportContainer/SubViewport/MapController")
 	if map_controller == null:
 		return
 
@@ -470,9 +476,9 @@ func load_world_data(
 				if not state_to_provinces.is_empty():
 					loaded_states = true
 
-	# Дополнительный фоллбек: если штаты не были загружены, проверяем extracted_tno_data
-	if not loaded_states and FileAccess.file_exists("res://extracted_tno_data/map_manifest.json"):
-		var f_ext = FileAccess.open("res://extracted_tno_data/map_manifest.json", FileAccess.READ)
+	# Дополнительный фоллбек: загрузка штатов из border_hierarchy_manifest.json
+	if not loaded_states and FileAccess.file_exists("res://map_data/border_hierarchy_manifest.json"):
+		var f_ext = FileAccess.open("res://map_data/border_hierarchy_manifest.json", FileAccess.READ)
 		if f_ext != null:
 			var ext_txt = f_ext.get_as_text()
 			f_ext.close()
@@ -609,8 +615,13 @@ func end_turn() -> void:
 						break
 				if all_ours:
 					transfer_state(sid, n_tag)
+				else:
+					if map_controller != null and map_controller.has_method("update_province_owner"):
+						map_controller.update_province_owner(reg_id, n_tag)
+			else:
+				if map_controller != null and map_controller.has_method("update_province_owner"):
+					map_controller.update_province_owner(reg_id, n_tag)
 			region_conquered.emit(reg_id, n_tag, p_tag)
-			_sync_map_controller_reactive([sid] if sid > 0 else [], n_tag)
 
 		if rep.get("battle_incident") != null:
 			var inc: GameEvent = rep["battle_incident"]
@@ -670,6 +681,10 @@ func end_turn() -> void:
 	for ev in triggered_events:
 		if ev.is_modal:
 			pending_modal_events.append(ev)
+		else:
+			if not ev.options.is_empty():
+				event_manager.resolve_event_option(ev, ev.options[0], player_state)
+			event_manager.event_triggered.emit(ev)
 
 	# 6. Проверка блокирующих модальных событий
 	if not pending_modal_events.is_empty():
@@ -827,6 +842,44 @@ func _check_game_over_conditions() -> void:
 	if player_state.is_in_fiscal_crisis and player_state.get_debt_to_gdp_ratio() >= 2.5 and player_state.liquid_reserves_billions <= -50.0:
 		_trigger_game_over(false, "Фискальный коллапс: национальный долг превысил 250% ВВП при отрицательных резервах. Полное банкротство страны.")
 		return
+
+	# 4. Условия победы и поражения для сверхдержав (Superpowers)
+	var tag = player_state.country_tag.to_upper()
+
+	# 4.1. Соединенные Штаты Америки (USA)
+	if tag == "USA" and current_turn >= 260:
+		if player_state.legitimacy >= 75.0 and player_state.radicalization <= 25.0 and player_state.gdp_billions >= 400.0 and not player_state.is_in_fiscal_crisis:
+			_trigger_game_over(true, "Триумф американской демократии: Соединенные Штаты преодолели все кризисы эпохи Холодной Войны, обеспечили процветание народа и стали неоспоримым флагманом свободного мира!")
+			return
+
+	# 4.2. Великая Японская Империя (JAP)
+	if tag == "JAP":
+		if japan_empire_manager != null:
+			if japan_empire_manager.yasuda_phase == JapanEmpireManager.YasudaPhase.STOCK_CRASH and player_state.radicalization >= 90.0 and player_state.legitimacy <= 15.0:
+				_trigger_game_over(false, "Крах Империи: Тотальный экономический коллапс дзайбацу и восстание сокрушили имперский строй.")
+				return
+			if japan_empire_manager.yasuda_phase == JapanEmpireManager.YasudaPhase.RESOLVED and current_turn >= 260:
+				_trigger_game_over(true, "Сфера Сопроцветания спасена! Империя преодолела кризис Ясуда, стабилизировала биржу и экономику и утвердила свое господство в Азии!")
+				return
+
+	# 4.3. Германский Рейх (GER / фракции ГВГ после победы)
+	if tag in ["GER", "BOR", "SPE", "GOR", "HEY"] and current_turn >= 260:
+		var gcw_active = (german_civil_war_manager != null and german_civil_war_manager.is_civil_war_active)
+		if not gcw_active and player_state.legitimacy >= 70.0 and player_state.gdp_billions >= 350.0 and not player_state.is_in_fiscal_crisis:
+			_trigger_game_over(true, "Европейский Гегемон: Власть в Рейхе окончательно консолидирована, экономика реорганизована, господство Германии в Европе непоколебимо.")
+			return
+
+	# 4.4. Королевство Италия (ITA)
+	if tag == "ITA" and current_turn >= 260:
+		if player_state.legitimacy >= 65.0 and player_state.gdp_billions >= 150.0 and not player_state.is_in_fiscal_crisis:
+			_trigger_game_over(true, "Имперский Триумф Рима: Италия преодолела распад Триумвирата, стабилизировала Средиземноморье и стала самостоятельной великой державой!")
+			return
+
+	# 5. Универсальный исторический финал 10-летнего таймфрейма (Turn 520 // 1962–1972)
+	if current_turn >= 520:
+		if player_state.legitimacy >= 40.0 and not player_state.is_in_fiscal_crisis:
+			_trigger_game_over(true, "Исторический финал эпохи: Ваше государство с честью прошло сквозь огонь и хаос 10 лет Холодной Войны (1962–1972), сохранив суверенитет и закрепив свое место в мировой истории!")
+			return
 
 
 func _trigger_game_over(victory: bool, reason: String) -> void:

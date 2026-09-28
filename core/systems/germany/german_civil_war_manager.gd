@@ -697,6 +697,16 @@ func spawn_goebbels_faction() -> void:
 		add_child(goebbels_ai)
 		if goebbels_ai.has_method("setup"):
 			goebbels_ai.setup(turn_manager_ref, map_controller_ref, gob_state)
+		if goebbels_ai.has_signal("sector_scorched"):
+			goebbels_ai.connect("sector_scorched", func(pid: int, pname: String):
+				print("[GCWManager] WAR CRIME: Goebbels scorched sector %s (#%d)" % [pname, pid])
+				if map_controller_ref != null:
+					map_controller_ref.add_combat_incident_ping(pid, "raid")
+			)
+		if goebbels_ai.has_signal("fanatic_offensive_launched"):
+			goebbels_ai.connect("fanatic_offensive_launched", func(axis_id: String, bonus: float):
+				print("[GCWManager] OFFENSIVE: Volkssturm launched fanatic strike along %s (+%.0f%%)" % [axis_id, (bonus - 1.0) * 100.0])
+			)
 
 	# Спавн фронта фанатичной контратаки
 	var gob_front = Frontline.new()

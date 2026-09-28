@@ -38,7 +38,8 @@ func is_core_of(country_tag: String) -> bool:
 func get_effective_tax_yield() -> float:
 	var control_factor = (100.0 - unrest) / 100.0
 	var infra_mult = 1.0 + (float(civilian_infrastructure) * 0.08)
-	return float(industrial_capacity) * control_factor * infra_mult
+	var core_mult = 1.0 if is_core_of(owner_tag) else 0.65
+	return float(industrial_capacity) * control_factor * infra_mult * core_mult
 
 
 func to_dict() -> Dictionary:

@@ -188,6 +188,18 @@ func setup(state: CountryState) -> void:
 	_refresh_metrics()
 
 
+func _tr(key: String, default_text: String) -> String:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, default_text)
+	return tr(key) if tr(key) != key else default_text
+
+
+func _on_locale_changed(_locale: String) -> void:
+	_refresh_metrics()
+
+
 func _refresh_metrics() -> void:
 	if current_state == null or lbl_gdp_val == null:
 		return
@@ -196,32 +208,32 @@ func _refresh_metrics() -> void:
 	lbl_gdp_val.text = "$%.2f B" % current_state.gdp_billions
 	var growth_pct = current_state.real_gdp_growth * 100.0
 	var sign_g = "+" if growth_pct >= 0 else ""
-	lbl_gdp_growth.text = "%s%.2f%% (РЕАЛЬНЫЙ РОСТ)" % [sign_g, growth_pct]
+	lbl_gdp_growth.text = "%s%.2f%% %s" % [sign_g, growth_pct, _tr("ECON_REAL_GROWTH", "(РЕАЛЬНЫЙ РОСТ)")]
 	lbl_gdp_growth.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN if growth_pct >= 0 else TNOTheme.COLOR_TEXT_RED)
 
 	# Госдолг
 	lbl_debt_val.text = "$%.2f B" % current_state.national_debt_billions
 	var ratio = current_state.get_debt_to_gdp_ratio() * 100.0
-	lbl_debt_ratio.text = "ДОЛГ/ВВП: %.1f%%" % ratio
+	lbl_debt_ratio.text = "%s: %.1f%%" % [_tr("ECON_DEBT_RATIO", "ДОЛГ/ВВП"), ratio]
 
 	# Кредитный рейтинг
 	var rating = current_state.get_credit_rating()
 	lbl_credit_rating.text = "[ %s ]" % rating
-	lbl_credit_cap.text = "ЛИМИТ: $%.1f B" % (current_state.gdp_billions * 1.5)
+	lbl_credit_cap.text = "%s: $%.1f B" % [_tr("ECON_CREDIT_CAP", "ЛИМИТ"), (current_state.gdp_billions * 1.5)]
 
 	# Сальдо
 	var revenue = current_state.calculate_total_revenue()
 	var expenses = current_state.calculate_total_expenses()
 	var diff = revenue - expenses
 
-	lbl_rev_val.text = "ДОХОДЫ: $%.2f B" % revenue
-	lbl_exp_val.text = "РАСХОДЫ: $%.2f B" % expenses
+	lbl_rev_val.text = "%s: $%.2f B" % [_tr("ECON_REVENUE", "ДОХОДЫ"), revenue]
+	lbl_exp_val.text = "%s: $%.2f B" % [_tr("ECON_EXPENSES", "РАСХОДЫ"), expenses]
 
 	if diff >= 0:
-		lbl_balance_status.text = "ПРОФИЦИТ: +$%.2f B" % diff
+		lbl_balance_status.text = "%s: +$%.2f B" % [_tr("ECON_SURPLUS", "ПРОФИЦИТ"), diff]
 		lbl_balance_status.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN)
 	else:
-		lbl_balance_status.text = "ДЕФИЦИТ: -$%.2f B" % absf(diff)
+		lbl_balance_status.text = "%s: -$%.2f B" % [_tr("ECON_DEFICIT", "ДЕФИЦИТ"), absf(diff)]
 		lbl_balance_status.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_RED)
 
 	if balance_progress_bar != null:
@@ -237,83 +249,83 @@ func _refresh_metrics() -> void:
 
 	# Банк
 	lbl_rate_val.text = "%.2f%%" % (current_state.central_bank_rate * 100.0)
-	lbl_inflation_val.text = "ГОДОВАЯ ИНФЛЯЦИЯ: %.2f%%" % (current_state.inflation_rate * 100.0)
-	lbl_reserves_val.text = "РЕЗЕРВЫ КАЗНАЧЕЙСТВА: $%.2f B" % current_state.liquid_reserves_billions
+	lbl_inflation_val.text = "%s: %.2f%%" % [_tr("ECON_INFLATION", "ГОДОВАЯ ИНФЛЯЦИЯ"), (current_state.inflation_rate * 100.0)]
+	lbl_reserves_val.text = "%s: $%.2f B" % [_tr("ECON_RESERVES", "РЕЗЕРВЫ КАЗНАЧЕЙСТВА"), current_state.liquid_reserves_billions]
 
 	if btn_print_money != null:
 		if current_state.money_printing_this_turn > 0.0:
-			btn_print_money.text = "[ ПЕЧАТНЫЙ СТАНОК: +$%.2fB В ХОД ]" % current_state.money_printing_this_turn
+			btn_print_money.text = "[ %s: +$%.2fB %s ]" % [_tr("ECON_PRINTING_PRESS", "ПЕЧАТНЫЙ СТАНОК"), current_state.money_printing_this_turn, _tr("PER_TURN", "В ХОД")]
 		else:
-			btn_print_money.text = "[ ЭМИССИЯ ВАЛЮТЫ (+$0.25B) ]"
+			btn_print_money.text = "[ %s (+$0.25B) ]" % _tr("ECON_PRINT_MONEY_BTN", "ЭМИССИЯ ВАЛЮТЫ")
 
 	# Стратегические ресурсы
 	if lbl_oil != null:
 		var p_oil = int(current_state.produced_resources.get("oil", 0))
 		var c_oil = int(current_state.consumed_resources.get("oil", 0))
 		var n_oil = p_oil - c_oil
-		lbl_oil.text = "НЕФТЬ: %d / %d (%+d)" % [p_oil, c_oil, n_oil]
+		lbl_oil.text = "%s: %d / %d (%+d)" % [_tr("RES_OIL", "НЕФТЬ"), p_oil, c_oil, n_oil]
 		lbl_oil.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN if n_oil >= 0 else TNOTheme.COLOR_TEXT_RED)
 
 	if lbl_steel != null:
 		var p_steel = int(current_state.produced_resources.get("steel", 0))
 		var c_steel = int(current_state.consumed_resources.get("steel", 0))
 		var n_steel = p_steel - c_steel
-		lbl_steel.text = "СТАЛЬ: %d / %d (%+d)" % [p_steel, c_steel, n_steel]
+		lbl_steel.text = "%s: %d / %d (%+d)" % [_tr("RES_STEEL", "СТАЛЬ"), p_steel, c_steel, n_steel]
 		lbl_steel.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN if n_steel >= 0 else TNOTheme.COLOR_TEXT_RED)
 
 	if lbl_rubber != null:
 		var p_rubber = int(current_state.produced_resources.get("rubber", 0))
 		var c_rubber = int(current_state.consumed_resources.get("rubber", 0))
 		var n_rubber = p_rubber - c_rubber
-		lbl_rubber.text = "РЕЗИНА: %d / %d (%+d)" % [p_rubber, c_rubber, n_rubber]
+		lbl_rubber.text = "%s: %d / %d (%+d)" % [_tr("RES_RUBBER", "РЕЗИНА"), p_rubber, c_rubber, n_rubber]
 		lbl_rubber.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN if n_rubber >= 0 else TNOTheme.COLOR_TEXT_RED)
 
 	if lbl_alloys != null:
 		var p_alloys = int(current_state.produced_resources.get("rare_alloys", 0))
 		var c_alloys = int(current_state.consumed_resources.get("rare_alloys", 0))
 		var n_alloys = p_alloys - c_alloys
-		lbl_alloys.text = "СПЛАВЫ: %d / %d (%+d)" % [p_alloys, c_alloys, n_alloys]
+		lbl_alloys.text = "%s: %d / %d (%+d)" % [_tr("RES_ALLOYS", "СПЛАВЫ"), p_alloys, c_alloys, n_alloys]
 		lbl_alloys.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN if n_alloys >= 0 else TNOTheme.COLOR_TEXT_RED)
 
 	if lbl_trade_balance != null:
 		var tb = current_state.resource_trade_balance
 		if tb >= 0.0:
-			lbl_trade_balance.text = "САЛЬДО ЭКСПОРТА: +$%.2f B / ход" % tb
+			lbl_trade_balance.text = "%s: +$%.2f B %s" % [_tr("ECON_TRADE_BALANCE", "САЛЬДО ЭКСПОРТА"), tb, _tr("PER_TURN", "/ ход")]
 			lbl_trade_balance.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN)
 		else:
-			lbl_trade_balance.text = "САЛЬДО ЭКСПОРТА: -$%.2f B (ИМПОРТ)" % absf(tb)
+			lbl_trade_balance.text = "%s: -$%.2f B (ИМПОРТ)" % [_tr("ECON_TRADE_BALANCE", "САЛЬДО ЭКСПОРТА"), absf(tb)]
 			lbl_trade_balance.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_RED)
 
 	# Развитие общества
 	if lbl_poverty != null:
-		lbl_poverty.text = "БЕДНОСТЬ: %.1f%%" % current_state.poverty_rate
+		lbl_poverty.text = "%s: %.1f%%" % [_tr("SOC_POVERTY", "БЕДНОСТЬ"), current_state.poverty_rate]
 		lbl_poverty.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_RED if current_state.poverty_rate > 50.0 else TNOTheme.COLOR_TEXT_AMBER)
 
 	if lbl_literacy != null:
-		lbl_literacy.text = "ГРАМОТНОСТЬ: %.1f%%" % current_state.literacy_rate
+		lbl_literacy.text = "%s: %.1f%%" % [_tr("SOC_LITERACY", "ГРАМОТНОСТЬ"), current_state.literacy_rate]
 		lbl_literacy.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN if current_state.literacy_rate > 60.0 else TNOTheme.COLOR_TEXT_AMBER)
 
 	if lbl_corruption != null:
-		lbl_corruption.text = "КОРРУПЦИЯ: %.1f%%" % current_state.corruption_rate
+		lbl_corruption.text = "%s: %.1f%%" % [_tr("SOC_CORRUPTION", "КОРРУПЦИЯ"), current_state.corruption_rate]
 		lbl_corruption.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_RED if current_state.corruption_rate > 40.0 else TNOTheme.COLOR_BORDER_CYAN)
 
 	if lbl_equipment != null:
-		lbl_equipment.text = "СТАНКИ: %.1f%%" % current_state.industrial_equipment_level
+		lbl_equipment.text = "%s: %.1f%%" % [_tr("SOC_EQUIPMENT", "СТАНКИ"), current_state.industrial_equipment_level]
 		lbl_equipment.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN if current_state.industrial_equipment_level > 50.0 else TNOTheme.COLOR_BORDER_CYAN)
 
 	# Антикризисные кнопки
 	if btn_austerity != null:
 		if current_state.is_austerity_active:
-			btn_austerity.text = "[ ЖЕСТКАЯ ЭКОНОМИЯ: ВКЛ ]"
+			btn_austerity.text = _tr("ECON_AUSTERITY_ON", "[ ЖЕСТКАЯ ЭКОНОМИЯ: ВКЛ ]")
 			btn_austerity.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_RED)
 		else:
-			btn_austerity.text = "[ ЖЕСТКАЯ ЭКОНОМИЯ: ВЫКЛ ]"
+			btn_austerity.text = _tr("ECON_AUSTERITY_OFF", "[ ЖЕСТКАЯ ЭКОНОМИЯ: ВЫКЛ ]")
 			btn_austerity.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
 
 	if btn_currency_reform != null:
 		if current_state.liquid_reserves_billions >= 0.40:
-			btn_currency_reform.text = "[ ДЕНЕЖНАЯ РЕФОРМА ($0.4B) ]"
+			btn_currency_reform.text = _tr("ECON_CURRENCY_REFORM", "[ ДЕНЕЖНАЯ РЕФОРМА ($0.4B) ]")
 			btn_currency_reform.disabled = false
 		else:
-			btn_currency_reform.text = "[ РЕФОРМА: НЕТ РЕЗЕРВОВ ]"
+			btn_currency_reform.text = _tr("ECON_NO_RESERVES", "[ РЕФОРМА: НЕТ РЕЗЕРВОВ ]")
 			btn_currency_reform.disabled = true

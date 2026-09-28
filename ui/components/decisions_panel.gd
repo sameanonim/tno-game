@@ -510,7 +510,25 @@ var fallback_decisions: Array[Dictionary] = [
 var all_decisions: Array[Dictionary] = []
 
 
+func _tr(key: String, default_text: String) -> String:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, default_text)
+	return tr(key) if tr(key) != key else default_text
+
+
+func _on_locale_changed(_locale: String) -> void:
+	_build_category_buttons()
+	refresh_panel()
+
+
 func _ready() -> void:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_signal("locale_changed"):
+			if not loc.locale_changed.is_connected(_on_locale_changed):
+				loc.locale_changed.connect(_on_locale_changed)
 	_build_ui()
 	_load_decisions_for_player()
 	refresh_panel()
@@ -567,13 +585,13 @@ func _build_ui() -> void:
 	header_panel.add_child(header_hbox)
 
 	var title_lbl = Label.new()
-	title_lbl.text = " ОПЕРАТИВНЫЕ РЕШЕНИЯ И ГОСУДАРСТВЕННЫЕ ИНИЦИАТИВЫ // DECISIONS "
+	title_lbl.text = _tr("DEC_TITLE", " ОПЕРАТИВНЫЕ РЕШЕНИЯ И ГОСУДАРСТВЕННЫЕ ИНИЦИАТИВЫ // DECISIONS ")
 	title_lbl.add_theme_font_size_override("font_size", 14)
 	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
 	header_hbox.add_child(title_lbl)
 
 	lbl_status_counter = Label.new()
-	lbl_status_counter.text = "[ ДОСТУПНО: 0 ]"
+	lbl_status_counter.text = _tr("DEC_AVAILABLE_EMPTY", "[ ДОСТУПНО: 0 ]")
 	lbl_status_counter.add_theme_font_size_override("font_size", 12)
 	lbl_status_counter.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_AMBER)
 	lbl_status_counter.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -597,7 +615,7 @@ func _build_ui() -> void:
 	cat_panel.add_child(cat_vbox)
 
 	var cat_header = Label.new()
-	cat_header.text = "КАТЕГОРИИ ДЕКРЕТОВ"
+	cat_header.text = _tr("DEC_CATEGORIES_TITLE", "КАТЕГОРИИ ДЕКРЕТОВ")
 	cat_header.add_theme_font_size_override("font_size", 12)
 	cat_header.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
 	cat_vbox.add_child(cat_header)
@@ -634,7 +652,7 @@ func _build_ui() -> void:
 
 	log_rich_text = RichTextLabel.new()
 	log_rich_text.bbcode_enabled = true
-	log_rich_text.text = "[color=#557766]ШТАБНОЙ ТЕЛЕГРАФ // Ожидание директив ставки Верховного Командования...[/color]"
+	log_rich_text.text = _tr("DEC_TELEGRAPH_WAIT", "[color=#557766]ШТАБНОЙ ТЕЛЕГРАФ // Ожидание директив ставки Верховного Командования...[/color]")
 	log_panel.add_child(log_rich_text)
 
 
@@ -655,16 +673,16 @@ func _build_category_buttons() -> void:
 		is_usa = (tag == "USA")
 
 	var cat_labels: Dictionary = {
-		"all": " ВСЕ ОПЕРАЦИИ",
-		"smuta": " РУССКАЯ СМУТА",
-		"komi": " ВЫБОРЫ В КОМИ",
-		"development": " РАЗВИТИЕ РЕГИОНОВ",
-		"reich": " КРИЗИС РЕЙХА",
-		"usa": " ДОКТРИНА США // ОФН",
-		"economy": " ЦЕНТРАЛЬНЫЙ БАНК",
-		"military": " ВОЕННЫЕ МАНЕВРЫ",
-		"diplomacy": " ГЕОПОЛИТИКА",
-		"state": " ГОСБЕЗОПАСНОСТЬ"
+		"all": _tr("DEC_CAT_ALL", " ВСЕ ОПЕРАЦИИ"),
+		"smuta": _tr("DEC_CAT_SMUTA", " РУССКАЯ СМУТА"),
+		"komi": _tr("DEC_CAT_KOMI", " ВЫБОРЫ В КОМИ"),
+		"development": _tr("DEC_CAT_DEVELOPMENT", " РАЗВИТИЕ РЕГИОНОВ"),
+		"reich": _tr("DEC_CAT_REICH", " КРИЗИС РЕЙХА"),
+		"usa": _tr("DEC_CAT_USA", " ДОКТРИНА США // ОФН"),
+		"economy": _tr("DEC_CAT_ECONOMY", " ЦЕНТРАЛЬНЫЙ БАНК"),
+		"military": _tr("DEC_CAT_MILITARY", " ВОЕННЫЕ МАНЕВРЫ"),
+		"diplomacy": _tr("DEC_CAT_DIPLOMACY", " ГЕОПОЛИТИКА"),
+		"state": _tr("DEC_CAT_STATE", " ГОСБЕЗОПАСНОСТЬ")
 	}
 
 	var present_cats: Dictionary = {"all": true}
@@ -763,7 +781,7 @@ func refresh_panel() -> void:
 		available_count += 1
 
 	if lbl_status_counter != null:
-		lbl_status_counter.text = "[ ДОСТУПНО: %d ИНИЦИАТИВ ]" % available_count
+		lbl_status_counter.text = _tr("DEC_AVAILABLE_FMT", "[ ДОСТУПНО: %d ИНИЦИАТИВ ]") % available_count
 
 
 func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
@@ -820,7 +838,7 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	hbox.add_child(vbox)
 
 	var cat_lbl = Label.new()
-	cat_lbl.text = dec.get("category_name", "ОПЕРАЦИЯ")
+	cat_lbl.text = dec.get("category_name", _tr("DEC_DEFAULT_CAT", "ОПЕРАЦИЯ"))
 	cat_lbl.add_theme_font_size_override("font_size", 10)
 	cat_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
 	vbox.add_child(cat_lbl)
@@ -845,7 +863,7 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	right_col.add_theme_constant_override("separation", 6)
 	hbox.add_child(right_col)
 
-	var cost_str = "ЗАТРАТЫ:\n"
+	var cost_str = _tr("DEC_COST_HEADER", "ЗАТРАТЫ:\n")
 	if cost_pc > 0.0: cost_str += "[%d PC] " % int(cost_pc)
 	if cost_cap > 0: cost_str += "[%d CAP] " % cost_cap
 	if cost_money > 0.0: cost_str += "[$%.2fB] " % cost_money
@@ -860,13 +878,13 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	var btn_execute = Button.new()
 	btn_execute.custom_minimum_size = Vector2(0, 36)
 	if on_cooldown:
-		btn_execute.text = "КД: %d ХОД" % cd_remaining
+		btn_execute.text = _tr("DEC_BTN_COOLDOWN", "КД: %d ХОД") % cd_remaining
 		btn_execute.disabled = true
 	elif not can_afford:
-		btn_execute.text = "НЕДОСТАТОЧНО"
+		btn_execute.text = _tr("DEC_BTN_CANNOT_AFFORD", "НЕДОСТАТОЧНО")
 		btn_execute.disabled = true
 	else:
-		btn_execute.text = "[ УТВЕРДИТЬ ]"
+		btn_execute.text = _tr("DEC_BTN_CONFIRM", "[ УТВЕРДИТЬ ]")
 		btn_execute.disabled = false
 		TNOTheme.apply_button_style(btn_execute, TNOTheme.COLOR_BORDER_CYAN, Color(0.08, 0.14, 0.16, 0.95))
 

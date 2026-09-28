@@ -166,7 +166,7 @@ func _ready() -> void:
 		load_constants()
 
 
-static func get_instance():
+static func get_instance() -> ConfigManager:
 	if instance == null:
 		var script_res = load("res://core/systems/config_manager.gd")
 		if script_res != null:

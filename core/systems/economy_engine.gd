@@ -385,7 +385,11 @@ static func process_turn(state: CountryState, regions: Dictionary = {}) -> Econo
 	report.gdp_prev = state.gdp_billions
 	var turns_year = get_turns_per_year()
 	
-	# 1. Расчет сырьевого баланса
+	# 1. Демографическая синхронизация по подконтрольным регионам
+	if not regions.is_empty():
+		state.get_population(regions)
+	
+	# 2. Расчет сырьевого баланса
 	var res_data = calculate_resource_balance(state, regions)
 	report.resource_revenue = res_data["export_revenue"]
 	report.resource_import_cost = res_data["import_cost"]
