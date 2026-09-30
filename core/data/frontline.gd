@@ -73,7 +73,7 @@ static func from_dict(data: Dictionary) -> Frontline:
 	front.total_attacker_casualties = int(data.get("total_attacker_casualties", 0))
 	front.total_defender_casualties = int(data.get("total_defender_casualties", 0))
 
-	front.axes = []
+	front.axes.clear()
 	for ax_dict in data.get("axes", []):
 		if ax_dict is Dictionary:
 			front.axes.append(OperationalAxis.from_dict(ax_dict))

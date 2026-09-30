@@ -344,24 +344,56 @@ func get_country_dossier(tag: String) -> Dictionary:
 		if col_arr is Array and col_arr.size() >= 3:
 			color = Color(col_arr[0], col_arr[1], col_arr[2])
 
+		# Извлечение черт (traits) лидера
+		var traits_list: Array = []
+		var manifest_c = manifest_data.get("countries", {}).get(tag, {})
+		var manifest_lead = manifest_c.get("primary_leader", {})
+		if manifest_lead.has("traits") and manifest_lead["traits"] is Array and not manifest_lead["traits"].is_empty():
+			traits_list = manifest_lead["traits"]
+		elif ident.has("traits") and ident["traits"] is Array:
+			traits_list = ident["traits"]
+
+		# Извлечение лора (Lore)
+		var lore_text = str(ident.get("lore", ""))
+		if lore_text.is_empty():
+			lore_text = str(c.get("narrative", {}).get("lore", ""))
+		if lore_text.is_empty():
+			lore_text = str(manifest_c.get("lore", manifest_lead.get("lore", "")))
+		if lore_text.is_empty():
+			var loc_mgr = get_node_or_null("/root/LocalizationManager")
+			if loc_mgr != null:
+				var l_val = loc_mgr.tr_key(tag + "_lore", "")
+				if not l_val.is_empty() and not l_val.begins_with("[MISSING"):
+					lore_text = l_val
+				else:
+					var tno_val = loc_mgr.tr_key(tag + "_THENEWORDER_DESC", "")
+					if not tno_val.is_empty() and not tno_val.begins_with("[MISSING"):
+						lore_text = tno_val
+
+		var portrait_p = ident.get("leader_portrait_path", "res://icon.svg")
+		if (portrait_p.is_empty() or portrait_p == "res://icon.svg") and manifest_lead.has("portrait_path"):
+			var mp = str(manifest_lead["portrait_path"])
+			if not mp.is_empty() and FileAccess.file_exists(mp):
+				portrait_p = mp
+
 		var dossier = {
 			"tag": tag,
 			"name": ident.get("country_name", tag),
 			"name_ru": ident.get("country_name_ru", ident.get("country_name", tag)),
-			"leader_name": ident.get("leader_name", "UNKNOWN"),
-			"leader_title": "Глава государства",
-			"ideology": ident.get("ruling_ideology", "Neutral"),
-			"sub_ideology": ident.get("sub_ideology", ""),
-			"theater": ident.get("theater", "theater_smuta"),
+			"leader_name": ident.get("leader_name", manifest_lead.get("leader_name", "UNKNOWN")),
+			"leader_title": ident.get("leader_title", manifest_lead.get("title", "Глава государства")),
+			"ideology": ident.get("ruling_ideology", manifest_c.get("ruling_ideology", "Neutral")),
+			"sub_ideology": ident.get("sub_ideology", manifest_c.get("sub_ideology", "")),
+			"theater": ident.get("theater", manifest_c.get("theater", "theater_smuta")),
 			"color": color,
-			"portrait_path": ident.get("leader_portrait_path", "res://icon.svg"),
-			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
-			"starting_gdp": float(econ.get("gdp_billions", 15.0)),
-			"starting_manpower": int(mil.get("manpower_pool", 50000)),
+			"portrait_path": portrait_p,
+			"difficulty_rating": manifest_c.get("difficulty_rating", "●●●○○ (СРЕДНЯЯ)"),
+			"starting_gdp": float(econ.get("gdp_billions", manifest_c.get("starting_gdp", 15.0))),
+			"starting_manpower": int(mil.get("manpower_pool", manifest_c.get("starting_manpower", 50000))),
 			"starting_factories": int(mil.get("civilian_factories", 15)) + int(mil.get("military_factories", 15)),
 			"geopolitical_bloc": ident.get("geopolitical_bloc", "Non-Aligned"),
-			"traits": [],
-			"lore": ""
+			"traits": traits_list,
+			"lore": lore_text
 		}
 
 		if tag == "USA":
@@ -379,6 +411,62 @@ func get_country_dossier(tag: String) -> Dictionary:
 			dossier["traits"] = ["Мастер кулуаров", "Альянс ОФН", "Расколотый конгресс", "Борьба за гражданские права"]
 			dossier["lore"] = "Оплот свободного мира после поражения во Второй мировой войне. Под руководством Никсона страна противостоит Рейху и Японии в прокси-конфликтах (Южная Африка), пока в Конгрессе разгорается ожесточенная битва коалиции R-D и пакта NPP за гражданские права и будущее нации."
 			dossier["geopolitical_bloc"] = "ОФН (Организация Свободных Наций)"
+		elif tag == "SPE":
+			dossier["name"] = "Reich of Albert Speer (Reformists)"
+			dossier["name_ru"] = "Германия (Альберт Шпеер / Реформаторы)"
+			dossier["leader_name"] = "Альберт Шпеер"
+			dossier["leader_title"] = "Рейхсминистр вооружений / Лидер Реформаторов"
+			dossier["portrait_path"] = "res://data/countries/GER/leaders/portraits/GER_albert_speer.png"
+			dossier["color"] = Color(0.85, 0.65, 0.20)
+			dossier["theater"] = "theater_gcw"
+			dossier["difficulty_rating"] = "●●●○○ (СРЕДНЯЯ)"
+			dossier["starting_gdp"] = 85.0
+			dossier["starting_manpower"] = 250000
+			dossier["starting_factories"] = 110
+			dossier["traits"] = ["Архитектор Рейха", "Либерализация рынка", "Поддержка студенчества"]
+			dossier["geopolitical_bloc"] = "Einheitspakt (Реформаторы)"
+		elif tag == "BOR":
+			dossier["name"] = "Reich of Martin Bormann (Party Bureaucracy)"
+			dossier["name_ru"] = "Германия (Мартин Борман / Партократы)"
+			dossier["leader_name"] = "Мартин Борман"
+			dossier["leader_title"] = "Партийный Секретарь НСДАП / Коричневое Преосвященство"
+			dossier["portrait_path"] = "res://data/countries/GER/leaders/portraits/GER_martin_bormann.png"
+			dossier["color"] = Color(0.60, 0.45, 0.25)
+			dossier["theater"] = "theater_gcw"
+			dossier["difficulty_rating"] = "●●○○○ (НИЗКАЯ)"
+			dossier["starting_gdp"] = 95.0
+			dossier["starting_manpower"] = 380000
+			dossier["starting_factories"] = 140
+			dossier["traits"] = ["Коричневое преосвященство", "Аппаратная паутина", "Консервация статуса-кво"]
+			dossier["geopolitical_bloc"] = "Einheitspakt (Партократы)"
+		elif tag == "GOR":
+			dossier["name"] = "Reich of Hermann Göring (Militarist Junta)"
+			dossier["name_ru"] = "Германия (Герман Геринг / Милитаристы)"
+			dossier["leader_name"] = "Герман Геринг"
+			dossier["leader_title"] = "Рейхсмаршал Великогермании / Глава Люфтваффе"
+			dossier["portrait_path"] = "res://data/countries/GER/leaders/portraits/GER_hermann_goring.png"
+			dossier["color"] = Color(0.48, 0.52, 0.58)
+			dossier["theater"] = "theater_gcw"
+			dossier["difficulty_rating"] = "●●●●○ (ВЫСОКАЯ)"
+			dossier["starting_gdp"] = 90.0
+			dossier["starting_manpower"] = 420000
+			dossier["starting_factories"] = 150
+			dossier["traits"] = ["Марионетка Шёрнера", "Экономика непрерывного грабежа", "Воздушный триумф"]
+			dossier["geopolitical_bloc"] = "Einheitspakt (Милитаристы)"
+		elif tag == "HEY":
+			dossier["name"] = "SS-Reich of Reinhard Heydrich"
+			dossier["name_ru"] = "Германия (Рейнхард Гейдрих / Черный Орден СС)"
+			dossier["leader_name"] = "Рейнхард Гейдрих"
+			dossier["leader_title"] = "Обергруппенфюрер СС / Пражский Мясник"
+			dossier["portrait_path"] = "res://data/countries/GER/leaders/portraits/GER_reinhard_heydrich.png"
+			dossier["color"] = Color(0.18, 0.18, 0.24)
+			dossier["theater"] = "theater_gcw"
+			dossier["difficulty_rating"] = "●●●●● (ЭКСТРЕМАЛЬНАЯ)"
+			dossier["starting_gdp"] = 70.0
+			dossier["starting_manpower"] = 180000
+			dossier["starting_factories"] = 95
+			dossier["traits"] = ["Пражский мясник", "Орудие Гиммлера", "Черный орден"]
+			dossier["geopolitical_bloc"] = "Burgundian Sphere (Черный Орден СС)"
 
 		_cached_dossiers[tag] = dossier
 		return dossier

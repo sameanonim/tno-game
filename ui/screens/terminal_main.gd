@@ -292,6 +292,16 @@ func _connect_signals() -> void:
 		if not loc.locale_changed.is_connected(_on_locale_changed):
 			loc.locale_changed.connect(_on_locale_changed)
 
+	# SettingsManager listener
+	var sm = _get_settings_manager()
+	if sm != null:
+		if not sm.crt_param_changed.is_connected(_on_crt_param_changed):
+			sm.crt_param_changed.connect(_on_crt_param_changed)
+		if not sm.crt_enabled_changed.is_connected(_on_crt_enabled_changed):
+			sm.crt_enabled_changed.connect(_on_crt_enabled_changed)
+		if not sm.ui_scale_changed.is_connected(_on_ui_scale_changed):
+			sm.ui_scale_changed.connect(_on_ui_scale_changed)
+
 	# Military & Frontlines signals
 	turn_manager.region_conquered.connect(_on_region_conquered)
 	turn_manager.state_conquered.connect(_on_state_conquered)
@@ -576,8 +586,11 @@ func _setup_initial_game_state() -> void:
 		turn_manager.player_state.turn_count = turn_manager.current_turn
 		turn_manager.player_state.set_flag("turn_count", turn_manager.current_turn)
 
-	var crt_rect: ColorRect = get_node_or_null("CRTOverlay")
-	if crt_rect != null and session_node != null and crt_rect.material is ShaderMaterial:
+	var crt_rect: CanvasItem = _get_crt_node()
+	var sm_node = _get_settings_manager()
+	if crt_rect != null and sm_node != null:
+		sm_node.register_crt_overlay(crt_rect)
+	elif crt_rect != null and session_node != null and crt_rect.material is ShaderMaterial:
 		session_node.apply_crt_to_material(crt_rect.material as ShaderMaterial)
 
 	event_overlay.visible = false
@@ -931,6 +944,45 @@ func _get_localization_manager() -> Node:
 	var tree = get_tree()
 	if tree != null and tree.root != null and tree.root.has_node("LocalizationManager"):
 		return tree.root.get_node("LocalizationManager")
+	return null
+
+
+func _on_crt_param_changed(_param_name: String, _val: Variant) -> void:
+	var crt_node = _get_crt_node()
+	var sm = _get_settings_manager()
+	if crt_node != null and sm != null:
+		sm.apply_crt_to_overlay(crt_node)
+
+
+func _on_crt_enabled_changed(is_enabled: bool) -> void:
+	var crt_node = _get_crt_node()
+	if crt_node != null:
+		crt_node.visible = is_enabled
+		if is_enabled:
+			var sm = _get_settings_manager()
+			if sm != null:
+				sm.apply_crt_to_overlay(crt_node)
+
+
+func _on_ui_scale_changed(_new_scale: float) -> void:
+	_update_hud()
+	_update_localized_ui()
+
+
+func _get_crt_node() -> CanvasItem:
+	if has_node("CRTPostProcess"):
+		return get_node("CRTPostProcess") as CanvasItem
+	elif has_node("CRTOverlay"):
+		return get_node("CRTOverlay") as CanvasItem
+	return null
+
+
+func _get_settings_manager() -> Node:
+	if has_node("/root/SettingsManager"):
+		return get_node("/root/SettingsManager")
+	var root_node = get_tree().root if get_tree() != null else null
+	if root_node != null:
+		return root_node.get_node_or_null("SettingsManager")
 	return null
 
 
@@ -1556,26 +1608,34 @@ func _toggle_in_game_settings() -> void:
 	if _active_settings_terminal != null and is_instance_valid(_active_settings_terminal):
 		_active_settings_terminal.queue_free()
 		_active_settings_terminal = null
-		if has_node("CRTPostProcess"):
-			get_node("CRTPostProcess").visible = true
+		var sm = _get_settings_manager()
+		var crt = _get_crt_node()
+		if sm != null and crt != null:
+			crt.remove_meta("crt_suspended")
+			sm.apply_crt_to_overlay(crt)
 		return
 
-	if has_node("CRTPostProcess"):
-		get_node("CRTPostProcess").visible = false
+	var crt_node = _get_crt_node()
+	if crt_node != null:
+		crt_node.set_meta("crt_suspended", true)
+		crt_node.visible = false
 
 	var st = SETTINGS_TERMINAL_SCENE.instantiate()
 	_active_settings_terminal = st
 	add_child(st)
 	st.settings_saved.connect(func():
-		var crt_rect: ColorRect = get_node_or_null("CRTOverlay")
-		var s_node = get_node_or_null("/root/GameSession")
-		if crt_rect != null and s_node != null and crt_rect.material is ShaderMaterial:
-			s_node.apply_crt_to_material(crt_rect.material as ShaderMaterial)
+		var sm = _get_settings_manager()
+		var crt = _get_crt_node()
+		if sm != null and crt != null:
+			sm.apply_crt_to_overlay(crt)
 		_update_localized_ui()
 	)
 	st.closed.connect(func():
-		if has_node("CRTPostProcess"):
-			get_node("CRTPostProcess").visible = true
+		var sm = _get_settings_manager()
+		var crt = _get_crt_node()
+		if sm != null and crt != null:
+			crt.remove_meta("crt_suspended")
+			sm.apply_crt_to_overlay(crt)
 		if _active_settings_terminal != null and is_instance_valid(_active_settings_terminal):
 			_active_settings_terminal.queue_free()
 			_active_settings_terminal = null

@@ -11,6 +11,10 @@ func _run_tests() -> void:
 	print("TESTING TNO MAIN MENU & AUDIO SYSTEM INTEGRATION")
 	print("==================================================")
 
+	var loc_init = root.get_node_or_null("LocalizationManager")
+	if loc_init != null:
+		loc_init.set_locale("ru")
+
 	# 1. Test AudioManager
 	var am = root.get_node_or_null("AudioManager")
 	if am == null:

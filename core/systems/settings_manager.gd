@@ -208,6 +208,7 @@ func apply_all_settings() -> void:
 	apply_ui_scale(current_ui_scale, false)
 	apply_audio_volumes()
 	update_crt_scanline_density()
+	update_all_crt_overlays()
 
 
 func apply_resolution(res: Vector2i, emit_signal: bool = true) -> void:
@@ -354,13 +355,77 @@ func _on_revert_timer_tick() -> void:
 # УПРАВЛЕНИЕ CRT-ТЕРМИНАЛОМ И АВТО-ПЛОТНОСТЬЮ СКАНЛАЙНОВ
 # ==============================================================================
 
+var _registered_crt_overlays: Array[CanvasItem] = []
+
+
+func register_crt_overlay(overlay: CanvasItem) -> void:
+	if overlay == null or not is_instance_valid(overlay):
+		return
+	if not _registered_crt_overlays.has(overlay):
+		_registered_crt_overlays.append(overlay)
+		if not overlay.tree_exiting.is_connected(_on_overlay_tree_exiting):
+			overlay.tree_exiting.connect(_on_overlay_tree_exiting.bind(overlay))
+	apply_crt_to_overlay(overlay)
+
+
+func unregister_crt_overlay(overlay: CanvasItem) -> void:
+	_registered_crt_overlays.erase(overlay)
+
+
+func _on_overlay_tree_exiting(overlay: CanvasItem) -> void:
+	unregister_crt_overlay(overlay)
+
+
+func apply_crt_to_overlay(overlay: CanvasItem) -> void:
+	if overlay == null or not is_instance_valid(overlay):
+		return
+	if overlay.has_meta("crt_suspended") and bool(overlay.get_meta("crt_suspended")):
+		overlay.visible = false
+		return
+	var is_on = crt_settings.get("enabled", true)
+	overlay.visible = is_on
+	if is_on and overlay.material is ShaderMaterial:
+		apply_crt_to_material(overlay.material as ShaderMaterial)
+
+
+func update_all_crt_overlays() -> void:
+	_clean_dead_overlays()
+	for overlay in _registered_crt_overlays:
+		apply_crt_to_overlay(overlay)
+
+
+func _clean_dead_overlays() -> void:
+	var valid: Array[CanvasItem] = []
+	for o in _registered_crt_overlays:
+		if is_instance_valid(o) and o.is_inside_tree():
+			valid.append(o)
+	_registered_crt_overlays = valid
+
+
+func find_crt_overlay(root_node: Node) -> CanvasItem:
+	if root_node == null:
+		return null
+	var candidate = root_node.get_node_or_null("CRTOverlay")
+	if candidate is CanvasItem:
+		return candidate as CanvasItem
+	candidate = root_node.get_node_or_null("CRTPostProcess")
+	if candidate is CanvasItem:
+		return candidate as CanvasItem
+	for child in root_node.get_children():
+		if (child.name == "CRTOverlay" or child.name == "CRTPostProcess") and child is CanvasItem:
+			return child as CanvasItem
+	return null
+
+
 func set_crt_param(param_name: String, value: Variant) -> void:
 	crt_settings[param_name] = value
+	update_all_crt_overlays()
 	crt_param_changed.emit(param_name, value)
 
 
 func set_crt_enabled(enabled: bool) -> void:
 	crt_settings["enabled"] = enabled
+	update_all_crt_overlays()
 	crt_enabled_changed.emit(enabled)
 
 
@@ -372,6 +437,7 @@ func update_crt_scanline_density() -> void:
 	var h = float(current_resolution.y)
 	var auto_scanlines = maxf(240.0, round(h * 0.5))
 	crt_settings["scanline_count"] = auto_scanlines
+	update_all_crt_overlays()
 	crt_param_changed.emit("scanline_count", auto_scanlines)
 
 
@@ -387,6 +453,7 @@ func apply_crt_to_material(mat: ShaderMaterial) -> void:
 		mat.set_shader_parameter("chromatic_aberration", 0.0)
 		mat.set_shader_parameter("flicker_strength", 0.0)
 		mat.set_shader_parameter("brightness_boost", 1.0)
+		mat.set_shader_parameter("phosphor_tint", Color(1.0, 1.0, 1.0, 1.0))
 		return
 
 	for k in crt_settings.keys():

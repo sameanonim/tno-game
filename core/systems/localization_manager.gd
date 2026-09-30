@@ -144,6 +144,7 @@ func _load_core_modular_packages(loc: String) -> void:
 	var packages = [
 		LOCALIZATION_DIR.path_join("ui/ui_terminal_%s.json" % loc),
 		LOCALIZATION_DIR.path_join("common/rules_%s.json" % loc),
+		LOCALIZATION_DIR.path_join("common/country_lore_%s.json" % loc),
 		LOCALIZATION_DIR.path_join("events/events_common_%s.json" % loc)
 	]
 	for pkg_path in packages:
@@ -459,8 +460,23 @@ func tr_key(key: String, context_params: Variant = {}, fallback: String = "") ->
 		var sanitized = _sanitize_text(raw_str)
 		return _apply_context_params(sanitized, params)
 
+	# 6. Специальный поиск для ключей лора стран (_lore -> _THENEWORDER_DESC или _desc)
+	if key.ends_with("_lore"):
+		var tag_prefix = key.trim_suffix("_lore")
+		var alt_keys = [tag_prefix + "_THENEWORDER_DESC", tag_prefix + "_desc"]
+		for alt in alt_keys:
+			var alt_res = tr_key(alt, params, "")
+			if not alt_res.is_empty() and not alt_res.begins_with("[MISSING"):
+				return alt_res
+
 	if not custom_fallback.is_empty():
 		return _apply_context_params(_sanitize_text(custom_fallback), params)
+
+	# Если в качестве фолбэка явно была передана пустая строка или параметр
+	if context_params is String and str(context_params).is_empty():
+		return ""
+	if not fallback.is_empty():
+		return fallback
 
 	return "[MISSING: %s]" % key
 

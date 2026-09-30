@@ -110,6 +110,8 @@ func _ready() -> void:
 	_switch_tab(TabIndex.DISPLAY)
 	_sync_ui_with_settings()
 	_update_localized_texts()
+	if _settings_mgr != null and crt_overlay != null:
+		_settings_mgr.register_crt_overlay(crt_overlay)
 	_apply_crt()
 	revert_overlay.visible = false
 
@@ -339,23 +341,23 @@ func _refresh_lang_buttons() -> void:
 
 func _sync_ui_with_settings() -> void:
 	var crt = _settings_mgr.crt_settings
-	chk_crt_enable.button_pressed = crt.get("enabled", true)
-	slider_curvature.value = crt.get("curvature", 0.03)
+	chk_crt_enable.set_pressed_no_signal(crt.get("enabled", true))
+	slider_curvature.set_value_no_signal(crt.get("curvature", 0.03))
 	val_curvature.text = "%.3f" % slider_curvature.value
-	slider_scanlines.value = crt.get("scanline_intensity", 0.16)
+	slider_scanlines.set_value_no_signal(crt.get("scanline_intensity", 0.16))
 	val_scanlines.text = "%.2f" % slider_scanlines.value
-	chk_auto_scanlines.button_pressed = crt.get("scanline_auto_density", true)
-	slider_glow.value = crt.get("brightness_boost", 1.05)
+	chk_auto_scanlines.set_pressed_no_signal(crt.get("scanline_auto_density", true))
+	slider_glow.set_value_no_signal(crt.get("brightness_boost", 1.05))
 	val_glow.text = "%.2f" % slider_glow.value
-	slider_aberration.value = crt.get("chromatic_aberration", 0.002)
+	slider_aberration.set_value_no_signal(crt.get("chromatic_aberration", 0.002))
 	val_aberration.text = "%.4f" % slider_aberration.value
 
 	var audio = _settings_mgr.audio_settings
-	slider_master.value = audio.get("master_volume", 0.8)
+	slider_master.set_value_no_signal(audio.get("master_volume", 0.8))
 	val_master.text = "%d%%" % int(slider_master.value * 100)
-	slider_sfx.value = audio.get("sfx_volume", 0.85)
+	slider_sfx.set_value_no_signal(audio.get("sfx_volume", 0.85))
 	val_sfx.text = "%d%%" % int(slider_sfx.value * 100)
-	slider_ambient.value = audio.get("ambient_volume", 0.7)
+	slider_ambient.set_value_no_signal(audio.get("ambient_volume", 0.7))
 	val_ambient.text = "%d%%" % int(slider_ambient.value * 100)
 
 	_update_display_info_label()
@@ -516,7 +518,9 @@ func _on_locale_changed(_locale_code: String) -> void:
 
 
 func _apply_crt() -> void:
-	if crt_overlay != null and crt_overlay.material is ShaderMaterial:
+	if crt_overlay != null and _settings_mgr != null:
+		_settings_mgr.apply_crt_to_overlay(crt_overlay)
+	elif crt_overlay != null and crt_overlay.material is ShaderMaterial:
 		_settings_mgr.apply_crt_to_material(crt_overlay.material as ShaderMaterial)
 
 

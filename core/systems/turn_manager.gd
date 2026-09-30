@@ -593,18 +593,23 @@ func end_turn() -> void:
 	# 4. Фаза фронтов и макро-войны
 	current_state = TurnState.PROCESSING_MILITARY
 	phase_changed.emit("PROCESSING_MILITARY")
-	last_military_reports = MilitaryEngine.simulate_frontlines(1, countries_world_state, regions_world_state)
+	last_military_reports = MilitaryEngine.simulate_frontlines(1, countries_world_state, regions_world_state, current_turn)
 	military_frontlines_processed.emit(last_military_reports)
 
 	pending_modal_events.clear()
 
 	# Проверка результатов фронтов на захват регионов, боевые инциденты и капитуляцию
+	var regions_captured_count = 0
 	for rep in last_military_reports:
 		if rep.get("captured_region_id", -1) > 0:
 			var reg_id = int(rep["captured_region_id"])
 			var n_tag = str(rep.get("new_owner", "")).to_upper()
 			var p_tag = str(rep.get("previous_owner", "")).to_upper()
 			var sid = province_to_state.get(reg_id, 0)
+
+			if boundary_manager != null:
+				boundary_manager.transfer_province(reg_id, n_tag)
+
 			if sid > 0:
 				var provs = state_to_provinces.get(sid, [])
 				var all_ours = true
@@ -621,7 +626,9 @@ func end_turn() -> void:
 			else:
 				if map_controller != null and map_controller.has_method("update_province_owner"):
 					map_controller.update_province_owner(reg_id, n_tag)
+
 			region_conquered.emit(reg_id, n_tag, p_tag)
+			regions_captured_count += 1
 
 		if rep.get("battle_incident") != null:
 			var inc: GameEvent = rep["battle_incident"]
@@ -642,6 +649,9 @@ func end_turn() -> void:
 				elif player_state != null and player_state.country_tag == victor:
 					player_state.legitimacy = clampf(player_state.legitimacy + 12.0, 0.0, 100.0)
 					player_state.army_morale = clampf(player_state.army_morale + 15.0, 0.0, 100.0)
+
+	if regions_captured_count > 0 and boundary_manager != null:
+		boundary_manager.audit_enclaves()
 
 	# 4.1. Кампания Германии / Немецкая Гражданская Война (GCW)
 	if german_civil_war_manager != null:
@@ -956,6 +966,26 @@ func save_game(save_path: String = "user://savegame.json") -> bool:
 	if directive_manager != null:
 		save_dict["directive_progress"] = directive_manager.active_progress.duplicate(true)
 
+	# Сериализация геополитической топологии BoundaryManager
+	if boundary_manager != null:
+		save_dict["boundary_manager_state"] = {
+			"border_statuses": boundary_manager.border_statuses.duplicate(),
+			"border_fortifications": boundary_manager.border_fortifications.duplicate(),
+			"state_dmz_flags": boundary_manager.state_dmz_flags.duplicate(),
+			"enclave_states": boundary_manager.enclave_states.duplicate(),
+			"state_to_owner": boundary_manager.state_to_owner.duplicate()
+		}
+
+	# Сериализация стадии и видимости веток FocusStageController
+	if focus_stage_controller != null:
+		save_dict["focus_stage_state"] = {
+			"current_tree_id": focus_stage_controller.current_tree_id,
+			"current_stage_category": focus_stage_controller.current_stage_category,
+			"hidden_branch_nodes": focus_stage_controller.hidden_branch_nodes.duplicate(),
+			"visible_branch_nodes": focus_stage_controller.visible_branch_nodes.duplicate(),
+			"completed_directives_archive": focus_stage_controller.completed_directives_archive.duplicate()
+		}
+
 	var f = FileAccess.open(save_path, FileAccess.WRITE)
 	if f == null:
 		push_error("TurnManager: Не удалось открыть файл сохранения: %s" % save_path)
@@ -1029,6 +1059,48 @@ func load_game(save_path: String = "user://savegame.json") -> bool:
 				if front != null:
 					MilitaryEngine.register_frontline(front)
 		military_frontlines_processed.emit(MilitaryEngine.get_active_frontlines())
+
+	# Восстановление состояния BoundaryManager
+	if data.has("boundary_manager_state") and boundary_manager != null:
+		var b_data: Dictionary = data["boundary_manager_state"]
+		if b_data.has("border_statuses") and b_data["border_statuses"] is Dictionary:
+			boundary_manager.border_statuses = b_data["border_statuses"].duplicate()
+		if b_data.has("border_fortifications") and b_data["border_fortifications"] is Dictionary:
+			boundary_manager.border_fortifications = b_data["border_fortifications"].duplicate()
+		if b_data.has("state_dmz_flags") and b_data["state_dmz_flags"] is Dictionary:
+			boundary_manager.state_dmz_flags.clear()
+			for k in b_data["state_dmz_flags"].keys():
+				boundary_manager.state_dmz_flags[int(k)] = bool(b_data["state_dmz_flags"][k])
+		if b_data.has("enclave_states") and b_data["enclave_states"] is Dictionary:
+			boundary_manager.enclave_states.clear()
+			for k in b_data["enclave_states"].keys():
+				boundary_manager.enclave_states[int(k)] = bool(b_data["enclave_states"][k])
+		if b_data.has("state_to_owner") and b_data["state_to_owner"] is Dictionary:
+			boundary_manager.state_to_owner.clear()
+			for k in b_data["state_to_owner"].keys():
+				boundary_manager.state_to_owner[int(k)] = str(b_data["state_to_owner"][k])
+
+	# Восстановление стадии и видимости веток FocusStageController
+	if data.has("focus_stage_state") and focus_stage_controller != null:
+		var fs_data: Dictionary = data["focus_stage_state"]
+		var tree_id = str(fs_data.get("current_tree_id", ""))
+		if not tree_id.is_empty():
+			focus_stage_controller.current_tree_id = tree_id
+			if focus_stage_controller.trees_manifest.has(tree_id) or FileAccess.file_exists("res://data/trees/%s.json" % tree_id):
+				focus_stage_controller.switch_focus_tree(tree_id, true)
+		focus_stage_controller.current_stage_category = str(fs_data.get("current_stage_category", "PROLOGUE"))
+		if fs_data.has("hidden_branch_nodes") and fs_data["hidden_branch_nodes"] is Array:
+			focus_stage_controller.hidden_branch_nodes.clear()
+			for h in fs_data["hidden_branch_nodes"]:
+				focus_stage_controller.hidden_branch_nodes.append(str(h))
+		if fs_data.has("visible_branch_nodes") and fs_data["visible_branch_nodes"] is Array:
+			focus_stage_controller.visible_branch_nodes.clear()
+			for v in fs_data["visible_branch_nodes"]:
+				focus_stage_controller.visible_branch_nodes.append(str(v))
+		if fs_data.has("completed_directives_archive") and fs_data["completed_directives_archive"] is Array:
+			focus_stage_controller.completed_directives_archive.clear()
+			for a in fs_data["completed_directives_archive"]:
+				focus_stage_controller.completed_directives_archive.append(str(a))
 
 	# Синхронизация карты после загрузки
 	if map_controller != null:

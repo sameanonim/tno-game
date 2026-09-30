@@ -324,6 +324,67 @@ func transfer_province_or_state(state_id: int, new_owner_tag: String) -> Diction
 	}
 
 
+## Псевдоним для совместимости с внешними системами
+func transfer_state(state_id: int, new_owner_tag: String) -> Dictionary:
+	return transfer_province_or_state(state_id, new_owner_tag)
+
+
+## Передача отдельной провинции новому владельцу с аудитом штата и анклавов
+func transfer_province(province_id: int, new_owner_tag: String) -> Dictionary:
+	var clean_tag = new_owner_tag.strip_edges().to_upper()
+	var state_id = province_to_state.get(province_id, 0)
+	var old_owner = ""
+
+	if regions_db.has(province_id):
+		var reg = regions_db[province_id] as RegionData
+		if reg != null:
+			old_owner = reg.owner_tag
+			reg.owner_tag = clean_tag
+
+	if auto_sync_map_controller and map_controller != null:
+		map_controller.update_province_owner(province_id, clean_tag)
+
+	# Если все провинции штата теперь под контролем new_owner_tag, передаем весь штат
+	if state_id > 0:
+		var provs = state_to_provinces.get(state_id, [])
+		var all_transferred = true
+		for p in provs:
+			var p_owner = clean_tag
+			if regions_db.has(int(p)):
+				var r = regions_db[int(p)] as RegionData
+				if r != null:
+					p_owner = r.owner_tag
+			if p_owner != clean_tag:
+				all_transferred = false
+				break
+		if all_transferred:
+			return transfer_state(state_id, clean_tag)
+		else:
+			# Частичный захват штата: проверяем анклавы
+			_check_and_apply_enclave_status(state_id, clean_tag)
+
+	return {
+		"success": true,
+		"changed": true,
+		"province_id": province_id,
+		"state_id": state_id,
+		"old_owner": old_owner,
+		"new_owner": clean_tag
+	}
+
+
+## Полный аудит топологических анклавов для всех стран и штатов
+func audit_enclaves() -> Dictionary:
+	var enclaves_found: Dictionary = {}
+	for country_tag in country_states.keys():
+		var states_list: Array = country_states[country_tag]
+		for sid in states_list:
+			var is_iso = _check_and_apply_enclave_status(int(sid), country_tag)
+			if is_iso:
+				enclaves_found[int(sid)] = country_tag
+	return enclaves_found
+
+
 # ==============================================================================
 # ENCLAVE DETECTION & DEBUFF APPLICATION
 # ==============================================================================

@@ -170,19 +170,22 @@ static func apply_button_style(btn: Button, accent_color: Color = COLOR_BORDER_C
 	btn.add_theme_color_override("font_pressed_color", COLOR_TEXT_AMBER)
 	btn.add_theme_color_override("font_disabled_color", COLOR_TEXT_MUTED)
 
-static func apply_panel_style(panel: PanelContainer, border_color: Color = COLOR_BORDER_DIM, bg_color: Color = COLOR_BG_DARK) -> void:
+static func apply_panel_style(panel: PanelContainer, border_color: Color = COLOR_BORDER_DIM, bg_color: Color = COLOR_BG_DARK, border_width: int = 1, corner_radius: int = 2) -> void:
 	if panel == null:
 		return
 	var sb = StyleBoxFlat.new()
 	sb.bg_color = bg_color
 	sb.border_color = border_color
-	sb.set_border_width_all(1)
-	sb.set_corner_radius_all(2)
+	sb.set_border_width_all(border_width)
+	sb.set_corner_radius_all(corner_radius)
 	sb.content_margin_left = 8
 	sb.content_margin_right = 8
 	sb.content_margin_top = 6
 	sb.content_margin_bottom = 6
 	panel.add_theme_stylebox_override("panel", sb)
+
+static func apply_box_style(panel: PanelContainer, border_color: Color = COLOR_BORDER_DIM, bg_color: Color = COLOR_BG_DARK, border_width: int = 1, corner_radius: int = 2) -> void:
+	apply_panel_style(panel, border_color, bg_color, border_width, corner_radius)
 
 static func create_pill_box(icon_tex: Texture2D, label_text: String, tooltip: String = "") -> PanelContainer:
 	var container = PanelContainer.new()

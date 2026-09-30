@@ -143,10 +143,6 @@ func get_tags_with_focus_trees() -> Array[String]:
 
 
 func get_country_dossier(tag: String) -> Dictionary:
-	if content_loader != null and content_loader.has_extracted_data():
-		var extracted_dossier = content_loader.get_country_dossier(tag)
-		if not extracted_dossier.is_empty():
-			return extracted_dossier
 	var dossiers = {
 		# --- РУССКАЯ СМУТА ---
 		"WRS": {
@@ -272,14 +268,14 @@ func get_country_dossier(tag: String) -> Dictionary:
 		# --- НЕМЕЦКИЙ КРИЗИС ---
 		"SPE": {
 			"tag": "SPE",
-			"name": "Реформистское Крыло (Германия)",
+			"name": "Германия (Альберт Шпеер / Реформаторы)",
 			"leader_name": "Альберт Шпеер",
-			"leader_title": "Рейхсминистр вооружений",
+			"leader_title": "Рейхсминистр вооружений / Лидер Реформаторов",
 			"ideology": "Фашизм",
 			"sub_ideology": "Реформистский Фашизм",
 			"theater": "theater_gcw",
-			"color": Color(0.80, 0.60, 0.20),
-			"portrait_path": "res://icon.svg",
+			"color": Color(0.85, 0.65, 0.20),
+			"portrait_path": "res://data/countries/GER/leaders/portraits/GER_albert_speer.png",
 			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
 			"starting_gdp": 85.0,
 			"starting_manpower": 250000,
@@ -289,14 +285,14 @@ func get_country_dossier(tag: String) -> Dictionary:
 		},
 		"BOR": {
 			"tag": "BOR",
-			"name": "Партийная Канцелярия (Германия)",
+			"name": "Германия (Мартин Борман / Партократы)",
 			"leader_name": "Мартин Борман",
-			"leader_title": "Партийный Секретарь НСДАП",
+			"leader_title": "Партийный Секретарь НСДАП / Коричневое Преосвященство",
 			"ideology": "Национал-Социализм",
 			"sub_ideology": "Ортодоксальный НСДАП",
 			"theater": "theater_gcw",
 			"color": Color(0.60, 0.45, 0.25),
-			"portrait_path": "res://icon.svg",
+			"portrait_path": "res://data/countries/GER/leaders/portraits/GER_martin_bormann.png",
 			"difficulty_rating": "●●○○○ (НИЗКАЯ)",
 			"starting_gdp": 95.0,
 			"starting_manpower": 380000,
@@ -306,14 +302,14 @@ func get_country_dossier(tag: String) -> Dictionary:
 		},
 		"GOR": {
 			"tag": "GOR",
-			"name": "Милитаристская Хунта (Германия)",
+			"name": "Германия (Герман Геринг / Милитаристы)",
 			"leader_name": "Герман Геринг",
-			"leader_title": "Рейхсмаршал Великогермании",
+			"leader_title": "Рейхсмаршал Великогермании / Глава Люфтваффе",
 			"ideology": "Национал-Социализм",
 			"sub_ideology": "Милитаризм Вермахта",
 			"theater": "theater_gcw",
-			"color": Color(0.50, 0.50, 0.50),
-			"portrait_path": "res://icon.svg",
+			"color": Color(0.48, 0.52, 0.58),
+			"portrait_path": "res://data/countries/GER/leaders/portraits/GER_hermann_goring.png",
 			"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
 			"starting_gdp": 90.0,
 			"starting_manpower": 420000,
@@ -323,14 +319,14 @@ func get_country_dossier(tag: String) -> Dictionary:
 		},
 		"HEY": {
 			"tag": "HEY",
-			"name": "СС-Орденштадт (Германия)",
+			"name": "Германия (Рейнхард Гейдрих / Черный Орден СС)",
 			"leader_name": "Рейнхард Гейдрих",
-			"leader_title": "Обергруппенфюрер СС",
+			"leader_title": "Обергруппенфюрер СС / Пражский Мясник",
 			"ideology": "Бургундская Система",
 			"sub_ideology": "Спартанизм СС",
 			"theater": "theater_gcw",
-			"color": Color(0.15, 0.15, 0.20),
-			"portrait_path": "res://icon.svg",
+			"color": Color(0.18, 0.18, 0.24),
+			"portrait_path": "res://data/countries/GER/leaders/portraits/GER_reinhard_heydrich.png",
 			"difficulty_rating": "●●●●● (ЭКСТРЕМАЛЬНАЯ)",
 			"starting_gdp": 70.0,
 			"starting_manpower": 180000,
@@ -407,8 +403,68 @@ func get_country_dossier(tag: String) -> Dictionary:
 			"starting_factories": 180,
 			"traits": ["Зять Муссолини", "Крах Триумвирата", "Рана Атлантропы", "Великий Фашистский Совет"],
 			"lore": "Италия одержала победу во Второй мировой, но оказалась у разбитого корыта: проект Атлантропа иссушил Адриатику и разорил Медзоджорно. Средиземноморский Триумвират трещит по швам, а в Великом Совете Чиано ведет войну не на жизнь, а на смерть против фашистских ортодоксов Скорцы."
+		},
+		"IBR": {
+			"tag": "IBR",
+			"name": "Иберийский Союз (Испания и Португалия)",
+			"leader_name": "Франсиско Франко",
+			"leader_title": "Каудильо Иберии",
+			"ideology": "Деспотизм",
+			"sub_ideology": "Авторитарный Корпоративизм",
+			"theater": "theater_europe",
+			"color": Color(0.70, 0.40, 0.15),
+			"portrait_path": "res://assets/gfx/leaders/IBR/IBR_Francisco_Franco.png",
+			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+			"starting_gdp": 68.0,
+			"starting_manpower": 320000,
+			"starting_factories": 65,
+			"traits": ["Хрупкий дуумвират", "Каталонский кризис", "Баскский сепаратизм"],
+			"lore": "Франсиско Франко и Антониу ди Салазар удерживают хрупкий Иберийский Союз. Единство двух диктатур подвергается испытаниям со стороны сепаратистов Каталонии и Басконии, террористов и неизбежной борьбы за престолонаследие."
+		},
+		"FRD": {
+			"tag": "FRD",
+			"name": "Французская Республика (Сопротивление)",
+			"leader_name": "Валери Жискар д'Эстен",
+			"leader_title": "Президент Республики",
+			"ideology": "Либерализм",
+			"sub_ideology": "Республиканский Демократизм",
+			"theater": "theater_europe",
+			"color": Color(0.25, 0.40, 0.70),
+			"portrait_path": "res://assets/gfx/leaders/FRD/FRD_Valery_Giscard_dEstaing.png",
+			"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+			"starting_gdp": 45.0,
+			"starting_manpower": 160000,
+			"starting_factories": 48,
+			"traits": ["Подпольная армия", "Борьба за свободу", "Тень Бургундии"],
+			"lore": "Французская Республика под руководством Валери Жискар д'Эстена борется за восстановление демократической и свободной Франции, отвергая как нацистское ярмо Режима Виши, так и террор Бургундии."
+		},
+		"BRG": {
+			"tag": "BRG",
+			"name": "Орденштадт Бургундия (SS-Staat)",
+			"leader_name": "Генрих Гиммлер",
+			"leader_title": "Рейхсфюрер СС",
+			"ideology": "Бургундская Система",
+			"sub_ideology": "Спартанский Эзотеризм",
+			"theater": "theater_europe",
+			"color": Color(0.12, 0.12, 0.16),
+			"portrait_path": "res://assets/gfx/leaders/BRG/BRG_Heinrich_Himmler.png",
+			"difficulty_rating": "●●●●● (ЭКСТРЕМАЛЬНАЯ)",
+			"starting_gdp": 55.0,
+			"starting_manpower": 240000,
+			"starting_factories": 85,
+			"traits": ["Черный Орден", "Апокалиптический культ", "Тотальный контроль"],
+			"lore": "Генрих Гиммлер превратил Бургундию в самый закрытый и зловещий тоталитарный лагерь на планете. За колючей проволокой СС куются планы апокалипсиса, призванного очистить Землю в ядерном пламени."
 		}
 	}
+
+	if content_loader != null and content_loader.has_extracted_data():
+		var extracted_dossier = content_loader.get_country_dossier(tag)
+		if not extracted_dossier.is_empty():
+			if str(extracted_dossier.get("lore", "")).is_empty() and dossiers.has(tag):
+				extracted_dossier["lore"] = dossiers[tag].get("lore", "")
+			if extracted_dossier.get("traits", []).is_empty() and dossiers.has(tag):
+				extracted_dossier["traits"] = dossiers[tag].get("traits", [])
+			return extracted_dossier
 
 	return dossiers.get(tag, dossiers["WRS"])
 

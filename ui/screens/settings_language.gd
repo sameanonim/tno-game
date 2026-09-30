@@ -41,6 +41,8 @@ const COLOR_FRAME_LINE      = Color(0.18, 0.45, 0.3) # Линии псевдог
 @onready var btn_back: Button = $VBox/BottomBar/HBox/BackButton
 @onready var status_label: Label = $VBox/BottomBar/StatusLabel
 
+@onready var crt_overlay: ColorRect = get_node_or_null("CRTOverlay")
+
 const LocManagerScript = preload("res://core/systems/localization_manager.gd")
 
 # Встроенный синтезатор щелчка реле / клавиши
@@ -58,6 +60,9 @@ func _ready() -> void:
 	_populate_language_radio_list()
 	_update_ui_texts()
 	_refresh_live_preview()
+	var sm = _get_settings_mgr()
+	if sm != null and crt_overlay != null:
+		sm.register_crt_overlay(crt_overlay)
 
 
 func _init_localization_manager() -> void:
@@ -96,6 +101,26 @@ func _connect_signals() -> void:
 		_play_relay_click(650.0, 0.03)
 		status_label.text = "[ ВЫБРАНА ОПЦИЯ 'Б' // ТЕСТОВЫЙ ПРИКАЗ ПЕРЕДАН В ШТАБ ]"
 	)
+
+	var sm = _get_settings_mgr()
+	if sm != null:
+		sm.crt_param_changed.connect(func(_p, _v):
+			if crt_overlay != null:
+				sm.apply_crt_to_overlay(crt_overlay)
+		)
+		sm.crt_enabled_changed.connect(func(is_enabled):
+			if crt_overlay != null:
+				crt_overlay.visible = is_enabled
+		)
+
+
+func _get_settings_mgr() -> Node:
+	if has_node("/root/SettingsManager"):
+		return get_node("/root/SettingsManager")
+	var root_node = get_tree().root if get_tree() != null else null
+	if root_node != null:
+		return root_node.get_node_or_null("SettingsManager")
+	return null
 
 
 # ==============================================================================

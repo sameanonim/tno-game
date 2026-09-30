@@ -244,9 +244,31 @@ func _connect_events() -> void:
 	slider_scanlines.value_changed.connect(func(v): _update_crt_param("scanline_intensity", v))
 	slider_glow.value_changed.connect(func(v): _update_crt_param("brightness_boost", v))
 	slider_aberration.value_changed.connect(func(v): _update_crt_param("chromatic_aberration", v))
-	slider_volume.value_changed.connect(func(v): AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(v)))
+	slider_volume.value_changed.connect(func(v):
+		var sm = _get_settings_manager()
+		if sm != null:
+			sm.audio_settings["master_volume"] = v
+			sm.apply_audio_volumes()
+		else:
+			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(v))
+	)
 	btn_lang_settings.pressed.connect(_on_open_system_settings)
-	btn_save_settings.pressed.connect(func(): _switch_state(MenuState.TITULAR))
+	btn_save_settings.pressed.connect(func():
+		var sm = _get_settings_manager()
+		if sm != null:
+			sm.save_settings()
+		_switch_state(MenuState.TITULAR)
+	)
+
+	# SettingsManager
+	var sm = _get_settings_manager()
+	if sm != null:
+		if not sm.crt_param_changed.is_connected(_on_settings_crt_param_changed):
+			sm.crt_param_changed.connect(_on_settings_crt_param_changed)
+		if not sm.crt_enabled_changed.is_connected(_on_settings_crt_enabled_changed):
+			sm.crt_enabled_changed.connect(_on_settings_crt_enabled_changed)
+		if not sm.ui_scale_changed.is_connected(_on_settings_ui_scale_changed):
+			sm.ui_scale_changed.connect(_on_settings_ui_scale_changed)
 
 	# Localization
 	if has_node("/root/LocalizationManager"):
@@ -357,11 +379,9 @@ func _on_open_system_settings() -> void:
 		term.queue_free()
 		if titular_panel != null:
 			titular_panel.visible = true
-		if crt_overlay != null:
-			crt_overlay.visible = true
+		_apply_crt_to_overlay()
 		_switch_state(prev_state)
 		_update_localized_ui()
-		_apply_crt_to_overlay()
 	)
 
 
@@ -377,11 +397,9 @@ func _on_open_language_settings() -> void:
 		lang_screen.queue_free()
 		if titular_panel != null:
 			titular_panel.visible = true
-		if crt_overlay != null:
-			crt_overlay.visible = true
+		_apply_crt_to_overlay()
 		_switch_state(prev_state)
 		_update_localized_ui()
-		_apply_crt_to_overlay()
 	)
 
 
@@ -737,10 +755,24 @@ func _update_dossier_panel(d: Dictionary) -> void:
 		dossier_traits.text = "└─ %s: %s" % [l_traits, traits_str if not traits_str.is_empty() else default_traits]
 
 	if dossier_lore != null:
-		var lore_text = d.get("lore", "")
+		var lore_text = str(d.get("lore", ""))
 		if loc != null and not tag.is_empty():
-			lore_text = loc.tr_key(tag + "_lore", lore_text)
+			var loc_lore = loc.tr_key(tag + "_lore", "")
+			if not loc_lore.is_empty() and not loc_lore.begins_with("[MISSING"):
+				lore_text = loc_lore
+			elif lore_text.is_empty():
+				var tno_desc = loc.tr_key(tag + "_THENEWORDER_DESC", "")
+				if not tno_desc.is_empty() and not tno_desc.begins_with("[MISSING"):
+					lore_text = tno_desc
+		if lore_text.is_empty() or lore_text.begins_with("[MISSING"):
+			var def_msg = "Историческая справка и стратегические ориентиры засекречены или формируются в текущий момент."
+			if loc != null:
+				def_msg = loc.tr_key("DEFAULT_COUNTRY_LORE", def_msg)
+			lore_text = def_msg
 		dossier_lore.text = "[color=#a0ccb8]%s[/color]" % lore_text
+		var scroll_parent = dossier_lore.get_parent()
+		if scroll_parent != null and scroll_parent.get_parent() is ScrollContainer:
+			(scroll_parent.get_parent() as ScrollContainer).scroll_vertical = 0
 
 	if dossier_portrait_frame != null:
 		var is_tag_change = (dossier_portrait_frame._current_leader_id != str(d.get("leader_id", d.get("tag", ""))))
@@ -833,21 +865,54 @@ func _on_load_game_pressed() -> void:
 # ==============================================================================
 
 func _refresh_settings_ui() -> void:
-	var s = _get_session().crt_settings
+	var sm = _get_settings_manager()
+	var s = sm.crt_settings if sm != null else _get_session().crt_settings
 	slider_curvature.value = s.get("curvature", 0.03)
 	slider_scanlines.value = s.get("scanline_intensity", 0.16)
 	slider_glow.value = s.get("brightness_boost", 1.05)
 	slider_aberration.value = s.get("chromatic_aberration", 0.002)
 
+	var audio_s = sm.audio_settings if sm != null else {}
+	slider_volume.value = audio_s.get("master_volume", 0.8)
+
 
 func _update_crt_param(param_name: String, val: float) -> void:
-	_get_session().crt_settings[param_name] = val
-	_apply_crt_to_overlay()
+	var sm = _get_settings_manager()
+	if sm != null:
+		sm.set_crt_param(param_name, val)
+	else:
+		_get_session().crt_settings[param_name] = val
+		_apply_crt_to_overlay()
 
 
 func _apply_crt_to_overlay() -> void:
-	if crt_overlay != null and crt_overlay.material is ShaderMaterial:
+	var sm = _get_settings_manager()
+	if sm != null and crt_overlay != null:
+		sm.register_crt_overlay(crt_overlay)
+		sm.apply_crt_to_overlay(crt_overlay)
+	elif crt_overlay != null and crt_overlay.material is ShaderMaterial:
 		_get_session().apply_crt_to_material(crt_overlay.material as ShaderMaterial)
+
+
+func _on_settings_crt_param_changed(_param_name: String, _val: Variant) -> void:
+	_apply_crt_to_overlay()
+
+
+func _on_settings_crt_enabled_changed(_enabled: bool) -> void:
+	_apply_crt_to_overlay()
+
+
+func _on_settings_ui_scale_changed(_new_scale: float) -> void:
+	_update_localized_ui()
+
+
+func _get_settings_manager() -> Node:
+	if has_node("/root/SettingsManager"):
+		return get_node("/root/SettingsManager")
+	var root_node = get_tree().root if get_tree() != null else null
+	if root_node != null:
+		return root_node.get_node_or_null("SettingsManager")
+	return null
 
 
 func _get_session() -> Node:

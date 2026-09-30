@@ -34,6 +34,17 @@ static func _tr_str(key: String, params: Dictionary = {}, fallback: String = "")
 		s = s.replace("{%s}" % str(k), str(params[k]))
 	return s
 
+## Детерминированный генератор псевдослучайных величин для хода (Linear Congruential + Bit Shift)
+static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
+	var s: int = (seed_val * 73856093) ^ 1274126177
+	s = (s ^ (s >> 13)) * 19349663
+	var norm: float = float(s & 0x7FFFFFFF) / float(0x7FFFFFFF)
+	return min_val + (norm * (max_val - min_val))
+
+
+static func _get_deterministic_int(seed_val: int, min_val: int, max_val: int) -> int:
+	return int(round(_get_deterministic_factor(seed_val, float(min_val), float(max_val))))
+
 
 ## Список активных стратегических фронтов
 static var active_frontlines: Array[Frontline] = []
@@ -100,7 +111,8 @@ static func deploy_proxy_theater(proxy_id: String, superpower_tag: String, count
 static func simulate_frontlines(
 	delta_turns: int,
 	countries: Dictionary,
-	regions: Dictionary
+	regions: Dictionary,
+	current_turn: int = 1
 ) -> Array[Dictionary]:
 	var reports: Array[Dictionary] = []
 	var fronts_to_close: Array[String] = []
@@ -119,7 +131,7 @@ static func simulate_frontlines(
 		var all_axes_finished = true
 		for axis in front.axes:
 			if axis != null:
-				var rep = _simulate_axis_turn(axis, front, attacker, defender, regions)
+				var rep = _simulate_axis_turn(axis, front, attacker, defender, regions, current_turn)
 				reports.append(rep)
 				if not axis.target_region_ids.is_empty():
 					all_axes_finished = false
@@ -142,7 +154,11 @@ static func simulate_frontlines(
 					"defeated": front.defender_tag
 				}, "ПОЛНАЯ КАПИТУЛЯЦИЯ: Войска %s сломили сопротивление %s! Держава полностью капитулировала." % [front.attacker_tag, front.defender_tag])
 			else:
-				cap_summary = "ТРИУМФ НА ТВД: Войска %s выполнили все директивы на фронте «%s». Противник сохраняет контроль над частью регионов (%d)." % [front.attacker_tag, front.name, def_regions_count]
+				cap_summary = _tr_str("FRONT_VICTORY_SUMMARY", {
+					"victor": front.attacker_tag,
+					"front_name": front.name,
+					"def_regions": def_regions_count
+				}, "ТРИУМФ НА ТВД: Войска %s выполнили все директивы на фронте «%s». Противник сохраняет контроль над частью регионов (%d)." % [front.attacker_tag, front.name, def_regions_count])
 
 			var cap_rep: Dictionary = {
 				"front_id": front.front_id,
@@ -168,7 +184,8 @@ static func _simulate_axis_turn(
 	front: Frontline,
 	attacker: CountryState,
 	defender: CountryState,
-	regions: Dictionary
+	regions: Dictionary,
+	current_turn: int = 1
 ) -> Dictionary:
 	var rep: Dictionary = {
 		"front_id": front.front_id,
@@ -247,8 +264,9 @@ static func _simulate_axis_turn(
 		var def_training = (defender.army_readiness * 0.5 + defender.army_morale * 0.5) / 100.0
 		def_power += (float(defender.military_factories) * def_factory_power) * def_training
 
-	# 3. БАЛАНС СИЛ И СДВИГ ФРОНТА
-	var randomness = randf_range(0.90, 1.10)
+	# 3. БАЛАНС СИЛ И СДВИГ ФРОНТА (Детерминированный сид хода)
+	var axis_seed: int = (current_turn * 73856093) ^ (axis.axis_id.hash() * 19349663) ^ (target_id * 83492791)
+	var randomness = _get_deterministic_factor(axis_seed, 0.90, 1.10)
 	var ratio = (atk_power * randomness) / maxf(def_power, 1.0)
 	var progress_gain = 0.0
 
@@ -260,25 +278,25 @@ static func _simulate_axis_turn(
 		# Решительный прорыв
 		var p_min = cfg.get_float("military", "progress_gain_high_min", 14.0) if cfg != null else 14.0
 		var p_max = cfg.get_float("military", "progress_gain_high_max", 24.0) if cfg != null else 24.0
-		progress_gain = randf_range(p_min, p_max)
+		progress_gain = _get_deterministic_factor(axis_seed + 1, p_min, p_max)
 		axis.is_stalled = false
 	elif ratio >= ratio_mid:
 		# Уверенное продвижение
 		var p_min = cfg.get_float("military", "progress_gain_mid_min", 8.0) if cfg != null else 8.0
 		var p_max = cfg.get_float("military", "progress_gain_mid_max", 14.0) if cfg != null else 14.0
-		progress_gain = randf_range(p_min, p_max)
+		progress_gain = _get_deterministic_factor(axis_seed + 2, p_min, p_max)
 		axis.is_stalled = false
 	elif ratio >= ratio_low:
 		# Вязкие позиционные бои
 		var p_min = cfg.get_float("military", "progress_gain_low_min", 2.0) if cfg != null else 2.0
 		var p_max = cfg.get_float("military", "progress_gain_low_max", 6.0) if cfg != null else 6.0
-		progress_gain = randf_range(p_min, p_max)
+		progress_gain = _get_deterministic_factor(axis_seed + 3, p_min, p_max)
 		axis.is_stalled = false
 	else:
 		# Наступление захлебнулось
 		var p_min = cfg.get_float("military", "progress_loss_stalled_min", 1.0) if cfg != null else 1.0
 		var p_max = cfg.get_float("military", "progress_loss_stalled_max", 4.0) if cfg != null else 4.0
-		progress_gain = -randf_range(p_min, p_max)
+		progress_gain = -_get_deterministic_factor(axis_seed + 4, p_min, p_max)
 		axis.is_stalled = true
 
 	# Модификатор стойки
@@ -299,7 +317,8 @@ static func _simulate_axis_turn(
 	var loss_max = cfg.get_float("military", "base_losses_rate_max", 0.035) if cfg != null else 0.035
 	var wep_loss_ratio = cfg.get_float("military", "weapons_loss_ratio", 0.75) if cfg != null else 0.75
 
-	var base_losses = int(float(axis.assigned_manpower) * randf_range(loss_min, loss_max))
+	var loss_rate = _get_deterministic_factor(axis_seed + 5, loss_min, loss_max)
+	var base_losses = int(float(axis.assigned_manpower) * loss_rate)
 	var atk_casualties = int(base_losses / maxf(ratio * 0.8, 0.5))
 	var def_casualties = int(base_losses * ratio)
 	var weapons_lost = int(float(atk_casualties) * wep_loss_ratio)
@@ -385,11 +404,12 @@ static func _simulate_axis_turn(
 			"enemy_losses": def_casualties
 		}, "Ось [%s]: %s (прогресс %0.1f%%). Потери: наши -%d, враг -%d." % [axis.name, status_str, axis.progress, atk_casualties, def_casualties])
 
-	# 6. ГЕНЕРАЦИЯ БОЕВЫХ ДИЛЕММ (BATTLE INCIDENTS)
-	if ratio >= 1.85 and randf() < 0.35:
-		rep["battle_incident"] = _create_battle_incident("breakthrough", axis, front, attacker, defender)
-	elif ratio <= 0.55 and axis.posture == OperationalAxis.Posture.AGGRESSIVE_BREAKTHROUGH and randf() < 0.40:
-		rep["battle_incident"] = _create_battle_incident("encirclement_risk", axis, front, attacker, defender)
+	# 6. ГЕНЕРАЦИЯ БОЕВЫХ ДИЛЕММ (BATTLE INCIDENTS) — Детерминированный расчет
+	var incident_roll = _get_deterministic_factor(axis_seed + 6, 0.0, 1.0)
+	if ratio >= 1.85 and incident_roll < 0.35:
+		rep["battle_incident"] = _create_battle_incident("breakthrough", axis, front, attacker, defender, current_turn)
+	elif ratio <= 0.55 and axis.posture == OperationalAxis.Posture.AGGRESSIVE_BREAKTHROUGH and incident_roll < 0.40:
+		rep["battle_incident"] = _create_battle_incident("encirclement_risk", axis, front, attacker, defender, current_turn)
 
 	return rep
 
@@ -399,14 +419,16 @@ static func _create_battle_incident(
 	axis: OperationalAxis,
 	front: Frontline,
 	attacker: CountryState,
-	defender: CountryState
+	defender: CountryState,
+	turn: int = 1
 ) -> GameEvent:
 	var ev = GameEvent.new()
 	ev.is_modal = true
 	ev.fire_only_once = false
 
+	var det_id = absi((axis.axis_id.hash() * 31) ^ (turn * 997))
 	if type == "breakthrough":
-		ev.event_id = "battle_incident_breakthrough_%d" % randi()
+		ev.event_id = "battle_incident_breakthrough_%s_%d" % [axis.axis_id, det_id]
 		ev.title = _tr_str("EVT_BATTLE_BREAKTHROUGH_TITLE", {"axis_name": axis.name.to_upper()}, "ОПЕРАТИВНЫЙ ПРОРЫВ: %s" % axis.name.to_upper())
 		ev.classification = _tr_str("EVT_BATTLE_BREAKTHROUGH_CLASS", {}, "[ВОЕННАЯ ДЕПЕША // ГЕНШТАБ]")
 		ev.description = _tr_str("EVT_BATTLE_BREAKTHROUGH_DESC", {"axis_name": axis.name}, "Авангардные соединения на оси «%s» разгромили передовые заслоны противника." % axis.name)
@@ -433,7 +455,7 @@ static func _create_battle_incident(
 		ev.options = [opt1, opt2]
 
 	elif type == "encirclement_risk":
-		ev.event_id = "battle_incident_encirclement_%d" % randi()
+		ev.event_id = "battle_incident_encirclement_%s_%d" % [axis.axis_id, det_id]
 		ev.title = _tr_str("EVT_BATTLE_ENCIRCLEMENT_TITLE", {"axis_name": axis.name.to_upper()}, "УГРОЗА ОКРУЖЕНИЯ: %s" % axis.name.to_upper())
 		ev.classification = _tr_str("EVT_BATTLE_ENCIRCLEMENT_CLASS", {}, "[СРОЧНАЯ МОЛНИЯ // ОПЕРАТИВНАЯ ГРУППА]")
 		ev.description = _tr_str("EVT_BATTLE_ENCIRCLEMENT_DESC", {"axis_name": axis.name}, "Передовые батальоны на острие удара оси «%s» оторвались от тылов..." % axis.name)
@@ -481,7 +503,8 @@ class RaidResult:
 static func execute_border_raid(
 	attacker: CountryState,
 	target_region: RegionData,
-	raid_intensity: String = "medium"
+	raid_intensity: String = "medium",
+	current_turn: int = 1
 ) -> RaidResult:
 	var result = RaidResult.new()
 
@@ -526,7 +549,8 @@ static func execute_border_raid(
 
 	var defense_power = (target_region.garrison_strength * terrain_mult) + (float(target_region.civilian_infrastructure) * 3.0)
 
-	var roll = randf_range(0.85, 1.15)
+	var raid_seed: int = (attacker.country_tag.hash() * 37) ^ (target_region.province_id * 101) ^ (current_turn * 99991)
+	var roll = _get_deterministic_factor(raid_seed, 0.85, 1.15)
 	var ratio = (attack_power * roll) / maxf(defense_power, 1.0)
 
 	if ratio >= 1.0:
@@ -534,11 +558,13 @@ static func execute_border_raid(
 		var spoils_factor = clampf(ratio - 0.5, 0.5, 3.0) * commitment_factor
 
 		result.loot_cash_billions = float(target_region.industrial_capacity) * 0.04 * spoils_factor
-		result.captured_weapons = int(randi_range(150, 450) * spoils_factor)
-		result.captured_manpower = int(randi_range(80, 300) * spoils_factor)
+		result.captured_weapons = int(_get_deterministic_int(raid_seed + 1, 150, 450) * spoils_factor)
+		result.captured_manpower = int(_get_deterministic_int(raid_seed + 2, 80, 300) * spoils_factor)
 
-		result.attacker_casualties = int(cost_manpower * randf_range(0.05, 0.20) / ratio)
-		result.defender_casualties = int(cost_manpower * randf_range(0.3, 0.8) * ratio)
+		var atk_loss_ratio = _get_deterministic_factor(raid_seed + 3, 0.05, 0.20)
+		var def_loss_ratio = _get_deterministic_factor(raid_seed + 4, 0.3, 0.8)
+		result.attacker_casualties = int(cost_manpower * atk_loss_ratio / ratio)
+		result.defender_casualties = int(cost_manpower * def_loss_ratio * ratio)
 		result.region_damage_unrest = clampf(15.0 * spoils_factor, 5.0, 40.0)
 
 		attacker.liquid_reserves_billions += result.loot_cash_billions
@@ -560,8 +586,10 @@ static func execute_border_raid(
 		}, "Рейд увенчался успехом! Захвачено $%0.2f млрд трофеев, %d стволов оружия, %d пленных. Потери: %d чел." % [result.loot_cash_billions, result.captured_weapons, result.captured_manpower, result.attacker_casualties])
 	else:
 		result.success = false
-		result.attacker_casualties = int(cost_manpower * randf_range(0.25, 0.60))
-		result.defender_casualties = int(cost_manpower * randf_range(0.10, 0.30))
+		var fail_atk_loss = _get_deterministic_factor(raid_seed + 5, 0.25, 0.60)
+		var fail_def_loss = _get_deterministic_factor(raid_seed + 6, 0.10, 0.30)
+		result.attacker_casualties = int(cost_manpower * fail_atk_loss)
+		result.defender_casualties = int(cost_manpower * fail_def_loss)
 
 		attacker.manpower_pool = maxi(attacker.manpower_pool - result.attacker_casualties, 0)
 		attacker.army_morale = clampf(attacker.army_morale - 3.0, 0.0, 100.0)
