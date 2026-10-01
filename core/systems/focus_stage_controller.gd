@@ -464,6 +464,14 @@ func evaluate_branches_visibility(state: CountryState = null) -> void:
 			new_hidden.append(d_id)
 			dir.status = DirectiveResource.Status.HIDDEN
 
+	# Сохраняем внешние идентификаторы веток и групп, не являющиеся прямыми директивами
+	for h in hidden_branch_nodes:
+		if not active_tree_directives.has(h) and not new_hidden.has(h):
+			new_hidden.append(h)
+	for v in visible_branch_nodes:
+		if not active_tree_directives.has(v) and not new_visible.has(v):
+			new_visible.append(v)
+
 	var changed = (new_hidden != hidden_branch_nodes or new_visible != visible_branch_nodes)
 	hidden_branch_nodes = new_hidden
 	visible_branch_nodes = new_visible
@@ -622,14 +630,21 @@ func from_dict(data: Dictionary, state: CountryState) -> void:
 
 	# 1. Восстановление реестра истории
 	completed_directive_ids.clear()
-	var raw_history = data.get("completed_directives_history", data.get("completed_directives_archive", []))
-	if raw_history is Array:
-		for cid in raw_history:
+	if data.has("completed_directives_history") and data["completed_directives_history"] is Array:
+		for cid in data["completed_directives_history"]:
 			var s_cid = str(cid)
 			if not completed_directive_ids.has(s_cid):
 				completed_directive_ids.append(s_cid)
 
-	completed_directives_archive = completed_directive_ids.duplicate()
+	completed_directives_archive.clear()
+	var raw_archive = data.get("completed_directives_archive", [])
+	if raw_archive is Array:
+		for aid in raw_archive:
+			var s_aid = str(aid)
+			if not completed_directives_archive.has(s_aid):
+				completed_directives_archive.append(s_aid)
+			if not completed_directive_ids.has(s_aid):
+				completed_directive_ids.append(s_aid)
 
 	# Синхронизация с CountryState
 	if country_state != null:
