@@ -18,36 +18,39 @@ from typing import Any, Dict, List, Union
 
 
 class ClausewitzTokenizer:
-    """Tokenizes Clausewitz script files into tokens."""
+    """Tokenizes Clausewitz script files into tokens, supporting comparison operators."""
     TOKEN_RE = re.compile(
-        r'(#.*?$)|("(?:\\.|[^"\\])*")|([{}])|([^\s#{}"=]+)|(=)',
+        r'("(?:\\.|[^"\\])*")|(#.*?$)|([{}])|(>=|<=|!=|>|<|=)|([^\s#{}"=><!]+)',
         re.MULTILINE
     )
 
     @classmethod
     def tokenize(cls, text: str) -> List[str]:
-        tokens = []
+        tokens: List[str] = []
         for match in cls.TOKEN_RE.finditer(text):
-            comment, string_lit, brace, word, equals = match.groups()
+            string_lit, comment, brace, op, word = match.groups()
             if comment:
                 continue
             if string_lit is not None:
-                tokens.append(string_lit[1:-1])  # Strip quotes
+                cleaned = string_lit[1:-1].replace('\\"', '"').replace('\\\\', '\\')
+                tokens.append(cleaned)
             elif brace:
                 tokens.append(brace)
+            elif op:
+                tokens.append(op)
             elif word:
                 tokens.append(word)
-            elif equals:
-                tokens.append(equals)
         return tokens
 
 
 class ClausewitzParser:
-    """Recursive descent parser for Clausewitz AST."""
+    """Recursive descent parser for Clausewitz AST with relational operator AST generation."""
+    RELATIONAL_OPS = {">=", "<=", "!=", ">", "<", "="}
+
     def __init__(self, tokens: List[str]):
-        self.tokens = tokens
-        self.pos = 0
-        self.length = len(tokens)
+        self.tokens: List[str] = tokens
+        self.pos: int = 0
+        self.length: int = len(tokens)
 
     def parse(self) -> Dict[str, Any]:
         result: Dict[str, Any] = {}
@@ -58,15 +61,19 @@ class ClausewitzParser:
             if key is None:
                 break
 
-            if self.peek() == "=":
-                self.consume()  # eat '='
+            op = self.peek()
+            if op in self.RELATIONAL_OPS:
+                self.consume()  # eat operator
                 val = self.parse_value()
+
+                entry = {"operator": op, "value": val} if op != "=" else val
+
                 if key in result:
                     if not isinstance(result[key], list):
                         result[key] = [result[key]]
-                    result[key].append(val)
+                    result[key].append(entry)
                 else:
-                    result[key] = val
+                    result[key] = entry
             else:
                 # Standalone word or list entry
                 if "list_values" not in result:
@@ -78,22 +85,24 @@ class ClausewitzParser:
         token = self.peek()
         if token == "{":
             self.consume()  # eat '{'
-            nested_dict = {}
-            nested_list = []
+            nested_dict: Dict[str, Any] = {}
+            nested_list: List[Any] = []
             is_pure_list = False
 
             while self.pos < self.length and self.peek() != "}":
                 curr = self.peek()
-                if self.peek_ahead(1) == "=":
+                next_tok = self.peek_ahead(1)
+                if next_tok in self.RELATIONAL_OPS:
                     k = self.consume()
-                    self.consume()  # '='
+                    op = self.consume()
                     v = self.parse_value()
+                    entry = {"operator": op, "value": v} if op != "=" else v
                     if k in nested_dict:
                         if not isinstance(nested_dict[k], list):
                             nested_dict[k] = [nested_dict[k]]
-                        nested_dict[k].append(v)
+                        nested_dict[k].append(entry)
                     else:
-                        nested_dict[k] = v
+                        nested_dict[k] = entry
                 else:
                     item = self.consume()
                     nested_list.append(item)

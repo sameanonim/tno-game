@@ -98,6 +98,14 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 			var is_pup = state.has_flag("is_puppet") or bool(state.story_flags.get("is_puppet", false))
 			return is_pup == expected_puppet
 
+		"is_ai":
+			var expected_ai: bool = bool(cond.get("value", true))
+			var is_player: bool = state.has_flag("is_player") or bool(state.story_flags.get("is_player", false))
+			var is_ai_actual: bool = not is_player
+			if state.has_flag("is_ai"):
+				is_ai_actual = bool(state.get_flag("is_ai"))
+			return is_ai_actual == expected_ai
+
 		"tag", "is_tag":
 			var target_tag = str(cond.get("tag", cond.get("value", ""))).to_upper()
 			return state.country_tag.to_upper() == target_tag
@@ -133,7 +141,7 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 
 		"has_idea":
 			var idea_id = str(cond.get("idea", cond.get("value", "")))
-			return state.has_flag("idea_" + idea_id) or state.has_flag(idea_id) or state.has_active_law(idea_id)
+			return state.has_flag("idea_" + idea_id) or state.has_flag(idea_id) or state.has_active_law(idea_id) or state.has_national_spirit(idea_id)
 
 		"controls_state", "owns_state", "has_state", "fully_controls_state":
 			var target_state_id = int(cond.get("state", cond.get("value", cond.get("state_id", 0))))
@@ -175,6 +183,10 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 					current_loyalty = float(state.factions_loyalty[k])
 					break
 			return _compare(current_loyalty, op, min_val)
+
+		"has_completed_focus", "has_completed_directive", "completed_focus", "completed_directive":
+			var f_id = str(cond.get("focus", cond.get("directive", cond.get("value", cond.get("id", "")))))
+			return state.completed_directives.has(f_id) or state.has_flag("completed_focus_" + f_id) or (state.has_method("has_completed_directive") and state.has_completed_directive(f_id))
 
 		_:
 			# Если условие неизвестно, проверяем флаги как запасной вариант

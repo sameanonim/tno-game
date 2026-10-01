@@ -33,6 +33,14 @@ enum Status {
 @export var icon_path: String = "res://icon.svg"
 @export var icon: Texture2D = null
 
+## Ленивое получение и кэширование иконки директивы
+func get_icon() -> Texture2D:
+	if icon != null:
+		return icon
+	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
+		icon = load(icon_path)
+	return icon
+
 # ==============================================================================
 # СЕТКА И СТОИМОСТЬ
 # ==============================================================================

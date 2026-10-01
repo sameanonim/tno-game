@@ -127,6 +127,10 @@ func setup(state: CountryState, arg2: Variant = null, arg3: Variant = null, arg4
 			focus_stage_controller.focus_tree_switched.connect(_on_focus_stage_switched)
 		if not focus_stage_controller.branches_visibility_changed.is_connected(_on_branches_visibility_changed):
 			focus_stage_controller.branches_visibility_changed.connect(_on_branches_visibility_changed)
+		if not focus_stage_controller.directive_auto_bypassed.is_connected(_on_directive_auto_bypassed):
+			focus_stage_controller.directive_auto_bypassed.connect(_on_directive_auto_bypassed)
+		if not focus_stage_controller.directive_force_cancelled.is_connected(_on_directive_force_cancelled):
+			focus_stage_controller.directive_force_cancelled.connect(_on_directive_force_cancelled)
 
 	if turn_manager != null:
 		if not turn_manager.directive_started.is_connected(_on_directive_started):
@@ -397,7 +401,7 @@ func _setup_ui_layout() -> void:
 	tree_hud_panel.add_child(tree_hud_hbox)
 
 	var lbl_tree_prefix = Label.new()
-	lbl_tree_prefix.text = " ДРЕВО:"
+	lbl_tree_prefix.text = tr(" ДРЕВО:")
 	lbl_tree_prefix.add_theme_font_size_override("font_size", 11)
 	lbl_tree_prefix.add_theme_color_override("font_color", COLOR_PHOSPHOR_CYAN)
 	tree_hud_hbox.add_child(lbl_tree_prefix)
@@ -474,13 +478,13 @@ func _setup_ui_layout() -> void:
 	insp_margin.add_child(insp_vbox)
 
 	lbl_insp_class = Label.new()
-	lbl_insp_class.text = "ДОСЬЕ ПРОЕКТА // НАЦИОНАЛЬНАЯ ДИРЕКТИВА"
+	lbl_insp_class.text = tr("ДОСЬЕ ПРОЕКТА // НАЦИОНАЛЬНАЯ ДИРЕКТИВА")
 	lbl_insp_class.add_theme_color_override("font_color", Color(0.4, 0.75, 0.65))
 	lbl_insp_class.add_theme_font_size_override("font_size", 10)
 	insp_vbox.add_child(lbl_insp_class)
 
 	lbl_insp_title = Label.new()
-	lbl_insp_title.text = "ВЫБЕРИТЕ ДИРЕКТИВУ НА СХЕМЕ"
+	lbl_insp_title.text = tr("ВЫБЕРИТЕ ДИРЕКТИВУ НА СХЕМЕ")
 	lbl_insp_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl_insp_title.add_theme_color_override("font_color", COLOR_PHOSPHOR_CYAN)
 	lbl_insp_title.add_theme_font_size_override("font_size", 15)
@@ -498,12 +502,12 @@ func _setup_ui_layout() -> void:
 	lbl_insp_desc.bbcode_enabled = true
 	lbl_insp_desc.fit_content = true
 	lbl_insp_desc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lbl_insp_desc.text = "[color=#779988]Изучите схему стратегических директив государства. Выберите проект для анализа оперативных затрат, требований кабинета и ожидаемых геополитических эффектов.[/color]"
+	lbl_insp_desc.text = tr("[color=#779988]Изучите схему стратегических директив государства. Выберите проект для анализа оперативных затрат, требований кабинета и ожидаемых геополитических эффектов.[/color]")
 	desc_scroll.add_child(lbl_insp_desc)
 
 	lbl_insp_cost = Label.new()
 	lbl_insp_cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	lbl_insp_cost.text = "ОПЕРАТИВНЫЕ ЗАТРАТЫ: --"
+	lbl_insp_cost.text = tr("ОПЕРАТИВНЫЕ ЗАТРАТЫ: --")
 	lbl_insp_cost.add_theme_color_override("font_color", COLOR_PHOSPHOR_AMBER)
 	lbl_insp_cost.add_theme_font_size_override("font_size", 11)
 	insp_vbox.add_child(lbl_insp_cost)
@@ -512,7 +516,7 @@ func _setup_ui_layout() -> void:
 	insp_vbox.add_child(sep_req)
 
 	var lbl_req_header = Label.new()
-	lbl_req_header.text = "ТРЕБОВАНИЯ И СТАТУС ВЕТКИ:"
+	lbl_req_header.text = tr("ТРЕБОВАНИЯ И СТАТУС ВЕТКИ:")
 	lbl_req_header.add_theme_color_override("font_color", Color(0.4, 0.75, 0.65))
 	lbl_req_header.add_theme_font_size_override("font_size", 10)
 	insp_vbox.add_child(lbl_req_header)
@@ -533,7 +537,7 @@ func _setup_ui_layout() -> void:
 	insp_vbox.add_child(sep2)
 
 	var lbl_eff_header = Label.new()
-	lbl_eff_header.text = "ОЖИДАЕМЫЕ ПОСЛЕДСТВИЯ И НАГРАДЫ:"
+	lbl_eff_header.text = tr("ОЖИДАЕМЫЕ ПОСЛЕДСТВИЯ И НАГРАДЫ:")
 	lbl_eff_header.add_theme_color_override("font_color", Color(0.4, 0.75, 0.65))
 	lbl_eff_header.add_theme_font_size_override("font_size", 10)
 	insp_vbox.add_child(lbl_eff_header)
@@ -551,7 +555,7 @@ func _setup_ui_layout() -> void:
 	eff_scroll.add_child(lbl_insp_effects)
 
 	btn_insp_start = Button.new()
-	btn_insp_start.text = "[ УТВЕРДИТЬ ДИРЕКТИВУ ]"
+	btn_insp_start.text = tr("[ УТВЕРДИТЬ ДИРЕКТИВУ ]")
 	btn_insp_start.disabled = true
 	btn_insp_start.custom_minimum_size = Vector2(0, 42)
 	btn_insp_start.pressed.connect(_on_start_button_pressed)
@@ -704,8 +708,10 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 	btn.custom_minimum_size = node_size
 	btn.size = node_size
 
-	var is_completed = player_state != null and player_state.completed_directives.has(dir.id)
-	var is_active = player_state != null and player_state.active_directives.has(dir.id)
+	var is_completed = (player_state != null and player_state.completed_directives.has(dir.id)) \
+		or (focus_stage_controller != null and focus_stage_controller.completed_directive_ids.has(dir.id)) \
+		or dir.status == DirectiveResource.Status.COMPLETED
+	var is_active = (player_state != null and player_state.active_directives.has(dir.id)) or dir.status == DirectiveResource.Status.IN_PROGRESS
 	var dossier = dir.can_be_started(player_state) if player_state != null else {"allowed": false, "reason": ""}
 	var can_start = dossier.get("allowed", false)
 
@@ -775,7 +781,7 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 	status_lbl.add_theme_font_size_override("font_size", 10)
 
 	if is_completed:
-		status_lbl.text = "✓ [ ВЫПОЛНЕНО ]"
+		status_lbl.text = tr("✓ [ ВЫПОЛНЕНО ]")
 		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_CYAN)
 	elif is_active:
 		var spent = dir.turns_to_complete - dir.turns_remaining
@@ -783,17 +789,18 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 			spent = directive_manager.active_progress[dir.id]
 		spent = clampi(spent, 0, dir.turns_to_complete)
 		var bar = _generate_ascii_bar(spent, dir.turns_to_complete)
-		status_lbl.text = "%s %d/%d ХОД" % [bar, spent, dir.turns_to_complete]
+		var turn_fmt = tr("%s %d/%d ХОД")
+		status_lbl.text = turn_fmt % [bar, spent, dir.turns_to_complete]
 		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_AMBER)
 	elif is_mutually_locked:
-		status_lbl.text = "✖ [ ЗАБЛОКИРОВАНО ВЫБОРОМ ]"
+		status_lbl.text = tr("✖ [ ЗАБЛОКИРОВАНО ВЫБОРОМ ]")
 		status_lbl.add_theme_color_override("font_color", COLOR_EXCLUSION_RED)
 		title_lbl.add_theme_color_override("font_color", Color(0.75, 0.35, 0.35))
 	elif can_start:
-		status_lbl.text = "► [ ГОТОВО К ПУСКУ ]"
+		status_lbl.text = tr("► [ ГОТОВО К ПУСКУ ]")
 		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_GREEN)
 	else:
-		status_lbl.text = "✖ [ ЗАБЛОКИРОВАНО ]"
+		status_lbl.text = tr("✖ [ ЗАБЛОКИРОВАНО ]")
 		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_DIM)
 
 	vbox.add_child(status_lbl)
@@ -968,7 +975,8 @@ func _find_visible_prerequisites(dir_id: String, visited: Array[String] = []) ->
 	visited.append(dir_id)
 
 	var dir: DirectiveResource = all_directives[dir_id]
-	for prereq_id in dir.prerequisites:
+	var all_prereqs = _get_all_prereq_ids(dir)
+	for prereq_id in all_prereqs:
 		if node_controls.has(prereq_id) and node_controls[prereq_id].visible:
 			if not result.has(prereq_id):
 				result.append(prereq_id)
@@ -979,6 +987,24 @@ func _find_visible_prerequisites(dir_id: String, visited: Array[String] = []) ->
 					result.append(a_id)
 
 	return result
+
+
+## Извлечение всех ID пререквизитов (как плоского списка, так и логических групп)
+func _get_all_prereq_ids(dir: DirectiveResource) -> Array[String]:
+	var ids: Array[String] = []
+	if dir == null:
+		return ids
+	for p in dir.prerequisites:
+		var p_str = str(p)
+		if not ids.has(p_str):
+			ids.append(p_str)
+	for grp in dir.prerequisites_groups:
+		if grp is Array:
+			for elem in grp:
+				var elem_str = str(elem)
+				if not ids.has(elem_str):
+					ids.append(elem_str)
+	return ids
 
 
 func _draw_orthogonal_bus(canvas: Control, from: Vector2, to: Vector2, col: Color, width: float) -> void:
@@ -1126,9 +1152,12 @@ func _update_inspector(dir: DirectiveResource) -> void:
 	lbl_insp_effects.text = eff_txt
 
 	# Кнопка запуска
-	var is_completed = player_state != null and player_state.completed_directives.has(dir.id)
+	var is_completed = (player_state != null and player_state.completed_directives.has(dir.id)) \
+		or (focus_stage_controller != null and focus_stage_controller.completed_directive_ids.has(dir.id)) \
+		or dir.status == DirectiveResource.Status.COMPLETED
 	var is_active = (turn_manager != null and "active_directive" in turn_manager and turn_manager.active_directive != null and turn_manager.active_directive.id == dir.id) \
-		or (player_state != null and player_state.active_directives.has(dir.id))
+		or (player_state != null and player_state.active_directives.has(dir.id)) \
+		or dir.status == DirectiveResource.Status.IN_PROGRESS
 	var dossier = dir.can_be_started(player_state) if player_state != null else {"allowed": false, "reason": ""}
 	var can_start = dossier.get("allowed", false)
 
@@ -1143,19 +1172,19 @@ func _update_inspector(dir: DirectiveResource) -> void:
 				break
 
 	if is_completed:
-		btn_insp_start.text = "[ ПРОЕКТ УЖЕ ВЫПОЛНЕН ]"
+		btn_insp_start.text = tr("[ ПРОЕКТ УЖЕ ВЫПОЛНЕН ]")
 		btn_insp_start.disabled = true
 	elif is_active:
-		btn_insp_start.text = "[ ДИРЕКТИВА В РАБОТЕ ]"
+		btn_insp_start.text = tr("[ ДИРЕКТИВА В РАБОТЕ ]")
 		btn_insp_start.disabled = true
 	elif is_mutually_locked:
-		btn_insp_start.text = "[ ЗАБЛОКИРОВАНО ВЫБОРОМ ]"
+		btn_insp_start.text = tr("[ ЗАБЛОКИРОВАНО ВЫБОРОМ ]")
 		btn_insp_start.disabled = true
 	elif can_start:
-		btn_insp_start.text = "[ УТВЕРДИТЬ ДИРЕКТИВУ ]"
+		btn_insp_start.text = tr("[ УТВЕРДИТЬ ДИРЕКТИВУ ]")
 		btn_insp_start.disabled = false
 	else:
-		btn_insp_start.text = "[ УСЛОВИЯ НЕ ВЫПОЛНЕНЫ ]"
+		btn_insp_start.text = tr("[ УСЛОВИЯ НЕ ВЫПОЛНЕНЫ ]")
 		btn_insp_start.disabled = true
 
 
@@ -1336,7 +1365,7 @@ func _setup_reboot_overlay() -> void:
 	panel.add_child(vbox)
 
 	var header = Label.new()
-	header.text = "/// ПЕРЕЗАГРУЗКА БАЗЫ ДИРЕКТИВ / СМЕНА СТАДИИ ///"
+	header.text = tr("/// ПЕРЕЗАГРУЗКА БАЗЫ ДИРЕКТИВ / СМЕНА СТАДИИ ///")
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.add_theme_font_size_override("font_size", 14)
 	header.add_theme_color_override("font_color", COLOR_PHOSPHOR_CYAN)
@@ -1367,10 +1396,19 @@ func play_stage_reboot_fx(new_tree_id: String, stage_name: String, on_midpoint_c
 	reboot_overlay.modulate.a = 0.0
 
 	var stage_badge = _get_stage_badge(stage_name)
-	lbl_reboot_log.text = "[color=#00f2ff]>>> ИНИЦИАЛИЗАЦИЯ ПРОТОКОЛА ПЕРЕЗАГРУЗКИ ТЕРМИНАЛА...[/color]\n"
-	lbl_reboot_log.text += "[color=#2bf070]>>> АРХИВАЦИЯ ПРЕДЫДУЩЕГО ПАКЕТА ГОСУДАРСТВЕННЫХ ДИРЕКТИВ... [OK][/color]\n"
-	lbl_reboot_log.text += "[color=#ffe040]>>> ЗАГРУЗКА ПАКЕТА: [%s] | ФАЗА: %s...[/color]\n" % [new_tree_id, stage_badge]
-	lbl_reboot_log.text += "[color=#00f2ff]>>> КАЛИБРОВКА МАТРИЦЫ ПРИОРИТЕТОВ КАБИНЕТА И АКТИВАЦИЯ УЗЛОВ...[/color]"
+	lbl_reboot_log.text = tr("[color=#ff3344]>>> [СИСТЕМНЫЙ СИГНАЛ] СМЕНА ПОЛИТИЧЕСКОГО КУРСА: ЗАГРУЗКА ПАКЕТА ДИРЕКТИВ [%s]...[/color]\n") % new_tree_id
+	lbl_reboot_log.text += tr("[color=#00f2ff]>>> ИНИЦИАЛИЗАЦИЯ CRT-ПРОТОКОЛА ПЕРЕЗАГРУЗКИ ТЕРМИНАЛА...[/color]\n")
+	lbl_reboot_log.text += tr("[color=#2bf070]>>> АРХИВАЦИЯ ПРЕДЫДУЩЕГО ПАКЕТА ГОСУДАРСТВЕННЫХ ДИРЕКТИВ... [OK][/color]\n")
+	var reboot_load_fmt = tr("[color=#ffe040]>>> ЗАГРУЗКА ПАКЕТА: [%s] | ФАЗА: %s...[/color]\n")
+	lbl_reboot_log.text += reboot_load_fmt % [new_tree_id, stage_badge]
+	lbl_reboot_log.text += tr("[color=#00f2ff]>>> КАЛИБРОВКА МАТРИЦЫ ПРИОРИТЕТОВ КАБИНЕТА И АКТИВАЦИЯ УЗЛОВ...[/color]")
+
+	# Эффект строчной помехи / глитча кинескопа
+	var glitch_tw = create_tween()
+	glitch_tw.tween_property(reboot_overlay, "position:x", 3.0, 0.03)
+	glitch_tw.tween_property(reboot_overlay, "position:x", -3.0, 0.03)
+	glitch_tw.tween_property(reboot_overlay, "position:x", 1.5, 0.03)
+	glitch_tw.tween_property(reboot_overlay, "position:x", 0.0, 0.03)
 
 	var tw = create_tween()
 	tw.tween_property(reboot_overlay, "modulate:a", 1.0, 0.12)
@@ -1392,15 +1430,31 @@ func play_stage_reboot_fx(new_tree_id: String, stage_name: String, on_midpoint_c
 
 
 func _animate_nodes_appearance() -> void:
+	var visible_nodes: Array[Control] = []
 	for dir_id in node_controls.keys():
 		var ctrl: Control = node_controls[dir_id]
-		if not ctrl.visible:
-			continue
+		if ctrl != null and ctrl.visible:
+			visible_nodes.append(ctrl)
+
+	# Сортировка построчно (сверху вниз, затем слева направо)
+	visible_nodes.sort_custom(func(a: Control, b: Control) -> bool:
+		if absf(a.position.y - b.position.y) > 20.0:
+			return a.position.y < b.position.y
+		return a.position.x < b.position.x
+	)
+
+	for i in range(visible_nodes.size()):
+		var ctrl: Control = visible_nodes[i]
 		ctrl.modulate.a = 0.0
+		var orig_y = ctrl.position.y
+		ctrl.position.y += 10.0
+
+		var row_delay = (orig_y / 180.0) * 0.05 + (i * 0.01)
 		var tw = create_tween()
-		var delay = randf_range(0.04, 0.25)
-		tw.tween_interval(delay)
-		tw.tween_property(ctrl, "modulate:a", 1.0, 0.2)
+		tw.tween_interval(clampf(row_delay, 0.02, 0.35))
+		tw.set_parallel(true)
+		tw.tween_property(ctrl, "modulate:a", 1.0, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(ctrl, "position:y", orig_y, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
 # ==============================================================================
@@ -1441,3 +1495,11 @@ func apply_branch_visibility(hidden_node_ids: Array[String], visible_node_ids: A
 
 	if graph_canvas != null:
 		graph_canvas.queue_redraw()
+
+
+func _on_directive_auto_bypassed(_directive: DirectiveResource) -> void:
+	refresh_tree()
+
+
+func _on_directive_force_cancelled(_directive: DirectiveResource, _reason: String) -> void:
+	refresh_tree()

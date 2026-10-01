@@ -10,6 +10,12 @@ extends Resource
 @export var leader_id: String = "leader_mikhail_tukhachevsky"
 @export var leader_name: String = "Mikhail Tukhachevsky"
 @export var title: String = "Marshal of the Soviet Union"
+## Псевдоним для совместимости с кодом интерфейса (leader_title <-> title)
+var leader_title: String:
+	get:
+		return title
+	set(val):
+		title = val
 @export var portrait_path: String = "res://icon.svg"
 
 @export_group("Ideology & Alignment")
@@ -48,6 +54,7 @@ func to_dict() -> Dictionary:
 		"leader_id": leader_id,
 		"leader_name": leader_name,
 		"title": title,
+		"leader_title": leader_title if not leader_title.is_empty() else title,
 		"portrait_path": portrait_path,
 		"ideology": ideology,
 		"faction_affiliation": faction_affiliation,
@@ -70,7 +77,7 @@ static func from_dict(data: Dictionary) -> LeaderResource:
 	var res = LeaderResource.new()
 	res.leader_id = data.get("leader_id", "")
 	res.leader_name = data.get("leader_name", "Unknown Leader")
-	res.title = data.get("title", "")
+	res.title = data.get("title", data.get("leader_title", ""))
 	res.portrait_path = data.get("portrait_path", "res://icon.svg")
 	res.ideology = data.get("ideology", "Neutral")
 	res.faction_affiliation = data.get("faction_affiliation", data.get("ideological_faction", "bureaucracy"))

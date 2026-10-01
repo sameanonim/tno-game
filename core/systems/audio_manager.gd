@@ -294,22 +294,22 @@ func attach_ui_sounds(root_node: Node) -> void:
 	if root_node == null:
 		return
 
-	if root_node is Button:
-		_wire_button_sounds(root_node as Button)
+	if root_node is BaseButton:
+		_wire_button_sounds(root_node as BaseButton)
 
-	for child in root_node.get_children():
+	for child: Node in root_node.get_children():
 		attach_ui_sounds(child)
 
 
-func _wire_button_sounds(btn: Button) -> void:
+func _wire_button_sounds(btn: BaseButton) -> void:
 	# Проверяем, не подключены ли уже слушатели
 	if not btn.mouse_entered.is_connected(_on_button_hovered):
 		btn.mouse_entered.connect(_on_button_hovered)
 
-	if btn is CheckBox:
-		if not btn.toggled.is_connected(_on_checkbox_toggled):
-			btn.toggled.connect(_on_checkbox_toggled)
-	else:
+	if btn.has_signal("toggled") and btn.is_class("CheckBox"):
+		if not btn.is_connected("toggled", _on_checkbox_toggled):
+			btn.connect("toggled", _on_checkbox_toggled)
+	elif btn.has_signal("pressed"):
 		if not btn.pressed.is_connected(_on_button_pressed):
 			btn.pressed.connect(_on_button_pressed)
 

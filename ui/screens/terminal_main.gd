@@ -294,7 +294,7 @@ func _connect_signals() -> void:
 					research_terminal_view.refresh_view()
 		)
 
-	if super_event_modal != null:
+	if super_event_modal != null and not super_event_modal.option_selected.is_connected(_on_super_event_closed):
 		super_event_modal.option_selected.connect(_on_super_event_closed)
 
 	# TNO TopBar signals
@@ -531,7 +531,7 @@ func _connect_signals() -> void:
 		)
 		province_inspector_panel.plan_raid_target_requested.connect(func(pid):
 			is_raid_mode_active = true
-			btn_raid_toggle.text = "[ РЕЙД: АКТИВЕН ]"
+			btn_raid_toggle.text = tr("[ РЕЙД: АКТИВЕН ]")
 			_open_raid_planning_panel(pid, map_controller.get_province_data(pid))
 			if sound_fx != null: sound_fx.play_alarm_buzz(520.0, 0.12)
 		)
@@ -780,7 +780,7 @@ func _setup_initial_game_state() -> void:
 	# Кнопка вызова штаба Рейха на тактической карте
 	if map_hud_hbox != null and btn_gcw_toggle == null:
 		btn_gcw_toggle = Button.new()
-		btn_gcw_toggle.text = "[ ШТАБ РЕЙХА ]"
+		btn_gcw_toggle.text = tr("[ ШТАБ РЕЙХА ]")
 		btn_gcw_toggle.pressed.connect(func():
 			if tab_container != null and tab_container.get_tab_count() > 3 and not tab_container.is_tab_hidden(3):
 				tab_container.current_tab = 3
@@ -800,7 +800,7 @@ func _setup_initial_game_state() -> void:
 	# Кнопка терминала Японии на тактической карте
 	if map_hud_hbox != null and btn_japan_toggle == null:
 		btn_japan_toggle = Button.new()
-		btn_japan_toggle.text = "[ 🏯 ДЗАЙБАЦУ ]"
+		btn_japan_toggle.text = tr("[ 🏯 ДЗАЙБАЦУ ]")
 		TNOTheme.apply_button_style(btn_japan_toggle, TNOTheme.COLOR_BORDER_CYAN, Color(0.06, 0.12, 0.15, 0.95))
 		btn_japan_toggle.pressed.connect(func():
 			if tab_container != null and tab_container.get_tab_count() > 3 and not tab_container.is_tab_hidden(3):
@@ -817,7 +817,7 @@ func _setup_initial_game_state() -> void:
 	# Кнопка терминала Италии на тактической карте
 	if map_hud_hbox != null and btn_italy_toggle == null:
 		btn_italy_toggle = Button.new()
-		btn_italy_toggle.text = "[ 🏛 ТРИУМВИРАТ ]"
+		btn_italy_toggle.text = tr("[ 🏛 ТРИУМВИРАТ ]")
 		TNOTheme.apply_button_style(btn_italy_toggle, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.08, 0.04, 0.95))
 		btn_italy_toggle.pressed.connect(func():
 			if tab_container != null and tab_container.get_tab_count() > 3 and not tab_container.is_tab_hidden(3):
@@ -834,7 +834,7 @@ func _setup_initial_game_state() -> void:
 	# Кнопка терминала НИОКР на тактической карте
 	if map_hud_hbox != null and btn_research_toggle == null:
 		btn_research_toggle = Button.new()
-		btn_research_toggle.text = "[ 🔬 НИОКР ]"
+		btn_research_toggle.text = tr("[ 🔬 НИОКР ]")
 		TNOTheme.apply_button_style(btn_research_toggle, TNOTheme.COLOR_BORDER_CYAN, Color(0.06, 0.12, 0.15, 0.95))
 		btn_research_toggle.pressed.connect(func():
 			_toggle_research_screen()
@@ -973,6 +973,12 @@ func trigger_super_event(event_id_or_title: String, quote: String = "", option: 
 	if label_log == null:
 		label_log = get_node_or_null("BottomBar/LogLabel")
 
+	if btn_end_turn != null:
+		btn_end_turn.disabled = true
+
+	if not super_event_modal.option_selected.is_connected(_on_super_event_closed):
+		super_event_modal.option_selected.connect(_on_super_event_closed)
+
 	if quote.is_empty() and option.is_empty():
 		super_event_modal.show_super_event_by_id(event_id_or_title)
 	else:
@@ -985,6 +991,8 @@ func trigger_super_event(event_id_or_title: String, quote: String = "", option: 
 
 
 func _on_super_event_closed() -> void:
+	if btn_end_turn != null:
+		btn_end_turn.disabled = false
 	_update_hud()
 	if label_log != null:
 		label_log.text = "СУПЕР-СОБЫТИЕ РАЗРЕШЕНО. ТЕРМИНАЛ ВОЗВРАЩЕН В ШТАТНЫЙ РЕЖИМ."
@@ -1007,21 +1015,29 @@ func _get_localization_manager() -> Node:
 	return null
 
 
-func _on_crt_param_changed(_param_name: String, _val: Variant) -> void:
-	var crt_node = _get_crt_node()
+func _apply_crt_to_overlay() -> void:
+	var crt_node: CanvasItem = _get_crt_node()
+	if crt_node == null:
+		return
 	var sm = _get_settings_manager()
-	if crt_node != null and sm != null:
+	if sm != null and sm.has_method("apply_crt_to_overlay"):
 		sm.apply_crt_to_overlay(crt_node)
+	else:
+		var gs = _get_session()
+		if gs != null and gs.has_method("apply_crt_to_material") and crt_node.material is ShaderMaterial:
+			gs.apply_crt_to_material(crt_node.material as ShaderMaterial)
+
+
+func _on_crt_param_changed(_param_name: String, _val: Variant) -> void:
+	_apply_crt_to_overlay()
 
 
 func _on_crt_enabled_changed(is_enabled: bool) -> void:
-	var crt_node = _get_crt_node()
+	var crt_node: CanvasItem = _get_crt_node()
 	if crt_node != null:
 		crt_node.visible = is_enabled
 		if is_enabled:
-			var sm = _get_settings_manager()
-			if sm != null:
-				sm.apply_crt_to_overlay(crt_node)
+			_apply_crt_to_overlay()
 
 
 func _on_ui_scale_changed(_new_scale: float) -> void:
@@ -1271,13 +1287,13 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 	margin.add_child(vbox)
 
 	var lbl_top = Label.new()
-	lbl_top.text = "[ ВЫСШИЙ ВОЕННЫЙ СОВЕТ // СИСТЕМНЫЙ ЭПИЛОГ ]"
+	lbl_top.text = tr("[ ВЫСШИЙ ВОЕННЫЙ СОВЕТ // СИСТЕМНЫЙ ЭПИЛОГ ]")
 	lbl_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_top.add_theme_color_override("font_color", Color(0.5, 0.7, 0.65, 0.8))
 	vbox.add_child(lbl_top)
 
 	var lbl_status = Label.new()
-	lbl_status.text = "★ ВЕЛИКАЯ ПОБЕДА ★" if victory else "▲ ГОСУДАРСТВЕННЫЙ КРАХ ▲"
+	lbl_status.text = tr("★ ВЕЛИКАЯ ПОБЕДА ★") if victory else tr("▲ ГОСУДАРСТВЕННЫЙ КРАХ ▲")
 	lbl_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_status.add_theme_color_override("font_color", border_col)
 	lbl_status.add_theme_font_size_override("font_size", 24)
@@ -1292,7 +1308,8 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 	var l_name = turn_manager.player_state.leader_name if turn_manager != null and turn_manager.player_state != null else "Leader"
 	var t_num = turn_manager.current_turn if turn_manager != null else 1
 	var date_s = turn_manager.get_formatted_date() if turn_manager != null else "1962"
-	lbl_info.text = "ДЕРЖАВА: %s [%s] | ЛИДЕР: %s\nДАТА: %s | ХОДОВ ПРОЙДЕНО: %d" % [c_name, c_tag, l_name, date_s, t_num]
+	var info_fmt = tr("ДЕРЖАВА: %s [%s] | ЛИДЕР: %s\nДАТА: %s | ХОДОВ ПРОЙДЕНО: %d")
+	lbl_info.text = info_fmt % [c_name, c_tag, l_name, date_s, t_num]
 	lbl_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_info.add_theme_color_override("font_color", Color(0.85, 0.90, 0.88, 1.0))
 	vbox.add_child(lbl_info)
@@ -1311,7 +1328,7 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 	vbox.add_child(btn_hbox)
 
 	var btn_menu = Button.new()
-	btn_menu.text = "[ ВЕРНУТЬСЯ В ГЛАВНОЕ МЕНЮ ]"
+	btn_menu.text = tr("[ ВЕРНУТЬСЯ В ГЛАВНОЕ МЕНЮ ]")
 	btn_menu.custom_minimum_size = Vector2(240, 42)
 	TNOTheme.apply_button_style(btn_menu, border_col, bg_col)
 	btn_menu.pressed.connect(func():
@@ -1320,7 +1337,7 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 	btn_hbox.add_child(btn_menu)
 
 	var btn_obs = Button.new()
-	btn_obs.text = "[ РЕЖИМ НАБЛЮДАТЕЛЯ (ОСМОТР) ]"
+	btn_obs.text = tr("[ РЕЖИМ НАБЛЮДАТЕЛЯ (ОСМОТР) ]")
 	btn_obs.custom_minimum_size = Vector2(240, 42)
 	TNOTheme.apply_button_style(btn_obs, Color(0.4, 0.6, 0.7), Color(0.04, 0.08, 0.12))
 	btn_obs.pressed.connect(func():

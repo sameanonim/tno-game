@@ -120,6 +120,7 @@ var ownership_lut_texture: ImageTexture
 
 # Dynamic State Flags & Shaders
 var contested_provinces: Dictionary = {}
+var dmz_provinces: Dictionary = {}
 var battle_intensity: float = 0.0
 var enable_rebellion_hatching: bool = true
 var enable_political_vignette: bool = true
@@ -440,7 +441,8 @@ func update_province_owner(province_id: int, owner_val: Variant, color: Color = 
 			state_id = int(provinces_data[province_id].get("state_id", 0))
 			province_to_state[province_id] = state_id
 		var is_frontline = contested_provinces.has(province_id)
-		var pixel_col = _pack_ownership_pixel(owner_id, state_id, false, is_frontline)
+		var is_dmz = dmz_provinces.has(province_id)
+		var pixel_col = _pack_ownership_pixel(owner_id, state_id, false, is_frontline, is_dmz)
 		ownership_lut_image.set_pixel(coord.x, coord.y, pixel_col)
 		if ownership_lut_texture != null:
 			ownership_lut_texture.update(ownership_lut_image)
@@ -744,6 +746,80 @@ func set_contested_provinces(province_ids: Array, is_contested: bool) -> void:
 
 
 ##
+## Установка статуса демилитаризованной зоны (DMZ) для конкретной провинции
+##
+func set_province_dmz(province_id: int, is_dmz: bool) -> void:
+	if is_dmz:
+		dmz_provinces[province_id] = true
+	else:
+		dmz_provinces.erase(province_id)
+
+	if ownership_lut_image != null:
+		var coord = _id_to_lut_coords(province_id)
+		var px = ownership_lut_image.get_pixel(coord.x, coord.y)
+		var a_byte = int(round(px.a * 255.0))
+		if is_dmz:
+			a_byte |= 32 # Bit 5 (val 32) = is_dmz
+		else:
+			a_byte &= ~32
+		px.a = float(a_byte) / 255.0
+		ownership_lut_image.set_pixel(coord.x, coord.y, px)
+		if ownership_lut_texture != null:
+			ownership_lut_texture.update(ownership_lut_image)
+
+
+##
+## Установка статуса демилитаризованной зоны (DMZ) для целого штата
+##
+func set_state_dmz(state_id: int, is_dmz: bool) -> void:
+	var provs = state_to_provinces.get(state_id, [])
+	if ownership_lut_image == null:
+		return
+	for pid in provs:
+		var p_id = int(pid)
+		if is_dmz:
+			dmz_provinces[p_id] = true
+		else:
+			dmz_provinces.erase(p_id)
+		var coord = _id_to_lut_coords(p_id)
+		var px = ownership_lut_image.get_pixel(coord.x, coord.y)
+		var a_byte = int(round(px.a * 255.0))
+		if is_dmz:
+			a_byte |= 32
+		else:
+			a_byte &= ~32
+		px.a = float(a_byte) / 255.0
+		ownership_lut_image.set_pixel(coord.x, coord.y, px)
+	if ownership_lut_texture != null:
+		ownership_lut_texture.update(ownership_lut_image)
+
+
+##
+## Динамическая адаптация шейдера карты к уровню международной напряженности DEFCON
+##
+func update_defcon_visuals(defcon_level: int) -> void:
+	if _shader_mat == null:
+		return
+	match defcon_level:
+		1: # DEFCON 1: Ядерная полночь (Nuclear Brink)
+			_shader_mat.set_shader_parameter("dmz_pulse_speed", 10.0)
+			_shader_mat.set_shader_parameter("dmz_dash_scale", 16.0)
+			_shader_mat.set_shader_parameter("border_rendering_mode", 2)
+		2: # DEFCON 2: Военное положение (War Footing)
+			_shader_mat.set_shader_parameter("dmz_pulse_speed", 7.5)
+			_shader_mat.set_shader_parameter("dmz_dash_scale", 20.0)
+			_shader_mat.set_shader_parameter("border_rendering_mode", 2)
+		3: # DEFCON 3: Кризис (Crisis)
+			_shader_mat.set_shader_parameter("dmz_pulse_speed", 5.5)
+			_shader_mat.set_shader_parameter("dmz_dash_scale", 24.0)
+			_shader_mat.set_shader_parameter("border_rendering_mode", 2)
+		_:
+			_shader_mat.set_shader_parameter("dmz_pulse_speed", 3.5)
+			_shader_mat.set_shader_parameter("dmz_dash_scale", 30.0)
+			_shader_mat.set_shader_parameter("border_rendering_mode", 0)
+
+
+##
 ## Управление видимостью иерархических границ
 ##
 func set_border_visibility(show_nat: bool, show_st: bool, show_prov: bool, show_coast: bool) -> void:
@@ -1042,19 +1118,55 @@ func get_province_id_under_cursor() -> int:
 func get_province_id_at_pixel(pixel: Vector2i) -> int:
 	if mask_image == null or pixel.x < 0 or pixel.x >= map_size.x or pixel.y < 0 or pixel.y >= map_size.y:
 		return 0
-	var col = mask_image.get_pixelv(pixel)
-	var r = int(round(col.r * 255.0))
-	var g = int(round(col.g * 255.0))
-	var b = int(round(col.b * 255.0))
+
+	# 1. Точечный сэмпл центрального пикселя
+	var raw_id: int = _sample_raw_pixel_id(pixel)
+	if raw_id > 0 and provinces_data.has(raw_id):
+		return raw_id
+
+	# 2. Если пиксель на стыке границ интерполирован/размыт — запускаем мажоритарную 3x3 фильтрацию
+	var neighbor_counts: Dictionary = {}
+	var best_candidate_id: int = 0
+	var max_frequency: int = 0
+
+	for dy: int in range(-1, 2):
+		var sample_y: int = pixel.y + dy
+		if sample_y < 0 or sample_y >= map_size.y:
+			continue
+		for dx: int in range(-1, 2):
+			var sample_x: int = pixel.x + dx
+			if sample_x < 0 or sample_x >= map_size.x:
+				continue
+
+			var n_id: int = _sample_raw_pixel_id(Vector2i(sample_x, sample_y))
+			if n_id > 0 and provinces_data.has(n_id):
+				var freq: int = int(neighbor_counts.get(n_id, 0)) + 1
+				neighbor_counts[n_id] = freq
+				if freq > max_frequency:
+					max_frequency = freq
+					best_candidate_id = n_id
+
+	return best_candidate_id
+
+
+##
+## Быстрое декодирование RGB цвета пикселя маски в целочисленный 24-битный ID
+##
+func _sample_raw_pixel_id(pos: Vector2i) -> int:
+	var col: Color = mask_image.get_pixelv(pos)
+	var r: int = int(round(col.r * 255.0))
+	var g: int = int(round(col.g * 255.0))
+	var b: int = int(round(col.b * 255.0))
 	return r | (g << 8) | (b << 16)
 
 
+##
+## Безопасное извлечение метаданных провинции без риска генерации фантомных объектов
+##
 func get_province_data(province_id: int) -> Dictionary:
-	return provinces_data.get(province_id, {
-		"id": province_id,
-		"name": "Province_%d" % province_id,
-		"owner": "Neutral"
-	})
+	if province_id <= 0 or not provinces_data.has(province_id):
+		return {}
+	return provinces_data[province_id]
 
 
 # ==============================================================================
@@ -1072,8 +1184,9 @@ func _setup_ownership_lut() -> void:
 		var state_id = province_to_state.get(pid, 0)
 		var is_water = bool(p_data.get("type", "") in ["sea", "lake", "ocean"])
 		var is_frontline = contested_provinces.has(pid)
+		var is_dmz = dmz_provinces.has(pid)
 
-		var pixel = _pack_ownership_pixel(owner_id, state_id, is_water, is_frontline)
+		var pixel = _pack_ownership_pixel(owner_id, state_id, is_water, is_frontline, is_dmz)
 		var coord = _id_to_lut_coords(pid)
 		ownership_lut_image.set_pixel(coord.x, coord.y, pixel)
 
@@ -1091,21 +1204,23 @@ func _refresh_ownership_lut_frontlines() -> void:
 		var state_id = province_to_state.get(pid, 0)
 		var is_water = bool(p_data.get("type", "") in ["sea", "lake", "ocean"])
 		var is_frontline = contested_provinces.has(pid)
+		var is_dmz = dmz_provinces.has(pid)
 
-		var pixel = _pack_ownership_pixel(owner_id, state_id, is_water, is_frontline)
+		var pixel = _pack_ownership_pixel(owner_id, state_id, is_water, is_frontline, is_dmz)
 		var coord = _id_to_lut_coords(pid)
 		ownership_lut_image.set_pixel(coord.x, coord.y, pixel)
 
 	ownership_lut_texture.update(ownership_lut_image)
 
 
-func _pack_ownership_pixel(owner_id: int, state_id: int, is_water: bool, is_frontline: bool = false) -> Color:
+func _pack_ownership_pixel(owner_id: int, state_id: int, is_water: bool, is_frontline: bool = false, is_dmz: bool = false) -> Color:
 	var r = float(clampi(owner_id, 0, 255)) / 255.0
 	var g = float(state_id & 0xFF) / 255.0
 	var b = float((state_id >> 8) & 0xFF) / 255.0
 	var flags = 0
 	if is_water: flags |= 1
 	if is_frontline: flags |= 4
+	if is_dmz: flags |= 32
 	var a = float(flags) / 255.0
 	return Color(r, g, b, a)
 

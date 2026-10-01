@@ -91,7 +91,7 @@ func display_focus_tree(country_tag: String) -> void:
 	var starters = summary.get("starting_directives", [])
 	if starters.is_empty():
 		var no_starters = Label.new()
-		no_starters.text = "└─ Стартовые директивы инициализируются на 1 ходу"
+		no_starters.text = tr("└─ Стартовые директивы инициализируются на 1 ходу")
 		no_starters.add_theme_color_override("font_color", Color(0.4, 0.65, 0.55))
 		no_starters.add_theme_font_size_override("font_size", 10)
 		starters_container.add_child(no_starters)
@@ -174,4 +174,4 @@ func _show_empty_state() -> void:
 	if loc != null:
 		empty_state_label.text = loc.tr_key("NO_FOCUS_TREE_NOTICE", "[!] УНИКАЛЬНОЕ ДРЕВО ДИРЕКТИВ ОТСУТСТВУЕТ // СТАНДАРТНЫЙ ПРОФИЛЬ УПРАВЛЕНИЯ")
 	else:
-		empty_state_label.text = "[!] УНИКАЛЬНОЕ ДРЕВО ДИРЕКТИВ ОТСУТСТВУЕТ // СТАНДАРТНЫЙ ПРОФИЛЬ УПРАВЛЕНИЯ"
+		empty_state_label.text = tr("[!] УНИКАЛЬНОЕ ДРЕВО ДИРЕКТИВ ОТСУТСТВУЕТ // СТАНДАРТНЫЙ ПРОФИЛЬ УПРАВЛЕНИЯ")

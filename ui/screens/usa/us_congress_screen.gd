@@ -60,7 +60,37 @@ var selected_bill_id: String = "BILL_CIVIL_RIGHTS_1964"
 var seat_cell_nodes: Array[ColorRect] = []
 
 
+func _tr(key: String, params: Variant = {}, fallback: String = "") -> String:
+	var loc_params: Dictionary = {}
+	var custom_fallback: String = fallback
+	if params is Dictionary:
+		loc_params = params
+	elif params is String:
+		if custom_fallback.is_empty():
+			custom_fallback = params
+
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, loc_params, custom_fallback)
+	var s = tr(key)
+	if s.is_empty() or s == key:
+		s = custom_fallback
+	for k in loc_params:
+		s = s.replace("{%s}" % str(k), str(loc_params[k]))
+	return s
+
+
+func _on_locale_changed(_locale: String) -> void:
+	_refresh_all()
+
+
 func _ready() -> void:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_signal("locale_changed"):
+			if not loc.locale_changed.is_connected(_on_locale_changed):
+				loc.locale_changed.connect(_on_locale_changed)
 	_apply_tno_styling()
 	_connect_signals()
 	if engine == null:
@@ -138,14 +168,17 @@ func _refresh_all() -> void:
 
 func _update_president_card() -> void:
 	var pres = engine.current_president
+	if lbl_header_title != null:
+		lbl_header_title.text = _tr("CONGRESS_TITLE", "КОНГРЕСС США // КАПИТОЛИЙСКИЙ ТЕРМИНАЛ")
 	if lbl_pres_name != null:
 		lbl_pres_name.text = pres.get("name", "Ричард Никсон").to_upper()
 	if lbl_pres_party != null:
 		var f_id = pres.get("faction", USElectoralEngineScript.FACTION_RD_R)
-		lbl_pres_party.text = "ПАРТИЯ: %s" % engine.get_faction_name(f_id)
+		var f_name = engine.get_faction_name(f_id)
+		lbl_pres_party.text = _tr("CONGRESS_PRES_PARTY", {"party": f_name}, "ПАРТИЯ: %s" % f_name)
 	if lbl_pres_ideology != null:
 		var ideo = pres.get("ideology", "conservatism").to_upper()
-		lbl_pres_ideology.text = "ИДЕОЛОГИЯ: %s" % ideo
+		lbl_pres_ideology.text = _tr("CONGRESS_PRES_IDEOLOGY", {"ideology": ideo}, "ИДЕОЛОГИЯ: %s" % ideo)
 
 	if pres_portrait != null:
 		var p_path = pres.get("portrait_path", "res://assets/gfx/leaders/USA/USA_Richard_Nixon.png")
@@ -160,7 +193,7 @@ func _update_president_card() -> void:
 		var leg = country_state.legitimacy if country_state != null else 70.0
 		var pc = country_state.political_capital if country_state != null else 100.0
 		var cap = country_state.current_cap if country_state != null else 5
-		lbl_election_status.text = "КАБИНЕТ БЕЛОГО ДОМА:\nПОЛИТ. КАПИТАЛ (PC): %0.0f | ОЧКИ ДЕЙСТВИЙ (CAP): %d | ОДОБРЕНИЕ: %0.0f%%" % [pc, cap, leg]
+		lbl_election_status.text = _tr("CONGRESS_CABINET_STATUS", {"pc": "%0.0f" % pc, "cap": cap, "approval": "%0.0f" % leg}, "КАБИНЕТ БЕЛОГО ДОМА:\nПОЛИТ. КАПИТАЛ (PC): %0.0f | ОЧКИ ДЕЙСТВИЙ (CAP): %d | ОДОБРЕНИЕ: %0.0f%%" % [pc, cap, leg])
 
 
 # ==============================================================================
@@ -193,20 +226,20 @@ func _update_senate_hemicycle() -> void:
 		var s_data = seats[i]
 		var cell = seat_cell_nodes[i]
 		cell.color = s_data.get("color", Color(0.5, 0.5, 0.5))
-		cell.tooltip_text = "Сенатор #%d: %s" % [i + 1, s_data.get("faction_name", "")]
+		cell.tooltip_text = _tr("CONGRESS_SENATOR_TOOLTIP", {"num": i + 1, "faction": s_data.get("faction_name", "")}, "Сенатор #%d: %s" % [i + 1, s_data.get("faction_name", "")])
 
 	var rd_total = engine.get_coalition_seats("RD")
 	var npp_total = engine.get_coalition_seats("NPP")
 
 	if lbl_senate_majority != null:
 		if rd_total >= 51:
-			lbl_senate_majority.text = "БОЛЬШИНСТВО В СЕНАТЕ: РДК (%d МЕСТ ИЗ 100)" % rd_total
+			lbl_senate_majority.text = _tr("CONGRESS_SENATE_MAJORITY_RD", {"seats": rd_total}, "БОЛЬШИНСТВО В СЕНАТЕ: РДК (%d МЕСТ ИЗ 100)" % rd_total)
 			lbl_senate_majority.add_theme_color_override("font_color", Color(0.3, 0.7, 1.0))
 		elif npp_total >= 51:
-			lbl_senate_majority.text = "БОЛЬШИНСТВО В СЕНАТЕ: ПАКТ НПП (%d МЕСТ ИЗ 100)" % npp_total
+			lbl_senate_majority.text = _tr("CONGRESS_SENATE_MAJORITY_NPP", {"seats": npp_total}, "БОЛЬШИНСТВО В СЕНАТЕ: ПАКТ НПП (%d МЕСТ ИЗ 100)" % npp_total)
 			lbl_senate_majority.add_theme_color_override("font_color", Color(0.2, 0.9, 0.75))
 		else:
-			lbl_senate_majority.text = "РАСКОЛОТЫЙ СЕНАТ (РДК: %d, НПП: %d)" % [rd_total, npp_total]
+			lbl_senate_majority.text = _tr("CONGRESS_SENATE_SPLIT", {"rd": rd_total, "npp": npp_total}, "РАСКОЛОТЫЙ СЕНАТ (РДК: %d, НПП: %d)" % [rd_total, npp_total])
 			lbl_senate_majority.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3))
 
 	if coalition_progress != null:
@@ -254,10 +287,10 @@ func _update_electoral_college() -> void:
 	}
 
 	var reg_names = {
-		USElectoralEngineScript.REGION_NORTHEAST: "Северо-Восток",
-		USElectoralEngineScript.REGION_MIDWEST: "Средний Запад",
-		USElectoralEngineScript.REGION_SOUTH: "Юг",
-		USElectoralEngineScript.REGION_WEST: "Запад"
+		USElectoralEngineScript.REGION_NORTHEAST: _tr("CONGRESS_REGION_NE", "Северо-Восток"),
+		USElectoralEngineScript.REGION_MIDWEST: _tr("CONGRESS_REGION_MW", "Средний Запад"),
+		USElectoralEngineScript.REGION_SOUTH: _tr("CONGRESS_REGION_S", "Юг"),
+		USElectoralEngineScript.REGION_WEST: _tr("CONGRESS_REGION_W", "Запад")
 	}
 
 	for reg in USElectoralEngineScript.ALL_REGIONS:
@@ -279,7 +312,7 @@ func _update_electoral_college() -> void:
 		lbl_name.add_theme_color_override("font_color", Color(0.7, 0.8, 0.8))
 
 		var lbl_stat = Label.new()
-		lbl_stat.text = "РДК %0.1f%% vs НПП %0.1f%% → [%s]" % [rd_share, npp_share, winner]
+		lbl_stat.text = _tr("CONGRESS_VOTES_TALLY", {"rd": "%0.1f" % rd_share, "npp": "%0.1f" % npp_share, "winner": winner}, "РДК %0.1f%% vs НПП %0.1f%% → [%s]" % [rd_share, npp_share, winner])
 		lbl_stat.add_theme_color_override("font_color", Color(0.3, 0.8, 1.0) if winner == "РДК" else Color(0.2, 0.9, 0.75))
 
 		p_hbox.add_child(lbl_name)
@@ -287,13 +320,13 @@ func _update_electoral_college() -> void:
 		regions_vbox.add_child(p_hbox)
 
 	if lbl_ec_tally != null:
-		lbl_ec_tally.text = "ПРОГНОЗ КОЛЛЕГИИ: РДК %d EV | НПП %d EV (270 для победы)" % [ev_rd_proj, ev_npp_proj]
+		lbl_ec_tally.text = _tr("CONGRESS_EC_TALLY", {"rd": ev_rd_proj, "npp": ev_npp_proj}, "ПРОГНОЗ КОЛЛЕГИИ: РДК %d EV | НПП %d EV (270 для победы)" % [ev_rd_proj, ev_npp_proj])
 		lbl_ec_tally.add_theme_color_override("font_color", Color(0.3, 0.9, 0.8))
 
 	if lbl_civil_rights_tension != null:
-		lbl_civil_rights_tension.text = "НАПРЯЖЕННОСТЬ ГРАЖДАНСКИХ ПРАВ: %0.0f%% (СТАТУС: %s)" % [
+		lbl_civil_rights_tension.text = _tr("CONGRESS_CIVIL_RIGHTS", {"pct": "%0.0f" % engine.civil_rights_tension, "status": engine.civil_rights_status}, "НАПРЯЖЕННОСТЬ ГРАЖДАНСКИХ ПРАВ: %0.0f%% (СТАТУС: %s)" % [
 			engine.civil_rights_tension, engine.civil_rights_status
-		]
+		])
 	if civil_rights_bar != null:
 		civil_rights_bar.max_value = 100
 		civil_rights_bar.value = engine.civil_rights_tension
@@ -338,6 +371,11 @@ func _select_bill(bill_id: String) -> void:
 	if lbl_active_bill_desc != null:
 		lbl_active_bill_desc.text = "[color=#a0ccb8]%s[/color]" % target_bill.get("description", "")
 
+	if btn_whip_votes != null:
+		btn_whip_votes.text = _tr("CONGRESS_BTN_WHIP", "Склонить сенаторов (25 PC, 1 CAP)")
+	if btn_call_vote != null:
+		btn_call_vote.text = _tr("CONGRESS_BTN_CALL_VOTE", "Вынести на голосование")
+
 	_update_vote_projection()
 	if lbl_vote_outcome != null:
 		lbl_vote_outcome.text = ""
@@ -353,10 +391,15 @@ func _update_vote_projection() -> void:
 	var will_pass = proj.get("projected_pass", false)
 
 	if lbl_vote_projection != null:
-		var status_str = "[ПРОХОДИТ]" if will_pass else "[БЛОКИРУЕТСЯ]"
-		lbl_vote_projection.text = "ГОЛОСА СЕНАТОРОВ:  ЗА: %d  |  ПРОТИВ: %d  |  КОЛЕБЛЮТСЯ: %d  →  %s" % [
+		var status_str = _tr("CONGRESS_STATUS_PASS", "[ПРИНИМАЕТСЯ]") if will_pass else _tr("CONGRESS_STATUS_FAIL", "[БЛОКИРУЕТСЯ]")
+		lbl_vote_projection.text = _tr("CONGRESS_VOTE_PROJECTION", {
+			"yeas": yeas,
+			"nays": nays,
+			"und": undecided,
+			"status": status_str
+		}, "ГОЛОСА СЕНАТОРОВ:  ЗА: %d  |  ПРОТИВ: %d  |  КОЛЕБЛЮТСЯ: %d  →  %s" % [
 			yeas, nays, undecided, status_str
-		]
+		])
 		lbl_vote_projection.add_theme_color_override(
 			"font_color", Color(0.2, 0.95, 0.6) if will_pass else Color(0.95, 0.4, 0.4)
 		)

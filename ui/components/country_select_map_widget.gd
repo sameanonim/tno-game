@@ -180,7 +180,7 @@ func apply_focus_highlight(enabled: bool) -> void:
 	map_controller.lut_texture.update(map_controller.lut_image)
 
 	if btn_filter_focus != null:
-		btn_filter_focus.text = "[★ ТОЛЬКО С ФОКУСАМИ: ВКЛ]" if enabled else "[★ ТОЛЬКО С ФОКУСАМИ: ВЫКЛ]"
+		btn_filter_focus.text = tr("[★ ТОЛЬКО С ФОКУСАМИ: ВКЛ]") if enabled else tr("[★ ТОЛЬКО С ФОКУСАМИ: ВЫКЛ]")
 		btn_filter_focus.add_theme_color_override("font_color", Color(0.2, 0.95, 0.85) if enabled else Color(0.5, 0.6, 0.6))
 
 	if pins_overlay != null:
@@ -301,7 +301,7 @@ func focus_coordinates(target_map_pos: Vector2, target_zoom: float, instant: boo
 	if lbl_coords != null:
 		var lat = int(round(90.0 - (target_map_pos.y / float(map_controller.map_size.y)) * 180.0))
 		var lon = int(round((target_map_pos.x / float(map_controller.map_size.x)) * 360.0 - 180.0))
-		lbl_coords.text = "КООРДИНАТЫ: %d°%s %d°%s // МАСШТАБ: %0.1fx" % [
+		lbl_coords.text = tr("КООРДИНАТЫ: %d°%s %d°%s // МАСШТАБ: %0.1fx") % [
 			abs(lat), "N" if lat >= 0 else "S",
 			abs(lon), "E" if lon >= 0 else "W",
 			target_zoom
@@ -386,7 +386,7 @@ func _display_hover_info(tag: String, d: Dictionary) -> void:
 		return
 
 	if tag.is_empty() or tag in ["WST", "WASTE", "Neutral"]:
-		lbl_hover_info.text = "СЕКТОР: НЕЙТРАЛЬНАЯ / ДЕМАРКИРОВАННАЯ ЗОНА // НАВЕДИТЕ КУРСОР НА ДЕРЖАВУ"
+		lbl_hover_info.text = tr("СЕКТОР: НЕЙТРАЛЬНАЯ / ДЕМАРКИРОВАННАЯ ЗОНА // НАВЕДИТЕ КУРСОР НА ДЕРЖАВУ")
 		return
 
 	var loc = get_node_or_null("/root/LocalizationManager")
@@ -404,8 +404,10 @@ func _display_hover_info(tag: String, d: Dictionary) -> void:
 		var session = get_node_or_null("/root/GameSession")
 		var summary = session.get_focus_tree_summary(tag) if session != null else {}
 		var total_dirs = summary.get("total_directives", 0)
-		focus_badge = " | [⚡ ДРЕВО ФОКУСОВ: %d ДИРЕКТИВ]" % total_dirs
+		var focus_badge_fmt = tr(" | [⚡ ДРЕВО ФОКУСОВ: %d ДИРЕКТИВ]")
+		focus_badge = focus_badge_fmt % total_dirs
 	else:
-		focus_badge = " | [! БЕЗ УНИКАЛЬНОГО ДРЕВА]"
+		focus_badge = tr(" | [! БЕЗ УНИКАЛЬНОГО ДРЕВА]")
 
-	lbl_hover_info.text = "[ %s ] %s // ЛИДЕР: %s%s" % [tag, c_name.to_upper(), leader, focus_badge]
+	var info_fmt = tr("[ %s ] %s // ЛИДЕР: %s%s")
+	lbl_hover_info.text = info_fmt % [tag, c_name.to_upper(), leader, focus_badge]

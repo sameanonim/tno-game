@@ -72,6 +72,11 @@ var current_state: CountryState = null
 
 
 func _ready() -> void:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_signal("locale_changed"):
+			if not loc.locale_changed.is_connected(_on_locale_changed):
+				loc.locale_changed.connect(_on_locale_changed)
 	_apply_tno_styling()
 	_connect_controls()
 	_refresh_metrics()
@@ -203,6 +208,55 @@ func _on_locale_changed(_locale: String) -> void:
 func _refresh_metrics() -> void:
 	if current_state == null or lbl_gdp_val == null:
 		return
+
+	# Статические заголовки карточек и секций
+	var lbl_gdp_title = get_node_or_null("VBox/HeaderCards/CardGDP/VBox/Title")
+	if lbl_gdp_title != null:
+		lbl_gdp_title.text = _tr("ECON_REAL_GDP", "РЕАЛЬНЫЙ ВВП")
+
+	var lbl_debt_title = get_node_or_null("VBox/HeaderCards/CardDebt/VBox/Title")
+	if lbl_debt_title != null:
+		lbl_debt_title.text = _tr("ECON_NATIONAL_DEBT", "ГОСУДАРСТВЕННЫЙ ДОЛГ")
+
+	var lbl_credit_title = get_node_or_null("VBox/HeaderCards/CardCredit/VBox/Title")
+	if lbl_credit_title != null:
+		lbl_credit_title.text = _tr("ECON_CREDIT_RATING", "КРЕДИТНЫЙ РЕЙТИНГ")
+
+	var lbl_spending_title = get_node_or_null("VBox/MainHBox/SpendingSection/VBox/Title")
+	if lbl_spending_title != null:
+		lbl_spending_title.text = _tr("ECON_SPENDING_SECTORS", "СТАТЬИ РАСХОДОВ БЮДЖЕТА")
+
+	var lbl_mil_title = get_node_or_null("VBox/MainHBox/SpendingSection/VBox/MilRow/Label")
+	if lbl_mil_title != null:
+		lbl_mil_title.text = _tr("ECON_SPEND_MIL", "Военные расходы (ВПК):")
+
+	var lbl_civ_title = get_node_or_null("VBox/MainHBox/SpendingSection/VBox/CivRow/Label")
+	if lbl_civ_title != null:
+		lbl_civ_title.text = _tr("ECON_SPEND_CIV", "Гражданский сектор (ТНП):")
+
+	var lbl_admin_title = get_node_or_null("VBox/MainHBox/SpendingSection/VBox/AdminRow/Label")
+	if lbl_admin_title != null:
+		lbl_admin_title.text = _tr("ECON_SPEND_ADMIN", "Аппарат и правопорядок:")
+
+	var lbl_rd_title = get_node_or_null("VBox/MainHBox/SpendingSection/VBox/RDRow/Label")
+	if lbl_rd_title != null:
+		lbl_rd_title.text = _tr("ECON_SPEND_RD", "Наука и НИОКР:")
+
+	var lbl_bank_title = get_node_or_null("VBox/MainHBox/BankSection/VBox/Title")
+	if lbl_bank_title != null:
+		lbl_bank_title.text = _tr("ECON_CENTRAL_BANK", "ЦЕНТРАЛЬНЫЙ БАНК // МОНЕТАРНАЯ ПОЛИТИКА")
+
+	var lbl_rate_title = get_node_or_null("VBox/MainHBox/BankSection/VBox/RateBox/Label")
+	if lbl_rate_title != null:
+		lbl_rate_title.text = _tr("ECON_DISCOUNT_RATE", "Учётная ставка ЦБ:")
+
+	var lbl_res_title = get_node_or_null("VBox/BottomHBox/ResourcesSection/VBox/Title")
+	if lbl_res_title != null:
+		lbl_res_title.text = _tr("ECON_STRATEGIC_RESOURCES", "СТРАТЕГИЧЕСКИЕ РЕСУРСЫ // ТОРГОВОЕ САЛЬДО")
+
+	var lbl_soc_title = get_node_or_null("VBox/BottomHBox/SocietalSection/VBox/Title")
+	if lbl_soc_title != null:
+		lbl_soc_title.text = _tr("ECON_SOCIETAL_DEV", "РАЗВИТИЕ ОБЩЕСТВА // АНТИКРИЗИСНЫЙ ШТАБ")
 
 	# ВВП
 	lbl_gdp_val.text = "$%.2f B" % current_state.gdp_billions

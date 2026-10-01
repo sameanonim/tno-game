@@ -61,7 +61,7 @@ func start_directive(directive_id: String, state: CountryState, force: bool = fa
 		_bypass_directive(dir, state)
 		return true
 
-	# 2. Двусторонняя блокировка взаимоисключающих веток
+	# 2. Двусторонняя блокировка взаимоисключающих веток и каскадное отключение зависимых узлов
 	for excl_id in dir.mutually_exclusive:
 		# Если взаимоисключающий проект уже находился в процессе — немедленно прерываем его
 		if state.active_directives.has(excl_id):
@@ -73,10 +73,11 @@ func start_directive(directive_id: String, state: CountryState, force: bool = fa
 				old_dir.status = DirectiveResource.Status.CANCELLED
 				directive_cancelled.emit(old_dir, "Прервано утверждением взаимоисключающей директивы [%s]." % dir.title)
 
-		# Навечно блокируем взаимоисключающий узел
+		# Навечно блокируем взаимоисключающий узел и каскадно гасим его поддерево
 		state.set_flag("locked_focus_" + excl_id, true)
 		if all_directives.has(excl_id):
 			all_directives[excl_id].status = DirectiveResource.Status.CANCELLED
+		_cascade_block_descendants(excl_id, state)
 
 	# 3. Отменяем другие текущие активные директивы игрока (TNO фокус-модель: 1 проект за раз)
 	var to_cancel: Array[String] = []
@@ -199,11 +200,12 @@ func _bypass_directive(dir: DirectiveResource, state: CountryState) -> void:
 func _apply_completion_effects(dir: DirectiveResource, state: CountryState) -> void:
 	dir.status = DirectiveResource.Status.COMPLETED
 
-	# Блокировка взаимоисключений при успешном завершении
+	# Блокировка взаимоисключений при успешном завершении и каскадное отключение зависимых узлов
 	for excl_id in dir.mutually_exclusive:
 		state.set_flag("locked_focus_" + excl_id, true)
 		if all_directives.has(excl_id):
 			all_directives[excl_id].status = DirectiveResource.Status.CANCELLED
+		_cascade_block_descendants(excl_id, state)
 
 	# 1. Применение массива опкодов из completion_rewards
 	for rew in dir.completion_rewards:
@@ -285,7 +287,7 @@ func get_directive_status(dir: DirectiveResource, state: CountryState) -> Direct
 		return DirectiveResource.Status.IN_PROGRESS
 
 	# Проверка на взаимную блокировку
-	if state.has_country_flag("locked_focus_" + dir.id):
+	if state.has_flag("locked_focus_" + dir.id):
 		return DirectiveResource.Status.CANCELLED
 
 	for excl_id in dir.mutually_exclusive:
@@ -296,3 +298,35 @@ func get_directive_status(dir: DirectiveResource, state: CountryState) -> Direct
 		return DirectiveResource.Status.AVAILABLE
 
 	return DirectiveResource.Status.LOCKED
+
+
+##
+## Рекурсивное каскадное отключение дочерних узлов взаимоисключающей ветки
+##
+func _cascade_block_descendants(root_excl_id: String, state: CountryState) -> void:
+	var queue: Array[String] = [root_excl_id]
+	var visited: Dictionary = {root_excl_id: true}
+
+	while not queue.is_empty():
+		var parent_id: String = queue.pop_front()
+		for dir_id: String in all_directives.keys():
+			if visited.has(dir_id):
+				continue
+			var dir_res: DirectiveResource = all_directives[dir_id]
+			if dir_res == null:
+				continue
+
+			var relies_on_parent: bool = false
+			if dir_res.prerequisites.has(parent_id):
+				relies_on_parent = true
+			elif not dir_res.prerequisites_groups.is_empty():
+				for grp in dir_res.prerequisites_groups:
+					if grp is Array and grp.has(parent_id) and grp.size() == 1:
+						relies_on_parent = true
+						break
+
+			if relies_on_parent:
+				visited[dir_id] = true
+				state.set_flag("locked_focus_" + dir_id, true)
+				dir_res.status = DirectiveResource.Status.CANCELLED
+				queue.append(dir_id)

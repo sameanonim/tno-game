@@ -50,7 +50,28 @@ STANDARD_EFFECT_OPCODES = {
     "add_manpower": "MOD_MANPOWER",
     "add_equipment_to_stockpile": "MOD_STOCKPILE",
     "transfer_state": "TRANSFER_STATE",
-    "set_rule": "SET_RULE"
+    "set_rule": "SET_RULE",
+    "set_variable": "SET_VAR",
+    "add_to_variable": "ADD_VAR",
+    "subtract_from_variable": "SUB_VAR",
+    "clamp_variable": "CLAMP_VAR",
+    "add_popularity": "ADD_POP",
+    "modify_popularity": "MOD_POP",
+    "tno_increase_popularity": "TNO_INC_POP",
+    "tno_decrease_popularity": "TNO_DEC_POP",
+    "add_ideas": "ADD_IDEAS",
+    "add_idea": "ADD_IDEA",
+    "remove_ideas": "REM_IDEAS",
+    "remove_idea": "REM_IDEA",
+    "swap_ideas": "SWAP_IDEAS",
+    "econ_raise_credit_rating": "RAISE_RATING",
+    "econ_lower_credit_rating": "LOWER_RATING",
+    "econ_set_credit_rating": "SET_RATING",
+    "econ_add_liquid_reserves": "ADD_RESERVES",
+    "econ_subtract_liquid_reserves": "SUB_RESERVES",
+    "econ_give_inflation_monthly_temp": "TEMP_INFLATION",
+    "custom_effect_tooltip": "TOOLTIP",
+    "annex_country_and_inherit": "ANNEX_COUNTRY"
 }
 
 STANDARD_TRIGGER_OPCODES = {
@@ -61,7 +82,9 @@ STANDARD_TRIGGER_OPCODES = {
     "has_war": "HAS_WAR",
     "stability": "CHECK_STABILITY",
     "has_political_power": "CHECK_PC",
-    "date": "CHECK_DATE"
+    "date": "CHECK_DATE",
+    "has_idea": "HAS_IDEA",
+    "check_variable": "CHECK_VAR"
 }
 
 

@@ -332,6 +332,11 @@ func get_debt_ceiling() -> float:
 	return gdp_billions * debt_ceiling_ratio
 
 
+## Дискретный кредитный индекс TNO (1..14): 14=AAA, 13=AA+, 12=AA, 11=AA-, 10=A+, 9=A, 8=A-, 7=BBB+, 6=BBB, 5=BBB-, 4=BB, 3=B, 2=CCC, 1=D
+@export_range(1, 14, 1) var credit_rating_index: int = 10
+@export var credit_rating_min: int = 1
+@export var credit_rating_max: int = 14
+
 ## Кредитный рейтинг страны (AAA, AA, A, BBB, BB, B, CCC, D) либо статус казны варлорда
 func get_credit_rating() -> String:
 	var eco_type = EconomyEngine.get_economy_type(self)
@@ -343,15 +348,21 @@ func get_credit_rating() -> String:
 		else:
 			return "ДЕФИЦИТ // УГРОЗА БУНТА"
 
-	var ratio = get_debt_to_gdp_ratio()
-	var stab = get_stability_index()
-	if ratio < 0.25 and stab > 0.4: return "AAA"
-	if ratio < 0.50 and stab > 0.2: return "A"
-	if ratio < 0.80 and stab > -0.1: return "BBB"
-	if ratio < 1.10 and stab > -0.3: return "BB"
-	if ratio < 1.50: return "B"
-	if ratio < 2.00: return "CCC"
-	return "D (Default Risk)"
+	match credit_rating_index:
+		14: return "AAA"
+		13: return "AA+"
+		12: return "AA"
+		11: return "AA-"
+		10: return "A+"
+		9: return "A"
+		8: return "A-"
+		7: return "BBB+"
+		6: return "BBB"
+		5: return "BBB-"
+		4: return "BB"
+		3: return "B"
+		2: return "CCC"
+		_: return "D (Default Risk)"
 
 
 
@@ -361,6 +372,45 @@ var central_bank_interest_rate: float:
 		return central_bank_rate
 	set(val):
 		central_bank_rate = val
+
+## Псевдоним ключевой ставки для вызовов из панелей решений
+var interest_rate: float:
+	get:
+		return central_bank_rate
+	set(val):
+		central_bank_rate = val
+
+
+## Добавление национального духа (идеи)
+func add_national_spirit(spirit_id: String, spirit_name: String = "", icon_path: String = "", desc: String = "") -> void:
+	for s in national_spirits:
+		if s.get("id", "") == spirit_id:
+			return
+	national_spirits.append({
+		"id": spirit_id,
+		"name": spirit_name if not spirit_name.is_empty() else spirit_id,
+		"icon": icon_path,
+		"desc": desc
+	})
+
+
+## Удаление национального духа (идеи)
+func remove_national_spirit(spirit_id: String) -> void:
+	var idx := -1
+	for i in range(national_spirits.size()):
+		if national_spirits[i].get("id", "") == spirit_id:
+			idx = i
+			break
+	if idx >= 0:
+		national_spirits.remove_at(idx)
+
+
+## Проверка наличия национального духа
+func has_national_spirit(spirit_id: String) -> bool:
+	for s in national_spirits:
+		if s.get("id", "") == spirit_id:
+			return true
+	return false
 
 
 ## Совокупные доходы бюджета за ход ($ млрд)
@@ -891,7 +941,10 @@ func to_dict() -> Dictionary:
 			"literacy_rate": literacy_rate,
 			"corruption_rate": corruption_rate,
 			"industrial_equipment_level": industrial_equipment_level,
-			"is_austerity_active": is_austerity_active
+			"is_austerity_active": is_austerity_active,
+			"credit_rating_index": credit_rating_index,
+			"credit_rating_min": credit_rating_min,
+			"credit_rating_max": credit_rating_max
 		},
 		"military": {
 			"total_population": total_population,
@@ -1142,6 +1195,9 @@ static func from_dict(data: Dictionary) -> CountryState:
 	state.factory_output_multiplier = float(eco.get("factory_output_multiplier", 1.0))
 	state.is_austerity_active = bool(eco.get("is_austerity_active", false))
 	state.resource_trade_balance = float(eco.get("resource_trade_balance", 0.0))
+	state.credit_rating_index = int(eco.get("credit_rating_index", 10))
+	state.credit_rating_min = int(eco.get("credit_rating_min", 1))
+	state.credit_rating_max = int(eco.get("credit_rating_max", 14))
 
 	# Синхронизация институциональных шкал с сохраненными макроэкономическими ставками
 	if eco.has("literacy_rate"):

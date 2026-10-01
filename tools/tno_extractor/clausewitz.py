@@ -11,10 +11,10 @@ from typing import Any, Dict, List, Union, Tuple, Optional
 class ClausewitzLexer:
     """Fast regular-expression based lexer for Clausewitz script."""
     
-    # Matches comments, quoted strings, operators, braces, or non-whitespace words
+    # Matches quoted strings, comments, operators, braces, or non-whitespace words
     TOKEN_REGEX = re.compile(
-        r'(#.*?$)|'                                # 1: Comments
-        r'("(?:\\.|[^"\\])*")|'                    # 2: Quoted strings
+        r'("(?:\\.|[^"\\])*")|'                    # 1: Quoted strings (including #)
+        r'(#.*?$)|'                                # 2: Comments
         r'([<>!=]=|[<>=])|'                        # 3: Operators (=, <=, >=, !=, <, >)
         r'([{}])|'                                 # 4: Braces
         r'([^\s#{}"=<>!]+)',                       # 5: Unquoted words/identifiers
@@ -25,7 +25,7 @@ class ClausewitzLexer:
     def tokenize(cls, text: str) -> List[str]:
         tokens = []
         for match in cls.TOKEN_REGEX.finditer(text):
-            comment, quoted, op, brace, word = match.groups()
+            quoted, comment, op, brace, word = match.groups()
             if comment:
                 continue
             elif quoted is not None:

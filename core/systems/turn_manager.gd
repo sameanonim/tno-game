@@ -94,7 +94,7 @@ var active_directive: DirectiveResource:
 		if _active_directive != null:
 			return _active_directive
 		if player_state != null and not player_state.active_directives.is_empty() and directive_manager != null:
-			var act_id = player_state.active_directives[0]
+			var act_id: String = player_state.active_directives[0]
 			if directive_manager.all_directives.has(act_id):
 				return directive_manager.all_directives[act_id]
 		return null
@@ -251,12 +251,12 @@ func _on_directive_cancelled(dir: DirectiveResource, reason: String) -> void:
 
 func _on_directive_event_triggered(ev_id: String) -> void:
 	if event_manager != null:
-		var ev = event_manager.get_or_load_event(ev_id)
+		var ev: GameEvent = event_manager.get_or_load_event(ev_id)
 		if ev != null:
 			pending_modal_events.append(ev)
 
 func _on_directive_region_conquered(province_id: int, new_owner_tag: String) -> void:
-	var old_owner = ""
+	var old_owner: String = ""
 	if regions_world_state.has(province_id):
 		var reg: RegionData = regions_world_state[province_id]
 		old_owner = reg.owner_tag
@@ -277,8 +277,8 @@ func _on_event_country_annexation_requested(victim_tag: String, annexer_tag: Str
 func transfer_state(state_id: int, new_owner_tag: String) -> bool:
 	if state_id <= 0:
 		return false
-	var clean_tag = new_owner_tag.to_upper().strip_edges()
-	var old_owner = ""
+	var clean_tag: String = new_owner_tag.to_upper().strip_edges()
+	var old_owner: String = ""
 
 	# 1. Поиск BoundaryManager, если не привязан
 	if boundary_manager == null:
@@ -336,8 +336,8 @@ func transfer_state(state_id: int, new_owner_tag: String) -> bool:
 
 ## Аннексия целого государства
 func annex_country(victim_tag: String, annexer_tag: String) -> void:
-	var v_tag = victim_tag.to_upper().strip_edges()
-	var a_tag = annexer_tag.to_upper().strip_edges()
+	var v_tag: String = victim_tag.to_upper().strip_edges()
+	var a_tag: String = annexer_tag.to_upper().strip_edges()
 	var states_to_transfer: Array[int] = []
 
 	if boundary_manager != null and boundary_manager.country_states.has(v_tag):
@@ -367,7 +367,7 @@ func _sync_map_controller_reactive(affected_states: Array[int], new_owner_tag: S
 		if map_controller.has_method("set_state_owner"):
 			map_controller.set_state_owner(sid, new_owner_tag)
 		else:
-			var provs = state_to_provinces.get(sid, [])
+			var provs: Array = state_to_provinces.get(sid, [])
 			for pid in provs:
 				if map_controller.has_method("set_province_owner"):
 					map_controller.set_province_owner(pid, new_owner_tag)
@@ -375,7 +375,7 @@ func _sync_map_controller_reactive(affected_states: Array[int], new_owner_tag: S
 					map_controller.update_province_owner(pid, new_owner_tag)
 
 	if map_controller.has_method("populate_data_lut_from_regions") and not regions_world_state.is_empty():
-		var p_tag = player_state.country_tag if player_state != null else "KOM"
+		var p_tag: String = player_state.country_tag if player_state != null else "KOM"
 		map_controller.populate_data_lut_from_regions(regions_world_state, p_tag)
 
 
@@ -549,14 +549,14 @@ func end_turn() -> void:
 
 	# 1. Сброс и начисление тактических очков (Data-Driven через ConfigManager)
 	var cfg = ConfigManager.get_instance()
-	var base_pc_gain = cfg.get_float("politics", "base_pc_gain_per_turn", 5.0) if cfg != null else 5.0
-	var base_cap = cfg.get_int("politics", "base_max_cap", 5) if cfg != null else 5
+	var base_pc_gain: float = cfg.get_float("politics", "base_pc_gain_per_turn", 5.0) if cfg != null else 5.0
+	var base_cap: int = cfg.get_int("politics", "base_max_cap", 5) if cfg != null else 5
 
 	if player_state.max_cap <= 0:
 		player_state.max_cap = base_cap
 	player_state.current_cap = player_state.max_cap
 
-	var pc_gain = player_state.pc_gain_per_turn if player_state.pc_gain_per_turn > 0.0 else base_pc_gain
+	var pc_gain: float = player_state.pc_gain_per_turn if player_state.pc_gain_per_turn > 0.0 else base_pc_gain
 	player_state.political_capital += pc_gain
 
 	# 2. Фаза экономики
@@ -572,6 +572,9 @@ func end_turn() -> void:
 			var ai_st: CountryState = countries_world_state[c_tag]
 			if ai_st != null:
 				EconomyEngine.process_ai_turn(ai_st)
+
+	# 2.3. Клиринговые союзы и взаимное влияние экономических сфер (Sphere Clearing & Spillover)
+	var _sphere_report: Dictionary = EconomyEngine.process_sphere_clearing_and_spillover(countries_world_state)
 
 	# 2.5. Фаза научно-технических исследований (R&D / PROCESSING_RESEARCH)
 	if research_manager != null:
@@ -595,6 +598,9 @@ func end_turn() -> void:
 	espionage_processed.emit(last_espionage_reports)
 	_process_sabotage_and_coups()
 
+	# 3.9. Фаза региональной демографии и мобилизации (Demographics & Manpower)
+	_process_demographics_and_manpower()
+
 	# 4. Фаза фронтов и макро-войны
 	current_state = TurnState.PROCESSING_MILITARY
 	phase_changed.emit("PROCESSING_MILITARY")
@@ -608,27 +614,30 @@ func end_turn() -> void:
 		current_turn
 	)
 	if defcon_rep.get("defcon_changed", false):
-		defcon_level_changed.emit(int(defcon_rep["current_level"]), str(defcon_rep.get("reason", "")))
+		var new_lvl: int = int(defcon_rep["current_level"])
+		defcon_level_changed.emit(new_lvl, str(defcon_rep.get("reason", "")))
+		if map_controller != null and map_controller.has_method("update_defcon_visuals"):
+			map_controller.update_defcon_visuals(new_lvl)
 	if defcon_rep.get("is_nuclear_midnight", false):
 		_trigger_game_over(false, "Шкала DEFCON достигла уровня 1 (Ядерная Полночь). Термоядерный апокалипсис уничтожил мир.")
 
 	pending_modal_events.clear()
 
 	# Проверка результатов фронтов на захват регионов, боевые инциденты и капитуляцию
-	var regions_captured_count = 0
+	var regions_captured_count: int = 0
 	for rep in last_military_reports:
 		if rep.get("captured_region_id", -1) > 0:
-			var reg_id = int(rep["captured_region_id"])
-			var n_tag = str(rep.get("new_owner", "")).to_upper()
-			var p_tag = str(rep.get("previous_owner", "")).to_upper()
-			var sid = province_to_state.get(reg_id, 0)
+			var reg_id: int = int(rep["captured_region_id"])
+			var n_tag: String = str(rep.get("new_owner", "")).to_upper()
+			var p_tag: String = str(rep.get("previous_owner", "")).to_upper()
+			var sid: int = province_to_state.get(reg_id, 0)
 
 			if boundary_manager != null:
 				boundary_manager.transfer_province(reg_id, n_tag)
 
 			if sid > 0:
-				var provs = state_to_provinces.get(sid, [])
-				var all_ours = true
+				var provs: Array = state_to_provinces.get(sid, [])
+				var all_ours: bool = true
 				for p in provs:
 					var r: RegionData = regions_world_state.get(p, null)
 					if r != null and r.owner_tag.to_upper() != n_tag:
@@ -651,8 +660,8 @@ func end_turn() -> void:
 			pending_modal_events.append(inc)
 
 		if rep.get("capitulation", false):
-			var victor = str(rep.get("victor_tag", "")).to_upper()
-			var defeated = str(rep.get("defeated_tag", "")).to_upper()
+			var victor: String = str(rep.get("victor_tag", "")).to_upper()
+			var defeated: String = str(rep.get("defeated_tag", "")).to_upper()
 			if not defeated.is_empty() and not victor.is_empty():
 				annex_country(defeated, victor)
 				if countries_world_state.has(defeated):
@@ -724,10 +733,10 @@ func end_turn() -> void:
 func start_directive(directive: DirectiveResource, force: bool = false) -> bool:
 	if directive_manager != null and directive != null and player_state != null:
 		_ensure_directive_manager_connected()
-		var dir_id = directive.id if not directive.id.is_empty() else directive.directive_id
+		var dir_id: String = directive.id if not directive.id.is_empty() else directive.directive_id
 		if not directive_manager.all_directives.has(dir_id):
 			directive_manager.register_directive(directive)
-		var success = directive_manager.start_directive(dir_id, player_state, force)
+		var success: bool = directive_manager.start_directive(dir_id, player_state, force)
 		if success:
 			if player_state.active_directives.has(dir_id):
 				_active_directive = directive
@@ -742,7 +751,7 @@ func start_directive(directive: DirectiveResource, force: bool = false) -> bool:
 ## Фаза пошагового расчета прогресса директивы
 func _process_directives_phase() -> void:
 	if directive_manager != null:
-		var completed = directive_manager.advance_turn(player_state)
+		var completed: Array[DirectiveResource] = directive_manager.advance_turn(player_state)
 		for dir in completed:
 			if _active_directive == dir or (_active_directive != null and _active_directive.id == dir.id):
 				_active_directive = null
@@ -756,14 +765,14 @@ func _display_next_modal_event() -> void:
 		_finalize_turn()
 		return
 
-	var next_event = pending_modal_events.pop_front()
+	var next_event: GameEvent = pending_modal_events.pop_front()
 	modal_event_opened.emit(next_event)
 
 
 ## Вызывается UI при выборе варианта в модальном диалоге события
 func resolve_modal_event_choice(event: GameEvent, option_index: int) -> void:
 	if option_index >= 0 and option_index < event.options.size():
-		var chosen_opt = event.options[option_index]
+		var chosen_opt: Dictionary = event.options[option_index]
 		event_manager.resolve_event_option(event, chosen_opt, player_state)
 
 	# Переход к следующему модальному событию в очереди, если есть
@@ -794,6 +803,70 @@ func _finalize_turn() -> void:
 	_check_game_over_conditions()
 
 
+## Расчет региональной демографии, естественного прироста и притока рекрутов (TNO Demographic Engine)
+func _process_demographics_and_manpower() -> void:
+	if regions_world_state.is_empty():
+		return
+
+	var country_core_pop: Dictionary = {}
+	var country_non_core_pop: Dictionary = {}
+	var country_unrest_sum: Dictionary = {}
+	var country_regions_count: Dictionary = {}
+
+	for reg_val in regions_world_state.values():
+		if reg_val is RegionData:
+			var reg: RegionData = reg_val
+			var owner: String = reg.owner_tag.to_upper().strip_edges()
+			if owner.is_empty():
+				continue
+			var pop: int = reg.population
+			var is_core: bool = reg.is_core_of(owner) or reg.core_tags.has(owner)
+
+			if is_core:
+				country_core_pop[owner] = country_core_pop.get(owner, 0) + pop
+			else:
+				country_non_core_pop[owner] = country_non_core_pop.get(owner, 0) + pop
+
+			# Пограничные регионы в условиях нестабильности дают меньшую отдачу
+			var border_penalty: float = 1.2 if reg.is_border_region else 1.0
+			country_unrest_sum[owner] = country_unrest_sum.get(owner, 0.0) + (reg.unrest * border_penalty)
+			country_regions_count[owner] = country_regions_count.get(owner, 0) + 1
+
+	for c_tag in countries_world_state.keys():
+		var c_st: CountryState = countries_world_state[c_tag]
+		if c_st == null:
+			continue
+
+		var core_pop: int = country_core_pop.get(c_tag, 0)
+		var non_core_pop: int = country_non_core_pop.get(c_tag, 0)
+		var reg_count: int = country_regions_count.get(c_tag, 0)
+		var avg_unrest: float = (country_unrest_sum.get(c_tag, 0.0) / float(maxi(reg_count, 1))) if reg_count > 0 else 0.0
+
+		c_st.set_flag("core_population", core_pop)
+		c_st.set_flag("total_population", core_pop + non_core_pop)
+		c_st.set_flag("controlled_regions_count", reg_count)
+
+		if core_pop <= 0 and non_core_pop <= 0:
+			continue
+
+		var base_recruit_rate: float = 0.00035
+		var legitimacy_mult: float = 0.5 + (c_st.legitimacy / 100.0) * 0.7
+		var war_support_mult: float = 0.6 + (c_st.war_support_percent / 100.0) * 0.6
+		var warlord_mult: float = 1.25 if c_st.has_flag("is_warlord") else 1.0
+		var draft_evasion_penalty: float = 1.0 - clampf((c_st.radicalization - 50.0) * 0.008, 0.0, 0.5)
+
+		var turn_recruits: int = int(float(core_pop) * base_recruit_rate * legitimacy_mult * war_support_mult * warlord_mult * draft_evasion_penalty)
+
+		var garrison_casualties: int = 0
+		if non_core_pop > 0 and avg_unrest > 25.0:
+			garrison_casualties = int(float(non_core_pop) * (avg_unrest / 100.0) * 0.00008)
+
+		var net_manpower_gain: int = turn_recruits - garrison_casualties
+		c_st.manpower_pool = maxi(c_st.manpower_pool + net_manpower_gain, 0)
+		c_st.set_flag("weekly_manpower_growth", net_manpower_gain)
+		c_st.set_flag("garrison_attrition", garrison_casualties)
+
+
 ## Проверка таймеров саботажа и назревающих переворотов
 func _process_sabotage_and_coups() -> void:
 	for c_tag in countries_world_state.keys():
@@ -813,7 +886,7 @@ func _process_sabotage_and_coups() -> void:
 		# 2. Неминуемый государственный переворот
 		if bool(c_st.story_flags.get("coup_imminent", false)):
 			c_st.story_flags.erase("coup_imminent")
-			var sponsor = str(c_st.story_flags.get("coup_sponsor", ""))
+			var sponsor: String = str(c_st.story_flags.get("coup_sponsor", ""))
 			c_st.story_flags.erase("coup_sponsor")
 			_resolve_coup(c_st, sponsor)
 
@@ -833,7 +906,7 @@ func _resolve_coup(victim: CountryState, sponsor_tag: String) -> void:
 				player_state.legitimacy = clampf(player_state.legitimacy + 5.0, 0.0, 100.0)
 
 	if victim == player_state:
-		var coup_event = GameEvent.new()
+		var coup_event := GameEvent.new()
 		coup_event.event_id = "crisis_military_coup_%d" % current_turn
 		coup_event.title = "ГОСУДАРСТВЕННЫЙ ПЕРЕВОРОТ!"
 		coup_event.classification = "[КРИЗИС ВЛАСТИ // ЧРЕЗВЫЧАЙНОЕ ПОЛОЖЕНИЕ]"
@@ -870,7 +943,7 @@ func _check_game_over_conditions() -> void:
 		return
 
 	# 4. Условия победы и поражения для сверхдержав (Superpowers)
-	var tag = player_state.country_tag.to_upper()
+	var tag: String = player_state.country_tag.to_upper()
 
 	# 4.1. Соединенные Штаты Америки (USA)
 	if tag == "USA" and current_turn >= 260:
@@ -890,7 +963,7 @@ func _check_game_over_conditions() -> void:
 
 	# 4.3. Германский Рейх (GER / фракции ГВГ после победы)
 	if tag in ["GER", "BOR", "SPE", "GOR", "HEY"] and current_turn >= 260:
-		var gcw_active = (german_civil_war_manager != null and german_civil_war_manager.is_civil_war_active)
+		var gcw_active: bool = (german_civil_war_manager != null and german_civil_war_manager.is_civil_war_active)
 		if not gcw_active and player_state.legitimacy >= 70.0 and player_state.gdp_billions >= 350.0 and not player_state.is_in_fiscal_crisis:
 			_trigger_game_over(true, "Европейский Гегемон: Власть в Рейхе окончательно консолидирована, экономика реорганизована, господство Германии в Европе непоколебимо.")
 			return
@@ -910,7 +983,7 @@ func _check_game_over_conditions() -> void:
 
 func _trigger_game_over(victory: bool, reason: String) -> void:
 	game_over.emit(victory, reason)
-	var ev = GameEvent.new()
+	var ev := GameEvent.new()
 	ev.event_id = "game_over_victory" if victory else "game_over_defeat"
 	ev.title = "ВЕЛИКИЙ ТРИУМФ НАЦИИ" if victory else "НАЦИОНАЛЬНАЯ КАТАСТРОФА"
 	ev.classification = "[КОНЕЦ ИГРЫ // ПОБЕДА]" if victory else "[КОНЕЦ ИГРЫ // ПОРАЖЕНИЕ]"
@@ -1002,13 +1075,16 @@ func save_game(save_path: String = "user://savegame.json") -> bool:
 
 	# Сериализация стадии и видимости веток FocusStageController
 	if focus_stage_controller != null:
-		save_dict["focus_stage_state"] = {
-			"current_tree_id": focus_stage_controller.current_tree_id,
-			"current_stage_category": focus_stage_controller.current_stage_category,
-			"hidden_branch_nodes": focus_stage_controller.hidden_branch_nodes.duplicate(),
-			"visible_branch_nodes": focus_stage_controller.visible_branch_nodes.duplicate(),
-			"completed_directives_archive": focus_stage_controller.completed_directives_archive.duplicate()
-		}
+		if focus_stage_controller.has_method("to_dict"):
+			save_dict["focus_stage_state"] = focus_stage_controller.to_dict()
+		else:
+			save_dict["focus_stage_state"] = {
+				"current_tree_id": focus_stage_controller.current_tree_id,
+				"current_stage_category": focus_stage_controller.current_stage_category,
+				"hidden_branch_nodes": focus_stage_controller.hidden_branch_nodes.duplicate(),
+				"visible_branch_nodes": focus_stage_controller.visible_branch_nodes.duplicate(),
+				"completed_directives_archive": focus_stage_controller.completed_directives_archive.duplicate()
+			}
 
 	var f = FileAccess.open(save_path, FileAccess.WRITE)
 	if f == null:
@@ -1124,24 +1200,27 @@ func load_game(save_path: String = "user://savegame.json") -> bool:
 	# Восстановление стадии и видимости веток FocusStageController
 	if data.has("focus_stage_state") and focus_stage_controller != null:
 		var fs_data: Dictionary = data["focus_stage_state"]
-		var tree_id = str(fs_data.get("current_tree_id", ""))
-		if not tree_id.is_empty():
-			focus_stage_controller.current_tree_id = tree_id
-			if focus_stage_controller.trees_manifest.has(tree_id) or FileAccess.file_exists("res://data/trees/%s.json" % tree_id):
-				focus_stage_controller.switch_focus_tree(tree_id, true)
-		focus_stage_controller.current_stage_category = str(fs_data.get("current_stage_category", "PROLOGUE"))
-		if fs_data.has("hidden_branch_nodes") and fs_data["hidden_branch_nodes"] is Array:
-			focus_stage_controller.hidden_branch_nodes.clear()
-			for h in fs_data["hidden_branch_nodes"]:
-				focus_stage_controller.hidden_branch_nodes.append(str(h))
-		if fs_data.has("visible_branch_nodes") and fs_data["visible_branch_nodes"] is Array:
-			focus_stage_controller.visible_branch_nodes.clear()
-			for v in fs_data["visible_branch_nodes"]:
-				focus_stage_controller.visible_branch_nodes.append(str(v))
-		if fs_data.has("completed_directives_archive") and fs_data["completed_directives_archive"] is Array:
-			focus_stage_controller.completed_directives_archive.clear()
-			for a in fs_data["completed_directives_archive"]:
-				focus_stage_controller.completed_directives_archive.append(str(a))
+		if focus_stage_controller.has_method("from_dict"):
+			focus_stage_controller.from_dict(fs_data, player_state)
+		else:
+			var tree_id = str(fs_data.get("current_tree_id", ""))
+			if not tree_id.is_empty():
+				focus_stage_controller.current_tree_id = tree_id
+				if focus_stage_controller.trees_manifest.has(tree_id) or FileAccess.file_exists("res://data/trees/%s.json" % tree_id):
+					focus_stage_controller.switch_focus_tree(tree_id, true)
+			focus_stage_controller.current_stage_category = str(fs_data.get("current_stage_category", "PROLOGUE"))
+			if fs_data.has("hidden_branch_nodes") and fs_data["hidden_branch_nodes"] is Array:
+				focus_stage_controller.hidden_branch_nodes.clear()
+				for h in fs_data["hidden_branch_nodes"]:
+					focus_stage_controller.hidden_branch_nodes.append(str(h))
+			if fs_data.has("visible_branch_nodes") and fs_data["visible_branch_nodes"] is Array:
+				focus_stage_controller.visible_branch_nodes.clear()
+				for v in fs_data["visible_branch_nodes"]:
+					focus_stage_controller.visible_branch_nodes.append(str(v))
+			if fs_data.has("completed_directives_archive") and fs_data["completed_directives_archive"] is Array:
+				focus_stage_controller.completed_directives_archive.clear()
+				for a in fs_data["completed_directives_archive"]:
+					focus_stage_controller.completed_directives_archive.append(str(a))
 
 	# Синхронизация карты после загрузки
 	if map_controller != null:

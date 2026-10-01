@@ -138,7 +138,7 @@ func _ensure_doctrine_panel() -> void:
 
 	lbl_doctrine_header = Label.new()
 	lbl_doctrine_header.name = "DoctrineHeader"
-	lbl_doctrine_header.text = "⚡ УНИКАЛЬНАЯ ДОКТРИНА ВАРЛОРДА ⚡"
+	lbl_doctrine_header.text = _tr("SMUTA_DOCTRINE_HEADER_DEFAULT", "⚡ УНИКАЛЬНАЯ ДОКТРИНА ВАРЛОРДА ⚡")
 	vb.add_child(lbl_doctrine_header)
 
 	lbl_doctrine_stats = RichTextLabel.new()
@@ -317,7 +317,7 @@ func _update_warlord_doctrine() -> void:
 		"TABORITSKY":
 			pnl_warlord_doctrine.visible = true
 			if lbl_doctrine_header != null:
-				lbl_doctrine_header.text = "⚡ ДОКТРИНА РЕГЕНТА: СВЯЩЕННАЯ РОССИЙСКАЯ ИМПЕРИЯ // ЧАСЫ СУДНОГО ДНЯ ⚡"
+				lbl_doctrine_header.text = _tr("SMUTA_DOCTRINE_HEADER_TABORITSKY", "⚡ ДОКТРИНА РЕГЕНТА: СВЯЩЕННАЯ РОССИЙСКАЯ ИМПЕРИЯ // ЧАСЫ СУДНОГО ДНЯ ⚡")
 
 			var clk_str = wm.get_taboritsky_clock_str()
 			var clk_min = wm.taboritsky_clock_minutes
@@ -328,104 +328,104 @@ func _update_warlord_doctrine() -> void:
 
 			if lbl_doctrine_stats != null:
 				var col_clk = "#ff3333" if clk_pct > 0.85 else ("#ffaa00" if clk_pct > 0.6 else "#33ff66")
-				lbl_doctrine_stats.text = (
+				lbl_doctrine_stats.text = _tr("SMUTA_DOCTRINE_STATS_TABORITSKY", (
 					"ВРЕМЯ НА ЧАСАХ: [color=%s][b]%s[/b][/color] %s | " +
 					"БЕЗУМИЕ: [color=#ff5555]%.0f%%[/color] | " +
 					"ОЧИЩЕНО ЗОН: [color=#ffff33]%d[/color] | " +
 					"ПОИСКОВ ЦАРЕВИЧА: [color=#00e5ff]%d[/color]"
-				) % [col_clk, clk_str, ascii_bar, wm.taboritsky_insanity_level, wm.taboritsky_cleansed_regions_count, wm.taboritsky_alexei_searches_count]
+				)) % [col_clk, clk_str, ascii_bar, wm.taboritsky_insanity_level, wm.taboritsky_cleansed_regions_count, wm.taboritsky_alexei_searches_count]
 
 			if hb_doctrine_actions != null:
 				hb_doctrine_actions.visible = true
 			if btn_doc_action_1 != null:
 				btn_doc_action_1.visible = true
-				btn_doc_action_1.text = "🔍 ПОИСКИ ЦАРЕВИЧА АЛЕКСЕЯ (15 PC, 1 CAP)"
+				btn_doc_action_1.text = _tr("SMUTA_ACTION_ALEXEI", "🔍 ПОИСКИ ЦАРЕВИЧА АЛЕКСЕЯ (15 PC, 1 CAP)")
 				btn_doc_action_1.disabled = wm.is_midnight_collapsed or (player_state.political_capital < 15.0 or player_state.current_cap < 1)
 			if btn_doc_action_2 != null:
 				btn_doc_action_2.visible = true
-				btn_doc_action_2.text = "☣ ОЧИЩЕНИЕ «ТАБУН» (250 СТВ, 20 PC)"
+				btn_doc_action_2.text = _tr("SMUTA_ACTION_TABUN", "☣ ОЧИЩЕНИЕ «ТАБУН» (250 СТВ, 20 PC)")
 				btn_doc_action_2.disabled = wm.is_midnight_collapsed or (player_state.infantry_weapons_stockpile < 250 or player_state.political_capital < 20.0)
 			if btn_doc_action_3 != null:
 				btn_doc_action_3.visible = true
-				btn_doc_action_3.text = "⚖ ВЕРИФИКАЦИЯ ВЕРНОСТИ (25 PC, 2 CAP)"
+				btn_doc_action_3.text = _tr("SMUTA_ACTION_VERIFY", "⚖ ВЕРИФИКАЦИЯ ВЕРНОСТИ (25 PC, 2 CAP)")
 				btn_doc_action_3.disabled = wm.is_midnight_collapsed or (player_state.political_capital < 25.0 or player_state.current_cap < 2)
 			if btn_doc_action_4 != null:
 				btn_doc_action_4.visible = true
-				btn_doc_action_4.text = "☠ ПРИБЛИЗИТЬ ПОЛНОЧЬ (+30 МИН)"
+				btn_doc_action_4.text = _tr("SMUTA_ACTION_HASTEN", "☠ ПРИБЛИЗИТЬ ПОЛНОЧЬ (+30 МИН)")
 				btn_doc_action_4.disabled = wm.is_midnight_collapsed
 
 		"YAZOV":
 			pnl_warlord_doctrine.visible = true
 			if lbl_doctrine_header != null:
-				lbl_doctrine_header.text = "⚡ ДОКТРИНА ВЕЛИКОГО СУДА: ВСЕРОССИЙСКАЯ ЧЕРНАЯ ЛИГА // ВОЗМЕЗДИЕ ⚡"
+				lbl_doctrine_header.text = _tr("SMUTA_DOCTRINE_HEADER_YAZOV", "⚡ ДОКТРИНА ВЕЛИКОГО СУДА: ВСЕРОССИЙСКАЯ ЧЕРНАЯ ЛИГА // ВОЗМЕЗДИЕ ⚡")
 
 			if lbl_doctrine_stats != null:
 				var trial_col = "#ff3333" if wm.yazov_trial_readiness >= 80.0 else "#ffaa00"
-				lbl_doctrine_stats.text = (
+				lbl_doctrine_stats.text = _tr("SMUTA_DOCTRINE_STATS_YAZOV", (
 					"НЕНАВИСТЬ К ТЕВТОНАМ: [color=#ff4444][b]%.0f%%[/b][/color] | " +
 					"БУНКЕРЫ КАРБЫШЕВА: [color=#00e5ff]УР. %d (%s)[/color] | " +
 					"ОВ «ОМСК-65»: [color=#33ff66]%d т.[/color] | " +
 					"ГОТОВНОСТЬ К СУДУ: [color=%s][b]%.0f%%[/b][/color]"
-				) % [wm.yazov_teutonic_hatred, wm.yazov_bunker_network_level, wm.get_yazov_bunker_capacity_str(), wm.yazov_chemical_stockpile_tons, trial_col, wm.yazov_trial_readiness]
+				)) % [wm.yazov_teutonic_hatred, wm.yazov_bunker_network_level, wm.get_yazov_bunker_capacity_str(), wm.yazov_chemical_stockpile_tons, trial_col, wm.yazov_trial_readiness]
 
 			if hb_doctrine_actions != null:
 				hb_doctrine_actions.visible = true
 			if btn_doc_action_1 != null:
 				btn_doc_action_1.visible = true
-				btn_doc_action_1.text = "🏗 СТРОИТЬ БУНКЕР (0.08B, 1 CAP, 10 PC)"
+				btn_doc_action_1.text = _tr("SMUTA_ACTION_BUNKER", "🏗 СТРОИТЬ БУНКЕР (0.08B, 1 CAP, 10 PC)")
 				btn_doc_action_1.disabled = (wm.yazov_bunker_network_level >= 5) or (player_state.liquid_reserves_billions < 0.08 or player_state.current_cap < 1)
 			if btn_doc_action_2 != null:
 				btn_doc_action_2.visible = true
-				btn_doc_action_2.text = "☣ СИНТЕЗ «ОМСК-65» (180 СТВ, 15 PC)"
+				btn_doc_action_2.text = _tr("SMUTA_ACTION_OMSK65", "☣ СИНТЕЗ «ОМСК-65» (180 СТВ, 15 PC)")
 				btn_doc_action_2.disabled = (player_state.infantry_weapons_stockpile < 180 or player_state.political_capital < 15.0)
 			if btn_doc_action_3 != null:
 				btn_doc_action_3.visible = true
-				btn_doc_action_3.text = "⚔ ПОЛЕВЫЕ ТРИБУНАЛЫ (15 PC, 1 CAP)"
+				btn_doc_action_3.text = _tr("SMUTA_ACTION_TRIBUNALS", "⚔ ПОЛЕВЫЕ ТРИБУНАЛЫ (15 PC, 1 CAP)")
 				btn_doc_action_3.disabled = (player_state.political_capital < 15.0 or player_state.current_cap < 1)
 			if btn_doc_action_4 != null:
 				btn_doc_action_4.visible = true
-				btn_doc_action_4.text = "🔥 ОБЪЯВИТЬ ВЕЛИКИЙ СУД (80%+)" if not wm.yazov_is_trial_declared else "★ СУД ОБЪЯВЛЕН ★"
+				btn_doc_action_4.text = _tr("SMUTA_ACTION_TRIAL", "🔥 ОБЪЯВИТЬ ВЕЛИКИЙ СУД (80%+)") if not wm.yazov_is_trial_declared else _tr("SMUTA_ACTION_TRIAL_DECLARED", "★ СУД ОБЪЯВЛЕН ★")
 				btn_doc_action_4.disabled = wm.yazov_is_trial_declared or (wm.yazov_trial_readiness < 80.0)
 
 		"SABLIN":
 			pnl_warlord_doctrine.visible = true
 			if lbl_doctrine_header != null:
-				lbl_doctrine_header.text = "⚡ ДОКТРИНА ЛЕНИНСКОГО ОКТЯБРЯ: БУРЯТСКАЯ РЕСПУБЛИКА // ВЛАСТЬ СОВЕТАМ ⚡"
+				lbl_doctrine_header.text = _tr("SMUTA_DOCTRINE_HEADER_SABLIN", "⚡ ДОКТРИНА ЛЕНИНСКОГО ОКТЯБРЯ: БУРЯТСКАЯ РЕСПУБЛИКА // ВЛАСТЬ СОВЕТАМ ⚡")
 
 			var ideal_pct = wm.sablin_idealism
 			var prag_pct = 100.0 - ideal_pct
 			if lbl_doctrine_stats != null:
-				lbl_doctrine_stats.text = (
+				lbl_doctrine_stats.text = _tr("SMUTA_DOCTRINE_STATS_SABLIN", (
 					"БАЛАНС РЕВОЛЮЦИИ: [color=#33ff66][b]ИДЕАЛИЗМ %.0f%%[/b][/color] vs [color=#ffaa00][b]ПРАГМАТИЗМ %.0f%%[/b][/color] | " +
 					"СОВЕТСКАЯ ДЕМОКРАТИЯ: [color=#00e5ff]%.0f%%[/color] | " +
 					"ЭНТУЗИАЗМ: [color=#ffff33]%.0f%%[/color]"
-				) % [ideal_pct, prag_pct, wm.sablin_soviet_democracy, wm.sablin_revolutionary_enthusiasm]
+				)) % [ideal_pct, prag_pct, wm.sablin_soviet_democracy, wm.sablin_revolutionary_enthusiasm]
 
 			if hb_doctrine_actions != null:
 				hb_doctrine_actions.visible = true
 			if btn_doc_action_1 != null:
 				btn_doc_action_1.visible = true
-				btn_doc_action_1.text = "🚩 ДЕБАТЫ В СОВЕТАХ (10 PC, 1 CAP)"
+				btn_doc_action_1.text = _tr("SMUTA_ACTION_SOVIET_DEBATES", "🚩 ДЕБАТЫ В СОВЕТАХ (10 PC, 1 CAP)")
 				btn_doc_action_1.disabled = (player_state.political_capital < 10.0 or player_state.current_cap < 1)
 			if btn_doc_action_2 != null:
 				btn_doc_action_2.visible = true
-				btn_doc_action_2.text = "🕊 АМНИСТИЯ ЗАКЛЮЧЕННЫХ (15 PC)"
+				btn_doc_action_2.text = _tr("SMUTA_ACTION_AMNESTY", "🕊 АМНИСТИЯ ЗАКЛЮЧЕННЫХ (15 PC)")
 				btn_doc_action_2.disabled = (player_state.political_capital < 15.0)
 			if btn_doc_action_3 != null:
 				btn_doc_action_3.visible = true
-				btn_doc_action_3.text = "🛡 КОМИТЕТ БЕЗОПАСНОСТИ (15 PC, 1 CAP)"
+				btn_doc_action_3.text = _tr("SMUTA_ACTION_SECURITY_COMMITTEE", "🛡 КОМИТЕТ БЕЗОПАСНОСТИ (15 PC, 1 CAP)")
 				btn_doc_action_3.disabled = (player_state.political_capital < 15.0 or player_state.current_cap < 1)
 			if btn_doc_action_4 != null:
 				btn_doc_action_4.visible = true
-				btn_doc_action_4.text = "⭐ КРАСНЫЕ ДРУЖИНЫ (12 PC, 1 CAP)"
+				btn_doc_action_4.text = _tr("SMUTA_ACTION_RED_GUARDS", "⭐ КРАСНЫЕ ДРУЖИНЫ (12 PC, 1 CAP)")
 				btn_doc_action_4.disabled = (player_state.political_capital < 12.0 or player_state.current_cap < 1)
 
 		_:
 			pnl_warlord_doctrine.visible = true
 			if lbl_doctrine_header != null:
-				lbl_doctrine_header.text = "⚡ ОБЩЕВОЕННАЯ ДОКТРИНА: ОПЕРАТИВНЫЙ ШТАБ ВАРЛОРДА ⚡"
+				lbl_doctrine_header.text = _tr("SMUTA_DOCTRINE_HEADER_GENERIC", "⚡ ОБЩЕВОЕННАЯ ДОКТРИНА: ОПЕРАТИВНЫЙ ШТАБ ВАРЛОРДА ⚡")
 			if lbl_doctrine_stats != null:
-				lbl_doctrine_stats.text = "Стандартный полевой режим. Уникальные доктрины доступны для Регента (Коми), Черной Лиги (Омск) и Советов (Бурятия)."
+				lbl_doctrine_stats.text = _tr("SMUTA_DOCTRINE_STATS_GENERIC", "Стандартный полевой режим. Уникальные доктрины доступны для Регента (Коми), Черной Лиги (Омск) и Советов (Бурятия).")
 			if hb_doctrine_actions != null:
 				hb_doctrine_actions.visible = false
 
@@ -613,7 +613,7 @@ func _on_doc_action_4_pressed() -> void:
 	match m_type:
 		"TABORITSKY":
 			res = wm.advance_taboritsky_clock(30, player_state)
-			var nar = "Стрелки часов Регента переведены вперед (+30 мин). Время: %s" % wm.get_taboritsky_clock_str()
+			var nar = _tr("SMUTA_CLOCK_ADVANCED_LOG", "Стрелки часов Регента переведены вперед (+30 мин). Время: %s") % wm.get_taboritsky_clock_str()
 			res["narrative"] = nar
 		"YAZOV":
 			res = wm.yazov_action_proclaim_great_trial(player_state)
@@ -624,13 +624,13 @@ func _on_doc_action_4_pressed() -> void:
 
 func _handle_action_result(res: Dictionary) -> void:
 	if res.get("success", false) or res.get("collapsed", false) or res.has("new_time"):
-		var nar = res.get("narrative", res.get("message", "Действие исполнено."))
+		var nar = res.get("narrative", res.get("message", _tr("SMUTA_ACTION_EXECUTED", "Действие исполнено.")))
 		if log_display != null:
 			log_display.text += "\n[color=#33ff66]>> [/color]" + nar
 	else:
-		var r = res.get("reason", "Ошибка исполнения.")
+		var r = res.get("reason", _tr("SMUTA_EXECUTION_ERROR", "Ошибка исполнения."))
 		if log_display != null:
-			log_display.text += "\n[color=#ff5555]>> ОТКЛОНЕНО: [/color]" + r
+			log_display.text += "\n[color=#ff5555]" + _tr("SMUTA_REJECTED_PREFIX", ">> ОТКЛОНЕНО: ") + "[/color]" + r
 	refresh_ui()
 
 
@@ -731,19 +731,19 @@ func _on_mechanic_action_executed(_action_id: String, details: Dictionary) -> vo
 
 func _on_midnight_clock_advanced(_new_minutes: int, formatted_time: String) -> void:
 	if log_display != null:
-		log_display.text += "\n[color=#ff3333]⏳ ЧАСЫ РЕГЕНТА: %s[/color]" % formatted_time
+		log_display.text += "\n[color=#ff3333]" + (_tr("SMUTA_CLOCK_LOG_FMT", "⏳ ЧАСЫ РЕГЕНТА: %s") % formatted_time) + "[/color]"
 	refresh_ui()
 
 
 func _on_midnight_struck() -> void:
 	if log_display != null:
-		log_display.text += "\n[color=#ff0000][b]☠ ПОЛНОЧЬ ПРОБИЛА! СВЯЩЕННАЯ РОССИЙСКАЯ ИМПЕРИЯ ПАЛА! ☠[/b][/color]"
+		log_display.text += "\n[color=#ff0000][b]" + _tr("SMUTA_MIDNIGHT_LOG", "☠ ПОЛНОЧЬ ПРОБИЛА! СВЯЩЕННАЯ РОССИЙСКАЯ ИМПЕРИЯ ПАЛА! ☠") + "[/b][/color]"
 	refresh_ui()
 
 
 func _on_great_trial_prepared(_readiness: float) -> void:
 	if log_display != null:
-		log_display.text += "\n[color=#ff3333][b]⚡ ВЕЛИКИЙ СУД НАЧАЛСЯ! ТОТАЛЬНАЯ МОБИЛИЗАЦИЯ! ⚡[/b][/color]"
+		log_display.text += "\n[color=#ff3333][b]" + _tr("SMUTA_TRIAL_LOG", "⚡ ВЕЛИКИЙ СУД НАЧАЛСЯ! ТОТАЛЬНАЯ МОБИЛИЗАЦИЯ! ⚡") + "[/b][/color]"
 	refresh_ui()
 
 

@@ -76,7 +76,8 @@ func _update_display() -> void:
 	# Шапка панели
 	if title_label != null:
 		var display_title = city_name.to_upper() if not city_name.is_empty() else state_name.to_upper()
-		title_label.text = "ИНСПЕКТОР // %s [PID: %d]" % [display_title, pid]
+		var inspector_fmt = tr("ИНСПЕКТОР // %s [PID: %d]")
+		title_label.text = inspector_fmt % [display_title, pid]
 
 	# Формирование информационного текста CRT
 	var text = ""

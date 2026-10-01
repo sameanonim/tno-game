@@ -52,6 +52,63 @@ static var active_frontlines: Array[Frontline] = []
 ## Глобальный реестр активных стратегических фронтов по ID
 static var registered_frontlines: Dictionary = {} # Key: String (front_id), Value: Frontline
 
+## Ссылка на диспетчер границ BoundaryManager и мок смежности провинций
+static var boundary_manager_ref: BoundaryManager = null
+static var mock_province_adjacency: Dictionary = {}
+
+static func set_boundary_manager(bm: BoundaryManager) -> void:
+	boundary_manager_ref = bm
+
+static func clear_boundary_manager() -> void:
+	boundary_manager_ref = null
+	mock_province_adjacency.clear()
+
+static func _get_boundary_manager() -> BoundaryManager:
+	if boundary_manager_ref != null and is_instance_valid(boundary_manager_ref):
+		return boundary_manager_ref
+	var main_loop = Engine.get_main_loop()
+	if main_loop is SceneTree and main_loop.root != null:
+		var tm = main_loop.root.find_child("TurnManager", true, false)
+		if tm != null and "boundary_manager" in tm and tm.boundary_manager != null:
+			return tm.boundary_manager
+		var bm = main_loop.root.find_child("BoundaryManager", true, false)
+		if bm is BoundaryManager:
+			return bm
+	return null
+
+## Динамический поиск сопредельных регионов обороняющегося для продолжения наступления
+static func find_adjacent_defender_regions(
+	from_region_id: int,
+	defender_tag: String,
+	regions: Dictionary,
+	boundary_mgr: BoundaryManager = null
+) -> Array[int]:
+	var candidate_ids: Array[int] = []
+	var bm: BoundaryManager = boundary_mgr if boundary_mgr != null else _get_boundary_manager()
+	var neighbors: Array = []
+	if bm != null and bm.province_adjacency.has(from_region_id):
+		neighbors = bm.province_adjacency[from_region_id]
+	elif mock_province_adjacency.has(from_region_id):
+		neighbors = mock_province_adjacency[from_region_id]
+
+	for n_id in neighbors:
+		var nid_int: int = int(n_id)
+		var r = regions.get(nid_int, null)
+		if r is RegionData and r.owner_tag == defender_tag:
+			if not candidate_ids.has(nid_int):
+				candidate_ids.append(nid_int)
+
+	# Если в графе смежности соседей не найдено, но у обороняющегося ещё остались регионы:
+	if candidate_ids.is_empty():
+		for r_id in regions.keys():
+			var r = regions[r_id]
+			if r is RegionData and r.owner_tag == defender_tag and int(r_id) != from_region_id:
+				if not candidate_ids.has(int(r_id)):
+					candidate_ids.append(int(r_id))
+					if candidate_ids.size() >= 3:
+						break
+	return candidate_ids
+
 ## Глобальное состояние ядерной напряженности DEFCON (5..1)
 static var global_defcon_level: int = 5
 static var global_world_tension: float = 10.0
@@ -172,6 +229,146 @@ static func deploy_starting_theater(player_state: CountryState, countries_world_
 ## Развертывание глобального прокси-театра Холодной войны (SAW, Малайя, Индонезия, Ближний Восток)
 static func deploy_proxy_theater(proxy_id: String, superpower_tag: String, countries_world_state: Dictionary) -> Frontline:
 	return MilitaryTheaterFactory.deploy_proxy_theater(proxy_id, superpower_tag, countries_world_state)
+
+
+##
+## Оказание скрытой или открытой военной помощи прокси-конфликту (Proxy War Aid Package)
+## superpower: CountryState державы-донора (USA, GER, JAP и др.)
+## front_id: String ID фронта (например, "proxy_south_africa", "proxy_malaya" или любой активный Frontline)
+## aid_package: Dictionary c ключами:
+##   - "weapons": int (пехотное снаряжение, списывается из donor.infantry_weapons_stockpile)
+##   - "heavy": int (тяжелая техника, списывается из donor.heavy_equipment_stockpile)
+##   - "manpower": int (добровольцы / военспецы, списывается из donor.manpower_pool)
+##   - "money": float (секретный бюджет ЦРУ/Абвера/Компэйтай, списывается из donor.liquid_reserves_billions)
+## axis_id: String опциональный ID оси (если пусто, выбирается первая активная ось)
+##
+## Возвращает Dictionary:
+##   - "success": bool
+##   - "message": String
+##   - "front_id": String
+##   - "axis_id": String
+##   - "tension_added": float
+##   - "world_tension_added": float
+##   - "aid_delivered": Dictionary
+##
+static func send_proxy_aid(
+	donor: CountryState,
+	front_id: String,
+	aid_package: Dictionary,
+	axis_id: String = ""
+) -> Dictionary:
+	if donor == null:
+		return {
+			"success": false,
+			"message": _tr_str("PROXY_AID_ERR_NO_DONOR", {}, "Ошибка: Государство-донор не определено.")
+		}
+
+	if aid_package.is_empty():
+		return {
+			"success": false,
+			"message": _tr_str("PROXY_AID_ERR_EMPTY", {}, "Ошибка: Пакет военной помощи пуст.")
+		}
+
+	var weapons_req: int = maxi(int(aid_package.get("weapons", 0)), 0)
+	var heavy_req: int = maxi(int(aid_package.get("heavy", 0)), 0)
+	var manpower_req: int = maxi(int(aid_package.get("manpower", 0)), 0)
+	var money_req: float = maxf(float(aid_package.get("money", 0.0)), 0.0)
+
+	if donor.infantry_weapons_stockpile < weapons_req:
+		return {
+			"success": false,
+			"message": _tr_str("PROXY_AID_ERR_WEAPONS", {"have": donor.infantry_weapons_stockpile, "need": weapons_req}, "Недостаточно стрелкового вооружения на складах (в наличии %d, требуется %d)." % [donor.infantry_weapons_stockpile, weapons_req])
+		}
+
+	if donor.heavy_equipment_stockpile < heavy_req:
+		return {
+			"success": false,
+			"message": _tr_str("PROXY_AID_ERR_HEAVY", {"have": donor.heavy_equipment_stockpile, "need": heavy_req}, "Недостаточно тяжелой бронетехники на армейских складах (в наличии %d, требуется %d)." % [donor.heavy_equipment_stockpile, heavy_req])
+		}
+
+	if donor.manpower_pool < manpower_req:
+		return {
+			"success": false,
+			"message": _tr_str("PROXY_AID_ERR_MANPOWER", {"have": donor.manpower_pool, "need": manpower_req}, "Недостаточно обученного резерва живой силы (в наличии %d, требуется %d)." % [donor.manpower_pool, manpower_req])
+		}
+
+	if donor.liquid_reserves_billions < money_req:
+		return {
+			"success": false,
+			"message": _tr_str("PROXY_AID_ERR_MONEY", {"have": "%0.2f" % donor.liquid_reserves_billions, "need": "%0.2f" % money_req}, "Недостаточно валютных резервов для секретной переброски контингента (в наличии $%0.2f млрд, требуется $%0.2f млрд)." % [donor.liquid_reserves_billions, money_req])
+		}
+
+	var front: Frontline = get_frontline(front_id)
+	if front == null:
+		# Попытка поиска по активным фронтам
+		for f in active_frontlines:
+			if f != null and (f.front_id == front_id or f.name.to_lower().contains(front_id.to_lower())):
+				front = f
+				break
+
+	if front == null or not front.active:
+		return {
+			"success": false,
+			"message": _tr_str("PROXY_AID_ERR_FRONT_INACTIVE", {"front": front_id}, "Театр боевых действий «%s» не найден или уже завершен." % front_id)
+		}
+
+	var target_axis: OperationalAxis = null
+	if not axis_id.is_empty():
+		target_axis = front.get_axis(axis_id)
+	if target_axis == null and not front.axes.is_empty():
+		target_axis = front.axes[0]
+
+	if target_axis == null:
+		return {
+			"success": false,
+			"message": _tr_str("PROXY_AID_ERR_NO_AXIS", {}, "На указанном ТВД отсутствуют активные оперативные направления.")
+		}
+
+	# Списание ресурсов у донора
+	donor.infantry_weapons_stockpile -= weapons_req
+	donor.heavy_equipment_stockpile -= heavy_req
+	donor.manpower_pool -= manpower_req
+	donor.liquid_reserves_billions -= money_req
+
+	# Передача подкрепления на оперативную ось
+	var eq = target_axis.assigned_equipment
+	eq["infantry_weapons"] = int(eq.get("infantry_weapons", 0)) + weapons_req
+	eq["heavy_equipment"] = int(eq.get("heavy_equipment", 0)) + heavy_req
+	target_axis.assigned_manpower += manpower_req
+	target_axis.is_stalled = false # Поставки снабжения ликвидируют позиционный тупик
+
+	# Эскалация напряженности
+	var tension_gain: float = 5.0 + (float(manpower_req) / 2000.0) * 2.0 + (float(heavy_req) / 100.0) * 1.5
+	front.tension = clampf(front.tension + tension_gain, 0.0, 100.0)
+
+	var wt_gain: float = 1.0 + (0.5 if heavy_req > 50 else 0.0) + (1.0 if manpower_req > 5000 else 0.0)
+	global_world_tension = clampf(global_world_tension + wt_gain, 5.0, 100.0)
+
+	# Политический эффект: демонстрация глобального влияния повышает легитимность
+	donor.legitimacy = clampf(donor.legitimacy + 0.5, 0.0, 100.0)
+
+	var aid_summary: String = _tr_str("PROXY_AID_SUCCESS_SUMMARY", {
+		"front": front.name,
+		"axis": target_axis.name,
+		"weapons": weapons_req,
+		"heavy": heavy_req,
+		"manpower": manpower_req
+	}, "Пакет военной помощи успешно доставлен на фронт «%s» (ось: %s)! Передано: %d стволов, %d ед. тяжелой техники, %d военных специалистов." % [front.name, target_axis.name, weapons_req, heavy_req, manpower_req])
+
+	return {
+		"success": true,
+		"message": aid_summary,
+		"front_id": front.front_id,
+		"axis_id": target_axis.axis_id,
+		"tension_added": tension_gain,
+		"world_tension_added": wt_gain,
+		"aid_delivered": {
+			"weapons": weapons_req,
+			"heavy": heavy_req,
+			"manpower": manpower_req,
+			"money": money_req
+		}
+	}
 
 
 
@@ -460,6 +657,20 @@ static func _simulate_axis_turn(
 		axis.target_region_ids.pop_front()
 		axis.progress = 0.0
 
+		# Если цели на оси закончились, но у обороняющегося ещё есть территории, динамически расширяем фронт
+		if axis.target_region_ids.is_empty() and defender != null:
+			var next_targets: Array[int] = find_adjacent_defender_regions(target_id, front.defender_tag, regions)
+			var occupied_targets: Array[int] = []
+			for other_axis in front.axes:
+				if other_axis != null and other_axis != axis:
+					for t in other_axis.target_region_ids:
+						occupied_targets.append(int(t))
+			for next_id in next_targets:
+				if not occupied_targets.has(next_id) and not axis.target_region_ids.has(next_id):
+					axis.target_region_ids.append(next_id)
+					if axis.target_region_ids.size() >= 3:
+						break
+
 		# Бонус к легитимности и морали
 		attacker.legitimacy = clampf(attacker.legitimacy + 2.5, 0.0, 100.0)
 		attacker.army_morale = clampf(attacker.army_morale + 4.0, 0.0, 100.0)
@@ -467,12 +678,19 @@ static func _simulate_axis_turn(
 			defender.legitimacy = clampf(defender.legitimacy - 3.5, 0.0, 100.0)
 			defender.army_morale = clampf(defender.army_morale - 5.0, 0.0, 100.0)
 
+		# Проверка нарушения демилитаризованной зоны (DMZ Breach Incident)
+		var dmz_info: Dictionary = _check_dmz_breach(target_id, attacker, defender, regions, current_turn)
+		if dmz_info.get("is_dmz", false):
+			rep["dmz_breach"] = dmz_info
+
+		var breach_extra: String = ("\n" + str(dmz_info.get("incident_summary", ""))) if dmz_info.get("is_dmz", false) else ""
+
 		rep["summary"] = _tr_str("FRONT_BREAKTHROUGH_SUMMARY", {
 			"axis_name": axis.name,
 			"region_id": target_id,
 			"region_name": rep["captured_region_name"],
 			"enemy_losses": def_casualties
-		}, "ПРОРЫВ ФРОНТА! Ось [%s] сломила оборону и заняла регион #%d (%s)! Потери врага: %d чел." % [axis.name, target_id, rep["captured_region_name"], def_casualties])
+		}, "ПРОРЫВ ФРОНТА! Ось [%s] сломила оборону и заняла регион #%d (%s)! Потери врага: %d чел." % [axis.name, target_id, rep["captured_region_name"], def_casualties]) + breach_extra
 	else:
 		var status_str = _tr_str("FRONT_STATUS_ADVANCING", {"delta": "%0.1f" % progress_gain}, "продвижение +%0.1f%%" % progress_gain) if progress_gain > 0 else _tr_str("FRONT_STATUS_STALLED", {}, "позиционный тупик")
 		rep["summary"] = _tr_str("FRONT_TURN_SUMMARY", {
@@ -491,6 +709,63 @@ static func _simulate_axis_turn(
 		rep["battle_incident"] = _create_battle_incident("encirclement_risk", axis, front, attacker, defender, current_turn)
 
 	return rep
+
+
+## Проверка и обработка инцидента нарушения демилитаризованной зоны (DMZ)
+static func _check_dmz_breach(
+	target_id: int,
+	attacker: CountryState,
+	defender: CountryState,
+	regions: Dictionary,
+	_current_turn: int = 1
+) -> Dictionary:
+	var bm: BoundaryManager = _get_boundary_manager()
+	var state_id: int = 0
+	var is_dmz: bool = false
+
+	if bm != null:
+		state_id = bm.province_to_state.get(target_id, 0)
+		is_dmz = bm.state_dmz_flags.get(state_id, false)
+
+	if not is_dmz and regions.has(target_id):
+		var reg = regions[target_id]
+		if reg is RegionData and reg.is_demilitarized:
+			is_dmz = true
+
+	if not is_dmz:
+		return {"is_dmz": false}
+
+	# Эскалация мировой напряженности за нарушение международного договора о DMZ
+	var tension_spike: float = 12.5
+	global_world_tension = clampf(global_world_tension + tension_spike, 5.0, 100.0)
+
+	# Снятие статуса DMZ с демилитаризованного сектора после ввода регулярных войск
+	if bm != null and state_id > 0:
+		bm.set_dmz_zone(state_id, false)
+	elif regions.has(target_id):
+		var reg = regions[target_id]
+		if reg is RegionData:
+			reg.is_demilitarized = false
+
+	var atk_tag: String = attacker.country_tag if attacker != null else "UNKNOWN"
+
+	var incident_text: String = _tr_str("DMZ_VIOLATION_TITLE", {
+		"state_id": state_id if state_id > 0 else target_id,
+		"tag": atk_tag
+	}, "КРИЗИС ДЕМИЛИТАРИЗОВАННОЙ ЗОНЫ: Войска [%s] нарушили международный статус и вошли в демилитаризованный сектор #%d!" % [atk_tag, state_id if state_id > 0 else target_id])
+
+	if attacker != null:
+		attacker.radicalization = clampf(attacker.radicalization + 3.0, 0.0, 100.0)
+	if defender != null:
+		defender.war_support_percent = clampf(defender.war_support_percent + 15.0, 0.0, 100.0)
+		defender.army_morale = clampf(defender.army_morale + 5.0, 0.0, 100.0)
+
+	return {
+		"is_dmz": true,
+		"state_id": state_id,
+		"tension_spike": tension_spike,
+		"incident_summary": incident_text
+	}
 
 
 static func _create_battle_incident(

@@ -15,6 +15,7 @@ const EVENTS_INDEX_PATH = "res://data/events/events_index.json"
 const GLOBAL_EVENTS_PATH = "res://data/events/global_events.json"
 const NEWS_EVENTS_PATH = "res://data/events/news_events.json"
 const COUNTRIES_BASE_DIR = "res://data/countries"
+const PATTERNS_REGISTRY_PATH = "res://data/patterns_registry.json"
 
 var all_events: Dictionary = {} # Key: String (event_id), Value: GameEvent
 var fired_events: Array[String] = []
@@ -24,6 +25,10 @@ var scheduled_events_queue: Array[Dictionary] = [] # Elements: { "event_id": Str
 var _events_index: Dictionary = {} # Key: String (event_id), Value: String (file path)
 var _file_cache: Dictionary = {}   # Key: String (file path), Value: Dictionary of event JSON dicts
 var _index_loaded: bool = false
+var _patterns_loaded: bool = false
+var _effect_opcodes: Dictionary = {}
+var _trigger_opcodes: Dictionary = {}
+var _known_effect_keys: Dictionary = {}
 
 
 ## Запланировать событие на конкретный ход в будущем
@@ -59,6 +64,7 @@ func evaluate_scheduled_events(current_turn: int) -> Array[GameEvent]:
 
 func _ready() -> void:
 	_load_index_if_needed()
+	_load_patterns_if_needed()
 
 
 func register_event(event: GameEvent) -> void:
@@ -220,183 +226,330 @@ func _check_event_triggers(event: GameEvent, state: CountryState, turn_number: i
 
 ## Применение последствий выбранного варианта в событии
 func resolve_event_option(event: GameEvent, option: Dictionary, state: CountryState) -> void:
-	# Списание стоимости выбора
+	if state == null or option == null:
+		return
+
+	# 1. Списание стоимости выбора (PC / CAP)
 	if option.has("required_pc"):
-		state.political_capital = maxf(state.political_capital - option["required_pc"], 0.0)
+		state.political_capital = maxf(state.political_capital - float(option["required_pc"]), 0.0)
 	if option.has("required_cap"):
-		state.current_cap = maxi(state.current_cap - option["required_cap"], 0)
+		state.current_cap = maxi(state.current_cap - int(option["required_cap"]), 0)
 
-	# Применение эффектов (поддержка обоих форматов: camel_case и TNO opcodes)
-	var effects = option.get("effects", {})
-	if effects.has("modify_pc"):
-		state.political_capital += float(effects["modify_pc"])
-	elif effects.has("MOD_PC"):
-		state.political_capital += float(effects["MOD_PC"])
-	elif effects.has("add_political_power"):
-		state.political_capital += float(effects["add_political_power"])
+	var effects: Dictionary = option.get("effects", {})
+	if effects.is_empty():
+		event_resolved.emit(event.event_id, str(option.get("option_id", "")))
+		return
 
-	if effects.has("modify_gdp"):
-		state.gdp_billions = maxf(state.gdp_billions + float(effects["modify_gdp"]), 0.1)
-	elif effects.has("MOD_GDP"):
-		state.gdp_billions = maxf(state.gdp_billions + float(effects["MOD_GDP"]), 0.1)
+	# 2. ПОЛИТИЧЕСКИЙ КАПИТАЛ И ЛЕГИТИМНОСТЬ
+	_apply_numeric_mod(effects, ["MOD_PC", "modify_pc", "add_political_power"], func(val: float) -> void:
+		state.political_capital = maxf(state.political_capital + val, 0.0)
+	)
+	_apply_numeric_mod(effects, ["MOD_LEGITIMACY", "modify_legitimacy"], func(val: float) -> void:
+		state.legitimacy = clampf(state.legitimacy + val, 0.0, 100.0)
+	)
+	_apply_numeric_mod(effects, ["MOD_RADICALIZATION", "modify_radicalization"], func(val: float) -> void:
+		state.radicalization = clampf(state.radicalization + val, 0.0, 100.0)
+	)
+	_apply_numeric_mod(effects, ["MOD_STABILITY", "modify_stability", "add_stability"], func(val: float) -> void:
+		var mult: float = 50.0 if absf(val) <= 1.0 else 0.5
+		state.legitimacy = clampf(state.legitimacy + (val * mult), 0.0, 100.0)
+	)
+	_apply_numeric_mod(effects, ["MOD_WAR_SUPPORT", "modify_war_support", "add_war_support"], func(val: float) -> void:
+		var ws: float = val * 100.0 if absf(val) <= 1.0 else val
+		state.war_support_percent = clampf(state.war_support_percent + ws, 0.0, 100.0)
+	)
 
-	if effects.has("modify_legitimacy"):
-		state.legitimacy = clampf(state.legitimacy + float(effects["modify_legitimacy"]), 0.0, 100.0)
-	elif effects.has("MOD_LEGITIMACY"):
-		state.legitimacy = clampf(state.legitimacy + float(effects["MOD_LEGITIMACY"]), 0.0, 100.0)
+	# 3. МАКРОЭКОНОМИКА (TOOLBOX THEORY)
+	_apply_numeric_mod(effects, ["MOD_GDP", "modify_gdp"], func(val: float) -> void:
+		state.gdp_billions = maxf(state.gdp_billions + val, 0.1)
+	)
+	_apply_numeric_mod(effects, ["MOD_INFLATION", "modify_inflation"], func(val: float) -> void:
+		state.inflation_rate = clampf(state.inflation_rate + val, -5.0, 100.0)
+	)
+	_apply_numeric_mod(effects, ["MOD_DEBT", "modify_debt"], func(val: float) -> void:
+		state.national_debt_billions = maxf(state.national_debt_billions + val, 0.0)
+	)
+	_apply_numeric_mod(effects, ["MOD_RESERVES", "modify_reserves"], func(val: float) -> void:
+		state.liquid_reserves_billions = maxf(state.liquid_reserves_billions + val, 0.0)
+	)
+	_apply_numeric_mod(effects, ["ADD_CIVILIAN_FACTORIES", "modify_civilian_factories"], func(val: float) -> void:
+		state.civilian_factories = maxi(state.civilian_factories + int(val), 0)
+	)
+	_apply_numeric_mod(effects, ["ADD_MILITARY_FACTORIES", "modify_military_factories"], func(val: float) -> void:
+		state.military_factories = maxi(state.military_factories + int(val), 0)
+	)
+	_apply_numeric_mod(effects, ["ADD_RESEARCH_POINTS", "modify_research_points"], func(val: float) -> void:
+		state.research_points = maxf(state.research_points + val, 0.0)
+	)
 
-	if effects.has("modify_radicalization"):
-		state.radicalization = clampf(state.radicalization + float(effects["modify_radicalization"]), 0.0, 100.0)
-	elif effects.has("MOD_RADICALIZATION"):
-		state.radicalization = clampf(state.radicalization + float(effects["MOD_RADICALIZATION"]), 0.0, 100.0)
+	# 4. ВОЕННЫЙ СЕКТОР И СКЛАДЫ СНАРЯЖЕНИЯ
+	_apply_numeric_mod(effects, ["MOD_MANPOWER", "modify_manpower", "add_manpower"], func(val: float) -> void:
+		state.manpower_pool = maxi(state.manpower_pool + int(val), 0)
+	)
+	_apply_numeric_mod(effects, ["MOD_STOCKPILE", "modify_weapons", "add_equipment_to_stockpile"], func(val: float) -> void:
+		state.infantry_weapons_stockpile = maxi(state.infantry_weapons_stockpile + int(val), 0)
+	)
+	_apply_numeric_mod(effects, ["MOD_HEAVY_EQUIPMENT", "modify_heavy_equipment"], func(val: float) -> void:
+		state.heavy_equipment_stockpile = maxi(state.heavy_equipment_stockpile + int(val), 0)
+	)
 
-	if effects.has("modify_stability"):
-		state.legitimacy = clampf(state.legitimacy + float(effects["modify_stability"]) * 50.0, 0.0, 100.0)
-	elif effects.has("MOD_STABILITY"):
-		state.legitimacy = clampf(state.legitimacy + float(effects["MOD_STABILITY"]) * 50.0, 0.0, 100.0)
-	elif effects.has("add_stability"):
-		var stab_val = float(effects["add_stability"])
-		var mult = 50.0 if absf(stab_val) <= 1.0 else 0.5
-		state.legitimacy = clampf(state.legitimacy + (stab_val * mult), 0.0, 100.0)
-
-	if effects.has("modify_war_support"):
-		state.war_support_percent = clampf(state.war_support_percent + float(effects["modify_war_support"]), 0.0, 100.0)
-	elif effects.has("MOD_WAR_SUPPORT"):
-		var ws_val = float(effects["MOD_WAR_SUPPORT"])
-		if absf(ws_val) <= 1.0:
-			ws_val *= 100.0
-		state.war_support_percent = clampf(state.war_support_percent + ws_val, 0.0, 100.0)
-	elif effects.has("add_war_support"):
-		var ws_val2 = float(effects["add_war_support"])
-		if absf(ws_val2) <= 1.0:
-			ws_val2 *= 100.0
-		state.war_support_percent = clampf(state.war_support_percent + ws_val2, 0.0, 100.0)
-
-	if effects.has("modify_reserves"):
-		state.liquid_reserves_billions = maxf(state.liquid_reserves_billions + float(effects["modify_reserves"]), 0.0)
-	elif effects.has("MOD_RESERVES"):
-		state.liquid_reserves_billions = maxf(state.liquid_reserves_billions + float(effects["MOD_RESERVES"]), 0.0)
-
-	if effects.has("modify_manpower"):
-		state.manpower_pool = maxi(state.manpower_pool + int(effects["modify_manpower"]), 0)
-	elif effects.has("MOD_MANPOWER"):
-		state.manpower_pool = maxi(state.manpower_pool + int(effects["MOD_MANPOWER"]), 0)
-	elif effects.has("add_manpower"):
-		state.manpower_pool = maxi(state.manpower_pool + int(effects["add_manpower"]), 0)
-
-	if effects.has("modify_weapons"):
-		state.infantry_weapons_stockpile = maxi(state.infantry_weapons_stockpile + int(effects["modify_weapons"]), 0)
-	elif effects.has("MOD_WEAPONS"):
-		state.infantry_weapons_stockpile = maxi(state.infantry_weapons_stockpile + int(effects["MOD_WEAPONS"]), 0)
-
-	if effects.has("modify_heavy_equipment"):
-		state.heavy_equipment_stockpile = maxi(state.heavy_equipment_stockpile + int(effects["modify_heavy_equipment"]), 0)
-	elif effects.has("MOD_HEAVY_EQUIPMENT"):
-		state.heavy_equipment_stockpile = maxi(state.heavy_equipment_stockpile + int(effects["MOD_HEAVY_EQUIPMENT"]), 0)
-
+	# 5. ФРАКЦИИ, ПАРТИИ И ЛИДЕРЫ
 	if effects.has("modify_factions"):
 		var f_mods: Dictionary = effects["modify_factions"]
-		for f_key in f_mods.keys():
-			state.modify_faction_loyalty(f_key, float(f_mods[f_key]))
+		for f_key: Variant in f_mods.keys():
+			state.modify_faction_loyalty(str(f_key), float(f_mods[f_key]))
 
+	if effects.has("SET_LEADER") or effects.has("set_leader"):
+		state.leader_name = str(effects.get("SET_LEADER", effects.get("set_leader")))
+
+	if effects.has("CHANGE_IDEOLOGY") or effects.has("set_ruling_ideology") or effects.has("ruling_ideology"):
+		state.ruling_ideology = str(effects.get("CHANGE_IDEOLOGY", effects.get("set_ruling_ideology", effects.get("ruling_ideology"))))
+
+	# 6. НАРРАТИВНЫЕ ФЛАГИ, ПРАВИЛА И КАРТА
 	if effects.has("set_flags"):
 		var flags_to_set: Dictionary = effects["set_flags"]
-		for f_key in flags_to_set.keys():
-			state.set_flag(f_key, flags_to_set[f_key])
+		for f_key: Variant in flags_to_set.keys():
+			state.set_flag(str(f_key), flags_to_set[f_key])
 
-	if effects.has("SET_FLAG"):
-		var single_flag = str(effects["SET_FLAG"])
-		state.set_flag(single_flag, true)
-
-	if effects.has("set_country_flag"):
-		var cf = effects["set_country_flag"]
+	if effects.has("SET_FLAG") or effects.has("set_country_flag"):
+		var cf: Variant = effects.get("SET_FLAG", effects.get("set_country_flag"))
 		if cf is String:
-			state.set_flag(cf, true)
+			state.set_flag(str(cf), true)
 		elif cf is Dictionary:
-			for k in cf:
+			for k: Variant in cf.keys():
 				state.set_flag(str(k), cf[k])
 
-	if effects.has("clr_country_flag"):
-		state.story_flags.erase(str(effects["clr_country_flag"]))
-	if effects.has("CLR_FLAG"):
-		state.story_flags.erase(str(effects["CLR_FLAG"]))
+	if effects.has("CLR_FLAG") or effects.has("clr_country_flag"):
+		var clr_val: Variant = effects.get("CLR_FLAG", effects.get("clr_country_flag"))
+		state.story_flags.erase(str(clr_val))
 
-	# Территориальные изменения и аннексия
-	if effects.has("transfer_state"):
-		var tid = int(effects["transfer_state"])
+	if effects.has("set_rule") or effects.has("SET_RULE"):
+		var r_k: String = str(effects.get("SET_RULE", effects.get("set_rule")))
+		state.set_flag("rule_" + r_k, true)
+
+	if effects.has("transfer_state") or effects.has("TRANSFER_STATE"):
+		var tid: int = int(effects.get("TRANSFER_STATE", effects.get("transfer_state")))
 		territory_transfer_requested.emit(tid, state.country_tag)
-	if effects.has("TRANSFER_STATE"):
-		var tid = int(effects["TRANSFER_STATE"])
-		territory_transfer_requested.emit(tid, state.country_tag)
+
 	if effects.has("transfer_states"):
-		for st_val in effects["transfer_states"]:
+		for st_val: Variant in effects["transfer_states"]:
 			territory_transfer_requested.emit(int(st_val), state.country_tag)
 
-	if effects.has("annex_country"):
-		var victim = str(effects["annex_country"]).to_upper()
-		country_annexation_requested.emit(victim, state.country_tag)
-	if effects.has("ANNEX_COUNTRY"):
-		var victim = str(effects["ANNEX_COUNTRY"]).to_upper()
+	if effects.has("annex_country") or effects.has("ANNEX_COUNTRY"):
+		var victim: String = str(effects.get("ANNEX_COUNTRY", effects.get("annex_country"))).to_upper()
 		country_annexation_requested.emit(victim, state.country_tag)
 
-	if effects.has("set_rule"):
-		var r_k = str(effects["set_rule"])
-		state.set_flag("rule_" + r_k, true)
-	if effects.has("SET_RULE"):
-		var r_k = str(effects["SET_RULE"])
-		state.set_flag("rule_" + r_k, true)
+	# 7. ДЕРЕВЬЯ ФОКУСОВ И СУПЕРИВЕНТЫ
+	if effects.has("load_focus_tree") or effects.has("LOAD_FOCUS_TREE"):
+		state.set_flag("pending_focus_tree_load", str(effects.get("LOAD_FOCUS_TREE", effects.get("load_focus_tree"))))
 
-	if effects.has("add_equipment_to_stockpile"):
-		state.infantry_weapons_stockpile = maxi(state.infantry_weapons_stockpile + int(effects["add_equipment_to_stockpile"]), 0)
-	if effects.has("MOD_STOCKPILE"):
-		state.infantry_weapons_stockpile = maxi(state.infantry_weapons_stockpile + int(effects["MOD_STOCKPILE"]), 0)
+	if effects.has("super_event") or effects.has("SUPER_EVENT") or effects.has("FIRE_SUPER_EVENT") or effects.has("fire_super_event"):
+		var se_id: String = str(effects.get("FIRE_SUPER_EVENT", effects.get("fire_super_event", effects.get("SUPER_EVENT", effects.get("super_event")))))
+		super_event_triggered.emit(se_id)
 
-	# Последующие связанные события (chained follow-up events с учетом days/turns)
+	# 8. ЦЕПОЧКИ ДЕПЕШ И НОВОСТЕЙ
 	if effects.has("country_events"):
-		for follow_id in effects["country_events"]:
+		for follow_id: Variant in effects["country_events"]:
 			_dispatch_or_schedule_event(follow_id, state)
-
 	if effects.has("country_event"):
 		_dispatch_or_schedule_event(effects["country_event"], state)
+	if effects.has("FIRE_EVENT"):
+		_dispatch_or_schedule_event(effects["FIRE_EVENT"], state)
 
 	if effects.has("news_events"):
-		for news_id in effects["news_events"]:
+		for news_id: Variant in effects["news_events"]:
 			_dispatch_or_schedule_event(news_id, state)
-
 	if effects.has("news_event"):
 		_dispatch_or_schedule_event(effects["news_event"], state)
+	if effects.has("FIRE_NEWS"):
+		_dispatch_or_schedule_event(effects["FIRE_NEWS"], state)
 
-	if effects.has("super_event"):
-		super_event_triggered.emit(str(effects["super_event"]))
-	if effects.has("SUPER_EVENT"):
-		super_event_triggered.emit(str(effects["SUPER_EVENT"]))
-	if effects.has("FIRE_SUPER_EVENT"):
-		super_event_triggered.emit(str(effects["FIRE_SUPER_EVENT"]))
-	if effects.has("fire_super_event"):
-		super_event_triggered.emit(str(effects["fire_super_event"]))
-	if effects.has("load_focus_tree"):
-		state.set_flag("pending_focus_tree_load", str(effects["load_focus_tree"]))
-	if effects.has("LOAD_FOCUS_TREE"):
-		state.set_flag("pending_focus_tree_load", str(effects["LOAD_FOCUS_TREE"]))
+	# 8.5. ПЕРЕМЕННЫЕ И ФЛАГИ СОСТОЯНИЯ (CLAUSEWITZ VARIABLES)
+	if effects.has("set_variable"):
+		var v_data: Variant = effects["set_variable"]
+		if v_data is Dictionary:
+			var v_name: String = str(v_data.get("which", v_data.get("var", "")))
+			var v_val: float = float(v_data.get("value", 0.0))
+			if not v_name.is_empty():
+				state.set_custom_variable(v_name, v_val)
+		elif v_data is Array:
+			for item in v_data:
+				if item is Dictionary:
+					var v_name: String = str(item.get("which", item.get("var", "")))
+					var v_val: float = float(item.get("value", 0.0))
+					if not v_name.is_empty():
+						state.set_custom_variable(v_name, v_val)
 
-	# Валидация неизвестных кодов эффектов
-	const KNOWN_EFFECT_KEYS: Array[String] = [
-		"modify_pc", "MOD_PC", "add_political_power", "modify_gdp", "MOD_GDP", "modify_legitimacy", "MOD_LEGITIMACY",
-		"modify_radicalization", "MOD_RADICALIZATION", "modify_stability", "MOD_STABILITY", "add_stability",
-		"modify_war_support", "MOD_WAR_SUPPORT", "add_war_support", "modify_reserves", "MOD_RESERVES",
-		"modify_manpower", "MOD_MANPOWER", "add_manpower", "modify_weapons", "MOD_WEAPONS",
-		"modify_heavy_equipment", "MOD_HEAVY_EQUIPMENT", "modify_factions", "set_flags",
-		"SET_FLAG", "set_country_flag", "clr_country_flag", "CLR_FLAG", "transfer_state", "TRANSFER_STATE",
-		"transfer_states", "annex_country", "ANNEX_COUNTRY", "set_rule", "SET_RULE",
-		"add_equipment_to_stockpile", "MOD_STOCKPILE", "country_events", "country_event",
-		"news_events", "news_event", "super_event", "SUPER_EVENT", "FIRE_SUPER_EVENT", "fire_super_event",
-		"load_focus_tree", "LOAD_FOCUS_TREE", "log"
-	]
-	for k in effects.keys():
-		if not KNOWN_EFFECT_KEYS.has(str(k)):
-			push_warning("[EventManager] Unhandled effect opcode: %s (value: %s)" % [str(k), str(effects[k])])
+	if effects.has("add_to_variable"):
+		var v_data: Variant = effects["add_to_variable"]
+		if v_data is Dictionary:
+			var v_name: String = str(v_data.get("which", v_data.get("var", "")))
+			var v_val: float = float(v_data.get("value", 0.0))
+			if not v_name.is_empty():
+				state.set_custom_variable(v_name, state.get_custom_variable(v_name) + v_val)
+		elif v_data is Array:
+			for item in v_data:
+				if item is Dictionary:
+					var v_name: String = str(item.get("which", item.get("var", "")))
+					var v_val: float = float(item.get("value", 0.0))
+					if not v_name.is_empty():
+						state.set_custom_variable(v_name, state.get_custom_variable(v_name) + v_val)
 
-	event_resolved.emit(event.event_id, option.get("option_id", ""))
+	if effects.has("subtract_from_variable"):
+		var v_data: Variant = effects["subtract_from_variable"]
+		if v_data is Dictionary:
+			var v_name: String = str(v_data.get("which", v_data.get("var", "")))
+			var v_val: float = float(v_data.get("value", 0.0))
+			if not v_name.is_empty():
+				state.set_custom_variable(v_name, state.get_custom_variable(v_name) - v_val)
+		elif v_data is Array:
+			for item in v_data:
+				if item is Dictionary:
+					var v_name: String = str(item.get("which", item.get("var", "")))
+					var v_val: float = float(item.get("value", 0.0))
+					if not v_name.is_empty():
+						state.set_custom_variable(v_name, state.get_custom_variable(v_name) - v_val)
+
+	if effects.has("clamp_variable"):
+		var v_data: Variant = effects["clamp_variable"]
+		if v_data is Dictionary:
+			var v_name: String = str(v_data.get("var", v_data.get("which", "")))
+			var v_min: float = float(v_data.get("min", -999999.0))
+			var v_max: float = float(v_data.get("max", 999999.0))
+			if not v_name.is_empty():
+				var cur_v: float = state.get_custom_variable(v_name)
+				state.set_custom_variable(v_name, clampf(cur_v, v_min, v_max))
+
+	# 8.6. ПОЛИТИЧЕСКИЕ ПАРТИИ И ИДЕОЛОГИИ
+	for pop_k in ["add_popularity", "modify_popularity", "tno_increase_popularity"]:
+		if effects.has(pop_k):
+			var pop_entry: Variant = effects[pop_k]
+			if pop_entry is Dictionary:
+				var ideo_key: String = str(pop_entry.get("ideology", pop_entry.get("which", ""))).to_lower()
+				var pop_val: float = float(pop_entry.get("popularity", pop_entry.get("value", 0.0)))
+				if absf(pop_val) <= 1.0:
+					pop_val *= 100.0
+				state.modify_party_popularity(ideo_key, pop_val)
+			elif pop_entry is Array:
+				for p_item in pop_entry:
+					if p_item is Dictionary:
+						var ideo_key: String = str(p_item.get("ideology", p_item.get("which", ""))).to_lower()
+						var pop_val: float = float(p_item.get("popularity", p_item.get("value", 0.0)))
+						if absf(pop_val) <= 1.0:
+							pop_val *= 100.0
+						state.modify_party_popularity(ideo_key, pop_val)
+
+	if effects.has("tno_decrease_popularity"):
+		var pop_entry: Variant = effects["tno_decrease_popularity"]
+		if pop_entry is Dictionary:
+			var ideo_key: String = str(pop_entry.get("ideology", pop_entry.get("which", ""))).to_lower()
+			var pop_val: float = float(pop_entry.get("popularity", pop_entry.get("value", 0.0)))
+			if absf(pop_val) <= 1.0:
+				pop_val *= 100.0
+			state.modify_party_popularity(ideo_key, -absf(pop_val))
+
+	# 8.7. НАЦИОНАЛЬНЫЕ ДУХИ И ИДЕИ (NATIONAL SPIRITS / IDEAS)
+	for idea_add_k in ["add_ideas", "add_idea"]:
+		if effects.has(idea_add_k):
+			var raw_idea: Variant = effects[idea_add_k]
+			if raw_idea is String:
+				state.add_national_spirit(raw_idea)
+				state.set_flag("idea_" + raw_idea, true)
+			elif raw_idea is Array:
+				for id_item in raw_idea:
+					var id_str: String = str(id_item)
+					state.add_national_spirit(id_str)
+					state.set_flag("idea_" + id_str, true)
+
+	for idea_rem_k in ["remove_ideas", "remove_idea"]:
+		if effects.has(idea_rem_k):
+			var raw_idea: Variant = effects[idea_rem_k]
+			if raw_idea is String:
+				state.remove_national_spirit(raw_idea)
+				state.set_flag("idea_" + raw_idea, false)
+			elif raw_idea is Array:
+				for id_item in raw_idea:
+					var id_str: String = str(id_item)
+					state.remove_national_spirit(id_str)
+					state.set_flag("idea_" + id_str, false)
+
+	if effects.has("swap_ideas"):
+		var swap_data: Variant = effects["swap_ideas"]
+		if swap_data is Dictionary:
+			var rem_id: String = str(swap_data.get("remove_idea", ""))
+			var add_id: String = str(swap_data.get("add_idea", ""))
+			if not rem_id.is_empty():
+				state.remove_national_spirit(rem_id)
+				state.set_flag("idea_" + rem_id, false)
+			if not add_id.is_empty():
+				state.add_national_spirit(add_id)
+				state.set_flag("idea_" + add_id, true)
+
+	# 8.8. КРЕДИТНЫЙ РЕЙТИНГ И МАКРОЭКОНОМИКА TNO
+	if effects.has("econ_raise_credit_rating") and bool(effects["econ_raise_credit_rating"]):
+		state.credit_rating_index = mini(state.credit_rating_index + 1, state.credit_rating_max)
+	if effects.has("econ_lower_credit_rating") and bool(effects["econ_lower_credit_rating"]):
+		state.credit_rating_index = maxi(state.credit_rating_index - 1, state.credit_rating_min)
+	if effects.has("econ_set_credit_rating"):
+		var new_r: int = int(effects.get("temp_credit_rating", effects["econ_set_credit_rating"]))
+		state.credit_rating_index = clampi(new_r, state.credit_rating_min, state.credit_rating_max)
+	if effects.has("econ_add_liquid_reserves"):
+		state.liquid_reserves_billions += float(effects["econ_add_liquid_reserves"])
+	if effects.has("econ_subtract_liquid_reserves"):
+		state.liquid_reserves_billions = maxf(state.liquid_reserves_billions - float(effects["econ_subtract_liquid_reserves"]), 0.0)
+	if effects.has("econ_give_inflation_monthly_temp"):
+		state.inflation_rate = clampf(state.inflation_rate + float(effects["econ_give_inflation_monthly_temp"]), 0.0, 1.0)
+
+	# 8.9. АННЕКСИЯ И ПЕРЕДАЧА СУВЕРЕНИТЕТА (TNO Annexation & Unification)
+	if effects.has("annex_country_and_inherit") or effects.has("annex_country"):
+		var raw_annex: Variant = effects.get("annex_country_and_inherit", effects.get("annex_country", ""))
+		var annex_target: String = ""
+		var transfer_troops: bool = true
+		if raw_annex is String:
+			annex_target = raw_annex.strip_edges().to_upper()
+		elif raw_annex is Dictionary:
+			annex_target = str(raw_annex.get("target", "")).strip_edges().to_upper()
+			transfer_troops = bool(raw_annex.get("transfer_troops", true))
+
+		if not annex_target.is_empty():
+			state.set_flag("annexed_" + annex_target, true)
+			var main_loop = Engine.get_main_loop()
+			if main_loop is SceneTree and main_loop.root != null:
+				var tm = main_loop.root.find_child("TurnManager", true, false)
+				if tm != null:
+					if tm.countries_world_state.has(annex_target):
+						var victim_state: CountryState = tm.countries_world_state[annex_target]
+						if transfer_troops and victim_state != null:
+							state.manpower_pool += int(float(victim_state.manpower_pool) * 0.5)
+							state.infantry_weapons_stockpile += int(float(victim_state.infantry_weapons_stockpile) * 0.7)
+							state.heavy_equipment_stockpile += int(float(victim_state.heavy_equipment_stockpile) * 0.7)
+					for reg_id in tm.regions_world_state.keys():
+						var reg = tm.regions_world_state[reg_id]
+						if reg is RegionData and reg.owner_tag == annex_target:
+							reg.owner_tag = state.country_tag
+					if tm.boundary_manager != null and tm.boundary_manager.has_method("transfer_country_sovereignty"):
+						tm.boundary_manager.transfer_country_sovereignty(annex_target, state.country_tag)
+
+	# 8.10. КАСТОМНЫЙ ТУЛТИП (Informational Tooltip)
+	if effects.has("custom_effect_tooltip"):
+		state.set_flag("last_effect_tooltip", str(effects["custom_effect_tooltip"]))
+
+	# 9. Динамическая валидация кодов эффектов через реестр паттернов
+	_load_patterns_if_needed()
+	for k: Variant in effects.keys():
+		var k_str: String = str(k)
+		if not _known_effect_keys.has(k_str):
+			push_warning("[EventManager] Unhandled effect opcode: %s (value: %s)" % [k_str, str(effects[k])])
+
+	event_resolved.emit(event.event_id, str(option.get("option_id", "")))
+
+
+## Вспомогательный метод полиморфного применения численных эффектов
+func _apply_numeric_mod(effects: Dictionary, keys: Array[String], apply_cb: Callable) -> void:
+	for k: String in keys:
+		if effects.has(k):
+			apply_cb.call(float(effects[k]))
+			return
 
 
 func _load_index_if_needed() -> void:
@@ -406,6 +559,54 @@ func _load_index_if_needed() -> void:
 	if FileAccess.file_exists(EVENTS_INDEX_PATH):
 		_events_index = _read_json_file(EVENTS_INDEX_PATH)
 		print("[EventManager] Loaded master events index: %d entries." % _events_index.size())
+
+
+func _load_patterns_if_needed() -> void:
+	if _patterns_loaded:
+		return
+	_patterns_loaded = true
+
+	const BASE_KNOWN_EFFECTS: Array[String] = [
+		"modify_pc", "MOD_PC", "add_political_power", "modify_gdp", "MOD_GDP", "modify_legitimacy", "MOD_LEGITIMACY",
+		"modify_radicalization", "MOD_RADICALIZATION", "modify_stability", "MOD_STABILITY", "add_stability",
+		"modify_war_support", "MOD_WAR_SUPPORT", "add_war_support", "modify_reserves", "MOD_RESERVES",
+		"MOD_INFLATION", "modify_inflation", "MOD_DEBT", "modify_debt",
+		"ADD_CIVILIAN_FACTORIES", "modify_civilian_factories", "ADD_MILITARY_FACTORIES", "modify_military_factories",
+		"ADD_RESEARCH_POINTS", "modify_research_points", "SET_LEADER", "set_leader",
+		"CHANGE_IDEOLOGY", "set_ruling_ideology", "ruling_ideology",
+		"modify_manpower", "MOD_MANPOWER", "add_manpower", "modify_weapons", "MOD_WEAPONS",
+		"modify_heavy_equipment", "MOD_HEAVY_EQUIPMENT", "modify_factions", "set_flags",
+		"SET_FLAG", "set_country_flag", "clr_country_flag", "CLR_FLAG", "transfer_state", "TRANSFER_STATE",
+		"transfer_states", "annex_country", "ANNEX_COUNTRY", "set_rule", "SET_RULE",
+		"add_equipment_to_stockpile", "MOD_STOCKPILE", "country_events", "country_event", "FIRE_EVENT",
+		"news_events", "news_event", "FIRE_NEWS", "super_event", "SUPER_EVENT", "FIRE_SUPER_EVENT", "fire_super_event",
+		"load_focus_tree", "LOAD_FOCUS_TREE", "log",
+		"set_variable", "add_to_variable", "subtract_from_variable", "clamp_variable",
+		"add_popularity", "modify_popularity", "tno_increase_popularity", "tno_decrease_popularity",
+		"add_ideas", "add_idea", "remove_ideas", "remove_idea", "swap_ideas",
+		"econ_raise_credit_rating", "econ_lower_credit_rating", "econ_set_credit_rating", "econ_initialize_credit_rating_system",
+		"econ_add_liquid_reserves", "econ_subtract_liquid_reserves", "econ_give_inflation_monthly_temp",
+		"annex_country_and_inherit", "custom_effect_tooltip"
+	]
+	for k: String in BASE_KNOWN_EFFECTS:
+		_known_effect_keys[k] = true
+
+	if FileAccess.file_exists(PATTERNS_REGISTRY_PATH):
+		var reg_data = _read_json_file(PATTERNS_REGISTRY_PATH)
+		var opcodes = reg_data.get("opcodes", {})
+		if opcodes is Dictionary:
+			var effs = opcodes.get("effects", {})
+			if effs is Dictionary:
+				_effect_opcodes = effs
+				for raw_k: Variant in effs.keys():
+					var k_str: String = str(raw_k)
+					var op_str: String = str(effs[raw_k])
+					_known_effect_keys[k_str] = true
+					_known_effect_keys[op_str] = true
+			var trgs = opcodes.get("triggers", {})
+			if trgs is Dictionary:
+				_trigger_opcodes = trgs
+		print("[EventManager] Loaded patterns registry: %d effect opcodes registered." % _effect_opcodes.size())
 
 
 func _read_json(res_path: String) -> Variant:

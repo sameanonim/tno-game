@@ -553,7 +553,15 @@ func _load_decisions_for_player() -> void:
 		dynamic_decs = loader.load_country_decisions(tag)
 
 	if not dynamic_decs.is_empty():
-		all_decisions = dynamic_decs
+		all_decisions = dynamic_decs.duplicate(true)
+		var existing_ids: Dictionary = {}
+		for d in all_decisions:
+			existing_ids[str(d.get("id", ""))] = true
+		for fd in fallback_decisions:
+			var fid = str(fd.get("id", ""))
+			if not existing_ids.has(fid):
+				all_decisions.append(fd.duplicate(true))
+				existing_ids[fid] = true
 	else:
 		all_decisions = fallback_decisions.duplicate(true)
 
@@ -837,20 +845,26 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	vbox.add_theme_constant_override("separation", 3)
 	hbox.add_child(vbox)
 
+	var raw_cat = str(dec.get("category_name", ""))
+	var cat_key = "DEC_" + dec_id.to_upper() + "_CAT"
 	var cat_lbl = Label.new()
-	cat_lbl.text = dec.get("category_name", _tr("DEC_DEFAULT_CAT", "ОПЕРАЦИЯ"))
+	cat_lbl.text = _tr(cat_key, _tr(raw_cat, raw_cat)) if not raw_cat.is_empty() else _tr("DEC_DEFAULT_CAT", "ОПЕРАЦИЯ")
 	cat_lbl.add_theme_font_size_override("font_size", 10)
 	cat_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
 	vbox.add_child(cat_lbl)
 
+	var raw_title = str(dec.get("title", ""))
+	var title_key = "DEC_" + dec_id.to_upper() + "_TITLE"
 	var title_lbl = Label.new()
-	title_lbl.text = dec["title"]
+	title_lbl.text = _tr(title_key, _tr(raw_title, raw_title))
 	title_lbl.add_theme_font_size_override("font_size", 13)
 	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_PRIMARY if can_afford else TNOTheme.COLOR_TEXT_SECONDARY)
 	vbox.add_child(title_lbl)
 
+	var raw_desc = str(dec.get("description", ""))
+	var desc_key = "DEC_" + dec_id.to_upper() + "_DESC"
 	var desc_lbl = Label.new()
-	desc_lbl.text = dec["description"]
+	desc_lbl.text = _tr(desc_key, _tr(raw_desc, raw_desc))
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	desc_lbl.add_theme_font_size_override("font_size", 11)
 	desc_lbl.add_theme_color_override("font_color", Color(0.65, 0.75, 0.70))
@@ -954,11 +968,16 @@ func _execute_decision(dec: Dictionary) -> void:
 		for cf in eff["clear_flags"]:
 			player_state.set_flag(cf, false)
 
-	var log_msg = str(eff.get("log", "Решение утверждено."))
+	var raw_log = str(eff.get("log", "Решение утверждено."))
+	var log_key = "DEC_" + dec_id.to_upper() + "_LOG"
+	var log_msg = _tr(log_key, _tr(raw_log, raw_log))
+	var title_key = "DEC_" + dec_id.to_upper() + "_TITLE"
+	var title_str = _tr(title_key, _tr(str(dec.get("title", "")), str(dec.get("title", ""))))
 	if log_rich_text != null:
-		log_rich_text.text = "[color=#44d990]>> [ХОД %d] ИНИЦИАТИВА [%s]: %s[/color]\n%s" % [
+		var init_fmt = _tr("DEC_LOG_EXECUTED", "[color=#44d990]>> [ХОД %d] ИНИЦИАТИВА [%s]: %s[/color]\n%s")
+		log_rich_text.text = init_fmt % [
 			current_turn,
-			dec["title"].to_upper(),
+			title_str.to_upper(),
 			log_msg,
 			log_rich_text.text
 		]

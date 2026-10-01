@@ -61,7 +61,7 @@ uniform vec4 coastline_color : source_color = vec4(0.00, 0.90, 1.00, 0.95);
 // ==============================================================================
 uniform bool enable_political_vignette = true;
 uniform bool enable_inner_falloff = true;
-uniform float inner_falloff_dim : hint_range(0.0, 0.6, 0.02) = 0.35;
+uniform float inner_falloff_dim : hint_range(0.0, 0.6, 0.02) = 0.32;
 uniform float border_glow_boost : hint_range(1.0, 2.0, 0.05) = 1.35;
 
 uniform bool enable_isohypses = true;

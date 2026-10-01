@@ -158,7 +158,8 @@ func update_state(state: CountryState, turn_manager: TurnManager = null) -> void
 	if lbl_econ != null:
 		var eco_type = EconomyEngine.get_economy_type(state)
 		if eco_type == EconomyEngine.EconomyType.WARLORD:
-			lbl_econ.text = "$%.1fB | КАЗНА: $%.2fB [%s]" % [state.gdp_billions, state.liquid_reserves_billions, state.get_credit_rating()]
+			var eco_fmt = tr("$%.1fB | КАЗНА: $%.2fB [%s]")
+			lbl_econ.text = eco_fmt % [state.gdp_billions, state.liquid_reserves_billions, state.get_credit_rating()]
 		else:
 			lbl_econ.text = "$%.1fB / $%.1fB [%s]" % [state.gdp_billions, state.national_debt_billions, state.get_credit_rating()]
 
