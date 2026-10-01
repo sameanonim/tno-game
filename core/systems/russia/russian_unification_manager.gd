@@ -36,6 +36,16 @@ signal great_trial_prepared(readiness_pct: float)
 signal sablin_balance_shifted(new_idealism: float)
 
 # ==============================================================================
+# ДЕТЕРМИНИРОВАННЫЙ ГЕНЕРАТОР
+# ==============================================================================
+static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
+	var s: int = (seed_val * 73856093) ^ 1274126177
+	s = (s ^ (s >> 13)) * 19349663
+	var norm: float = float(s & 0x7FFFFFFF) / float(0x7FFFFFFF)
+	return min_val + (norm * (max_val - min_val))
+
+
+# ==============================================================================
 # ПЕРЕЧИСЛЕНИЯ И КОНСТАНТЫ СТАДИЙ
 # ==============================================================================
 enum SmutaStage {
@@ -447,7 +457,8 @@ func execute_diplomatic_summit(target_tag: String, turn_manager: TurnManager) ->
 	var t_power = t_state.army_readiness * 0.5 + t_state.legitimacy * 0.5
 	var ratio = p_power / maxf(t_power, 1.0)
 
-	var roll = randf_range(0.8, 1.2) * ratio
+	var summit_seed: int = (turn_manager.current_turn * 73856093) ^ (player_tag.hash() * 19349663) ^ target_tag.hash()
+	var roll = _get_deterministic_factor(summit_seed, 0.8, 1.2) * ratio
 	if roll >= 0.90:
 		res["success"] = true
 		res["annexed"] = true

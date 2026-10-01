@@ -138,23 +138,30 @@ class ClausewitzParser:
 
 
 def parse_clausewitz_file(file_path: str) -> Dict[str, Any]:
-    with open(file_path, "r", encoding="utf-8-sig", errors="replace") as f:
-        content = f.read()
-    tokens = ClausewitzTokenizer.tokenize(content)
-    parser = ClausewitzParser(tokens)
-    return parser.parse()
+    try:
+        with open(file_path, "r", encoding="utf-8-sig", errors="replace") as f:
+            content = f.read()
+        tokens = ClausewitzTokenizer.tokenize(content)
+        parser = ClausewitzParser(tokens)
+        return parser.parse()
+    except Exception as e:
+        print(f"[ERROR] Failed parsing Clausewitz file '{file_path}': {e}", file=sys.stderr)
+        return {}
 
 
 def parse_localization_yml(file_path: str) -> Dict[str, str]:
     """Parses Paradox .yml localization files."""
     loc_data = {}
     key_val_pattern = re.compile(r'^\s*([A-Za-z0-9_.\-]+):[0-9]*\s*"(.*)"\s*$')
-    with open(file_path, "r", encoding="utf-8-sig", errors="replace") as f:
-        for line in f:
-            match = key_val_pattern.match(line)
-            if match:
-                k, v = match.groups()
-                loc_data[k] = v.replace("\\n", "\n")
+    try:
+        with open(file_path, "r", encoding="utf-8-sig", errors="replace") as f:
+            for line in f:
+                match = key_val_pattern.match(line)
+                if match:
+                    k, v = match.groups()
+                    loc_data[k] = v.replace("\\n", "\n")
+    except Exception as e:
+        print(f"[ERROR] Failed parsing localization file '{file_path}': {e}", file=sys.stderr)
     return loc_data
 
 

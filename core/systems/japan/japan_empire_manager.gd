@@ -106,6 +106,23 @@ var sphere_members: Dictionary = {
 
 var turn_manager_ref: TurnManager = null
 var player_state_ref: CountryState = null
+var _current_turn: int = 1
+
+
+# ==============================================================================
+# ДЕТЕРМИНИРОВАННЫЙ ГЕНЕРАТОР ПСЕВДОСЛУЧАЙНЫХ ВЕЛИЧИН
+# ==============================================================================
+static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
+	var s: int = (seed_val * 73856093) ^ 1274126177
+	s = (s ^ (s >> 13)) * 19349663
+	var norm: float = float(s & 0x7FFFFFFF) / float(0x7FFFFFFF)
+	return min_val + (norm * (max_val - min_val))
+
+
+static func _get_deterministic_norm(seed_val: int) -> float:
+	var s: int = (seed_val * 73856093) ^ 1274126177
+	s = (s ^ (s >> 13)) * 19349663
+	return float(s & 0x7FFFFFFF) / float(0x7FFFFFFF)
 
 
 func _ready() -> void:
@@ -122,6 +139,7 @@ func initialize(tm: TurnManager, p_state: CountryState) -> void:
 # ПОШАГОВЫЙ ЦИКЛ СИМУЛЯЦИИ (Turn Process)
 # ==============================================================================
 func process_turn(turn_num: int, p_state: CountryState = null, _world_states: Dictionary = {}) -> void:
+	_current_turn = turn_num
 	if p_state != null:
 		player_state_ref = p_state
 
@@ -143,8 +161,9 @@ func _process_yasuda_turn(turn_num: int) -> void:
 				trigger_yasuda_crash()
 
 		YasudaPhase.STOCK_CRASH:
-			# Падение биржи продолжается
-			tse_index = clampf(tse_index - randf_range(35.0, 75.0), 380.0, 1000.0)
+			# Падение биржи продолжается (детерминированный расчет)
+			var crash_drop: float = _get_deterministic_factor(turn_num * 1013 + 57, 35.0, 75.0)
+			tse_index = clampf(tse_index - crash_drop, 380.0, 1000.0)
 			ino_cabinet_approval = clampf(ino_cabinet_approval - 8.0, 5.0, 100.0)
 			if player_state_ref != null:
 				player_state_ref.inflation_rate = clampf(player_state_ref.inflation_rate + 0.008, 0.0, 0.35)
@@ -156,15 +175,17 @@ func _process_yasuda_turn(turn_num: int) -> void:
 				print("[JapanEmpireManager] Кабинет Ино потерял доверие. Начинается парламентское расследование скандала Ясуда.")
 
 		YasudaPhase.INVESTIGATION:
-			# Накопление улик
-			yasuda_corruption_evidence = clampf(yasuda_corruption_evidence + randf_range(3.0, 8.0), 0.0, 100.0)
+			# Накопление улик (детерминированный расчет)
+			var ev_gain: float = _get_deterministic_factor(turn_num * 2017 + 89, 3.0, 8.0)
+			yasuda_corruption_evidence = clampf(yasuda_corruption_evidence + ev_gain, 0.0, 100.0)
 			if ino_cabinet_approval <= 12.0 and active_prime_minister_key == "INO":
 				# Крах правительства Ино
 				_force_cabinet_resignation()
 
 		YasudaPhase.RESOLVED:
-			# Постепенное восстановление биржи
-			tse_index = clampf(tse_index + randf_range(5.0, 15.0), 400.0, 950.0)
+			# Постепенное восстановление биржи (детерминированный расчет)
+			var rec_gain: float = _get_deterministic_factor(turn_num * 3049 + 113, 5.0, 15.0)
+			tse_index = clampf(tse_index + rec_gain, 400.0, 950.0)
 			if player_state_ref != null:
 				player_state_ref.inflation_rate = maxf(player_state_ref.inflation_rate - 0.002, 0.03)
 
@@ -344,14 +365,16 @@ func _load_japan_directives(path: String) -> void:
 # БАЛАНС ИЯА И ИЯФ (IJA vs IJN Rivalry)
 # ==============================================================================
 func _process_military_rivalry_turn() -> void:
-	# Дрейф баланса
+	# Дрейф баланса (детерминированный расчет)
 	if ija_ijn_balance < -60.0:
 		# Слишком сильное влияние Армии — недовольство на флотилии
-		if player_state_ref != null and randf() < 0.15:
+		var roll_army: float = _get_deterministic_norm(_current_turn * 4001 + 31)
+		if player_state_ref != null and roll_army < 0.15:
 			player_state_ref.political_capital = maxf(player_state_ref.political_capital - 5.0, 0.0)
 	elif ija_ijn_balance > 60.0:
 		# Слишком сильный Флот — офицеры Квантунской армии ропщут
-		if player_state_ref != null and randf() < 0.15:
+		var roll_navy: float = _get_deterministic_norm(_current_turn * 5003 + 73)
+		if player_state_ref != null and roll_navy < 0.15:
 			player_state_ref.war_support_percent = maxf(player_state_ref.war_support_percent - 2.0, 10.0)
 
 
@@ -390,8 +413,9 @@ func _process_sphere_turn() -> void:
 	for m_tag in sphere_members.keys():
 		var m = sphere_members[m_tag]
 		total_tribute += int(m.get("tribute_factories", 0))
-		# Случайные партизанские инциденты
-		if float(m.get("unrest", 0.0)) > 50.0 and randf() < 0.1:
+		# Партизанские инциденты (детерминированный расчет)
+		var member_seed: int = (_current_turn * 73856093) ^ str(m_tag).hash()
+		if float(m.get("unrest", 0.0)) > 50.0 and _get_deterministic_norm(member_seed) < 0.10:
 			sphere_incident_reported.emit(m_tag, "Восстание местных партизан в %s!" % m["name"])
 
 	# Часть фабрик сателлитов питает японскую промышленность

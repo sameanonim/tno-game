@@ -371,6 +371,8 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 	res.category = str(data.get("category", "doctrine"))
 	res.icon_symbol = str(data.get("icon_symbol", "[★]"))
 	res.icon_path = str(data.get("icon_path", "res://icon.svg"))
+	if not res.icon_path.is_empty() and ResourceLoader.exists(res.icon_path):
+		res.icon = load(res.icon_path) as Texture2D
 
 	# Координаты сетки
 	var gp = data.get("grid_position", [0.0, 0.0])
