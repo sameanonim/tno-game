@@ -19,10 +19,42 @@ const COUNTRIES_BASE_DIR = "res://data/countries"
 var all_events: Dictionary = {} # Key: String (event_id), Value: GameEvent
 var fired_events: Array[String] = []
 var pending_modal_events: Array[GameEvent] = []
+var scheduled_events_queue: Array[Dictionary] = [] # Elements: { "event_id": String, "trigger_turn": int, "target_tag": String }
 
 var _events_index: Dictionary = {} # Key: String (event_id), Value: String (file path)
 var _file_cache: Dictionary = {}   # Key: String (file path), Value: Dictionary of event JSON dicts
 var _index_loaded: bool = false
+
+
+## Запланировать событие на конкретный ход в будущем
+func schedule_event(event_id: String, turns_delay: int, current_turn: int, target_tag: String = "") -> void:
+	var trig_turn: int = current_turn + maxi(turns_delay, 1)
+	scheduled_events_queue.append({
+		"event_id": event_id,
+		"trigger_turn": trig_turn,
+		"target_tag": target_tag
+	})
+	print("[EventManager] Запланировано событие '%s' на ход %d (задержка: %d ходов)" % [event_id, trig_turn, turns_delay])
+
+
+## Проверить и извлечь запланированные события, созревшие к текущему ходу
+func evaluate_scheduled_events(current_turn: int) -> Array[GameEvent]:
+	var ready_events: Array[GameEvent] = []
+	var remaining_queue: Array[Dictionary] = []
+
+	for item: Dictionary in scheduled_events_queue:
+		var target_turn: int = int(item.get("trigger_turn", 0))
+		if target_turn <= current_turn:
+			var ev_id: String = str(item.get("event_id", ""))
+			var ev: GameEvent = get_or_load_event(ev_id)
+			if ev != null:
+				ready_events.append(ev)
+		else:
+			remaining_queue.append(item)
+
+	scheduled_events_queue = remaining_queue
+	return ready_events
+
 
 
 func _ready() -> void:
@@ -110,6 +142,16 @@ func evaluate_turn_triggers(state: CountryState, turn_number: int = -1) -> Array
 	if cur_turn <= 0:
 		cur_turn = 1
 
+	# 1. Проверяем созревшие запланированные отложенные события
+	var scheduled_ready: Array[GameEvent] = evaluate_scheduled_events(cur_turn)
+	for s_ev in scheduled_ready:
+		if s_ev.fire_only_once and fired_events.has(s_ev.event_id):
+			continue
+		triggered.append(s_ev)
+		if s_ev.fire_only_once:
+			fired_events.append(s_ev.event_id)
+
+	# 2. Проверяем обычные условные триггеры
 	for event_id in all_events.keys():
 		var event: GameEvent = all_events[event_id]
 		if event.fire_only_once and fired_events.has(event_id):
@@ -309,42 +351,20 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 	if effects.has("MOD_STOCKPILE"):
 		state.infantry_weapons_stockpile = maxi(state.infantry_weapons_stockpile + int(effects["MOD_STOCKPILE"]), 0)
 
-	# Последующие связанные события (chained follow-up events)
+	# Последующие связанные события (chained follow-up events с учетом days/turns)
 	if effects.has("country_events"):
 		for follow_id in effects["country_events"]:
-			var sub_ev = get_or_load_event(str(follow_id))
-			if sub_ev != null:
-				pending_modal_events.append(sub_ev)
+			_dispatch_or_schedule_event(follow_id, state)
 
 	if effects.has("country_event"):
-		var ce = effects["country_event"]
-		var ev_id = ""
-		if ce is String:
-			ev_id = ce
-		elif ce is Dictionary:
-			ev_id = str(ce.get("id", ""))
-		if not ev_id.is_empty():
-			var sub_ev2 = get_or_load_event(ev_id)
-			if sub_ev2 != null:
-				pending_modal_events.append(sub_ev2)
+		_dispatch_or_schedule_event(effects["country_event"], state)
 
 	if effects.has("news_events"):
 		for news_id in effects["news_events"]:
-			var n_ev = get_or_load_event(str(news_id))
-			if n_ev != null:
-				pending_modal_events.append(n_ev)
+			_dispatch_or_schedule_event(news_id, state)
 
 	if effects.has("news_event"):
-		var ne = effects["news_event"]
-		var nev_id = ""
-		if ne is String:
-			nev_id = ne
-		elif ne is Dictionary:
-			nev_id = str(ne.get("id", ""))
-		if not nev_id.is_empty():
-			var n_ev2 = get_or_load_event(nev_id)
-			if n_ev2 != null:
-				pending_modal_events.append(n_ev2)
+		_dispatch_or_schedule_event(effects["news_event"], state)
 
 	if effects.has("super_event"):
 		super_event_triggered.emit(str(effects["super_event"]))
@@ -411,4 +431,30 @@ func _read_json_file(res_path: String) -> Dictionary:
 	if data is Dictionary:
 		return data
 	return {}
+
+
+func _dispatch_or_schedule_event(ev_entry: Variant, state: CountryState) -> void:
+	var ev_id: String = ""
+	var days_delay: int = 0
+	var cur_turn: int = state.turn_count if state != null and state.turn_count > 0 else 1
+
+	if ev_entry is String:
+		ev_id = ev_entry
+	elif ev_entry is Dictionary:
+		ev_id = str(ev_entry.get("id", ""))
+		days_delay = int(ev_entry.get("days", ev_entry.get("random_days", 0)))
+		if ev_entry.has("turns"):
+			days_delay = int(ev_entry["turns"]) * 7
+
+	if ev_id.is_empty():
+		return
+
+	if days_delay > 0:
+		var turns_delay: int = int(ceil(float(days_delay) / 7.0))
+		schedule_event(ev_id, turns_delay, cur_turn, state.country_tag if state != null else "")
+	else:
+		var sub_ev: GameEvent = get_or_load_event(ev_id)
+		if sub_ev != null:
+			pending_modal_events.append(sub_ev)
+
 

@@ -47,6 +47,10 @@ func setup(state: CountryState, tm: TurnManager, rm: ResearchManager = null) -> 
 	if research_manager != null:
 		if not research_manager.tech_researched.is_connected(_on_tech_researched):
 			research_manager.tech_researched.connect(_on_tech_researched)
+		if not research_manager.research_advanced.is_connected(_on_research_advanced):
+			research_manager.research_advanced.connect(_on_research_advanced)
+		if not research_manager.research_boosted.is_connected(_on_research_boosted):
+			research_manager.research_boosted.connect(_on_research_boosted)
 
 	refresh_view()
 
@@ -59,6 +63,16 @@ func _on_tech_researched(_tech_id: String, tech: TechResource) -> void:
 	var t_name = tech.tech_name if tech != null else _tech_id
 	_log_message("[color=#55ff55]ТЕХНОЛОГИЧЕСКИЙ ПРОРЫВ: Завершена разработка темы «%s»![/color]" % t_name)
 	refresh_view()
+
+
+func _on_research_advanced(_tech_id: String, _progress: float, _total: float) -> void:
+	refresh_view()
+
+
+func _on_research_boosted(tech_id: String, bonus_percent: float) -> void:
+	_log_message("[color=#ffff55]УСКОРЕНИЕ НИОКР: Тема %s получила бонус +%.1f%% к темпу![/color]" % [tech_id, bonus_percent])
+	refresh_view()
+
 
 
 func _build_ui() -> void:

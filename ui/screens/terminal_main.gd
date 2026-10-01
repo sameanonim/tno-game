@@ -209,6 +209,10 @@ func _connect_signals() -> void:
 	turn_manager.autosaved.connect(func(turn: int, save_path: String):
 		label_log.text = "АВТОСОХРАНЕНИЕ: Ход %d успешно записан [%s]" % [turn, save_path]
 	)
+	turn_manager.world_data_loaded.connect(func(r_count: int, c_count: int):
+		print("[TerminalMain] World data synchronized: %d regions, %d countries." % [r_count, c_count])
+	)
+
 
 	if turn_manager.focus_stage_controller != null:
 		turn_manager.focus_stage_controller.stage_transition_requested.connect(func(target_tree_id: String, reason: String):
@@ -257,6 +261,19 @@ func _connect_signals() -> void:
 				label_log.text = "ТРЕВОГА: Регион #%d окружен войсками [%s]! Линии снабжения перерезаны." % [state_id, surrounded_by]
 				if sound_fx != null: sound_fx.play_alarm_buzz(320.0, 0.4)
 		)
+		turn_manager.boundary_manager.territory_transferred.connect(func(state_id: int, _old_owner: String, new_owner: String, _is_enclave: bool):
+			if map_controller != null and map_controller.has_method("set_state_owner"):
+				map_controller.set_state_owner(state_id, new_owner)
+		)
+		turn_manager.boundary_manager.frontlines_recalculated.connect(func(affected_tags: Array[String]):
+			print("[TerminalMain] Frontlines recalculated for: %s" % str(affected_tags))
+		)
+		turn_manager.boundary_manager.border_status_changed.connect(func(prov_a: int, prov_b: int, _old_s: int, _new_s: int):
+			print("[TerminalMain] Border status changed between %d and %d" % [prov_a, prov_b])
+		)
+
+
+
 
 	if tab_container != null:
 		tab_container.tab_changed.connect(func(tab_idx: int):
@@ -291,6 +308,8 @@ func _connect_signals() -> void:
 		var loc = get_node("/root/LocalizationManager")
 		if not loc.locale_changed.is_connected(_on_locale_changed):
 			loc.locale_changed.connect(_on_locale_changed)
+		if not loc.locale_updated.is_connected(_on_locale_changed):
+			loc.locale_updated.connect(_on_locale_changed)
 
 	# SettingsManager listener
 	var sm = _get_settings_manager()
@@ -301,11 +320,29 @@ func _connect_signals() -> void:
 			sm.crt_enabled_changed.connect(_on_crt_enabled_changed)
 		if not sm.ui_scale_changed.is_connected(_on_ui_scale_changed):
 			sm.ui_scale_changed.connect(_on_ui_scale_changed)
+		if not sm.vsync_mode_changed.is_connected(func(mode: int): print("[TerminalMain] VSync: %d" % mode)):
+			sm.vsync_mode_changed.connect(func(mode: int): print("[TerminalMain] VSync: %d" % mode))
+
+	# ConfigManager listener
+	if has_node("/root/ConfigManager"):
+		var cfg = get_node("/root/ConfigManager")
+		if not cfg.constants_reloaded.is_connected(func(): _update_hud()):
+			cfg.constants_reloaded.connect(func(): _update_hud())
+
+	# GameSession listener
+	if has_node("/root/GameSession"):
+		var gs = get_node("/root/GameSession")
+		if not gs.session_bootstrapped.is_connected(func(_c): print("[TerminalMain] Session bootstrapped")):
+			gs.session_bootstrapped.connect(func(_c): print("[TerminalMain] Session bootstrapped"))
+		if not gs.crt_settings_updated.is_connected(func(_s): _apply_crt_to_overlay()):
+			gs.crt_settings_updated.connect(func(_s): _apply_crt_to_overlay())
+
 
 	# Military & Frontlines signals
 	turn_manager.region_conquered.connect(_on_region_conquered)
 	turn_manager.state_conquered.connect(_on_state_conquered)
 	turn_manager.military_frontlines_processed.connect(_on_military_frontlines_processed)
+	turn_manager.defcon_level_changed.connect(_on_defcon_level_changed)
 
 	# Directive Tree signals
 	directive_tree_view.directive_initiated.connect(func(d: DirectiveResource):
@@ -316,6 +353,11 @@ func _connect_signals() -> void:
 	directive_tree_view.directive_selected.connect(func(_d: DirectiveResource):
 		if sound_fx != null: sound_fx.play_switch_click(850.0)
 	)
+	directive_tree_view.directive_hovered.connect(func(_d: DirectiveResource):
+		if sound_fx != null and sound_fx.has_method("play_switch_click"):
+			sound_fx.play_switch_click(1600.0)
+	)
+
 
 	# Politics & Laws signals
 	if politics_panel != null:
@@ -523,6 +565,16 @@ func _connect_signals() -> void:
 					province_inspector_panel.inspect_province(pid, map_controller.province_features_data, turn_manager.player_state.country_tag)
 				if sound_fx != null: sound_fx.play_switch_click(1000.0)
 	)
+
+	map_controller.province_selected.connect(func(pid: int, _data: Dictionary):
+		if province_inspector_panel != null:
+			province_inspector_panel.inspect_province(pid, map_controller.province_features_data, turn_manager.player_state.country_tag)
+	)
+	map_controller.tactical_view_toggled.connect(func(is_tactical: bool):
+		if sound_fx != null and sound_fx.has_method("play_switch_click"):
+			sound_fx.play_switch_click(1200.0 if is_tactical else 600.0)
+	)
+
 
 	# Economics controls
 	if tno_economy_screen != null:
@@ -905,6 +957,14 @@ func _on_defcon_clicked() -> void:
 		if sound_fx != null: sound_fx.play_alarm_buzz(580.0, 0.14)
 
 
+func _on_defcon_level_changed(level: int, reason: String) -> void:
+	if sound_fx != null:
+		var pitch: float = 300.0 + (float(6 - level) * 80.0)
+		sound_fx.play_alarm_buzz(pitch, 0.45)
+	label_log.text = "ТРЕВОГА DEFCON: Уровень %d! %s" % [level, reason]
+	_update_hud()
+
+
 func trigger_super_event(event_id_or_title: String, quote: String = "", option: String = "", art_path: String = "", audio_path: String = "") -> void:
 	if super_event_modal == null:
 		super_event_modal = get_node_or_null("TNOSuperEventModal")
@@ -1125,8 +1185,10 @@ func _on_modal_event_opened(event: GameEvent) -> void:
 		var opt = event.options[idx]
 		var btn = Button.new()
 		btn.text = "> %s" % opt.get("text", "Acknowledge")
-		var can_choose = GameEvent.can_select_option(opt, turn_manager.player_state)
-		btn.disabled = not can_choose
+		var opt_eval: Dictionary = GameEvent.evaluate_option_availability(opt, turn_manager.player_state)
+		btn.disabled = not opt_eval["allowed"]
+		if not str(opt_eval.get("effects_tooltip", "")).is_empty():
+			btn.tooltip_text = str(opt_eval["effects_tooltip"])
 		
 		var captured_idx = idx
 		btn.pressed.connect(func():

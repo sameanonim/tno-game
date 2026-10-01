@@ -216,10 +216,21 @@ func _refresh_metrics() -> void:
 	var ratio = current_state.get_debt_to_gdp_ratio() * 100.0
 	lbl_debt_ratio.text = "%s: %.1f%%" % [_tr("ECON_DEBT_RATIO", "ДОЛГ/ВВП"), ratio]
 
-	# Кредитный рейтинг
+	# Кредитный рейтинг / Казна
+	var eco_type = EconomyEngine.get_economy_type(current_state)
 	var rating = current_state.get_credit_rating()
 	lbl_credit_rating.text = "[ %s ]" % rating
-	lbl_credit_cap.text = "%s: $%.1f B" % [_tr("ECON_CREDIT_CAP", "ЛИМИТ"), (current_state.gdp_billions * 1.5)]
+	if eco_type == EconomyEngine.EconomyType.WARLORD:
+		lbl_credit_cap.text = "%s: $%.2f B" % [_tr("ECON_WAR_CHEST", "КАЗНА"), current_state.liquid_reserves_billions]
+		if current_state.liquid_reserves_billions >= 0.2:
+			lbl_credit_rating.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN)
+		elif current_state.liquid_reserves_billions > 0.0:
+			lbl_credit_rating.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_AMBER)
+		else:
+			lbl_credit_rating.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_RED)
+	else:
+		lbl_credit_cap.text = "%s: $%.1f B" % [_tr("ECON_CREDIT_CAP", "ЛИМИТ"), (current_state.gdp_billions * current_state.debt_ceiling_ratio)]
+
 
 	# Сальдо
 	var revenue = current_state.calculate_total_revenue()

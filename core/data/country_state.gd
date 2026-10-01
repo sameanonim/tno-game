@@ -332,8 +332,17 @@ func get_debt_ceiling() -> float:
 	return gdp_billions * debt_ceiling_ratio
 
 
-## Кредитный рейтинг страны (AAA, AA, A, BBB, BB, B, CCC, D)
+## Кредитный рейтинг страны (AAA, AA, A, BBB, BB, B, CCC, D) либо статус казны варлорда
 func get_credit_rating() -> String:
+	var eco_type = EconomyEngine.get_economy_type(self)
+	if eco_type == EconomyEngine.EconomyType.WARLORD:
+		if liquid_reserves_billions >= 0.2:
+			return "КАЗНА: СТАБИЛЬНА"
+		elif liquid_reserves_billions > 0.0:
+			return "КАЗНА: ИСТОЩЕНИЕ"
+		else:
+			return "ДЕФИЦИТ // УГРОЗА БУНТА"
+
 	var ratio = get_debt_to_gdp_ratio()
 	var stab = get_stability_index()
 	if ratio < 0.25 and stab > 0.4: return "AAA"
@@ -343,6 +352,7 @@ func get_credit_rating() -> String:
 	if ratio < 1.50: return "B"
 	if ratio < 2.00: return "CCC"
 	return "D (Default Risk)"
+
 
 
 ## Псевдоним ключевой ставки для совместимости
@@ -592,7 +602,11 @@ func set_societal_metric_value(metric_key: String, val: float) -> void:
 		m.current_value = val
 	else:
 		var new_m = SocietalMetricResource.new(metric_key, metric_key.capitalize(), val)
+		new_m.tier_changed.connect(func(old_tier: int, new_tier: int):
+			print("[CountryState:%s] Societal metric '%s' transitioned tier %d -> %d" % [country_tag, metric_key, old_tier, new_tier])
+		)
 		societal_development[metric_key] = new_m
+
 
 
 ## Изменяет числовое значение институциональной шкалы на delta

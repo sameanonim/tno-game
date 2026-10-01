@@ -385,6 +385,47 @@ func audit_enclaves() -> Dictionary:
 	return enclaves_found
 
 
+## Ликвидация изолированных анклавов (де-бордергор)
+## Передает полностью изолированные не-прибрежные штаты окружающему государству
+func cleanup_isolated_enclaves(target_owner_tag: String = "") -> Array[int]:
+	var liquidated_states: Array[int] = []
+	var tags_to_check: Array[String] = []
+	if not target_owner_tag.is_empty():
+		tags_to_check.append(target_owner_tag)
+	else:
+		for t in country_states.keys():
+			tags_to_check.append(str(t))
+
+	for tag in tags_to_check:
+		if not country_states.has(tag):
+			continue
+		var states_list = country_states[tag].duplicate()
+		for sid in states_list:
+			if is_state_enclave(int(sid)):
+				var neighbors = state_adjacency.get(int(sid), [])
+				var owner_counts: Dictionary = {}
+				for n_sid in neighbors:
+					var n_owner = state_to_owner.get(int(n_sid), "")
+					if n_owner.is_empty() or n_owner == tag or n_owner in ["WST", "WASTE"]:
+						continue
+					owner_counts[n_owner] = owner_counts.get(n_owner, 0) + 1
+				
+				var dominant_owner: String = ""
+				var max_c: int = 0
+				for cand_tag in owner_counts.keys():
+					if owner_counts[cand_tag] > max_c:
+						max_c = owner_counts[cand_tag]
+						dominant_owner = cand_tag
+				
+				if not dominant_owner.is_empty():
+					print("[BoundaryManager] Liquidating enclave state %d from %s to %s" % [int(sid), tag, dominant_owner])
+					transfer_state(int(sid), dominant_owner)
+					liquidated_states.append(int(sid))
+
+	return liquidated_states
+
+
+
 # ==============================================================================
 # ENCLAVE DETECTION & DEBUFF APPLICATION
 # ==============================================================================

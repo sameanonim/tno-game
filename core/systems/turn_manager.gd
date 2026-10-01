@@ -25,6 +25,7 @@ signal espionage_processed(reports: Array[Dictionary])
 signal tech_completed(report: Dictionary)
 signal autosaved(turn_number: int, save_path: String)
 signal game_over(victory: bool, reason: String)
+signal defcon_level_changed(level: int, reason: String)
 
 enum TurnState {
 	IDLE,
@@ -352,6 +353,10 @@ func annex_country(victim_tag: String, annexer_tag: String) -> void:
 	for sid in states_to_transfer:
 		transfer_state(sid, a_tag)
 
+	if boundary_manager != null:
+		boundary_manager.cleanup_isolated_enclaves(a_tag)
+
+
 
 ## Реактивная синхронизация шейдерной палитры карты
 func _sync_map_controller_reactive(affected_states: Array[int], new_owner_tag: String = "") -> void:
@@ -595,6 +600,17 @@ func end_turn() -> void:
 	phase_changed.emit("PROCESSING_MILITARY")
 	last_military_reports = MilitaryEngine.simulate_frontlines(1, countries_world_state, regions_world_state, current_turn)
 	military_frontlines_processed.emit(last_military_reports)
+
+	# Расчет глобальной ядерной эскалации DEFCON
+	var defcon_rep: Dictionary = MilitaryEngine.evaluate_global_defcon(
+		MilitaryEngine.get_active_frontlines(),
+		countries_world_state,
+		current_turn
+	)
+	if defcon_rep.get("defcon_changed", false):
+		defcon_level_changed.emit(int(defcon_rep["current_level"]), str(defcon_rep.get("reason", "")))
+	if defcon_rep.get("is_nuclear_midnight", false):
+		_trigger_game_over(false, "Шкала DEFCON достигла уровня 1 (Ядерная Полночь). Термоядерный апокалипсис уничтожил мир.")
 
 	pending_modal_events.clear()
 
@@ -943,11 +959,19 @@ func save_game(save_path: String = "user://savegame.json") -> bool:
 		"completed_directives": player_state.completed_directives.duplicate(),
 		"story_flags": player_state.story_flags.duplicate(true),
 		"fired_events": event_manager.fired_events.duplicate() if event_manager != null else [],
+		"pending_modal_events": [],
+		"scheduled_events_queue": event_manager.scheduled_events_queue.duplicate(true) if event_manager != null else [],
+		"global_defcon_level": MilitaryEngine.global_defcon_level,
+		"global_world_tension": MilitaryEngine.global_world_tension,
 		"frontlines": [],
 		"countries_world_state": {},
 		"regions_world_state": {},
 		"directive_progress": {}
 	}
+
+	for p_ev in pending_modal_events:
+		if p_ev != null and p_ev.has_method("to_dict"):
+			save_dict["pending_modal_events"].append(p_ev.to_dict())
 
 	for front in MilitaryEngine.get_active_frontlines():
 		if front != null and front.has_method("to_dict"):
@@ -1042,6 +1066,23 @@ func load_game(save_path: String = "user://savegame.json") -> bool:
 			var r_dict = data["regions_world_state"][pid_str]
 			if r_dict is Dictionary:
 				regions_world_state[int(pid_str)] = RegionData.from_dict(r_dict)
+
+	if data.has("global_defcon_level"):
+		MilitaryEngine.global_defcon_level = int(data["global_defcon_level"])
+	if data.has("global_world_tension"):
+		MilitaryEngine.global_world_tension = float(data["global_world_tension"])
+
+	pending_modal_events.clear()
+	if data.has("pending_modal_events") and data["pending_modal_events"] is Array:
+		for raw_ev in data["pending_modal_events"]:
+			if raw_ev is Dictionary:
+				pending_modal_events.append(GameEvent.from_dict(raw_ev))
+
+	if event_manager != null and data.has("scheduled_events_queue") and data["scheduled_events_queue"] is Array:
+		event_manager.scheduled_events_queue.clear()
+		for raw_sch in data["scheduled_events_queue"]:
+			if raw_sch is Dictionary:
+				event_manager.scheduled_events_queue.append(raw_sch.duplicate(true))
 
 	if event_manager != null and data.has("fired_events"):
 		event_manager.fired_events.clear()

@@ -98,9 +98,10 @@ func update_state(state: CountryState, turn_manager: TurnManager = null) -> void
 		flag_rect.texture = flag_tex
 
 	var c_name = state.country_name
-	if has_node("/root/LocalizationManager"):
+	if is_inside_tree() and has_node("/root/LocalizationManager"):
 		var loc = get_node("/root/LocalizationManager")
 		c_name = loc.tr_key(state.country_tag, loc.tr_key(state.country_name, state.country_name))
+
 
 	if lbl_country_tag != null:
 		lbl_country_tag.text = state.country_tag
@@ -155,7 +156,12 @@ func update_state(state: CountryState, turn_manager: TurnManager = null) -> void
 
 	# 8. Макроэкономика (ВВП / Долг / Рейтинг)
 	if lbl_econ != null:
-		lbl_econ.text = "$%.1fB / $%.1fB [%s]" % [state.gdp_billions, state.national_debt_billions, state.get_credit_rating()]
+		var eco_type = EconomyEngine.get_economy_type(state)
+		if eco_type == EconomyEngine.EconomyType.WARLORD:
+			lbl_econ.text = "$%.1fB | КАЗНА: $%.2fB [%s]" % [state.gdp_billions, state.liquid_reserves_billions, state.get_credit_rating()]
+		else:
+			lbl_econ.text = "$%.1fB / $%.1fB [%s]" % [state.gdp_billions, state.national_debt_billions, state.get_credit_rating()]
+
 
 	# 9. Уровень DEFCON (1 - 5)
 	var defcon_level = state.story_flags.get("defcon_level", 5)

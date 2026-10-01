@@ -227,8 +227,16 @@ func _connect_events() -> void:
 	btn_proceed_to_setup.pressed.connect(func(): _switch_state(MenuState.CAMPAIGN_SETUP))
 	if map_widget != null:
 		map_widget.country_selected.connect(_on_map_country_selected)
+		map_widget.country_hovered.connect(func(tag: String, data: Dictionary):
+			_on_leader_card_hovered(data)
+		)
+	leader_selected.connect(func(_ldr: LeaderResource):
+		if sound_fx != null and sound_fx.has_method("play_switch_click"):
+			sound_fx.play_switch_click(880.0)
+	)
 	if search_box != null:
 		search_box.text_changed.connect(_on_search_text_changed)
+
 
 	# Setup
 	btn_diff_observer.pressed.connect(func(): _set_difficulty(GameSessionScript.Difficulty.OBSERVER))
@@ -401,6 +409,10 @@ func _on_open_language_settings() -> void:
 		_switch_state(prev_state)
 		_update_localized_ui()
 	)
+	lang_screen.language_applied.connect(func(loc_code: String):
+		_on_locale_changed(loc_code)
+	)
+
 
 
 func _on_locale_changed(_locale_code: String) -> void:

@@ -59,7 +59,14 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	content_loader = ContentLoader.new()
 	content_loader.name = "ContentLoader"
+	content_loader.content_loaded.connect(func(c_cnt: int, t_cnt: int):
+		print("[GameSession] ContentLoader indexed %d countries, %d trees." % [c_cnt, t_cnt])
+	)
+	content_loader.country_package_loaded.connect(func(tag: String, _st: CountryState):
+		print("[GameSession] Country package loaded: %s" % tag)
+	)
 	add_child(content_loader)
+
 
 
 # ==============================================================================

@@ -71,6 +71,34 @@ static func get_turns_per_year() -> float:
 	return DEFAULT_TURNS_PER_YEAR
 
 
+## Экономические архетипы TNO
+enum EconomyType {
+	STANDARD,        ## Стандартная суверенная экономика
+	WARLORD,         ## Варлорд: военная казна, набеги, отсутствие суверенного долга и облигаций
+	SPHERE_HEGEMON,  ## Гегемон экономической зоны (USA, GER, JAP): резервная валюта, сеньораж
+	SPHERE_MEMBER    ## Сателлит зоны (OFN / Einheitspakt / Co-Prosperity Sphere)
+}
+
+const RUS_WARLORD_TAGS: Array[String] = [
+	"KOM", "WRF", "VYT", "SAM", "ABK", "ONE", "PRM", "UKH", "GAY", "TYU",
+	"SVE", "OMS", "KRN", "SUR", "NOV", "TOM", "KKH", "ALT", "KRA", "IRK",
+	"BRY", "YAK", "CHY", "MAG", "KAM", "OKH", "ALD", "AMR", "ZLA", "KEM"
+]
+
+const SPHERE_HEGEMONS: Array[String] = ["USA", "GER", "JAP"]
+
+static func get_economy_type(state: CountryState) -> EconomyType:
+	if state == null:
+		return EconomyType.STANDARD
+	if state.country_tag in RUS_WARLORD_TAGS or state.has_flag("is_warlord"):
+		return EconomyType.WARLORD
+	if state.country_tag in SPHERE_HEGEMONS:
+		return EconomyType.SPHERE_HEGEMON
+	if state.global_sphere != "NON_ALIGNED" and not state.global_sphere.is_empty():
+		return EconomyType.SPHERE_MEMBER
+	return EconomyType.STANDARD
+
+
 # ==============================================================================
 # 1. ДОХОДЫ И РАСХОДЫ ГОСБЮДЖЕТА
 # ==============================================================================
@@ -79,10 +107,31 @@ static func get_turns_per_year() -> float:
 static func calculate_turn_revenue(state: CountryState) -> float:
 	var cfg = ConfigManager.get_instance()
 	var turns_year = get_turns_per_year()
-	
-	# Базовый сбор налогов: (ВВП * Налоговая ставка) / TURNS_PER_YEAR
-	var tax_revenue = (state.gdp_billions * state.tax_rate) / turns_year
-	
+	var eco_type: EconomyType = get_economy_type(state)
+
+	var tax_revenue: float = 0.0
+
+	# 1. СПЕЦИФИКА ТИПОВ ЭКОНОМИКИ
+	if eco_type == EconomyType.WARLORD:
+		# Экономика Варлордов: сборы дани, реквизиции у населения и кустарное производство
+		var base_tribute: float = (float(state.civilian_factories) * 0.015) + (float(state.military_factories) * 0.008)
+		var warlord_eff: float = clampf(0.5 + (state.legitimacy * 0.005) - (state.radicalization * 0.004), 0.3, 1.2)
+		var war_tax: float = (state.gdp_billions * 0.12 * warlord_eff) / turns_year
+		tax_revenue = base_tribute + war_tax
+		if state.is_austerity_active:
+			tax_revenue *= 1.25 # Продразверстка дает +25% сборов
+	elif eco_type == EconomyType.SPHERE_HEGEMON:
+		# Сверхдержава-гегемон: налоги + сеньораж глобальной резервной валюты
+		var base_tax = (state.gdp_billions * state.tax_rate) / turns_year
+		var seigniorage: float = 0.08 # Сеньораж резервной валюты ($80 млн/ход)
+		tax_revenue = base_tax + seigniorage
+	elif eco_type == EconomyType.SPHERE_MEMBER:
+		# Сателлит сферы: взнос в клиринговый союз гегемона
+		tax_revenue = ((state.gdp_billions * state.tax_rate) / turns_year) * 0.95
+	else:
+		# Стандартный индустриальный рынок
+		tax_revenue = (state.gdp_billions * state.tax_rate) / turns_year
+
 	# Коррекция на стабильность и эффективность госаппарата
 	var eff_base = cfg.get_float("economy", "tax_efficiency_base", 0.8) if cfg != null else 0.8
 	var eff_legit = cfg.get_float("economy", "tax_efficiency_legitimacy_factor", 0.003) if cfg != null else 0.003
@@ -124,11 +173,16 @@ static func calculate_turn_revenue(state: CountryState) -> float:
 
 ## Расчет процентной ставки по государственному долгу
 static func calculate_debt_interest_rate(state: CountryState) -> float:
+	var eco_type: EconomyType = get_economy_type(state)
+	if eco_type == EconomyType.WARLORD:
+		# Варлорды не имеют доступа к внешним рынкам суверенных облигаций
+		return 0.0
+
 	var cfg = ConfigManager.get_instance()
 	var base_rate = state.central_bank_rate
 	var debt_ratio = state.get_debt_to_gdp_ratio()
 	
-	var debt_threshold = cfg.get_float("economy", "debt_risk_threshold", 0.8) if cfg != null else 0.8
+	var debt_threshold = (state.debt_ceiling_ratio * 0.8) if state.debt_ceiling_ratio > 0.0 else (cfg.get_float("economy", "debt_risk_threshold", 0.8) if cfg != null else 0.8)
 	var debt_mult = cfg.get_float("economy", "debt_risk_multiplier", 0.08) if cfg != null else 0.08
 	var stab_mult = cfg.get_float("economy", "stability_risk_multiplier", 0.04) if cfg != null else 0.04
 	var crisis_prem = cfg.get_float("economy", "fiscal_crisis_risk_premium", 0.15) if cfg != null else 0.15
@@ -142,6 +196,10 @@ static func calculate_debt_interest_rate(state: CountryState) -> float:
 	if state.is_in_fiscal_crisis:
 		risk_premium += crisis_prem
 		
+	# Гегемон валютной зоны имеет сниженную премию благодаря статусу резервной валюты
+	if eco_type == EconomyType.SPHERE_HEGEMON:
+		risk_premium *= 0.65
+
 	var floor_rate = cfg.get_float("economy", "interest_rate_floor", 0.01) if cfg != null else 0.01
 	var ceil_rate = cfg.get_float("economy", "interest_rate_ceiling", 0.35) if cfg != null else 0.35
 	return clampf(base_rate + risk_premium, floor_rate, ceil_rate)
@@ -424,9 +482,10 @@ static func process_turn(state: CountryState, regions: Dictionary = {}) -> Econo
 	var surplus_repay_ratio = cfg.get_float("economy", "surplus_debt_repayment_ratio", 0.4) if cfg != null else 0.4
 
 	# 4. Балансировка казны и долга
+	var eco_type = get_economy_type(state)
 	if net_balance >= 0.0:
 		# Профицит: пополнение резервов или частичное погашение долга
-		if state.national_debt_billions > 0.0:
+		if state.national_debt_billions > 0.0 and eco_type != EconomyType.WARLORD:
 			var debt_repay = minf(net_balance * surplus_repay_ratio, state.national_debt_billions)
 			state.national_debt_billions -= debt_repay
 			state.liquid_reserves_billions += (net_balance - debt_repay)
@@ -441,18 +500,29 @@ static func process_turn(state: CountryState, regions: Dictionary = {}) -> Econo
 			var uncovered = deficit - state.liquid_reserves_billions
 			state.liquid_reserves_billions = 0.0
 			
-			if state.is_in_fiscal_crisis:
+			if eco_type == EconomyType.WARLORD:
+				# У варлорда нет внешних кредиторов! Непокрытый дефицит вызывает кризис снабжения и риск бунта
+				state.is_in_fiscal_crisis = true
+				state.army_morale = clampf(state.army_morale - 3.5, 5.0, 100.0)
+				state.radicalization = clampf(state.radicalization + 2.0, 0.0, 100.0)
+			elif state.is_in_fiscal_crisis:
 				# Кредиторы отказывают в займах! Экстренное включение печатного станка.
 				state.money_printing_this_turn += uncovered
 			else:
 				state.national_debt_billions += uncovered
 				
 	# Проверка потолка долга (Debt Ceiling)
-	if state.national_debt_billions >= state.get_debt_ceiling():
-		state.is_in_fiscal_crisis = true
-	elif state.national_debt_billions < state.get_debt_ceiling() * 0.8:
-		# Выход из кризиса только при снижении долга до безопасного уровня
-		state.is_in_fiscal_crisis = false
+	if eco_type == EconomyType.WARLORD:
+		# У варлорда кризис определяется истощением военной казны
+		if state.liquid_reserves_billions <= 0.0:
+			state.is_in_fiscal_crisis = true
+		elif state.liquid_reserves_billions >= 0.2:
+			state.is_in_fiscal_crisis = false
+	else:
+		if state.national_debt_billions >= state.get_debt_ceiling():
+			state.is_in_fiscal_crisis = true
+		elif state.national_debt_billions < state.get_debt_ceiling() * 0.8:
+			state.is_in_fiscal_crisis = false
 			
 	# Учет эмиссии («печатный станок»)
 	var money_print_inflation = cfg.get_float("economy", "inflation_money_print_factor", 0.03) if cfg != null else 0.03
@@ -463,7 +533,13 @@ static func process_turn(state: CountryState, regions: Dictionary = {}) -> Econo
 		
 	# 5. Динамика инфляции
 	var inflation_drift = (state.real_gdp_growth * 0.3) - (state.central_bank_rate * 0.4)
-	if state.get_debt_to_gdp_ratio() > 1.2:
+	if eco_type == EconomyType.SPHERE_MEMBER:
+		# Члены сферы имеют более стабильную привязку валюты благодаря клирингу метрополии
+		inflation_drift *= 0.70
+	elif eco_type == EconomyType.WARLORD:
+		# У варлорда инфляция зависит от дефицита товаров и стабильности
+		inflation_drift = maxf(0.02 - (state.get_stability_index() * 0.03), -0.01)
+	elif state.get_debt_to_gdp_ratio() > 1.2:
 		inflation_drift += 0.005 # Инфляция доверия к долгу
 	state.inflation_rate = clampf(state.inflation_rate + (inflation_drift / turns_year), 0.005, 0.95)
 	report.inflation_rate = state.inflation_rate

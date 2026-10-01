@@ -79,8 +79,21 @@ func setup(manager: GermanCivilWarManager) -> void:
 			gcw_manager.tactical_order_resolved.connect(_on_order_resolved)
 		if not gcw_manager.defcon_alert.is_connected(_on_defcon_alert):
 			gcw_manager.defcon_alert.connect(_on_defcon_alert)
+		if not gcw_manager.contender_mechanic_updated.is_connected(_on_contender_mechanic_updated):
+			gcw_manager.contender_mechanic_updated.connect(_on_contender_mechanic_updated)
+		if not gcw_manager.post_cw_reform_updated.is_connected(_on_post_cw_reform_updated):
+			gcw_manager.post_cw_reform_updated.connect(_on_post_cw_reform_updated)
 
 	refresh_ui()
+
+
+func _on_contender_mechanic_updated(_contender_key: String, _data: Dictionary) -> void:
+	refresh_ui()
+
+
+func _on_post_cw_reform_updated(_reform_key: String, _value: float) -> void:
+	refresh_ui()
+
 
 
 func _connect_buttons() -> void:

@@ -52,6 +52,85 @@ static var active_frontlines: Array[Frontline] = []
 ## Глобальный реестр активных стратегических фронтов по ID
 static var registered_frontlines: Dictionary = {} # Key: String (front_id), Value: Frontline
 
+## Глобальное состояние ядерной напряженности DEFCON (5..1)
+static var global_defcon_level: int = 5
+static var global_world_tension: float = 10.0
+
+
+## Централизованный расчет эскалации DEFCON по результатам хода
+static func evaluate_global_defcon(
+	frontlines_list: Array[Frontline],
+	countries: Dictionary,
+	current_turn: int = 1
+) -> Dictionary:
+	var total_tension: float = 0.0
+	var superpower_proxy_clashes: int = 0
+	var active_front_count: int = 0
+
+	for front: Frontline in frontlines_list:
+		if front != null and front.active:
+			active_front_count += 1
+			total_tension += front.tension
+			var atk: String = front.attacker_tag.to_upper()
+			var def: String = front.defender_tag.to_upper()
+			if atk in ["USA", "GER", "JAP", "SPE", "BOR", "GOR", "HEY"] or def in ["USA", "GER", "JAP", "SPE", "BOR", "GOR", "HEY"]:
+				superpower_proxy_clashes += 1
+
+	var tension_fronts: float = (total_tension / float(maxi(active_front_count, 1))) if active_front_count > 0 else 0.0
+	var target_tension: float = (tension_fronts * 0.5) + (float(superpower_proxy_clashes) * 25.0)
+	var tension_decay: float = 1.2
+	if target_tension > global_world_tension:
+		global_world_tension = clampf(global_world_tension + (target_tension - global_world_tension) * 0.6, 5.0, 100.0)
+	else:
+		global_world_tension = clampf(maxf(global_world_tension - tension_decay, 5.0), 5.0, 100.0)
+
+	var cfg = ConfigManager.get_instance()
+	var defcon_thresh: Dictionary = cfg.get_constant("military", "defcon_escalation_thresholds", {}) if cfg != null else {}
+	var t1: float = float(defcon_thresh.get("DEFCON_1", 90.0))
+	var t2: float = float(defcon_thresh.get("DEFCON_2", 75.0))
+	var t3: float = float(defcon_thresh.get("DEFCON_3", 50.0))
+	var t4: float = float(defcon_thresh.get("DEFCON_4", 25.0))
+
+	var new_defcon: int = 5
+	if global_world_tension >= t1:
+		new_defcon = 1 # Nuclear Brink
+	elif global_world_tension >= t2:
+		new_defcon = 2 # War Footing
+	elif global_world_tension >= t3:
+		new_defcon = 3 # Crisis
+	elif global_world_tension >= t4:
+		new_defcon = 4 # Standby
+	else:
+		new_defcon = 5 # Peace
+
+
+	var changed: bool = (new_defcon != global_defcon_level)
+	var prev_defcon: int = global_defcon_level
+	global_defcon_level = new_defcon
+
+	for c_tag in countries.keys():
+		var c_st = countries[c_tag]
+		if c_st is CountryState:
+			c_st.set_flag("defcon_level", global_defcon_level)
+			c_st.set_flag("world_tension", global_world_tension)
+
+	var reason_str: String = ""
+	if changed:
+		if new_defcon < prev_defcon:
+			reason_str = _tr_str("DEFCON_ESCALATION", {"lvl": new_defcon}, "Эскалация международной обстановки: объявлен уровень DEFCON %d!" % new_defcon)
+		else:
+			reason_str = _tr_str("DEFCON_DEESCALATION", {"lvl": new_defcon}, "Деэскалация кризиса: уровень боеготовности снижен до DEFCON %d." % new_defcon)
+
+	return {
+		"defcon_changed": changed,
+		"previous_level": prev_defcon,
+		"current_level": global_defcon_level,
+		"world_tension": global_world_tension,
+		"reason": reason_str,
+		"is_nuclear_midnight": (global_defcon_level == 1)
+	}
+
+
 
 # ==============================================================================
 # УПРАВЛЕНИЕ ФРОНТАМИ

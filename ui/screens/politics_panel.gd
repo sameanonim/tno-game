@@ -57,6 +57,11 @@ func _ready() -> void:
 		)
 	if pie_chart_control != null:
 		pie_chart_control.draw.connect(_on_pie_chart_draw)
+	if portrait_frame != null:
+		portrait_frame.portrait_clicked.connect(func():
+			portrait_frame.play_glitch_burst(0.2, 0.25)
+		)
+
 
 
 func _apply_tno_styling() -> void:
