@@ -34,6 +34,7 @@ var selected_theater_index: int = 0
 var selected_tag: String = "KOM"
 var config: RefCounted
 var current_bg_is_submod: bool = false
+var sound_fx: TerminalSoundFx = null
 
 signal leader_selected(leader: LeaderResource)
 
@@ -233,6 +234,8 @@ func _connect_events() -> void:
 	leader_selected.connect(func(_ldr: LeaderResource):
 		if sound_fx != null and sound_fx.has_method("play_switch_click"):
 			sound_fx.play_switch_click(880.0)
+		elif has_node("/root/AudioManager"):
+			get_node("/root/AudioManager").play_sfx("click_default")
 	)
 	if search_box != null:
 		search_box.text_changed.connect(_on_search_text_changed)
@@ -286,6 +289,10 @@ func _connect_events() -> void:
 
 
 func _attach_audio() -> void:
+	if sound_fx == null:
+		sound_fx = TerminalSoundFx.new()
+		sound_fx.name = "TerminalSoundFx"
+		add_child(sound_fx)
 	if has_node("/root/AudioManager"):
 		var am = get_node("/root/AudioManager")
 		am.attach_ui_sounds(self)
