@@ -271,19 +271,20 @@ func _render_contenders_tab() -> void:
 		match c["key"]:
 			"SPEER":
 				var bal_sign = "+" if gcw_manager.speer_reform_balance >= 0 else ""
-				mech_lbl.text = "БАЛАНС РЕФОРМ: %s%0.1f%% (Ориентация: %s)" % [
+				var orientation_str = _tr("GCW_SPEER_LIBERALS", "Либерализация / Студенты") if gcw_manager.speer_reform_balance > 0 else _tr("GCW_SPEER_CONSERVATIVES", "Диктат Консерваторов")
+				mech_lbl.text = _tr("GCW_SPEER_REFORM_FMT", "БАЛАНС РЕФОРМ: %s%0.1f%% (Ориентация: %s)") % [
 					bal_sign,
 					gcw_manager.speer_reform_balance,
-					"Либерализация / Студенты" if gcw_manager.speer_reform_balance > 0 else "Диктат Консерваторов"
+					orientation_str
 				]
 			"BORMANN":
 				var web_bar = _generate_ascii_bar(gcw_manager.bormann_party_web / 100.0, 10)
-				mech_lbl.text = "ПАРТИЙНАЯ ПАУТИНА: [%s] %0.1f%% (Истощение врагов: -350 винтовок/ход)" % [
+				mech_lbl.text = _tr("GCW_BORMANN_WEB_FMT", "ПАРТИЙНАЯ ПАУТИНА: [%s] %0.1f%% (Истощение врагов: -350 винтовок/ход)") % [
 					web_bar,
 					gcw_manager.bormann_party_web
 				]
 			"GOERING":
-				mech_lbl.text = "ВОЕННЫЙ ДОЛГ: $%.1fB | ЛОЯЛЬНОСТЬ ШЁРНЕРА: %0.0f%%" % [
+				mech_lbl.text = _tr("GCW_GOERING_DEBT_FMT", "ВОЕННЫЙ ДОЛГ: $%.1fB | ЛОЯЛЬНОСТЬ ШЁРНЕРА: %0.0f%%") % [
 					gcw_manager.goering_war_debt_billions,
 					gcw_manager.goering_militarist_loyalty
 				]
@@ -291,7 +292,7 @@ func _render_contenders_tab() -> void:
 				var nuke_bars = ""
 				for i in range(10):
 					nuke_bars += "☢" if i < gcw_manager.heydrich_nuclear_codes else "░"
-				mech_lbl.text = "БУРГУНДСКИЙ САБОТАЖ: %0.0f%% | ЯДЕРНЫЕ КОДЫ: [%s] %d/10" % [
+				mech_lbl.text = _tr("GCW_HEYDRICH_SABOTAGE_FMT", "БУРГУНДСКИЙ САБОТАЖ: %0.0f%% | ЯДЕРНЫЕ КОДЫ: [%s] %d/10") % [
 					gcw_manager.heydrich_burgundian_influence,
 					nuke_bars,
 					gcw_manager.heydrich_nuclear_codes
@@ -352,24 +353,24 @@ func _render_post_cw_reforms_tab() -> void:
 	match victor_tag:
 		GermanCivilWarManager.TAG_SPEER:
 			var h = Label.new()
-			h.text = "КУРС АЛЬБЕРТА ШПЕЕРА // «БАНДА ЧЕТЫРЕХ» И ЦОЛЬФЕРАЙН"
+			h.text = _tr("GCW_SPEER_HEGEMONY_TITLE", "КУРС АЛЬБЕРТА ШПЕЕРА // «БАНДА ЧЕТЫРЕХ» И ЦОЛЬФЕРАЙН")
 			h.modulate = Color(1.0, 0.85, 0.2)
 			vbox.add_child(h)
 
 			var bal_sign = "+" if gcw_manager.speer_reform_balance >= 0 else ""
 			var bal_lbl = Label.new()
-			bal_lbl.text = "БАЛАНС РЕФОРМ: %s%0.1f%% (Шпеер vs Шмидт/Эрхард/Тресков)" % [bal_sign, gcw_manager.speer_reform_balance]
+			bal_lbl.text = _tr("GCW_SPEER_BALANCE_POST_FMT", "БАЛАНС РЕФОРМ: %s%0.1f%% (Шпеер vs Шмидт/Эрхард/Тресков)") % [bal_sign, gcw_manager.speer_reform_balance]
 			bal_lbl.modulate = Color(0.3, 1.0, 0.5)
 			vbox.add_child(bal_lbl)
 
 			var slave_bar = _generate_ascii_bar(gcw_manager.speer_slave_emancipation / 100.0, 15)
 			var slv_lbl = Label.new()
-			slv_lbl.text = "ЛИКВИДАЦИЯ РАБСТВА: [%s] %0.0f%%" % [slave_bar, gcw_manager.speer_slave_emancipation]
+			slv_lbl.text = _tr("GCW_SPEER_SLAVE_FMT", "ЛИКВИДАЦИЯ РАБСТВА: [%s] %0.0f%%") % [slave_bar, gcw_manager.speer_slave_emancipation]
 			vbox.add_child(slv_lbl)
 
 			var zoll_bar = _generate_ascii_bar(gcw_manager.speer_zollverein_integration / 100.0, 15)
 			var zoll_lbl = Label.new()
-			zoll_lbl.text = "ИНТЕГРАЦИЯ ЦОЛЬФЕРАЙНА: [%s] %0.0f%%" % [zoll_bar, gcw_manager.speer_zollverein_integration]
+			zoll_lbl.text = _tr("GCW_SPEER_ZOLL_FMT", "ИНТЕГРАЦИЯ ЦОЛЬФЕРАЙНА: [%s] %0.0f%%") % [zoll_bar, gcw_manager.speer_zollverein_integration]
 			vbox.add_child(zoll_lbl)
 
 			# Кнопки реформ
@@ -415,18 +416,18 @@ func _render_post_cw_reforms_tab() -> void:
 
 		GermanCivilWarManager.TAG_BORMANN:
 			var h = Label.new()
-			h.text = "РЕЖИМ МАРТИНА БОРМАНА // «КАРТОТЕКА» И РЕКОНСТРУКЦИЯ"
+			h.text = _tr("GCW_BORMANN_HEGEMONY_TITLE", "РЕЖИМ МАРТИНА БОРМАНА // «КАРТОТЕКА» И РЕКОНСТРУКЦИЯ")
 			h.modulate = Color(1.0, 0.75, 0.3)
 			vbox.add_child(h)
 
 			var card_bar = _generate_ascii_bar(gcw_manager.bormann_card_index / 100.0, 15)
 			var card_lbl = Label.new()
-			card_lbl.text = "МОЩЬ КАРТОТЕКИ РЕЙХСЛЯЙТЕРОВ: [%s] %0.0f%%" % [card_bar, gcw_manager.bormann_card_index]
+			card_lbl.text = _tr("GCW_BORMANN_CARD_FMT", "МОЩЬ КАРТОТЕКИ РЕЙХСЛЯЙТЕРОВ: [%s] %0.0f%%") % [card_bar, gcw_manager.bormann_card_index]
 			vbox.add_child(card_lbl)
 
 			var mega_bar = _generate_ascii_bar(gcw_manager.bormann_megaprojects_progress / 100.0, 15)
 			var mega_lbl = Label.new()
-			mega_lbl.text = "МЕГАПРОЕКТЫ ГЕРМАНИА: [%s] %0.0f%%" % [mega_bar, gcw_manager.bormann_megaprojects_progress]
+			mega_lbl.text = _tr("GCW_BORMANN_MEGA_FMT", "МЕГАПРОЕКТЫ ГЕРМАНИА: [%s] %0.0f%%") % [mega_bar, gcw_manager.bormann_megaprojects_progress]
 			vbox.add_child(mega_lbl)
 
 			var btn_grid = GridContainer.new()
@@ -462,12 +463,12 @@ func _render_post_cw_reforms_tab() -> void:
 
 		_:
 			var h = Label.new()
-			h.text = "ВЕЛИКОГЕРМАНСКИЙ РЕЙХ // ВОССТАНОВЛЕНИЕ ПОРЯДКА"
+			h.text = _tr("GCW_RESTORE_ORDER_TITLE", "ВЕЛИКОГЕРМАНСКИЙ РЕЙХ // ВОССТАНОВЛЕНИЕ ПОРЯДКА")
 			h.modulate = Color(0.2, 0.9, 0.6)
 			vbox.add_child(h)
 
 			var info = Label.new()
-			info.text = "Рейх объединен. Национальные директивы переключены на глобальное восстановление."
+			info.text = _tr("GCW_RESTORE_ORDER_DESC", "Рейх объединен. Национальные директивы переключены на глобальное восстановление.")
 			vbox.add_child(info)
 
 	section_contenders.add_child(panel)

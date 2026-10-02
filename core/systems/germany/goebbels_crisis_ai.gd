@@ -83,9 +83,19 @@ func _execute_ai_offensive() -> void:
 						lowest_defense = def_rating
 						weakest_axis = axis
 
+static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
+	var x: int = (seed_val ^ 0x5DEECE66D) & 0xFFFFFFFF
+	x = (x * 1103515245 + 12345) & 0x7FFFFFFF
+	var t: float = float(x) / float(0x7FFFFFFF)
+	return lerpf(min_val, max_val, t)
+
+
 	# Направление яростного прорыва
 	if weakest_axis != null:
-		weakest_axis.progress = clampf(weakest_axis.progress + randf_range(8.0, 16.0) * fanaticism_attack_bonus, 0.0, 100.0)
+		var turn_num: int = turn_manager_ref.current_turn if turn_manager_ref != null else 1
+		var atk_seed: int = turn_num * 8831 + str(weakest_axis.axis_id).hash() + turns_active * 137
+		var gain: float = _get_deterministic_factor(atk_seed, 8.0, 16.0)
+		weakest_axis.progress = clampf(weakest_axis.progress + gain * fanaticism_attack_bonus, 0.0, 100.0)
 		weakest_axis.is_stalled = false
 		fanatic_offensive_launched.emit(weakest_axis.axis_id, fanaticism_attack_bonus)
 		print("[GoebbelsCrisisAI] Launching suicidal fanatic spearhead along axis [%s]! Progress: %.1f%%" % [weakest_axis.name, weakest_axis.progress])

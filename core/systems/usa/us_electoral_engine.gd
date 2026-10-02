@@ -547,7 +547,16 @@ func _select_npp_candidate(year: int, preferred: String, country_state: CountryS
 
 	# Если кризис доверия экстремален: выдвижение экстремистов
 	if rad >= 50.0 and leg <= 35.0:
-		if preferred.to_upper() == "YOCKEY" or randf() < 0.5:
+		var favors_yockey: bool = false
+		if not preferred.is_empty():
+			favors_yockey = (preferred.to_upper() == "YOCKEY")
+		else:
+			var civil_rights_strife: float = country_state.get_custom_variable("civil_rights_tension") if country_state != null else 0.0
+			var communist_pop: float = country_state.get_party_popularity("communist") if country_state != null else 0.0
+			var fascist_pop: float = (country_state.get_party_popularity("national_socialism") + country_state.get_party_popularity("fascism")) if country_state != null else 0.0
+			favors_yockey = (fascist_pop >= communist_pop) or (civil_rights_strife > 60.0)
+
+		if favors_yockey:
 			return {
 				"id": "USA_Francis_Yockey",
 				"name": "Фрэнсис Паркер Йоки",

@@ -55,6 +55,13 @@ const COLOR_GOEBBELS = Color(0.75, 0.15, 0.15, 1.0)    # Кроваво-багр
 const COLOR_RED_ANARCHY = Color(0.85, 0.10, 0.10, 1.0) # Алый пролетарский (KPD / DSR)
 const COLOR_BERLIN = Color(0.70, 0.70, 0.60, 1.0)      # Нейтральный пепельный (Гарнизон Шпандау)
 
+## Детерминированный генератор псевдослучайных величин для хода
+static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
+	var s: int = (seed_val * 73856093) ^ 1274126177
+	s = (s ^ (s >> 13)) * 19349663
+	var norm: float = float(s & 0x7FFFFFFF) / float(0x7FFFFFFF)
+	return min_val + (norm * (max_val - min_val))
+
 # ==============================================================================
 # СОСТОЯНИЕ МОДУЛЯ
 # ==============================================================================
@@ -287,10 +294,10 @@ func _process_phase_1_turn(_turn: int) -> void:
 	turns_until_hitler_death -= 1
 	print("[GCWManager] Phase 1 Agony: %d turns until Hitler's death." % turns_until_hitler_death)
 
-	# Пассивный дрейф влияния ИИ-фракций
+	# Пассивный дрейф влияния ИИ-фракций (детерминированный расчет)
 	for k in faction_influence.keys():
 		if k != _tag_to_contender_name(player_contender_tag):
-			var drift = randf_range(-0.5, 1.5)
+			var drift: float = _get_deterministic_factor(turns_until_hitler_death * 1013 + str(k).hash(), -0.5, 1.5)
 			faction_influence[k] = clampf(faction_influence[k] + drift, 5.0, 95.0)
 
 	_normalize_influence()
@@ -575,11 +582,12 @@ func _process_phase_2_turn(_turn: int) -> void:
 	# Проверка контроля над Берлином
 	_check_berlin_status()
 
-	# Проверка таймера Анархии (>15 ходов затяжной войны)
+	# Проверка таймера Анархии (>15 ходов затяжной войны, детерминированная проверка)
 	if gcw_turns_elapsed > 15 and not berlin_has_fallen:
-		if not goebbels_crisis_active and randf() < 0.65:
+		var anarchy_seed: int = (gcw_turns_elapsed * 73856093) ^ 19349663
+		if not goebbels_crisis_active and _get_deterministic_factor(anarchy_seed + 1, 0.0, 1.0) < 0.65:
 			spawn_goebbels_faction()
-		elif not red_anarchy_active and randf() < 0.60:
+		elif not red_anarchy_active and _get_deterministic_factor(anarchy_seed + 2, 0.0, 1.0) < 0.60:
 			spawn_red_anarchy()
 
 	# Обновление ИИ Геббельса при активности
@@ -592,8 +600,9 @@ func _process_phase_2_turn(_turn: int) -> void:
 
 
 func _update_contender_mechanics() -> void:
-	# 1. Шпеер: Баланс реформ дрейфует под давлением войны
-	speer_reform_balance = clampf(speer_reform_balance + randf_range(-3.0, 3.0), -100.0, 100.0)
+	# 1. Шпеер: Баланс реформ дрейфует под давлением войны (детерминированный расчет)
+	var speer_seed: int = (gcw_turns_elapsed * 99991) ^ 31337
+	speer_reform_balance = clampf(speer_reform_balance + _get_deterministic_factor(speer_seed, -3.0, 3.0), -100.0, 100.0)
 	contender_mechanic_updated.emit(TAG_SPEER, {"reform_balance": speer_reform_balance})
 
 	# 2. Борман: Партийная паутина истощает вражеские склады (-350 винтовок врагам за ход)
@@ -616,8 +625,9 @@ func _update_contender_mechanics() -> void:
 		"schorner_loyalty": goering_militarist_loyalty
 	})
 
-	# 4. Гейдрих: Охота за ядерными кодами
-	if randf() < 0.25 and heydrich_nuclear_codes < 10:
+	# 4. Гейдрих: Охота за ядерными кодами (детерминированный расчет)
+	var nuke_seed: int = (gcw_turns_elapsed * 83492791) ^ 7919
+	if _get_deterministic_factor(nuke_seed, 0.0, 1.0) < 0.25 and heydrich_nuclear_codes < 10:
 		heydrich_nuclear_codes += 1
 		print("[GCWManager] Heydrich SS commandos captured silo nuclear code: %d/10!" % heydrich_nuclear_codes)
 	contender_mechanic_updated.emit(TAG_HEYDRICH, {
@@ -963,7 +973,9 @@ func _process_phase_3_turn(_turn: int) -> void:
 
 			TAG_HEYDRICH:
 				# Опасность бургундской диверсии
-				if heydrich_silos_secured < 7 and randf() < 0.2:
+				var turn_num: int = turn_manager_ref.current_turn if turn_manager_ref != null else 1
+				var burg_seed: int = turn_num * 7331 + heydrich_silos_secured * 97
+				if heydrich_silos_secured < 7 and _get_deterministic_factor(burg_seed, 0.0, 1.0) < 0.2:
 					heydrich_burgundian_influence = clampf(heydrich_burgundian_influence + 2.0, 0.0, 100.0)
 
 		post_cw_reform_updated.emit(post_cw_victor_tag, get_post_cw_status())
@@ -1150,10 +1162,12 @@ func get_post_cw_status() -> Dictionary:
 
 
 func _process_proxy_wars() -> void:
+	var turn_num: int = turn_manager_ref.current_turn if turn_manager_ref != null else 1
 	for p_key in proxy_wars.keys():
 		var p_data = proxy_wars[p_key]
 		if p_data["status"] == "active":
-			p_data["tension"] = clampf(p_data["tension"] + randf_range(-2.0, 4.0), 0.0, 100.0)
+			var p_seed: int = turn_num * 1097 + str(p_key).hash()
+			p_data["tension"] = clampf(p_data["tension"] + _get_deterministic_factor(p_seed, -2.0, 4.0), 0.0, 100.0)
 			# Если напряженность критическая (>85), шкала DEFCON сдвигается вниз (к ядерному армагеддону)
 			if p_data["tension"] > 85.0 and current_defcon > 2:
 				adjust_defcon(current_defcon - 1, "Эскалация в конфликте: %s" % p_data["name"])

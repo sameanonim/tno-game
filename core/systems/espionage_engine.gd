@@ -37,6 +37,14 @@ class EspionageReport:
 		}
 
 
+## Детерминированный генератор псевдослучайных величин для хода (Linear Congruential + Bit Shift)
+static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
+	var s: int = (seed_val * 73856093) ^ 1274126177
+	s = (s ^ (s >> 13)) * 19349663
+	var norm: float = float(s & 0x7FFFFFFF) / float(0x7FFFFFFF)
+	return min_val + (norm * (max_val - min_val))
+
+
 # ==============================================================================
 # ГЛАВНЫЙ СИСТЕМНЫЙ ЦИКЛ ОБРАБОТКИ ХОДА (PROCESS TURN)
 # ==============================================================================
@@ -144,7 +152,8 @@ static func _process_black_budget_phase(
 				ag.loyalty = clampf(ag.loyalty - 15.0, 0.0, 100.0)
 				# При лояльности < 30% растет риск перевербовки в двойного агента
 				if ag.loyalty < 30.0 and not ag.is_double_agent:
-					if randf() < 0.30:
+					var ag_seed: int = (state.turn_count * 99991) ^ (ag.id.hash() * 37)
+					if _get_deterministic_factor(ag_seed, 0.0, 1.0) < 0.30:
 						ag.is_double_agent = true
 						report.incidents.append({
 							"type": "AGENT_BETRAYAL",
@@ -379,7 +388,8 @@ static func _resolve_operation_outcome(
 	countries: Dictionary,
 	report: EspionageReport
 ) -> void:
-	var roll = randf()
+	var op_seed: int = (state.turn_count * 73856093) ^ (op.op_id.hash() * 19349663) ^ op.target_country_tag.hash()
+	var roll: float = _get_deterministic_factor(op_seed, 0.0, 1.0)
 
 	if roll < risk:
 		# ======================================================================
@@ -436,7 +446,8 @@ static func _execute_stealth_success(
 		var ag = state.get_agent_by_id(aid)
 		if ag != null:
 			ag.loyalty = clampf(ag.loyalty + 5.0, 0.0, 100.0)
-			if randf() < 0.20 and ag.competence < 5:
+			var xp_seed: int = (state.turn_count * 1013) ^ (ag.id.hash() * 31)
+			if _get_deterministic_factor(xp_seed, 0.0, 1.0) < 0.20 and ag.competence < 5:
 				ag.competence += 1
 
 	report.completed_operations.append({
@@ -498,7 +509,8 @@ static func _execute_catastrophic_failure(
 	for aid in op.assigned_agent_ids:
 		var ag = state.get_agent_by_id(aid)
 		if ag != null:
-			if randf() < 0.60:
+			var cap_seed: int = (state.turn_count * 7919) ^ (ag.id.hash() * 43)
+			if _get_deterministic_factor(cap_seed, 0.0, 1.0) < 0.60:
 				ag.status = AgentResource.AgentStatus.CAPTURED
 				ag.loyalty = 0.0
 			else:
@@ -527,11 +539,13 @@ static func _apply_operation_payload_effects(
 	op: CovertOperationResource,
 	target_st: CountryState
 ) -> String:
+	var op_seed: int = (state.turn_count * 73856093) ^ (op.op_id.hash() * 19349663) ^ op.target_country_tag.hash()
+
 	match op.type:
 		CovertOperationResource.OpType.STEAL_TECH:
 			# 1. STEAL_TECH: похищение реальных чертежей и начисление 40–70% прогресса технологии
-			var gain = randf_range(40.0, 70.0)
-			var tech_key = str(op.operation_payload.get("target_tech", ""))
+			var gain: float = _get_deterministic_factor(op_seed + 101, 40.0, 70.0)
+			var tech_key: String = str(op.operation_payload.get("target_tech", ""))
 
 			# Если конкретная цель не задана, похищаем технологию, которая есть у цели, но нет у нас
 			if tech_key.is_empty() and target_st != null and not target_st.researched_techs.is_empty():
@@ -555,18 +569,18 @@ static func _apply_operation_payload_effects(
 				tech_key = "tech_industry_mechanization_1"
 
 			# Запись чертежа и прогресса в стейт
-			var flag_name = "blueprint_" + tech_key
+			var flag_name: String = "blueprint_" + tech_key
 			state.set_flag(flag_name, gain)
 			state.political_capital += 15.0
 
 			# Если тема прямо сейчас разрабатывается в активном слоте — ускоряем прогресс
 			if state.active_researches.has(tech_key):
-				var info = state.active_researches[tech_key]
-				var cost = float(info.get("cost", 100.0))
+				var info: Dictionary = state.active_researches[tech_key]
+				var cost: float = float(info.get("cost", 100.0))
 				info["progress"] = float(info.get("progress", 0.0)) + (cost * (gain / 100.0))
 				state.active_researches[tech_key] = info
 
-			var t_label = tech_key.replace("tech_", "").replace("_", " ").capitalize()
+			var t_label: String = tech_key.replace("tech_", "").replace("_", " ").capitalize()
 			return "Похищен секретный комплект чертежей [%s] у державы [%s]. Затраты на исследование снижены на %d%%." % [
 				t_label,
 				op.target_country_tag,
@@ -576,12 +590,12 @@ static func _apply_operation_payload_effects(
 		CovertOperationResource.OpType.SABOTAGE_INDUSTRY:
 			# 2. SABOTAGE_INDUSTRY: временный штраф на производственный потенциал (IC modifier -25%)
 			if target_st != null:
-				var turns = int(op.operation_payload.get("duration_turns", 6))
+				var turns: int = int(op.operation_payload.get("duration_turns", 6))
 				target_st.story_flags["sabotage_ic_turns"] = turns
 				target_st.story_flags["sabotage_ic_modifier"] = -0.25
 				# Прямой урон по гражданским и военным заводам
-				var civ_loss = maxi(int(float(target_st.civilian_factories) * 0.15), 1)
-				var mil_loss = maxi(int(float(target_st.military_factories) * 0.15), 1)
+				var civ_loss: int = maxi(int(float(target_st.civilian_factories) * 0.15), 1)
+				var mil_loss: int = maxi(int(float(target_st.military_factories) * 0.15), 1)
 				target_st.civilian_factories = maxi(target_st.civilian_factories - civ_loss, 0)
 				target_st.military_factories = maxi(target_st.military_factories - mil_loss, 0)
 				return "Взрывы на индустриальных комплексах цели. Выведено из строя %d гражд. и %d воен. заводов на %d ходов." % [civ_loss, mil_loss, turns]
@@ -590,9 +604,9 @@ static func _apply_operation_payload_effects(
 		CovertOperationResource.OpType.SABOTAGE_MILITARY:
 			# 3. SABOTAGE_MILITARY: списание от 10% до 30% запасов снаряжения и снижение готовности
 			if target_st != null:
-				var cut_ratio = randf_range(0.15, 0.30)
-				var loss_inf = int(float(target_st.infantry_weapons_stockpile) * cut_ratio)
-				var loss_heavy = int(float(target_st.heavy_equipment_stockpile) * cut_ratio)
+				var cut_ratio: float = _get_deterministic_factor(op_seed + 202, 0.15, 0.30)
+				var loss_inf: int = int(float(target_st.infantry_weapons_stockpile) * cut_ratio)
+				var loss_heavy: int = int(float(target_st.heavy_equipment_stockpile) * cut_ratio)
 				target_st.infantry_weapons_stockpile = maxi(target_st.infantry_weapons_stockpile - loss_inf, 0)
 				target_st.heavy_equipment_stockpile = maxi(target_st.heavy_equipment_stockpile - loss_heavy, 0)
 				target_st.army_readiness = clampf(target_st.army_readiness - 18.0, 5.0, 100.0)

@@ -504,6 +504,10 @@ void fragment() {
 					if (n_meta_inner.is_water || n_meta_inner.country_id != center_meta.country_id) {
 						inner_glow_hit += (i < 4 ? 1.0 : 0.7071);
 					}
+				} else if (r_inner >= r_nat) {
+					// Optimization: If the outermost probe is already inside the same province,
+					// all intermediate hierarchical probes (national, state, provincial) along this ray are identical.
+					continue;
 				}
 			}
 
@@ -557,6 +561,10 @@ void fragment() {
 						fort_hit += 1.0;
 					}
 				}
+			} else if (r_nat >= r_state && r_nat >= r_prov) {
+				// Optimization: If national radius is already within the province,
+				// intermediate state and province probes along this ray are inside the same province.
+				continue;
 			}
 
 			// Sample at state radius

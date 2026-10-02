@@ -123,6 +123,13 @@ enum EconomyType {
 	SPHERE_MEMBER    ## Сателлит зоны (OFN / Einheitspakt / Co-Prosperity Sphere)
 }
 
+enum CurrencyZone {
+	USD,         ## OFN / Бреттон-Вудс (Доллар США — глобальная расчетная единица)
+	REICHSMARK,  ## Einheitspakt / Zollverein (Рейхсмарка — клиринг Европы)
+	YEN,         ## Сфера Сопроцветания (Иена — расчетный блок Азии)
+	SOVEREIGN    ## Суверенная автаркия / Неприсоединившиеся (Рубль, Лира и др.)
+}
+
 const RUS_WARLORD_TAGS: Array[String] = [
 	"KOM", "WRF", "VYT", "SAM", "ABK", "ONE", "PRM", "UKH", "GAY", "TYU",
 	"SVE", "OMS", "KRN", "SUR", "NOV", "TOM", "KKH", "ALT", "KRA", "IRK",
@@ -130,6 +137,84 @@ const RUS_WARLORD_TAGS: Array[String] = [
 ]
 
 const SPHERE_HEGEMONS: Array[String] = ["USA", "GER", "JAP"]
+
+## Определение валютной зоны державы
+static func get_country_currency_zone(state: CountryState) -> CurrencyZone:
+	if state == null:
+		return CurrencyZone.SOVEREIGN
+	var tag: String = state.country_tag.to_upper().strip_edges()
+	var sphere: String = state.global_sphere.to_upper().strip_edges()
+	if tag == "USA" or sphere == "OFN":
+		return CurrencyZone.USD
+	elif tag == "GER" or sphere in ["EINHEITSPAKT", "ZOLLVEREIN", "GERMAN_SPHERE"]:
+		return CurrencyZone.REICHSMARK
+	elif tag == "JAP" or sphere in ["CO_PROSPERITY", "CO_PROSPERITY_SPHERE", "JAPAN_SPHERE"]:
+		return CurrencyZone.YEN
+	return CurrencyZone.SOVEREIGN
+
+
+## Динамический расчет курсов валют к доллару США ($1.00)
+static func calculate_currency_exchange_rates(hegemon_states: Dictionary) -> Dictionary:
+	var usa: CountryState = hegemon_states.get("USA", null)
+	var ger: CountryState = hegemon_states.get("GER", null)
+	var jap: CountryState = hegemon_states.get("JAP", null)
+
+	var usa_growth: float = usa.real_gdp_growth if usa != null else 0.04
+	var usa_infl: float = usa.inflation_rate if usa != null else 0.03
+
+	var ger_growth: float = ger.real_gdp_growth if ger != null else 0.035
+	var ger_infl: float = ger.inflation_rate if ger != null else 0.045
+
+	var jap_growth: float = jap.real_gdp_growth if jap != null else 0.05
+	var jap_infl: float = jap.inflation_rate if jap != null else 0.04
+
+	var rm_base: float = 2.50
+	var rm_rate: float = clampf(rm_base * ((1.0 + ger_infl - ger_growth) / maxf(1.0 + usa_infl - usa_growth, 0.5)), 1.20, 5.00)
+
+	var yen_base: float = 360.0
+	var yen_rate: float = clampf(yen_base * ((1.0 + jap_infl - jap_growth) / maxf(1.0 + usa_infl - usa_growth, 0.5)), 180.0, 600.0)
+
+	return {
+		CurrencyZone.USD: 1.0,
+		CurrencyZone.REICHSMARK: rm_rate,
+		CurrencyZone.YEN: yen_rate,
+		CurrencyZone.SOVEREIGN: 1.0
+	}
+
+
+## Расчет клиринговых пошлин и валютных издержек внешней торговли
+static func calculate_trade_clearing(
+	exporter: CountryState,
+	importer: CountryState,
+	trade_volume: float
+) -> Dictionary:
+	var exp_zone: CurrencyZone = get_country_currency_zone(exporter)
+	var imp_zone: CurrencyZone = get_country_currency_zone(importer)
+
+	var is_intra_sphere: bool = (exp_zone == imp_zone) and (exp_zone != CurrencyZone.SOVEREIGN)
+
+	if is_intra_sphere:
+		var clearing_fee: float = trade_volume * 0.02
+		return {
+			"is_intra_sphere": true,
+			"tariff_rate": 0.0,
+			"tariff_revenue": 0.0,
+			"clearing_fee": clearing_fee,
+			"reserve_drain": 0.0,
+			"currency_used": exp_zone
+		}
+	else:
+		var tariff_rate: float = 0.18
+		var tariff_total: float = trade_volume * tariff_rate
+		var reserve_drain: float = trade_volume * 0.15
+		return {
+			"is_intra_sphere": false,
+			"tariff_rate": tariff_rate,
+			"tariff_revenue": tariff_total,
+			"clearing_fee": 0.0,
+			"reserve_drain": reserve_drain,
+			"currency_used": CurrencyZone.USD
+		}
 
 static func get_economy_type(state: CountryState) -> EconomyType:
 	if state == null:
@@ -170,55 +255,59 @@ static func get_economy_type(state: CountryState) -> EconomyType:
 
 ## Расчет совокупных доходов бюджета за ход ($ млрд)
 static func calculate_turn_revenue(state: CountryState) -> float:
-	var cfg = ConfigManager.get_instance()
+	var cfg: ConfigManager = ConfigManager.get_instance()
 	var turns_year: float = get_turns_per_year()
 	var eco_type: EconomyType = get_economy_type(state)
 
 	var tax_revenue: float = 0.0
 
-	# 1. СПЕЦИФИКА ТИПОВ ЭКОНОМИКИ
-	if eco_type == EconomyType.WARLORD:
-		# Экономика Варлордов: сборы дани, реквизиции у населения и кустарное производство
-		var base_tribute: float = (float(state.civilian_factories) * 0.015) + (float(state.military_factories) * 0.008)
-		var warlord_eff: float = clampf(0.5 + (state.legitimacy * 0.005) - (state.radicalization * 0.004), 0.3, 1.2)
-		var war_tax: float = (state.gdp_billions * 0.12 * warlord_eff) / turns_year
-		tax_revenue = base_tribute + war_tax
-		if state.is_austerity_active:
-			tax_revenue *= 1.25 # Продразверстка дает +25% сборов
-	elif eco_type == EconomyType.SPHERE_HEGEMON:
-		# Сверхдержава-гегемон: налоги + сеньораж глобальной резервной валюты
-		var base_tax = (state.gdp_billions * state.tax_rate) / turns_year
-		var seigniorage: float = 0.08 # Сеньораж резервной валюты ($80 млн/ход)
-		tax_revenue = base_tax + seigniorage
-	elif eco_type == EconomyType.SPHERE_MEMBER:
-		# Сателлит сферы: взнос в клиринговый союз гегемона
-		tax_revenue = ((state.gdp_billions * state.tax_rate) / turns_year) * 0.95
-	else:
-		# Стандартный индустриальный рынок
-		tax_revenue = (state.gdp_billions * state.tax_rate) / turns_year
+	# 1. СПЕЦИФИКА ТИПОВ ЭКОНОМИКИ (TNO Canon)
+	match eco_type:
+		EconomyType.WARLORD:
+			# Экономика Варлордов: сборы дани, реквизиции у населения и кустарное производство
+			var base_tribute: float = (float(state.civilian_factories) * 0.015) + (float(state.military_factories) * 0.008)
+			var warlord_eff: float = clampf(0.50 + (state.legitimacy * 0.005) - (state.radicalization * 0.004), 0.30, 1.20)
+			var war_tax: float = (state.gdp_billions * 0.12 * warlord_eff) / turns_year
+			tax_revenue = base_tribute + war_tax
+			if state.is_austerity_active:
+				tax_revenue *= 1.25 # Продразверстка и жесткая экономия дают +25% сборов
+
+		EconomyType.SPHERE_HEGEMON:
+			# Сверхдержава-гегемон: налоги + сеньораж глобальной резервной валюты
+			var base_tax: float = (state.gdp_billions * state.tax_rate) / turns_year
+			var seigniorage: float = 0.08 # Сеньораж резервной валюты ($80 млн/ход)
+			tax_revenue = base_tax + seigniorage
+
+		EconomyType.SPHERE_MEMBER:
+			# Сателлит сферы: взнос в клиринговый союз гегемона (-5% отчислений)
+			tax_revenue = ((state.gdp_billions * state.tax_rate) / turns_year) * 0.95
+
+		_:
+			# Стандартный индустриальный рынок
+			tax_revenue = (state.gdp_billions * state.tax_rate) / turns_year
 
 	# Коррекция на стабильность и эффективность госаппарата
-	var eff_base = cfg.get_float("economy", "tax_efficiency_base", 0.8) if cfg != null else 0.8
-	var eff_legit = cfg.get_float("economy", "tax_efficiency_legitimacy_factor", 0.003) if cfg != null else 0.003
-	var eff_rad = cfg.get_float("economy", "tax_efficiency_radicalization_factor", 0.002) if cfg != null else 0.002
-	var eff_min = cfg.get_float("economy", "tax_efficiency_min", 0.4) if cfg != null else 0.4
-	var eff_max = cfg.get_float("economy", "tax_efficiency_max", 1.3) if cfg != null else 1.3
+	var eff_base: float = cfg.get_float("economy", "tax_efficiency_base", 0.8) if cfg != null else 0.8
+	var eff_legit: float = cfg.get_float("economy", "tax_efficiency_legitimacy_factor", 0.003) if cfg != null else 0.003
+	var eff_rad: float = cfg.get_float("economy", "tax_efficiency_radicalization_factor", 0.002) if cfg != null else 0.002
+	var eff_min: float = cfg.get_float("economy", "tax_efficiency_min", 0.4) if cfg != null else 0.4
+	var eff_max: float = cfg.get_float("economy", "tax_efficiency_max", 1.3) if cfg != null else 1.3
 	
-	var efficiency = eff_base + (state.legitimacy * eff_legit) - (state.radicalization * eff_rad)
+	var efficiency: float = eff_base + (state.legitimacy * eff_legit) - (state.radicalization * eff_rad)
 	
 	# Влияние институционального развития (REVENUE Laws & Metrics):
 	# Формула ТЗ: TaxEfficiency = BaseRate * (0.6 + 0.4 * AdminIntegrity / 100)
-	var admin_integrity = state.get_societal_metric_value("administrative_integrity", 100.0 - state.corruption_rate)
-	var academic_base = state.get_societal_metric_value("academic_base", state.literacy_rate)
-	var labor_rights = state.get_societal_metric_value("labor_rights", 30.0)
+	var admin_integrity: float = state.get_societal_metric_value("administrative_integrity", 100.0 - state.corruption_rate)
+	var academic_base: float = state.get_societal_metric_value("academic_base", state.literacy_rate)
+	var labor_rights: float = state.get_societal_metric_value("labor_rights", 30.0)
 
-	var institutional_eff = (0.60 + (0.40 * (admin_integrity / 100.0)))
-	var academic_bonus = 1.0 + ((academic_base - 40.0) * 0.001)
+	var institutional_eff: float = (0.60 + (0.40 * (admin_integrity / 100.0)))
+	var academic_bonus: float = 1.0 + ((academic_base - 40.0) * 0.001)
 	# Высокий уровень labor_rights немного снижает корпоративный налог, но увеличивает сборы НДФЛ через рост фонда оплаты труда
-	var labor_tax_factor = 1.0 + ((labor_rights - 40.0) * 0.0006)
+	var labor_tax_factor: float = 1.0 + ((labor_rights - 40.0) * 0.0006)
 
-	var poverty_penalty = clampf(1.0 - (state.poverty_rate - 25.0) * 0.005, 0.65, 1.15)
-	var corruption_drain = clampf(1.0 - (state.corruption_rate * 0.004), 0.60, 1.0)
+	var poverty_penalty: float = clampf(1.0 - (state.poverty_rate - 25.0) * 0.005, 0.65, 1.15)
+	var corruption_drain: float = clampf(1.0 - (state.corruption_rate * 0.004), 0.60, 1.0)
 	
 	efficiency = efficiency * institutional_eff * academic_bonus * labor_tax_factor * poverty_penalty * corruption_drain
 	
@@ -229,7 +318,7 @@ static func calculate_turn_revenue(state: CountryState) -> float:
 	tax_revenue *= clampf(efficiency, eff_min, eff_max)
 	
 	# Доход от внешних субсидий и сырьевого экспорта
-	var resource_income = cfg.get_float("economy", "resource_income_base", 0.02) if cfg != null else 0.02
+	var resource_income: float = cfg.get_float("economy", "resource_income_base", 0.02) if cfg != null else 0.02
 	if state.resource_trade_balance > 0.0:
 		resource_income += state.resource_trade_balance
 	
@@ -256,7 +345,7 @@ const RATING_CREDIT_SPREADS: Dictionary = {
 
 ## Возвращает надбавку за риск кредитного рейтинга (credit spread)
 static func get_credit_rating_spread(rating_index: int) -> float:
-	var idx = clampi(rating_index, 1, 14)
+	var idx: int = clampi(rating_index, 1, 14)
 	return float(RATING_CREDIT_SPREADS.get(idx, 0.0125))
 
 
@@ -267,14 +356,14 @@ static func calculate_debt_interest_rate(state: CountryState) -> float:
 		# Варлорды не имеют доступа к внешним рынкам суверенных облигаций
 		return 0.0
 
-	var cfg = ConfigManager.get_instance()
-	var base_rate = state.central_bank_rate
-	var debt_ratio = state.get_debt_to_gdp_ratio()
+	var cfg: ConfigManager = ConfigManager.get_instance()
+	var base_rate: float = state.central_bank_rate
+	var debt_ratio: float = state.get_debt_to_gdp_ratio()
 	
-	var debt_threshold = (state.debt_ceiling_ratio * 0.8) if state.debt_ceiling_ratio > 0.0 else (cfg.get_float("economy", "debt_risk_threshold", 0.8) if cfg != null else 0.8)
-	var debt_mult = cfg.get_float("economy", "debt_risk_multiplier", 0.08) if cfg != null else 0.08
-	var stab_mult = cfg.get_float("economy", "stability_risk_multiplier", 0.04) if cfg != null else 0.04
-	var crisis_prem = cfg.get_float("economy", "fiscal_crisis_risk_premium", 0.15) if cfg != null else 0.15
+	var debt_threshold: float = (state.debt_ceiling_ratio * 0.8) if state.debt_ceiling_ratio > 0.0 else (cfg.get_float("economy", "debt_risk_threshold", 0.8) if cfg != null else 0.8)
+	var debt_mult: float = cfg.get_float("economy", "debt_risk_multiplier", 0.08) if cfg != null else 0.08
+	var stab_mult: float = cfg.get_float("economy", "stability_risk_multiplier", 0.04) if cfg != null else 0.04
+	var crisis_prem: float = cfg.get_float("economy", "fiscal_crisis_risk_premium", 0.15) if cfg != null else 0.15
 	
 	# Спред доходности по дискретной шкале кредитного рейтинга TNO (AAA..D)
 	var rating_spread: float = get_credit_rating_spread(state.credit_rating_index)
@@ -292,22 +381,22 @@ static func calculate_debt_interest_rate(state: CountryState) -> float:
 	if eco_type == EconomyType.SPHERE_HEGEMON:
 		risk_premium *= 0.65
 
-	var floor_rate = cfg.get_float("economy", "interest_rate_floor", 0.01) if cfg != null else 0.01
-	var ceil_rate = cfg.get_float("economy", "interest_rate_ceiling", 0.35) if cfg != null else 0.35
+	var floor_rate: float = cfg.get_float("economy", "interest_rate_floor", 0.01) if cfg != null else 0.01
+	var ceil_rate: float = cfg.get_float("economy", "interest_rate_ceiling", 0.35) if cfg != null else 0.35
 	return clampf(base_rate + risk_premium, floor_rate, ceil_rate)
 
 
 ## Расчет совокупных расходов бюджета за ход ($ млрд)
 static func calculate_turn_expenses(state: CountryState) -> Dictionary:
-	var cfg = ConfigManager.get_instance()
-	var annual_turn_div = get_turns_per_year()
+	var cfg: ConfigManager = ConfigManager.get_instance()
+	var annual_turn_div: float = get_turns_per_year()
 	
-	var mil_share_mult = cfg.get_float("economy", "military_expense_gdp_share_mult", 0.15) if cfg != null else 0.15
-	var mil_fac_mult = cfg.get_float("economy", "military_factory_cost_mult", 0.015) if cfg != null else 0.015
-	var manpower_mult = cfg.get_float("economy", "manpower_cost_mult", 0.000001) if cfg != null else 0.000001
-	var civ_share_mult = cfg.get_float("economy", "civilian_expense_mult", 0.12) if cfg != null else 0.12
-	var admin_share_mult = cfg.get_float("economy", "admin_expense_mult", 0.08) if cfg != null else 0.08
-	var rd_share_mult = cfg.get_float("economy", "rd_expense_mult", 0.08) if cfg != null else 0.08
+	var mil_share_mult: float = cfg.get_float("economy", "military_expense_gdp_share_mult", 0.15) if cfg != null else 0.15
+	var mil_fac_mult: float = cfg.get_float("economy", "military_factory_cost_mult", 0.015) if cfg != null else 0.015
+	var manpower_mult: float = cfg.get_float("economy", "manpower_cost_mult", 0.000001) if cfg != null else 0.000001
+	var civ_share_mult: float = cfg.get_float("economy", "civilian_expense_mult", 0.12) if cfg != null else 0.12
+	var admin_share_mult: float = cfg.get_float("economy", "admin_expense_mult", 0.08) if cfg != null else 0.08
+	var rd_share_mult: float = cfg.get_float("economy", "rd_expense_mult", 0.08) if cfg != null else 0.08
 
 	# 1. Расходы на содержание армии и ВПК (в режиме Austerity военные траты урезаются на 20%)
 	var mil_scale: float = (float(state.military_factories) * mil_fac_mult) + (float(state.manpower_pool) * manpower_mult)
@@ -752,11 +841,15 @@ static func toggle_austerity_program(state: CountryState) -> Dictionary:
 
 ## Проведение денежной реформы (сбивает гиперинфляцию ценой резервов)
 static func conduct_currency_reform(state: CountryState) -> Dictionary:
-	var cost = 0.40 # $0.40 млрд
+	var cost: float = 0.40 # $0.40 млрд
 	if state.liquid_reserves_billions < cost:
 		return {
 			"success": false,
-			"message": _tr_str("ECON_CURRENCY_REFORM_FAIL_MSG", {"required": "0.40"}, "Отказ: Недостаточно валютных резервов для обеспечения новой денежной массы (требуется $0.40 млрд).")
+			"message": _tr_str(
+				"ECON_CURRENCY_REFORM_FAIL_MSG",
+				{"required": "0.40"},
+				"Отказ: Недостаточно валютных резервов для обеспечения новой денежной массы (требуется $0.40 млрд)."
+			)
 		}
 		
 	state.liquid_reserves_billions -= cost
@@ -764,8 +857,43 @@ static func conduct_currency_reform(state: CountryState) -> Dictionary:
 	state.legitimacy = clampf(state.legitimacy + 5.0, 0.0, 100.0)
 	return {
 		"success": true,
-		"message": _tr_str("ECON_CURRENCY_REFORM_SUCCESS_MSG", {}, "ДЕНЕЖНАЯ РЕФОРМА УСПЕШНА: Изъятие необеспеченной валюты сбило инфляцию на 55% и восстановило доверие к рублю.")
+		"message": _tr_str(
+			"ECON_CURRENCY_REFORM_SUCCESS_MSG",
+			{"rate": "%.1f" % (state.inflation_rate * 100.0)},
+			"Денежная реформа успешно проведена: инфляция сбита ценой стабилизационного фонда."
+		)
 	}
+
+
+## Реструктуризация суверенного внешнего долга
+static func restructure_foreign_debt(state: CountryState) -> Dictionary:
+	if state.national_debt_billions <= 0.0:
+		return {
+			"success": false,
+			"message": _tr_str(
+				"ECON_DEBT_RESTRUCTURE_ZERO_MSG",
+				{},
+				"Отказ: У государства отсутствует суверенный долг для реструктуризации."
+			)
+		}
+		
+	# Списание 35% долговых обязательств в обмен на резкое падение кредитного рейтинга и престижа
+	var haircut: float = state.national_debt_billions * 0.35
+	state.national_debt_billions = maxf(state.national_debt_billions - haircut, 0.0)
+	state.credit_rating_index = maxi(state.credit_rating_index - 3, state.credit_rating_min)
+	state.legitimacy = clampf(state.legitimacy - 12.0, 0.0, 100.0)
+	state.radicalization = clampf(state.radicalization + 8.0, 0.0, 100.0)
+	
+	return {
+		"success": true,
+		"haircut": haircut,
+		"message": _tr_str(
+			"ECON_DEBT_RESTRUCTURE_SUCCESS_MSG",
+			{"haircut": "%.2f" % haircut},
+			"Долг реструктурирован: списано $%.2f млрд обязательств, однако кредитный рейтинг обрушен до дефолтного уровня."
+		)
+	}
+
 
 
 # ==============================================================================

@@ -107,6 +107,14 @@ func initialize(tm: TurnManager, p_state: CountryState) -> void:
 	print("[ItalyEmpireManager] Инициализирован для Итальянской Империи. Лидер: %s" % (player_state_ref.leader_name if player_state_ref else "Галеаццо Чиано"))
 
 
+## Детерминированный генератор псевдослучайных величин для хода
+static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
+	var s: int = (seed_val * 73856093) ^ 1274126177
+	s = (s ^ (s >> 13)) * 19349663
+	var norm: float = float(s & 0x7FFFFFFF) / float(0x7FFFFFFF)
+	return min_val + (norm * (max_val - min_val))
+
+
 # ==============================================================================
 # ПОШАГОВЫЙ ЦИКЛ СИМУЛЯЦИИ (Turn Process)
 # ==============================================================================
@@ -118,7 +126,7 @@ func process_turn(turn_num: int, p_state: CountryState = null, _world_states: Di
 	_process_triumvirate_turn(turn_num)
 
 	# 2. Симуляция Битвы за Средиземноморье
-	_process_mediterranean_turn()
+	_process_mediterranean_turn(turn_num)
 
 	# 3. Экономический ущерб Атлантропы
 	_process_atlantropa_drain()
@@ -128,9 +136,11 @@ func _process_triumvirate_turn(turn_num: int) -> void:
 	triumvirate_turns_elapsed += 1
 
 	if triumvirate_state != TriumvirateState.DISSOLVED:
-		# Постепенный рост напряжения
-		iberia_tension = clampf(iberia_tension + randf_range(1.5, 3.5), 0.0, 100.0)
-		turkey_tension = clampf(turkey_tension + randf_range(2.0, 4.5), 0.0, 100.0)
+		# Постепенный рост напряжения (детерминированный расчет)
+		var ib_seed: int = (turn_num * 99991) ^ 104729
+		var tr_seed: int = (turn_num * 73856093) ^ 224737
+		iberia_tension = clampf(iberia_tension + _get_deterministic_factor(ib_seed, 1.5, 3.5), 0.0, 100.0)
+		turkey_tension = clampf(turkey_tension + _get_deterministic_factor(tr_seed, 2.0, 4.5), 0.0, 100.0)
 		triumvirate_tension_changed.emit(iberia_tension, turkey_tension)
 
 		# Стадии кризиса
@@ -169,18 +179,19 @@ func trigger_triumvirate_collapse() -> void:
 			turn_manager_ref.pending_modal_events.push_front(ev)
 
 
-func _process_mediterranean_turn() -> void:
-	# Фоновая борьба за влияние
+func _process_mediterranean_turn(turn_num: int = 1) -> void:
+	# Фоновая борьба за влияние (детерминированная симуляция)
 	for th_key in mediterranean_theaters.keys():
-		var th = mediterranean_theaters[th_key]
+		var th: Dictionary = mediterranean_theaters[th_key]
+		var th_seed: int = (turn_num * 31337) ^ str(th_key).hash()
 		# Арабский национализм и повстанцы медленно подтачивают позиции Италии
 		if th.has("arab_nationalism"):
-			th["arab_nationalism"] = clampf(th["arab_nationalism"] + randf_range(0.5, 2.0), 0.0, 100.0)
+			th["arab_nationalism"] = clampf(th["arab_nationalism"] + _get_deterministic_factor(th_seed + 1, 0.5, 2.0), 0.0, 100.0)
 			if th["arab_nationalism"] > 60.0:
 				th["italian_influence"] = maxf(th["italian_influence"] - 1.0, 0.0)
 
 		if th.has("baath_insurgency"):
-			th["baath_insurgency"] = clampf(th["baath_insurgency"] + randf_range(0.5, 2.5), 0.0, 100.0)
+			th["baath_insurgency"] = clampf(th["baath_insurgency"] + _get_deterministic_factor(th_seed + 2, 0.5, 2.5), 0.0, 100.0)
 
 
 func _process_atlantropa_drain() -> void:

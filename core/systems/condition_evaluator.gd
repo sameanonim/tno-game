@@ -15,15 +15,14 @@ static func evaluate(node: Dictionary, state: CountryState) -> bool:
 	if node.is_empty():
 		return true
 
-	# Проверка логических операторов верхнего уровня
-	var op = str(node.get("operator", "")).to_upper()
+	# 1. Проверка структуры с явным полем "operator": "AND" | "OR" | "NOT"
+	var op: String = str(node.get("operator", "")).to_upper()
 	if op == "AND":
 		var conditions = node.get("conditions", [])
 		for cond in conditions:
 			if cond is Dictionary and not evaluate(cond, state):
 				return false
 		return true
-
 	elif op == "OR":
 		var conditions = node.get("conditions", [])
 		if conditions.is_empty():
@@ -32,16 +31,77 @@ static func evaluate(node: Dictionary, state: CountryState) -> bool:
 			if cond is Dictionary and evaluate(cond, state):
 				return true
 		return false
-
 	elif op == "NOT":
 		var conditions = node.get("conditions", [])
-		# В блоке NOT ни одно условие не должно быть истинным
 		for cond in conditions:
 			if cond is Dictionary and evaluate(cond, state):
 				return false
 		return true
 
-	# Если это листовой узел (конкретная проверка)
+	# 2. Прямая поддержка вложенных блоков Clausewitz: "AND", "OR", "NOT", "hidden_trigger"
+	if node.has("AND"):
+		var raw_and = node["AND"]
+		if raw_and is Array:
+			for item in raw_and:
+				if item is Dictionary and not evaluate(item, state):
+					return false
+		elif raw_and is Dictionary and not evaluate(raw_and, state):
+			return false
+
+	if node.has("OR"):
+		var raw_or = node["OR"]
+		if raw_or is Array:
+			var any_true: bool = false
+			for item in raw_or:
+				if item is Dictionary and evaluate(item, state):
+					any_true = true
+					break
+			if not any_true and not raw_or.is_empty():
+				return false
+		elif raw_or is Dictionary and not evaluate(raw_or, state):
+			return false
+
+	if node.has("NOT"):
+		var raw_not = node["NOT"]
+		if raw_not is Array:
+			for item in raw_not:
+				if item is Dictionary and evaluate(item, state):
+					return false
+		elif raw_not is Dictionary and evaluate(raw_not, state):
+			return false
+
+	if node.has("hidden_trigger"):
+		var raw_hidden = node["hidden_trigger"]
+		if raw_hidden is Dictionary and not evaluate(raw_hidden, state):
+			return false
+		elif raw_hidden is Array:
+			for item in raw_hidden:
+				if item is Dictionary and not evaluate(item, state):
+					return false
+
+	if node.has("custom_trigger_tooltip"):
+		var raw_tip = node["custom_trigger_tooltip"]
+		if raw_tip is Dictionary and not evaluate(raw_tip, state):
+			return false
+
+	# 3. Обработка оставшихся ключей (листовые проверки)
+	var special_keys: Array[String] = ["AND", "OR", "NOT", "operator", "conditions", "hidden_trigger", "custom_trigger_tooltip", "tooltip"]
+	var leaf_keys: Array[String] = []
+	for k in node.keys():
+		if not special_keys.has(str(k)):
+			leaf_keys.append(str(k))
+
+	if leaf_keys.is_empty():
+		return true
+
+	if not node.has("type") and not node.has("opcode"):
+		for lk in leaf_keys:
+			var sub_node: Dictionary = { lk: node[lk] }
+			if not evaluate_leaf(sub_node, state):
+				return false
+		return true
+
+	# Если это листовой узел с явным "type"/"opcode"
 	return evaluate_leaf(node, state)
 
 
@@ -50,11 +110,27 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 	if state == null:
 		return false
 
-	var cond_type = str(cond.get("type", cond.get("opcode", ""))).to_lower()
+	var cond_type: String = str(cond.get("type", cond.get("opcode", ""))).to_lower()
+	if cond_type.is_empty():
+		for k in cond.keys():
+			var lk: String = str(k).to_lower()
+			if lk in [
+				"has_country_flag", "has_flag", "has_global_flag", "not_has_country_flag",
+				"check_variable", "stability", "check_stability", "political_power",
+				"has_political_capital", "has_war", "has_war_with", "is_puppet", "is_ai",
+				"tag", "is_tag", "ruling_party", "ruling_ideology", "party_popularity",
+				"senate_seats", "parliament_seats", "has_idea", "controls_state", "owns_state",
+				"threat", "world_tension", "is_neighbor_of", "has_tech", "date", "check_date",
+				"faction_loyalty", "has_completed_focus", "has_completed_directive",
+				"num_of_factories", "num_of_civilian_factories", "num_of_military_factories",
+				"has_army_manpower", "has_oil_crisis", "is_in_faction"
+			]:
+				cond_type = lk
+				break
 
 	match cond_type:
 		"has_country_flag", "has_flag":
-			var f_name = str(cond.get("flag", ""))
+			var f_name = str(cond.get("flag", cond.get("has_country_flag", cond.get("has_flag", cond.get("value", "")))))
 			if f_name in ["US_doesnt_have_crisis_yes", "US_doesnt_have_crisis"]:
 				if state.has_flag("USA_guyana_crisis") or state.has_flag("USA_in_crisis") or state.has_flag("US_has_crisis"):
 					return false
@@ -62,11 +138,11 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 			return state.has_flag(f_name)
 
 		"has_global_flag":
-			var gf_name = str(cond.get("flag", ""))
+			var gf_name = str(cond.get("flag", cond.get("has_global_flag", cond.get("value", ""))))
 			return state.has_flag(gf_name)
 
 		"not_has_country_flag":
-			var nf_name = str(cond.get("flag", ""))
+			var nf_name = str(cond.get("flag", cond.get("not_has_country_flag", cond.get("value", ""))))
 			return not state.has_flag(nf_name)
 
 		"check_variable":
@@ -187,6 +263,34 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 		"has_completed_focus", "has_completed_directive", "completed_focus", "completed_directive":
 			var f_id = str(cond.get("focus", cond.get("directive", cond.get("value", cond.get("id", "")))))
 			return state.completed_directives.has(f_id) or state.has_flag("completed_focus_" + f_id) or (state.has_method("has_completed_directive") and state.has_completed_directive(f_id))
+
+		"num_of_factories":
+			var op: String = str(cond.get("operator", ">="))
+			var val: float = float(cond.get("value", cond.get("num_of_factories", 0.0)))
+			var total_fac: float = float(state.civilian_factories + state.military_factories)
+			return _compare(total_fac, op, val)
+
+		"num_of_civilian_factories":
+			var op: String = str(cond.get("operator", ">="))
+			var val: float = float(cond.get("value", cond.get("num_of_civilian_factories", 0.0)))
+			return _compare(float(state.civilian_factories), op, val)
+
+		"num_of_military_factories":
+			var op: String = str(cond.get("operator", ">="))
+			var val: float = float(cond.get("value", cond.get("num_of_military_factories", 0.0)))
+			return _compare(float(state.military_factories), op, val)
+
+		"has_army_manpower", "has_manpower":
+			var op: String = str(cond.get("operator", ">="))
+			var val: float = float(cond.get("value", cond.get("manpower", cond.get("has_army_manpower", 0.0))))
+			return _compare(float(state.manpower_pool), op, val)
+
+		"has_oil_crisis":
+			return state.has_flag("global_oil_crisis") or state.has_flag("oil_crisis_active")
+
+		"is_in_faction", "is_in_faction_with":
+			var expected_fac: String = str(cond.get("faction", cond.get("sphere", cond.get("is_in_faction", cond.get("is_in_faction_with", cond.get("value", "")))))).to_upper()
+			return state.global_sphere.to_upper() == expected_fac or state.has_flag("faction_" + expected_fac.to_lower())
 
 		_:
 			# Если условие неизвестно, проверяем флаги как запасной вариант

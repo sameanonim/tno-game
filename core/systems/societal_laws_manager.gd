@@ -52,17 +52,17 @@ static func calculate_minimum_fiscal_requirement(state: CountryState) -> float:
 
 ## Подробный расчет стоимости содержания институтов и законов за текущий ход
 static func calculate_detailed_law_costs(state: CountryState) -> Dictionary:
-	var pop_millions = float(state.get_population()) / 1000000.0
+	var pop_millions: float = float(state.get_population()) / 1000000.0
 	if pop_millions <= 0.1:
 		pop_millions = 5.0 # Fallback 5M
 
-	var admin_integrity = state.get_societal_metric_value("administrative_integrity", 30.0)
+	var admin_integrity: float = state.get_societal_metric_value("administrative_integrity", 30.0)
 	# Коррупция раздувает бюджетные расходы без роста институционального качества:
 	# Чем ниже administrative_integrity, тем выше наценка хищений (до +50%)
-	var corruption_waste = (1.0 - (admin_integrity / 100.0)) * CORRUPTION_WASTE_FACTOR
-	var corruption_cost_multiplier = 1.0 + corruption_waste
+	var corruption_waste: float = (1.0 - (admin_integrity / 100.0)) * CORRUPTION_WASTE_FACTOR
+	var corruption_cost_multiplier: float = 1.0 + corruption_waste
 
-	var laws = get_active_law_resources(state)
+	var laws: Array[LawResource] = get_active_law_resources(state)
 	var by_metric: Dictionary = {}
 	var by_law: Dictionary = {}
 	var in_kind_required: Dictionary = {
@@ -72,13 +72,13 @@ static func calculate_detailed_law_costs(state: CountryState) -> Dictionary:
 	var total_cash_cost: float = 0.0
 
 	# 1. Расчет расходов по активным законам типа EXPENSE
-	for law in laws:
+	for law: LawResource in laws:
 		if law.fiscal_type == LawResource.FiscalType.EXPENSE:
-			var target_m = _find_primary_metric_for_law(law)
-			var current_scale = state.get_societal_metric_value(target_m, 25.0)
+			var target_m: String = _find_primary_metric_for_law(law)
+			var current_scale: float = state.get_societal_metric_value(target_m, 25.0)
 			
 			# Формула ТЗ: BudgetCost = BasePerCapitaCost * N * (1.0 + S_i / 100) * (1.0 + CorruptionWaste)
-			var law_cost = BASE_PER_CAPITA_COST_UNIT * law.base_fiscal_weight * pop_millions * (1.0 + (current_scale / 100.0)) * corruption_cost_multiplier
+			var law_cost: float = BASE_PER_CAPITA_COST_UNIT * law.base_fiscal_weight * pop_millions * (1.0 + (current_scale / 100.0)) * corruption_cost_multiplier
 			
 			total_cash_cost += law_cost
 			by_law[law.law_id] = law_cost
@@ -86,16 +86,16 @@ static func calculate_detailed_law_costs(state: CountryState) -> Dictionary:
 
 			# Если это варлорд, суммируем натуральные требования со складов
 			if _is_warlord_state(state):
-				for item_key in law.in_kind_goods_cost.keys():
-					var qty = int(law.in_kind_goods_cost[item_key])
+				for item_key: String in law.in_kind_goods_cost.keys():
+					var qty: int = int(law.in_kind_goods_cost[item_key])
 					in_kind_required[item_key] = int(in_kind_required.get(item_key, 0)) + qty
 
 	# 2. Базовые расходы на поддержание институтов без явных законов (минимальное содержание)
-	for m_key in METRIC_KEYS:
+	for m_key: String in METRIC_KEYS:
 		if not by_metric.has(m_key):
-			var current_scale = state.get_societal_metric_value(m_key, 25.0)
+			var current_scale: float = state.get_societal_metric_value(m_key, 25.0)
 			# Минимальное содержание (0.4 от стандартного веса)
-			var m_base_cost = BASE_PER_CAPITA_COST_UNIT * 0.40 * pop_millions * (1.0 + (current_scale / 100.0)) * corruption_cost_multiplier
+			var m_base_cost: float = BASE_PER_CAPITA_COST_UNIT * 0.40 * pop_millions * (1.0 + (current_scale / 100.0)) * corruption_cost_multiplier
 			by_metric[m_key] = m_base_cost
 			total_cash_cost += m_base_cost
 
@@ -120,32 +120,32 @@ static func process_turn_evolution(
 ) -> Dictionary:
 	_ensure_state_metrics_initialized(state)
 
-	var active_laws_list = get_active_law_resources(state)
-	var targets = _calculate_metric_targets(state, active_laws_list)
-	var detailed_costs = calculate_detailed_law_costs(state)
+	var active_laws_list: Array[LawResource] = get_active_law_resources(state)
+	var targets: Dictionary = _calculate_metric_targets(state, active_laws_list)
+	var detailed_costs: Dictionary = calculate_detailed_law_costs(state)
 	var required_by_metric: Dictionary = detailed_costs.get("by_metric", {})
 
 	# Военная усталость и общественное недовольство для формулы износа (Decay)
-	var war_exhaustion = clampf((100.0 - state.war_support_percent) / 100.0 * 0.5, 0.0, 1.0)
-	var unrest_factor = clampf(state.radicalization / 100.0, 0.0, 1.5)
+	var war_exhaustion: float = clampf((100.0 - state.war_support_percent) / 100.0 * 0.5, 0.0, 1.0)
+	var unrest_factor: float = clampf(state.radicalization / 100.0, 0.0, 1.5)
 
 	# Определение бюджета и финансирования
-	var is_warlord = _is_warlord_state(state)
+	var is_warlord: bool = _is_warlord_state(state)
 	var in_kind_used: Dictionary = {"infantry_weapons": 0, "oil": 0}
 	var threatened_laws: Array[String] = []
 
-	var total_allocated_cash = 0.0
+	var total_allocated_cash: float = 0.0
 	if budget_allocated.has("civilian_budget_allocated"):
 		total_allocated_cash = float(budget_allocated["civilian_budget_allocated"])
 	elif budget_allocated.has("total"):
 		total_allocated_cash = float(budget_allocated["total"])
 	else:
 		# По умолчанию берем гражданские расходы бюджета из EconomyEngine
-		var exp_dict = EconomyEngine.calculate_turn_expenses(state)
+		var exp_dict: Dictionary = EconomyEngine.calculate_turn_expenses(state)
 		total_allocated_cash = float(exp_dict.get("civilian", 0.05))
 
-	var total_required_cash = float(detailed_costs.get("total_fiscal_requirement", 0.05))
-	var global_coverage = clampf(total_allocated_cash / maxf(total_required_cash, 0.0001), 0.0, 1.5)
+	var total_required_cash: float = float(detailed_costs.get("total_fiscal_requirement", 0.05))
+	var global_coverage: float = clampf(total_allocated_cash / maxf(total_required_cash, 0.0001), 0.0, 1.5)
 
 	var metrics_before: Dictionary = {}
 	var metrics_after: Dictionary = {}
@@ -153,30 +153,30 @@ static func process_turn_evolution(
 	var funding_ratios: Dictionary = {}
 
 	# Итерируемся по 6 базовым институциональным шкалам
-	for m_key in METRIC_KEYS:
-		var metric_res = state.get_societal_metric(m_key)
+	for m_key: String in METRIC_KEYS:
+		var metric_res: SocietalMetricResource = state.get_societal_metric(m_key)
 		if metric_res == null:
 			continue
 
-		var s_prev = metric_res.current_value
+		var s_prev: float = metric_res.current_value
 		metrics_before[m_key] = s_prev
 
-		var target_val = float(targets.get(m_key, 20.0))
+		var target_val: float = float(targets.get(m_key, 20.0))
 		metric_res.target_value = target_val
 
 		# Коэффициент покрытия финансирования F
-		var f_ratio = global_coverage
+		var f_ratio: float = global_coverage
 		if budget_allocated.has(m_key) and required_by_metric.has(m_key):
-			var alloc_m = float(budget_allocated[m_key])
-			var req_m = float(required_by_metric[m_key])
+			var alloc_m: float = float(budget_allocated[m_key])
+			var req_m: float = float(required_by_metric[m_key])
 			f_ratio = clampf(alloc_m / maxf(req_m, 0.0001), 0.0, 1.5)
 
 		# Специфика Русской Смуты (Warlord in-kind compensation):
 		# Если денег не хватает (f_ratio < 1.0), но у варлорда есть склады оружия и сырья,
 		# расходы списываются натурой со складов, восстанавливая покрытие F до 1.0!
 		if is_warlord and f_ratio < 1.0:
-			var req_weap = int(detailed_costs.get("in_kind_goods_required", {}).get("infantry_weapons", 25))
-			var req_oil = int(detailed_costs.get("in_kind_goods_required", {}).get("oil", 1))
+			var req_weap: int = int(detailed_costs.get("in_kind_goods_required", {}).get("infantry_weapons", 25))
+			var req_oil: int = int(detailed_costs.get("in_kind_goods_required", {}).get("oil", 1))
 			
 			if state.infantry_weapons_stockpile >= req_weap and state.produced_resources.get("oil", 0) >= req_oil:
 				state.infantry_weapons_stockpile -= req_weap
@@ -188,14 +188,14 @@ static func process_turn_evolution(
 
 		# 1. Расчет естественного износа институтов (Decay)
 		# Decay_i = base_decay * (1.0 + WarExhaustion + UnrestFactor)
-		var decay_i = metric_res.base_decay * (1.0 + war_exhaustion + unrest_factor)
+		var decay_i: float = metric_res.base_decay * (1.0 + war_exhaustion + unrest_factor)
 
 		# 2. Расчет шага сближения с целевой планкой (Velocity Impact)
 		# Velocity * (Target - S_i)
-		var velocity_step = metric_res.velocity * (target_val - s_prev)
+		var velocity_step: float = metric_res.velocity * (target_val - s_prev)
 
 		# 3. Расчет влияния финансирования (Funding Impact)
-		var funding_impact = 0.0
+		var funding_impact: float = 0.0
 		if f_ratio >= 1.0:
 			# Профицитное субсидирование (F > 1.0): бонус к темпу реформ +0.3 * (F - 1.0)
 			if (target_val > s_prev):
@@ -215,10 +215,10 @@ static func process_turn_evolution(
 			state.legitimacy = clampf(state.legitimacy - (1.5 * float(delta_turns)), 0.0, 100.0)
 
 		# Формула ТЗ: Delta S_i = Velocity * (Target - S_i) - Decay_i + FundingImpact_i + ShockImpact_i
-		var delta_s = (velocity_step - decay_i + funding_impact) * float(delta_turns)
+		var delta_s: float = (velocity_step - decay_i + funding_impact) * float(delta_turns)
 
 		# Применение изменений
-		var new_val = clampf(s_prev + delta_s, 0.0, 100.0)
+		var new_val: float = clampf(s_prev + delta_s, 0.0, 100.0)
 		metric_res.current_value = new_val
 		metric_res.record_history()
 		metric_res.calculate_modifiers()
@@ -227,7 +227,7 @@ static func process_turn_evolution(
 		deltas[m_key] = new_val - s_prev
 
 	# Обновление статуса законов (is_under_threat при недофинансировании статьи)
-	for law in active_laws_list:
+	for law: LawResource in active_laws_list:
 		var target_m = _find_primary_metric_for_law(law)
 		var m_coverage = float(funding_ratios.get(target_m, global_coverage))
 		if law.fiscal_type == LawResource.FiscalType.EXPENSE and m_coverage < 0.99:

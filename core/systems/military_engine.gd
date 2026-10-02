@@ -485,18 +485,18 @@ static func _simulate_axis_turn(
 		rep["summary"] = _tr_str("FRONT_AXIS_ALL_OBJECTIVES", {"axis_name": axis.name}, "Направление [%s]: Все оперативные цели достигнуты!" % axis.name)
 		return rep
 
-	var target_id = axis.target_region_ids[0]
+	var target_id: int = axis.target_region_ids[0]
 	var target_region: RegionData = regions.get(target_id, null)
 
-	var cfg = ConfigManager.get_instance()
+	var cfg: ConfigManager = ConfigManager.get_instance()
 
 	# 1. РАСЧЕТ БОЕВОЙ МОЩИ АТАКУЮЩИХ
-	var atk_power = axis.get_effective_combat_power(attacker.army_readiness, attacker.army_morale)
+	var atk_power: float = axis.get_effective_combat_power(attacker.army_readiness, attacker.army_morale)
 
 	# Влияние тяжелой техники и бронетанковых клиньев в зависимости от ландшафта
-	var heavy_armor = axis.assigned_equipment.get("heavy_equipment", 0)
+	var heavy_armor: int = int(axis.assigned_equipment.get("heavy_equipment", 0))
 	if heavy_armor > 0 and target_region != null:
-		var ttype = target_region.terrain_type.to_lower()
+		var ttype: String = target_region.terrain_type.to_lower()
 		match ttype:
 			"mountains", "marsh":
 				atk_power *= 0.85
@@ -509,20 +509,20 @@ static func _simulate_axis_turn(
 				atk_power *= 1.15
 
 	# Проверка складов оружия атакующего (Data-Driven через ConfigManager)
-	var hunger_ratio = cfg.get_float("military", "combat_hunger_threshold_ratio", 0.4) if cfg != null else 0.4
-	var hunger_penalty = cfg.get_float("military", "combat_hunger_atk_penalty", 0.65) if cfg != null else 0.65
-	var weapons_in_use = axis.assigned_equipment.get("infantry_weapons", 0)
+	var hunger_ratio: float = cfg.get_float("military", "combat_hunger_threshold_ratio", 0.4) if cfg != null else 0.4
+	var hunger_penalty: float = cfg.get_float("military", "combat_hunger_atk_penalty", 0.65) if cfg != null else 0.65
+	var weapons_in_use: int = int(axis.assigned_equipment.get("infantry_weapons", 0))
 	if weapons_in_use < int(float(axis.assigned_manpower) * hunger_ratio):
 		atk_power *= hunger_penalty # Штраф за снарядный голод
 		axis.is_stalled = true
 
 	# 2. РАСЧЕТ ОБОРОНИТЕЛЬНОЙ МОЩИ
-	var def_power = 100.0
-	var terrain_mult = 1.0
+	var def_power: float = 100.0
+	var terrain_mult: float = 1.0
 
-	var terrain_mods = cfg.get_dict("military", "terrain_modifiers", {}) if cfg != null else {}
+	var terrain_mods: Dictionary = cfg.get_dict("military", "terrain_modifiers", {}) if cfg != null else {}
 	if target_region != null:
-		var ttype = target_region.terrain_type.to_lower()
+		var ttype: String = target_region.terrain_type.to_lower()
 		if terrain_mods.has(ttype):
 			terrain_mult = float(terrain_mods[ttype])
 		else:
@@ -536,87 +536,119 @@ static func _simulate_axis_turn(
 		def_power = (target_region.garrison_strength * 1.5 + float(target_region.civilian_infrastructure) * 8.0) * terrain_mult
 
 	if defender != null:
-		var def_factory_power = cfg.get_float("military", "defender_factory_power_factor", 15.0) if cfg != null else 15.0
-		var def_training = (defender.army_readiness * 0.5 + defender.army_morale * 0.5) / 100.0
+		var def_factory_power: float = cfg.get_float("military", "defender_factory_power_factor", 15.0) if cfg != null else 15.0
+		var def_training: float = (defender.army_readiness * 0.5 + defender.army_morale * 0.5) / 100.0
 		def_power += (float(defender.military_factories) * def_factory_power) * def_training
 
 	# 3. БАЛАНС СИЛ И СДВИГ ФРОНТА (Детерминированный сид хода)
 	var axis_seed: int = (current_turn * 73856093) ^ (axis.axis_id.hash() * 19349663) ^ (target_id * 83492791)
-	var randomness = _get_deterministic_factor(axis_seed, 0.90, 1.10)
-	var ratio = (atk_power * randomness) / maxf(def_power, 1.0)
-	var progress_gain = 0.0
+	var randomness: float = _get_deterministic_factor(axis_seed, 0.90, 1.10)
+	var ratio: float = (atk_power * randomness) / maxf(def_power, 1.0)
+	var progress_gain: float = 0.0
 
-	var ratio_high = cfg.get_float("military", "breakthrough_ratio_high", 1.4) if cfg != null else 1.4
-	var ratio_mid = cfg.get_float("military", "breakthrough_ratio_mid", 1.0) if cfg != null else 1.0
-	var ratio_low = cfg.get_float("military", "breakthrough_ratio_low", 0.75) if cfg != null else 0.75
+	var ratio_high: float = cfg.get_float("military", "breakthrough_ratio_high", 1.4) if cfg != null else 1.4
+	var ratio_mid: float = cfg.get_float("military", "breakthrough_ratio_mid", 1.0) if cfg != null else 1.0
+	var ratio_low: float = cfg.get_float("military", "breakthrough_ratio_low", 0.75) if cfg != null else 0.75
 
 	if ratio >= ratio_high:
 		# Решительный прорыв
-		var p_min = cfg.get_float("military", "progress_gain_high_min", 14.0) if cfg != null else 14.0
-		var p_max = cfg.get_float("military", "progress_gain_high_max", 24.0) if cfg != null else 24.0
+		var p_min: float = cfg.get_float("military", "progress_gain_high_min", 14.0) if cfg != null else 14.0
+		var p_max: float = cfg.get_float("military", "progress_gain_high_max", 24.0) if cfg != null else 24.0
 		progress_gain = _get_deterministic_factor(axis_seed + 1, p_min, p_max)
 		axis.is_stalled = false
 	elif ratio >= ratio_mid:
 		# Уверенное продвижение
-		var p_min = cfg.get_float("military", "progress_gain_mid_min", 8.0) if cfg != null else 8.0
-		var p_max = cfg.get_float("military", "progress_gain_mid_max", 14.0) if cfg != null else 14.0
+		var p_min: float = cfg.get_float("military", "progress_gain_mid_min", 8.0) if cfg != null else 8.0
+		var p_max: float = cfg.get_float("military", "progress_gain_mid_max", 14.0) if cfg != null else 14.0
 		progress_gain = _get_deterministic_factor(axis_seed + 2, p_min, p_max)
 		axis.is_stalled = false
 	elif ratio >= ratio_low:
 		# Вязкие позиционные бои
-		var p_min = cfg.get_float("military", "progress_gain_low_min", 2.0) if cfg != null else 2.0
-		var p_max = cfg.get_float("military", "progress_gain_low_max", 6.0) if cfg != null else 6.0
+		var p_min: float = cfg.get_float("military", "progress_gain_low_min", 2.0) if cfg != null else 2.0
+		var p_max: float = cfg.get_float("military", "progress_gain_low_max", 6.0) if cfg != null else 6.0
 		progress_gain = _get_deterministic_factor(axis_seed + 3, p_min, p_max)
 		axis.is_stalled = false
 	else:
 		# Наступление захлебнулось
-		var p_min = cfg.get_float("military", "progress_loss_stalled_min", 1.0) if cfg != null else 1.0
-		var p_max = cfg.get_float("military", "progress_loss_stalled_max", 4.0) if cfg != null else 4.0
+		var p_min: float = cfg.get_float("military", "progress_loss_stalled_min", 1.0) if cfg != null else 1.0
+		var p_max: float = cfg.get_float("military", "progress_loss_stalled_max", 4.0) if cfg != null else 4.0
 		progress_gain = -_get_deterministic_factor(axis_seed + 4, p_min, p_max)
 		axis.is_stalled = true
 
 	# Модификатор стойки
 	match axis.posture:
 		OperationalAxis.Posture.AGGRESSIVE_BREAKTHROUGH:
-			var agg_mult = cfg.get_float("military", "posture_aggressive_mult", 1.35) if cfg != null else 1.35
+			var agg_mult: float = cfg.get_float("military", "posture_aggressive_mult", 1.35) if cfg != null else 1.35
 			progress_gain *= agg_mult
 		OperationalAxis.Posture.DEFENSIVE:
-			var def_max = cfg.get_float("military", "posture_defensive_max_progress", 1.0) if cfg != null else 1.0
+			var def_max: float = cfg.get_float("military", "posture_defensive_max_progress", 1.0) if cfg != null else 1.0
 			progress_gain = minf(progress_gain, def_max) # В обороне продвижение минимально
+
+	# Влияние логистической инфраструктуры на темп продвижения
+	if target_region != null:
+		var infra: int = target_region.civilian_infrastructure
+		if infra <= 2:
+			progress_gain *= (0.75 + float(infra) * 0.10) # Бездорожье и распутица тормозят наступление
+		elif infra >= 5:
+			progress_gain *= 1.20 # Развитая сеть ускоряет переброску
 
 	axis.progress = clampf(axis.progress + progress_gain, 0.0, 100.0)
 	rep["progress_delta"] = progress_gain
 	rep["current_progress"] = axis.progress
 
-	# 4. ПОТЕРИ И АМОРТИЗАЦИЯ СНАРЯЖЕНИЯ
-	var loss_min = cfg.get_float("military", "base_losses_rate_min", 0.015) if cfg != null else 0.015
-	var loss_max = cfg.get_float("military", "base_losses_rate_max", 0.035) if cfg != null else 0.035
-	var wep_loss_ratio = cfg.get_float("military", "weapons_loss_ratio", 0.75) if cfg != null else 0.75
+	# 4. ПОТЕРИ И АМОРТИЗАЦИЯ СНАРЯЖЕНИЯ (С УЧЕТОМ ИНФРАСТРУКТУРЫ И ПАРТИЗАН)
+	var loss_min: float = cfg.get_float("military", "base_losses_rate_min", 0.015) if cfg != null else 0.015
+	var loss_max: float = cfg.get_float("military", "base_losses_rate_max", 0.035) if cfg != null else 0.035
+	var wep_loss_ratio: float = cfg.get_float("military", "weapons_loss_ratio", 0.75) if cfg != null else 0.75
 
-	var loss_rate = _get_deterministic_factor(axis_seed + 5, loss_min, loss_max)
-	var base_losses = int(float(axis.assigned_manpower) * loss_rate)
-	var atk_casualties = int(base_losses / maxf(ratio * 0.8, 0.5))
-	var def_casualties = int(base_losses * ratio)
-	var weapons_lost = int(float(atk_casualties) * wep_loss_ratio)
-	var heavy_lost = int(float(atk_casualties) * 0.035)
+	if target_region != null:
+		if target_region.civilian_infrastructure <= 2:
+			loss_min *= 1.25
+			loss_max *= 1.40
+			wep_loss_ratio *= 1.20
+		elif target_region.civilian_infrastructure >= 5:
+			loss_min *= 0.85
+			loss_max *= 0.85
+
+	var loss_rate: float = _get_deterministic_factor(axis_seed + 5, loss_min, loss_max)
+	var base_losses: int = int(float(axis.assigned_manpower) * loss_rate)
+	var atk_casualties: int = int(base_losses / maxf(ratio * 0.8, 0.5))
+	var def_casualties: int = int(base_losses * ratio)
+	var weapons_lost: int = int(float(atk_casualties) * wep_loss_ratio)
+	var heavy_lost: int = int(float(atk_casualties) * 0.035)
+
+	# Асимметричные партизанские действия в тайге, горах и болотах
+	if target_region != null:
+		var ttype_lower: String = target_region.terrain_type.to_lower()
+		var is_rugged: bool = ttype_lower in ["forest", "marsh", "mountains"]
+		var high_unrest: bool = target_region.unrest > 45.0 or (defender != null and defender.radicalization > 50.0)
+		if is_rugged and high_unrest:
+			var ambush_roll: float = _get_deterministic_factor(axis_seed + 11, 0.0, 1.0)
+			if ambush_roll < 0.35:
+				var ambush_rifles: int = int(_get_deterministic_factor(axis_seed + 12, 60.0, 160.0))
+				weapons_lost += ambush_rifles
+				atk_casualties += int(ambush_rifles * 0.4)
+				progress_gain = maxf(progress_gain - 2.5, -5.0)
+				rep["battle_incident"] = "PARTISAN_AMBUSH"
+				rep["partisan_ambush_weapons"] = ambush_rifles
 
 	# Списание потерь (только с боевой группы оси)
 	axis.assigned_manpower = maxi(axis.assigned_manpower - atk_casualties, 0)
-	var eq_weapons = axis.assigned_equipment.get("infantry_weapons", 0)
+	var eq_weapons: int = int(axis.assigned_equipment.get("infantry_weapons", 0))
 	axis.assigned_equipment["infantry_weapons"] = maxi(eq_weapons - weapons_lost, 0)
-	var eq_heavy = axis.assigned_equipment.get("heavy_equipment", 0)
+	var eq_heavy: int = int(axis.assigned_equipment.get("heavy_equipment", 0))
 	axis.assigned_equipment["heavy_equipment"] = maxi(eq_heavy - heavy_lost, 0)
 
 	# Пополнение потерь оси из глобальных резервов государства
-	var manpower_reinforcement = min(atk_casualties, attacker.manpower_pool)
+	var manpower_reinforcement: int = mini(atk_casualties, attacker.manpower_pool)
 	attacker.manpower_pool -= manpower_reinforcement
 	axis.assigned_manpower += manpower_reinforcement
 	
-	var weapons_reinforcement = min(weapons_lost, attacker.infantry_weapons_stockpile)
+	var weapons_reinforcement: int = mini(weapons_lost, attacker.infantry_weapons_stockpile)
 	attacker.infantry_weapons_stockpile -= weapons_reinforcement
 	axis.assigned_equipment["infantry_weapons"] += weapons_reinforcement
 
-	var heavy_reinforcement = min(heavy_lost, attacker.heavy_equipment_stockpile)
+	var heavy_reinforcement: int = mini(heavy_lost, attacker.heavy_equipment_stockpile)
 	attacker.heavy_equipment_stockpile -= heavy_reinforcement
 	axis.assigned_equipment["heavy_equipment"] += heavy_reinforcement
 
@@ -860,17 +892,17 @@ static func execute_border_raid(
 	raid_intensity: String = "medium",
 	current_turn: int = 1
 ) -> RaidResult:
-	var result = RaidResult.new()
+	var result: RaidResult = RaidResult.new()
 
-	var cfg = ConfigManager.get_instance()
-	var raids_cfg = cfg.get_dict("military", "raids", {}) if cfg != null else {}
+	var cfg: ConfigManager = ConfigManager.get_instance()
+	var raids_cfg: Dictionary = cfg.get_dict("military", "raids", {}) if cfg != null else {}
 
-	var commitment_factor = 1.0
-	var cost_weapons = 200
-	var cost_manpower = 400
+	var commitment_factor: float = 1.0
+	var cost_weapons: int = 200
+	var cost_manpower: int = 400
 
 	if raids_cfg.has(raid_intensity) and raids_cfg[raid_intensity] is Dictionary:
-		var r_data = raids_cfg[raid_intensity]
+		var r_data: Dictionary = raids_cfg[raid_intensity]
 		commitment_factor = float(r_data.get("commitment_factor", 1.0))
 		cost_weapons = int(r_data.get("cost_weapons", 200))
 		cost_manpower = int(r_data.get("cost_manpower", 400))
@@ -892,31 +924,31 @@ static func execute_border_raid(
 
 	attacker.infantry_weapons_stockpile -= cost_weapons
 
-	var attack_power = (attacker.army_readiness * 0.6 + attacker.army_morale * 0.4) * commitment_factor
+	var attack_power: float = (attacker.army_readiness * 0.6 + attacker.army_morale * 0.4) * commitment_factor
 
-	var terrain_mult = 1.0
+	var terrain_mult: float = 1.0
 	match target_region.terrain_type:
 		"forest": terrain_mult = 1.2
 		"marsh": terrain_mult = 1.4
 		"mountains": terrain_mult = 1.6
 		"urban": terrain_mult = 1.5
 
-	var defense_power = (target_region.garrison_strength * terrain_mult) + (float(target_region.civilian_infrastructure) * 3.0)
+	var defense_power: float = (target_region.garrison_strength * terrain_mult) + (float(target_region.civilian_infrastructure) * 3.0)
 
 	var raid_seed: int = (attacker.country_tag.hash() * 37) ^ (target_region.province_id * 101) ^ (current_turn * 99991)
-	var roll = _get_deterministic_factor(raid_seed, 0.85, 1.15)
-	var ratio = (attack_power * roll) / maxf(defense_power, 1.0)
+	var roll: float = _get_deterministic_factor(raid_seed, 0.85, 1.15)
+	var ratio: float = (attack_power * roll) / maxf(defense_power, 1.0)
 
 	if ratio >= 1.0:
 		result.success = true
-		var spoils_factor = clampf(ratio - 0.5, 0.5, 3.0) * commitment_factor
+		var spoils_factor: float = clampf(ratio - 0.5, 0.5, 3.0) * commitment_factor
 
 		result.loot_cash_billions = float(target_region.industrial_capacity) * 0.04 * spoils_factor
 		result.captured_weapons = int(_get_deterministic_int(raid_seed + 1, 150, 450) * spoils_factor)
 		result.captured_manpower = int(_get_deterministic_int(raid_seed + 2, 80, 300) * spoils_factor)
 
-		var atk_loss_ratio = _get_deterministic_factor(raid_seed + 3, 0.05, 0.20)
-		var def_loss_ratio = _get_deterministic_factor(raid_seed + 4, 0.3, 0.8)
+		var atk_loss_ratio: float = _get_deterministic_factor(raid_seed + 3, 0.05, 0.20)
+		var def_loss_ratio: float = _get_deterministic_factor(raid_seed + 4, 0.3, 0.8)
 		result.attacker_casualties = int(cost_manpower * atk_loss_ratio / ratio)
 		result.defender_casualties = int(cost_manpower * def_loss_ratio * ratio)
 		result.region_damage_unrest = clampf(15.0 * spoils_factor, 5.0, 40.0)
@@ -940,8 +972,8 @@ static func execute_border_raid(
 		}, "Рейд увенчался успехом! Захвачено $%0.2f млрд трофеев, %d стволов оружия, %d пленных. Потери: %d чел." % [result.loot_cash_billions, result.captured_weapons, result.captured_manpower, result.attacker_casualties])
 	else:
 		result.success = false
-		var fail_atk_loss = _get_deterministic_factor(raid_seed + 5, 0.25, 0.60)
-		var fail_def_loss = _get_deterministic_factor(raid_seed + 6, 0.10, 0.30)
+		var fail_atk_loss: float = _get_deterministic_factor(raid_seed + 5, 0.25, 0.60)
+		var fail_def_loss: float = _get_deterministic_factor(raid_seed + 6, 0.10, 0.30)
 		result.attacker_casualties = int(cost_manpower * fail_atk_loss)
 		result.defender_casualties = int(cost_manpower * fail_def_loss)
 

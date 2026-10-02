@@ -735,6 +735,15 @@ func _on_directive_completed(dir: DirectiveResource) -> void:
 	if not completed_directives_archive.has(dir.id):
 		completed_directives_archive.append(dir.id)
 
+	# Блокировка взаимоисключающих директив при завершении
+	for ex_id in dir.mutually_exclusive:
+		var clean_ex: String = str(ex_id).strip_edges()
+		if not blocked_mutually_exclusive_ids.has(clean_ex):
+			blocked_mutually_exclusive_ids.append(clean_ex)
+			if country_state != null:
+				country_state.set_flag("locked_focus_" + clean_ex, true)
+			print("[FocusStageController] Блокировка взаимоисключающей директивы: %s" % clean_ex)
+
 	for rew in dir.completion_rewards:
 		var op = str(rew.get("opcode", "")).to_upper()
 		if op == "LOAD_FOCUS_TREE":
@@ -744,6 +753,25 @@ func _on_directive_completed(dir: DirectiveResource) -> void:
 				print("[FocusStageController] Директива [%s] инициировала LOAD_FOCUS_TREE -> [%s]" % [dir.id, target_tree])
 				switch_focus_tree(target_tree, keep)
 				return
+
+
+## Проверяет, доступна ли директива для взятия в работу с учётом взаимных исключений
+func is_directive_available(dir_id: String) -> bool:
+	if completed_directive_ids.has(dir_id) or blocked_mutually_exclusive_ids.has(dir_id):
+		return false
+	if country_state != null and country_state.has_flag("locked_focus_" + dir_id):
+		return false
+	var directive: DirectiveResource = active_tree_directives.get(dir_id, null)
+	if directive == null:
+		return false
+	for exclusive_id: String in directive.mutually_exclusive:
+		var clean_ex_id: String = exclusive_id.strip_edges()
+		if completed_directive_ids.has(clean_ex_id):
+			if not blocked_mutually_exclusive_ids.has(dir_id):
+				blocked_mutually_exclusive_ids.append(dir_id)
+			return false
+	return true
+
 
 
 ## Перехват разрешения событий EventManager

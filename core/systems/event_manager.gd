@@ -73,22 +73,22 @@ func register_event(event: GameEvent) -> void:
 
 ## Загружает все события для конкретной страны (data/countries/<TAG>/events.json)
 func load_country_events(tag: String) -> Array[GameEvent]:
-	var upper_tag = tag.to_upper().strip_edges()
-	var ev_path = COUNTRIES_BASE_DIR.path_join(upper_tag).path_join("events.json")
+	var upper_tag: String = tag.to_upper().strip_edges()
+	var ev_path: String = COUNTRIES_BASE_DIR.path_join(upper_tag).path_join("events.json")
 	var result: Array[GameEvent] = []
 
-	var events_data = _read_json(ev_path)
+	var events_data: Variant = _read_json(ev_path)
 	if events_data is Array:
 		for raw in events_data:
 			if raw is Dictionary:
-				var g_ev = GameEvent.from_dict(raw)
+				var g_ev: GameEvent = GameEvent.from_dict(raw)
 				register_event(g_ev)
 				result.append(g_ev)
 	elif events_data is Dictionary:
 		for ev_id in events_data.keys():
 			var raw = events_data[ev_id]
 			if raw is Dictionary:
-				var g_ev = GameEvent.from_dict(raw)
+				var g_ev: GameEvent = GameEvent.from_dict(raw)
 				register_event(g_ev)
 				result.append(g_ev)
 
@@ -103,11 +103,11 @@ func get_or_load_event(event_id: String) -> GameEvent:
 
 	_load_index_if_needed()
 
-	var file_path = _events_index.get(event_id, "")
+	var file_path: String = _events_index.get(event_id, "")
 	if file_path.is_empty():
 		return null
 
-	var full_res_path = file_path
+	var full_res_path: String = file_path
 	if not full_res_path.begins_with("res://"):
 		full_res_path = "res://".path_join(file_path.replace("\\", "/"))
 
@@ -118,7 +118,7 @@ func get_or_load_event(event_id: String) -> GameEvent:
 	if file_data.has(event_id):
 		var raw = file_data[event_id]
 		if raw is Dictionary:
-			var ev = GameEvent.from_dict(raw)
+			var ev: GameEvent = GameEvent.from_dict(raw)
 			register_event(ev)
 			return ev
 
@@ -127,7 +127,7 @@ func get_or_load_event(event_id: String) -> GameEvent:
 
 ## Принудительный триггер события по его ID (например, из фокуса/директивы или скрипта)
 func trigger_event(event_id: String) -> GameEvent:
-	var ev = get_or_load_event(event_id)
+	var ev: GameEvent = get_or_load_event(event_id)
 	if ev != null:
 		if ev.fire_only_once and fired_events.has(event_id):
 			return ev
