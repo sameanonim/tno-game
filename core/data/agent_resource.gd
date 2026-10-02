@@ -46,6 +46,13 @@ enum AgentStatus {
 @export var traits: Array[String] = []
 
 
+static var _seq_id: int = 100000
+
+static func generate_unique_id(prefix: String = "agent_") -> String:
+	_seq_id += 1
+	return prefix + str(_seq_id)
+
+
 func _init(
 	p_id: String = "",
 	p_codename: String = "Shadow",
@@ -56,7 +63,7 @@ func _init(
 	if not p_id.is_empty():
 		id = p_id
 	else:
-		id = "agent_" + str(randi() % 900000 + 100000)
+		id = generate_unique_id("agent_")
 	codename = p_codename
 	competence = clampi(p_competence, 1, 5)
 	loyalty = clampf(p_loyalty, 0.0, 100.0)
@@ -111,7 +118,8 @@ func to_dict() -> Dictionary:
 
 static func from_dict(data: Dictionary) -> AgentResource:
 	var agent = AgentResource.new()
-	agent.id = str(data.get("id", "agent_" + str(randi() % 900000 + 100000)))
+	var raw_id = str(data.get("id", ""))
+	agent.id = raw_id if not raw_id.is_empty() else generate_unique_id("agent_")
 	agent.codename = str(data.get("codename", "Shadow"))
 	agent.assigned_country_tag = str(data.get("assigned_country_tag", ""))
 	agent.competence = clampi(int(data.get("competence", 3)), 1, 5)

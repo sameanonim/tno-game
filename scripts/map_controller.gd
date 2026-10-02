@@ -1153,7 +1153,14 @@ func get_province_id_at_pixel(pixel: Vector2i) -> int:
 ## Быстрое декодирование RGB цвета пикселя маски в целочисленный 24-битный ID
 ##
 func _sample_raw_pixel_id(pos: Vector2i) -> int:
-	var col: Color = mask_image.get_pixelv(pos)
+	if mask_image == null:
+		return 0
+	var mw: int = mask_image.get_width()
+	var mh: int = mask_image.get_height()
+	if mw <= 0 or mh <= 0:
+		return 0
+	var clamped_pos = Vector2i(clampi(pos.x, 0, mw - 1), clampi(pos.y, 0, mh - 1))
+	var col: Color = mask_image.get_pixelv(clamped_pos)
 	var r: int = int(round(col.r * 255.0))
 	var g: int = int(round(col.g * 255.0))
 	var b: int = int(round(col.b * 255.0))

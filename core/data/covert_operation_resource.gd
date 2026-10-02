@@ -57,6 +57,13 @@ enum OpType {
 @export var is_aborted: bool = false
 
 
+static var _seq_id: int = 100000
+
+static func generate_unique_id(prefix: String = "op_") -> String:
+	_seq_id += 1
+	return prefix + str(_seq_id)
+
+
 func _init(
 	p_op_id: String = "",
 	p_title: String = "Covert Operation",
@@ -70,7 +77,7 @@ func _init(
 	if not p_op_id.is_empty():
 		op_id = p_op_id
 	else:
-		op_id = "op_" + str(randi() % 900000 + 100000)
+		op_id = generate_unique_id("op_")
 	title = p_title
 	type = p_type
 	target_country_tag = p_target_tag
@@ -151,7 +158,8 @@ func to_dict() -> Dictionary:
 
 static func from_dict(data: Dictionary) -> CovertOperationResource:
 	var op = CovertOperationResource.new()
-	op.op_id = str(data.get("op_id", "op_" + str(randi() % 900000 + 100000)))
+	var raw_id = str(data.get("op_id", ""))
+	op.op_id = raw_id if not raw_id.is_empty() else generate_unique_id("op_")
 	op.title = str(data.get("title", "Covert Operation"))
 	op.type = data.get("type", OpType.STEAL_TECH) as OpType
 	op.target_country_tag = str(data.get("target_country_tag", ""))

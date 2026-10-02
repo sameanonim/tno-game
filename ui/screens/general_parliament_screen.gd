@@ -41,6 +41,15 @@ func _ready() -> void:
 		engine = ParliamentEngineScript.new()
 
 
+func _tr(key: String, default_text: String) -> String:
+	if is_inside_tree():
+		var loc = get_node_or_null("/root/LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, {}, default_text)
+	var tr_val = TranslationServer.translate(key)
+	return tr_val if (not tr_val.is_empty() and tr_val != key) else default_text
+
+
 func _apply_tno_styling() -> void:
 	TNOTheme.apply_panel_style(self, TNOTheme.COLOR_BORDER_CYAN, TNOTheme.COLOR_BG_DARK)
 	if btn_close != null:
@@ -103,9 +112,11 @@ func _update_majority_status() -> void:
 	var has_majority = (coalition_seats >= quorum)
 
 	if lbl_status_coalition != null:
-		lbl_status_coalition.text = "ПРАВИТЕЛЬСТВЕННОЕ БОЛЬШИНСТВО: %d / %d мест (Порог кворума: %d) — %s" % [
-			coalition_seats, total, quorum,
-			("[color=#20dfaa]КОАЛИЦИОННОЕ БОЛЬШИНСТВО СФОРМИРОВАНО[/color]" if has_majority else "[color=#df6030]ПРАВИТЕЛЬСТВО МЕНЬШИНСТВА (ТРЕБУЮТСЯ СДЕЛКИ)[/color]")
+		var maj_formed = _tr("PARLIAMENT_MAJORITY_FORMED", "[color=#20dfaa]КОАЛИЦИОННОЕ БОЛЬШИНСТВО СФОРМИРОВАНО[/color]")
+		var min_govt = _tr("PARLIAMENT_MINORITY_GOVT", "[color=#df6030]ПРАВИТЕЛЬСТВО МЕНЬШИНСТВА (ТРЕБУЮТСЯ СДЕЛКИ)[/color]")
+		var status_str = maj_formed if has_majority else min_govt
+		lbl_status_coalition.text = _tr("PARLIAMENT_MAJORITY_STATUS", "ПРАВИТЕЛЬСТВЕННОЕ БОЛЬШИНСТВО: %d / %d мест (Порог кворума: %d) — %s") % [
+			coalition_seats, total, quorum, status_str
 		]
 	if coalition_progress != null:
 		coalition_progress.max_value = total
@@ -177,7 +188,7 @@ func _populate_factions_list() -> void:
 		top_h.add_child(lbl_name)
 
 		var lbl_seats = Label.new()
-		lbl_seats.text = "%d мест (%.1f%%)" % [f.seats, (float(f.seats)/float(engine.total_seats))*100.0]
+		lbl_seats.text = _tr("PARLIAMENT_SEATS_FORMAT", "%d мест (%.1f%%)") % [f.seats, (float(f.seats)/float(engine.total_seats))*100.0]
 		lbl_seats.add_theme_font_size_override("font_size", 11)
 		lbl_seats.add_theme_color_override("font_color", f.color)
 		top_h.add_child(lbl_seats)
@@ -185,7 +196,7 @@ func _populate_factions_list() -> void:
 
 		# Лояльность и накопленные сделки
 		var meta_lbl = Label.new()
-		meta_lbl.text = "Лояльность режиму: %.0f%% | Долг/Сделки (Favors): %d | Бонус к голосам: +%d" % [
+		meta_lbl.text = _tr("PARLIAMENT_FACTION_META", "Лояльность режиму: %.0f%% | Долг/Сделки (Favors): %d | Бонус к голосам: +%d") % [
 			f.loyalty, f.favors, f.whipped_votes_bonus
 		]
 		meta_lbl.add_theme_font_size_override("font_size", 10)
@@ -198,8 +209,8 @@ func _populate_factions_list() -> void:
 
 		# 1. Лоббирование / Компромисс (15 PC)
 		var b_comp = Button.new()
-		b_comp.text = "🤝 ЛОББИ (15 PC)"
-		b_comp.tooltip_text = "Потратить 15 PC на кулуарные переговоры. Склонить до 35% депутатов фракции поддержать законопроект."
+		b_comp.text = _tr("PARLIAMENT_BTN_LOBBY", "🤝 ЛОББИ (15 PC)")
+		b_comp.tooltip_text = _tr("PARLIAMENT_TOOLTIP_LOBBY", "Потратить 15 PC на кулуарные переговоры. Склонить до 35% депутатов фракции поддержать законопроект.")
 		var can_comp = (country_state != null and country_state.political_capital >= 15.0)
 		b_comp.disabled = not can_comp
 		TNOTheme.apply_button_style(b_comp, TNOTheme.COLOR_BORDER_CYAN, Color(0.06, 0.12, 0.14, 0.9))
@@ -211,8 +222,8 @@ func _populate_factions_list() -> void:
 
 		# 2. Обещание портфеля (1 CAP)
 		var b_cap = Button.new()
-		b_cap.text = "💼 ПОРТФЕЛЬ (1 CAP)"
-		b_cap.tooltip_text = "Потратить 1 очко кабинета (CAP). Предоставить фракции аппаратные квоты (+60% гарантированных голосов, +1 Favor)."
+		b_cap.text = _tr("PARLIAMENT_BTN_PORTFOLIO", "💼 ПОРТФЕЛЬ (1 CAP)")
+		b_cap.tooltip_text = _tr("PARLIAMENT_TOOLTIP_PORTFOLIO", "Потратить 1 очко кабинета (CAP). Предоставить фракции аппаратные квоты (+60% гарантированных голосов, +1 Favor).")
 		var can_cap = (country_state != null and country_state.current_cap >= 1)
 		b_cap.disabled = not can_cap
 		TNOTheme.apply_button_style(b_cap, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.08, 0.04, 0.9))
@@ -224,8 +235,8 @@ func _populate_factions_list() -> void:
 
 		# 3. Фискальная субсидия ($0.15B)
 		var b_sub = Button.new()
-		b_sub.text = "💵 СУБСИДИЯ ($0.15B)"
-		b_sub.tooltip_text = "Выделить $0.15 млрд на целевые проекты региона/сектора фракции (+80% голосов фракции, +8% лояльности)."
+		b_sub.text = _tr("PARLIAMENT_BTN_SUBSIDY", "💵 СУБСИДИЯ ($0.15B)")
+		b_sub.tooltip_text = _tr("PARLIAMENT_TOOLTIP_SUBSIDY", "Выделить $0.15 млрд на целевые проекты региона/сектора фракции (+80% голосов фракции, +8% лояльности).")
 		var can_sub = (country_state != null and country_state.liquid_reserves_billions >= 0.15)
 		b_sub.disabled = not can_sub
 		TNOTheme.apply_button_style(b_sub, TNOTheme.COLOR_BORDER_CYAN, Color(0.04, 0.10, 0.08, 0.9))
@@ -268,35 +279,40 @@ func _populate_bills_list() -> void:
 func _update_selected_bill_view() -> void:
 	var b = engine._get_bill(selected_bill_id)
 	if b == null:
-		if lbl_bill_title != null: lbl_bill_title.text = "ЗАКОНОПРОЕКТ НЕ ВЫБРАН"
+		if lbl_bill_title != null: lbl_bill_title.text = _tr("TNO_PARL_NO_BILL_SELECTED", "ЗАКОНОПРОЕКТ НЕ ВЫБРАН")
 		if lbl_bill_desc != null: lbl_bill_desc.text = ""
 		if lbl_vote_projection != null: lbl_vote_projection.text = ""
 		if btn_call_vote != null: btn_call_vote.disabled = true
 		return
 
 	if lbl_bill_title != null:
-		lbl_bill_title.text = b.title.to_upper() + " // КАТЕГОРИЯ: " + b.category.to_upper()
+		var cat_prefix = _tr("TNO_PARL_CATEGORY_PREFIX", " // КАТЕГОРИЯ: ")
+		lbl_bill_title.text = b.title.to_upper() + cat_prefix + b.category.to_upper()
 
 	if lbl_bill_desc != null:
 		var effects_str = ""
 		for k in b.effects.keys():
 			effects_str += " • %s: %s\n" % [k, str(b.effects[k])]
-		lbl_bill_desc.text = "%s\n\n[color=#20dfaa]ЭФФЕКТЫ ПРИ ПРИНЯТИИ:[/color]\n%s\n[color=#d09020]СТОИМОСТЬ ВНЕСЕНИЯ:[/color] %.0f PC, %d CAP" % [
-			b.description, effects_str, b.cost_pc, b.cost_cap
+		var eff_title = _tr("TNO_PARL_BILL_EFFECTS_TITLE", "ЭФФЕКТЫ ПРИ ПРИНЯТИИ:")
+		var cost_title = _tr("TNO_PARL_BILL_COST_INTRO", "СТОИМОСТЬ ВНЕСЕНИЯ:")
+		lbl_bill_desc.text = "%s\n\n[color=#20dfaa]%s[/color]\n%s\n[color=#d09020]%s[/color] %.0f PC, %d CAP" % [
+			b.description, eff_title, effects_str, cost_title, b.cost_pc, b.cost_cap
 		]
 
 	var proj = engine.calculate_vote_projection(b.id)
 	if lbl_vote_projection != null:
 		var status_col = "#20dfaa" if proj["is_passing"] else "#df4030"
-		var status_text = "ПРОЕКТ ИМЕЕТ БОЛЬШИНСТВО" if proj["is_passing"] else "НЕДОСТАТОЧНО ГОЛОСОВ ДЛЯ КВОРУМА"
-		lbl_vote_projection.text = "ПРОГНОЗ ГОЛОСОВАНИЯ: [color=#20dfaa]ЗА: %d[/color] | [color=#df4030]ПРОТИВ: %d[/color] | [color=#8090a0]ВОЗДЕРЖАЛИСЬ: %d[/color] (Кворум: %d)\nСТАТУС: [color=%s]%s[/color]" % [
+		var status_text = _tr("TNO_PARL_VOTE_PROJ_PASS", "ПРОЕКТ ИМЕЕТ БОЛЬШИНСТВО") if proj["is_passing"] else _tr("TNO_PARL_VOTE_PROJ_FAIL", "НЕДОСТАТОЧНО ГОЛОСОВ ДЛЯ КВОРУМА")
+		var proj_fmt = _tr("TNO_PARL_PROJECTION_FORMAT", "ПРОГНОЗ ГОЛОСОВАНИЯ: [color=#20dfaa]ЗА: %d[/color] | [color=#df4030]ПРОТИВ: %d[/color] | [color=#8090a0]ВОЗДЕРЖАЛИСЬ: %d[/color] (Кворум: %d)\nСТАТУС: [color=%s]%s[/color]")
+		lbl_vote_projection.text = proj_fmt % [
 			proj["yeas"], proj["nays"], proj["abstain"], proj["quorum_needed"], status_col, status_text
 		]
 
 	if btn_call_vote != null:
 		var can_call = (country_state != null and country_state.political_capital >= b.cost_pc and country_state.current_cap >= b.cost_cap)
 		btn_call_vote.disabled = not can_call
-		btn_call_vote.text = "[ 🗳 ПРОВЕСТИ ГОЛОСОВАНИЕ (%.0f PC, %d CAP) ]" % [b.cost_pc, b.cost_cap]
+		var vote_fmt = _tr("TNO_PARL_CALL_VOTE_BTN", "[ 🗳 ПРОВЕСТИ ГОЛОСОВАНИЕ (%.0f PC, %d CAP) ]")
+		btn_call_vote.text = vote_fmt % [b.cost_pc, b.cost_cap]
 
 
 func _on_offer_favor(party_id: String, deal_type: String) -> void:

@@ -64,6 +64,16 @@ func _ready() -> void:
 
 
 
+func _tr(key: String, default_text: String) -> String:
+	if is_inside_tree() and get_tree().root.has_node("LocalizationManager"):
+		var loc = get_tree().root.get_node("LocalizationManager")
+		return loc.tr_key(key, default_text)
+	var translated = TranslationServer.translate(key)
+	if translated != key and not translated.is_empty():
+		return translated
+	return default_text
+
+
 func _apply_tno_styling() -> void:
 	TNOTheme.apply_panel_style(self, TNOTheme.COLOR_BORDER_CYAN, TNOTheme.COLOR_BG_DARK)
 	if btn_close != null:
@@ -84,7 +94,8 @@ func display_country(state: CountryState) -> void:
 		var loc = get_tree().root.get_node("LocalizationManager")
 		c_name = loc.tr_key(state.country_tag, state.country_name)
 	if lbl_header_title != null:
-		lbl_header_title.text = "ГОСУДАРСТВЕННЫЙ АППАРАТ И ПОЛИТИКА // %s (%s)" % [c_name.to_upper(), state.country_tag]
+		var hdr_fmt = _tr("TNO_POL_HEADER_TITLE", "ГОСУДАРСТВЕННЫЙ АППАРАТ И ПОЛИТИКА // %s (%s)")
+		lbl_header_title.text = hdr_fmt % [c_name.to_upper(), state.country_tag]
 
 	# Лидер
 	var l_name = state.leader_name if not state.leader_name.is_empty() else "UNKNOWN"
@@ -97,7 +108,7 @@ func display_country(state: CountryState) -> void:
 	if state.head_of_state != null and not state.head_of_state.leader_title.is_empty():
 		l_title = state.head_of_state.leader_title
 	if l_title.is_empty():
-		l_title = "Глава государства"
+		l_title = _tr("TNO_POL_DEFAULT_HEAD_TITLE", "Глава государства")
 	if lbl_leader_title != null:
 		lbl_leader_title.text = str(l_title)
 
@@ -145,13 +156,13 @@ func _setup_legislature_button() -> void:
 		return
 
 	var tag = current_state.country_tag.to_upper()
-	var btn_title = "[ 🏛 ПАРЛАМЕНТ ]"
+	var btn_title = _tr("TNO_POL_BTN_PARLIAMENT", "[ 🏛 ПАРЛАМЕНТ ]")
 	if tag == "USA":
-		btn_title = "[ 🏛 КОНГРЕСС И ВЫБОРЫ США ]"
+		btn_title = _tr("TNO_POL_BTN_US_CONGRESS", "[ 🏛 КОНГРЕСС И ВЫБОРЫ США ]")
 	elif tag in ["GER", "SPE", "BOR", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"]:
-		btn_title = "[ 🏛 РЕЙХСТАГ ВЕЛИКОЙ ГЕРМАНИИ ]"
+		btn_title = _tr("TNO_POL_BTN_REICHSTAG", "[ 🏛 РЕЙХСТАГ ВЕЛИКОЙ ГЕРМАНИИ ]")
 	elif RussianUnificationManager.is_warlord(tag) or tag in ["RUS", "SOV", "WRS", "KOM", "SAM", "VYT", "OMS", "IRK"]:
-		btn_title = "[ 🏛 ВЕРХОВНЫЙ СОВЕТ / ДУМА ]"
+		btn_title = _tr("TNO_POL_BTN_SOVIET", "[ 🏛 ВЕРХОВНЫЙ СОВЕТ / ДУМА ]")
 
 	if btn_legislature == null:
 		btn_legislature = Button.new()
@@ -222,7 +233,7 @@ func _populate_national_spirits() -> void:
 	for sp in spirits:
 		var panel = PanelContainer.new()
 		panel.custom_minimum_size = Vector2(170, 70)
-		var sp_name = str(sp.get("name", "Национальный дух"))
+		var sp_name = str(sp.get("name", _tr("TNO_POL_SPIRIT_DEFAULT", "Национальный дух")))
 		var sp_desc = str(sp.get("desc", ""))
 		panel.tooltip_text = "%s\n\n%s" % [sp_name, sp_desc]
 		
@@ -281,11 +292,12 @@ func _populate_societal_laws() -> void:
 
 		# Интерактивная плашка закона: клик открывает диалог реформы
 		var btn_law_card = Button.new()
-		btn_law_card.text = "⚖ %s: %s [Ур. %d/%d]" % [str(law.get("name")), str(law.get("value")), int(cur_t), int(max_t)]
+		var law_fmt = _tr("TNO_POL_LAW_FMT", "⚖ %s: %s [Ур. %d/%d]")
+		btn_law_card.text = law_fmt % [str(law.get("name")), str(law.get("value")), int(cur_t), int(max_t)]
 		btn_law_card.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn_law_card.custom_minimum_size = Vector2(280, 24)
 		btn_law_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		btn_law_card.tooltip_text = "Нажмите для подробного досье закона и выбора ветки реформ."
+		btn_law_card.tooltip_text = _tr("TNO_POL_LAW_TOOLTIP", "Нажмите для подробного досье закона и выбора ветки реформ.")
 		TNOTheme.apply_button_style(btn_law_card, TNOTheme.COLOR_BORDER_CYAN, Color(0.05, 0.08, 0.10, 0.90))
 		var c_idx = law_idx
 		btn_law_card.pressed.connect(func():
@@ -315,9 +327,9 @@ func _populate_societal_laws() -> void:
 
 		# Кнопка повышения уровня (Реформа)
 		var btn_up = Button.new()
-		btn_up.text = "▲ РЕФОРМА"
+		btn_up.text = _tr("TNO_POL_BTN_REFORM", "▲ РЕФОРМА")
 		btn_up.custom_minimum_size = Vector2(95, 24)
-		btn_up.tooltip_text = "Инициировать государственную реформу закона.\nСтоимость: 20 PC, 1 CAP."
+		btn_up.tooltip_text = _tr("TNO_POL_BTN_REFORM_TIP", "Инициировать государственную реформу закона.\nСтоимость: 20 PC, 1 CAP.")
 		var can_up = (cur_t < max_t) and (current_state.political_capital >= 20.0) and (current_state.current_cap >= 1)
 		btn_up.disabled = not can_up
 		TNOTheme.apply_button_style(btn_up, TNOTheme.COLOR_BORDER_CYAN, Color(0.05, 0.14, 0.16, 0.95))
@@ -333,7 +345,7 @@ func _populate_societal_laws() -> void:
 		var btn_down = Button.new()
 		btn_down.text = "▼"
 		btn_down.custom_minimum_size = Vector2(26, 24)
-		btn_down.tooltip_text = "Свернуть реформу / сократить расходы.\nСтоимость: 15 PC, 1 CAP."
+		btn_down.tooltip_text = _tr("TNO_POL_BTN_ROLLBACK_TIP", "Свернуть реформу / сократить расходы.\nСтоимость: 15 PC, 1 CAP.")
 		var can_down = (cur_t > 1) and (current_state.political_capital >= 15.0) and (current_state.current_cap >= 1)
 		btn_down.disabled = not can_down
 		TNOTheme.apply_button_style(btn_down, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.08, 0.05, 0.9))
@@ -357,7 +369,7 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 		active_reform_modal = null
 
 	var law = current_state.societal_laws[law_idx]
-	var law_name = str(law.get("name", "Закон"))
+	var law_name = str(law.get("name", _tr("TNO_POL_DEFAULT_LAW_NAME", "Закон")))
 	var cur_tier = int(law.get("tier", 1))
 	var max_tier = int(law.get("max_tier", 5))
 
@@ -377,7 +389,7 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 	# Заголовок модала
 	var mh_box = HBoxContainer.new()
 	var mtitle = Label.new()
-	mtitle.text = "РЕФОРМА: " + law_name.to_upper()
+	mtitle.text = _tr("TNO_POL_REFORM_TITLE_PREFIX", "РЕФОРМА: ") + law_name.to_upper()
 	mtitle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	mtitle.add_theme_font_size_override("font_size", 13)
 	mtitle.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
@@ -395,7 +407,8 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 
 	# Текущее состояние и шкала
 	var cur_status_lbl = Label.new()
-	cur_status_lbl.text = "ТЕКУЩИЙ СТАТУС: УРОВЕНЬ %d ИЗ %d // %s" % [cur_tier, max_tier, str(law.get("value"))]
+	var status_fmt = _tr("TNO_POL_CUR_STATUS_FMT", "ТЕКУЩИЙ СТАТУС: УРОВЕНЬ %d ИЗ %d // %s")
+	cur_status_lbl.text = status_fmt % [cur_tier, max_tier, str(law.get("value"))]
 	cur_status_lbl.add_theme_font_size_override("font_size", 11)
 	cur_status_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_AMBER)
 	mvbox.add_child(cur_status_lbl)
@@ -409,7 +422,7 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 
 	# Информация о цене и эффектах
 	var meta_cost = Label.new()
-	meta_cost.text = "СТОИМОСТЬ РЕФОРМЫ: 20 PC, 1 CAP | ЭФФЕКТ: +2.5 Легитимность, -3.0 Радикализация, +12 Институты"
+	meta_cost.text = _tr("TNO_POL_REFORM_COST_INFO", "СТОИМОСТЬ РЕФОРМЫ: 20 PC, 1 CAP | ЭФФЕКТ: +2.5 Легитимность, -3.0 Радикализация, +12 Институты")
 	meta_cost.add_theme_font_size_override("font_size", 10)
 	meta_cost.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_MUTED)
 	mvbox.add_child(meta_cost)
@@ -419,7 +432,7 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 	act_hbox.add_theme_constant_override("separation", 10)
 
 	var b_enact = Button.new()
-	b_enact.text = "[ ▲ ПРИНЯТЬ РЕФОРМУ ЗАКОНА ]"
+	b_enact.text = _tr("TNO_POL_BTN_ENACT_REFORM", "[ ▲ ПРИНЯТЬ РЕФОРМУ ЗАКОНА ]")
 	b_enact.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_enact.custom_minimum_size = Vector2(0, 30)
 	var can_e = (cur_tier < max_tier) and (current_state.political_capital >= 20.0) and (current_state.current_cap >= 1)
@@ -435,7 +448,7 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 	act_hbox.add_child(b_enact)
 
 	var b_rollback = Button.new()
-	b_rollback.text = "[ ▼ ДЕРЕГУЛЯЦИЯ ]"
+	b_rollback.text = _tr("TNO_POL_BTN_DEREGULATION", "[ ▼ ДЕРЕГУЛЯЦИЯ ]")
 	b_rollback.custom_minimum_size = Vector2(140, 30)
 	var can_r = (cur_tier > 1) and (current_state.political_capital >= 15.0) and (current_state.current_cap >= 1)
 	b_rollback.disabled = not can_r
@@ -503,14 +516,16 @@ func _generate_law_tiers_bbcode(law_name: String, cur_tier: int) -> String:
 		]
 
 	var res = ""
+	var tag_cur = _tr("TNO_POL_TIER_CURRENT", "ТЕКУЩИЙ")
+	var tag_next = _tr("TNO_POL_TIER_NEXT", "СЛЕДУЮЩИЙ")
 	for i in range(tiers.size()):
 		var t_num = i + 1
 		if t_num == cur_tier:
-			res += "[color=#20dfaa]▶ " + tiers[i] + " [ТЕКУЩИЙ][/color]\n"
+			res += "[color=#20dfaa]▶ %s [%s][/color]\n" % [tiers[i], tag_cur]
 		elif t_num == cur_tier + 1:
-			res += "[color=#f0d040]★ " + tiers[i] + " [СЛЕДУЮЩИЙ][/color]\n"
+			res += "[color=#f0d040]★ %s [%s][/color]\n" % [tiers[i], tag_next]
 		else:
-			res += "[color=#708595]" + tiers[i] + "[/color]\n"
+			res += "[color=#708595]%s[/color]\n" % [tiers[i]]
 	return res
 
 

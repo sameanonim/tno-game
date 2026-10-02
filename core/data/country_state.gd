@@ -94,6 +94,7 @@ extends Resource
 
 ## Реальный годовой рост ВВП (0.05 = +5.0% / год)
 @export var real_gdp_growth: float = 0.045
+## @deprecated: Устаревший процентный аксессор. Используйте каноническое поле real_gdp_growth.
 var gdp_growth_rate: float:
 	get:
 		return real_gdp_growth * 100.0
@@ -111,6 +112,7 @@ var gdp_growth_rate: float:
 
 ## Статус фискального кризиса (дефолта)
 @export var is_in_fiscal_crisis: bool = false
+## @deprecated: Устаревший псевдоним. Используйте каноническое поле is_in_fiscal_crisis.
 var fiscal_crisis_active: bool:
 	get:
 		return is_in_fiscal_crisis

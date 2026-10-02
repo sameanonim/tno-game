@@ -525,7 +525,7 @@ func _render_superpower_tab() -> void:
 		var t_bar = _generate_ascii_bar(p.get("tension", 0.0) / 100.0, 12)
 		var l1 = Label.new()
 		var th_code = p.get("theater_code", p_key.to_upper())
-		l1.text = "[ %s // %s ]  НАПРЯЖЕННОСТЬ: [%s] %0.1f%%" % [th_code, p["name"], t_bar, p["tension"]]
+		l1.text = _tr("GCW_THEATER_TENSION", "[ %s // %s ]  НАПРЯЖЕННОСТЬ: [%s] %0.1f%%") % [th_code, p["name"], t_bar, p["tension"]]
 		if p["tension"] > 70.0:
 			l1.modulate = Color(1.0, 0.35, 0.35)
 		elif p["tension"] > 40.0:
@@ -535,12 +535,12 @@ func _render_superpower_tab() -> void:
 		vbox.add_child(l1)
 
 		var desc_lbl = Label.new()
-		desc_lbl.text = "  > %s" % p.get("description", "Оперативный ТВД геополитического противостояния блоков.")
+		desc_lbl.text = "  > %s" % p.get("description", _tr("GCW_THEATER_DEFAULT_DESC", "Оперативный ТВД геополитического противостояния блоков."))
 		desc_lbl.modulate = Color(0.65, 0.85, 0.95)
 		vbox.add_child(desc_lbl)
 
 		var l2 = Label.new()
-		l2.text = "  ДИВИЗИИ: %d | ФИНАНСЫ: $%.2fB | ОРУЖИЕ: %d шт. | ТЕХНИКА: %d ед. | СТАТУС: [%s]" % [
+		l2.text = _tr("GCW_THEATER_STATS", "  ДИВИЗИИ: %d | ФИНАНСЫ: $%.2fB | ОРУЖИЕ: %d шт. | ТЕХНИКА: %d ед. | СТАТУС: [%s]") % [
 			p.get("german_volunteers", 0),
 			p.get("funded_billions", 0.0),
 			p.get("weapons_delivered", 0),
@@ -561,11 +561,11 @@ func _render_superpower_tab() -> void:
 			if ok:
 				proxy_aid_dispatched.emit(p_key, 1, 0.5)
 				if status_bar_label != null:
-					status_bar_label.text = "УСПЕХ: Экспедиционный контингент отправлен в %s." % p["name"]
+					status_bar_label.text = _tr("GCW_MSG_AID_SUCCESS", "УСПЕХ: Экспедиционный контингент отправлен в %s.") % p["name"]
 					status_bar_label.modulate = Color(0.2, 1.0, 0.4)
 			else:
 				if status_bar_label != null:
-					status_bar_label.text = "ОШИБКА: Недостаточно рекрутов (10k), винтовок (2.5k) или валюты ($0.5B)."
+					status_bar_label.text = _tr("GCW_MSG_AID_FAIL", "ОШИБКА: Недостаточно рекрутов (10k), винтовок (2.5k) или валюты ($0.5B).")
 					status_bar_label.modulate = Color(1.0, 0.4, 0.4)
 			refresh_ui()
 		)
@@ -635,7 +635,7 @@ func _on_order_resolved(order: String, res: Dictionary) -> void:
 
 func _on_defcon_alert(level: int, reason: String) -> void:
 	if status_bar_label != null:
-		status_bar_label.text = "ВНИМАНИЕ: СДВИГ DEFCON НА УРОВЕНЬ %d! Причина: %s" % [level, reason]
+		status_bar_label.text = _tr("GCW_MSG_DEFCON_ALERT", "ВНИМАНИЕ: СДВИГ DEFCON НА УРОВЕНЬ %d! Причина: %s") % [level, reason]
 		status_bar_label.modulate = Color(1.0, 0.2, 0.2)
 	refresh_ui()
 
