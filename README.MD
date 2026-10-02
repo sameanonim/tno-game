@@ -1,181 +1,242 @@
-# TNOGame
+# TNO-Game (The New Order: Terminal Crisis)
 
-TNOGame is a Godot 4 grand-strategy / geopolitical simulation project focused on a large-scale world map, country systems, politics, economy, research, and narrative-driven gameplay. The repository includes both the game runtime and a set of Python/Godot tools for data extraction, localization, content processing, and systems validation.
+[![Godot Engine](https://img.shields.io/badge/Godot-4.7%2B-478CBF?logo=godotengine&logoColor=white)](https://godotengine.org/)
+[![Render Pipeline](https://img.shields.io/badge/Renderer-Forward%2B%20%7C%20D3D12-0078D6)](#графическая-подсистема-и-интерактивная-карта)
+[![Python Pipeline](https://img.shields.io/badge/Data%20Pipeline-Python%203.10%2B-3776AB?logo=python&logoColor=white)](#data-pipeline--инструменты-обработки)
+[![Locale](https://img.shields.io/badge/Localization-RU%20(Primary)%20%2F%20EN-green)](#локализация-и-интернационализация)
+[![Architecture](https://img.shields.io/badge/Architecture-Data--Driven%20%2F%20Event--Oriented-orange)](#архитектура-проекта)
 
-## Overview
-
-This project is structured as a modular strategy game with:
-
-- a custom main menu and UI screens;
-- multiple government / country systems (for example: Germany, Italy, Japan, Russia, and USA);
-- a world map and boundary logic;
-- economy, research, parliament, espionage, and directive systems;
-- localization support with Russian fallback and modular data generation;
-- automated tooling for content extraction and architecture validation.
-
-The project configuration is defined in `project.godot`, and the main application entry point is the `ui/screens/main_menu.tscn` scene.
-
-## Tech stack
-
-- Engine: Godot 4.7
-- Main language: GDScript
-- Supporting tools: Python
-- Shader language: GDShader
-- Script examples and data tooling: generated/utility scripts for map and content pipelines
-
-Repository language composition:
-
-- GDScript: 76.6%
-- Python: 21.7%
-- GDShader: 1.4%
-- GAP: 0.3%
-
-## Key features
-
-- Map-driven simulation with boundary and geographic logic
-- National / country logic and systems for major factions
-- Political and parliamentary mechanics
-- Research and technology progression
-- Economic simulation and resource management
-- Espionage and strategic operations
-- Directive / focus-tree-like gameplay systems
-- Audio, settings, and localization infrastructure
-- Data-driven content generation and content decoupling tools
-
-## Repository structure
-
-```text
-.
-├── addons/                     # Godot add-ons and editor integrations
-├── assets/                     # Fonts and art resources
-├── audit/                      # Audit-related checks and analysis output
-├── core/                       # Core game systems and logic
-│   ├── audio/                  # Audio-related logic
-│   ├── data/                  # Data models and game data
-│   ├── systems/               # Main gameplay systems
-│   └── utils/                 # Shared helper utilities
-├── data/                       # General game data files
-├── extracted_tno_data/         # Extracted / derived data from external content
-├── map_data/                   # Map-related generated data
-├── scenes/                     # Godot scenes
-├── scripts/                    # Gameplay scripts and controllers
-├── shaders/                    # Custom shaders
-├── sample_test/                # Sample/test content and prototypes
-├── tools/                      # Python and GDScript tooling for extraction, synthesis, validation
-├── ui/                         # UI screens, themes, and reusable components
-├── .editorconfig               # Editor formatting rules
-├── .gitattributes              # Git attributes
-├── .gitignore                  # Git ignore rules
-├── .mcp.json                   # MCP configuration
-├── default_bus_layout.tres     # Audio bus configuration
-├── icon.svg                    # Project icon
-├── project.godot               # Godot project configuration
-└── README.MD                   # Project documentation
-```
-
-## Main systems
-
-The project includes a wide range of systems under `core/systems` such as:
-
-- `audio_manager.gd`
-- `config_manager.gd`
-- `content_loader.gd`
-- `directive_manager.gd`
-- `economy_engine.gd`
-- `espionage_engine.gd`
-- `event_manager.gd`
-- `focus_stage_controller.gd`
-- `game_session.gd`
-- `localization_manager.gd`
-- `military_engine.gd`
-- `parliament_engine.gd`
-- `research_manager.gd`
-- `settings_manager.gd`
-- `societal_laws_manager.gd`
-- `turn_manager.gd`
-
-There are also country-specific systems for Germany, Italy, Japan, Russia, and the USA, which suggests a split architecture for national gameplay rules and data.
-
-## User interface
-
-The UI layer is stored under `ui/` and contains:
-
-- main menu screens;
-- settings screens;
-- politics and economy panels;
-- research and espionage terminal views;
-- country-specific screens;
-- custom theme assets.
-
-Examples include:
-
-- `ui/screens/main_menu.tscn`
-- `ui/screens/politics_panel.tscn`
-- `ui/screens/tno_economy_screen.tscn`
-- `ui/screens/settings_terminal.tscn`
-- `ui/screens/research_terminal_view.tscn`
-
-## Tools and content pipeline
-
-The `tools/` directory contains a large number of automation scripts for:
-
-- map preprocessing and conversion;
-- data decoupling and content modularization;
-- localization build and validation;
-- focus tree compilation and extraction;
-- country and leader import;
-- simulation testing and architecture verification.
-
-These scripts indicate that the project is not just a game prototype but a data-heavy strategy system with a serious content pipeline.
-
-## Getting started
-
-### Requirements
-
-- Godot 4.7+
-- Git
-- Optional: Python 3.x for tooling scripts
-
-### Run the project
-
-1. Download and install Godot 4.7.
-2. Open the repo folder in Godot.
-3. Open `project.godot`.
-4. Press F5 or use the Run button in the editor.
-5. The project starts from `ui/screens/main_menu.tscn`.
-
-### Working with tools
-
-Many Python utilities in `tools/` are intended for content generation and validation. Use them depending on the task you are working on, for example:
-
-- localization generation;
-- map processing;
-- content modularization;
-- simulation / QA test scripts.
-
-## Project status
-
-This repository appears to be an active development project with a large amount of content-generation tooling and simulation systems. The codebase is structured for expansion and modular game systems, but it is still a work in progress.
-
-## Notes
-
-- Autoloaded systems are configured in `project.godot` and include `SettingsManager`, `LocalizationManager`, `AudioManager`, `GameSession`, and `MCPRuntimeServer`.
-- The project includes both runtime game systems and developer tooling.
-- There is no explicit license file in the repository root, so licensing information should be confirmed before redistribution or commercial use.
-
-## Contributing
-
-Contributions are welcome if you are working on gameplay logic, UI, data pipelines, content generation, or game systems. For development work, it is recommended to keep the project structure consistent with the current Godot organization:
-
-- gameplay logic in `core/` and `scripts/`;
-- UI scenes in `ui/`;
-- content processing in `tools/`;
-- generated or extracted content in `data/`, `map_data/`, and `extracted_tno_data/`.
-
-## License
-
-No explicit license file was found in the repository root at the time of writing. If this project is intended for public or commercial use, add a license file and document the terms clearly.
+> **Автономная пошаговая текстово-графическая геополитическая стратегия и кризисный симулятор в сеттинге The New Order: Last Days of Europe.**  
+> Управление сверхдержавами и региональными фракциями через стилизованный военный ЭЛТ-терминал 1960–70-х годов.
 
 ---
 
-TNOGame is a large-scale strategy-game project built around a data-driven architecture, modular simulation systems, and rich world-state management.
+## Содержание
+
+1. [Концепция и видение](#концепция-и-видение)
+2. [Ключевые отличия от HoI4](#ключевые-отличия-от-hoi4)
+3. [Архитектура проекта](#архитектура-проекта)
+4. [Ключевые игровые подсистемы](#ключевые-игровые-подсистемы)
+   - [Экономический движок (Toolbox Theory)](#1-экономический-движок-economyengine)
+   - [Политическая система и Парламент](#2-политическая-система-и-парламент-parliamentengine)
+   - [Национальные директивы (Directives)](#3-национальные-директивы-directivemanager)
+   - [Военный модуль и ТВД](#4-военный-модуль-и-твд-militaryengine)
+   - [Разведка и спецоперации](#5-разведка-и-спецоперации-espionageengine)
+   - [Социальные институты и законы](#6-социальные-институты-и-законы-societallawsmanager)
+5. [Графическая подсистема и интерактивная карта](#графическая-подсистема-и-интерактивная-карта)
+6. [Data Pipeline & Инструменты обработки](#data-pipeline--инструменты-обработки)
+7. [Структура репозитория](#структура-репозитория)
+8. [Установка и запуск](#установка-и-запуск)
+9. [Тестирование и верификация](#тестирование-и-верификация)
+10. [Правила разработки и контрибьютинг](#правила-разработки-и-контрибьютинг)
+
+---
+
+## Концепция и видение
+
+**TNO-Game** извлекает колоссальный нарративный пласт, политическую драму и макроэкономическую глубину культовой модификации *The New Order: Last Days of Europe* и переносит их в автономный, быстрый и отзывчивый движок **Godot 4**.
+
+* **Жанровый гибрид:** Пошаговый политико-экономический симулятор и интерактивная новелла эпохи Холодной войны (в традициях *Suzerain*, *Crisis in the Kremlin*, *Ostalgie*).
+* **Сеттинг:** Альтернативные 1960–1970-е годы. Мир расколот между ядерными гегемонами (Ось и США), руины СССР охвачены бесконечной войной варлордов («Русская Смута»), Третий Рейх балансирует на грани гражданской войны за наследство Гитлера, а Япония сталкивается с кризисом монополий Дзайбацу.
+* **Атмосфера:** Управление государством осуществляется через специализированный армейский командный терминал ранней цифровой эры — монохромный люминофор (Amber/Green/Cyan), динамические развертки ЭЛТ, телетайпные сводки и строгая телеметрическая эстетика.
+
+---
+
+## Ключевые отличия от HoI4
+
+| Аспект | Hearts of Iron IV (Clausewitz) | TNO-Game (Godot 4) |
+|---|---|---|
+| **Темп игры** | Непрерывный ежесекундный тик реального времени | Пошаговый расчет (ход = неделя / месяц) |
+| **Управление войсками** | Ручной микроконтроль сотен дивизий и фронтовых линий | Макро-планирование ТВД, резервы, готовность, направления ударов и снабжение |
+| **Принятие решений** | Ожидание завершения 70-дневных фокусов | Ветвящиеся пошаговые директивы, кризисные дилеммы и парламентские соглашения |
+| **Экономика** | Условное строительство фабрик и верфей | Полноценная макромодель: ВВП, госдолг, резервы, инфляция, ставка ЦБ, ВПК vs ТНП |
+| **Политика** | Статичный прирост очков PP | Динамический Политический капитал (PC), Очки кабинета (CAP), фракционная лояльность, места в парламенте |
+| **Производительность** | Высокая нагрузка на CPU из-за поиска путей тысячами юнитов | Мгновенный расчет ходов, отрисовка карты полностью на шейдерах GPU |
+
+---
+
+## Архитектура проекта
+
+Проект построен на принципах **Data-Driven Architecture** с четким разделением состояния, логики симуляции и слоя отображения:
+
+```
+ ┌─────────────────────────────────────────────────────────────┐
+ │                       DATA PIPELINE                         │
+ │     HoI4 Mod (.txt / .yml)  ──>  Python Parsers / Tools     │
+ │                                            │                │
+ │                         JSON & Compressed SQLite            │
+ └────────────────────────────────────────────┬────────────────┘
+                                              ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │                     DATA MODELS & STATE                     │
+ │      CountryState  │  RegionData  │  DirectiveResource      │
+ │      GameEvent     │  Frontline   │  SocietalMetric         │
+ └────────────────────────────────────────────┬────────────────┘
+                                              ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │                     SIMULATION ENGINES                      │
+ │   TurnManager  ───►  EconomyEngine    ───►  ParliamentEngine│
+ │         │          MilitaryEngine     ───►  DirectiveManager│
+ │         └────────► EspionageEngine    ───►  EventManager    │
+ └────────────────────────────────────────────┬────────────────┘
+                                              ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │                         UI & SHADERS                        │
+ │   CRT Terminal Viewport  │  GPU Province Map (LUT Shader)   │
+ │   Politics & Economy UI  │  Event Dialogs & Decision Trees  │
+ └─────────────────────────────────────────────────────────────┘
+```
+
+### Главные глобальные синглтоны (Autoload)
+* [`SettingsManager`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/core/systems/settings_manager.gd) — Конфигурация графики, звука, шейдеров ЭЛТ и доступности.
+* [`LocalizationManager`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/core/systems/localization_manager.gd) — Ключевая многоязычная локализация с автоматическим откатом (fallback) на русский язык.
+* [`AudioManager`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/core/systems/audio_manager.gd) — Управление шинами звука, эффектами терминала и тематическим саундтреком.
+* [`GameSession`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/core/systems/game_session.gd) — Хранилище контекста активной игровой сессии, выбранной нации и глобального состояния мира.
+* [`MCPRuntimeServer`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/addons/godot_mcp_toolkit/runtime/mcp_runtime_server.gd) — Runtime-мост интеграции для отладки, инспекции и внешнего управления.
+
+---
+
+## Ключевые игровые подсистемы
+
+### 1. Экономический движок (`EconomyEngine`)
+Вдохновлен макроэкономической моделью *Toolbox Theory*:
+* **Динамика ВВП и долга:** Расчет реального и номинального ВВП, расчет стоимости обслуживания государственного долга и суверенного кредитного рейтинга.
+* **Центробанк и денежная масса:** Регулирование ключевой процентной ставки, эмиссия («печатный станок») и расчет инфляционного давления.
+* **Производственный потенциал (IC):** Балансировка мощностей между сектором товаров народного потребления (ТНП, сдерживает недовольство) и военно-промышленным комплексом (ВПК, пополняет склады снаряжения).
+* **Региональные инвестиции:** Точечное финансирование инфраструктуры, сельского хозяйства и добычи сырья в подконтрольных провинциях.
+
+### 2. Политическая система и Парламент (`ParliamentEngine`)
+* **Ресурсы власти:** Отказ от абстрактных очков политвласти в пользу **Политического капитала (PC)** и **Очков действий кабинета (CAP)**.
+* **Законодательные органы:** Моделирование Сената США, Рейхстага Германии, Палаты представителей с динамическим распределением мест по партиям.
+* **Политические торги:** Сделки (Favors), формирование правящих коалиций, продвижение спорных биллей и преодоление вето.
+* **Формула стабильности:** `Легитимность режима - (Общественное недовольство + Уровень радикализации)`.
+
+### 3. Национальные директивы (`DirectiveManager`)
+* Пошаговые государственные проекты вместо 70-дневных фокусов HoI4.
+* Представлены графом инициатив с взаимными исключениями, требованиями по уровню поддержки фракций и стоимостью за ход.
+* Каждая директива генерирует сопутствующие события, побочные эффекты и дилеммы для кабинета министров.
+
+### 4. Военный модуль и ТВД (`MilitaryEngine`)
+* **Оперативно-стратегический уровень:** Управление пулом рекрутов (Manpower), складскими запасами техники и патронов (Stockpiles), а также боевым духом и слаженностью войск (Readiness & Morale).
+* **Русская Смута (Russian Unification):** Специфическая система фаз объединения (варлорды -> региональный этап -> суперрегиональный этап -> провозглашение единой России), пограничные набеги за снаряжением и дипломатические союзы.
+* **Гражданская война в Германии (GCW):** Оперативная панель борьбы претендентов (Шпеер, Борман, Геринг, Гейдрих), инфильтрация провинций, влияние на армейские корпуса.
+
+### 5. Разведка и спецоперации (`EspionageEngine`)
+* Развертывание резидентур и вербовка агентов.
+* Тайные операции: финансирование повстанцев, саботаж инфраструктуры, похищение чертежей, дезинформация и устранение политических лидеров.
+
+### 6. Социальные институты и законы (`SocietalLawsManager`)
+* Матрица реформ и законов: трудовое законодательство, призывная система, гражданские права, образование, здравоохранение и свобода прессы.
+* Влияние социальных показателей на производительность труда, рождаемость, уровень бедности и общее недовольство.
+
+---
+
+## Графическая подсистема и интерактивная карта
+
+Карта мира визуализируется с максимальной производительностью без использования сотен тяжелых полигональных нод:
+
+1. **Растровая RGB-маска провинций (`provinces.png`):** Каждый пиксель уникальным RGB-значением кодирует целочисленный идентификатор провинции (`Province ID = R + G * 256 + B * 65536`).
+2. **GPU CanvasItem-шейдер (`shaders/province_map.gdshader`):** 
+   - Использует динамическую 1D-текстуру палитры (Look-Up Table / LUT).
+   - Изменение владельца провинции или цвета подсветки требует лишь обновления одного пикселя в LUT-палитре на GPU — без перерисовки самой карты.
+   - Адаптивная отрисовка государственных и региональных границ на лету через фрагментный шейдер.
+3. **Эффективный Raycast / Picking:** Определение выбранной провинции при клике мыши выполняется через `Image.get_pixelv()` по копии маски в оперативной памяти за $O(1)$.
+4. **CRT Терминал-эффект (`shaders/crt_terminal.gdshader`):** Искривление кинескопа, скан-линии, хроматическая аберрация, размытие люминофора и легкое мерцание развертки.
+
+---
+
+## Data Pipeline & Инструменты обработки
+
+В директории `tools/` содержится набор консольных утилит на Python для преобразования сырых данных HoI4 TNO в структуры игры:
+
+* `clausewitz_parser.py` — Лексер и парсер структурированных текстовых скриптов Paradox Clausewitz.
+* `map_converter.py` / `map_preprocessor.py` — Очистка растра провинций, верификация непрерывности границ и генерация таблиц смежности регионов.
+* `tno_border_lut_builder.py` — Запекание текстур границ для шейдерного пайплайна.
+* `focus_tree_compiler.py` / `focus_pipeline.py` — Конвертация древ фокусов HoI4 в графы ресурсов `DirectiveResource`.
+* `build_modular_localization.py` — Сборка, индексация и дедупликация строк локализации с кэшированием.
+* `decouple_all_content.py` — Автоматическое выделение хардкод-данных наций в формат модульных JSON/Resource бандлов.
+
+---
+
+## Структура репозитория
+
+```text
+.
+├── .agents/                    # Инструкции, правила и контексты AI-разработки
+├── addons/                     # Плагины Godot (включая godot_mcp_toolkit)
+├── assets/                     # Графические ресурсы, шрифты, иконки, CRT-подложки
+├── audit/                      # Отчеты статического анализа, метрики и реестр дефектов
+│   └── defects_registry.md     # Журнал классификации и исправления известных багов
+├── core/                       # Архитектурное ядро симуляции
+│   ├── audio/                  # Контроллеры звуковой системы
+│   ├── data/                   # Godot Resources (CountryState, Directive, Event, etc.)
+│   ├── systems/                # Главные движки подсистем
+│   │   ├── germany/            # Специфические механики Рейха и Гражданской войны
+│   │   ├── italy/              # Механики Италии и Империи
+│   │   ├── japan/              # Механики Японии, Сферы Сопроцветания и Кризиса Ясуда
+│   │   ├── russia/             # Механики русских варлордов и этапов объединения
+│   │   └── usa/                # Механики США, Сената и президентских выборов
+│   └── utils/                  # Математические, детерминированные и служебные хелперы
+├── data/                       # Готовые игровые базы данных (нации, законы, технологии)
+├── extracted_tno_data/         # Данные, извлеченные из первоисточников TNO
+├── map_data/                   # Маски провинций, списки определений и LUT-таблицы
+├── scenes/                     # Скомпонованные Godot сцены
+├── scripts/                    # Скрипты контроллеров и геймплейная логика
+├── shaders/                    # Шейдеры ЭЛТ, карты провинций и портретов лидеров
+├── tools/                      # Комплекс Python и GDScript утилит и тестовых раннеров
+├── ui/                         # Пользовательский интерфейс терминала
+│   ├── screens/                # Экраны (главное меню, экономика, политика, ТВД, настройки)
+│   └── themes/                 # Темы оформления, стили и шрифтовые наборы
+├── project.godot               # Главный файл конфигурации Godot Engine
+└── README.MD                   # Основная документация проекта
+```
+
+---
+
+## Установка и запуск
+
+### Системные требования
+* **Движок:** [Godot Engine 4.7+](https://godotengine.org/download) (рекомендуется сборка с поддержкой Forward+ / Direct3D 12).
+* **Операционная система:** Windows 10/11, Linux (с поддержкой Vulkan / D3D12).
+* **Python (для запуска data-пайплайна):** Python 3.10+ (с установленными библиотеками `Pillow`, `numpy`).
+
+### Запуск игры
+1. Склонируйте репозиторий:
+   ```bash
+   git clone https://github.com/sameanonim/tno-game.git
+   ```
+2. Откройте Godot Engine и импортируйте файл [`project.godot`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/project.godot).
+3. Нажмите клавишу **F5** (или кнопку «Играть») для запуска с начальной сцены [`ui/screens/main_menu.tscn`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/ui/screens/main_menu.tscn).
+
+---
+
+## Тестирование и верификация
+
+В репозитории реализован полный контур автоматизированного тестирования на базе GDScript и Python:
+
+```bash
+# Запуск сквозного аудита типизации и дехардинга
+python tools/audit_static_typing.py
+python tools/audit_hardcoded_strings.py
+python tools/audit_signals.py
+
+# Тестирование симуляции (через headless-режим Godot)
+godot --headless -s tools/test_sprint1_verification.gd
+godot --headless -s tools/test_sprint2_verification.gd
+godot --headless -s tools/test_warlord_mechanics.gd
+godot --headless -s tools/test_turn_based_economy.gd
+```
+
+Все выявленные архитектурные узкие места и дефекты протоколируются в [Реестре дефектов](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/audit/defects_registry.md).
+
+---
+
+## Правила разработки и контрибьютинг
+
+1. **Строгая статическая типизация:** Весь новый код на GDScript обязан иметь явные аннотации типов аргументов, возвращаемых значений и переменных (`var x: int = 0`).
+2. **Детерминизм симуляции:** Запрещено использование несидированного генератора `randf()` в расчете исходов военных и экономических событий (см. дефект `DEF-01`).
+3. **Локализация:** Никаких захардкоженных строк интерфейса. Весь текст оформляется через `LocalizationManager.tr_key("KEY", fallback)`.
+4. **Изоляция ядра (Core Isolation):** Модели данных из `core/data/` не должны содержать прямых зависимостей от UI-нод.
+
+---
+*TNOGame — геополитический симулятор эпохи кризисов.*
