@@ -25,6 +25,20 @@ var tech_cards_container: VBoxContainer
 var log_rich_text: RichTextLabel
 
 
+static func _tr_str(key: String, params: Dictionary = {}, fallback: String = "") -> String:
+	var main_loop: MainLoop = Engine.get_main_loop()
+	if main_loop is SceneTree and main_loop.root != null and main_loop.root.has_node("LocalizationManager"):
+		var loc: Node = main_loop.root.get_node("LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, params, fallback)
+	var s: String = TranslationServer.translate(key)
+	if s.is_empty() or s == key:
+		s = fallback
+	for k: String in params:
+		s = s.replace("{%s}" % k, str(params[k]))
+	return s
+
+
 func _ready() -> void:
 	_build_ui()
 	refresh_view()
@@ -96,31 +110,31 @@ func _build_ui() -> void:
 	header_panel.add_child(header_hbox)
 
 	var title_lbl = Label.new()
-	title_lbl.text = " ГОСУДАРСТВЕННЫЙ КОМИТЕТ ПО НАУКЕ И ВПК // R&D TERMINAL "
+	title_lbl.text = _tr_str("RESEARCH_HEADER_TITLE", {}, " ГОСУДАРСТВЕННЫЙ КОМИТЕТ ПО НАУКЕ И ВПК // R&D TERMINAL ")
 	title_lbl.add_theme_font_size_override("font_size", 14)
 	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
 	header_hbox.add_child(title_lbl)
 
 	lbl_budget_info = Label.new()
-	lbl_budget_info.text = "БЮДЖЕТ: $0.00B/ход"
+	lbl_budget_info.text = _tr_str("RESEARCH_BUDGET_INIT", {}, "БЮДЖЕТ: $0.00B/ход")
 	lbl_budget_info.add_theme_font_size_override("font_size", 11)
 	lbl_budget_info.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
 	header_hbox.add_child(lbl_budget_info)
 
 	lbl_points_per_turn = Label.new()
-	lbl_points_per_turn.text = "ГЕНЕРАЦИЯ: +0.0 RP/ход"
+	lbl_points_per_turn.text = _tr_str("RESEARCH_GEN_INIT", {}, "ГЕНЕРАЦИЯ: +0.0 RP/ход")
 	lbl_points_per_turn.add_theme_font_size_override("font_size", 11)
 	lbl_points_per_turn.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
 	header_hbox.add_child(lbl_points_per_turn)
 
 	lbl_reserve_pool = Label.new()
-	lbl_reserve_pool.text = "РЕЗЕРВ: 0.0 RP"
+	lbl_reserve_pool.text = _tr_str("RESEARCH_RESERVE_INIT", {}, "РЕЗЕРВ: 0.0 RP")
 	lbl_reserve_pool.add_theme_font_size_override("font_size", 11)
 	lbl_reserve_pool.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_AMBER)
 	header_hbox.add_child(lbl_reserve_pool)
 
 	lbl_status_slots = Label.new()
-	lbl_status_slots.text = "[ СЛОТЫ: 0 / 3 ]"
+	lbl_status_slots.text = _tr_str("RESEARCH_SLOTS_INIT", {}, "[ СЛОТЫ: 0 / 3 ]")
 	lbl_status_slots.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_status_slots.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	lbl_status_slots.add_theme_font_size_override("font_size", 12)
@@ -138,7 +152,7 @@ func _build_ui() -> void:
 	slots_panel.add_child(slots_vbox)
 
 	var slots_title = Label.new()
-	slots_title.text = " АКТИВНЫЕ ЛАБОРАТОРИИ И КОНСТРУКТОРСКИЕ БЮРО // ACTIVE R&D QUEUE"
+	slots_title.text = _tr_str("RESEARCH_QUEUE_TITLE", {}, " АКТИВНЫЕ ЛАБОРАТОРИИ И КОНСТРУКТОРСКИЕ БЮРО // ACTIVE R&D QUEUE")
 	slots_title.add_theme_font_size_override("font_size", 11)
 	slots_title.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
 	slots_vbox.add_child(slots_title)
@@ -171,7 +185,7 @@ func _build_ui() -> void:
 
 	log_rich_text = RichTextLabel.new()
 	log_rich_text.bbcode_enabled = true
-	log_rich_text.text = "[color=#557766]НИОКР ТЕЛЕГРАФ // Все исследовательские комплексы функционируют в штатном режиме...[/color]"
+	log_rich_text.text = _tr_str("RESEARCH_LOG_INIT", {}, "[color=#557766]НИОКР ТЕЛЕГРАФ // Все исследовательские комплексы функционируют в штатном режиме...[/color]")
 	log_panel.add_child(log_rich_text)
 
 
@@ -182,17 +196,17 @@ func _build_category_buttons() -> void:
 		c.queue_free()
 
 	var cat_defs = [
-		{"id": 0, "name": "🏭 ПРОМЫШЛЕННОСТЬ"},
-		{"id": 1, "name": "🎯 СТРЕЛКОВОЕ ОРУЖИЕ"},
-		{"id": 2, "name": "🛡 БРОНЕТЕХНИКА"},
-		{"id": 3, "name": "✈ АВИАЦИЯ И ПВО"},
-		{"id": 4, "name": "☢ ЯДЕРНАЯ ПРОГРАММА"},
-		{"id": 5, "name": "⚡ ДОКТРИНЫ И АСУ"}
+		{"id": 0, "key": "TECH_CAT_INDUSTRY", "name": "🏭 ПРОМЫШЛЕННОСТЬ"},
+		{"id": 1, "key": "TECH_CAT_INFANTRY", "name": "🎯 СТРЕЛКОВОЕ ОРУЖИЕ"},
+		{"id": 2, "key": "TECH_CAT_ARMOR", "name": "🛡 БРОНЕТЕХНИКА"},
+		{"id": 3, "key": "TECH_CAT_AIR", "name": "✈ АВИАЦИЯ И ПВО"},
+		{"id": 4, "key": "TECH_CAT_NUCLEAR", "name": "☢ ЯДЕРНАЯ ПРОГРАММА"},
+		{"id": 5, "key": "TECH_CAT_DOCTRINE", "name": "⚡ ДОКТРИНЫ И АСУ"}
 	]
 
 	for c in cat_defs:
 		var btn = Button.new()
-		btn.text = c["name"]
+		btn.text = _tr_str(str(c["key"]), {}, str(c["name"]))
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		btn.custom_minimum_size = Vector2(0, 34)
 		var cid = int(c["id"])
@@ -216,16 +230,16 @@ func refresh_view() -> void:
 	var annual_div = 52.143
 	var rd_turn_exp = (gdp * rd_share) / annual_div
 	if lbl_budget_info != null:
-		lbl_budget_info.text = "БЮДЖЕТ: $%.2fB/ход (%.1f%% ВВП)" % [rd_turn_exp, rd_share * 100.0]
+		lbl_budget_info.text = _tr_str("RESEARCH_BUDGET_FMT", {"exp": "%.2f" % rd_turn_exp, "pct": "%.1f" % (rd_share * 100.0)}, "БЮДЖЕТ: $%.2fB/ход (%.1f%% ВВП)" % [rd_turn_exp, rd_share * 100.0])
 	if lbl_points_per_turn != null:
-		lbl_points_per_turn.text = "ВЫРАБОТКА: +%.1f RP/ход" % player_state.research_points_per_turn
+		lbl_points_per_turn.text = _tr_str("RESEARCH_GEN_FMT", {"rp": "%.1f" % player_state.research_points_per_turn}, "ВЫРАБОТКА: +%.1f RP/ход" % player_state.research_points_per_turn)
 	if lbl_reserve_pool != null:
-		lbl_reserve_pool.text = "РЕЗЕРВ: %.1f RP" % player_state.research_points_pool
+		lbl_reserve_pool.text = _tr_str("RESEARCH_RESERVE_FMT", {"val": "%.1f" % player_state.research_points_pool}, "РЕЗЕРВ: %.1f RP" % player_state.research_points_pool)
 	if lbl_status_slots != null:
-		lbl_status_slots.text = "[ СЛОТЫ НИОКР: %d / %d АКТИВНЫ ]" % [
+		lbl_status_slots.text = _tr_str("RESEARCH_SLOTS_FMT", {"active": player_state.active_researches.size(), "max": player_state.get_total_research_slots()}, "[ СЛОТЫ НИОКР: %d / %d АКТИВНЫ ]" % [
 			player_state.active_researches.size(),
 			player_state.get_total_research_slots()
-		]
+		])
 
 	# Отрисовка слотов
 	_render_active_slots()
@@ -257,7 +271,7 @@ func _render_active_slots() -> void:
 		slot_card.add_child(hbox)
 
 		var slot_num = Label.new()
-		slot_num.text = " [СЛОТ #%d]" % (s_idx + 1)
+		slot_num.text = _tr_str("RESEARCH_SLOT_NUM", {"num": s_idx + 1}, " [СЛОТ #%d]" % (s_idx + 1))
 		slot_num.add_theme_font_size_override("font_size", 10)
 		slot_num.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_AMBER)
 		hbox.add_child(slot_num)
@@ -274,7 +288,7 @@ func _render_active_slots() -> void:
 			var rem_turns = int(info.get("turns_remaining", 1))
 
 			var name_lbl = Label.new()
-			name_lbl.text = "ТЕМА: %s" % t_name
+			name_lbl.text = _tr_str("RESEARCH_THEME_LABEL", {"name": t_name}, "ТЕМА: %s" % t_name)
 			name_lbl.add_theme_font_size_override("font_size", 11)
 			name_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
 			hbox.add_child(name_lbl)
@@ -288,26 +302,26 @@ func _render_active_slots() -> void:
 			hbox.add_child(prog_bar)
 
 			var pct_lbl = Label.new()
-			pct_lbl.text = "%.1f%% (%.1f/%.1f RP) // ~%d ХОД." % [pct, prog, cost, rem_turns]
+			pct_lbl.text = _tr_str("RESEARCH_PROGRESS_LABEL", {"pct": "%.1f" % pct, "prog": "%.1f" % prog, "cost": "%.1f" % cost, "rem": rem_turns}, "%.1f%% (%.1f/%.1f RP) // ~%d ХОД." % [pct, prog, cost, rem_turns])
 			pct_lbl.add_theme_font_size_override("font_size", 10)
 			pct_lbl.add_theme_color_override("font_color", Color(0.6, 0.8, 0.7))
 			hbox.add_child(pct_lbl)
 
 			var btn_cancel = Button.new()
-			btn_cancel.text = "[ ОТМЕНА ]"
+			btn_cancel.text = _tr_str("RESEARCH_BTN_CANCEL", {}, "[ ОТМЕНА ]")
 			btn_cancel.custom_minimum_size = Vector2(75, 20)
 			btn_cancel.add_theme_font_size_override("font_size", 9)
 			TNOTheme.apply_button_style(btn_cancel, Color(0.8, 0.3, 0.3), Color(0.12, 0.04, 0.04, 0.95))
 			btn_cancel.pressed.connect(func():
 				research_manager.cancel_research(player_state, t_id)
 				research_action_executed.emit("cancel", t_id)
-				_log_message("[color=#ff7777]Разработка темы «%s» остановлена, лаборатория освобождена.[/color]" % t_name)
+				_log_message(_tr_str("RESEARCH_CANCELLED_MSG", {"name": t_name}, "[color=#ff7777]Разработка темы «%s» остановлена, лаборатория освобождена.[/color]" % t_name))
 				refresh_view()
 			)
 			hbox.add_child(btn_cancel)
 		else:
 			var empty_lbl = Label.new()
-			empty_lbl.text = "— ЛАБОРАТОРИЯ СВОБОДНА // ВЫБЕРИТЕ ПРОЕКТ ДЛЯ РАЗРАБОТКИ —"
+			empty_lbl.text = _tr_str("RESEARCH_SLOT_EMPTY", {}, "— ЛАБОРАТОРИЯ СВОБОДНА // ВЫБЕРИТЕ ПРОЕКТ ДЛЯ РАЗРАБОТКИ —")
 			empty_lbl.add_theme_font_size_override("font_size", 10)
 			empty_lbl.add_theme_color_override("font_color", Color(0.4, 0.5, 0.5))
 			empty_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -389,12 +403,12 @@ func _create_tech_card(tech: TechResource) -> Control:
 	vbox.add_child(desc_lbl)
 
 	# Модификаторы и предшественники
-	var mods_str = "ЭФФЕКТЫ: "
+	var mods_str = _tr_str("RESEARCH_EFFECTS_TITLE", {}, "ЭФФЕКТЫ: ")
 	for mk in tech.state_modifiers.keys():
 		mods_str += "[%s: +%s] " % [mk, str(tech.state_modifiers[mk])]
 
 	if not tech.prerequisite_techs.is_empty():
-		mods_str += "| ТРЕБУЕТСЯ: "
+		mods_str += _tr_str("RESEARCH_REQUIRES_TITLE", {}, "| ТРЕБУЕТСЯ: ")
 		for pr in tech.prerequisite_techs:
 			var pr_obj = research_manager.get_tech(pr)
 			var pr_name = pr_obj.tech_name if pr_obj != null else pr
@@ -416,10 +430,10 @@ func _create_tech_card(tech: TechResource) -> Control:
 
 	# Проверка бонуса чертежей
 	var bp_flag = "blueprint_" + t_id
-	var cost_label_text = "ЗАТРАТЫ: %.0f RP" % tech.research_cost
+	var cost_label_text = _tr_str("RESEARCH_COST_FMT", {"cost": "%.0f" % tech.research_cost}, "ЗАТРАТЫ: %.0f RP" % tech.research_cost)
 	if player_state.has_flag(bp_flag):
 		var bp_val = float(player_state.story_flags.get(bp_flag, 35.0))
-		cost_label_text += " (-%d%% ЧЕРТЕЖ!)" % int(bp_val)
+		cost_label_text += _tr_str("RESEARCH_BP_BONUS", {"val": int(bp_val)}, " (-%d%% ЧЕРТЕЖ!)" % int(bp_val))
 
 	var cost_lbl = Label.new()
 	cost_lbl.text = cost_label_text
@@ -432,17 +446,17 @@ func _create_tech_card(tech: TechResource) -> Control:
 	btn_action.custom_minimum_size = Vector2(0, 32)
 
 	if is_done:
-		btn_action.text = "✓ ОСВОЕНО"
+		btn_action.text = _tr_str("RESEARCH_BTN_DONE", {}, "✓ ОСВОЕНО")
 		btn_action.disabled = true
 		TNOTheme.apply_button_style(btn_action, Color(0.2, 0.7, 0.4), Color(0.04, 0.12, 0.06, 0.95))
 	elif is_active:
 		var info = player_state.active_researches[t_id]
 		var pct = (float(info.get("progress", 0.0)) / float(info.get("cost", 100.0))) * 100.0
-		btn_action.text = "В РАБОТЕ (%.0f%%)" % pct
+		btn_action.text = _tr_str("RESEARCH_BTN_ACTIVE", {"pct": "%.0f" % pct}, "В РАБОТЕ (%.0f%%)" % pct)
 		btn_action.disabled = true
 		TNOTheme.apply_button_style(btn_action, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.08, 0.04, 0.95))
 	elif can_start:
-		btn_action.text = "[ ИССЛЕДОВАТЬ ]"
+		btn_action.text = _tr_str("RESEARCH_BTN_RESEARCH", {}, "[ ИССЛЕДОВАТЬ ]")
 		btn_action.disabled = false
 		TNOTheme.apply_button_style(btn_action, TNOTheme.COLOR_BORDER_CYAN, Color(0.06, 0.12, 0.15, 0.95))
 		btn_action.pressed.connect(func():
@@ -455,7 +469,7 @@ func _create_tech_card(tech: TechResource) -> Control:
 			refresh_view()
 		)
 	else:
-		btn_action.text = check.get("reason", "НЕДОСТУПНО")
+		btn_action.text = check.get("reason", _tr_str("RESEARCH_BTN_UNAVAILABLE", {}, "НЕДОСТУПНО"))
 		btn_action.disabled = true
 		btn_action.add_theme_font_size_override("font_size", 9)
 		TNOTheme.apply_button_style(btn_action, TNOTheme.COLOR_BORDER_DIM, Color(0.03, 0.04, 0.05, 0.85))
@@ -468,4 +482,4 @@ func _create_tech_card(tech: TechResource) -> Control:
 func _log_message(msg: String) -> void:
 	if log_rich_text != null:
 		var cur_turn = turn_manager.current_turn if turn_manager != null else 1
-		log_rich_text.text = ">> [ХОД %d] %s\n%s" % [cur_turn, msg, log_rich_text.text]
+		log_rich_text.text = _tr_str("RESEARCH_LOG_PREFIX", {"turn": cur_turn, "msg": msg, "prev": log_rich_text.text}, ">> [ХОД %d] %s\n%s" % [cur_turn, msg, log_rich_text.text])

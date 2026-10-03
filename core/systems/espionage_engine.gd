@@ -745,6 +745,12 @@ static func create_covert_operation(
 	return op
 
 
+## Набор каноничных позывных оперативников
+const DEFAULT_CODENAMES: Array[String] = [
+	"Призрак", "Сокол", "Коршун", "Беркут", "Ворон", "Спектр", "Мираж", "Сатурн", "Гриф"
+]
+
+
 ## Создание агента с заданным профилем
 static func recruit_agent(
 	codename: String,
@@ -759,6 +765,17 @@ static func recruit_agent(
 	else:
 		ag.status = AgentResource.AgentStatus.IDLE
 	return ag
+
+
+## Детерминированная вербовка агента-кандидата с псевдослучайными характеристиками
+static func recruit_candidate_agent(state: CountryState, seed_val: int = 0) -> AgentResource:
+	var s: int = seed_val
+	if s == 0 and state != null:
+		s = int(state.agents.size() * 37 + state.black_budget * 100) + 1013
+	var h: int = ((s * 73856093) ^ 1274126177) & 0x7FFFFFFF
+	var codename: String = DEFAULT_CODENAMES[h % DEFAULT_CODENAMES.size()]
+	var comp: int = 2 + ((h >> 3) % 3) # 2..4
+	return recruit_agent(codename, comp, "", 0.6)
 
 
 # ==============================================================================

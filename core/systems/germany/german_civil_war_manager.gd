@@ -1368,15 +1368,25 @@ func _initialize_starting_regions() -> void:
 	# Инициализация провинций Германии в Фазе 1 под единым тегом GER
 	for pid in all_cores:
 		if not regions.has(pid):
-			var r = RegionData.new()
+			var r: RegionData = RegionData.new()
 			r.province_id = pid
 			r.province_name = "Рейхсгау #%d" % pid
 			r.owner_tag = "GER"
-			r.industrial_capacity = randi_range(3, 8)
-			r.civilian_infrastructure = randi_range(4, 9)
+			var stats: Dictionary = calculate_reichsgau_province_stats(pid)
+			r.industrial_capacity = int(stats.industrial_capacity)
+			r.civilian_infrastructure = int(stats.civilian_infrastructure)
 			r.unrest = 15.0
 			r.garrison_strength = 80.0
 			regions[pid] = r
+
+
+## Детерминированный LCG-расчет характеристик провинций Рейхсгау от ID провинции (DEF-01)
+static func calculate_reichsgau_province_stats(pid: int) -> Dictionary:
+	var seed_hash: int = ((pid * 73856093) ^ 1274126177) & 0x7FFFFFFF
+	return {
+		"industrial_capacity": 3 + (seed_hash % 6),
+		"civilian_infrastructure": 4 + ((seed_hash >> 4) % 6)
+	}
 
 
 func _tag_to_contender_name(tag: String) -> String:

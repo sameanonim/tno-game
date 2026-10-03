@@ -95,11 +95,17 @@ func _connect_signals() -> void:
 
 	preview_btn_a.pressed.connect(func():
 		_play_relay_click(800.0, 0.03)
-		status_label.text = "[ ВЫБРАНА ОПЦИЯ 'А' // ТЕСТОВЫЙ ПРИКАЗ ПЕРЕДАН В ШТАБ ]"
+		if _loc_mgr != null:
+			status_label.text = _loc_mgr.tr_key("LANG_OPT_A_SELECTED", {}, "[ ВЫБРАНА ОПЦИЯ 'А' // ТЕСТОВЫЙ ПРИКАЗ ПЕРЕДАН В ШТАБ ]")
+		else:
+			status_label.text = tr("LANG_OPT_A_SELECTED")
 	)
 	preview_btn_b.pressed.connect(func():
 		_play_relay_click(650.0, 0.03)
-		status_label.text = "[ ВЫБРАНА ОПЦИЯ 'Б' // ТЕСТОВЫЙ ПРИКАЗ ПЕРЕДАН В ШТАБ ]"
+		if _loc_mgr != null:
+			status_label.text = _loc_mgr.tr_key("LANG_OPT_B_SELECTED", {}, "[ ВЫБРАНА ОПЦИЯ 'Б' // ТЕСТОВЫЙ ПРИКАЗ ПЕРЕДАН В ШТАБ ]")
+		else:
+			status_label.text = tr("LANG_OPT_B_SELECTED")
 	)
 
 	var sm = _get_settings_mgr()
@@ -225,7 +231,10 @@ func _on_language_selected(new_locale: String) -> void:
 	_update_ui_texts()
 	_refresh_live_preview()
 
-	status_label.text = "[ ВНИМАНИЕ: СИСТЕМНЫЙ ЯЗЫК ПЕРЕКЛЮЧЕН НА: %s ]" % _selected_locale.to_upper()
+	if _loc_mgr != null:
+		status_label.text = _loc_mgr.tr_key("SYS_LANG_SWITCHED", {"code": _selected_locale.to_upper()}, "[ ВНИМАНИЕ: СИСТЕМНЫЙ ЯЗЫК ПЕРЕКЛЮЧЕН НА: %s ]" % _selected_locale.to_upper())
+	else:
+		status_label.text = tr("SYS_LANG_SWITCHED")
 
 
 func _on_apply_bios_pressed() -> void:

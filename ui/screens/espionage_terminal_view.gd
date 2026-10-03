@@ -473,13 +473,10 @@ func _on_recruit_button_pressed() -> void:
 		return
 
 	country_state.black_budget -= 2.0
-	var codenames = ["Призрак", "Сокол", "Коршун", "Беркут", "Ворон", "Спектр", "Мираж", "Сатурн", "Гриф"]
-	var chosen_name = codenames[randi() % codenames.size()]
-	var comp = randi_range(2, 4)
-	var new_ag = EspionageEngine.recruit_agent(chosen_name, comp, "", 0.6)
+	var new_ag: AgentResource = EspionageEngine.recruit_candidate_agent(country_state)
 	country_state.add_agent(new_ag)
 
-	append_terminal_log(_tr("ESPIONAGE_RECRUIT_SUCCESS", ">> ВЕРБОВКА УСПЕШНА: Агент «%s» (навык: %s) зачислен в штат.") % [chosen_name, new_ag.get_stars_string()], COLOR_PHOSPHOR)
+	append_terminal_log(_tr("ESPIONAGE_RECRUIT_SUCCESS", ">> ВЕРБОВКА УСПЕШНА: Агент «%s» (навык: %s) зачислен в штат.") % [new_ag.codename, new_ag.get_stars_string()], COLOR_PHOSPHOR)
 	refresh_ui()
 
 

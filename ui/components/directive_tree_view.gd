@@ -123,6 +123,8 @@ func setup(state: CountryState, arg2: Variant = null, arg3: Variant = null, arg4
 			focus_stage_controller = c
 
 	if focus_stage_controller != null:
+		if not focus_stage_controller.tree_loaded.is_connected(_on_tree_loaded):
+			focus_stage_controller.tree_loaded.connect(_on_tree_loaded)
 		if not focus_stage_controller.focus_tree_switched.is_connected(_on_focus_stage_switched):
 			focus_stage_controller.focus_tree_switched.connect(_on_focus_stage_switched)
 		if not focus_stage_controller.branches_visibility_changed.is_connected(_on_branches_visibility_changed):
@@ -1460,6 +1462,13 @@ func _animate_nodes_appearance() -> void:
 # ==============================================================================
 # ИНТЕГРАЦИЯ С FOCUS_STAGE_CONTROLLER
 # ==============================================================================
+
+func _on_tree_loaded(tree_id: String, directives_map: Dictionary) -> void:
+	all_directives.clear()
+	for k: Variant in directives_map.keys():
+		all_directives[str(k)] = directives_map[k]
+	refresh_tree()
+
 
 func _on_focus_stage_switched(tree_id: String, new_directives_graph: Dictionary, stage_meta: Dictionary) -> void:
 	all_directives.clear()

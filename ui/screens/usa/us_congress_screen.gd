@@ -411,11 +411,11 @@ func _on_whip_votes_pressed() -> void:
 	var res = engine.whip_votes(selected_bill_id, country_state)
 	if res.get("success", false):
 		if lbl_vote_outcome != null:
-			lbl_vote_outcome.text = "✓ КНУТ БЕЛОГО ДОМА: %d колеблющихся сенаторов встали на сторону администрации!" % res.get("swayed", 0)
+			lbl_vote_outcome.text = _tr("CONGRESS_WHIP_SUCCESS", {"swayed": res.get("swayed", 0)}, "✓ КНУТ БЕЛОГО ДОМА: %d колеблющихся сенаторов встали на сторону администрации!" % res.get("swayed", 0))
 			lbl_vote_outcome.add_theme_color_override("font_color", Color(0.3, 0.95, 0.8))
 	else:
 		if lbl_vote_outcome != null:
-			lbl_vote_outcome.text = "⚠ Недостаточно политического капитала (PC) или очков кабинета (CAP)!"
+			lbl_vote_outcome.text = _tr("CONGRESS_WHIP_FAIL", {}, "⚠ Недостаточно политического капитала (PC) или очков кабинета (CAP)!")
 			lbl_vote_outcome.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
 
 	_update_vote_projection()
@@ -432,10 +432,10 @@ func _on_call_vote_pressed() -> void:
 
 	if lbl_vote_outcome != null:
 		if passed:
-			lbl_vote_outcome.text = "★ ЗАКОНОПРОЕКТ ПРИНЯТ: %d ЗА / %d ПРОТИВ! Эффекты вступили в законную силу." % [yeas, nays]
+			lbl_vote_outcome.text = _tr("CONGRESS_BILL_PASSED", {"yeas": yeas, "nays": nays}, "★ ЗАКОНОПРОЕКТ ПРИНЯТ: %d ЗА / %d ПРОТИВ! Эффекты вступили в законную силу." % [yeas, nays])
 			lbl_vote_outcome.add_theme_color_override("font_color", Color(0.2, 0.98, 0.6))
 		else:
-			lbl_vote_outcome.text = "✗ ЗАКОНОПРОЕКТ ОТКЛОНЕН: %d ЗА / %d ПРОТИВ! Администрация потерпела поражение." % [yeas, nays]
+			lbl_vote_outcome.text = _tr("CONGRESS_BILL_REJECTED", {"yeas": yeas, "nays": nays}, "✗ ЗАКОНОПРОЕКТ ОТКЛОНЕН: %d ЗА / %d ПРОТИВ! Администрация потерпела поражение." % [yeas, nays])
 			lbl_vote_outcome.add_theme_color_override("font_color", Color(0.98, 0.25, 0.25))
 
 	_refresh_all()
@@ -450,7 +450,7 @@ func _on_trigger_midterm_pressed() -> void:
 		return
 	var rep = engine.conduct_senate_elections(country_state)
 	if lbl_vote_outcome != null:
-		lbl_vote_outcome.text = "🗳 ВЫБОРЫ В СЕНАТ ЗАВЕРШЕНЫ! Переизбрано 34 места. Большинство: %s." % rep.get("majority_coalition", "")
+		lbl_vote_outcome.text = _tr("CONGRESS_MIDTERMS_DONE", {"maj": rep.get("majority_coalition", "")}, "🗳 ВЫБОРЫ В СЕНАТ ЗАВЕРШЕНЫ! Переизбрано 34 места. Большинство: %s." % rep.get("majority_coalition", ""))
 		lbl_vote_outcome.add_theme_color_override("font_color", Color(0.3, 0.9, 1.0))
 	_refresh_all()
 
@@ -462,9 +462,10 @@ func _on_trigger_presidential_pressed() -> void:
 	var res = engine.conduct_presidential_election(cur_year, country_state)
 	var cand = res.get("winning_candidate", {})
 	if lbl_vote_outcome != null:
-		lbl_vote_outcome.text = "🏛 ПРЕЗИДЕНТ %d: Победил %s (%s) с %d EV!" % [
-			cur_year, cand.get("name", ""), cand.get("faction", ""), res.get("ev_rd" if res.get("winner_coalition", "") == "RD" else "ev_npp", 270)
-		]
+		var ev_val = res.get("ev_rd" if res.get("winner_coalition", "") == "RD" else "ev_npp", 270)
+		lbl_vote_outcome.text = _tr("CONGRESS_PRES_DONE", {"year": cur_year, "name": cand.get("name", ""), "faction": cand.get("faction", ""), "ev": ev_val}, "🏛 ПРЕЗИДЕНТ %d: Победил %s (%s) с %d EV!" % [
+			cur_year, cand.get("name", ""), cand.get("faction", ""), ev_val
+		])
 		lbl_vote_outcome.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
 	_refresh_all()
 

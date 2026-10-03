@@ -19,6 +19,9 @@ const FocusStageControllerScript = preload("res://core/systems/focus_stage_contr
 const CountryStateScript = preload("res://core/data/country_state.gd")
 const CovertOperationResourceScript = preload("res://core/data/covert_operation_resource.gd")
 const AgentResourceScript = preload("res://core/data/agent_resource.gd")
+const GCWManagerScript = preload("res://core/systems/germany/german_civil_war_manager.gd")
+const EspionageEngineScript = preload("res://core/systems/espionage_engine.gd")
+const SettingsManagerScript = preload("res://core/systems/settings_manager.gd")
 
 func _init() -> void:
 	call_deferred("_run_audit")
@@ -113,10 +116,20 @@ func _check_signal_topology() -> bool:
 		tm.queue_free()
 		return false
 
+	# Verify SettingsManager signals (DEF-02)
+	var sm = SettingsManagerScript.new()
+	if not sm.has_signal("resolution_changed") or not sm.has_signal("window_mode_changed"):
+		printerr("FAIL: SettingsManager missing display signals.")
+		tm.queue_free()
+		sm.queue_free()
+		return false
+	sm.queue_free()
+
 	tm.queue_free()
 	print("  * TurnManager signals verified: OK (7/7)")
 	print("  * FocusStageController signals verified: OK (4/4)")
 	print("  * EventManager signals verified: OK")
+	print("  * SettingsManager signals verified: OK (DEF-02)")
 	return true
 
 
@@ -151,8 +164,34 @@ func _check_resource_determinism_and_types() -> bool:
 		printerr("FAIL: Deprecated fiscal_crisis_active accessor failed.")
 		return false
 
+	# Test GCW province deterministic generation (DEF-01)
+	for pid in [101, 202, 303, 404]:
+		var s1: Dictionary = GCWManagerScript.calculate_reichsgau_province_stats(pid)
+		var s2: Dictionary = GCWManagerScript.calculate_reichsgau_province_stats(pid)
+		if s1.industrial_capacity != s2.industrial_capacity:
+			printerr("FAIL: GCW province IC is non-deterministic for pid %d!" % pid)
+			return false
+		if s1.civilian_infrastructure != s2.civilian_infrastructure:
+			printerr("FAIL: GCW province infrastructure is non-deterministic for pid %d!" % pid)
+			return false
+		if s1.industrial_capacity < 3 or s1.industrial_capacity > 8:
+			printerr("FAIL: GCW province IC out of bounds 3..8 (%d)!" % s1.industrial_capacity)
+			return false
+		if s1.civilian_infrastructure < 4 or s1.civilian_infrastructure > 9:
+			printerr("FAIL: GCW province infrastructure out of bounds 4..9 (%d)!" % s1.civilian_infrastructure)
+			return false
+
+	# Test Espionage candidate agent determinism (DEF-04)
+	var ag_det1 = EspionageEngineScript.recruit_candidate_agent(state, 555)
+	var ag_det2 = EspionageEngineScript.recruit_candidate_agent(state, 555)
+	if ag_det1.codename != ag_det2.codename or ag_det1.competence != ag_det2.competence:
+		printerr("FAIL: Espionage agent generation is non-deterministic!")
+		return false
+
 	print("  * Deterministic IDs (Agent & CovertOp): OK (%s, %s)" % [ag1.id, op1.op_id])
 	print("  * CountryState accessors (Canonical & Deprecated): OK")
+	print("  * GCW Reichsgau province generation: DETERMINISTIC OK (DEF-01)")
+	print("  * Espionage candidate recruitment: DETERMINISTIC OK (DEF-04)")
 	return true
 
 

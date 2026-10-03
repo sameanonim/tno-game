@@ -528,7 +528,7 @@ func _switch_state(new_state: MenuState) -> void:
 					var loc = get_node("/root/LocalizationManager")
 					titular_log.text = loc.tr_key("SYS_STATUS_READY", "СИСТЕМА: ГОТОВА К АВТОРИЗАЦИИ // УРОВЕНЬ ДОСТУПА: ВЫСШИЙ")
 				else:
-					titular_log.text = "СИСТЕМА: ГОТОВА К АВТОРИЗАЦИИ // УРОВЕНЬ ДОСТУПА: ВЫСШИЙ"
+					titular_log.text = tr("SYS_STATUS_READY")
 		MenuState.THEATER_SELECT:
 			_select_theater(selected_theater_index)
 		MenuState.CAMPAIGN_SETUP:
@@ -876,7 +876,10 @@ func _on_load_game_pressed() -> void:
 			get_tree().change_scene_to_file("res://ui/screens/terminal_main.tscn")
 			return
 	if titular_log != null:
-		titular_log.text = "ОШИБКА: АРХИВ [user://savegame.json] НЕ НАЙДЕН!"
+		if has_node("/root/LocalizationManager"):
+			titular_log.text = get_node("/root/LocalizationManager").tr_key("ERR_SAVE_NOT_FOUND", "ОШИБКА: АРХИВ [user://savegame.json] НЕ НАЙДЕН!")
+		else:
+			titular_log.text = tr("ERR_SAVE_NOT_FOUND")
 
 
 # ==============================================================================

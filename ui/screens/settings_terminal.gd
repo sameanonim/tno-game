@@ -194,6 +194,10 @@ func _connect_events() -> void:
 	if _settings_mgr != null:
 		_settings_mgr.revert_countdown_tick.connect(_on_revert_tick)
 		_settings_mgr.revert_cancelled.connect(_on_revert_cancelled)
+		if not _settings_mgr.resolution_changed.is_connected(_on_resolution_changed):
+			_settings_mgr.resolution_changed.connect(_on_resolution_changed)
+		if not _settings_mgr.window_mode_changed.is_connected(_on_window_mode_changed):
+			_settings_mgr.window_mode_changed.connect(_on_window_mode_changed)
 
 	# Нижняя панель
 	btn_save_bios.pressed.connect(_on_save_bios_pressed)
@@ -368,7 +372,7 @@ func _update_display_info_label() -> void:
 	var scr_sz = DisplayServer.screen_get_size(scr)
 	var win_sz = DisplayServer.window_get_size()
 	var aspect = float(win_sz.x) / float(maxi(1, win_sz.y))
-	lbl_display_info.text = "ФИЗИЧЕСКИЙ ЭКРАН: %dx%d // ОКНО ТЕРМИНАЛА: %dx%d (АСПЕКТ: %.2f:1)" % [
+	lbl_display_info.text = _tr("SETTINGS_DISPLAY_INFO", "ФИЗИЧЕСКИЙ ЭКРАН: %dx%d // ОКНО ТЕРМИНАЛА: %dx%d (АСПЕКТ: %.2f:1)") % [
 		scr_sz.x, scr_sz.y, win_sz.x, win_sz.y, aspect
 	]
 
@@ -413,7 +417,7 @@ func _on_confirm_resolution_pressed() -> void:
 	_play_relay_click(1250.0, 0.06)
 	_update_display_info_label()
 	_apply_crt()
-	status_bar_label.text = "[ ВИДЕОРЕЖИМ УСПЕШНО ЗАФИКСИРОВАН ]"
+	status_bar_label.text = _tr("SETTINGS_MODE_CONFIRMED", "[ ВИДЕОРЕЖИМ УСПЕШНО ЗАФИКСИРОВАН ]")
 
 
 func _on_revert_resolution_pressed() -> void:
@@ -423,7 +427,7 @@ func _on_revert_resolution_pressed() -> void:
 	_populate_options()
 	_update_display_info_label()
 	_apply_crt()
-	status_bar_label.text = "[ ИЗМЕНЕНИЯ ВИДЕОРЕЖИМА ОТМЕНЕНЫ ]"
+	status_bar_label.text = _tr("SETTINGS_MODE_REVERTED", "[ ИЗМЕНЕНИЯ ВИДЕОРЕЖИМА ОТМЕНЕНЫ ]")
 
 
 func _on_revert_tick(seconds_left: int) -> void:
@@ -432,6 +436,19 @@ func _on_revert_tick(seconds_left: int) -> void:
 
 func _on_revert_cancelled() -> void:
 	revert_overlay.visible = false
+
+
+func _on_resolution_changed(new_res: Vector2i) -> void:
+	for i: int in range(_cached_resolutions.size()):
+		if _cached_resolutions[i] == new_res:
+			opt_resolution.select(i)
+			break
+	_update_display_info_label()
+
+
+func _on_window_mode_changed(new_mode: int) -> void:
+	opt_window_mode.select(new_mode)
+	_update_display_info_label()
 
 
 func _on_crt_toggled(toggled: bool) -> void:
@@ -447,7 +464,7 @@ func _on_language_selected(code: String) -> void:
 		_update_localized_texts()
 		_populate_options()
 		_play_relay_click(900.0, 0.04)
-		status_bar_label.text = "[ СИСТЕМНЫЙ ЯЗЫК: %s ]" % code.to_upper()
+		status_bar_label.text = _tr("SETTINGS_LANG_ACTIVE", "[ СИСТЕМНЫЙ ЯЗЫК: %s ]") % code.to_upper()
 
 
 func _on_save_bios_pressed() -> void:
@@ -473,13 +490,13 @@ func _on_save_game_pressed() -> void:
 		var ok = tm.save_game("user://savegame.json")
 		if ok:
 			_play_relay_click(1200.0, 0.08)
-			status_bar_label.text = "[ СИСТЕМА: ИГРА УСПЕШНО СОХРАНЕНА (ХОД %d) -> user://savegame.json ]" % tm.get("current_turn")
+			status_bar_label.text = _tr("SETTINGS_GAME_SAVED", "[ СИСТЕМА: ИГРА УСПЕШНО СОХРАНЕНА (ХОД %d) -> user://savegame.json ]") % tm.get("current_turn")
 		else:
 			_play_relay_click(300.0, 0.15)
-			status_bar_label.text = "[ ОШИБКА: НЕ УДАЛОСЬ СОХРАНИТЬ ИГРУ ]"
+			status_bar_label.text = _tr("SETTINGS_GAME_SAVE_ERR", "[ ОШИБКА: НЕ УДАЛОСЬ СОХРАНИТЬ ИГРУ ]")
 	else:
 		_play_relay_click(300.0, 0.15)
-		status_bar_label.text = "[ ВНИМАНИЕ: АКТИВНАЯ ИГРОВАЯ СЕССИЯ НЕ НАЙДЕНА ]"
+		status_bar_label.text = _tr("SETTINGS_GAME_NO_SESSION", "[ ВНИМАНИЕ: АКТИВНАЯ ИГРОВАЯ СЕССИЯ НЕ НАЙДЕНА ]")
 
 
 func _on_load_game_pressed() -> void:
@@ -488,15 +505,15 @@ func _on_load_game_pressed() -> void:
 		var ok = tm.load_game("user://savegame.json")
 		if ok:
 			_play_relay_click(900.0, 0.08)
-			status_bar_label.text = "[ СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА (ХОД %d) ]" % tm.get("current_turn")
+			status_bar_label.text = _tr("SETTINGS_GAME_LOADED", "[ СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА (ХОД %d) ]") % tm.get("current_turn")
 			await get_tree().create_timer(0.3).timeout
 			_on_back_pressed()
 		else:
 			_play_relay_click(300.0, 0.15)
-			status_bar_label.text = "[ ОШИБКА: АРХИВ user://savegame.json НЕ НАЙДЕН ]"
+			status_bar_label.text = _tr("SETTINGS_GAME_LOAD_ERR", "[ ОШИБКА: АРХИВ user://savegame.json НЕ НАЙДЕН ]")
 	else:
 		_play_relay_click(300.0, 0.15)
-		status_bar_label.text = "[ ВНИМАНИЕ: АКТИВНАЯ ИГРОВАЯ СЕССИЯ НЕ НАЙДЕНА ]"
+		status_bar_label.text = _tr("SETTINGS_GAME_NO_SESSION", "[ ВНИМАНИЕ: АКТИВНАЯ ИГРОВАЯ СЕССИЯ НЕ НАЙДЕНА ]")
 
 
 func _find_turn_manager() -> Node:

@@ -341,6 +341,8 @@ func _connect_signals() -> void:
 	# Military & Frontlines signals
 	turn_manager.region_conquered.connect(_on_region_conquered)
 	turn_manager.state_conquered.connect(_on_state_conquered)
+	if not turn_manager.state_transferred.is_connected(_on_state_transferred):
+		turn_manager.state_transferred.connect(_on_state_transferred)
 	turn_manager.military_frontlines_processed.connect(_on_military_frontlines_processed)
 	turn_manager.defcon_level_changed.connect(_on_defcon_level_changed)
 
@@ -1467,6 +1469,10 @@ func _on_state_conquered(state_id: int, new_owner: String) -> void:
 	if sound_fx != null:
 		sound_fx.play_alarm_buzz(600.0, 0.3)
 	label_log.text = "ТЕРРИТОРИАЛЬНЫЙ ТРАНСФЕР: Штат #%d полностью перешел под контроль [%s]!" % [state_id, new_owner]
+
+
+func _on_state_transferred(state_id: int, _old_owner: String, new_owner: String) -> void:
+	_on_state_conquered(state_id, new_owner)
 
 
 func _on_military_frontlines_processed(reports: Array[Dictionary]) -> void:

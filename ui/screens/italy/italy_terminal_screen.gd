@@ -61,6 +61,20 @@ func setup(mgr: ItalyEmpireManager) -> void:
 	refresh_ui()
 
 
+static func _tr_str(key: String, params: Dictionary = {}, fallback: String = "") -> String:
+	var main_loop: MainLoop = Engine.get_main_loop()
+	if main_loop is SceneTree and main_loop.root != null and main_loop.root.has_node("LocalizationManager"):
+		var loc: Node = main_loop.root.get_node("LocalizationManager")
+		if loc != null and loc.has_method("tr_key"):
+			return loc.tr_key(key, params, fallback)
+	var s: String = TranslationServer.translate(key)
+	if s.is_empty() or s == key:
+		s = fallback
+	for k: String in params:
+		s = s.replace("{%s}" % k, str(params[k]))
+	return s
+
+
 func _on_manager_update(_arg1: Variant = null, _arg2: Variant = null) -> void:
 	refresh_ui()
 
@@ -108,32 +122,32 @@ func refresh_ui() -> void:
 
 	# Верхний HUD
 	if lbl_duce_info != null:
-		var l_name = italy_manager.player_state_ref.leader_name if italy_manager.player_state_ref else "Галеаццо Чиано"
-		lbl_duce_info.text = "ГЛАВА ПРАВИТЕЛЬСТВА: %s" % l_name.to_upper()
+		var l_name = italy_manager.player_state_ref.leader_name if italy_manager.player_state_ref else _tr_str("UI_ITALY_DEF_LEADER", {}, "Галеаццо Чиано")
+		lbl_duce_info.text = _tr_str("UI_ITALY_HEAD_OF_GOV", {"name": l_name.to_upper()}, "ГЛАВА ПРАВИТЕЛЬСТВА: {name}")
 
 	if lbl_triumvirate_status != null:
-		var st_str = "СОЮЗ СТАБИЛЕН"
+		var st_str = _tr_str("UI_TRIUMVIRATE_STATUS_STABLE", {}, "СОЮЗ СТАБИЛЕН")
 		var st_col = Color(0.3, 1.0, 0.4)
 		match italy_manager.triumvirate_state:
 			ItalyEmpireManager.TriumvirateState.STRAINED:
-				st_str = "НАПРЯЖЕНИЕ"
+				st_str = _tr_str("UI_TRIUMVIRATE_STATUS_STRAINED", {}, "НАПРЯЖЕНИЕ")
 				st_col = Color(1.0, 0.8, 0.2)
 			ItalyEmpireManager.TriumvirateState.COLLAPSING:
-				st_str = "ОСТРЫЙ КРИЗИС"
+				st_str = _tr_str("UI_TRIUMVIRATE_STATUS_COLLAPSING", {}, "ОСТРЫЙ КРИЗИС")
 				st_col = Color(1.0, 0.4, 0.2)
 			ItalyEmpireManager.TriumvirateState.DISSOLVED:
-				st_str = "АЛЬЯНС РАСПАЛСЯ"
+				st_str = _tr_str("UI_TRIUMVIRATE_STATUS_DISSOLVED", {}, "АЛЬЯНС РАСПАЛСЯ")
 				st_col = Color(1.0, 0.2, 0.2)
-		lbl_triumvirate_status.text = "ТРИУМВИРАТ: %s" % st_str
+		lbl_triumvirate_status.text = _tr_str("UI_TRIUMVIRATE_STATUS_LABEL", {"status": st_str}, "ТРИУМВИРАТ: {status}")
 		lbl_triumvirate_status.modulate = st_col
 
 	if lbl_council_balance != null:
 		var bal = italy_manager.council_balance
-		lbl_council_balance.text = "БАЛАНС СОВЕТА: %+0.0f (Скорца vs Чиано)" % bal
+		lbl_council_balance.text = _tr_str("UI_ITALY_COUNCIL_BALANCE", {"bal": "%+0.0f" % bal}, "БАЛАНС СОВЕТА: %+0.0f (Скорца vs Чиано)")
 		lbl_council_balance.modulate = Color(0.3, 0.95, 0.9) if bal >= 0 else Color(1.0, 0.7, 0.3)
 
 	if lbl_atlantropa_damage != null:
-		lbl_atlantropa_damage.text = "УЩЕРБ АТЛАНТРОПЫ: %0.0f%%" % italy_manager.atlantropa_damage_index
+		lbl_atlantropa_damage.text = _tr_str("UI_ITALY_ATLANTROPA_DAMAGE", {"dmg": "%0.0f" % italy_manager.atlantropa_damage_index}, "УЩЕРБ АТЛАНТРОПЫ: %0.0f%%")
 
 	match current_tab:
 		"triumvirate": _render_triumvirate_tab()
@@ -150,7 +164,7 @@ func _render_triumvirate_tab() -> void:
 	for c in sec_triumvirate.get_children(): c.queue_free()
 
 	var head = Label.new()
-	head.text = "=== ДИПЛОМАТИЧЕСКИЙ ПАКТ ТРИУМВИРАТА (ИТАЛИЯ - ИБЕРИЯ - ТУРЦИЯ) ==="
+	head.text = _tr_str("UI_TRIUMVIRATE_HEADER", {}, "=== ДИПЛОМАТИЧЕСКИЙ ПАКТ ТРИУМВИРАТА (ИТАЛИЯ - ИБЕРИЯ - ТУРЦИЯ) ===")
 	head.modulate = Color(1.0, 0.85, 0.2)
 	sec_triumvirate.add_child(head)
 
@@ -162,24 +176,24 @@ func _render_triumvirate_tab() -> void:
 	var tk_bar = _ascii_bar(italy_manager.turkey_tension / 100.0, 15)
 
 	var l_ib = Label.new()
-	l_ib.text = "НАПРЯЖЕНИЕ С ИБЕРИЕЙ: [%s] %0.1f%% (Споры: Гибралтар, Марокко, Атлантропа)" % [ib_bar, italy_manager.iberia_tension]
+	l_ib.text = _tr_str("UI_TRIUMVIRATE_TENSION_IBERIA", {"bar": ib_bar, "val": "%0.1f" % italy_manager.iberia_tension}, "НАПРЯЖЕНИЕ С ИБЕРИЕЙ: [{bar}] {val}% (Споры: Гибралтар, Марокко, Атлантропа)")
 	vb_st.add_child(l_ib)
 
 	var l_tk = Label.new()
-	l_tk.text = "НАПРЯЖЕНИЕ С ТУРЦИЕЙ: [%s] %0.1f%% (Споры: Нефть Мосула, Левант, Додеканес)" % [tk_bar, italy_manager.turkey_tension]
+	l_tk.text = _tr_str("UI_TRIUMVIRATE_TENSION_TURKEY", {"bar": tk_bar, "val": "%0.1f" % italy_manager.turkey_tension}, "НАПРЯЖЕНИЕ С ТУРЦИЕЙ: [{bar}] {val}% (Споры: Нефть Мосула, Левант, Додеканес)")
 	vb_st.add_child(l_tk)
 
 	sec_triumvirate.add_child(p_st)
 
 	if italy_manager.triumvirate_state != ItalyEmpireManager.TriumvirateState.DISSOLVED:
 		var h_acts = Label.new()
-		h_acts.text = "ДИПЛОМАТИЧЕСКИЕ ИНИЦИАТИВЫ РИМА:"
+		h_acts.text = _tr_str("UI_TRIUMVIRATE_ACTS_TITLE", {}, "ДИПЛОМАТИЧЕСКИЕ ИНИЦИАТИВЫ РИМА:")
 		h_acts.modulate = Color(0.0, 0.95, 1.0)
 		sec_triumvirate.add_child(h_acts)
 
 		var hbox = HBoxContainer.new()
 		var b_ib = Button.new()
-		b_ib.text = "[ ДИАЛОГ С МАДРИДОМ (20 PC) ]"
+		b_ib.text = _tr_str("UI_TRIUMVIRATE_BTN_MADRID", {}, "[ ДИАЛОГ С МАДРИДОМ (20 PC) ]")
 		b_ib.pressed.connect(func():
 			var r = italy_manager.appease_ally("IBERIA")
 			lbl_log_status.text = r["message"]
@@ -188,7 +202,7 @@ func _render_triumvirate_tab() -> void:
 		hbox.add_child(b_ib)
 
 		var b_tk = Button.new()
-		b_tk.text = "[ НЕФТЯНЫЕ ПЕРЕГОВОРЫ С АНКАРОЙ (20 PC) ]"
+		b_tk.text = _tr_str("UI_TRIUMVIRATE_BTN_ANKARA", {}, "[ НЕФТЯНЫЕ ПЕРЕГОВОРЫ С АНКАРОЙ (20 PC) ]")
 		b_tk.pressed.connect(func():
 			var r = italy_manager.appease_ally("TURKEY")
 			lbl_log_status.text = r["message"]
@@ -200,7 +214,7 @@ func _render_triumvirate_tab() -> void:
 	else:
 		var p_collapsed = PanelContainer.new()
 		var l_col = Label.new()
-		l_col.text = "ТРИУМВИРАТ ОКОНЧАТЕЛЬНО РАСПАЛСЯ. СРЕДИЗЕМНОМОРЬЕ СТАЛО АРЕНОЙ ВОЙНЫ АГЕНТОВ И АРМИЙ."
+		l_col.text = _tr_str("UI_TRIUMVIRATE_COLLAPSED_MSG", {}, "ТРИУМВИРАТ ОКОНЧАТЕЛЬНО РАСПАЛСЯ. СРЕДИЗЕМНОМОРЬЕ СТАЛО АРЕНОЙ ВОЙНЫ АГЕНТОВ И АРМИЙ.")
 		l_col.modulate = Color(1.0, 0.3, 0.3)
 		p_collapsed.add_child(l_col)
 		sec_triumvirate.add_child(p_collapsed)
@@ -214,7 +228,7 @@ func _render_mediterranean_tab() -> void:
 	for c in sec_mediterranean.get_children(): c.queue_free()
 
 	var head = Label.new()
-	head.text = "=== БИТВА ЗА СРЕДИЗЕМНОМОРЬЕ // ЗОНЫ ИМПЕРСКОГО ВЛИЯНИЯ ==="
+	head.text = _tr_str("UI_MEDITERRANEAN_HEADER", {}, "=== БИТВА ЗА СРЕДИЗЕМНОМОРЬЕ // ЗОНЫ ИМПЕРСКОГО ВЛИЯНИЯ ===")
 	head.modulate = Color(0.0, 0.95, 1.0)
 	sec_mediterranean.add_child(head)
 
@@ -226,7 +240,7 @@ func _render_mediterranean_tab() -> void:
 
 		var inf_bar = _ascii_bar(float(th["italian_influence"]) / 100.0, 15)
 		var h = Label.new()
-		h.text = "%s | ИТАЛЬЯНСКОЕ ВЛИЯНИЕ: [%s] %0.1f%%" % [th["name"].to_upper(), inf_bar, th["italian_influence"]]
+		h.text = "%s | " % th["name"].to_upper() + _tr_str("UI_MEDITERRANEAN_INFLUENCE", {"bar": inf_bar, "val": "%0.1f" % th["italian_influence"]}, "ИТАЛЬЯНСКОЕ ВЛИЯНИЕ: [{bar}] {val}%")
 		h.modulate = Color(1.0, 0.85, 0.3)
 		vb.add_child(h)
 
@@ -237,7 +251,7 @@ func _render_mediterranean_tab() -> void:
 
 		var btn_box = HBoxContainer.new()
 		var b_inv = Button.new()
-		b_inv.text = "[ ИНВЕСТИРОВАТЬ ($2.0B) ]"
+		b_inv.text = _tr_str("UI_MEDITERRANEAN_BTN_INVEST", {}, "[ ИНВЕСТИРОВАТЬ ($2.0B) ]")
 		b_inv.pressed.connect(func():
 			var r = italy_manager.invest_in_theater(th_key, 2.0)
 			lbl_log_status.text = r["message"]
@@ -246,7 +260,7 @@ func _render_mediterranean_tab() -> void:
 		btn_box.add_child(b_inv)
 
 		var b_car = Button.new()
-		b_car.text = "[ НАПРАВИТЬ КАРАБИНЕРОВ (4000 чел, 1 CAP) ]"
+		b_car.text = _tr_str("UI_MEDITERRANEAN_BTN_CARABINIERI", {}, "[ НАПРАВИТЬ КАРАБИНЕРОВ (4000 чел, 1 CAP) ]")
 		b_car.pressed.connect(func():
 			var r = italy_manager.deploy_carabinieri(th_key)
 			lbl_log_status.text = r["message"]
@@ -266,7 +280,7 @@ func _render_atlantropa_tab() -> void:
 	for c in sec_atlantropa.get_children(): c.queue_free()
 
 	var head = Label.new()
-	head.text = "=== КАТАСТРОФА АТЛАНТРОПЫ // ВОССТАНОВЛЕНИЕ ПОЧВ И ПОРТОВ ==="
+	head.text = _tr_str("UI_ATLANTROPA_HEADER", {}, "=== КАТАСТРОФА АТЛАНТРОПЫ // ВОССТАНОВЛЕНИЕ ПОЧВ И ПОРТОВ ===")
 	head.modulate = Color(1.0, 0.85, 0.2)
 	sec_atlantropa.add_child(head)
 
@@ -277,10 +291,7 @@ func _render_atlantropa_tab() -> void:
 	var l_desc = RichTextLabel.new()
 	l_desc.bbcode_enabled = true
 	l_desc.fit_content = true
-	l_desc.text = (
-		"Плотина Германа Зёргеля в Гибралтаре обернулась катастрофой для Италии: Адриатическое море ушло, " +
-		"Венеция и Триест превратились в сухопутные города, а солончаки разрушили сельское хозяйство Медзоджорно."
-	)
+	l_desc.text = _tr_str("UI_ATLANTROPA_DESC", {}, "Плотина Германа Зёргеля в Гибралтаре обернулась катастрофой для Италии: Адриатическое море ушло, Венеция и Триест превратились в сухопутные города, а солончаки разрушили сельское хозяйство Медзоджорно.")
 	vb_info.add_child(l_desc)
 	sec_atlantropa.add_child(p_info)
 
@@ -292,12 +303,12 @@ func _render_atlantropa_tab() -> void:
 
 		var p_bar = _ascii_bar(float(pr["progress"]) / 100.0, 15)
 		var h = Label.new()
-		h.text = "%s | ПРОГРЕСС: [%s] %0.0f%%" % [pr["name"].to_upper(), p_bar, pr["progress"]]
+		h.text = "%s | " % pr["name"].to_upper() + _tr_str("UI_ATLANTROPA_PROGRESS", {"bar": p_bar, "val": "%0.0f" % pr["progress"]}, "ПРОГРЕСС: [{bar}] {val}%")
 		h.modulate = Color(0.2, 0.95, 0.6) if pr["completed"] else Color(1.0, 0.8, 0.3)
 		vb.add_child(h)
 
 		var btn = Button.new()
-		btn.text = "[ ЗАВЕРШЕНО ]" if pr["completed"] else "[ ФИНАНСИРОВАТЬ СТРОИТЕЛЬСТВО ($%0.1fB) ]" % pr["cost"]
+		btn.text = _tr_str("UI_ATLANTROPA_BTN_DONE", {}, "[ ЗАВЕРШЕНО ]") if pr["completed"] else _tr_str("UI_ATLANTROPA_BTN_FUND", {"cost": "%0.1f" % pr["cost"]}, "[ ФИНАНСИРОВАТЬ СТРОИТЕЛЬСТВО (${cost}B) ]")
 		btn.disabled = bool(pr["completed"])
 		btn.pressed.connect(func():
 			var r = italy_manager.advance_atlantropa_project(pr_key)
@@ -317,7 +328,7 @@ func _render_council_tab() -> void:
 	for c in sec_council.get_children(): c.queue_free()
 
 	var head = Label.new()
-	head.text = "=== ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ // ДУЭЛЬ ЧИАНО И СКОРЦЫ ==="
+	head.text = _tr_str("UI_COUNCIL_HEADER", {}, "=== ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ // ДУЭЛЬ ЧИАНО И СКОРЦЫ ===")
 	head.modulate = Color(0.0, 0.95, 1.0)
 	sec_council.add_child(head)
 
@@ -328,28 +339,25 @@ func _render_council_tab() -> void:
 	var bal = italy_manager.council_balance
 	var bal_bar = _ascii_bar((bal + 100.0) / 200.0, 20)
 	var l_bal = Label.new()
-	l_bal.text = "БАЛАНС В СОВЕТЕ: СКОРЦА [%s] ЧИАНО (%+0.0f)" % [bal_bar, bal]
+	l_bal.text = _tr_str("UI_COUNCIL_BALANCE_LABEL", {"bar": bal_bar, "bal": "%+0.0f" % bal}, "БАЛАНС В СОВЕТЕ: СКОРЦА [{bar}] ЧИАНО ({bal})")
 	l_bal.modulate = Color(1.0, 0.85, 0.3)
 	vb_d.add_child(l_bal)
 
 	var l_desc = RichTextLabel.new()
 	l_desc.bbcode_enabled = true
 	l_desc.fit_content = true
-	l_desc.text = (
-		"[color=#00e5ff]ГАЛЕАЦЦО ЧИАНО:[/color] Демократизация, роспуск Черных Рубашек, сближение с США и коалиция со светскими партиями.\n" +
-		"[color=#ffaa33]КАРЛО СКОРЦА:[/color] Ортодоксальный фашизм 1919 года, тоталитарный контроль партии, имперский реванш."
-	)
+	l_desc.text = _tr_str("UI_COUNCIL_DUEL_DESC", {}, "[color=#00e5ff]ГАЛЕАЦЦО ЧИАНО:[/color] Демократизация, роспуск Черных Рубашек, сближение с США и коалиция со светскими партиями.\n[color=#ffaa33]КАРЛО СКОРЦА:[/color] Ортодоксальный фашизм 1919 года, тоталитарный контроль партии, имперский реванш.")
 	vb_d.add_child(l_desc)
 	sec_council.add_child(p_duel)
 
 	# Кнопки смены исторического курса
 	var h_paths = Label.new()
-	h_paths.text = "УТВЕРДИТЬ СУДЬБУ ИТАЛИИ В СОВЕТЕ (ПЕРЕКЛЮЧЕНИЕ ДИРЕКТИВ):"
+	h_paths.text = _tr_str("UI_COUNCIL_PATHS_TITLE", {}, "УТВЕРДИТЬ СУДЬБУ ИТАЛИИ В СОВЕТЕ (ПЕРЕКЛЮЧЕНИЕ ДИРЕКТИВ):")
 	h_paths.modulate = Color(0.2, 0.95, 0.6)
 	sec_council.add_child(h_paths)
 
 	var b_ciano = Button.new()
-	b_ciano.text = "[ 1. КУРС ГАЛЕАЦЦО ЧИАНО: ДЕМОКРАТИЗАЦИЯ И РЕФОРМЫ (35 PC) ]"
+	b_ciano.text = _tr_str("UI_COUNCIL_BTN_CIANO", {}, "[ 1. КУРС ГАЛЕАЦЦО ЧИАНО: ДЕМОКРАТИЗАЦИЯ И РЕФОРМЫ (35 PC) ]")
 	b_ciano.pressed.connect(func():
 		var r = italy_manager.adopt_ciano_democratic_reforms()
 		lbl_log_status.text = r["message"]
@@ -358,7 +366,7 @@ func _render_council_tab() -> void:
 	sec_council.add_child(b_ciano)
 
 	var b_scorza = Button.new()
-	b_scorza.text = "[ 2. ДИКТАТ КАРЛО СКОРЦЫ: ТОТАЛИТАРНЫЙ РЕВАНШ (35 PC) ]"
+	b_scorza.text = _tr_str("UI_COUNCIL_BTN_SCORZA", {}, "[ 2. ДИКТАТ КАРЛО СКОРЦЫ: ТОТАЛИТАРНЫЙ РЕВАНШ (35 PC) ]")
 	b_scorza.pressed.connect(func():
 		var r = italy_manager.adopt_scorza_hardliner_path()
 		lbl_log_status.text = r["message"]
