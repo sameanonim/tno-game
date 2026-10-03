@@ -133,6 +133,18 @@ func can_be_started(state: CountryState, completed_directives: Array = []) -> Di
 	for c in completed_directives:
 		if not completed_list.has(str(c)):
 			completed_list.append(str(c))
+	var hist = state.story_flags.get("completed_historical_focuses", [])
+	if hist is Array:
+		for h in hist:
+			var s_h = str(h)
+			if not completed_list.has(s_h):
+				completed_list.append(s_h)
+	var arch = state.story_flags.get("completed_directives_archive", [])
+	if arch is Array:
+		for a in arch:
+			var s_a = str(a)
+			if not completed_list.has(s_a):
+				completed_list.append(s_a)
 
 	# 1. Проверка уже запущенных и завершенных директив
 	if state.active_directives.has(id):

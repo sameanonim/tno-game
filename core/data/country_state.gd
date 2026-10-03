@@ -281,6 +281,18 @@ var fiscal_crisis_active: bool:
 ## Завершенные национальные директивы
 @export var completed_directives: Array = []
 
+## Проверяет, была ли директива завершена (в текущей партии или исторически до 1962 года)
+func is_directive_completed(dir_id: String) -> bool:
+	if completed_directives.has(dir_id):
+		return true
+	var hist = story_flags.get("completed_historical_focuses", [])
+	if hist is Array and hist.has(dir_id):
+		return true
+	var arch = story_flags.get("completed_directives_archive", [])
+	if arch is Array and arch.has(dir_id):
+		return true
+	return false
+
 ## Флаг аннексии/капитуляции государства
 @export var is_annexed: bool = false
 

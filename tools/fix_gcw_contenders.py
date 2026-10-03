@@ -131,9 +131,7 @@ bor_country = {
     "war_support_percent": 80.0
   },
   "narrative": {
-    "active_directives": [
-      "dir_bormann_tighten_party_grip"
-    ],
+    "active_directives": [],
     "completed_directives": [],
     "story_flags": {
       "gcw_contender": True,
@@ -272,9 +270,7 @@ gor_country = {
     "war_support_percent": 90.0
   },
   "narrative": {
-    "active_directives": [
-      "dir_goering_luftwaffe_air_supremacy"
-    ],
+    "active_directives": [],
     "completed_directives": [],
     "story_flags": {
       "gcw_contender": True,

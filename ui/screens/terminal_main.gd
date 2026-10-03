@@ -1519,7 +1519,13 @@ func _populate_sample_directives() -> void:
 	if loaded and not directive_tree_view.all_directives.is_empty():
 		for d in directive_tree_view.all_directives.values():
 			mgr.register_directive(d)
-		label_log.text = _tr_str("UI_AUTO_GEN_1521", {}, "ЗАГРУЖЕНО НАЦИОНАЛЬНОЕ ДРЕВО ДИРЕКТИВ [%s]: %d ИНИЦИАТИВ") % [turn_manager.player_state.country_tag, directive_tree_view.all_directives.size()]
+		if turn_manager.player_state != null:
+			mgr.sync_initial_directives(turn_manager.player_state)
+		var comp_cnt = turn_manager.player_state.completed_directives.size() if turn_manager.player_state != null else 0
+		var act_cnt = turn_manager.player_state.active_directives.size() if turn_manager.player_state != null else 0
+		label_log.text = _tr_str("UI_AUTO_GEN_1521", {}, "ЗАГРУЖЕНО ДРЕВО ДИРЕКТИВ [%s]: %d ИНИЦИАТИВ (ЗАВЕРШЕНО: %d, В ПРОЦЕССЕ: %d)") % [
+			turn_manager.player_state.country_tag, directive_tree_view.all_directives.size(), comp_cnt, act_cnt
+		]
 		return
 
 	var extracted_directives: Array[DirectiveResource] = cl.get_directives_for_country(turn_manager.player_state.country_tag)

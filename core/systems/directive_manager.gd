@@ -31,6 +31,43 @@ func register_directive(dir: DirectiveResource) -> void:
 			all_directives[dir.id] = dir
 
 
+## Синхронизация стартового состояния директив (завершённых и активных) из CountryState
+func sync_initial_directives(state: CountryState) -> void:
+	if state == null:
+		return
+
+	# 1. Синхронизация завершённых директив
+	for comp_id in state.completed_directives:
+		var c_str = str(comp_id)
+		if all_directives.has(c_str):
+			var comp_dir: DirectiveResource = all_directives[c_str]
+			comp_dir.status = DirectiveResource.Status.COMPLETED
+			comp_dir.turns_remaining = 0
+			# Блокировка взаимоисключающих веток
+			for excl_id in comp_dir.mutually_exclusive:
+				state.set_flag("locked_focus_" + excl_id, true)
+				if all_directives.has(excl_id):
+					all_directives[excl_id].status = DirectiveResource.Status.CANCELLED
+				_cascade_block_descendants(excl_id, state)
+
+	# 2. Синхронизация активных директив
+	var valid_actives: Array = []
+	for act_id in state.active_directives:
+		var a_str = str(act_id)
+		if all_directives.has(a_str):
+			valid_actives.append(a_str)
+			var act_dir: DirectiveResource = all_directives[a_str]
+			act_dir.status = DirectiveResource.Status.IN_PROGRESS
+			var spent = active_progress.get(a_str, 0)
+			act_dir.turns_remaining = maxi(act_dir.turns_to_complete - spent, 0)
+			if not active_progress.has(a_str):
+				active_progress[a_str] = spent
+		else:
+			push_warning("DirectiveManager: Стартовая активная директива [%s] не найдена в реестре древа." % a_str)
+
+	state.active_directives = valid_actives
+
+
 func can_start(directive_id: String, state: CountryState) -> bool:
 	if not all_directives.has(directive_id):
 		return false

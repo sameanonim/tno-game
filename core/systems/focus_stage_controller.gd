@@ -351,6 +351,9 @@ func switch_focus_tree(new_tree_id: String, preserve_history: bool = true) -> vo
 			if directive_manager != null:
 				directive_manager.register_directive(d_res)
 
+	if directive_manager != null and country_state != null:
+		directive_manager.sync_initial_directives(country_state)
+
 	current_tree_id = new_tree_id
 	current_stage_category = str(new_tree_data.get("stage_category", "GENERAL"))
 

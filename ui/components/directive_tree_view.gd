@@ -269,6 +269,8 @@ func load_tree_from_file(path: String) -> bool:
 		directive_manager.all_directives.clear()
 		for d in all_directives.values():
 			directive_manager.register_directive(d)
+		if player_state != null:
+			directive_manager.sync_initial_directives(player_state)
 
 	print("[DirectiveTreeView] Загружено %d директив из [%s]." % [all_directives.size(), path])
 	refresh_tree()
@@ -670,6 +672,21 @@ func refresh_tree() -> void:
 
 	if not selected_directive_id.is_empty() and all_directives.has(selected_directive_id):
 		_update_inspector(all_directives[selected_directive_id])
+	elif player_state != null and not player_state.active_directives.is_empty() and all_directives.has(str(player_state.active_directives[0])):
+		selected_directive_id = str(player_state.active_directives[0])
+		_update_inspector(all_directives[selected_directive_id])
+	elif not all_directives.is_empty():
+		var first_pick: DirectiveResource = null
+		for d in all_directives.values():
+			if d.status == DirectiveResource.Status.AVAILABLE or (player_state != null and d.can_be_started(player_state)["allowed"]):
+				first_pick = d
+				break
+			elif first_pick == null and d.status != DirectiveResource.Status.COMPLETED and d.status != DirectiveResource.Status.MUTUALLY_BLOCKED:
+				first_pick = d
+		if first_pick == null:
+			first_pick = all_directives.values()[0]
+		selected_directive_id = first_pick.id
+		_update_inspector(first_pick)
 
 
 func _calculate_node_position(dir: DirectiveResource, offset_x: float = 0.0, offset_y: float = 0.0) -> Vector2:
