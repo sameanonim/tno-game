@@ -27,13 +27,45 @@ signal log_message_generated(text: String, is_alert: bool)
 @export var campaign_state: Resource = null
 @export var current_turn: int = 1
 
-# Ссылки на внешние менеджеры
+# Ссылки на внешние менеджеры и движки подсистем
 var civil_war_manager: GermanCivilWarManager = null
+var kartenhaus_engine: KartenhausEngine = null
+var zollverein_engine: ZollvereinEngine = null
+var warplans_engine: WarPlansEngine = null
+var nuclear_custody_engine: NuclearCustodyEngine = null
 
 
 func _init() -> void:
 	if campaign_state == null:
 		campaign_state = CampaignStateScript.new()
+	kartenhaus_engine = KartenhausEngineScript.new()
+	zollverein_engine = ZollvereinEngineScript.new()
+	warplans_engine = WarPlansEngineScript.new()
+	nuclear_custody_engine = NuclearCustodyEngineScript.new()
+	_connect_engine_signals()
+
+
+func _connect_engine_signals() -> void:
+	if kartenhaus_engine != null:
+		kartenhaus_engine.kartenhaus_district_secured.connect(func(_did, _ok): pass)
+		kartenhaus_engine.faction_purged.connect(func(_fk, _pen): pass)
+		kartenhaus_engine.bormann_status_updated.connect(func(_cp, _sd): pass)
+	if zollverein_engine != null:
+		zollverein_engine.regime_alignment_changed.connect(func(_mv, _an): pass)
+		zollverein_engine.zollverein_member_added.connect(func(_tag): pass)
+		zollverein_engine.slave_emancipation_stepped.connect(func(_r, _b): pass)
+		zollverein_engine.slave_revolt_erupted.connect(func(): pass)
+	if warplans_engine != null:
+		warplans_engine.war_plan_launched.connect(func(_pt, _tt): pass)
+		warplans_engine.conquest_plundered.connect(func(_tt, _ga): pass)
+		warplans_engine.militarist_tension_spiked.connect(func(_nt): pass)
+		warplans_engine.militarist_coup_warning.connect(func(): pass)
+	if nuclear_custody_engine != null:
+		nuclear_custody_engine.silo_secured.connect(func(_sid, _rem): pass)
+		nuclear_custody_engine.burgundian_sabotage_detected.connect(func(_sid): pass)
+		nuclear_custody_engine.apocalypse_clock_ticked.connect(func(_cp): pass)
+		nuclear_custody_engine.nuclear_armageddon_prevented.connect(func(): pass)
+		nuclear_custody_engine.world_annihilated_in_nuclear_fire.connect(func(): pass)
 
 
 func _ready() -> void:
@@ -127,13 +159,13 @@ func _process_successor_rule_turn(seed_val: int) -> void:
 	var step_res: Dictionary = {}
 	match campaign_state.chosen_contender_tag:
 		"BOR":
-			step_res = KartenhausEngineScript.process_turn_step(campaign_state, seed_val)
+			step_res = kartenhaus_engine.step_turn(campaign_state, seed_val) if kartenhaus_engine != null else KartenhausEngineScript.process_turn_step(campaign_state, seed_val)
 		"SPE":
-			step_res = ZollvereinEngineScript.process_turn_step(campaign_state, seed_val)
+			step_res = zollverein_engine.step_turn(campaign_state, seed_val) if zollverein_engine != null else ZollvereinEngineScript.process_turn_step(campaign_state, seed_val)
 		"GOR":
-			step_res = WarPlansEngineScript.process_turn_step(campaign_state, seed_val)
+			step_res = warplans_engine.step_turn(campaign_state, seed_val) if warplans_engine != null else WarPlansEngineScript.process_turn_step(campaign_state, seed_val)
 		"HEY":
-			step_res = NuclearCustodyEngineScript.process_turn_step(campaign_state, seed_val)
+			step_res = nuclear_custody_engine.step_turn(campaign_state, seed_val) if nuclear_custody_engine != null else NuclearCustodyEngineScript.process_turn_step(campaign_state, seed_val)
 			if step_res.get("apocalypse_triggered", false):
 				campaign_state.current_stage = CampaignStateScript.CampaignStage.STAGE_COLLAPSE
 				emit_signal("campaign_stage_advanced", int(campaign_state.current_stage), "ЯДЕРНЫЙ АПОКАЛИПСИС // КОНЕЦ СВЕТА")
@@ -175,7 +207,11 @@ func select_player_contender(tag: String) -> void:
 
 
 func execute_bormann_secure_district(district_id: String) -> bool:
-	var success: bool = KartenhausEngineScript.secure_gauleiter(campaign_state, district_id, current_turn * 991)
+	var success: bool = false
+	if kartenhaus_engine != null:
+		success = kartenhaus_engine.secure_district_action(campaign_state, district_id, current_turn * 991)
+	else:
+		success = KartenhausEngineScript.secure_gauleiter(campaign_state, district_id, current_turn * 991)
 	emit_signal("germany_state_updated", campaign_state)
 	return success
 
@@ -186,12 +222,20 @@ func execute_speer_empower_advisor(advisor_key: String, delta: float) -> void:
 
 
 func execute_goering_campaign_victory(target_tag: String) -> Dictionary:
-	var res: Dictionary = WarPlansEngineScript.execute_campaign_victory(campaign_state, target_tag)
+	var res: Dictionary = {}
+	if warplans_engine != null:
+		res = warplans_engine.campaign_victory_action(campaign_state, target_tag)
+	else:
+		res = WarPlansEngineScript.execute_campaign_victory(campaign_state, target_tag)
 	emit_signal("germany_state_updated", campaign_state)
 	return res
 
 
 func execute_heydrich_secure_silo() -> bool:
-	var success: bool = NuclearCustodyEngineScript.secure_silo_operation(campaign_state, current_turn * 773)
+	var success: bool = false
+	if nuclear_custody_engine != null:
+		success = nuclear_custody_engine.secure_silo_action(campaign_state, current_turn * 773)
+	else:
+		success = NuclearCustodyEngineScript.secure_silo_operation(campaign_state, current_turn * 773)
 	emit_signal("germany_state_updated", campaign_state)
 	return success

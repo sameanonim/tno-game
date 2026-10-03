@@ -76,7 +76,14 @@ func _check_autoloads_and_singletons() -> bool:
 	var focus_ctrl = FocusStageControllerScript.new()
 	var loc = LocalizationManagerScript.new()
 
-	if eco == null or mil == null or cond == null or focus_ctrl == null or loc == null:
+	var ok: bool = (eco != null and mil != null and cond != null and focus_ctrl != null and loc != null)
+	if eco is Node: eco.free()
+	if mil is Node: mil.free()
+	if cond is Node: cond.free()
+	if focus_ctrl is Node: focus_ctrl.free()
+	if loc is Node: loc.free()
+
+	if not ok:
 		printerr("FAIL: Core system instantiation failed.")
 		return false
 
@@ -104,7 +111,9 @@ func _check_signal_topology() -> bool:
 	for sig_name in required_tm_signals:
 		if not tm.has_signal(sig_name):
 			printerr("FAIL: TurnManager missing signal: %s" % sig_name)
-			tm.queue_free()
+			tm.free()
+			focus_ctrl.free()
+			ev_mgr.free()
 			return false
 
 	# Verify FocusStageController signals
@@ -115,25 +124,33 @@ func _check_signal_topology() -> bool:
 	for sig_name in required_focus_signals:
 		if not focus_ctrl.has_signal(sig_name):
 			printerr("FAIL: FocusStageController missing signal: %s" % sig_name)
-			tm.queue_free()
+			tm.free()
+			focus_ctrl.free()
+			ev_mgr.free()
 			return false
 
 	# Verify EventManager signals
 	if not ev_mgr.has_signal("event_triggered"):
 		printerr("FAIL: EventManager missing signal: event_triggered")
-		tm.queue_free()
+		tm.free()
+		focus_ctrl.free()
+		ev_mgr.free()
 		return false
 
 	# Verify SettingsManager signals (DEF-02)
 	var sm = SettingsManagerScript.new()
 	if not sm.has_signal("resolution_changed") or not sm.has_signal("window_mode_changed"):
 		printerr("FAIL: SettingsManager missing display signals.")
-		tm.queue_free()
-		sm.queue_free()
+		tm.free()
+		focus_ctrl.free()
+		ev_mgr.free()
+		sm.free()
 		return false
-	sm.queue_free()
+	sm.free()
 
-	tm.queue_free()
+	tm.free()
+	focus_ctrl.free()
+	ev_mgr.free()
 	print("  * TurnManager signals verified: OK (7/7)")
 	print("  * FocusStageController signals verified: OK (4/4)")
 	print("  * EventManager signals verified: OK")
@@ -302,18 +319,18 @@ func _check_multi_turn_simulation_consistency() -> bool:
 	var conquest_res = rum.execute_warlord_conquest("WRS", "KOM", tm_mock, "annex_and_integrate")
 	if not conquest_res["success"] or conqueror_st.infantry_weapons_stockpile <= 1000:
 		printerr("FAIL: Warlord conquest army integration failed (TASK-4.1).")
-		rum.queue_free()
-		tm_mock.queue_free()
+		rum.free()
+		tm_mock.free()
 		return false
-	rum.queue_free()
-	tm_mock.queue_free()
+	rum.free()
+	tm_mock.free()
 
 	# Test CRT Terminal Sound & Shader Features (TASK-4.3)
 	var sfx = TerminalSoundFxScript.new()
 	root.add_child(sfx)
 	sfx.play_crt_warmup()
 	sfx.play_crt_flyback_hum(0.05)
-	sfx.queue_free()
+	sfx.free()
 
 	print("  * 5-Turn Economic Simulation: OK (Final GDP: %.2fB, Debt: %.2fB, Reserves: %.2fB)" % [
 		state.gdp_billions, state.national_debt_billions, state.liquid_reserves_billions
@@ -408,6 +425,6 @@ func _check_germany_deep_systems() -> bool:
 	screen_inst.setup(mgr)
 	print("  * GermanyTerminalScreen Scene instantiation & setup: OK")
 	
-	screen_inst.queue_free()
-	mgr.queue_free()
+	screen_inst.free()
+	mgr.free()
 	return true

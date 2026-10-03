@@ -12,6 +12,30 @@ signal zollverein_member_added(country_tag: String)
 signal slave_emancipation_stepped(remaining_slaves_millions: float, gdp_bonus: float)
 signal slave_revolt_erupted()
 
+
+func step_turn(state: Resource, turn_seed: int) -> Dictionary:
+	var result: Dictionary = process_turn_step(state, turn_seed)
+	if state != null:
+		regime_alignment_changed.emit(state.speer_regime_meter, get_alignment_title(state.speer_regime_meter))
+		if float(result.get("slave_liberation_delta", 0.0)) > 0.0:
+			slave_emancipation_stepped.emit(state.slaves_count_millions, float(result.get("gdp_growth_bonus", 0.0)))
+		if state.slave_revolt_triggered:
+			slave_revolt_erupted.emit()
+	return result
+
+
+func add_member_action(state: Resource, country_tag: String) -> bool:
+	if state == null:
+		return false
+	var zd: Dictionary = state.zollverein_data
+	var members: Array = zd.get("pakt_members", [])
+	if not members.has(country_tag):
+		members.append(country_tag)
+		zd["pakt_members"] = members
+		zollverein_member_added.emit(country_tag)
+		return true
+	return false
+
 static func get_alignment_title(meter_val: float) -> String:
 	if meter_val <= -50.0:
 		return "Фашистский Триумф (Автократия Шпеера)"

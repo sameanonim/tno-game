@@ -12,6 +12,31 @@ signal conquest_plundered(target_tag: String, gold_amount: float)
 signal militarist_tension_spiked(new_tension: float)
 signal militarist_coup_warning()
 
+
+func step_turn(state: Resource, turn_seed: int) -> Dictionary:
+	var result: Dictionary = process_turn_step(state, turn_seed)
+	if state != null:
+		var tension: float = float(state.goering_warplans_data.get("militarist_tension", 30.0))
+		militarist_tension_spiked.emit(tension)
+		if result.get("risk_of_coup", false):
+			militarist_coup_warning.emit()
+	return result
+
+
+func launch_plan_action(state: Resource, plan_tier: String, target_tag: String) -> void:
+	if state != null:
+		var wpd: Dictionary = state.goering_warplans_data
+		wpd["current_plan"] = plan_tier
+		wpd["target_country_tag"] = target_tag
+		war_plan_launched.emit(plan_tier, target_tag)
+
+
+func campaign_victory_action(state: Resource, target_tag: String) -> Dictionary:
+	var res: Dictionary = execute_campaign_victory(state, target_tag)
+	if res.get("success", false):
+		conquest_plundered.emit(target_tag, float(res.get("gold_plundered", 0.0)))
+	return res
+
 static func get_plan_targets(plan_tier: String) -> Array[String]:
 	match plan_tier:
 		"A":

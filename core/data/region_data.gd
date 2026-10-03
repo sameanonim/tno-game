@@ -29,6 +29,11 @@ extends Resource
 @export var is_demilitarized: bool = false
 @export var is_border_region: bool = true
 @export var story_flags: Dictionary = {}
+@export var is_dirty: bool = true
+
+
+func mark_dirty() -> void:
+	is_dirty = true
 
 
 func is_core_of(country_tag: String) -> bool:
@@ -57,12 +62,13 @@ func to_dict() -> Dictionary:
 		"terrain_type": terrain_type,
 		"is_demilitarized": is_demilitarized,
 		"is_border_region": is_border_region,
-		"story_flags": story_flags.duplicate(true)
+		"story_flags": story_flags.duplicate(true),
+		"is_dirty": false
 	}
 
 
 static func from_dict(data: Dictionary) -> RegionData:
-	var res = RegionData.new()
+	var res := RegionData.new()
 	res.province_id = int(data.get("province_id", 1))
 	res.province_name = data.get("province_name", "")
 	res.owner_tag = data.get("owner_tag", "")
@@ -78,6 +84,7 @@ static func from_dict(data: Dictionary) -> RegionData:
 	res.terrain_type = data.get("terrain_type", "plains")
 	res.is_demilitarized = bool(data.get("is_demilitarized", false))
 	res.is_border_region = bool(data.get("is_border_region", false))
+	res.is_dirty = bool(data.get("is_dirty", false))
 	if data.has("story_flags") and data["story_flags"] is Dictionary:
 		res.story_flags = data["story_flags"].duplicate(true)
 	return res

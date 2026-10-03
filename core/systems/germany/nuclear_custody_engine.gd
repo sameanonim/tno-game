@@ -16,6 +16,29 @@ signal world_annihilated_in_nuclear_fire()
 const TOTAL_SILOS: int = 28
 const REQUIRED_FOR_SAFETY: int = 20
 
+
+func step_turn(state: Resource, turn_seed: int) -> Dictionary:
+	var result: Dictionary = process_turn_step(state, turn_seed)
+	if state != null:
+		var nd: Dictionary = state.heydrich_nuclear_data
+		var clock: float = float(nd.get("apocalypse_clock_percent", 25.0))
+		apocalypse_clock_ticked.emit(clock)
+		if result.get("apocalypse_triggered", false):
+			world_annihilated_in_nuclear_fire.emit()
+		elif int(nd.get("secured_silos", 14)) >= REQUIRED_FOR_SAFETY:
+			nuclear_armageddon_prevented.emit()
+		if float(result.get("clock_delta", 0.0)) > 2.0:
+			burgundian_sabotage_detected.emit("SILO_BURGUNDY_GRID")
+	return result
+
+
+func secure_silo_action(state: Resource, turn_seed: int) -> bool:
+	var success: bool = secure_silo_operation(state, turn_seed)
+	if state != null:
+		var nd: Dictionary = state.heydrich_nuclear_data
+		silo_secured.emit("SILO_PRIMARY", int(nd.get("burgundian_infiltrated_silos", 0)))
+	return success
+
 static func process_turn_step(state: Resource, turn_seed: int) -> Dictionary:
 	var result: Dictionary = {
 		"clock_delta": 0.0,

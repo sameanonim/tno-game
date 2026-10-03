@@ -300,7 +300,7 @@ func _update_active_tree_hud(target_tree_id: String = "") -> void:
 	if display_id.is_empty() and not current_tree_path.is_empty():
 		display_id = current_tree_path.get_file().trim_suffix(".json")
 	if display_id.is_empty():
-		display_id = "СТАРТОВЫЙ КОМПЛЕКС"
+		display_id = tr("СТАРТОВЫЙ КОМПЛЕКС")
 
 	var stage_cat = "GENERAL"
 	var total_dirs = all_directives.size()
@@ -319,20 +319,20 @@ func _update_active_tree_hud(target_tree_id: String = "") -> void:
 	if lbl_active_tree_title != null:
 		lbl_active_tree_title.text = "● " + display_id.to_upper()
 	if lbl_active_tree_count != null:
-		lbl_active_tree_count.text = "[ %d ДИРЕКТИВ ]" % total_dirs
+		lbl_active_tree_count.text = tr("[ %d ДИРЕКТИВ ]") % total_dirs
 
 
 func _get_stage_badge(category: String, is_start: bool = false) -> String:
 	if is_start:
-		return "[СТАРТ]"
+		return tr("[СТАРТ]")
 	match category.to_upper():
-		"PROLOGUE": return "[ПРОЛОГ]"
-		"CRISIS": return "[СМУТА]"
-		"LEADERSHIP": return "[ВЛАСТЬ]"
-		"REGIONAL": return "[РЕГИОН]"
-		"SUPERREGIONAL": return "[СУПЕР-Р]"
-		"FINAL": return "[ЕДИНСТВО]"
-		_: return "[ПАКЕТ]"
+		"PROLOGUE": return tr("[ПРОЛОГ]")
+		"CRISIS": return tr("[СМУТА]")
+		"LEADERSHIP": return tr("[ВЛАСТЬ]")
+		"REGIONAL": return tr("[РЕГИОН]")
+		"SUPERREGIONAL": return tr("[СУПЕР-Р]")
+		"FINAL": return tr("[ЕДИНСТВО]")
+		_: return tr("[ПАКЕТ]")
 
 
 func _on_tree_selected_from_menu(index: int) -> void:
@@ -432,13 +432,13 @@ func _setup_ui_layout() -> void:
 	tree_hud_hbox.add_child(lbl_tree_prefix)
 
 	lbl_active_tree_badge = Label.new()
-	lbl_active_tree_badge.text = "[ СТАДИЯ ]"
+	lbl_active_tree_badge.text = tr("[ СТАДИЯ ]")
 	lbl_active_tree_badge.add_theme_font_size_override("font_size", 10)
 	lbl_active_tree_badge.add_theme_color_override("font_color", COLOR_PHOSPHOR_AMBER)
 	tree_hud_hbox.add_child(lbl_active_tree_badge)
 
 	lbl_active_tree_title = Label.new()
-	lbl_active_tree_title.text = "ИНИЦИАЛИЗАЦИЯ..."
+	lbl_active_tree_title.text = tr("ИНИЦИАЛИЗАЦИЯ...")
 	lbl_active_tree_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_active_tree_title.add_theme_font_size_override("font_size", 11)
 	lbl_active_tree_title.add_theme_color_override("font_color", COLOR_PHOSPHOR_GREEN)

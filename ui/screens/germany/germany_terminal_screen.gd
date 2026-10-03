@@ -82,6 +82,16 @@ func setup(manager: Node) -> void:
 			campaign_manager.germany_state_updated.connect(_on_manager_updated)
 		if not campaign_manager.log_message_generated.is_connected(_on_log_message):
 			campaign_manager.log_message_generated.connect(_on_log_message)
+		if not campaign_manager.hitler_health_changed.is_connected(_on_hitler_health_changed):
+			campaign_manager.hitler_health_changed.connect(_on_hitler_health_changed)
+		if not campaign_manager.hitler_passed_away.is_connected(_on_hitler_passed_away):
+			campaign_manager.hitler_passed_away.connect(_on_hitler_passed_away)
+		if not campaign_manager.campaign_stage_advanced.is_connected(_on_campaign_stage_advanced):
+			campaign_manager.campaign_stage_advanced.connect(_on_campaign_stage_advanced)
+		if not campaign_manager.slave_unrest_changed.is_connected(_on_slave_unrest_changed):
+			campaign_manager.slave_unrest_changed.connect(_on_slave_unrest_changed)
+		if not campaign_manager.contender_mechanic_stepped.is_connected(_on_contender_mechanic_stepped):
+			campaign_manager.contender_mechanic_stepped.connect(_on_contender_mechanic_stepped)
 		_refresh_ui()
 
 
