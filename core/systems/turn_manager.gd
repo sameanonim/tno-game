@@ -663,7 +663,10 @@ func end_turn() -> void:
 			var victor: String = str(rep.get("victor_tag", "")).to_upper()
 			var defeated: String = str(rep.get("defeated_tag", "")).to_upper()
 			if not defeated.is_empty() and not victor.is_empty():
-				annex_country(defeated, victor)
+				if russian_unification_manager != null and RussianUnificationManager.is_warlord(victor) and RussianUnificationManager.is_warlord(defeated):
+					russian_unification_manager.execute_warlord_conquest(victor, defeated, self, "annex_and_integrate")
+				else:
+					annex_country(defeated, victor)
 				if countries_world_state.has(defeated):
 					var def_st: CountryState = countries_world_state[defeated]
 					if def_st != null:

@@ -17,7 +17,12 @@ extends Resource
 @export var ruling_ideology: String = "Authoritarian Socialism"
 @export var sub_ideology: String = ""
 @export var leader_title: String = "Глава государства"
-@export var leader_portrait_id: String = ""
+## @deprecated: Устаревший ID портрета лидера. Рекомендуется использовать leader_portrait_path.
+@export var leader_portrait_id: String = "":
+	get:
+		return leader_portrait_id if not leader_portrait_id.is_empty() else leader_portrait_path
+	set(val):
+		leader_portrait_id = val
 @export var ruling_party: String = "Authoritarian Socialism"
 @export var country_color: Color = Color(0.85, 0.2, 0.2, 1.0)
 
@@ -27,8 +32,14 @@ extends Resource
 @export_group("Diplomacy & Global Spheres")
 ## Глобальная фракция / альянс (OFN, EINHEITSPAKT, CO_PROSPERITY_SPHERE, TRIUMVIRATE, SOVEREIGN_RUSSIA, NON_ALIGNED)
 @export var faction: String = "NON_ALIGNED"
-@export var alliance: String = "Non-Aligned"
+## @deprecated: Устаревшее наименование альянса. Рекомендуется использовать поле faction.
+@export var alliance: String = "Non-Aligned":
+	get:
+		return alliance if alliance != "Non-Aligned" else faction
+	set(val):
+		alliance = val
 @export var global_sphere: String = "NON_ALIGNED"
+## @deprecated: Устаревший числовой код сферы. Рекомендуется использовать строковый global_sphere.
 @export var sphere_code: float = 0.05
 
 ## Контролируемые и национальные штаты (ID штатов)
@@ -294,7 +305,15 @@ var fiscal_crisis_active: bool:
 @export var active_researches: Dictionary = {}
 
 ## Базовое число доступных слотов НИОКР
+## @deprecated: Для получения итогового количества слотов с учётом всех модификаторов используйте метод get_total_research_slots().
 @export var research_slots_count: int = 3
+
+## @deprecated: Аксессор совместимости. Рекомендуется использовать get_total_research_slots().
+var research_slots: int:
+	get:
+		return get_total_research_slots()
+	set(val):
+		research_slots_count = val
 
 ## Накопленный резерв очков науки
 @export var research_points_pool: float = 0.0

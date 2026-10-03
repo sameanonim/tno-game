@@ -99,12 +99,26 @@ var btn_save_game: Button = null
 var btn_load_game: Button = null
 
 
+func _tr_str(key: String, params: Dictionary = {}, fallback: String = "") -> String:
+	var main_loop = Engine.get_main_loop()
+	if main_loop and main_loop.root and main_loop.root.has_node("LocalizationManager"):
+		var lm = main_loop.root.get_node("LocalizationManager")
+		if lm.has_method("tr_key"):
+			return lm.tr_key(key, params, fallback)
+	var res = TranslationServer.translate(key)
+	if res == key and fallback != "":
+		res = fallback
+	for p in params.keys():
+		res = res.replace("{" + str(p) + "}", str(params[p]))
+	return res
+
+
 
 
 func quick_save() -> void:
 	if turn_manager != null and turn_manager.save_game("user://savegame.json"):
 		if sound_fx != null: sound_fx.play_switch_click(1400.0)
-		label_log.text = "СИСТЕМА: ИГРА УСПЕШНО СОХРАНЕНА [user://savegame.json] (ХОД %d)" % turn_manager.current_turn
+		label_log.text = _tr_str("UI_LOG_SAVE_SUCCESS", {"turn": turn_manager.current_turn}, "СИСТЕМА: ИГРА УСПЕШНО СОХРАНЕНА [user://savegame.json] (ХОД {turn})")
 
 
 func quick_load() -> void:
@@ -121,9 +135,9 @@ func quick_load() -> void:
 			decisions_panel.setup(turn_manager.player_state, turn_manager)
 		if research_terminal_view != null:
 			research_terminal_view.setup(turn_manager.player_state, turn_manager, turn_manager.research_manager)
-		label_log.text = "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД %d)" % turn_manager.current_turn
+		label_log.text = _tr_str("UI_LOG_LOAD_SUCCESS", {"turn": turn_manager.current_turn}, "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД {turn})")
 	else:
-		label_log.text = "ОШИБКА: ФАЙЛ СОХРАНЕНИЯ НЕ НАЙДЕН [user://savegame.json]"
+		label_log.text = _tr_str("UI_LOG_LOAD_FAILED", {}, "ОШИБКА: ФАЙЛ СОХРАНЕНИЯ НЕ НАЙДЕН [user://savegame.json]")
 
 
 func _setup_bottom_bar() -> void:
@@ -147,7 +161,7 @@ func _setup_bottom_bar() -> void:
 	if btn_save_game == null:
 		btn_save_game = Button.new()
 		btn_save_game.name = "SaveGameButton"
-		btn_save_game.text = "[ СОХРАНИТЬ (F5) ]"
+		btn_save_game.text = _tr_str("UI_BTN_QUICK_SAVE", {}, "[ СОХРАНИТЬ (F5) ]")
 		btn_save_game.custom_minimum_size = Vector2(160, 0)
 		btn_save_game.size_flags_horizontal = Control.SIZE_SHRINK_END
 		TNOTheme.apply_button_style(btn_save_game, TNOTheme.COLOR_BORDER_CYAN, Color(0.06, 0.12, 0.14, 0.95))
@@ -157,7 +171,7 @@ func _setup_bottom_bar() -> void:
 	if btn_load_game == null:
 		btn_load_game = Button.new()
 		btn_load_game.name = "LoadGameButton"
-		btn_load_game.text = "[ ЗАГРУЗИТЬ (F9) ]"
+		btn_load_game.text = _tr_str("UI_BTN_QUICK_LOAD", {}, "[ ЗАГРУЗИТЬ (F9) ]")
 		btn_load_game.custom_minimum_size = Vector2(160, 0)
 		btn_load_game.size_flags_horizontal = Control.SIZE_SHRINK_END
 		TNOTheme.apply_button_style(btn_load_game, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.08, 0.04, 0.95))
@@ -177,6 +191,7 @@ func _ready() -> void:
 	sound_fx = TerminalSoundFx.new()
 	sound_fx.name = "TerminalSoundFx"
 	add_child(sound_fx)
+	sound_fx.play_crt_warmup()
 	_setup_bottom_bar()
 	turn_manager.map_controller = map_controller
 	_setup_initial_game_state()
@@ -187,7 +202,7 @@ func _ready() -> void:
 		research_terminal_view.research_action_executed.connect(func(act_type: String, tech_id: String):
 			_update_hud()
 			if sound_fx != null: sound_fx.play_switch_click(1250.0)
-			label_log.text = "НИОКР [%s]: ТЕМА «%s»" % [act_type.to_upper(), tech_id]
+			label_log.text = _tr_str("UI_AUTO_GEN_204", {}, "НИОКР [%s]: ТЕМА «%s»") % [act_type.to_upper(), tech_id]
 		)
 	_connect_signals()
 	_update_hud()
@@ -207,7 +222,7 @@ func _connect_signals() -> void:
 	turn_manager.game_over.connect(_on_game_over)
 	turn_manager.espionage_processed.connect(_on_espionage_processed)
 	turn_manager.autosaved.connect(func(turn: int, save_path: String):
-		label_log.text = "АВТОСОХРАНЕНИЕ: Ход %d успешно записан [%s]" % [turn, save_path]
+		label_log.text = _tr_str("UI_AUTO_GEN_224", {}, "АВТОСОХРАНЕНИЕ: Ход %d успешно записан [%s]") % [turn, save_path]
 	)
 	turn_manager.world_data_loaded.connect(func(r_count: int, c_count: int):
 		print("[TerminalMain] World data synchronized: %d regions, %d countries." % [r_count, c_count])
@@ -216,7 +231,7 @@ func _connect_signals() -> void:
 
 	if turn_manager.focus_stage_controller != null:
 		turn_manager.focus_stage_controller.stage_transition_requested.connect(func(target_tree_id: String, reason: String):
-			label_log.text = "СМЕНА ЭПОХИ: Переход на стадию директив [%s] (%s)" % [target_tree_id, reason]
+			label_log.text = _tr_str("UI_AUTO_GEN_233", {}, "СМЕНА ЭПОХИ: Переход на стадию директив [%s] (%s)") % [target_tree_id, reason]
 			if sound_fx != null: sound_fx.play_switch_click(1500.0)
 		)
 
@@ -229,36 +244,36 @@ func _connect_signals() -> void:
 
 	if turn_manager.russian_unification_manager != null:
 		turn_manager.russian_unification_manager.operational_log_entry.connect(func(txt: String):
-			label_log.text = "СМУТА: %s" % txt
+			label_log.text = _tr_str("UI_AUTO_GEN_246", {}, "СМУТА: %s") % (txt)
 		)
 	if turn_manager.german_civil_war_manager != null:
 		turn_manager.german_civil_war_manager.gcw_concluded.connect(func(victor: String):
-			label_log.text = "GCW: Гражданская война в Германии окончена победой %s" % victor
+			label_log.text = _tr_str("UI_AUTO_GEN_250", {}, "GCW: Гражданская война в Германии окончена победой %s") % (victor)
 		)
 		turn_manager.german_civil_war_manager.berlin_captured.connect(func(tag: String):
 			if sound_fx != null: sound_fx.play_alarm_buzz(350.0, 0.4)
-			label_log.text = "ЭКСТРЕННОЕ СООБЩЕНИЕ: БЕРЛИН ВЗЯТ ШТУРМОМ СИЛАМИ [%s]!" % tag.to_upper()
+			label_log.text = _tr_str("UI_AUTO_GEN_254", {}, "ЭКСТРЕННОЕ СООБЩЕНИЕ: БЕРЛИН ВЗЯТ ШТУРМОМ СИЛАМИ [%s]!") % (tag.to_upper())
 			_update_hud()
 		)
 		turn_manager.german_civil_war_manager.goebbels_crisis_triggered.connect(func():
 			if sound_fx != null: sound_fx.play_alarm_buzz(300.0, 0.5)
-			label_log.text = "КРАСНАЯ ТРЕВОГА: НАЧАЛАСЬ ФАЗА ВТОРОЙ ГРАЖДАНСКОЙ ВОЙНЫ / КРИЗИС ГЁББЕЛЬСА!"
+			label_log.text = _tr_str("UI_AUTO_GEN_259", {}, "КРАСНАЯ ТРЕВОГА: НАЧАЛАСЬ ФАЗА ВТОРОЙ ГРАЖДАНСКОЙ ВОЙНЫ / КРИЗИС ГЁББЕЛЬСА!")
 			_update_hud()
 		)
 		turn_manager.german_civil_war_manager.red_anarchy_triggered.connect(func():
 			if sound_fx != null: sound_fx.play_alarm_buzz(250.0, 0.6)
-			label_log.text = "КАТАСТРОФА: КРАСНАЯ АНАРХИЯ ОХВАТИЛА ГЕРМАНИЮ! РАСПАД ЦЕНТРАЛЬНОЙ ВЛАСТИ."
+			label_log.text = _tr_str("UI_AUTO_GEN_264", {}, "КАТАСТРОФА: КРАСНАЯ АНАРХИЯ ОХВАТИЛА ГЕРМАНИЮ! РАСПАД ЦЕНТРАЛЬНОЙ ВЛАСТИ.")
 			_update_hud()
 		)
 		turn_manager.german_civil_war_manager.proxy_lend_lease_delivered.connect(func(proxy_key: String, _w: int, _t: int, _cash: float):
-			label_log.text = "ПОСТАВКИ: Ленд-лиз успешно доставлен на ТВД [%s]" % proxy_key.to_upper()
+			label_log.text = _tr_str("UI_AUTO_GEN_268", {}, "ПОСТАВКИ: Ленд-лиз успешно доставлен на ТВД [%s]") % (proxy_key.to_upper())
 			_update_hud()
 		)
 
 	if turn_manager.boundary_manager != null:
 		turn_manager.boundary_manager.enclave_detected.connect(func(state_id: int, owner_tag: String, surrounded_by: String):
 			if turn_manager.player_state != null and owner_tag == turn_manager.player_state.country_tag:
-				label_log.text = "ТРЕВОГА: Регион #%d окружен войсками [%s]! Линии снабжения перерезаны." % [state_id, surrounded_by]
+				label_log.text = _tr_str("UI_AUTO_GEN_275", {}, "ТРЕВОГА: Регион #%d окружен войсками [%s]! Линии снабжения перерезаны.") % [state_id, surrounded_by]
 				if sound_fx != null: sound_fx.play_alarm_buzz(320.0, 0.4)
 		)
 		turn_manager.boundary_manager.territory_transferred.connect(func(state_id: int, _old_owner: String, new_owner: String, _is_enclave: bool):
@@ -366,7 +381,7 @@ func _connect_signals() -> void:
 		politics_panel.law_reformed.connect(func(law_id: String, tier: int):
 			_update_hud()
 			if sound_fx != null: sound_fx.play_switch_click(1400.0)
-			label_log.text = "РЕФОРМА: Закон «%s» изменен (уровень %d)" % [law_id, tier]
+			label_log.text = _tr_str("UI_AUTO_GEN_383", {}, "РЕФОРМА: Закон «%s» изменен (уровень %d)") % [law_id, tier]
 		)
 
 	# Espionage operations signals
@@ -374,25 +389,25 @@ func _connect_signals() -> void:
 		espionage_terminal_view.operation_launched.connect(func(op: CovertOperationResource):
 			_update_hud()
 			if sound_fx != null: sound_fx.play_switch_click(1250.0)
-			label_log.text = "РАЗВЕДКА: Начата спецоперация «%s»" % op.title
+			label_log.text = _tr_str("UI_AUTO_GEN_391", {}, "РАЗВЕДКА: Начата спецоперация «%s»") % (op.title)
 		)
 		espionage_terminal_view.operation_aborted.connect(func(op: CovertOperationResource):
 			_update_hud()
 			if sound_fx != null: sound_fx.play_alarm_buzz(450.0, 0.2)
-			label_log.text = "РАЗВЕДКА: Прервана спецоперация «%s»" % op.title
+			label_log.text = _tr_str("UI_AUTO_GEN_396", {}, "РАЗВЕДКА: Прервана спецоперация «%s»") % (op.title)
 		)
 		espionage_terminal_view.agent_assigned.connect(func(agent_id: String, _slot: int):
 			_update_hud()
-			label_log.text = "РАЗВЕДКА: Агент %s задействован на задании" % agent_id
+			label_log.text = _tr_str("UI_AUTO_GEN_400", {}, "РАЗВЕДКА: Агент %s задействован на задании") % (agent_id)
 		)
 		espionage_terminal_view.agent_recalled.connect(func(agent_id: String):
 			_update_hud()
-			label_log.text = "РАЗВЕДКА: Агент %s отозван в резерв" % agent_id
+			label_log.text = _tr_str("UI_AUTO_GEN_404", {}, "РАЗВЕДКА: Агент %s отозван в резерв") % (agent_id)
 		)
 
 	turn_manager.societal_evolution_completed.connect(func(rep: Dictionary):
 		if not rep.is_empty():
-			label_log.text = "ОБЩЕСТВО: Произошли эволюционные сдвиги в социальных институтах нации."
+			label_log.text = _tr_str("UI_AUTO_GEN_409", {}, "ОБЩЕСТВО: Произошли эволюционные сдвиги в социальных институтах нации.")
 	)
 
 	# GCW focus tree switch signal
@@ -403,10 +418,10 @@ func _connect_signals() -> void:
 	# Russian Unification signals
 	if turn_manager.russian_unification_manager != null:
 		turn_manager.russian_unification_manager.regional_triumph_achieved.connect(func(tag: String, macro_region: String, title: String):
-			label_log.text = "РЕГИОНАЛЬНЫЙ ТРИУМФ: %s объединил %s (%s)!" % [tag, macro_region, title]
+			label_log.text = _tr_str("UI_AUTO_GEN_420", {}, "РЕГИОНАЛЬНЫЙ ТРИУМФ: %s объединил %s (%s)!") % [tag, macro_region, title]
 		)
 		turn_manager.russian_unification_manager.superregional_triumph_achieved.connect(func(tag: String, super_region: String, title: String):
-			label_log.text = "СУПЕРРЕГИОНАЛЬНЫЙ ТРИУМФ: %s объединил %s (%s)!" % [tag, super_region, title]
+			label_log.text = _tr_str("UI_AUTO_GEN_423", {}, "СУПЕРРЕГИОНАЛЬНЫЙ ТРИУМФ: %s объединил %s (%s)!") % [tag, super_region, title]
 		)
 
 	# Japan Empire signals
@@ -414,10 +429,10 @@ func _connect_signals() -> void:
 		if not turn_manager.japan_empire_manager.prime_minister_elected.is_connected(_on_japan_prime_minister_elected):
 			turn_manager.japan_empire_manager.prime_minister_elected.connect(_on_japan_prime_minister_elected)
 		turn_manager.japan_empire_manager.yasuda_crisis_triggered.connect(func(tse: float):
-			label_log.text = "ТОКИЙСКАЯ БИРЖА: Крах Ясуда! Индекс TSE упал до %.0f!" % tse
+			label_log.text = _tr_str("UI_AUTO_GEN_431", {}, "ТОКИЙСКАЯ БИРЖА: Крах Ясуда! Индекс TSE упал до %.0f!") % (tse)
 		)
 		turn_manager.japan_empire_manager.sphere_incident_reported.connect(func(member_tag: String, message: String):
-			label_log.text = "СФЕРА СОПРОЦВЕТАНИЯ (%s): %s" % [member_tag, message]
+			label_log.text = _tr_str("UI_AUTO_GEN_434", {}, "СФЕРА СОПРОЦВЕТАНИЯ (%s): %s") % [member_tag, message]
 		)
 
 	# Italy Empire signals
@@ -425,16 +440,16 @@ func _connect_signals() -> void:
 		if not turn_manager.italy_empire_manager.ideology_path_chosen.is_connected(_on_italy_ideology_path_chosen):
 			turn_manager.italy_empire_manager.ideology_path_chosen.connect(_on_italy_ideology_path_chosen)
 		turn_manager.italy_empire_manager.council_power_shifted.connect(func(balance: float):
-			label_log.text = "ВЕЛИКИЙ СОВЕТ: Баланс сил сместился: %.0f" % balance
+			label_log.text = _tr_str("UI_AUTO_GEN_442", {}, "ВЕЛИКИЙ СОВЕТ: Баланс сил сместился: %.0f") % (balance)
 		)
 
 	# Research Manager signals
 	if turn_manager.research_manager != null:
 		turn_manager.research_manager.research_started.connect(func(t_id: String, _turns: int):
-			label_log.text = "НИОКР: Начат исследовательский проект %s" % t_id
+			label_log.text = _tr_str("UI_AUTO_GEN_448", {}, "НИОКР: Начат исследовательский проект %s") % (t_id)
 		)
 		turn_manager.research_manager.research_cancelled.connect(func(t_id: String):
-			label_log.text = "НИОКР: Проект %s отменен" % t_id
+			label_log.text = _tr_str("UI_AUTO_GEN_451", {}, "НИОКР: Проект %s отменен") % (t_id)
 		)
 
 	# Map mode signals
@@ -464,7 +479,7 @@ func _connect_signals() -> void:
 			"КАРТА ГЕОПОЛИТИЧЕСКИХ СФЕР ВЛИЯНИЯ (SPHERES)"
 		]
 		var m_name = mode_names[new_mode] if new_mode < mode_names.size() else "КАРТА"
-		label_log.text = "РЕЖИМ КАРТЫ: %s" % m_name
+		label_log.text = _tr_str("UI_AUTO_GEN_481", {}, "РЕЖИМ КАРТЫ: %s") % (m_name)
 	)
 
 	btn_ruler_focus.pressed.connect(func():
@@ -474,7 +489,7 @@ func _connect_signals() -> void:
 		var r_inact = loc.tr_key("BTN_RULER_INACTIVE", "[ ПРАВИТЕЛЬ: ВЫКЛ ]") if loc != null else "[ ПРАВИТЕЛЬ: ВЫКЛ ]"
 		btn_ruler_focus.text = r_act if map_controller.is_ruler_domain_focus else r_inact
 		if sound_fx != null: sound_fx.play_switch_click(1150.0)
-		label_log.text = "РЕЖИМ ПРАВИТЕЛЯ (RULER DOMAIN): " + ("АКТИВИРОВАН. Внешний мир затемнен." if map_controller.is_ruler_domain_focus else "ОТКЛЮЧЕН.")
+		label_log.text = _tr_str("UI_AUTO_GEN_491", {}, "РЕЖИМ ПРАВИТЕЛЯ (RULER DOMAIN): ") + ("АКТИВИРОВАН. Внешний мир затемнен." if map_controller.is_ruler_domain_focus else "ОТКЛЮЧЕН.")
 	)
 
 	btn_raid_toggle.pressed.connect(func():
@@ -484,7 +499,7 @@ func _connect_signals() -> void:
 		var rd_inact = loc.tr_key("BTN_RAID_INACTIVE", "[ РЕЙД: ВЫКЛ ]") if loc != null else "[ РЕЙД: ВЫКЛ ]"
 		btn_raid_toggle.text = rd_act if is_raid_mode_active else rd_inact
 		if sound_fx != null: sound_fx.play_switch_click(950.0)
-		label_log.text = "РЕЖИМ НАБЕГОВ СМУТЫ: " + ("АКТИВИРОВАН. Выберите вражеский регион на карте." if is_raid_mode_active else "ОТКЛЮЧЕН.")
+		label_log.text = _tr_str("UI_AUTO_GEN_501", {}, "РЕЖИМ НАБЕГОВ СМУТЫ: ") + ("АКТИВИРОВАН. Выберите вражеский регион на карте." if is_raid_mode_active else "ОТКЛЮЧЕН.")
 	)
 
 	btn_panel_recon.pressed.connect(func(): _execute_context_raid("recon"))
@@ -594,13 +609,13 @@ func _connect_signals() -> void:
 		russian_smuta_panel.stage_advance_requested.connect(func():
 			_update_hud()
 			if sound_fx != null: sound_fx.play_switch_click(1400.0)
-			label_log.text = "СМУТА: Инициирован переход на следующую стадию объединения."
+			label_log.text = _tr_str("UI_AUTO_GEN_611", {}, "СМУТА: Инициирован переход на следующую стадию объединения.")
 		)
 		russian_smuta_panel.diplomatic_summit_requested.connect(func(target_tag: String):
 			if turn_manager.russian_unification_manager != null:
 				var res = turn_manager.russian_unification_manager.execute_diplomatic_summit(target_tag, turn_manager)
 				var success = res.get("success", false)
-				label_log.text = "ДИПЛОМАТИЯ: %s" % res.get("message", "")
+				label_log.text = _tr_str("UI_AUTO_GEN_617", {}, "ДИПЛОМАТИЯ: %s") % (res.get("message")
 				if sound_fx != null:
 					if success: sound_fx.play_switch_click(1300.0)
 					else: sound_fx.play_alarm_buzz(450.0, 0.3)
@@ -615,7 +630,7 @@ func _connect_signals() -> void:
 			_update_hud()
 			if sound_fx != null: sound_fx.play_switch_click(1300.0)
 			var log_str = effects.get("log", "Инициатива утверждена.")
-			label_log.text = "ДЕКРЕТ: %s" % log_str
+			label_log.text = _tr_str("UI_AUTO_GEN_632", {}, "ДЕКРЕТ: %s") % (log_str)
 		)
 
 
@@ -633,7 +648,7 @@ func _setup_initial_game_state() -> void:
 			if map_controller != null:
 				map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
 				map_controller.refresh_tactical_frontlines()
-			label_log.text = "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД %d)" % turn_manager.current_turn
+			label_log.text = _tr_str("UI_AUTO_GEN_650", {}, "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД %d)") % (turn_manager.current_turn)
 	elif session_node != null and session_node.active_player_state != null:
 		turn_manager.set_player_state(session_node.active_player_state)
 	else:
@@ -690,7 +705,7 @@ func _setup_initial_game_state() -> void:
 				if map_controller != null and provs.size() > 0:
 					map_controller.select_province(provs[0])
 					map_controller.add_combat_incident_ping(provs[0], "theater_radar")
-				label_log.text = "ПРОКСИ-ТЕАТР [%s]: КООРДИНАТЫ ПЕРЕДАНЫ В ОПЕРАТИВНЫЙ ШТАБ" % pk.to_upper()
+				label_log.text = _tr_str("UI_AUTO_GEN_707", {}, "ПРОКСИ-ТЕАТР [%s]: КООРДИНАТЫ ПЕРЕДАНЫ В ОПЕРАТИВНЫЙ ШТАБ") % (pk.to_upper())
 			)
 			gcw_operations_panel.tactical_order_clicked.connect(func(order_type, _axis):
 				_update_hud()
@@ -698,13 +713,13 @@ func _setup_initial_game_state() -> void:
 					map_controller.refresh_tactical_frontlines()
 				if sound_fx != null:
 					sound_fx.play_switch_click(1200.0)
-				label_log.text = "ГЕНШТАБ: ТАКТИЧЕСКИЙ ПРИКАЗ «%s» ПЕРЕДАН ВОЙСКАМ" % order_type.to_upper()
+				label_log.text = _tr_str("UI_AUTO_GEN_715", {}, "ГЕНШТАБ: ТАКТИЧЕСКИЙ ПРИКАЗ «%s» ПЕРЕДАН ВОЙСКАМ") % (order_type.to_upper())
 			)
 			gcw_operations_panel.intrigue_action_clicked.connect(func(act_type, contender):
 				_update_hud()
 				if sound_fx != null:
 					sound_fx.play_key_click(900.0)
-				label_log.text = "ИНТРИГА: ОПЕРАЦИЯ «%s» ПРОТИВ ФРАКЦИИ [%s] РЕАЛИЗОВАНА" % [act_type.to_upper(), contender.to_upper()]
+				label_log.text = _tr_str("UI_AUTO_GEN_721", {}, "ИНТРИГА: ОПЕРАЦИЯ «%s» ПРОТИВ ФРАКЦИИ [%s] РЕАЛИЗОВАНА") % [act_type.to_upper(), contender.to_upper()]
 			)
 
 
@@ -793,7 +808,7 @@ func _setup_initial_game_state() -> void:
 				if gcw_operations_panel.visible:
 					gcw_operations_panel.refresh_ui()
 			if sound_fx != null: sound_fx.play_switch_click(1250.0)
-			label_log.text = "ОПЕРАТИВНЫЙ ШТАБ РЕЙХА: АКТИВИРОВАН"
+			label_log.text = _tr_str("UI_AUTO_GEN_810", {}, "ОПЕРАТИВНЫЙ ШТАБ РЕЙХА: АКТИВИРОВАН")
 		)
 		map_hud_hbox.add_child(btn_gcw_toggle)
 	if btn_gcw_toggle != null:
@@ -810,7 +825,7 @@ func _setup_initial_game_state() -> void:
 				if japan_terminal_screen != null:
 					japan_terminal_screen.refresh_ui()
 			if sound_fx != null: sound_fx.play_switch_click(1250.0)
-			label_log.text = "ТЕРМИНАЛ ИМПЕРИИ ЯПОНИЯ: АКТИВИРОВАН"
+			label_log.text = _tr_str("UI_AUTO_GEN_827", {}, "ТЕРМИНАЛ ИМПЕРИИ ЯПОНИЯ: АКТИВИРОВАН")
 		)
 		map_hud_hbox.add_child(btn_japan_toggle)
 	if btn_japan_toggle != null:
@@ -827,7 +842,7 @@ func _setup_initial_game_state() -> void:
 				if italy_terminal_screen != null:
 					italy_terminal_screen.refresh_ui()
 			if sound_fx != null: sound_fx.play_switch_click(1250.0)
-			label_log.text = "ТЕРМИНАЛ ИМПЕРИИ ИТАЛИЯ: АКТИВИРОВАН"
+			label_log.text = _tr_str("UI_AUTO_GEN_844", {}, "ТЕРМИНАЛ ИМПЕРИИ ИТАЛИЯ: АКТИВИРОВАН")
 		)
 		map_hud_hbox.add_child(btn_italy_toggle)
 	if btn_italy_toggle != null:
@@ -963,7 +978,7 @@ func _on_defcon_level_changed(level: int, reason: String) -> void:
 	if sound_fx != null:
 		var pitch: float = 300.0 + (float(6 - level) * 80.0)
 		sound_fx.play_alarm_buzz(pitch, 0.45)
-	label_log.text = "ТРЕВОГА DEFCON: Уровень %d! %s" % [level, reason]
+	label_log.text = _tr_str("UI_AUTO_GEN_980", {}, "ТРЕВОГА DEFCON: Уровень %d! %s") % [level, reason]
 	_update_hud()
 
 
@@ -989,7 +1004,7 @@ func trigger_super_event(event_id_or_title: String, quote: String = "", option: 
 	if sound_fx != null:
 		sound_fx.play_alarm_buzz(440.0, 0.25)
 	if label_log != null:
-		label_log.text = "СУПЕР-СОБЫТИЕ: %s" % event_id_or_title
+		label_log.text = _tr_str("UI_AUTO_GEN_1006", {}, "СУПЕР-СОБЫТИЕ: %s") % (event_id_or_title)
 
 
 func _on_super_event_closed() -> void:
@@ -997,7 +1012,7 @@ func _on_super_event_closed() -> void:
 		btn_end_turn.disabled = false
 	_update_hud()
 	if label_log != null:
-		label_log.text = "СУПЕР-СОБЫТИЕ РАЗРЕШЕНО. ТЕРМИНАЛ ВОЗВРАЩЕН В ШТАТНЫЙ РЕЖИМ."
+		label_log.text = _tr_str("UI_AUTO_GEN_1014", {}, "СУПЕР-СОБЫТИЕ РАЗРЕШЕНО. ТЕРМИНАЛ ВОЗВРАЩЕН В ШТАТНЫЙ РЕЖИМ.")
 
 
 
@@ -1225,7 +1240,7 @@ func _on_event_option_selected(index: int) -> void:
 
 func _on_us_electoral_report_generated(rep: Dictionary) -> void:
 	var msg = rep.get("summary", "ЭЛЕКТОРАЛЬНЫЙ ОТЧЕТ США ПОЛУЧЕН")
-	label_log.text = "ВЫБОРЫ В США: %s" % msg
+	label_log.text = _tr_str("UI_AUTO_GEN_1242", {}, "ВЫБОРЫ В США: %s") % (msg)
 	if us_congress_screen != null and us_congress_screen.visible:
 		us_congress_screen.setup(turn_manager.player_state, turn_manager.us_electoral_engine)
 
@@ -1235,7 +1250,7 @@ var game_over_modal: Control = null
 
 func _on_game_over(victory: bool, reason: String) -> void:
 	var status = "ПОБЕДА" if victory else "ПОРАЖЕНИЕ"
-	label_log.text = "ФИНАЛ ИГРЫ: %s // %s" % [status, reason]
+	label_log.text = _tr_str("UI_AUTO_GEN_1252", {}, "ФИНАЛ ИГРЫ: %s // %s") % [status, reason]
 	if sound_fx != null:
 		if victory:
 			sound_fx.play_switch_click(1600.0)
@@ -1346,7 +1361,7 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 		game_over_modal.visible = false
 		if tab_container != null:
 			tab_container.current_tab = 0
-		label_log.text = "РЕЖИМ НАБЛЮДАТЕЛЯ: СВОБОДНЫЙ ОСМОТР КАРТЫ АКТИВИРОВАН."
+		label_log.text = _tr_str("UI_AUTO_GEN_1363", {}, "РЕЖИМ НАБЛЮДАТЕЛЯ: СВОБОДНЫЙ ОСМОТР КАРТЫ АКТИВИРОВАН.")
 	)
 	btn_hbox.add_child(btn_obs)
 
@@ -1357,7 +1372,7 @@ func _on_espionage_processed(reports: Array[Dictionary]) -> void:
 	if not reports.is_empty():
 		var last = reports[-1]
 		var msg = last.get("summary", "Разведывательные операции завершены.")
-		label_log.text = "РАЗВЕДКА: %s" % msg
+		label_log.text = _tr_str("UI_AUTO_GEN_1374", {}, "РАЗВЕДКА: %s") % (msg)
 
 
 # ==============================================================================
@@ -1384,7 +1399,7 @@ func _launch_raid(intensity: String) -> void:
 					break
 
 	if target_reg == null:
-		label_log.text = "ОШИБКА: НЕТ ДОСТУПНЫХ ЦЕЛЕЙ ДЛЯ НАБЕГА ВБЛИЗИ ГРАНИЦ!"
+		label_log.text = _tr_str("UI_AUTO_GEN_1401", {}, "ОШИБКА: НЕТ ДОСТУПНЫХ ЦЕЛЕЙ ДЛЯ НАБЕГА ВБЛИЗИ ГРАНИЦ!")
 		return
 
 	var res = MilitaryEngine.execute_border_raid(turn_manager.player_state, target_reg, intensity)
@@ -1398,7 +1413,7 @@ func _launch_raid(intensity: String) -> void:
 	if russian_smuta_panel != null and russian_smuta_panel.log_display != null:
 		var col_tag = "[color=#55ff55]" if res.success else "[color=#ff5555]"
 		russian_smuta_panel.log_display.text += "\n" + col_tag + res.narrative_summary + "[/color]"
-	label_log.text = "РЕЗУЛЬТАТ НАБЕГА: " + res.narrative_summary
+	label_log.text = _tr_str("UI_AUTO_GEN_1415", {}, "РЕЗУЛЬТАТ НАБЕГА: ") + res.narrative_summary
 	_update_hud()
 
 
@@ -1413,7 +1428,7 @@ func _open_raid_planning_panel(region_id: int, data: Dictionary) -> void:
 	var garrison = int(reg_obj.garrison_strength) if reg_obj != null else 60
 	var ic = reg_obj.industrial_capacity if reg_obj != null else 2
 
-	raid_panel_info.text = "[color=#00e5ff]СЕКТОР НАПАДЕНИЯ:[/color] %s [ID: %d]\n[color=#ffcc00]ВЛАДЕЛЕЦ:[/color] %s\n[color=#ff5555]ГАРНИЗОН:[/color] %d%% | [color=#33ff66]IC:[/color] %d\n[color=#888888]Оценка трофеев: склады оружия, наличность, рабочая сила.[/color]" % [
+	raid_panel_info.text = _tr_str("UI_AUTO_GEN_1430", {}, "[color=#00e5ff]СЕКТОР НАПАДЕНИЯ:[/color] %s [ID: %d]\n[color=#ffcc00]ВЛАДЕЛЕЦ:[/color] %s\n[color=#ff5555]ГАРНИЗОН:[/color] %d%% | [color=#33ff66]IC:[/color] %d\n[color=#888888]Оценка трофеев: склады оружия, наличность, рабочая сила.[/color]") % ([)
 		reg_name, region_id, owner_tag, garrison, ic
 	]
 	raid_panel.visible = true
@@ -1445,7 +1460,7 @@ func _execute_context_raid(intensity: String) -> void:
 	var col_tag = "[color=#55ff55]" if res.success else "[color=#ff5555]"
 	if russian_smuta_panel != null and russian_smuta_panel.log_display != null:
 		russian_smuta_panel.log_display.text += "\n" + col_tag + res.narrative_summary + "[/color]"
-	label_log.text = "РЕЗУЛЬТАТ НАБЕГА: " + res.narrative_summary
+	label_log.text = _tr_str("UI_AUTO_GEN_1462", {}, "РЕЗУЛЬТАТ НАБЕГА: ") + res.narrative_summary
 	_update_hud()
 
 
@@ -1459,7 +1474,7 @@ func _on_region_conquered(prov_id: int, new_owner: String, previous_owner: Strin
 	map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
 	if sound_fx != null:
 		sound_fx.play_alarm_buzz(580.0, 0.25)
-	label_log.text = "ТЕАТР ВОЕННЫХ ДЕЙСТВИЙ: Регион #%d взят силами [%s] (бывш. %s)!" % [prov_id, new_owner, previous_owner]
+	label_log.text = _tr_str("UI_AUTO_GEN_1476", {}, "ТЕАТР ВОЕННЫХ ДЕЙСТВИЙ: Регион #%d взят силами [%s] (бывш. %s)!") % [prov_id, new_owner, previous_owner]
 
 
 func _on_state_conquered(state_id: int, new_owner: String) -> void:
@@ -1468,7 +1483,7 @@ func _on_state_conquered(state_id: int, new_owner: String) -> void:
 	map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
 	if sound_fx != null:
 		sound_fx.play_alarm_buzz(600.0, 0.3)
-	label_log.text = "ТЕРРИТОРИАЛЬНЫЙ ТРАНСФЕР: Штат #%d полностью перешел под контроль [%s]!" % [state_id, new_owner]
+	label_log.text = _tr_str("UI_AUTO_GEN_1485", {}, "ТЕРРИТОРИАЛЬНЫЙ ТРАНСФЕР: Штат #%d полностью перешел под контроль [%s]!") % [state_id, new_owner]
 
 
 func _on_state_transferred(state_id: int, _old_owner: String, new_owner: String) -> void:
@@ -1504,7 +1519,7 @@ func _populate_sample_directives() -> void:
 	if loaded and not directive_tree_view.all_directives.is_empty():
 		for d in directive_tree_view.all_directives.values():
 			mgr.register_directive(d)
-		label_log.text = "ЗАГРУЖЕНО НАЦИОНАЛЬНОЕ ДРЕВО ДИРЕКТИВ [%s]: %d ИНИЦИАТИВ" % [turn_manager.player_state.country_tag, directive_tree_view.all_directives.size()]
+		label_log.text = _tr_str("UI_AUTO_GEN_1521", {}, "ЗАГРУЖЕНО НАЦИОНАЛЬНОЕ ДРЕВО ДИРЕКТИВ [%s]: %d ИНИЦИАТИВ") % [turn_manager.player_state.country_tag, directive_tree_view.all_directives.size()]
 		return
 
 	var extracted_directives: Array[DirectiveResource] = cl.get_directives_for_country(turn_manager.player_state.country_tag)
@@ -1512,7 +1527,7 @@ func _populate_sample_directives() -> void:
 		for d in extracted_directives:
 			mgr.register_directive(d)
 		directive_tree_view.setup(turn_manager.player_state, turn_manager, mgr, turn_manager.focus_stage_controller)
-		label_log.text = "ЗАГРУЖЕНО НАЦИОНАЛЬНОЕ ДРЕВО ДИРЕКТИВ [%s]: %d ИНИЦИАТИВ" % [turn_manager.player_state.country_tag, extracted_directives.size()]
+		label_log.text = _tr_str("UI_AUTO_GEN_1529", {}, "ЗАГРУЖЕНО НАЦИОНАЛЬНОЕ ДРЕВО ДИРЕКТИВ [%s]: %d ИНИЦИАТИВ") % [turn_manager.player_state.country_tag, extracted_directives.size()]
 		return
 
 	# Fallback на встроенное дерево при отсутствии внешних JSON
@@ -1625,7 +1640,7 @@ func _populate_sample_events() -> void:
 	# Загрузка нарративных событий для текущей страны
 	var loaded = ev_mgr.load_country_events(turn_manager.player_state.country_tag)
 	if not loaded.is_empty():
-		label_log.text = "НАРРАТИВНЫЙ МОДУЛЬ: Загружено %d событий для [%s]" % [loaded.size(), turn_manager.player_state.country_tag]
+		label_log.text = _tr_str("UI_AUTO_GEN_1642", {}, "НАРРАТИВНЫЙ МОДУЛЬ: Загружено %d событий для [%s]") % [loaded.size(), turn_manager.player_state.country_tag]
 
 	if not ev_mgr.all_events.has("ev_smuta_opening"):
 		var ev = GameEvent.new()
@@ -1770,7 +1785,7 @@ func _open_general_parliament_screen() -> void:
 	parl.vote_passed.connect(func(bill_id: String, _effects: Dictionary):
 		_update_hud()
 		if sound_fx != null: sound_fx.play_switch_click(1350.0)
-		label_log.text = "ПАРЛАМЕНТ: Законопроект «%s» успешно принят большинством голосов!" % bill_id
+		label_log.text = _tr_str("UI_AUTO_GEN_1787", {}, "ПАРЛАМЕНТ: Законопроект «%s» успешно принят большинством голосов!") % (bill_id)
 	)
 	parl.closed.connect(func():
 		if _active_parliament_screen != null and is_instance_valid(_active_parliament_screen):
@@ -1800,7 +1815,7 @@ func _toggle_research_screen() -> void:
 
 func _on_tech_completed(rep: Dictionary) -> void:
 	var t_name = rep.get("tech_name", rep.get("tech_id", "НИОКР"))
-	label_log.text = "НАУЧНЫЙ ПРОРЫВ: Завершена разработка технологии «%s»!" % t_name
+	label_log.text = _tr_str("UI_AUTO_GEN_1817", {}, "НАУЧНЫЙ ПРОРЫВ: Завершена разработка технологии «%s»!") % (t_name)
 	if sound_fx != null:
 		sound_fx.play_switch_click(1500.0)
 	_update_hud()
@@ -1814,7 +1829,7 @@ func _on_focus_tree_switch_requested(tree_id: String, tree_path: String) -> void
 		directive_tree_view.play_stage_reboot_fx(tree_id if not tree_id.is_empty() else tree_base, "POST_WAR", func():
 			directive_tree_view.load_tree_from_file(tree_path)
 		)
-	label_log.text = "РЕЙХСКАБИНЕТ: АКТИВИРОВАНО НОВОЕ ДРЕВО ДИРЕКТИВ [%s]" % tree_path.get_file()
+	label_log.text = _tr_str("UI_AUTO_GEN_1831", {}, "РЕЙХСКАБИНЕТ: АКТИВИРОВАНО НОВОЕ ДРЕВО ДИРЕКТИВ [%s]") % (tree_path.get_file())
 
 
 func _on_japan_prime_minister_elected(leader_name: String, tree_id: String) -> void:
@@ -1823,7 +1838,7 @@ func _on_japan_prime_minister_elected(leader_name: String, tree_id: String) -> v
 		directive_tree_view.play_stage_reboot_fx(tree_id, "CABINET", func():
 			directive_tree_view.load_tree_from_file(tree_path)
 		)
-	label_log.text = "ТОКИО: ПРЕМЬЕР-МИНИСТР [%s] ВСТУПИЛ В ДОЛЖНОСТЬ. ДРЕВО: %s" % [leader_name, tree_id]
+	label_log.text = _tr_str("UI_AUTO_GEN_1840", {}, "ТОКИО: ПРЕМЬЕР-МИНИСТР [%s] ВСТУПИЛ В ДОЛЖНОСТЬ. ДРЕВО: %s") % [leader_name, tree_id]
 	_update_hud()
 
 
@@ -1833,5 +1848,5 @@ func _on_italy_ideology_path_chosen(path_key: String, tree_id: String) -> void:
 		directive_tree_view.play_stage_reboot_fx(tree_id, "REGIME", func():
 			directive_tree_view.load_tree_from_file(tree_path)
 		)
-	label_log.text = "РИМ: ВЕЛИКИЙ СОВЕТ УТВЕРДИЛ КУРС [%s]. ДРЕВО: %s" % [path_key, tree_id]
+	label_log.text = _tr_str("UI_AUTO_GEN_1850", {}, "РИМ: ВЕЛИКИЙ СОВЕТ УТВЕРДИЛ КУРС [%s]. ДРЕВО: %s") % [path_key, tree_id]
 	_update_hud()

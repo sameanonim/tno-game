@@ -361,41 +361,6 @@ func _render_sphere_tab() -> void:
 		)
 		vb.add_child(btn_pacify)
 
-		sec_sphere.add_child(card)ll: return
-	for c in sec_sphere.get_children(): c.queue_free()
-
-	var head = Label.new()
-	head.text = "=== ВЕЛИКАЯ ВОСТОЧНОАЗИАТСКАЯ СФЕРА СОПРОЦВЕТАНИЯ (GEACPS) ==="
-	head.modulate = Color(0.0, 0.95, 1.0)
-	sec_sphere.add_child(head)
-
-	for m_tag in japan_manager.sphere_members.keys():
-		var m = japan_manager.sphere_members[m_tag]
-		var card = PanelContainer.new()
-		var vb = VBoxContainer.new()
-		card.add_child(vb)
-
-		var l_bar = _ascii_bar(float(m["loyalty"]) / 100.0, 10)
-		var u_bar = _ascii_bar(float(m["unrest"]) / 100.0, 10)
-
-		var title = Label.new()
-		title.text = "%s [%s] | ФАБРИКИ В БЮДЖЕТ: +%d" % [m["name"].to_upper(), m_tag, m["tribute_factories"]]
-		title.modulate = Color(1.0, 0.85, 0.3)
-		vb.add_child(title)
-
-		var stat = Label.new()
-		stat.text = "ЛОЯЛЬНОСТЬ: [%s] %0.0f%% | НЕДОВОЛЬСТВО: [%s] %0.0f%%" % [l_bar, m["loyalty"], u_bar, m["unrest"]]
-		vb.add_child(stat)
-
-		var btn_pacify = Button.new()
-		btn_pacify.text = "[ НАПРАВИТЬ КЭМПЭЙТАЙ (5000 рекрутов, 15 PC) ]"
-		btn_pacify.pressed.connect(func():
-			var r = japan_manager.suppress_sphere_insurgency(m_tag)
-			lbl_log_status.text = r["message"]
-			refresh_ui()
-		)
-		vb.add_child(btn_pacify)
-
 		sec_sphere.add_child(card)
 
 

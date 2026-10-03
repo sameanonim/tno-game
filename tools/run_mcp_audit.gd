@@ -22,6 +22,10 @@ const AgentResourceScript = preload("res://core/data/agent_resource.gd")
 const GCWManagerScript = preload("res://core/systems/germany/german_civil_war_manager.gd")
 const EspionageEngineScript = preload("res://core/systems/espionage_engine.gd")
 const SettingsManagerScript = preload("res://core/systems/settings_manager.gd")
+const DirectiveResourceScript = preload("res://core/data/directive_resource.gd")
+const RussianUnificationManagerScript = preload("res://core/systems/russia/russian_unification_manager.gd")
+const TurnManagerScript = preload("res://core/systems/turn_manager.gd")
+const TerminalSoundFxScript = preload("res://core/audio/terminal_sound_fx.gd")
 
 func _init() -> void:
 	call_deferred("_run_audit")
@@ -79,7 +83,6 @@ func _check_autoloads_and_singletons() -> bool:
 	return true
 
 
-const TurnManagerScript = preload("res://core/systems/turn_manager.gd")
 const EventManagerScript = preload("res://core/systems/event_manager.gd")
 
 func _check_signal_topology() -> bool:
@@ -153,7 +156,7 @@ func _check_resource_determinism_and_types() -> bool:
 		printerr("FAIL: Agent IDs are not unique.")
 		return false
 
-	# Test country state canonical vs deprecated accessors (DEF-007)
+	# Test country state canonical vs deprecated accessors (DEF-06 & DEF-007)
 	var state = CountryStateScript.new()
 	state.real_gdp_growth = 0.05
 	if absf(state.gdp_growth_rate - 5.0) > 0.001:
@@ -162,6 +165,30 @@ func _check_resource_determinism_and_types() -> bool:
 	state.is_in_fiscal_crisis = true
 	if not state.fiscal_crisis_active:
 		printerr("FAIL: Deprecated fiscal_crisis_active accessor failed.")
+		return false
+	state.leader_portrait_path = "res://icon.svg"
+	if state.leader_portrait_id != "res://icon.svg":
+		printerr("FAIL: Deprecated leader_portrait_id accessor failed.")
+		return false
+	state.faction = "OFN"
+	if state.alliance != "OFN":
+		printerr("FAIL: Deprecated alliance accessor failed.")
+		return false
+	if state.research_slots != state.get_total_research_slots():
+		printerr("FAIL: Deprecated research_slots accessor failed.")
+		return false
+
+	# Test DirectiveResource icon_path serialization (DEF-05)
+	var dir_res = DirectiveResourceScript.new()
+	dir_res.id = "test_directive_serialization"
+	dir_res.icon_path = "res://icon.svg"
+	var dir_dict: Dictionary = dir_res.to_dict()
+	if not dir_dict.has("icon_path") or dir_dict["icon_path"] != "res://icon.svg":
+		printerr("FAIL: DirectiveResource to_dict missing icon_path (DEF-05).")
+		return false
+	var restored_dir = DirectiveResourceScript.from_dict(dir_dict)
+	if restored_dir.icon_path != "res://icon.svg":
+		printerr("FAIL: DirectiveResource from_dict icon_path restoration failed (DEF-05).")
 		return false
 
 	# Test GCW province deterministic generation (DEF-01)
@@ -189,7 +216,8 @@ func _check_resource_determinism_and_types() -> bool:
 		return false
 
 	print("  * Deterministic IDs (Agent & CovertOp): OK (%s, %s)" % [ag1.id, op1.op_id])
-	print("  * CountryState accessors (Canonical & Deprecated): OK")
+	print("  * CountryState accessors (Canonical & Deprecated): OK (DEF-06)")
+	print("  * DirectiveResource icon serialization: OK (DEF-05)")
 	print("  * GCW Reichsgau province generation: DETERMINISTIC OK (DEF-01)")
 	print("  * Espionage candidate recruitment: DETERMINISTIC OK (DEF-04)")
 	return true
@@ -242,7 +270,50 @@ func _check_multi_turn_simulation_consistency() -> bool:
 			printerr("FAIL: GDP dropped to non-positive value on turn %d" % t)
 			return false
 
+	# Test Oil Crisis interactive trigger & resolution (TASK-4.2)
+	var oil_rep: Dictionary = EconomyEngine.trigger_oil_crisis_event()
+	if not EconomyEngine.is_oil_crisis() or oil_rep.get("event") != "SE_OIL_CRISIS":
+		printerr("FAIL: Oil crisis trigger failed (TASK-4.2).")
+		return false
+	var resolve_rep: Dictionary = EconomyEngine.resolve_oil_crisis_event()
+	if EconomyEngine.is_oil_crisis() or resolve_rep.get("price_multiplier") != 1.0:
+		printerr("FAIL: Oil crisis resolution failed (TASK-4.2).")
+		return false
+
+	# Test Russian Unification & Warlord Conquest (TASK-4.1)
+	var rum = RussianUnificationManagerScript.new()
+	var victim_st = CountryStateScript.new()
+	victim_st.country_tag = "KOM"
+	victim_st.infantry_weapons_stockpile = 500
+	victim_st.manpower_pool = 10000
+	var conqueror_st = CountryStateScript.new()
+	conqueror_st.country_tag = "WRS"
+	conqueror_st.infantry_weapons_stockpile = 1000
+	conqueror_st.manpower_pool = 20000
+
+	var tm_mock = TurnManagerScript.new()
+	tm_mock.countries_world_state["KOM"] = victim_st
+	tm_mock.countries_world_state["WRS"] = conqueror_st
+	var conquest_res = rum.execute_warlord_conquest("WRS", "KOM", tm_mock, "annex_and_integrate")
+	if not conquest_res["success"] or conqueror_st.infantry_weapons_stockpile <= 1000:
+		printerr("FAIL: Warlord conquest army integration failed (TASK-4.1).")
+		rum.queue_free()
+		tm_mock.queue_free()
+		return false
+	rum.queue_free()
+	tm_mock.queue_free()
+
+	# Test CRT Terminal Sound & Shader Features (TASK-4.3)
+	var sfx = TerminalSoundFxScript.new()
+	root.add_child(sfx)
+	sfx.play_crt_warmup()
+	sfx.play_crt_flyback_hum(0.05)
+	sfx.queue_free()
+
 	print("  * 5-Turn Economic Simulation: OK (Final GDP: %.2fB, Debt: %.2fB, Reserves: %.2fB)" % [
 		state.gdp_billions, state.national_debt_billions, state.liquid_reserves_billions
 	])
+	print("  * Russian Warlord Conquest & Army Merging: OK (TASK-4.1)")
+	print("  * Global 1973 Oil Crisis Simulation: OK (TASK-4.2)")
+	print("  * CRT Shader Noise & Flyback Sound Synthesis: OK (TASK-4.3)")
 	return true

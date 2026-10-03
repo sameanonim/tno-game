@@ -96,6 +96,26 @@ static func is_oil_crisis(state: CountryState = null) -> bool:
 	return false
 
 
+## Интерактивный запуск глобального Нефтяного кризиса 1973 года (SE_OIL_CRISIS)
+static func trigger_oil_crisis_event(turn_mgr: Node = null) -> Dictionary:
+	set_oil_crisis(true, 3.5)
+	var report = {
+		"event": "SE_OIL_CRISIS",
+		"price_multiplier": 3.5,
+		"affected_hegemons": ["USA", "GER", "JAP"]
+	}
+	if turn_mgr != null:
+		if turn_mgr.has_method("trigger_super_event"):
+			turn_mgr.trigger_super_event("SE_OIL_CRISIS")
+	return report
+
+
+## Дипломатическое и экономическое разрешение Нефтяного кризиса
+static func resolve_oil_crisis_event() -> Dictionary:
+	set_oil_crisis(false, 1.0)
+	return {"event": "OIL_CRISIS_RESOLVED", "price_multiplier": 1.0}
+
+
 # ==============================================================================
 # CONSUMER GOODS & CONSTRUCTION POOL API
 # ==============================================================================

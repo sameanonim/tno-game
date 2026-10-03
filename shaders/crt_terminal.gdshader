@@ -29,7 +29,14 @@ uniform float brightness_boost : hint_range(0.8, 1.5, 0.05) = 1.08;
 // 4. Analog Noise & Flicker
 uniform float flicker_speed : hint_range(0.0, 30.0, 1.0) = 8.0;
 uniform float flicker_strength : hint_range(0.0, 0.1, 0.005) = 0.015;
+uniform float phosphor_noise_strength : hint_range(0.0, 0.1, 0.005) = 0.025;
+uniform float beam_sweep_speed : hint_range(0.0, 5.0, 0.1) = 0.8;
+uniform float beam_sweep_intensity : hint_range(0.0, 0.2, 0.01) = 0.04;
 
+
+float pseudo_noise(vec2 co) {
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
 
 vec2 curve_uv(vec2 uv) {
     vec2 delta = uv - 0.5;
@@ -55,6 +62,18 @@ void fragment() {
         // Scanlines
         float scanline = sin(curved_uv.y * scanline_count * 3.14159);
         col -= scanline * scanline_intensity * 0.5;
+
+        // Phosphor Grain / Analog Noise
+        float noise = (pseudo_noise(curved_uv + vec2(TIME * 0.1, TIME * 0.05)) - 0.5) * phosphor_noise_strength;
+        col += noise;
+
+        // CRT Beam Sweep Line (Phosphor persistence sweep)
+        float beam_pos = fract(TIME * beam_sweep_speed);
+        float beam_dist = abs(curved_uv.y - beam_pos);
+        if (beam_dist < 0.06) {
+            float sweep = (1.0 - (beam_dist / 0.06)) * beam_sweep_intensity;
+            col += sweep;
+        }
 
         // Vignette
         vec2 uv_offset = (curved_uv - 0.5) * 2.0;

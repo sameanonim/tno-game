@@ -36,6 +36,8 @@ enum Status {
 ## Ленивое получение и кэширование иконки директивы
 func get_icon() -> Texture2D:
 	if icon != null:
+		if icon.resource_path != "" and (icon_path.is_empty() or icon_path == "res://icon.svg"):
+			icon_path = icon.resource_path
 		return icon
 	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
 		icon = load(icon_path)
@@ -325,6 +327,10 @@ func to_dict() -> Dictionary:
 	for t in available_triggers:
 		trg_list.append(t.duplicate(true))
 
+	var effective_icon_path: String = icon_path
+	if (effective_icon_path.is_empty() or effective_icon_path == "res://icon.svg") and icon != null and not icon.resource_path.is_empty():
+		effective_icon_path = icon.resource_path
+
 	return {
 		"id": id,
 		"directive_id": id,
@@ -332,7 +338,7 @@ func to_dict() -> Dictionary:
 		"description": description,
 		"category": category,
 		"icon_symbol": icon_symbol,
-		"icon_path": icon_path,
+		"icon_path": effective_icon_path,
 		"grid_position": [grid_position.x, grid_position.y],
 		"turns_to_complete": turns_to_complete,
 		"turns_remaining": turns_remaining,
@@ -370,7 +376,13 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 	res.description = str(data.get("description", ""))
 	res.category = str(data.get("category", "doctrine"))
 	res.icon_symbol = str(data.get("icon_symbol", "[★]"))
-	res.icon_path = str(data.get("icon_path", "res://icon.svg"))
+	if data.has("icon_path"):
+		res.icon_path = str(data["icon_path"])
+	elif data.has("icon") and data["icon"] is String:
+		res.icon_path = str(data["icon"])
+	else:
+		res.icon_path = "res://icon.svg"
+
 	if not res.icon_path.is_empty() and ResourceLoader.exists(res.icon_path):
 		res.icon = load(res.icon_path) as Texture2D
 

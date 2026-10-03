@@ -503,6 +503,94 @@ func execute_diplomatic_summit(target_tag: String, turn_manager: TurnManager) ->
 
 
 # ==============================================================================
+# ВОЕННЫЙ ЗАХВАТ, РАЗГРАБЛЕНИЕ И СЛИЯНИЕ АРМИЙ ВАРЛОРДОВ
+# ==============================================================================
+
+## Военный разгром и поглощение варлорда (Loot & Military Integration)
+func execute_warlord_conquest(
+	conqueror_tag: String,
+	victim_tag: String,
+	turn_manager: TurnManager,
+	loot_mode: String = "annex_and_integrate"
+) -> Dictionary:
+	var res: Dictionary = {
+		"success": false,
+		"conqueror_tag": conqueror_tag,
+		"victim_tag": victim_tag,
+		"loot_mode": loot_mode,
+		"transferred_states": 0,
+		"weapons_captured": 0,
+		"manpower_integrated": 0,
+		"cash_plundered": 0.0,
+		"stage_advanced": false
+	}
+
+	if turn_manager == null:
+		return res
+
+	var c_state: CountryState = turn_manager.countries_world_state.get(conqueror_tag, null)
+	var v_state: CountryState = turn_manager.countries_world_state.get(victim_tag, null)
+	if c_state == null and turn_manager.player_state != null and turn_manager.player_state.country_tag == conqueror_tag:
+		c_state = turn_manager.player_state
+	if v_state == null and turn_manager.player_state != null and turn_manager.player_state.country_tag == victim_tag:
+		v_state = turn_manager.player_state
+
+	if c_state == null or v_state == null:
+		return res
+
+	# 1. Аннексия территорий
+	turn_manager.annex_country(victim_tag, conqueror_tag)
+	v_state.is_annexed = true
+	res["transferred_states"] = v_state.controlled_states.size()
+
+	# 2. Трофеи и слияние армий
+	var weapons: int = 0
+	var manpower: int = 0
+	var cash: float = 0.0
+
+	if loot_mode == "pillage_and_strip":
+		# Полное разграбление военных складов и казны
+		weapons = v_state.infantry_weapons_stockpile + int(float(v_state.military_factories) * 80)
+		cash = v_state.liquid_reserves_billions * 0.90 + 0.15
+		manpower = int(float(v_state.manpower_pool) * 0.40)
+		c_state.radicalization = clampf(c_state.radicalization + 3.0, 0.0, 100.0)
+		c_state.political_capital += 15.0
+		_log("РАЗГРАБЛЕНИЕ ВАРЛОРДА: Арсеналы [%s] вывезены подчистую, казна разграблена." % victim_tag)
+	else:
+		# Интеграция и слияние институтов (annex_and_integrate)
+		weapons = int(float(v_state.infantry_weapons_stockpile) * 0.85)
+		cash = v_state.liquid_reserves_billions * 0.70
+		manpower = int(float(v_state.manpower_pool) * 0.70) + 8000
+		c_state.legitimacy = clampf(c_state.legitimacy + 8.0, 0.0, 100.0)
+		c_state.civilian_factories += v_state.civilian_factories
+		c_state.military_factories += v_state.military_factories
+		_log("СЛИЯНИЕ АРМИЙ: Войска [%s] присягнули на верность нашему знамени." % victim_tag)
+
+	c_state.infantry_weapons_stockpile += weapons
+	c_state.liquid_reserves_billions += cash
+	c_state.manpower_pool += manpower
+
+	res["weapons_captured"] = weapons
+	res["manpower_integrated"] = manpower
+	res["cash_plundered"] = cash
+	res["success"] = true
+
+	# 3. Автоматическая проверка эволюции стадий
+	if conqueror_tag == player_tag:
+		if current_stage == SmutaStage.STAGE_2_REGIONAL and check_regional_victory(player_tag, turn_manager.regions_world_state, turn_manager.countries_world_state):
+			proclaim_regional_unification(c_state, turn_manager)
+			res["stage_advanced"] = true
+		elif current_stage == SmutaStage.STAGE_3_SUPERREGIONAL and check_superregional_victory(player_tag, turn_manager.regions_world_state, turn_manager.countries_world_state):
+			proclaim_superregional_unification(c_state, turn_manager)
+			res["stage_advanced"] = true
+		elif current_stage == SmutaStage.STAGE_4_FINAL and check_final_unification(player_tag, turn_manager.regions_world_state, turn_manager.countries_world_state):
+			proclaim_final_unification(c_state)
+			res["stage_advanced"] = true
+
+	return res
+
+
+# ==============================================================================
 # ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ТИТУЛОВ И СУПЕР-СОБЫТИЙ
 # ==============================================================================
 

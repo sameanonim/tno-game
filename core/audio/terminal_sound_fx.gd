@@ -42,6 +42,17 @@ func play_telegraph_chirp() -> void:
 	_synthesize_tone(1400.0, 0.025, 120.0, "square")
 
 
+func play_crt_flyback_hum(duration_sec: float = 0.25) -> void:
+	# Высокочастотный аналоговый свист строчного трансформатора ЭЛТ (flyback transformer ~7.5 kHz)
+	_synthesize_tone(7500.0, duration_sec, 6.0, "sine")
+
+
+func play_crt_warmup() -> void:
+	# Прогрев катода и щелчок высокого напряжения
+	play_switch_click(450.0, 0.04)
+	play_crt_flyback_hum(0.35)
+
+
 func _synthesize_tone(freq: float, duration_sec: float, decay_rate: float, wave_type: String = "sine") -> void:
 	if _sfx_player == null or not _sfx_player.playing:
 		return
