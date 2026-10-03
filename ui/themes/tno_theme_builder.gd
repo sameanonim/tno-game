@@ -188,7 +188,7 @@ static func apply_box_style(panel: PanelContainer, border_color: Color = COLOR_B
 	apply_panel_style(panel, border_color, bg_color, border_width, corner_radius)
 
 static func create_pill_box(icon_tex: Texture2D, label_text: String, tooltip: String = "") -> PanelContainer:
-	var container = PanelContainer.new()
+	var container := PanelContainer.new()
 	var sb = StyleBoxFlat.new()
 	sb.bg_color = Color(0.04, 0.06, 0.08, 0.92)
 	sb.border_color = Color(0.16, 0.28, 0.34, 0.9)
@@ -203,12 +203,12 @@ static func create_pill_box(icon_tex: Texture2D, label_text: String, tooltip: St
 	if not tooltip.is_empty():
 		container.tooltip_text = tooltip
 	
-	var hbox = HBoxContainer.new()
+	var hbox := HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 6)
 	container.add_child(hbox)
 	
 	if icon_tex != null:
-		var trect = TextureRect.new()
+		var trect := TextureRect.new()
 		trect.texture = icon_tex
 		trect.custom_minimum_size = Vector2(18, 18)
 		trect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -216,7 +216,7 @@ static func create_pill_box(icon_tex: Texture2D, label_text: String, tooltip: St
 		trect.mouse_filter = Control.MOUSE_FILTER_PASS
 		hbox.add_child(trect)
 	
-	var lbl = Label.new()
+	var lbl := Label.new()
 	lbl.name = "ValueLabel"
 	lbl.text = label_text
 	var font = get_font_aldrich()

@@ -75,20 +75,13 @@ func _execute_ai_offensive() -> void:
 				if not axis.target_region_ids.is_empty():
 					var target_id = axis.target_region_ids[0]
 					var target_reg: RegionData = turn_manager_ref.regions_world_state.get(target_id, null)
-					var def_rating = 50.0
+					var def_rating := 50.0
 					if target_reg != null:
 						def_rating = target_reg.garrison_strength + float(target_reg.civilian_infrastructure) * 5.0
 
 					if def_rating < lowest_defense:
 						lowest_defense = def_rating
 						weakest_axis = axis
-
-static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
-	var x: int = (seed_val ^ 0x5DEECE66D) & 0xFFFFFFFF
-	x = (x * 1103515245 + 12345) & 0x7FFFFFFF
-	var t: float = float(x) / float(0x7FFFFFFF)
-	return lerpf(min_val, max_val, t)
-
 
 	# Направление яростного прорыва
 	if weakest_axis != null:
@@ -137,3 +130,10 @@ func on_sector_lost(region: RegionData) -> void:
 		map_controller_ref.add_combat_incident_ping(region.province_id, "scorched")
 
 	sector_scorched.emit(region.province_id, region.province_name)
+
+
+static func _get_deterministic_factor(seed_val: int, min_val: float, max_val: float) -> float:
+	var x: int = (seed_val ^ 0x5DEECE66D) & 0xFFFFFFFF
+	x = (x * 1103515245 + 12345) & 0x7FFFFFFF
+	var t: float = float(x) / float(0x7FFFFFFF)
+	return lerpf(min_val, max_val, t)

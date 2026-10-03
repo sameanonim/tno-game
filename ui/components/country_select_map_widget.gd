@@ -151,7 +151,7 @@ func apply_focus_highlight(enabled: bool) -> void:
 	if not is_map_ready or map_controller.lut_image == null:
 		return
 
-	var dark_dim = Color(0.06, 0.08, 0.09, 1.0)
+	var dark_dim := Color(0.06, 0.08, 0.09, 1.0)
 	var default_color = map_controller.default_province_color
 
 	for pid in map_controller.provinces_data.keys():
@@ -205,7 +205,7 @@ func _create_tactical_pins() -> void:
 		if not tags_with_focus.has(tag):
 			continue
 
-		var pin_btn = Button.new()
+		var pin_btn := Button.new()
 		pin_btn.text = "★ %s" % tag
 		pin_btn.custom_minimum_size = Vector2(48, 20)
 		pin_btn.add_theme_font_size_override("font_size", 9)
@@ -284,7 +284,7 @@ func focus_coordinates(target_map_pos: Vector2, target_zoom: float, instant: boo
 
 	var viewport_center = sub_viewport.size * 0.5
 	var map_half_size = Vector2(map_controller.map_size) * 0.5
-	var dest_scale = Vector2(target_zoom, target_zoom)
+	var dest_scale := Vector2(target_zoom, target_zoom)
 	var dest_pos = viewport_center - (target_map_pos - map_half_size) * dest_scale
 
 	if instant:
@@ -399,7 +399,7 @@ func _display_hover_info(tag: String, d: Dictionary) -> void:
 		leader = loc.tr_key(leader, leader)
 
 	var has_tree = tags_with_focus.has(tag)
-	var focus_badge = ""
+	var focus_badge := ""
 	if has_tree:
 		var session = get_node_or_null("/root/GameSession")
 		var summary = session.get_focus_tree_summary(tag) if session != null else {}

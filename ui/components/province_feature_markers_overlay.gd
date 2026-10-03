@@ -140,7 +140,7 @@ func _draw_railways(vis_rect: Rect2) -> void:
 
 
 func _draw_military_installations(vis_rect: Rect2, font: Font) -> void:
-	var font_size = 10
+	var font_size := 10
 
 	for pid in province_centroids.keys():
 		var pos: Vector2 = province_centroids[pid]
@@ -169,7 +169,7 @@ func _draw_military_installations(vis_rect: Rect2, font: Font) -> void:
 
 		# Смещение под центроидом
 		var x_offset = -float(icons.size() * 12) * 0.5
-		var y_offset = 12.0
+		var y_offset := 12.0
 
 		for item in icons:
 			var txt = item["icon"]

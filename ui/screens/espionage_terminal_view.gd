@@ -229,7 +229,7 @@ func _render_networks_list() -> void:
 		child.queue_free()
 
 	if country_state.infiltration_networks.is_empty():
-		var empty_lbl = Label.new()
+		var empty_lbl := Label.new()
 		empty_lbl.text = _tr("ESPIONAGE_NO_NETWORKS", ">> Агентурные сети отсутствуют. Направьте агентов в целевые державы.")
 		empty_lbl.modulate = COLOR_DIM
 		networks_container.add_child(empty_lbl)
@@ -244,19 +244,19 @@ func _render_networks_list() -> void:
 		var status_str = str(net_data.get("network_status", "DORMANT")) if net_data is Dictionary else "ACTIVE"
 		var ag_count = int(net_data.get("agents_count", 0)) if net_data is Dictionary else 0
 
-		var panel = PanelContainer.new()
-		var hbox = HBoxContainer.new()
+		var panel := PanelContainer.new()
+		var hbox := HBoxContainer.new()
 		hbox.add_theme_constant_override("separation", 12)
 
 		# Тэг страны
-		var tag_lbl = Label.new()
+		var tag_lbl := Label.new()
 		tag_lbl.custom_minimum_size = Vector2(80, 0)
 		tag_lbl.text = "[ %s ]" % tag
 		tag_lbl.modulate = COLOR_CYAN
 		hbox.add_child(tag_lbl)
 
 		# Прогресс-бар псевдографикой [██████░░░░] 60%
-		var bar_lbl = Label.new()
+		var bar_lbl := Label.new()
 		bar_lbl.custom_minimum_size = Vector2(240, 0)
 		bar_lbl.text = _make_ascii_bar(lvl / 100.0, 12) + " %0.1f%%" % lvl
 		if lvl >= 70.0:
@@ -268,20 +268,20 @@ func _render_networks_list() -> void:
 		hbox.add_child(bar_lbl)
 
 		# Статус сети
-		var stat_lbl = Label.new()
+		var stat_lbl := Label.new()
 		stat_lbl.custom_minimum_size = Vector2(160, 0)
 		stat_lbl.text = status_str
 		stat_lbl.modulate = COLOR_DIM
 		hbox.add_child(stat_lbl)
 
 		# Количество агентов
-		var agents_lbl = Label.new()
+		var agents_lbl := Label.new()
 		agents_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		agents_lbl.text = _tr("ESPIONAGE_AGENTS_COUNT", "Агентов: %d") % ag_count
 		hbox.add_child(agents_lbl)
 
 		# Кнопка отправки агента
-		var btn_infiltrate = Button.new()
+		var btn_infiltrate := Button.new()
 		btn_infiltrate.text = _tr("ESPIONAGE_BTN_INFILTRATE", "+ Внедрить")
 		btn_infiltrate.pressed.connect(func(): _prompt_assign_agent_to_country(tag))
 		hbox.add_child(btn_infiltrate)
@@ -302,7 +302,7 @@ func _render_operations_list() -> void:
 		child.queue_free()
 
 	if country_state.active_covert_operations.is_empty():
-		var empty_lbl = Label.new()
+		var empty_lbl := Label.new()
 		empty_lbl.text = _tr("ESPIONAGE_NO_OPERATIONS", ">> Нет активных спецопераций. Перейдите во вкладку [ПЛАНИРОВАНИЕ МИССИЙ].")
 		empty_lbl.modulate = COLOR_DIM
 		operations_container.add_child(empty_lbl)
@@ -312,20 +312,20 @@ func _render_operations_list() -> void:
 		if op == null:
 			continue
 
-		var panel = PanelContainer.new()
-		var vbox = VBoxContainer.new()
+		var panel := PanelContainer.new()
+		var vbox := VBoxContainer.new()
 		vbox.add_theme_constant_override("separation", 6)
 
 		# Заголовок операции
-		var top_hbox = HBoxContainer.new()
-		var title_lbl = Label.new()
+		var top_hbox := HBoxContainer.new()
+		var title_lbl := Label.new()
 		title_lbl.text = _tr("ESPIONAGE_OP_TARGET", ">> %s [%s] -> Цель: %s") % [op.title, op.get_type_name_ru(), op.target_country_tag]
 		title_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		title_lbl.modulate = COLOR_CYAN
 		top_hbox.add_child(title_lbl)
 
 		if op.is_frozen:
-			var frozen_badge = Label.new()
+			var frozen_badge := Label.new()
 			frozen_badge.text = _tr("ESPIONAGE_OP_FROZEN", "[ ЗАМОРОЖЕНА ]")
 			frozen_badge.modulate = COLOR_RED
 			top_hbox.add_child(frozen_badge)
@@ -333,13 +333,13 @@ func _render_operations_list() -> void:
 		vbox.add_child(top_hbox)
 
 		# Прогресс и таймер фаз
-		var prog_hbox = HBoxContainer.new()
-		var prog_lbl = Label.new()
+		var prog_hbox := HBoxContainer.new()
+		var prog_lbl := Label.new()
 		prog_lbl.custom_minimum_size = Vector2(220, 0)
 		prog_lbl.text = _tr("ESPIONAGE_OP_PROGRESS", "Прогресс: %d / %d ходов") % [op.current_turn_progress, op.total_turns_required]
 		prog_hbox.add_child(prog_lbl)
 
-		var bar_lbl = Label.new()
+		var bar_lbl := Label.new()
 		bar_lbl.custom_minimum_size = Vector2(200, 0)
 		bar_lbl.text = op.get_progress_bar_string(10)
 		bar_lbl.modulate = COLOR_PHOSPHOR
@@ -347,14 +347,14 @@ func _render_operations_list() -> void:
 
 		# Текущий риск
 		var risk_val = _calculate_op_display_risk(op)
-		var risk_lbl = Label.new()
+		var risk_lbl := Label.new()
 		risk_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		risk_lbl.text = _tr("ESPIONAGE_OP_RISK", "Риск провала: %0.0f%%") % (risk_val * 100.0)
 		risk_lbl.modulate = COLOR_RED if risk_val > 0.40 else (COLOR_AMBER if risk_val > 0.20 else COLOR_PHOSPHOR)
 		prog_hbox.add_child(risk_lbl)
 
 		# Кнопка Abort Protocol
-		var btn_abort = Button.new()
+		var btn_abort := Button.new()
 		btn_abort.text = _tr("ESPIONAGE_BTN_ABORT", "[ ABORT PROTOCOL ]")
 		btn_abort.modulate = COLOR_RED
 		btn_abort.pressed.connect(func(): _on_abort_operation_clicked(op))
@@ -366,9 +366,9 @@ func _render_operations_list() -> void:
 
 
 func _calculate_op_display_risk(op: CovertOperationResource) -> float:
-	var target_sec = 50.0
+	var target_sec := 50.0
 	var net_lvl = country_state.get_infiltration_level(op.target_country_tag)
-	var skill_sum = 0
+	var skill_sum := 0
 	for aid in op.assigned_agent_ids:
 		var ag = country_state.get_agent_by_id(aid)
 		if ag != null:
@@ -399,7 +399,7 @@ func _render_roster_list() -> void:
 		child.queue_free()
 
 	if country_state.active_agents.is_empty():
-		var empty_lbl = Label.new()
+		var empty_lbl := Label.new()
 		empty_lbl.text = _tr("ESPIONAGE_NO_AGENTS", ">> Штат разведотдела пуст. Наймите агентов через кнопку ниже.")
 		empty_lbl.modulate = COLOR_DIM
 		roster_container.add_child(empty_lbl)
@@ -409,40 +409,40 @@ func _render_roster_list() -> void:
 		if ag == null:
 			continue
 
-		var panel = PanelContainer.new()
-		var hbox = HBoxContainer.new()
+		var panel := PanelContainer.new()
+		var hbox := HBoxContainer.new()
 		hbox.add_theme_constant_override("separation", 10)
 
 		# Позывной
-		var name_lbl = Label.new()
+		var name_lbl := Label.new()
 		name_lbl.custom_minimum_size = Vector2(130, 0)
 		name_lbl.text = "«%s»" % ag.codename
 		name_lbl.modulate = COLOR_CYAN
 		hbox.add_child(name_lbl)
 
 		# Навык
-		var stars_lbl = Label.new()
+		var stars_lbl := Label.new()
 		stars_lbl.custom_minimum_size = Vector2(80, 0)
 		stars_lbl.text = ag.get_stars_string()
 		stars_lbl.modulate = COLOR_AMBER
 		hbox.add_child(stars_lbl)
 
 		# Лояльность
-		var loy_lbl = Label.new()
+		var loy_lbl := Label.new()
 		loy_lbl.custom_minimum_size = Vector2(110, 0)
 		loy_lbl.text = _tr("ESPIONAGE_LOYALTY", "Лояльность: %0.0f%%") % ag.loyalty
 		loy_lbl.modulate = COLOR_RED if ag.loyalty < 30.0 else (COLOR_AMBER if ag.loyalty < 60.0 else COLOR_PHOSPHOR)
 		hbox.add_child(loy_lbl)
 
 		# Статус
-		var stat_lbl = Label.new()
+		var stat_lbl := Label.new()
 		stat_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		stat_lbl.text = ag.get_status_string_ru()
 		stat_lbl.modulate = COLOR_DIM if ag.status == AgentResource.AgentStatus.IDLE else COLOR_PHOSPHOR
 		hbox.add_child(stat_lbl)
 
 		# Апkeep
-		var cost_lbl = Label.new()
+		var cost_lbl := Label.new()
 		cost_lbl.custom_minimum_size = Vector2(90, 0)
 		cost_lbl.text = _tr("ESPIONAGE_UPKEEP", "$%0.1fM/ход") % ag.upkeep_cost_black_budget
 		cost_lbl.modulate = COLOR_DIM
@@ -450,12 +450,12 @@ func _render_roster_list() -> void:
 
 		# Кнопка отзыва / переназначения
 		if ag.status == AgentResource.AgentStatus.INFILTRATING:
-			var btn_recall = Button.new()
+			var btn_recall := Button.new()
 			btn_recall.text = _tr("ESPIONAGE_BTN_RECALL", "Отозвать")
 			btn_recall.pressed.connect(func(): _recall_agent(ag))
 			hbox.add_child(btn_recall)
 		elif ag.status == AgentResource.AgentStatus.IDLE:
-			var btn_assign = Button.new()
+			var btn_assign := Button.new()
 			btn_assign.text = _tr("ESPIONAGE_BTN_ASSIGN", "Назначить...")
 			btn_assign.pressed.connect(func(): _prompt_assign_agent(ag))
 			hbox.add_child(btn_assign)
@@ -490,7 +490,7 @@ func _recall_agent(ag: AgentResource) -> void:
 
 
 func _prompt_assign_agent(ag: AgentResource) -> void:
-	var target_tag = "GER"
+	var target_tag := "GER"
 	if opt_target_country != null and opt_target_country.item_count > 0:
 		target_tag = opt_target_country.get_item_text(opt_target_country.selected)
 	ag.assigned_country_tag = target_tag
@@ -638,7 +638,7 @@ func _on_espionage_processed(reports: Array[Dictionary]) -> void:
 
 func _make_ascii_bar(ratio: float, width: int = 10) -> String:
 	var filled = int(round(clampf(ratio, 0.0, 1.0) * width))
-	var s = "["
+	var s := "["
 	for i in range(width):
 		if i < filled:
 			s += "█"

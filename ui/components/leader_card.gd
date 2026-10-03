@@ -76,8 +76,8 @@ func _render_ui() -> void:
 
 
 func _update_style() -> void:
-	var bg_col = Color(0.03, 0.06, 0.05, 0.95)
-	var border_col = Color(0.18, 0.45, 0.38, 0.7)
+	var bg_col := Color(0.03, 0.06, 0.05, 0.95)
+	var border_col := Color(0.18, 0.45, 0.38, 0.7)
 
 	if is_selected:
 		bg_col = Color(0.05, 0.16, 0.12, 0.98)
@@ -103,9 +103,9 @@ func _update_style() -> void:
 
 
 func _make_ascii_bar(value: int, max_val: int) -> String:
-	var slots = 5
+	var slots := 5
 	var filled = clampi(int(round((float(value) / float(max_val)) * slots)), 0, slots)
-	var s = "["
+	var s := "["
 	for i in range(slots):
 		s += "█" if i < filled else "░"
 	s += "]"

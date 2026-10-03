@@ -130,7 +130,7 @@ func resolve_active_tree(tag: String, state: CountryState) -> String:
 				_: priority = 0
 
 		var act_ast = t_meta.get("activation_ast", {})
-		var satisfies_conditions = true
+		var satisfies_conditions := true
 
 		if eval_state != null and not act_ast.is_empty():
 			satisfies_conditions = ConditionEvaluator.evaluate(act_ast, eval_state)

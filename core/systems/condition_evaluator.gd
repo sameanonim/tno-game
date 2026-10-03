@@ -194,7 +194,7 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 			var party_key = str(cond.get("party", cond.get("ideology", cond.get("which", cond.get("key", ""))))).to_lower()
 			var op = str(cond.get("operator", cond.get("compare", ">=")))
 			var target_val = float(cond.get("value", 0.0))
-			var current_val = 0.0
+			var current_val := 0.0
 			if state.has_method("get_party_popularity"):
 				current_val = state.get_party_popularity(party_key)
 			elif state.parties_popularity.has(party_key):
@@ -205,7 +205,7 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 			var party_key = str(cond.get("party", cond.get("ideology", cond.get("faction", "")))).to_lower()
 			var op = str(cond.get("operator", cond.get("compare", ">=")))
 			var target_val = float(cond.get("value", 0.0))
-			var current_val = 0.0
+			var current_val := 0.0
 			if state.parliament_seats.has(party_key):
 				current_val = float(state.parliament_seats[party_key])
 			else:
@@ -253,7 +253,7 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 			var f_name = str(cond.get("faction", "")).to_lower()
 			var op = str(cond.get("operator", ">="))
 			var min_val = float(cond.get("min", cond.get("value", 0.0)))
-			var current_loyalty = 50.0
+			var current_loyalty := 50.0
 			for k in state.factions_loyalty.keys():
 				if str(k).to_lower() == f_name:
 					current_loyalty = float(state.factions_loyalty[k])
@@ -321,7 +321,7 @@ static func _evaluate_variable_check(cond: Dictionary, state: CountryState) -> b
 	var op = str(cond.get("operator", cond.get("compare", ">=")))
 	var target_val = float(cond.get("value", 0.0))
 
-	var current_val = 0.0
+	var current_val := 0.0
 	match var_name:
 		"political_capital", "pc", "political_power":
 			current_val = state.political_capital
@@ -381,7 +381,7 @@ static func explain(node: Dictionary, state: CountryState, depth: int = 0) -> Ar
 	var op = str(node.get("operator", "")).to_upper()
 	if op in ["AND", "OR", "NOT"]:
 		var conditions = node.get("conditions", [])
-		var op_title = ""
+		var op_title := ""
 		match op:
 			"AND": op_title = "Все следующие условия (И):"
 			"OR": op_title = "Хотя бы одно условие (ИЛИ):"

@@ -44,15 +44,15 @@ static func deploy_proxy_theater(
 	if existing != null:
 		return existing
 
-	var front_title = "Global Proxy Theater"
-	var axis_title = "Strategic Axis"
+	var front_title := "Global Proxy Theater"
+	var axis_title := "Strategic Axis"
 	var attacker_tag = superpower_tag
-	var defender_tag = "NEU"
-	var defender_name = "Opposing Proxy Coalition"
+	var defender_tag := "NEU"
+	var defender_name := "Opposing Proxy Coalition"
 	var regions: Array = []
-	var cmd_name = "Field Commander"
-	var cmd_trait = "proxy_warfare_expert"
-	var cmd_skill = 7
+	var cmd_name := "Field Commander"
+	var cmd_trait := "proxy_warfare_expert"
+	var cmd_skill := 7
 
 	match proxy_id:
 		"south_africa":
@@ -120,14 +120,14 @@ static func _deploy_warlord_theater(
 	countries_world_state: Dictionary
 ) -> Frontline:
 	var macro = RussianUnificationManager.get_macro_region(tag)
-	var enemy_tag = "ONG"
-	var enemy_name = "Onega Garrison"
-	var front_title = "Western Russia Unification Theater"
-	var axis_title = "Onega Strategic Spearhead"
+	var enemy_tag := "ONG"
+	var enemy_name := "Onega Garrison"
+	var front_title := "Western Russia Unification Theater"
+	var axis_title := "Onega Strategic Spearhead"
 	var target_regions: Array = [9248, 9273]
-	var commander_name = "Mikhail Tukhachevsky"
-	var commander_trait = "deep_battle_theorist"
-	var commander_skill = 8
+	var commander_name := "Mikhail Tukhachevsky"
+	var commander_trait := "deep_battle_theorist"
+	var commander_skill := 8
 
 	match macro:
 		RussianUnificationManager.MACRO_WEST_RUSSIA:
@@ -311,12 +311,12 @@ static func _deploy_german_theater(
 	countries_world_state: Dictionary
 ) -> Frontline:
 	var enemy_tag = "SPE" if tag in ["GER", "BOR"] else "BOR"
-	var enemy_name = "Reich Civil War Contender"
-	var front_title = "Grossdeutsches Reich Civil War - Operational Theater"
-	var axis_title = "Berlin-Ruhr Strategic Corridor"
-	var commander_name = "Hans Speidel"
-	var commander_trait = "defensive_specialist"
-	var commander_skill = 7
+	var enemy_name := "Reich Civil War Contender"
+	var front_title := "Grossdeutsches Reich Civil War - Operational Theater"
+	var axis_title := "Berlin-Ruhr Strategic Corridor"
+	var commander_name := "Hans Speidel"
+	var commander_trait := "defensive_specialist"
+	var commander_skill := 7
 
 	if tag == "BOR":
 		enemy_tag = "SPE"

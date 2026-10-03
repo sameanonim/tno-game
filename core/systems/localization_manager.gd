@@ -243,7 +243,7 @@ func _register_translation(loc_code: String) -> void:
 	var ui_prefixes = ["SYS_", "MENU_", "PREVIEW_", "BTN_", "TAB_", "MAP_", "DIFF_", "RULE_", "CRT_", "AUDIO_", "SETUP_", "TIMESTEP_"]
 	for k in dict:
 		var key_str = str(k)
-		var is_ui = false
+		var is_ui := false
 		for p in ui_prefixes:
 			if key_str.begins_with(p):
 				is_ui = true
@@ -324,7 +324,7 @@ func register_custom_strings(locale_code: String, strings_map: Dictionary) -> vo
 func set_locale(locale_code: String, save_persisted: bool = true) -> void:
 	var target = locale_code.to_lower().strip_edges()
 	var available = get_available_locales()
-	var found = false
+	var found := false
 	for loc in available:
 		if loc["code"] == target:
 			found = true
@@ -530,7 +530,7 @@ func get_terminal_font() -> Font:
 func save_to_config() -> void:
 	if current_locale == _persisted_locale and FileAccess.file_exists(CONFIG_PATH):
 		return
-	var config = ConfigFile.new()
+	var config := ConfigFile.new()
 	if FileAccess.file_exists(CONFIG_PATH):
 		var _load_err = config.load(CONFIG_PATH)
 	config.set_value("localization", "locale", current_locale)
@@ -544,7 +544,7 @@ func save_to_config() -> void:
 
 
 func _load_persisted_settings() -> void:
-	var config = ConfigFile.new()
+	var config := ConfigFile.new()
 	if config.load(CONFIG_PATH) == OK:
 		var saved_loc = config.get_value("localization", "locale", "")
 		if saved_loc in ["ru", "en", "de"]:

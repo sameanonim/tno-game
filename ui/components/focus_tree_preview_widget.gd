@@ -75,7 +75,7 @@ func display_focus_tree(country_tag: String) -> void:
 
 	var cats = summary.get("categories", [])
 	for cat in cats:
-		var cat_lbl = Label.new()
+		var cat_lbl := Label.new()
 		var cat_name = str(cat).to_upper()
 		if loc != null:
 			cat_name = loc.tr_key("CAT_" + cat_name, cat_name)
@@ -90,7 +90,7 @@ func display_focus_tree(country_tag: String) -> void:
 
 	var starters = summary.get("starting_directives", [])
 	if starters.is_empty():
-		var no_starters = Label.new()
+		var no_starters := Label.new()
 		no_starters.text = tr("└─ Стартовые директивы инициализируются на 1 ходу")
 		no_starters.add_theme_color_override("font_color", Color(0.4, 0.65, 0.55))
 		no_starters.add_theme_font_size_override("font_size", 10)
@@ -102,7 +102,7 @@ func display_focus_tree(country_tag: String) -> void:
 
 
 func _create_mini_directive_card(d: Dictionary) -> PanelContainer:
-	var panel = PanelContainer.new()
+	var panel := PanelContainer.new()
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0.04, 0.08, 0.08, 0.85)
 	style.border_width_left = 2
@@ -113,11 +113,11 @@ func _create_mini_directive_card(d: Dictionary) -> PanelContainer:
 	style.content_margin_bottom = 4
 	panel.add_theme_stylebox_override("panel", style)
 
-	var vbox = VBoxContainer.new()
+	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 2)
 
-	var top_row = HBoxContainer.new()
-	var symbol_lbl = Label.new()
+	var top_row := HBoxContainer.new()
+	var symbol_lbl := Label.new()
 	symbol_lbl.text = d.get("icon_symbol", "[★]")
 	symbol_lbl.add_theme_color_override("font_color", Color(0.95, 0.85, 0.35, 1.0))
 	symbol_lbl.add_theme_font_size_override("font_size", 11)
@@ -128,7 +128,7 @@ func _create_mini_directive_card(d: Dictionary) -> PanelContainer:
 	if loc != null and not d_title.is_empty():
 		d_title = loc.tr_key(d_title, d_title)
 
-	var title_lbl = Label.new()
+	var title_lbl := Label.new()
 	title_lbl.text = " " + d_title
 	title_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_lbl.add_theme_color_override("font_color", Color(0.85, 0.95, 0.90, 1.0))
@@ -136,7 +136,7 @@ func _create_mini_directive_card(d: Dictionary) -> PanelContainer:
 	top_row.add_child(title_lbl)
 
 	var turns = d.get("turns_required", 1)
-	var turns_lbl = Label.new()
+	var turns_lbl := Label.new()
 	var l_turn = loc.tr_key("TURN_UNIT", "ход") if loc != null else "ход"
 	turns_lbl.text = "%d %s" % [turns, l_turn]
 	turns_lbl.add_theme_color_override("font_color", Color(0.4, 0.75, 0.65))
@@ -149,7 +149,7 @@ func _create_mini_directive_card(d: Dictionary) -> PanelContainer:
 	if not desc.is_empty():
 		if loc != null:
 			desc = loc.tr_key(desc, desc)
-		var desc_lbl = Label.new()
+		var desc_lbl := Label.new()
 		var short_desc = desc.split("\n")[0]
 		if short_desc.length() > 95:
 			short_desc = short_desc.substr(0, 92) + "..."

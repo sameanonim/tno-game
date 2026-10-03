@@ -115,7 +115,7 @@ func update_state(state: CountryState, turn_manager: TurnManager = null) -> void
 
 	# 3. Очки кабинета (CAP)
 	if lbl_cap != null:
-		var cap_blocks = ""
+		var cap_blocks := ""
 		for i in range(state.max_cap):
 			cap_blocks += "■" if i < state.current_cap else "□"
 		lbl_cap.text = "%s %d/%d" % [cap_blocks, state.current_cap, state.max_cap]

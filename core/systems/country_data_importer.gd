@@ -333,7 +333,7 @@ static func get_available_nations() -> Array[Dictionary]:
 		var portrait = item.get("leader_portrait_path", item.get("portrait", "res://icon.svg"))
 		var has_content = bool(item.get("has_content", true))
 
-		var col = Color(0.6, 0.6, 0.6, 1.0)
+		var col := Color(0.6, 0.6, 0.6, 1.0)
 		var c_arr = item.get("country_color", item.get("color", []))
 		if c_arr is Array and c_arr.size() >= 3:
 			col = Color(float(c_arr[0]), float(c_arr[1]), float(c_arr[2]), 1.0)

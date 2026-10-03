@@ -624,10 +624,10 @@ static func _convert_dict_to_law_resource(dict: Dictionary) -> LawResource:
 	var tier = int(dict.get("tier", 1))
 	var max_tier = int(dict.get("max_tier", 5))
 
-	var category = "general"
+	var category := "general"
 	var fiscal = LawResource.FiscalType.EXPENSE
 	var target_impact: Dictionary = {}
-	var weight = 1.0
+	var weight := 1.0
 
 	if "труд" in name_str.to_lower():
 		category = "labor"

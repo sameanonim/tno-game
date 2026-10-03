@@ -83,7 +83,7 @@ static func get_all_directives() -> Array[DirectiveResource]:
 	list.append_array(get_heydrich_directives())
 	list.append_array(get_phase_3_hegemony_directives())
 
-	var has_stockpile = false
+	var has_stockpile := false
 	for d in list:
 		if d.completion_effects.has("MOD_STOCKPILE"):
 			has_stockpile = true
@@ -193,8 +193,8 @@ static func create_event_gcw_victory(victor_tag: String) -> GameEvent:
 	ev.event_id = "germany_gcw_victory_" + victor_tag.to_lower()
 	ev.is_modal = true
 
-	var victor_name = "Альберта Шпеера"
-	var doctrine = "Эра прагматичных реформ, Цольферайна и реструктуризации экономики"
+	var victor_name := "Альберта Шпеера"
+	var doctrine := "Эра прагматичных реформ, Цольферайна и реструктуризации экономики"
 	match victor_tag:
 		"SPE":
 			victor_name = "Альберта Шпеера"

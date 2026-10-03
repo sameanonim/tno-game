@@ -243,7 +243,7 @@ func _initialize_map() -> void:
 
 	# 2. Подготовка растровой маски в RAM для O(1) чтения
 	if mask_texture == null:
-		var default_mask_path = "res://map_data/provinces_mask.png"
+		var default_mask_path := "res://map_data/provinces_mask.png"
 		if ResourceLoader.exists(default_mask_path):
 			mask_texture = load(default_mask_path)
 		else:
@@ -289,9 +289,9 @@ func _initialize_map() -> void:
 		var p_info = provinces_data[pid]
 		var owner_tag = str(p_info.get("owner", ""))
 		var sphere_val = _get_sphere_code_for_owner(owner_tag)
-		var ic_norm = 0.0
-		var unrest_norm = 0.0
-		var infra_norm = 0.0
+		var ic_norm := 0.0
+		var unrest_norm := 0.0
+		var infra_norm := 0.0
 		if starting_regions_data.has(pid):
 			var r_info = starting_regions_data[pid]
 			ic_norm = clampf(float(r_info.get("industrial_capacity", 0)) / 10.0, 0.0, 1.0)
@@ -320,7 +320,7 @@ func _initialize_map() -> void:
 
 		# Карта высот
 		if heightmap_texture == null:
-			var h_path = "res://map_data/height_map.png"
+			var h_path := "res://map_data/height_map.png"
 			if ResourceLoader.exists(h_path):
 				heightmap_texture = load(h_path)
 		if heightmap_texture != null:
@@ -328,7 +328,7 @@ func _initialize_map() -> void:
 
 		# Реки
 		if rivers_texture == null:
-			var r_path = "res://map_data/rivers_mask.png"
+			var r_path := "res://map_data/rivers_mask.png"
 			if ResourceLoader.exists(r_path):
 				rivers_texture = load(r_path)
 		if rivers_texture != null:
@@ -410,7 +410,7 @@ func focus_on_province(province_id: int, smooth: bool = true) -> void:
 	var local_offset = (centroid - Vector2(map_size) * 0.5) if centered else centroid
 	var target_pos = base_position - (local_offset * scale.x)
 	var scaled_half = (Vector2(map_size) * scale) * 0.5
-	var margin = Vector2(300.0, 300.0)
+	var margin := Vector2(300.0, 300.0)
 	target_pos.x = clampf(target_pos.x, base_position.x - scaled_half.x - margin.x, base_position.x + scaled_half.x + margin.x)
 	target_pos.y = clampf(target_pos.y, base_position.y - scaled_half.y - margin.y, base_position.y + scaled_half.y + margin.y)
 
@@ -572,8 +572,8 @@ func set_rebellion_hatching_enabled(enabled: bool) -> void:
 
 func sync_military_fronts(frontlines: Array[Frontline]) -> void:
 	contested_provinces.clear()
-	var active_count = 0
-	var max_tension = 0.0
+	var active_count := 0
+	var max_tension := 0.0
 
 	for f in frontlines:
 		if f != null and f.active:
@@ -601,10 +601,10 @@ func update_rebellion_hotspots(regions: Dictionary, player_tag: String = "") -> 
 	for pid in regions.keys():
 		var reg = regions[pid]
 		if reg != null and pid > 0 and pid <= max_province_id:
-			var unrest_norm = 0.0
-			var ic_norm = 0.0
-			var infra_norm = 0.0
-			var owner_tag = ""
+			var unrest_norm := 0.0
+			var ic_norm := 0.0
+			var infra_norm := 0.0
+			var owner_tag := ""
 
 			if reg is RegionData:
 				unrest_norm = clampf(reg.unrest / 100.0, 0.0, 1.0)
@@ -1148,7 +1148,7 @@ func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
 
 func _clamp_map_position() -> void:
 	var scaled_half = (Vector2(map_size) * scale) * 0.5
-	var margin = Vector2(300.0, 300.0)
+	var margin := Vector2(300.0, 300.0)
 	position.x = clampf(position.x, base_position.x - scaled_half.x - margin.x, base_position.x + scaled_half.x + margin.x)
 	position.y = clampf(position.y, base_position.y - scaled_half.y - margin.y, base_position.y + scaled_half.y + margin.y)
 	_update_camera_limits()
@@ -1309,7 +1309,7 @@ func _pack_ownership_pixel(owner_id: int, state_id: int, is_water: bool, is_fron
 	var r = float(clampi(owner_id, 0, 255)) / 255.0
 	var g = float(state_id & 0xFF) / 255.0
 	var b = float((state_id >> 8) & 0xFF) / 255.0
-	var flags = 0
+	var flags := 0
 	if is_water: flags |= 1
 	if is_frontline: flags |= 4
 	if is_dmz: flags |= 32
@@ -1391,7 +1391,7 @@ func _load_supplementary_data() -> void:
 			f.close()
 			var json = JSON.new()
 			if json.parse(text) == OK and json.data is Dictionary:
-				var cid = 1
+				var cid := 1
 				for tag in json.data.keys():
 					var c_info = json.data[tag]
 					country_tag_to_id[tag] = cid

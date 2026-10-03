@@ -41,13 +41,13 @@ func get_effective_combat_power(army_readiness: float, army_morale: float) -> fl
 	base_power += float(assigned_equipment.get("heavy_equipment", 0)) * 0.15
 
 	var training_mult = (army_readiness * 0.6 + army_morale * 0.4) / 100.0
-	var commander_mult = 1.0
+	var commander_mult := 1.0
 	if commander != null:
 		commander_mult += float(commander.attack_skill) * 0.05
 		if commander.traits.has("deep_battle_theorist"):
 			commander_mult += 0.15
 
-	var posture_mult = 1.0
+	var posture_mult := 1.0
 	match posture:
 		Posture.DEFENSIVE:
 			posture_mult = 0.6
@@ -65,11 +65,11 @@ func get_effective_defense_power(army_readiness: float) -> float:
 	base_def += float(assigned_equipment.get("heavy_equipment", 0)) * 0.20
 
 	var training_mult = maxf(army_readiness / 100.0, 0.4)
-	var commander_mult = 1.0
+	var commander_mult := 1.0
 	if commander != null:
 		commander_mult += float(commander.defense_skill) * 0.06
 
-	var posture_mult = 1.0
+	var posture_mult := 1.0
 	match posture:
 		Posture.DEFENSIVE:
 			posture_mult = 1.5

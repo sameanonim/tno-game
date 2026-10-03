@@ -140,7 +140,7 @@ func _populate_language_radio_list() -> void:
 
 	var locales = _loc_mgr.get_available_locales()
 	for item in locales:
-		var btn = Button.new()
+		var btn := Button.new()
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.focus_mode = Control.FOCUS_ALL
 		btn.custom_minimum_size = Vector2(0, 42)

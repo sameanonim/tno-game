@@ -294,7 +294,7 @@ func check_regional_victory(tag: String, regions_world: Dictionary, countries: D
 			var is_ann = bool(rival.get("is_annexed")) if (rival != null and rival.get("is_annexed") != null) else false
 			if rival != null and not is_ann:
 				# Проверяем, остались ли у соперника подконтрольные регионы
-				var owned = 0
+				var owned := 0
 				for r in regions_world.values():
 					if r is RegionData and r.owner_tag == w_tag:
 						owned += 1
@@ -343,7 +343,7 @@ func check_superregional_victory(tag: String, regions_world: Dictionary, countri
 			var rival: CountryState = countries.get(w_tag, null)
 			var is_ann = bool(rival.get("is_annexed")) if (rival != null and rival.get("is_annexed") != null) else false
 			if rival != null and not is_ann:
-				var owned = 0
+				var owned := 0
 				for r in regions_world.values():
 					if r is RegionData and r.owner_tag == w_tag:
 						owned += 1
@@ -388,7 +388,7 @@ func check_final_unification(tag: String, regions_world: Dictionary, countries: 
 		var rival: CountryState = countries.get(w_tag, null)
 		var is_ann = bool(rival.get("is_annexed")) if (rival != null and rival.get("is_annexed") != null) else false
 		if rival != null and not is_ann:
-			var owned = 0
+			var owned := 0
 			for r in regions_world.values():
 				if r is RegionData and r.owner_tag == w_tag:
 					owned += 1
@@ -466,7 +466,7 @@ func execute_diplomatic_summit(target_tag: String, turn_manager: TurnManager) ->
 		res["annexed"] = true
 
 		# Передача всех территорий соперника без разрушений
-		var transferred = 0
+		var transferred := 0
 		for pid in turn_manager.regions_world_state.keys():
 			var reg: RegionData = turn_manager.regions_world_state[pid]
 			if reg != null and reg.owner_tag == target_tag:
@@ -785,12 +785,12 @@ func _switch_directives_tree(turn_manager: TurnManager, stage_suffix: String) ->
 		return
 
 	# Скоринг кандидатов
-	var best_tree = ""
-	var best_score = -100
+	var best_tree := ""
+	var best_score := -100
 
 	for cand in candidates:
 		var c_lower = cand.to_lower()
-		var score = 0
+		var score := 0
 
 		# Обязательный фильтр: дерево должно принадлежать тегу игрока
 		if not c_lower.contains(clean_tag.to_lower()):
@@ -826,7 +826,7 @@ func _switch_directives_tree(turn_manager: TurnManager, stage_suffix: String) ->
 		turn_manager.focus_stage_controller.switch_focus_tree(best_tree, true)
 		_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s (Оценка соответствия: %d)" % [best_tree, best_score])
 	elif candidates.size() > 0 and turn_manager.focus_stage_controller != null:
-		var fallback_cand = ""
+		var fallback_cand := ""
 		for cand in candidates:
 			if cand.to_lower().contains(clean_tag.to_lower()):
 				fallback_cand = cand

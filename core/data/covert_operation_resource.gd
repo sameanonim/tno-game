@@ -103,7 +103,7 @@ func get_progress_ratio() -> float:
 func get_progress_bar_string(bar_width: int = 10) -> String:
 	var ratio = get_progress_ratio()
 	var filled_count = int(round(ratio * bar_width))
-	var bar_str = "["
+	var bar_str := "["
 	for i in range(bar_width):
 		if i < filled_count:
 			bar_str += "█"

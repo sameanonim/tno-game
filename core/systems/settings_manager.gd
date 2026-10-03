@@ -115,7 +115,7 @@ static func get_instance() -> Node:
 # ==============================================================================
 
 func load_settings() -> void:
-	var cfg = ConfigFile.new()
+	var cfg := ConfigFile.new()
 	if not FileAccess.file_exists(CONFIG_PATH) or cfg.load(CONFIG_PATH) != OK:
 		print("[SettingsManager] Config file not found. Setting defaults based on monitor.")
 		_detect_default_display_settings()
@@ -151,7 +151,7 @@ func load_settings() -> void:
 
 
 func save_settings() -> void:
-	var cfg = ConfigFile.new()
+	var cfg := ConfigFile.new()
 	if FileAccess.file_exists(CONFIG_PATH):
 		var _load_err = cfg.load(CONFIG_PATH)
 

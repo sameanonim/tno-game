@@ -79,7 +79,7 @@ func _process(delta: float) -> void:
 	if not is_tactical_view_active:
 		return
 
-	var needs_redraw = false
+	var needs_redraw := false
 
 	# 1. Обновление времени жизни боевых меток
 	for i in range(active_pings.size() - 1, -1, -1):
@@ -136,9 +136,9 @@ func sync_rebellions(regions: Dictionary, centroids: Dictionary) -> void:
 		if reg == null:
 			continue
 
-		var unrest = 0.0
+		var unrest := 0.0
 		var r_name = "Region_%d" % pid
-		var is_sabotage = false
+		var is_sabotage := false
 
 		if reg is RegionData:
 			unrest = reg.unrest
@@ -242,7 +242,7 @@ func _draw_frontline_demarcation(front: Frontline) -> void:
 		var p1 = points[i]
 		var p2 = points[i + 1]
 		var dir = (p2 - p1).normalized()
-		var normal = Vector2(-dir.y, dir.x)
+		var normal := Vector2(-dir.y, dir.x)
 
 		# Базовая неоновая линия рубежа
 		draw_line(p1, p2, Color(COL_BLUE_DEFENSE.r, COL_BLUE_DEFENSE.g, COL_BLUE_DEFENSE.b, 0.75), 2.0)
@@ -293,8 +293,8 @@ func _draw_axis_arrow(from_pos: Vector2, to_pos: Vector2, progress: float, postu
 
 	# Определение цвета и параметров стойки
 	var arrow_col = COL_GREEN_TERMINAL
-	var arrow_width = 3.0
-	var posture_tag = "BALANCED"
+	var arrow_width := 3.0
+	var posture_tag := "BALANCED"
 
 	match posture:
 		OperationalAxis.Posture.AGGRESSIVE_BREAKTHROUGH:
@@ -327,7 +327,7 @@ func _draw_axis_arrow(from_pos: Vector2, to_pos: Vector2, progress: float, postu
 	if zoom_level >= lod_label_threshold:
 		var filled_blocks = int(round(prog_factor * 8.0))
 		var empty_blocks = 8 - filled_blocks
-		var block_str = ""
+		var block_str := ""
 		for i in range(filled_blocks): block_str += "█"
 		for i in range(empty_blocks): block_str += "░"
 
@@ -450,7 +450,7 @@ func _draw_rebellion_hotspots() -> void:
 # ==============================================================================
 
 func _draw_chevron_head(tip: Vector2, dir: Vector2, col: Color, size: float) -> void:
-	var normal = Vector2(-dir.y, dir.x)
+	var normal := Vector2(-dir.y, dir.x)
 	var left = tip - (dir * size) + (normal * size * 0.55)
 	var right = tip - (dir * size) - (normal * size * 0.55)
 
@@ -460,7 +460,7 @@ func _draw_chevron_head(tip: Vector2, dir: Vector2, col: Color, size: float) -> 
 
 func _draw_hud_tag(pos: Vector2, text: String, col: Color) -> void:
 	var font = default_font if default_font != null else ThemeDB.fallback_font
-	var font_size = 10
+	var font_size := 10
 	var text_size = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	var rect = Rect2(pos, text_size + Vector2(8, 4))
 

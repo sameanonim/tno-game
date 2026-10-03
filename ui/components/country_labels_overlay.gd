@@ -178,7 +178,7 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 		return
 
 	# Текущий LOD по зуму
-	var current_lod = 1
+	var current_lod := 1
 	if zoom_level >= 1.60:
 		current_lod = 3 # Все державы и малые варлорды
 	elif zoom_level >= 0.75:
@@ -223,7 +223,7 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 			continue
 
 		# Текст названия: компактный картографический вариант
-		var raw_name = ""
+		var raw_name := ""
 		if use_russian_names:
 			raw_name = str(data.get("name_ru", data.get("display_name", tag)))
 		else:
@@ -256,7 +256,7 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 		var effective_font_size = test_size
 
 		# Непрозрачность текста: при глубоком зуме названия стран плавно уступают место тактике
-		var text_alpha = 0.88
+		var text_alpha := 0.88
 		if zoom_level >= 2.8:
 			text_alpha = clampf(0.88 - ((zoom_level - 2.8) * 0.40), 0.20, 0.88)
 
@@ -275,7 +275,7 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 		var screen_label_rect = Rect2(screen_center - Vector2(approx_screen_w * 0.5, approx_screen_h * 0.5), Vector2(approx_screen_w, approx_screen_h))
 
 		# Если на экране уже есть надпись более приоритетной державы в этой точке — пропускаем
-		var has_collision = false
+		var has_collision := false
 		for occ in occupied_rects:
 			if occ.intersects(screen_label_rect):
 				has_collision = true
@@ -303,8 +303,8 @@ func _draw_state_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect: R
 	var state_alpha = 0.75 * fade_in
 	var font_size = int(round(clampf(9.0 / pow(zoom_level, 0.35), 7.0, 10.0)))
 
-	var state_col = Color(COL_STATE_TEXT.r, COL_STATE_TEXT.g, COL_STATE_TEXT.b, state_alpha)
-	var shadow_col = Color(COL_STATE_SHADOW.r, COL_STATE_SHADOW.g, COL_STATE_SHADOW.b, state_alpha * 0.95)
+	var state_col := Color(COL_STATE_TEXT.r, COL_STATE_TEXT.g, COL_STATE_TEXT.b, state_alpha)
+	var shadow_col := Color(COL_STATE_SHADOW.r, COL_STATE_SHADOW.g, COL_STATE_SHADOW.b, state_alpha * 0.95)
 
 	# Сортируем штаты по размеру и значимости: сначала крупные провинции, чтобы мелкие не перебивали их
 	var sorted_sids = state_labels_db.keys()
@@ -316,7 +316,7 @@ func _draw_state_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect: R
 		return float(state_labels_db[a].get("span", 1.0)) > float(state_labels_db[b].get("span", 1.0))
 	)
 
-	var states_drawn_count = 0
+	var states_drawn_count := 0
 
 	for sid in sorted_sids:
 		if states_drawn_count >= MAX_STATES_ON_SCREEN:
@@ -361,7 +361,7 @@ func _draw_state_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect: R
 		var label_screen_rect = Rect2(screen_center - Vector2(screen_txt_w * 0.5, screen_txt_h * 0.5), Vector2(screen_txt_w, screen_txt_h))
 
 		# Если накладывается на уже отрисованный объект — пропускаем для чистоты карты!
-		var collides = false
+		var collides := false
 		for occ in occupied_rects:
 			if occ.intersects(label_screen_rect):
 				collides = true
@@ -425,7 +425,7 @@ func _draw_spaced_string_hoi4(
 	var y_pos: float = center.y + (float(font_size) * 0.35)
 
 	# 1. Многослойная рельефная 8-точечная тень в стиле карт HoI4
-	var shadow_col = Color(COL_HOI4_SHADOW.r, COL_HOI4_SHADOW.g, COL_HOI4_SHADOW.b, color.a * 0.95)
+	var shadow_col := Color(COL_HOI4_SHADOW.r, COL_HOI4_SHADOW.g, COL_HOI4_SHADOW.b, color.a * 0.95)
 	var shadow_offsets = [
 		Vector2(1.5, 0.0),
 		Vector2(-1.5, 0.0),

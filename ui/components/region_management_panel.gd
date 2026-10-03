@@ -71,9 +71,9 @@ func refresh_display() -> void:
 	var garrison_bar = _generate_ascii_bar(garrison_val / 100.0, 10)
 
 	var unrest_color = "#33ff66" if unrest_val < 30.0 else ("#ffcc00" if unrest_val < 60.0 else "#ff4444")
-	var infra_color = "#00e5ff"
+	var infra_color := "#00e5ff"
 
-	var text = ""
+	var text := ""
 	text += "[color=#aaaaaa]%s[/color] [color=#00e5ff]%s[/color]\n" % [_tr("REG_SOVEREIGNTY", "СТАТУС СУВЕРЕНИТЕТА:"), _tr("REG_DIRECT_CONTROL", "ПРЯМОЙ КОНТРОЛЬ ПРАВИТЕЛЯ")]
 	text += "[color=#aaaaaa]%s[/color] %s\n\n" % [_tr("REG_TERRAIN", "ТИП МЕСТНОСТИ:"), current_region.terrain_type.to_upper()]
 	text += "[color=#aaaaaa]%s[/color] [color=#33ff66]%s[/color]\n" % [_tr("REG_IC", "ИНДУСТРИАЛЬНЫЙ ПОТЕНЦИАЛ (IC):"), _tr("REG_FACTORIES_VAL", "{count} ФАБРИК").replace("{count}", str(current_region.industrial_capacity))]
@@ -169,7 +169,7 @@ func _on_close_pressed() -> void:
 func _generate_ascii_bar(fraction: float, total_chars: int = 10) -> String:
 	var filled = clampi(int(round(clampf(fraction, 0.0, 1.0) * float(total_chars))), 0, total_chars)
 	var empty = total_chars - filled
-	var bar = ""
+	var bar := ""
 	for i in range(filled): bar += "█"
 	for i in range(empty): bar += "░"
 	return bar

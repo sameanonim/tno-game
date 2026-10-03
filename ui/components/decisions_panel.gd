@@ -576,23 +576,23 @@ func _build_ui() -> void:
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 
-	var main_vbox = VBoxContainer.new()
+	var main_vbox := VBoxContainer.new()
 	main_vbox.anchor_right = 1.0
 	main_vbox.anchor_bottom = 1.0
 	main_vbox.add_theme_constant_override("separation", 8)
 	add_child(main_vbox)
 
 	# 1. Заголовок терминала решений
-	var header_panel = PanelContainer.new()
+	var header_panel := PanelContainer.new()
 	header_panel.custom_minimum_size = Vector2(0, 48)
 	TNOTheme.apply_panel_style(header_panel, TNOTheme.COLOR_BORDER_CYAN, Color(0.03, 0.06, 0.08, 0.95))
 	main_vbox.add_child(header_panel)
 
-	var header_hbox = HBoxContainer.new()
+	var header_hbox := HBoxContainer.new()
 	header_hbox.add_theme_constant_override("separation", 12)
 	header_panel.add_child(header_hbox)
 
-	var title_lbl = Label.new()
+	var title_lbl := Label.new()
 	title_lbl.text = _tr("DEC_TITLE", " ОПЕРАТИВНЫЕ РЕШЕНИЯ И ГОСУДАРСТВЕННЫЕ ИНИЦИАТИВЫ // DECISIONS ")
 	title_lbl.add_theme_font_size_override("font_size", 14)
 	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
@@ -607,28 +607,28 @@ func _build_ui() -> void:
 	header_hbox.add_child(lbl_status_counter)
 
 	# 2. Основное тело: Слева фильтр категорий, Справа список карточек
-	var body_hbox = HBoxContainer.new()
+	var body_hbox := HBoxContainer.new()
 	body_hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body_hbox.add_theme_constant_override("separation", 10)
 	main_vbox.add_child(body_hbox)
 
 	# Левая колонка: Категории
-	var cat_panel = PanelContainer.new()
+	var cat_panel := PanelContainer.new()
 	cat_panel.custom_minimum_size = Vector2(240, 0)
 	TNOTheme.apply_panel_style(cat_panel, TNOTheme.COLOR_BORDER_DIM, Color(0.02, 0.04, 0.06, 0.95))
 	body_hbox.add_child(cat_panel)
 
-	var cat_vbox = VBoxContainer.new()
+	var cat_vbox := VBoxContainer.new()
 	cat_vbox.add_theme_constant_override("separation", 6)
 	cat_panel.add_child(cat_vbox)
 
-	var cat_header = Label.new()
+	var cat_header := Label.new()
 	cat_header.text = _tr("DEC_CATEGORIES_TITLE", "КАТЕГОРИИ ДЕКРЕТОВ")
 	cat_header.add_theme_font_size_override("font_size", 12)
 	cat_header.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
 	cat_vbox.add_child(cat_header)
 
-	var sep = HSeparator.new()
+	var sep := HSeparator.new()
 	cat_vbox.add_child(sep)
 
 	category_list_container = VBoxContainer.new()
@@ -638,12 +638,12 @@ func _build_ui() -> void:
 	_build_category_buttons()
 
 	# Правая колонка: Список решений и телеграфный лог
-	var right_vbox = VBoxContainer.new()
+	var right_vbox := VBoxContainer.new()
 	right_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	right_vbox.add_theme_constant_override("separation", 8)
 	body_hbox.add_child(right_vbox)
 
-	var scroll = ScrollContainer.new()
+	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	right_vbox.add_child(scroll)
 
@@ -653,7 +653,7 @@ func _build_ui() -> void:
 	scroll.add_child(decisions_list_container)
 
 	# Телеграфный лог результатов
-	var log_panel = PanelContainer.new()
+	var log_panel := PanelContainer.new()
 	log_panel.custom_minimum_size = Vector2(0, 90)
 	TNOTheme.apply_panel_style(log_panel, TNOTheme.COLOR_BORDER_DIM, Color(0.01, 0.03, 0.04, 0.95))
 	right_vbox.add_child(log_panel)
@@ -670,10 +670,10 @@ func _build_category_buttons() -> void:
 	for c in category_list_container.get_children():
 		c.queue_free()
 
-	var is_russian = false
-	var is_german = false
-	var is_usa = false
-	var tag = ""
+	var is_russian := false
+	var is_german := false
+	var is_usa := false
+	var tag := ""
 	if player_state != null:
 		tag = player_state.country_tag.to_upper()
 		is_russian = tag in ["WRS", "KOM", "OMS", "SVR", "SAM", "NOV", "TYU", "IRK", "CHT", "MAG", "KEM", "VYT", "BRY", "SBA", "ONE", "ORE", "ZLT", "DRL", "MGN", "VOR"] or RussianUnificationManager.is_warlord(tag)
@@ -718,7 +718,7 @@ func _build_category_buttons() -> void:
 			categories.append({"id": c_id, "name": " " + str(c_id).to_upper()})
 
 	for cat in categories:
-		var btn = Button.new()
+		var btn := Button.new()
 		btn.text = cat["name"]
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.custom_minimum_size = Vector2(0, 34)
@@ -745,7 +745,7 @@ func refresh_panel() -> void:
 	var is_german = tag in ["GER", "SPE", "BOR", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"]
 	var is_usa = (tag == "USA")
 
-	var available_count = 0
+	var available_count := 0
 
 	for dec in all_decisions:
 		# Фильтрация по конкретным тегам державы
@@ -763,7 +763,7 @@ func refresh_panel() -> void:
 
 		# Проверка обязательных и блокирующих флагов
 		if dec.has("required_flags"):
-			var missing_flag = false
+			var missing_flag := false
 			for rf in dec["required_flags"]:
 				if not player_state.has_flag(rf):
 					missing_flag = true
@@ -772,7 +772,7 @@ func refresh_panel() -> void:
 				continue
 
 		if dec.has("blocked_flags"):
-			var has_blocked = false
+			var has_blocked := false
 			for bf in dec["blocked_flags"]:
 				if player_state.has_flag(bf):
 					has_blocked = true
@@ -793,7 +793,7 @@ func refresh_panel() -> void:
 
 
 func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
-	var panel = PanelContainer.new()
+	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 100)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
@@ -816,16 +816,16 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	var bg_col = Color(0.03, 0.06, 0.08, 0.95) if can_afford else Color(0.02, 0.03, 0.04, 0.90)
 	TNOTheme.apply_panel_style(panel, border_col, bg_col)
 
-	var hbox = HBoxContainer.new()
+	var hbox := HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 12)
 	panel.add_child(hbox)
 
 	# Иконка категории
-	var icon_rect = TextureRect.new()
+	var icon_rect := TextureRect.new()
 	icon_rect.custom_minimum_size = Vector2(48, 48)
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	var icon_path = "res://assets/gfx/interface/war_support_icon.png"
+	var icon_path := "res://assets/gfx/interface/war_support_icon.png"
 	if dec["category"] == "economy":
 		icon_path = "res://assets/gfx/interface/industrial_capacity_icon.png"
 	elif dec["category"] == "smuta":
@@ -840,14 +840,14 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	hbox.add_child(icon_rect)
 
 	# Текстовое досье
-	var vbox = VBoxContainer.new()
+	var vbox := VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_theme_constant_override("separation", 3)
 	hbox.add_child(vbox)
 
 	var raw_cat = str(dec.get("category_name", ""))
 	var cat_key = "DEC_" + dec_id.to_upper() + "_CAT"
-	var cat_lbl = Label.new()
+	var cat_lbl := Label.new()
 	cat_lbl.text = _tr(cat_key, _tr(raw_cat, raw_cat)) if not raw_cat.is_empty() else _tr("DEC_DEFAULT_CAT", "ОПЕРАЦИЯ")
 	cat_lbl.add_theme_font_size_override("font_size", 10)
 	cat_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
@@ -855,7 +855,7 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 
 	var raw_title = str(dec.get("title", ""))
 	var title_key = "DEC_" + dec_id.to_upper() + "_TITLE"
-	var title_lbl = Label.new()
+	var title_lbl := Label.new()
 	title_lbl.text = _tr(title_key, _tr(raw_title, raw_title))
 	title_lbl.add_theme_font_size_override("font_size", 13)
 	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_PRIMARY if can_afford else TNOTheme.COLOR_TEXT_SECONDARY)
@@ -863,7 +863,7 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 
 	var raw_desc = str(dec.get("description", ""))
 	var desc_key = "DEC_" + dec_id.to_upper() + "_DESC"
-	var desc_lbl = Label.new()
+	var desc_lbl := Label.new()
 	desc_lbl.text = _tr(desc_key, _tr(raw_desc, raw_desc))
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	desc_lbl.add_theme_font_size_override("font_size", 11)
@@ -871,7 +871,7 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	vbox.add_child(desc_lbl)
 
 	# Плашка стоимости и кнопка выполнения
-	var right_col = VBoxContainer.new()
+	var right_col := VBoxContainer.new()
 	right_col.custom_minimum_size = Vector2(170, 0)
 	right_col.alignment = BoxContainer.ALIGNMENT_CENTER
 	right_col.add_theme_constant_override("separation", 6)
@@ -882,14 +882,14 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	if cost_cap > 0: cost_str += "[%d CAP] " % cost_cap
 	if cost_money > 0.0: cost_str += "[$%.2fB] " % cost_money
 
-	var cost_lbl = Label.new()
+	var cost_lbl := Label.new()
 	cost_lbl.text = cost_str
 	cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	cost_lbl.add_theme_font_size_override("font_size", 10)
 	cost_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_AMBER if can_afford else Color(0.7, 0.3, 0.3))
 	right_col.add_child(cost_lbl)
 
-	var btn_execute = Button.new()
+	var btn_execute := Button.new()
 	btn_execute.custom_minimum_size = Vector2(0, 36)
 	if on_cooldown:
 		btn_execute.text = _tr("DEC_BTN_COOLDOWN", "КД: %d ХОД") % cd_remaining

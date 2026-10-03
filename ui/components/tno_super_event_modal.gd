@@ -144,7 +144,7 @@ func show_super_event_by_id(super_event_id: String) -> bool:
 		)
 		return false
 
-	var is_ru = true
+	var is_ru := true
 	var tree = _get_active_scene_tree()
 	var root_node = tree.root if tree != null else null
 	if root_node != null and root_node.has_node("LocalizationManager"):

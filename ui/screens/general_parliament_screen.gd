@@ -103,7 +103,7 @@ func _refresh_all() -> void:
 
 func _update_majority_status() -> void:
 	var total = engine.total_seats
-	var coalition_seats = 0
+	var coalition_seats := 0
 	for f in engine.factions:
 		if f.is_in_coalition:
 			coalition_seats += f.seats
@@ -135,14 +135,14 @@ func _build_hemicycle() -> void:
 	var total_dots = 100 # Репрезентативная выборка мест 10x10
 	hemicycle_grid.columns = 10
 
-	var dot_index = 0
+	var dot_index := 0
 	for f in engine.factions:
 		var share_dots = int(round((float(f.seats) / float(engine.total_seats)) * float(total_dots)))
 		share_dots = maxi(1, share_dots)
 		for _i in range(share_dots):
 			if dot_index >= total_dots:
 				break
-			var rect = ColorRect.new()
+			var rect := ColorRect.new()
 			rect.custom_minimum_size = Vector2(14, 14)
 			rect.color = f.color
 			rect.tooltip_text = "%s: %d мандатов" % [f.name, f.seats]
@@ -151,7 +151,7 @@ func _build_hemicycle() -> void:
 			dot_index += 1
 
 	while dot_index < total_dots:
-		var rect = ColorRect.new()
+		var rect := ColorRect.new()
 		rect.custom_minimum_size = Vector2(14, 14)
 		rect.color = Color(0.2, 0.25, 0.3)
 		hemicycle_grid.add_child(rect)
@@ -167,7 +167,7 @@ func _populate_factions_list() -> void:
 		c.queue_free()
 
 	for f in engine.factions:
-		var panel = PanelContainer.new()
+		var panel := PanelContainer.new()
 		var sb = StyleBoxFlat.new()
 		sb.bg_color = Color(0.05, 0.08, 0.10, 0.90)
 		sb.border_color = f.color
@@ -175,19 +175,19 @@ func _populate_factions_list() -> void:
 		sb.set_content_margin_all(6)
 		panel.add_theme_stylebox_override("panel", sb)
 
-		var vbox = VBoxContainer.new()
+		var vbox := VBoxContainer.new()
 		vbox.add_theme_constant_override("separation", 4)
 
 		# Верхняя строка: Имя, Места, Лояльность
-		var top_h = HBoxContainer.new()
-		var lbl_name = Label.new()
+		var top_h := HBoxContainer.new()
+		var lbl_name := Label.new()
 		lbl_name.text = f.name
 		lbl_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		lbl_name.add_theme_font_size_override("font_size", 12)
 		lbl_name.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_PRIMARY)
 		top_h.add_child(lbl_name)
 
-		var lbl_seats = Label.new()
+		var lbl_seats := Label.new()
 		lbl_seats.text = _tr("PARLIAMENT_SEATS_FORMAT", "%d мест (%.1f%%)") % [f.seats, (float(f.seats)/float(engine.total_seats))*100.0]
 		lbl_seats.add_theme_font_size_override("font_size", 11)
 		lbl_seats.add_theme_color_override("font_color", f.color)
@@ -195,7 +195,7 @@ func _populate_factions_list() -> void:
 		vbox.add_child(top_h)
 
 		# Лояльность и накопленные сделки
-		var meta_lbl = Label.new()
+		var meta_lbl := Label.new()
 		meta_lbl.text = _tr("PARLIAMENT_FACTION_META", "Лояльность режиму: %.0f%% | Долг/Сделки (Favors): %d | Бонус к голосам: +%d") % [
 			f.loyalty, f.favors, f.whipped_votes_bonus
 		]
@@ -204,11 +204,11 @@ func _populate_factions_list() -> void:
 		vbox.add_child(meta_lbl)
 
 		# Кнопки заключения сделок (Favors)
-		var deals_h = HBoxContainer.new()
+		var deals_h := HBoxContainer.new()
 		deals_h.add_theme_constant_override("separation", 6)
 
 		# 1. Лоббирование / Компромисс (15 PC)
-		var b_comp = Button.new()
+		var b_comp := Button.new()
 		b_comp.text = _tr("PARLIAMENT_BTN_LOBBY", "🤝 ЛОББИ (15 PC)")
 		b_comp.tooltip_text = _tr("PARLIAMENT_TOOLTIP_LOBBY", "Потратить 15 PC на кулуарные переговоры. Склонить до 35% депутатов фракции поддержать законопроект.")
 		var can_comp = (country_state != null and country_state.political_capital >= 15.0)
@@ -221,7 +221,7 @@ func _populate_factions_list() -> void:
 		deals_h.add_child(b_comp)
 
 		# 2. Обещание портфеля (1 CAP)
-		var b_cap = Button.new()
+		var b_cap := Button.new()
 		b_cap.text = _tr("PARLIAMENT_BTN_PORTFOLIO", "💼 ПОРТФЕЛЬ (1 CAP)")
 		b_cap.tooltip_text = _tr("PARLIAMENT_TOOLTIP_PORTFOLIO", "Потратить 1 очко кабинета (CAP). Предоставить фракции аппаратные квоты (+60% гарантированных голосов, +1 Favor).")
 		var can_cap = (country_state != null and country_state.current_cap >= 1)
@@ -234,7 +234,7 @@ func _populate_factions_list() -> void:
 		deals_h.add_child(b_cap)
 
 		# 3. Фискальная субсидия ($0.15B)
-		var b_sub = Button.new()
+		var b_sub := Button.new()
 		b_sub.text = _tr("PARLIAMENT_BTN_SUBSIDY", "💵 СУБСИДИЯ ($0.15B)")
 		b_sub.tooltip_text = _tr("PARLIAMENT_TOOLTIP_SUBSIDY", "Выделить $0.15 млрд на целевые проекты региона/сектора фракции (+80% голосов фракции, +8% лояльности).")
 		var can_sub = (country_state != null and country_state.liquid_reserves_billions >= 0.15)
@@ -259,7 +259,7 @@ func _populate_bills_list() -> void:
 		c.queue_free()
 
 	for b in engine.active_bills:
-		var btn = Button.new()
+		var btn := Button.new()
 		btn.text = "[ " + b.title.to_upper() + " ]"
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.custom_minimum_size = Vector2(0, 32)
@@ -290,7 +290,7 @@ func _update_selected_bill_view() -> void:
 		lbl_bill_title.text = b.title.to_upper() + cat_prefix + b.category.to_upper()
 
 	if lbl_bill_desc != null:
-		var effects_str = ""
+		var effects_str := ""
 		for k in b.effects.keys():
 			effects_str += " • %s: %s\n" % [k, str(b.effects[k])]
 		var eff_title = _tr("TNO_PARL_BILL_EFFECTS_TITLE", "ЭФФЕКТЫ ПРИ ПРИНЯТИИ:")

@@ -198,7 +198,7 @@ func _process_atlantropa_drain() -> void:
 	if player_state_ref == null:
 		return
 	# Если проекты не завершены, Атлантропа вытягивает из бюджета средства
-	var incomplete_projects = 0
+	var incomplete_projects := 0
 	for p_key in atlantropa_projects.keys():
 		if not atlantropa_projects[p_key]["completed"]:
 			incomplete_projects += 1
@@ -312,8 +312,8 @@ func adopt_ciano_democratic_reforms() -> Dictionary:
 	player_state_ref.set_flag("italy_path", "ciano_dem")
 	player_state_ref.active_directives.clear()
 
-	var tree_id = "tno_italy_dem_shared"
-	var tree_path = "res://data/countries/ITA/directives/trees/tno_italy_dem_shared.json"
+	var tree_id := "tno_italy_dem_shared"
+	var tree_path := "res://data/countries/ITA/directives/trees/tno_italy_dem_shared.json"
 
 	_switch_italian_tree(tree_id, tree_path)
 	ideology_path_chosen.emit("CIANO_DEM", tree_id)
@@ -336,8 +336,8 @@ func adopt_scorza_hardliner_path() -> Dictionary:
 	player_state_ref.set_flag("italy_path", "scorza_hardliner")
 	player_state_ref.active_directives.clear()
 
-	var tree_id = "tno_italy_scorza_shared"
-	var tree_path = "res://data/countries/ITA/directives/trees/tno_italy_scorza_shared.json"
+	var tree_id := "tno_italy_scorza_shared"
+	var tree_path := "res://data/countries/ITA/directives/trees/tno_italy_scorza_shared.json"
 
 	_switch_italian_tree(tree_id, tree_path)
 	ideology_path_chosen.emit("SCORZA_HARDLINER", tree_id)

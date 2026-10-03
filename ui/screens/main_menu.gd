@@ -359,7 +359,7 @@ func _on_menupic_hover(zone_idx: int) -> void:
 		return
 	var loc = get_node_or_null("/root/LocalizationManager")
 	var key = "TNO_MENUPIC_TOOLTIP_%d" % zone_idx
-	var fallback = "«Я знаю, чего хочу и как этого добиться.»"
+	var fallback := "«Я знаю, чего хочу и как этого добиться.»"
 	if zone_idx == 2:
 		fallback = "«Наша боль не мешает нам сохранять спокойствие...»"
 	elif zone_idx == 3:
@@ -551,7 +551,7 @@ func _populate_theater_tabs() -> void:
 	var theaters = _get_session().get_theaters()
 	for i in range(theaters.size()):
 		var t_data = theaters[i]
-		var btn = Button.new()
+		var btn := Button.new()
 		var t_id = str(t_data.get("id", str(i))).to_upper()
 		var default_name = t_data.get("name", "")
 		var loc_name = default_name
@@ -766,7 +766,7 @@ func _update_dossier_panel(d: Dictionary) -> void:
 	if dossier_stats != null:
 		dossier_stats.text = "│ %s: $%0.1f %s | %s: %d %s | %s: %d %s" % [l_gdp, gdp, unit_b, l_res, mp, unit_men, l_ind, ic, unit_fac]
 
-	var traits_str = ""
+	var traits_str := ""
 	for t in d.get("traits", []):
 		var t_trans = loc.tr_key(str(t), str(t)) if loc != null else str(t)
 		traits_str += "[%s]  " % t_trans
@@ -784,7 +784,7 @@ func _update_dossier_panel(d: Dictionary) -> void:
 				if not tno_desc.is_empty() and not tno_desc.begins_with("[MISSING"):
 					lore_text = tno_desc
 		if lore_text.is_empty() or lore_text.begins_with("[MISSING"):
-			var def_msg = "Историческая справка и стратегические ориентиры засекречены или формируются в текущий момент."
+			var def_msg := "Историческая справка и стратегические ориентиры засекречены или формируются в текущий момент."
 			if loc != null:
 				def_msg = loc.tr_key("DEFAULT_COUNTRY_LORE", def_msg)
 			lore_text = def_msg
@@ -802,9 +802,9 @@ func _update_dossier_panel(d: Dictionary) -> void:
 
 
 func _make_ascii_bar(value: int, max_val: int) -> String:
-	var slots = 5
+	var slots := 5
 	var filled = clampi(int(round((float(value) / float(max_val)) * slots)), 0, slots)
-	var s = "["
+	var s := "["
 	for i in range(slots):
 		s += "█" if i < filled else "░"
 	s += "]"
@@ -866,7 +866,7 @@ func _on_launch_campaign() -> void:
 
 
 func _on_load_game_pressed() -> void:
-	var path = "user://savegame.json"
+	var path := "user://savegame.json"
 	if FileAccess.file_exists(path):
 		var state = CountryState.load_from_json_file(path)
 		if state != null:

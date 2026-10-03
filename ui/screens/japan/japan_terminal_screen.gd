@@ -94,8 +94,8 @@ func _switch_tab(tab_name: String) -> void:
 	if sec_zaibatsu != null: sec_zaibatsu.visible = (tab_name == "zaibatsu")
 	if sec_sphere != null: sec_sphere.visible = (tab_name == "sphere")
 
-	var col_active = Color(0.0, 0.95, 1.0, 1.0)
-	var col_dim = Color(0.4, 0.6, 0.55, 0.8)
+	var col_active := Color(0.0, 0.95, 1.0, 1.0)
+	var col_dim := Color(0.4, 0.6, 0.55, 0.8)
 	if btn_tab_yasuda != null: btn_tab_yasuda.modulate = col_active if tab_name == "yasuda" else col_dim
 	if btn_tab_diet != null: btn_tab_diet.modulate = col_active if tab_name == "diet" else col_dim
 	if btn_tab_zaibatsu != null: btn_tab_zaibatsu.modulate = col_active if tab_name == "zaibatsu" else col_dim
@@ -148,16 +148,16 @@ func _render_yasuda_tab() -> void:
 	if sec_yasuda == null: return
 	for c in sec_yasuda.get_children(): c.queue_free()
 
-	var head = Label.new()
+	var head := Label.new()
 	head.text = _tr_str("UI_JAPAN_YASUDA_TITLE", {}, "--- РАССЛЕДОВАНИЕ КОРРУПЦИИ В ДЗАЙБАЦУ ЯСУДА ---")
 	head.modulate = Color(0.0, 0.95, 1.0)
 	sec_yasuda.add_child(head)
 
-	var p_status = PanelContainer.new()
-	var vb_st = VBoxContainer.new()
+	var p_status := PanelContainer.new()
+	var vb_st := VBoxContainer.new()
 	p_status.add_child(vb_st)
 
-	var st_text = ""
+	var st_text := ""
 	match japan_manager.yasuda_phase:
 		JapanEmpireManager.YasudaPhase.NORMAL:
 			st_text = _tr_str("UI_YASUDA_ST_NORMAL", {}, "[color=#88cc88]СТАТУС: БЕЗМЯТЕЖНОСТЬ.[/color] Финансовые рынки Токио стабильны, конгломерат Ясуда кредитует флот.")
@@ -168,7 +168,7 @@ func _render_yasuda_tab() -> void:
 		JapanEmpireManager.YasudaPhase.RESOLVED:
 			st_text = _tr_str("UI_YASUDA_ST_RESOLVED", {}, "[color=#00e5ff]СТАТУС: ПРЕОДОЛЕНИЕ КРИЗИСА.[/color] Сформирован новый кабинет, рынки постепенно стабилизируются.")
 
-	var desc_lbl = RichTextLabel.new()
+	var desc_lbl := RichTextLabel.new()
 	desc_lbl.bbcode_enabled = true
 	desc_lbl.fit_content = true
 	desc_lbl.text = st_text
@@ -177,13 +177,13 @@ func _render_yasuda_tab() -> void:
 
 	# Опции разрешения кризиса
 	if japan_manager.yasuda_phase in [JapanEmpireManager.YasudaPhase.STOCK_CRASH, JapanEmpireManager.YasudaPhase.INVESTIGATION]:
-		var opts_lbl = Label.new()
+		var opts_lbl := Label.new()
 		opts_lbl.text = _tr_str("UI_YASUDA_OPTS_TITLE", {}, "ПУТИ РАЗРЕШЕНИЯ НАЦИОНАЛЬНОГО КРИЗИСА:")
 		opts_lbl.modulate = Color(0.0, 0.95, 1.0)
 		sec_yasuda.add_child(opts_lbl)
 
 		# 1. Санация Икэды
-		var b_bailout = Button.new()
+		var b_bailout := Button.new()
 		b_bailout.text = _tr_str("UI_YASUDA_BTN_BAILOUT", {}, "[ 1. САНАЦИЯ И СПАСЕНИЕ БАНКОВ (Икэда Хаято) — Затраты: $15.0B ]")
 		b_bailout.pressed.connect(func():
 			var r = japan_manager.resolve_yasuda_bailout()
@@ -193,7 +193,7 @@ func _render_yasuda_tab() -> void:
 		sec_yasuda.add_child(b_bailout)
 
 		# 2. Антикоррупционный суд Такаги
-		var b_invest = Button.new()
+		var b_invest := Button.new()
 		b_invest.text = _tr_str("UI_YASUDA_BTN_INVEST", {}, "[ 2. АНТИКОРРУПЦИОННЫЙ СУД И ЧИСТКА (Такаги Сокити) — Затраты: 40 PC, 1 CAP ]")
 		b_invest.pressed.connect(func():
 			var r = japan_manager.resolve_yasuda_investigation()
@@ -203,7 +203,7 @@ func _render_yasuda_tab() -> void:
 		sec_yasuda.add_child(b_invest)
 
 		# 3. Национализация Каи
-		var b_nat = Button.new()
+		var b_nat := Button.new()
 		b_nat.text = _tr_str("UI_YASUDA_BTN_NATIONALIZE", {}, "[ 3. НАЦИОНАЛИЗАЦИЯ И ГОСПЛАН (Кая Окинори) — Затраты: 35 PC ]")
 		b_nat.pressed.connect(func():
 			var r = japan_manager.resolve_yasuda_nationalize()
@@ -220,29 +220,29 @@ func _render_diet_tab() -> void:
 	if sec_diet == null: return
 	for c in sec_diet.get_children(): c.queue_free()
 
-	var head = Label.new()
+	var head := Label.new()
 	head.text = _tr_str("UI_DIET_HEADER", {}, "=== ПАЛАТА ПЭРОВ (KIZOKUIN) И ИМПЕРАТОРСКИЙ ДАЙЭТ ===")
 	head.modulate = Color(0.0, 0.95, 1.0)
 	sec_diet.add_child(head)
 
 	for f_key in japan_manager.factions_diet.keys():
 		var f = japan_manager.factions_diet[f_key]
-		var card = PanelContainer.new()
-		var vb = VBoxContainer.new()
+		var card := PanelContainer.new()
+		var vb := VBoxContainer.new()
 		card.add_child(vb)
 
 		var bar = _ascii_bar(float(f["loyalty"]) / 100.0, 15)
-		var h = Label.new()
+		var h := Label.new()
 		h.text = "%s | " % f["name"].to_upper() + _tr_str("UI_DIET_FACTION_INFO", {"seats": f["seats"], "bar": bar, "loyalty": "%0.0f" % f["loyalty"]}, "МАНДАТЫ: {seats} | ЛОЯЛЬНОСТЬ: [{bar}] {loyalty}%")
 		h.modulate = Color(1.0, 0.85, 0.3)
 		vb.add_child(h)
 
-		var desc = Label.new()
+		var desc := Label.new()
 		desc.text = f["desc"]
 		desc.modulate = Color(0.7, 0.8, 0.75)
 		vb.add_child(desc)
 
-		var btn_elect = Button.new()
+		var btn_elect := Button.new()
 		btn_elect.text = _tr_str("UI_DIET_BTN_APPOINT", {"leader": f["leader"].to_upper()}, "[ НАЗНАЧИТЬ ПРЕМЬЕР-МИНИСТРОМ: {leader} ]")
 		btn_elect.disabled = (japan_manager.active_prime_minister_key == f_key)
 		btn_elect.pressed.connect(func():
@@ -263,31 +263,31 @@ func _render_zaibatsu_tab() -> void:
 	for c in sec_zaibatsu.get_children(): c.queue_free()
 
 	# Секция Дзайбацу
-	var h_z = Label.new()
+	var h_z := Label.new()
 	h_z.text = _tr_str("UI_ZAIBATSU_HEADER", {}, "ВЕЛИКИЕ ФИНАНСОВО-ПРОМЫШЛЕННЫЕ ДЗАЙБАЦУ:")
 	h_z.modulate = Color(1.0, 0.85, 0.2)
 	sec_zaibatsu.add_child(h_z)
 
-	var p_z = PanelContainer.new()
-	var vb_z = VBoxContainer.new()
+	var p_z := PanelContainer.new()
+	var vb_z := VBoxContainer.new()
 	p_z.add_child(vb_z)
 
 	for z_key in japan_manager.zaibatsu_influence.keys():
 		var val = japan_manager.zaibatsu_influence[z_key]
 		var b = _ascii_bar(val / 100.0, 15)
-		var l = Label.new()
+		var l := Label.new()
 		l.text = "%-12s: [%s] %0.1f%%" % [z_key, b, val]
 		vb_z.add_child(l)
 	sec_zaibatsu.add_child(p_z)
 
 	# Секция IJA vs IJN
-	var h_m = Label.new()
+	var h_m := Label.new()
 	h_m.text = _tr_str("UI_IJA_IJN_RIVALRY_HEADER", {}, "СОПЕРНИЧЕСТВО АРМИИ (ИЯА) И ФЛОТА (ИЯФ):")
 	h_m.modulate = Color(0.2, 0.95, 0.6)
 	sec_zaibatsu.add_child(h_m)
 
-	var p_m = PanelContainer.new()
-	var vb_m = VBoxContainer.new()
+	var p_m := PanelContainer.new()
+	var vb_m := VBoxContainer.new()
 	p_m.add_child(vb_m)
 
 	var bal = japan_manager.ija_ijn_balance
@@ -295,7 +295,7 @@ func _render_zaibatsu_tab() -> void:
 	if bal < -30.0: bal_str = _tr_str("UI_IJA_DICTATE", {}, "ДИКТАТ АРМИИ (IJA)")
 	elif bal > 30.0: bal_str = _tr_str("UI_IJN_DOMINANCE", {}, "ДОМИНИРОВАНИЕ ФЛОТА (IJN)")
 
-	var l_bal = Label.new()
+	var l_bal := Label.new()
 	l_bal.text = _tr_str("UI_IJA_IJN_BALANCE_LABEL", {
 		"bal": "%0.1f" % bal,
 		"status": bal_str,
@@ -304,8 +304,8 @@ func _render_zaibatsu_tab() -> void:
 	}, "БАЛАНС: {bal} ({status}) | Квота стали Армии: {army}% | Квота нефти Флота: {navy}%")
 	vb_m.add_child(l_bal)
 
-	var hbox_acts = HBoxContainer.new()
-	var b_army = Button.new()
+	var hbox_acts := HBoxContainer.new()
+	var b_army := Button.new()
 	b_army.text = _tr_str("UI_IJA_PRIORITY_BTN", {}, "[ ПРИОРИТЕТ АРМИИ (15 PC) ]")
 	b_army.pressed.connect(func():
 		var r = japan_manager.allocate_resources_to_army()
@@ -314,7 +314,7 @@ func _render_zaibatsu_tab() -> void:
 	)
 	hbox_acts.add_child(b_army)
 
-	var b_navy = Button.new()
+	var b_navy := Button.new()
 	b_navy.text = _tr_str("UI_IJN_PRIORITY_BTN", {}, "[ ПРИОРИТЕТ ФЛОТУ (15 PC) ]")
 	b_navy.pressed.connect(func():
 		var r = japan_manager.allocate_resources_to_navy()
@@ -334,33 +334,33 @@ func _render_sphere_tab() -> void:
 	if sec_sphere == null: return
 	for c in sec_sphere.get_children(): c.queue_free()
 
-	var head = Label.new()
+	var head := Label.new()
 	head.text = _tr_str("UI_SPHERE_HEADER", {}, "=== ВЕЛИКАЯ ВОСТОЧНОАЗИАТСКАЯ СФЕРА СОПРОЦВЕТАНИЯ (GEACPS) ===")
 	head.modulate = Color(0.0, 0.95, 1.0)
 	sec_sphere.add_child(head)
 
 	for m_tag in japan_manager.sphere_members.keys():
 		var m = japan_manager.sphere_members[m_tag]
-		var card = PanelContainer.new()
-		var vb = VBoxContainer.new()
+		var card := PanelContainer.new()
+		var vb := VBoxContainer.new()
 		card.add_child(vb)
 
 		var l_bar = _ascii_bar(float(m["loyalty"]) / 100.0, 10)
 		var u_bar = _ascii_bar(float(m["unrest"]) / 100.0, 10)
 
-		var title = Label.new()
+		var title := Label.new()
 		title.text = "%s [%s] | " % [m["name"].to_upper(), m_tag] + _tr_str("UI_SPHERE_FACTORIES_TRIBUTE", {"factories": m["tribute_factories"]}, "ФАБРИКИ В БЮДЖЕТ: +{factories}")
 		title.modulate = Color(1.0, 0.85, 0.3)
 		vb.add_child(title)
 
-		var stat = Label.new()
+		var stat := Label.new()
 		stat.text = _tr_str("UI_SPHERE_STATS_LABEL", {
 			"l_bar": l_bar, "loyalty": "%0.0f" % m["loyalty"],
 			"u_bar": u_bar, "unrest": "%0.0f" % m["unrest"]
 		}, "ЛОЯЛЬНОСТЬ: [{l_bar}] {loyalty}% | НЕДОВОЛЬСТВО: [{u_bar}] {unrest}%")
 		vb.add_child(stat)
 
-		var btn_pacify = Button.new()
+		var btn_pacify := Button.new()
 		btn_pacify.text = _tr_str("UI_SPHERE_PACIFY_BTN", {}, "[ НАПРАВИТЬ КЭМПЭЙТАЙ (5000 рекрутов, 15 PC) ]")
 		btn_pacify.pressed.connect(func():
 			var r = japan_manager.suppress_sphere_insurgency(m_tag)
@@ -375,7 +375,7 @@ func _render_sphere_tab() -> void:
 func _ascii_bar(ratio: float, length: int) -> String:
 	var r = clampf(ratio, 0.0, 1.0)
 	var filled = int(round(r * length))
-	var s = ""
+	var s := ""
 	for i in range(filled): s += "█"
 	for i in range(length - filled): s += "░"
 	return s

@@ -131,7 +131,7 @@ func _ensure_doctrine_panel() -> void:
 		return
 	pnl_warlord_doctrine = PanelContainer.new()
 	pnl_warlord_doctrine.name = "WarlordDoctrinePanel"
-	var vb = VBoxContainer.new()
+	var vb := VBoxContainer.new()
 	vb.name = "VBox"
 	vb.add_theme_constant_override("separation", 4)
 	pnl_warlord_doctrine.add_child(vb)
@@ -279,7 +279,7 @@ func refresh_ui() -> void:
 		progress_stage.value = float(current_st) / 5.0 * 100.0
 
 	# 2. Подсчет контролируемых провинций
-	var total_my_provinces = 0
+	var total_my_provinces := 0
 	for reg in turn_manager.regions_world_state.values():
 		if reg is RegionData and reg.owner_tag == p_tag:
 			total_my_provinces += 1
@@ -322,7 +322,7 @@ func _update_warlord_doctrine() -> void:
 			var clk_str = wm.get_taboritsky_clock_str()
 			var clk_min = wm.taboritsky_clock_minutes
 			var clk_pct = clampf(float(clk_min) / 720.0, 0.0, 1.0)
-			var bar_len = 16
+			var bar_len := 16
 			var filled = int(clk_pct * bar_len)
 			var ascii_bar = "[" + "█".repeat(filled) + "░".repeat(bar_len - filled) + "]"
 
@@ -434,10 +434,10 @@ func _update_region_card(label: RichTextLabel, macro_key: String) -> void:
 	if label == null or turn_manager == null:
 		return
 
-	var leader_tag = ""
-	var leader_name = ""
-	var prov_count = 0
-	var total_provs = 0
+	var leader_tag := ""
+	var leader_name := ""
+	var prov_count := 0
+	var total_provs := 0
 
 	for reg in turn_manager.regions_world_state.values():
 		if reg is RegionData:
@@ -453,8 +453,8 @@ func _update_region_card(label: RichTextLabel, macro_key: String) -> void:
 		if reg is RegionData and RussianUnificationManager.get_macro_region(reg.owner_tag) == macro_key:
 			counts_by_tag[reg.owner_tag] = counts_by_tag.get(reg.owner_tag, 0) + 1
 
-	var best_tag = ""
-	var best_c = 0
+	var best_tag := ""
+	var best_c := 0
 	for t in counts_by_tag.keys():
 		if counts_by_tag[t] > best_c:
 			best_c = counts_by_tag[t]
@@ -534,7 +534,7 @@ func _update_summit_targets() -> void:
 	opt_summit_target.clear()
 
 	var p_tag = player_state.country_tag
-	var added = 0
+	var added := 0
 	for w_tag in RussianUnificationManager.WARLORD_REGIONS.keys():
 		if w_tag == p_tag:
 			continue

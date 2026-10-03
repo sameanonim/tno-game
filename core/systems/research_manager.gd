@@ -118,7 +118,7 @@ func can_research(state: CountryState, tech_id: String) -> Dictionary:
 			var pr_name = pr_obj.tech_name if pr_obj != null else prereq
 			return {"allowed": false, "reason": "Требуется изучить: %s" % pr_name}
 
-	var cost_mult = 1.0
+	var cost_mult := 1.0
 	var blueprint_flag = "blueprint_" + tech_id
 	if state.has_flag(blueprint_flag):
 		var bp_val = float(state.story_flags.get(blueprint_flag, 35.0))
@@ -161,7 +161,7 @@ func start_research(state: CountryState, tech_id: String, requested_slot: int = 
 		return {"success": false, "message": "Нет свободных слотов НИОКР"}
 
 	# Проверка бонуса чертежей (от шпионажа / кражи технологий)
-	var cost_mult = 1.0
+	var cost_mult := 1.0
 	var blueprint_flag = "blueprint_" + tech_id
 	if state.has_flag(blueprint_flag):
 		var bp_val = float(state.story_flags.get(blueprint_flag, 35.0))

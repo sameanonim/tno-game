@@ -574,7 +574,7 @@ func modify_party_popularity(ideology_key: String, delta: float) -> void:
 		return
 		
 	var target_party: PartyData = null
-	var total_other_pop = 0.0
+	var total_other_pop := 0.0
 	
 	for p in initial_parties:
 		if p.ideology_key == ideology_key:
@@ -634,7 +634,7 @@ func normalize_parties_popularity() -> void:
 	if initial_parties.is_empty():
 		return
 		
-	var sum = 0.0
+	var sum := 0.0
 	for p in initial_parties:
 		sum += p.popularity
 		
@@ -706,7 +706,7 @@ func init_default_societal_development() -> void:
 ## Возвращает общую численность населения страны (агрегируя регионы или сохраненное значение)
 func get_population(regions: Dictionary = {}) -> int:
 	if not regions.is_empty():
-		var sum_pop = 0
+		var sum_pop := 0
 		for reg in regions.values():
 			if reg is RegionData and reg.owner_tag == country_tag:
 				sum_pop += reg.population
@@ -760,7 +760,7 @@ func set_infiltration_level(target_tag: String, level: float, status: String = "
 		else:
 			final_status = "DORMANT"
 	
-	var ag_count = 0
+	var ag_count := 0
 	for ag in active_agents:
 		if ag != null and ag.assigned_country_tag == clean_tag:
 			ag_count += 1

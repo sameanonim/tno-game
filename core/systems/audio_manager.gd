@@ -113,7 +113,7 @@ func _setup_players() -> void:
 
 	# 2. Пул SFX плееров
 	for i in range(SFX_POOL_SIZE):
-		var p = AudioStreamPlayer.new()
+		var p := AudioStreamPlayer.new()
 		p.name = "SFXPlayer_%d" % i
 		p.bus = "SFX" if _bus_exists("SFX") else "Master"
 		add_child(p)

@@ -317,7 +317,7 @@ func appoint_prime_minister(cand_key: String) -> void:
 
 ## Проведение голосования по законопроекту в Палате Представителей (Diet)
 func call_diet_vote(bill_id: String, required_threshold: float = 50.0) -> bool:
-	var total_support = 0.0
+	var total_support := 0.0
 	for f_key in factions_diet.keys():
 		var f_data = factions_diet[f_key]
 		var seats = float(f_data.get("seats", 0))
@@ -409,7 +409,7 @@ func allocate_resources_to_army() -> Dictionary:
 func _process_sphere_turn() -> void:
 	if player_state_ref == null:
 		return
-	var total_tribute = 0
+	var total_tribute := 0
 	for m_tag in sphere_members.keys():
 		var m = sphere_members[m_tag]
 		total_tribute += int(m.get("tribute_factories", 0))

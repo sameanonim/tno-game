@@ -100,7 +100,7 @@ func load_country_package(country_tag: String) -> CountryState:
 	var country_json_path = pkg_dir.path_join("country.json")
 	var profile_json_path = pkg_dir.path_join("country_profile.json")
 
-	var target_json_path = ""
+	var target_json_path := ""
 	if FileAccess.file_exists(country_json_path):
 		target_json_path = country_json_path
 	elif FileAccess.file_exists(profile_json_path):
@@ -340,7 +340,7 @@ func get_country_dossier(tag: String) -> Dictionary:
 		var mil = c.get("military", {})
 
 		var col_arr = ident.get("country_color", [0.75, 0.25, 0.25, 1.0])
-		var color = Color(0.75, 0.25, 0.25)
+		var color := Color(0.75, 0.25, 0.25)
 		if col_arr is Array and col_arr.size() >= 3:
 			color = Color(col_arr[0], col_arr[1], col_arr[2])
 
@@ -533,7 +533,7 @@ func get_directives_for_country(tag: String) -> Array[DirectiveResource]:
 	var pkg_index_path = COUNTRIES_BASE_DIR.path_join(tag).path_join("directives").path_join("trees_index.json")
 	if FileAccess.file_exists(pkg_index_path):
 		var idx_data = _read_json(pkg_index_path)
-		var chosen_path = ""
+		var chosen_path := ""
 		if idx_data is Array and not idx_data.is_empty():
 			for t_info in idx_data:
 				var tid = str(t_info.get("tree_id", "")).to_lower()
@@ -702,9 +702,9 @@ func get_focus_tree_summary(tag: String) -> Dictionary:
 			summary["has_tree"] = true
 			summary["total_trees"] = idx_data.size()
 
-			var chosen_tree_path = ""
-			var chosen_tree_id = ""
-			var total_all_dirs = 0
+			var chosen_tree_path := ""
+			var chosen_tree_id := ""
+			var total_all_dirs := 0
 			for t_info in idx_data:
 				var tid = str(t_info.get("tree_id", ""))
 				total_all_dirs += int(t_info.get("total_directives", 0))
@@ -1078,7 +1078,7 @@ func load_country_decisions(tag: String) -> Array[Dictionary]:
 				result.append(d)
 
 	# Добавляем универсальные декреты из generic_decisions, если они еще не добавлены
-	var generic_path = "res://data/decisions/generic_decisions.json"
+	var generic_path := "res://data/decisions/generic_decisions.json"
 	if FileAccess.file_exists(generic_path):
 		var gen_raw = _read_json(generic_path)
 		if gen_raw is Array:
@@ -1100,7 +1100,7 @@ func get_master_decisions() -> Array[Dictionary]:
 	if not _master_decisions_cache.is_empty():
 		return _master_decisions_cache
 
-	var master_path = "res://data/extracted/decisions_master.json"
+	var master_path := "res://data/extracted/decisions_master.json"
 	if FileAccess.file_exists(master_path):
 		var raw = _read_json(master_path)
 		if raw is Array:

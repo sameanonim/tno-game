@@ -195,7 +195,7 @@ func can_be_started(state: CountryState, completed_directives: Array = []) -> Di
 	if not prerequisites_groups.is_empty():
 		for group in prerequisites_groups:
 			if group is Array:
-				var group_satisfied = false
+				var group_satisfied := false
 				for req_id in group:
 					if completed_list.has(str(req_id)):
 						group_satisfied = true

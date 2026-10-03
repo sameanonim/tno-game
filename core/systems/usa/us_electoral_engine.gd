@@ -149,7 +149,7 @@ func get_coalition_seats(coalition: String) -> int:
 ## Проверяет, контролирует ли фракция или коалиция большинство в Сенате (>= 51)
 ##
 func has_majority(faction_or_coalition: String) -> bool:
-	var threshold = 51
+	var threshold := 51
 	var cfg = ConfigManager.get_instance()
 	if cfg != null and cfg.has_category("us_politics"):
 		threshold = cfg.get_int("us_politics", "senate_majority_threshold", 51)
@@ -163,7 +163,7 @@ func has_majority(faction_or_coalition: String) -> bool:
 ## Возвращает общее количество мест в Сенате (всегда 100)
 ##
 func get_total_senate_seats() -> int:
-	var total = 0
+	var total := 0
 	for f in senate_seats.keys():
 		total += int(senate_seats[f])
 	return total
@@ -174,7 +174,7 @@ func get_total_senate_seats() -> int:
 ##
 func get_senate_seat_list() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	var seat_idx = 0
+	var seat_idx := 0
 
 	# Упорядочиваем слева направо: NPP_L -> NPP_C -> RD_D -> RD_R -> NPP_FR -> NPP_Y
 	var faction_order = [
@@ -267,7 +267,7 @@ func calculate_regional_popularities(country_state: CountryState) -> Dictionary:
 			lean[FACTION_RD_R] = maxf(5.0, lean[FACTION_RD_R] - rad_factor * 0.5)
 
 		# Нормализация до 100%
-		var total_sum = 0.0
+		var total_sum := 0.0
 		for f in lean.keys():
 			total_sum += lean[f]
 
@@ -291,7 +291,7 @@ func calculate_regional_popularities(country_state: CountryState) -> Dictionary:
 ## Проводит выборы в 1/3 мест Сената (33-34 места)
 ##
 func conduct_senate_elections(country_state: CountryState) -> Dictionary:
-	var total_seats_to_elect = 34
+	var total_seats_to_elect := 34
 	var regional_poll = calculate_regional_popularities(country_state)
 
 	# Распределение 34 мест по регионам:
@@ -316,7 +316,7 @@ func conduct_senate_elections(country_state: CountryState) -> Dictionary:
 		# Пропорциональное распределение мест по методу наибольших остатков
 		var raw_seats: Dictionary = {}
 		var remainders: Array[Dictionary] = []
-		var assigned = 0
+		var assigned := 0
 
 		for f in ALL_FACTIONS:
 			var vote_share = float(polls.get(f, 0.0)) / 100.0
@@ -337,7 +337,7 @@ func conduct_senate_elections(country_state: CountryState) -> Dictionary:
 
 	# Места, которые были освобождены под выборы (условно 34 места пропорционально текущему составу)
 	var vacated_seats: Dictionary = {}
-	var vac_assigned = 0
+	var vac_assigned := 0
 	var vac_remainders: Array[Dictionary] = []
 	for f in ALL_FACTIONS:
 		var exact_vac = (float(senate_seats[f]) / 100.0) * float(total_seats_to_elect)
@@ -409,8 +409,8 @@ func conduct_presidential_election(
 		REGION_WEST: 123
 	}
 
-	var ev_rd = 0
-	var ev_npp = 0
+	var ev_rd := 0
+	var ev_npp := 0
 	var regional_outcomes: Dictionary = {}
 
 	for reg in ALL_REGIONS:
@@ -419,7 +419,7 @@ func conduct_presidential_election(
 		var npp_votes = float(polls.get(FACTION_NPP_C, 0.0)) + float(polls.get(FACTION_NPP_FR, 0.0)) + float(polls.get(FACTION_NPP_L, 0.0)) + float(polls.get(FACTION_NPP_Y, 0.0))
 
 		var ev_count = ev_per_region[reg]
-		var reg_winner = ""
+		var reg_winner := ""
 		if rd_votes >= npp_votes:
 			reg_winner = "RD"
 			ev_rd += ev_count
@@ -755,9 +755,9 @@ func project_bill_votes(bill_id: String) -> Dictionary:
 		return {"yeas": 0, "nays": 100, "undecided": 0, "passes": false}
 
 	var stances: Dictionary = target_bill.get("stances", {})
-	var yeas = 0
-	var nays = 0
-	var undecided = 0
+	var yeas := 0
+	var nays := 0
+	var undecided := 0
 	var faction_breakdown: Dictionary = {}
 
 	for f in ALL_FACTIONS:
@@ -790,7 +790,7 @@ func project_bill_votes(bill_id: String) -> Dictionary:
 		yeas += swayed
 		undecided -= swayed
 
-	var threshold = 51
+	var threshold := 51
 	var cfg = ConfigManager.get_instance()
 	if cfg != null and cfg.has_category("us_politics"):
 		threshold = cfg.get_int("us_politics", "senate_majority_threshold", 51)
@@ -811,8 +811,8 @@ func project_bill_votes(bill_id: String) -> Dictionary:
 ## переманивая колеблющихся сенаторов на сторону Белого Дома
 ##
 func whip_votes(bill_id: String, country_state: CountryState) -> Dictionary:
-	var pc_cost = 15.0
-	var cap_cost = 1
+	var pc_cost := 15.0
+	var cap_cost := 1
 	var cfg = ConfigManager.get_instance()
 	if cfg != null and cfg.has_category("us_politics"):
 		pc_cost = cfg.get_float("us_politics", "whip_votes_pc_cost", 15.0)

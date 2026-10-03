@@ -307,7 +307,7 @@ func _process_phase_1_turn(_turn: int) -> void:
 
 
 func _normalize_influence() -> void:
-	var total = 0.0
+	var total := 0.0
 	for v in faction_influence.values():
 		total += v
 	if total > 0.001:
@@ -449,7 +449,7 @@ func _spawn_contender_states() -> void:
 			c_state.infantry_weapons_stockpile = 25000
 
 		# 4. Динамическая коррекция на баланс влияния фракции перед войной
-		var f_key = ""
+		var f_key := ""
 		match tag:
 			TAG_SPEER: f_key = "SPEER"
 			TAG_BORMANN: f_key = "BORMANN"
@@ -812,7 +812,7 @@ func check_unification_victory() -> String:
 
 	var regions = turn_manager_ref.regions_world_state
 	var counts: Dictionary = {}
-	var total_german_cores = 0
+	var total_german_cores := 0
 
 	var all_cores: Array[int] = []
 	for p_list in regional_partition.values():

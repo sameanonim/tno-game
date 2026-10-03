@@ -256,7 +256,7 @@ func _populate_options() -> void:
 	opt_resolution.clear()
 	_cached_resolutions = _settings_mgr.get_available_resolutions()
 	var curr_res = _settings_mgr.current_resolution
-	var selected_idx = 0
+	var selected_idx := 0
 
 	for i in range(_cached_resolutions.size()):
 		var r = _cached_resolutions[i]
@@ -285,7 +285,7 @@ func _populate_options() -> void:
 	# 4. Масштаб интерфейса
 	opt_ui_scale.clear()
 	var scales = _settings_mgr.UI_SCALES if _settings_mgr != null else [0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
-	var scale_idx = 1
+	var scale_idx := 1
 	for i in range(scales.size()):
 		var s = scales[i]
 		opt_ui_scale.add_item("%d%%" % int(s * 100), i)
@@ -304,7 +304,7 @@ func _populate_languages() -> void:
 
 	var locales = _loc_mgr.get_available_locales()
 	for item in locales:
-		var btn = Button.new()
+		var btn := Button.new()
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.focus_mode = Control.FOCUS_ALL
 		btn.custom_minimum_size = Vector2(0, 38)

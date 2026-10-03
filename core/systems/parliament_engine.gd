@@ -286,7 +286,7 @@ func _setup_generic_parliament(state: CountryState) -> void:
 	total_seats = 350
 
 	if not state.initial_parties.is_empty():
-		var allocated = 0
+		var allocated := 0
 		for i in range(state.initial_parties.size()):
 			var p = state.initial_parties[i]
 			var f = ParliamentFaction.new()
@@ -535,10 +535,10 @@ func offer_favor(party_id: String, deal_type: String, state: CountryState) -> Di
 	if f == null:
 		return {"success": false, "message": "Фракция не найдена."}
 
-	var cost_pc = 0.0
-	var cost_cap = 0
-	var cost_money = 0.0
-	var bonus_votes = 0
+	var cost_pc := 0.0
+	var cost_cap := 0
+	var cost_money := 0.0
+	var bonus_votes := 0
 
 	match deal_type:
 		"compromise": # Политический компромисс и лоббирование (15 PC)
@@ -583,12 +583,12 @@ func offer_favor(party_id: String, deal_type: String, state: CountryState) -> Di
 ## Возвращает прогноз голосования по текущему законопроекту
 func calculate_vote_projection(bill_id: String) -> Dictionary:
 	var b = _get_bill(bill_id)
-	var yeas = 0
-	var nays = 0
-	var abstain = 0
+	var yeas := 0
+	var nays := 0
+	var abstain := 0
 
 	for f in factions:
-		var base_support = 0.50
+		var base_support := 0.50
 		if b != null and b.base_support_weights.has(f.id):
 			base_support = float(b.base_support_weights[f.id])
 		elif f.is_in_coalition:

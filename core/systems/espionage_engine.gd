@@ -199,7 +199,7 @@ static func _process_infiltration_networks_phase(
 
 		# Подсчет агентов, занимающихся развертыванием сети (INFILTRATING)
 		var infiltrating_agents: Array[AgentResource] = []
-		var total_agents_in_country = 0
+		var total_agents_in_country := 0
 
 		for ag in state.active_agents:
 			if ag != null and ag.assigned_country_tag.to_upper().strip_edges() == target_tag:
@@ -207,11 +207,11 @@ static func _process_infiltration_networks_phase(
 				if ag.status == AgentResource.AgentStatus.INFILTRATING:
 					infiltrating_agents.append(ag)
 
-		var delta_inf = 0.0
+		var delta_inf := 0.0
 
 		if not infiltrating_agents.is_empty():
 			# Формула ТЗ: ΔInfiltration = Σ(AgentCompetence * 1.5) - (TargetDomesticSecurity * 0.05)
-			var comp_sum = 0
+			var comp_sum := 0
 			for ag in infiltrating_agents:
 				comp_sum += ag.competence
 			delta_inf = (float(comp_sum) * 1.5) - (target_sec * 0.05)
@@ -223,7 +223,7 @@ static func _process_infiltration_networks_phase(
 		var new_level = clampf(cur_level + delta_inf, 0.0, 100.0)
 
 		# Определение статуса сети
-		var net_status = "DORMANT"
+		var net_status := "DORMANT"
 		if new_level >= 70.0:
 			net_status = "DEEP_COVER"
 		elif new_level >= 30.0:
@@ -281,8 +281,8 @@ static func _process_covert_operations_phase(
 
 		# 3.3 Расчет пошагового риска раскрытия
 		# Формула ТЗ: TurnRisk = Clamp(base_detection_risk + (TargetSecurity - Infiltration) * 0.01 - (AgentSkill * 0.03), 0.05, 0.95)
-		var agent_skill_sum = 0
-		var has_double_agent = false
+		var agent_skill_sum := 0
+		var has_double_agent := false
 
 		for aid in op.assigned_agent_ids:
 			var ag = state.get_agent_by_id(aid)
@@ -332,7 +332,7 @@ func _resolve_operation(op: CovertOperationResource, state: CountryState, countr
 static func resolve_operation(op: CovertOperationResource, state: CountryState, countries: Dictionary) -> Dictionary:
 	var target_st: CountryState = countries.get(op.target_country_tag, null)
 	var report_mock = EspionageReport.new()
-	var stolen_tech = ""
+	var stolen_tech := ""
 	if op.type == CovertOperationResource.OpType.STEAL_TECH:
 		var tech_key = str(op.operation_payload.get("target_tech", ""))
 		if tech_key.is_empty() and target_st != null and not target_st.researched_techs.is_empty():
@@ -344,8 +344,8 @@ static func resolve_operation(op: CovertOperationResource, state: CountryState, 
 
 	_resolve_operation_outcome(state, op, 0.0, target_st, countries, report_mock)
 
-	var is_success = true
-	var summary_text = ""
+	var is_success := true
+	var summary_text := ""
 	if not report_mock.completed_operations.is_empty():
 		var last_op = report_mock.completed_operations.back()
 		summary_text = last_op.get("summary", "")
@@ -850,7 +850,7 @@ static func _run_espionage_debug_simulation() -> bool:
 	var init_weapons = target.infantry_weapons_stockpile
 
 	# Запускаем ходы до завершения операции
-	var op_completed = false
+	var op_completed := false
 	for turn in range(4, 7):
 		var reps = process_turn(world_countries, 1)
 		for r in reps:

@@ -119,7 +119,7 @@ func _find_map_controller_recursive(node: Node) -> MapController:
 # DATA LOADING & TOPOLOGY GRAPH
 # ==============================================================================
 func load_manifest_data() -> bool:
-	var success = false
+	var success := false
 
 	# 1. Загрузка borders_manifest.json (сгенерирован map_sanitizer.py)
 	if FileAccess.file_exists(borders_manifest_path):
@@ -333,7 +333,7 @@ func transfer_state(state_id: int, new_owner_tag: String) -> Dictionary:
 func transfer_province(province_id: int, new_owner_tag: String) -> Dictionary:
 	var clean_tag = new_owner_tag.strip_edges().to_upper()
 	var state_id = province_to_state.get(province_id, 0)
-	var old_owner = ""
+	var old_owner := ""
 
 	if regions_db.has(province_id):
 		var reg = regions_db[province_id] as RegionData
@@ -347,7 +347,7 @@ func transfer_province(province_id: int, new_owner_tag: String) -> Dictionary:
 	# Если все провинции штата теперь под контролем new_owner_tag, передаем весь штат
 	if state_id > 0:
 		var provs = state_to_provinces.get(state_id, [])
-		var all_transferred = true
+		var all_transferred := true
 		for p in provs:
 			var p_owner = clean_tag
 			if regions_db.has(int(p)):
@@ -489,7 +489,7 @@ func is_state_enclave(state_id: int) -> bool:
 	# Поиск в ширину (BFS) по дружественным штатам
 	var visited: Dictionary = {state_id: true}
 	var queue: Array[int] = [state_id]
-	var has_coast = false
+	var has_coast := false
 
 	# Определяем столичный штат (первый в списке или из CountryState)
 	var capital_sid = all_states[0]

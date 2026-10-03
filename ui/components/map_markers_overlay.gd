@@ -143,9 +143,9 @@ func _draw_rebellion_hotspots(font: Font, s: float) -> void:
 			continue
 
 		var has_high_unrest = (reg.unrest >= 70.0)
-		var is_rebellion_flag = false
-		var is_sabotage_flag = false
-		var is_strike_flag = false
+		var is_rebellion_flag := false
+		var is_sabotage_flag := false
+		var is_strike_flag := false
 
 		if reg.story_flags != null:
 			is_rebellion_flag = reg.story_flags.get("rebellion_active", false) or reg.story_flags.get("partisan_uprising", false)
@@ -161,10 +161,10 @@ func _draw_rebellion_hotspots(font: Font, s: float) -> void:
 		var center: Vector2 = province_centroids[pid]
 
 		# Классификация угрозы и подбор цветового кода
-		var title = ""
+		var title := ""
 		var badge_col = COL_RED_ALERT
-		var ring_count = 2
-		var pulse_freq = 7.0
+		var ring_count := 2
+		var pulse_freq := 7.0
 
 		if is_rebellion_flag or reg.unrest >= 85.0:
 			title = "[!] ВОССТАНИЕ"
@@ -185,7 +185,7 @@ func _draw_rebellion_hotspots(font: Font, s: float) -> void:
 		# Анимация люминофора CRT
 		var time_offset = float(pid % 17) * 0.35
 		var pulse = 0.65 + 0.35 * sin((anim_time * pulse_freq) + time_offset)
-		var active_col = Color(badge_col.r, badge_col.g, badge_col.b, badge_col.a * pulse)
+		var active_col := Color(badge_col.r, badge_col.g, badge_col.b, badge_col.a * pulse)
 
 		# Концентрические круги опасности
 		for r_idx in range(ring_count):
@@ -199,8 +199,8 @@ func _draw_rebellion_hotspots(font: Font, s: float) -> void:
 		draw_circle(center, 1.6 * s, Color.WHITE * pulse)
 
 		# Формирование карточки плашки в зависимости от LOD
-		var label_text = ""
-		var sub_text = ""
+		var label_text := ""
+		var sub_text := ""
 
 		if zoom_level < 1.1:
 			# Macro LOD: компактная плашка [! 82%]
@@ -281,9 +281,9 @@ func _draw_frontline_clashes(font: Font, s: float) -> void:
 			_draw_norad_reticle(clash_pos, s, clash_color, strobe_sharp)
 
 			# 2. Карточка боестолкновения
-			var title_text = ""
-			var axis_text = ""
-			var stat_text = ""
+			var title_text := ""
+			var axis_text := ""
+			var stat_text := ""
 
 			if zoom_level < 1.1:
 				# Macro LOD

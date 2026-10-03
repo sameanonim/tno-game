@@ -41,7 +41,7 @@ func _draw() -> void:
 		return
 
 	var font = default_font if default_font != null else ThemeDB.fallback_font
-	var font_size = 9
+	var font_size := 9
 
 	for pid in regions_state.keys():
 		if not province_centroids.has(pid):
@@ -76,7 +76,7 @@ func _draw() -> void:
 			})
 
 		# Отрисовка плашек над центроидом
-		var y_offset = -14.0
+		var y_offset := -14.0
 		for b in badges:
 			var txt = b["text"]
 			var col: Color = b["col"]

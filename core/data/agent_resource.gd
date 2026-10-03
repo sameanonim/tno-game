@@ -89,7 +89,7 @@ func get_status_string_ru() -> String:
 
 ## Возвращает псевдографические звезды навыка
 func get_stars_string() -> String:
-	var stars = ""
+	var stars := ""
 	for i in range(5):
 		if i < competence:
 			stars += "★"

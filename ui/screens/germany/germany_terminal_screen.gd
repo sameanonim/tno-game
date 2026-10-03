@@ -155,6 +155,36 @@ func _on_manager_updated(_state: Resource) -> void:
 	_refresh_ui()
 
 
+func _on_hitler_health_changed(new_health: float, is_alive: bool) -> void:
+	_refresh_ui()
+	if not is_alive:
+		_on_log_message(_tr_str("UI_GER_ALERT_FUHRER_DEMISE", "ЭКСТРЕННОЕ СООБЩЕНИЕ: Фюрер скончался! В Берлине объявлено чрезвычайное положение."), true)
+	elif new_health < 25.0:
+		_on_log_message(_tr_str("UI_GER_WARN_FUHRER_CRITICAL", "ТРЕВОГА: Состояние здоровья вождя критическое (%0.1f%%)!" % new_health), true)
+
+
+func _on_hitler_passed_away() -> void:
+	_refresh_ui()
+	_on_log_message(_tr_str("UI_GER_ALERT_FUHRER_DEAD", "РЕЙХСКАРИЛЬОН: Адольф Гитлер мёртв. Начинается схватка за престолонаследие!"), true)
+
+
+func _on_campaign_stage_advanced(_new_stage: int, stage_title: String) -> void:
+	_refresh_ui()
+	_on_log_message(_tr_str("UI_GER_STAGE_CHANGED", "Смена эпохи: Переход на этап [%s]!" % stage_title), false)
+
+
+func _on_slave_unrest_changed(new_unrest: float, is_critical: bool) -> void:
+	_refresh_ui()
+	if is_critical:
+		_on_log_message(_tr_str("UI_GER_CRITICAL_SLAVE_UNREST", "ВНИМАНИЕ: Напряженность среди подневольных рабочих достигла предела (%0.0f%%)!" % (new_unrest * 100.0)), true)
+
+
+func _on_contender_mechanic_stepped(contender_tag: String, step_result: Dictionary) -> void:
+	_refresh_ui()
+	if step_result.has("description"):
+		_on_log_message("[%s] %s" % [contender_tag, str(step_result["description"])], false)
+
+
 func _refresh_ui() -> void:
 	if campaign_manager == null or campaign_manager.campaign_state == null:
 		return

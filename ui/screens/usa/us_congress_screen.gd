@@ -210,7 +210,7 @@ func _build_senate_grid() -> void:
 	# 10 строк по 10 мест = 100 сенаторов
 	hemicycle_grid.columns = 10
 	for i in range(100):
-		var cell = ColorRect.new()
+		var cell := ColorRect.new()
 		cell.custom_minimum_size = Vector2(18, 18)
 		cell.color = Color(0.2, 0.4, 0.8)
 		hemicycle_grid.add_child(cell)
@@ -276,8 +276,8 @@ func _update_electoral_college() -> void:
 		c.queue_free()
 
 	var poll = engine.calculate_regional_popularities(country_state)
-	var ev_rd_proj = 0
-	var ev_npp_proj = 0
+	var ev_rd_proj := 0
+	var ev_npp_proj := 0
 
 	var ev_by_region = {
 		USElectoralEngineScript.REGION_NORTHEAST: 120,
@@ -305,13 +305,13 @@ func _update_electoral_college() -> void:
 		else:
 			ev_npp_proj += ev_count
 
-		var p_hbox = HBoxContainer.new()
-		var lbl_name = Label.new()
+		var p_hbox := HBoxContainer.new()
+		var lbl_name := Label.new()
 		lbl_name.text = "%s (%d EV):" % [reg_names[reg], ev_count]
 		lbl_name.custom_minimum_size = Vector2(150, 0)
 		lbl_name.add_theme_color_override("font_color", Color(0.7, 0.8, 0.8))
 
-		var lbl_stat = Label.new()
+		var lbl_stat := Label.new()
 		lbl_stat.text = _tr("CONGRESS_VOTES_TALLY", {"rd": "%0.1f" % rd_share, "npp": "%0.1f" % npp_share, "winner": winner}, "РДК %0.1f%% vs НПП %0.1f%% → [%s]" % [rd_share, npp_share, winner])
 		lbl_stat.add_theme_color_override("font_color", Color(0.3, 0.8, 1.0) if winner == "РДК" else Color(0.2, 0.9, 0.75))
 
@@ -343,7 +343,7 @@ func _populate_bills_list() -> void:
 		c.queue_free()
 
 	for bill in engine.get_available_bills():
-		var btn = Button.new()
+		var btn := Button.new()
 		var b_id = bill.get("id", "")
 		btn.text = "📜 %s" % bill.get("title", b_id)
 		btn.custom_minimum_size = Vector2(0, 32)

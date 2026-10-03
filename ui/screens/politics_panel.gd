@@ -210,7 +210,7 @@ func _update_pie_chart_legend() -> void:
 	if lbl_legend == null or current_state == null:
 		return
 		
-	var text = ""
+	var text := ""
 	for p in current_state.initial_parties:
 		var hex = p.color.to_html(false)
 		text += "[color=#%s]■[/color] %s (%.1f%%)\n" % [hex, p.party_name, p.popularity]
@@ -231,7 +231,7 @@ func _populate_national_spirits() -> void:
 
 	var spirits = current_state.national_spirits
 	for sp in spirits:
-		var panel = PanelContainer.new()
+		var panel := PanelContainer.new()
 		panel.custom_minimum_size = Vector2(170, 70)
 		var sp_name = str(sp.get("name", _tr("TNO_POL_SPIRIT_DEFAULT", "Национальный дух")))
 		var sp_desc = str(sp.get("desc", ""))
@@ -244,11 +244,11 @@ func _populate_national_spirits() -> void:
 		sb.set_corner_radius_all(1)
 		panel.add_theme_stylebox_override("panel", sb)
 
-		var hbox = HBoxContainer.new()
+		var hbox := HBoxContainer.new()
 		hbox.add_theme_constant_override("separation", 8)
 		panel.add_child(hbox)
 
-		var icon = TextureRect.new()
+		var icon := TextureRect.new()
 		icon.custom_minimum_size = Vector2(28, 28)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -256,7 +256,7 @@ func _populate_national_spirits() -> void:
 		icon.texture = TNOTheme.get_texture(icon_path)
 		hbox.add_child(icon)
 
-		var lbl = Label.new()
+		var lbl := Label.new()
 		lbl.text = sp_name
 		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -284,14 +284,14 @@ func _populate_societal_laws() -> void:
 	var laws = current_state.societal_laws
 	for law_idx in range(laws.size()):
 		var law = laws[law_idx]
-		var row = HBoxContainer.new()
+		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 8)
 
 		var max_t = float(law.get("max_tier", 5))
 		var cur_t = float(law.get("tier", 1))
 
 		# Интерактивная плашка закона: клик открывает диалог реформы
-		var btn_law_card = Button.new()
+		var btn_law_card := Button.new()
 		var law_fmt = _tr("TNO_POL_LAW_FMT", "⚖ %s: %s [Ур. %d/%d]")
 		btn_law_card.text = law_fmt % [str(law.get("name")), str(law.get("value")), int(cur_t), int(max_t)]
 		btn_law_card.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -306,7 +306,7 @@ func _populate_societal_laws() -> void:
 		row.add_child(btn_law_card)
 
 		# Шкала прогресса
-		var bar = ProgressBar.new()
+		var bar := ProgressBar.new()
 		bar.custom_minimum_size = Vector2(75, 14)
 		bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		bar.min_value = 0
@@ -326,7 +326,7 @@ func _populate_societal_laws() -> void:
 		row.add_child(bar)
 
 		# Кнопка повышения уровня (Реформа)
-		var btn_up = Button.new()
+		var btn_up := Button.new()
 		btn_up.text = _tr("TNO_POL_BTN_REFORM", "▲ РЕФОРМА")
 		btn_up.custom_minimum_size = Vector2(95, 24)
 		btn_up.tooltip_text = _tr("TNO_POL_BTN_REFORM_TIP", "Инициировать государственную реформу закона.\nСтоимость: 20 PC, 1 CAP.")
@@ -342,7 +342,7 @@ func _populate_societal_laws() -> void:
 		row.add_child(btn_up)
 
 		# Кнопка отката
-		var btn_down = Button.new()
+		var btn_down := Button.new()
 		btn_down.text = "▼"
 		btn_down.custom_minimum_size = Vector2(26, 24)
 		btn_down.tooltip_text = _tr("TNO_POL_BTN_ROLLBACK_TIP", "Свернуть реформу / сократить расходы.\nСтоимость: 15 PC, 1 CAP.")
@@ -373,7 +373,7 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 	var cur_tier = int(law.get("tier", 1))
 	var max_tier = int(law.get("max_tier", 5))
 
-	var modal = PanelContainer.new()
+	var modal := PanelContainer.new()
 	modal.custom_minimum_size = Vector2(440, 320)
 	modal.anchors_preset = Control.PRESET_CENTER
 	modal.offset_left = -220
@@ -382,20 +382,20 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 	modal.offset_bottom = 160
 	TNOTheme.apply_panel_style(modal, TNOTheme.COLOR_BORDER_CYAN, Color(0.04, 0.07, 0.09, 0.98))
 
-	var mvbox = VBoxContainer.new()
+	var mvbox := VBoxContainer.new()
 	mvbox.add_theme_constant_override("separation", 10)
 	modal.add_child(mvbox)
 
 	# Заголовок модала
-	var mh_box = HBoxContainer.new()
-	var mtitle = Label.new()
+	var mh_box := HBoxContainer.new()
+	var mtitle := Label.new()
 	mtitle.text = _tr("TNO_POL_REFORM_TITLE_PREFIX", "РЕФОРМА: ") + law_name.to_upper()
 	mtitle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	mtitle.add_theme_font_size_override("font_size", 13)
 	mtitle.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
 	mh_box.add_child(mtitle)
 
-	var btn_mclose = Button.new()
+	var btn_mclose := Button.new()
 	btn_mclose.text = "✕"
 	btn_mclose.custom_minimum_size = Vector2(26, 26)
 	TNOTheme.apply_button_style(btn_mclose, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.05, 0.05, 0.9))
@@ -406,7 +406,7 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 	mvbox.add_child(mh_box)
 
 	# Текущее состояние и шкала
-	var cur_status_lbl = Label.new()
+	var cur_status_lbl := Label.new()
 	var status_fmt = _tr("TNO_POL_CUR_STATUS_FMT", "ТЕКУЩИЙ СТАТУС: УРОВЕНЬ %d ИЗ %d // %s")
 	cur_status_lbl.text = status_fmt % [cur_tier, max_tier, str(law.get("value"))]
 	cur_status_lbl.add_theme_font_size_override("font_size", 11)
@@ -414,24 +414,24 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 	mvbox.add_child(cur_status_lbl)
 
 	# Справочник ступеней закона (Специфика TNO)
-	var tiers_desc = RichTextLabel.new()
+	var tiers_desc := RichTextLabel.new()
 	tiers_desc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tiers_desc.bbcode_enabled = true
 	tiers_desc.text = _generate_law_tiers_bbcode(law_name, cur_tier)
 	mvbox.add_child(tiers_desc)
 
 	# Информация о цене и эффектах
-	var meta_cost = Label.new()
+	var meta_cost := Label.new()
 	meta_cost.text = _tr("TNO_POL_REFORM_COST_INFO", "СТОИМОСТЬ РЕФОРМЫ: 20 PC, 1 CAP | ЭФФЕКТ: +2.5 Легитимность, -3.0 Радикализация, +12 Институты")
 	meta_cost.add_theme_font_size_override("font_size", 10)
 	meta_cost.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_MUTED)
 	mvbox.add_child(meta_cost)
 
 	# Кнопки действий
-	var act_hbox = HBoxContainer.new()
+	var act_hbox := HBoxContainer.new()
 	act_hbox.add_theme_constant_override("separation", 10)
 
-	var b_enact = Button.new()
+	var b_enact := Button.new()
 	b_enact.text = _tr("TNO_POL_BTN_ENACT_REFORM", "[ ▲ ПРИНЯТЬ РЕФОРМУ ЗАКОНА ]")
 	b_enact.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b_enact.custom_minimum_size = Vector2(0, 30)
@@ -447,7 +447,7 @@ func _open_law_reform_dialog(law_idx: int) -> void:
 	)
 	act_hbox.add_child(b_enact)
 
-	var b_rollback = Button.new()
+	var b_rollback := Button.new()
 	b_rollback.text = _tr("TNO_POL_BTN_DEREGULATION", "[ ▼ ДЕРЕГУЛЯЦИЯ ]")
 	b_rollback.custom_minimum_size = Vector2(140, 30)
 	var can_r = (cur_tier > 1) and (current_state.political_capital >= 15.0) and (current_state.current_cap >= 1)
@@ -515,7 +515,7 @@ func _generate_law_tiers_bbcode(law_name: String, cur_tier: int) -> String:
 			"Ур. 5: [b]Передовой стандарт TNO[/b] — максимальная сплоченность и легитимность институтов."
 		]
 
-	var res = ""
+	var res := ""
 	var tag_cur = _tr("TNO_POL_TIER_CURRENT", "ТЕКУЩИЙ")
 	var tag_next = _tr("TNO_POL_TIER_NEXT", "СЛЕДУЮЩИЙ")
 	for i in range(tiers.size()):

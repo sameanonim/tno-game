@@ -404,7 +404,7 @@ static func simulate_frontlines(
 		if attacker == null:
 			continue
 
-		var all_axes_finished = true
+		var all_axes_finished := true
 		for axis in front.axes:
 			if axis != null:
 				var rep = _simulate_axis_turn(axis, front, attacker, defender, regions, current_turn)
@@ -415,7 +415,7 @@ static func simulate_frontlines(
 		if all_axes_finished:
 			front.active = false
 			fronts_to_close.append(front.front_id)
-			var def_regions_count = 0
+			var def_regions_count := 0
 			if defender != null and not regions.is_empty():
 				for r in regions.values():
 					if r is RegionData and r.owner_tag == front.defender_tag:
@@ -423,7 +423,7 @@ static func simulate_frontlines(
 
 			# Полная капитуляция происходит, если у обороняющегося не осталось регионов либо силы истощены (< 3000 чел. и <= 2 регионов)
 			var is_true_capitulation = (def_regions_count == 0) or (defender != null and defender.manpower_pool <= 3000 and def_regions_count <= 2)
-			var cap_summary = ""
+			var cap_summary := ""
 			if is_true_capitulation:
 				cap_summary = _tr_str("FRONT_CAPITULATION_SUMMARY", {
 					"victor": front.attacker_tag,

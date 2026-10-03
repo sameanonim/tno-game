@@ -93,23 +93,23 @@ func _build_ui() -> void:
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 
-	var main_vbox = VBoxContainer.new()
+	var main_vbox := VBoxContainer.new()
 	main_vbox.anchor_right = 1.0
 	main_vbox.anchor_bottom = 1.0
 	main_vbox.add_theme_constant_override("separation", 8)
 	add_child(main_vbox)
 
 	# 1. Шапка терминала НИОКР
-	var header_panel = PanelContainer.new()
+	var header_panel := PanelContainer.new()
 	header_panel.custom_minimum_size = Vector2(0, 52)
 	TNOTheme.apply_panel_style(header_panel, TNOTheme.COLOR_BORDER_CYAN, Color(0.02, 0.05, 0.07, 0.96))
 	main_vbox.add_child(header_panel)
 
-	var header_hbox = HBoxContainer.new()
+	var header_hbox := HBoxContainer.new()
 	header_hbox.add_theme_constant_override("separation", 14)
 	header_panel.add_child(header_hbox)
 
-	var title_lbl = Label.new()
+	var title_lbl := Label.new()
 	title_lbl.text = _tr_str("RESEARCH_HEADER_TITLE", {}, " ГОСУДАРСТВЕННЫЙ КОМИТЕТ ПО НАУКЕ И ВПК // R&D TERMINAL ")
 	title_lbl.add_theme_font_size_override("font_size", 14)
 	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
@@ -142,16 +142,16 @@ func _build_ui() -> void:
 	header_hbox.add_child(lbl_status_slots)
 
 	# 2. Активные слоты исследований (Research Queue)
-	var slots_panel = PanelContainer.new()
+	var slots_panel := PanelContainer.new()
 	slots_panel.custom_minimum_size = Vector2(0, 95)
 	TNOTheme.apply_panel_style(slots_panel, TNOTheme.COLOR_BORDER_DIM, Color(0.015, 0.03, 0.04, 0.95))
 	main_vbox.add_child(slots_panel)
 
-	var slots_vbox = VBoxContainer.new()
+	var slots_vbox := VBoxContainer.new()
 	slots_vbox.add_theme_constant_override("separation", 4)
 	slots_panel.add_child(slots_vbox)
 
-	var slots_title = Label.new()
+	var slots_title := Label.new()
 	slots_title.text = _tr_str("RESEARCH_QUEUE_TITLE", {}, " АКТИВНЫЕ ЛАБОРАТОРИИ И КОНСТРУКТОРСКИЕ БЮРО // ACTIVE R&D QUEUE")
 	slots_title.add_theme_font_size_override("font_size", 11)
 	slots_title.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
@@ -168,7 +168,7 @@ func _build_ui() -> void:
 	_build_category_buttons()
 
 	# 4. Список технологий в выбранной категории
-	var scroll = ScrollContainer.new()
+	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	main_vbox.add_child(scroll)
 
@@ -178,7 +178,7 @@ func _build_ui() -> void:
 	scroll.add_child(tech_cards_container)
 
 	# 5. Нижняя телеграфная панель
-	var log_panel = PanelContainer.new()
+	var log_panel := PanelContainer.new()
 	log_panel.custom_minimum_size = Vector2(0, 65)
 	TNOTheme.apply_panel_style(log_panel, TNOTheme.COLOR_BORDER_DIM, Color(0.01, 0.02, 0.03, 0.95))
 	main_vbox.add_child(log_panel)
@@ -205,7 +205,7 @@ func _build_category_buttons() -> void:
 	]
 
 	for c in cat_defs:
-		var btn = Button.new()
+		var btn := Button.new()
 		btn.text = _tr_str(str(c["key"]), {}, str(c["name"]))
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		btn.custom_minimum_size = Vector2(0, 34)
@@ -227,7 +227,7 @@ func refresh_view() -> void:
 	# Обновление показателей шапки
 	var gdp = player_state.gdp_billions
 	var rd_share = player_state.rd_spending_share
-	var annual_div = 52.143
+	var annual_div := 52.143
 	var rd_turn_exp = (gdp * rd_share) / annual_div
 	if lbl_budget_info != null:
 		lbl_budget_info.text = _tr_str("RESEARCH_BUDGET_FMT", {"exp": "%.2f" % rd_turn_exp, "pct": "%.1f" % (rd_share * 100.0)}, "БЮДЖЕТ: $%.2fB/ход (%.1f%% ВВП)" % [rd_turn_exp, rd_share * 100.0])
@@ -262,15 +262,15 @@ func _render_active_slots() -> void:
 		slot_to_tech[s_idx] = t_id
 
 	for s_idx in range(max_slots):
-		var slot_card = PanelContainer.new()
+		var slot_card := PanelContainer.new()
 		slot_card.custom_minimum_size = Vector2(0, 26)
 		TNOTheme.apply_panel_style(slot_card, TNOTheme.COLOR_BORDER_DIM, Color(0.02, 0.04, 0.05, 0.90))
 
-		var hbox = HBoxContainer.new()
+		var hbox := HBoxContainer.new()
 		hbox.add_theme_constant_override("separation", 10)
 		slot_card.add_child(hbox)
 
-		var slot_num = Label.new()
+		var slot_num := Label.new()
 		slot_num.text = _tr_str("RESEARCH_SLOT_NUM", {"num": s_idx + 1}, " [СЛОТ #%d]" % (s_idx + 1))
 		slot_num.add_theme_font_size_override("font_size", 10)
 		slot_num.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_AMBER)
@@ -287,13 +287,13 @@ func _render_active_slots() -> void:
 			var pct = clampf((prog / cost) * 100.0, 0.0, 100.0)
 			var rem_turns = int(info.get("turns_remaining", 1))
 
-			var name_lbl = Label.new()
+			var name_lbl := Label.new()
 			name_lbl.text = _tr_str("RESEARCH_THEME_LABEL", {"name": t_name}, "ТЕМА: %s" % t_name)
 			name_lbl.add_theme_font_size_override("font_size", 11)
 			name_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
 			hbox.add_child(name_lbl)
 
-			var prog_bar = ProgressBar.new()
+			var prog_bar := ProgressBar.new()
 			prog_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			prog_bar.custom_minimum_size = Vector2(150, 16)
 			prog_bar.max_value = cost
@@ -301,13 +301,13 @@ func _render_active_slots() -> void:
 			prog_bar.show_percentage = false
 			hbox.add_child(prog_bar)
 
-			var pct_lbl = Label.new()
+			var pct_lbl := Label.new()
 			pct_lbl.text = _tr_str("RESEARCH_PROGRESS_LABEL", {"pct": "%.1f" % pct, "prog": "%.1f" % prog, "cost": "%.1f" % cost, "rem": rem_turns}, "%.1f%% (%.1f/%.1f RP) // ~%d ХОД." % [pct, prog, cost, rem_turns])
 			pct_lbl.add_theme_font_size_override("font_size", 10)
 			pct_lbl.add_theme_color_override("font_color", Color(0.6, 0.8, 0.7))
 			hbox.add_child(pct_lbl)
 
-			var btn_cancel = Button.new()
+			var btn_cancel := Button.new()
 			btn_cancel.text = _tr_str("RESEARCH_BTN_CANCEL", {}, "[ ОТМЕНА ]")
 			btn_cancel.custom_minimum_size = Vector2(75, 20)
 			btn_cancel.add_theme_font_size_override("font_size", 9)
@@ -320,7 +320,7 @@ func _render_active_slots() -> void:
 			)
 			hbox.add_child(btn_cancel)
 		else:
-			var empty_lbl = Label.new()
+			var empty_lbl := Label.new()
 			empty_lbl.text = _tr_str("RESEARCH_SLOT_EMPTY", {}, "— ЛАБОРАТОРИЯ СВОБОДНА // ВЫБЕРИТЕ ПРОЕКТ ДЛЯ РАЗРАБОТКИ —")
 			empty_lbl.add_theme_font_size_override("font_size", 10)
 			empty_lbl.add_theme_color_override("font_color", Color(0.4, 0.5, 0.5))
@@ -344,7 +344,7 @@ func _render_tech_cards() -> void:
 
 
 func _create_tech_card(tech: TechResource) -> Control:
-	var panel = PanelContainer.new()
+	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 90)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
@@ -356,7 +356,7 @@ func _create_tech_card(tech: TechResource) -> Control:
 
 	# Определение цветов карточки
 	var border_col = TNOTheme.COLOR_BORDER_CYAN
-	var bg_col = Color(0.02, 0.04, 0.06, 0.95)
+	var bg_col := Color(0.02, 0.04, 0.06, 0.95)
 
 	if is_done:
 		border_col = Color(0.2, 0.8, 0.4)
@@ -370,12 +370,12 @@ func _create_tech_card(tech: TechResource) -> Control:
 
 	TNOTheme.apply_panel_style(panel, border_col, bg_col)
 
-	var hbox = HBoxContainer.new()
+	var hbox := HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 12)
 	panel.add_child(hbox)
 
 	# Иконка технологии
-	var icon_rect = TextureRect.new()
+	var icon_rect := TextureRect.new()
 	icon_rect.custom_minimum_size = Vector2(48, 48)
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -384,18 +384,18 @@ func _create_tech_card(tech: TechResource) -> Control:
 	hbox.add_child(icon_rect)
 
 	# Досье технологии
-	var vbox = VBoxContainer.new()
+	var vbox := VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_theme_constant_override("separation", 3)
 	hbox.add_child(vbox)
 
-	var title_lbl = Label.new()
+	var title_lbl := Label.new()
 	title_lbl.text = "[%s] %s" % [t_id.to_upper(), tech.tech_name]
 	title_lbl.add_theme_font_size_override("font_size", 12)
 	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN if not is_done else Color(0.4, 0.9, 0.5))
 	vbox.add_child(title_lbl)
 
-	var desc_lbl = Label.new()
+	var desc_lbl := Label.new()
 	desc_lbl.text = tech.description
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	desc_lbl.add_theme_font_size_override("font_size", 10)
@@ -415,14 +415,14 @@ func _create_tech_card(tech: TechResource) -> Control:
 			var pr_done = player_state.is_tech_researched(pr)
 			mods_str += "[%s %s] " % ["✓" if pr_done else "✗", pr_name]
 
-	var meta_lbl = Label.new()
+	var meta_lbl := Label.new()
 	meta_lbl.text = mods_str
 	meta_lbl.add_theme_font_size_override("font_size", 9)
 	meta_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_AMBER if not is_done else Color(0.4, 0.8, 0.5))
 	vbox.add_child(meta_lbl)
 
 	# Правая колонка действий
-	var right_col = VBoxContainer.new()
+	var right_col := VBoxContainer.new()
 	right_col.custom_minimum_size = Vector2(160, 0)
 	right_col.alignment = BoxContainer.ALIGNMENT_CENTER
 	right_col.add_theme_constant_override("separation", 4)
@@ -435,14 +435,14 @@ func _create_tech_card(tech: TechResource) -> Control:
 		var bp_val = float(player_state.story_flags.get(bp_flag, 35.0))
 		cost_label_text += _tr_str("RESEARCH_BP_BONUS", {"val": int(bp_val)}, " (-%d%% ЧЕРТЕЖ!)" % int(bp_val))
 
-	var cost_lbl = Label.new()
+	var cost_lbl := Label.new()
 	cost_lbl.text = cost_label_text
 	cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	cost_lbl.add_theme_font_size_override("font_size", 10)
 	cost_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN if not is_done else Color(0.4, 0.8, 0.4))
 	right_col.add_child(cost_lbl)
 
-	var btn_action = Button.new()
+	var btn_action := Button.new()
 	btn_action.custom_minimum_size = Vector2(0, 32)
 
 	if is_done:

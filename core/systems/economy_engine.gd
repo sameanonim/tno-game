@@ -493,7 +493,7 @@ static func calculate_resource_balance(state: CountryState, regions: Dictionary 
 	}
 	
 	# 1. Агрегация добычи по контролируемым провинциям
-	var found_regions = false
+	var found_regions := false
 	if not regions.is_empty():
 		for reg in regions.values():
 			if reg is RegionData and reg.owner_tag == state.country_tag:
@@ -514,11 +514,11 @@ static func calculate_resource_balance(state: CountryState, regions: Dictionary 
 			produced["rare_alloys"] = int(float(state.military_factories) * 0.3) + 2
 
 	# 2. Расчет потребления сырья
-	var oil_per_10k = 0.08
-	var steel_civ = 0.5
-	var steel_mil = 1.0
-	var rubber_cg = 0.35
-	var alloys_mil = 0.4
+	var oil_per_10k := 0.08
+	var steel_civ := 0.5
+	var steel_mil := 1.0
+	var rubber_cg := 0.35
+	var alloys_mil := 0.4
 	
 	if cfg != null and cfg.has_constant("economy", "resource_consumption"):
 		var rc = cfg.get_dict("economy", "resource_consumption")
@@ -567,7 +567,7 @@ static func calculate_resource_balance(state: CountryState, regions: Dictionary 
 	state.resource_trade_balance = export_revenue - import_cost
 	
 	# Дефицитные штрафы
-	var prod_mult = 1.0
+	var prod_mult := 1.0
 	if net.get("steel", 0) < 0:
 		prod_mult *= 0.75 # Нехватка стали режет выпуск техники
 	if net.get("rare_alloys", 0) < 0:
@@ -605,7 +605,7 @@ static func update_societal_development(state: CountryState, turns_per_year: flo
 	var eq_growth_rate = float(soc_cfg.get("industrial_equipment_growth_rate", 0.03))
 	
 	# 1. Бедность (Poverty Rate)
-	var poverty_delta = 0.0
+	var poverty_delta := 0.0
 	if state.civilian_spending_share >= 0.25:
 		poverty_delta = - (state.civilian_spending_share - 0.20) * pov_red_rate
 	elif state.civilian_spending_share < 0.18:
@@ -613,13 +613,13 @@ static func update_societal_development(state: CountryState, turns_per_year: flo
 	state.poverty_rate = clampf(state.poverty_rate + (poverty_delta * 52.0 / turns_per_year), 3.0, 95.0)
 	
 	# 2. Грамотность (Literacy Rate)
-	var literacy_delta = 0.0
+	var literacy_delta := 0.0
 	if state.rd_spending_share >= 0.08:
 		literacy_delta = state.rd_spending_share * lit_gain_rate
 	state.literacy_rate = clampf(state.literacy_rate + (literacy_delta * 52.0 / turns_per_year), 10.0, 99.0)
 	
 	# 3. Коррупция (Corruption Rate)
-	var corruption_delta = 0.0
+	var corruption_delta := 0.0
 	if state.admin_spending_share >= 0.22:
 		corruption_delta = - (state.admin_spending_share - 0.18) * cor_red_rate
 	elif state.admin_spending_share < 0.16:
@@ -627,7 +627,7 @@ static func update_societal_development(state: CountryState, turns_per_year: flo
 	state.corruption_rate = clampf(state.corruption_rate + (corruption_delta * 52.0 / turns_per_year), 5.0, 90.0)
 	
 	# 4. Промышленная оснащенность (Industrial Equipment)
-	var eq_delta = 0.0
+	var eq_delta := 0.0
 	if state.civilian_factories >= 12 and state.liquid_reserves_billions > 0.5:
 		eq_delta = eq_growth_rate
 	state.industrial_equipment_level = clampf(state.industrial_equipment_level + (eq_delta * 52.0 / turns_per_year), 10.0, 100.0)
@@ -923,8 +923,8 @@ static func restructure_foreign_debt(state: CountryState) -> Dictionary:
 ## Инвестиция в модернизацию инфраструктуры провинции
 static func invest_in_infrastructure(province_id: int, state: CountryState, regions: Dictionary) -> Dictionary:
 	var cfg = ConfigManager.get_instance()
-	var cost_money = 0.15
-	var cost_cap = 1
+	var cost_money := 0.15
+	var cost_cap := 1
 	if cfg != null and cfg.has_constant("economy", "regional_investments"):
 		var ri = cfg.get_dict("economy", "regional_investments")
 		cost_money = float(ri.get("infrastructure_cost_money", cost_money))
@@ -965,8 +965,8 @@ static func invest_in_infrastructure(province_id: int, state: CountryState, regi
 ## Строительство фабрики или военного завода в регионе
 static func invest_in_factory(province_id: int, state: CountryState, regions: Dictionary, is_military: bool) -> Dictionary:
 	var cfg = ConfigManager.get_instance()
-	var cost_money = 0.35
-	var cost_cap = 2
+	var cost_money := 0.35
+	var cost_cap := 2
 	if cfg != null and cfg.has_constant("economy", "regional_investments"):
 		var ri = cfg.get_dict("economy", "regional_investments")
 		cost_money = float(ri.get("factory_cost_money", cost_money))
@@ -1013,8 +1013,8 @@ static func invest_in_factory(province_id: int, state: CountryState, regions: Di
 ## Геологоразведка и освоение месторождений в регионе
 static func prospect_resources(province_id: int, state: CountryState, regions: Dictionary, resource_type: String) -> Dictionary:
 	var cfg = ConfigManager.get_instance()
-	var cost_money = 0.20
-	var cost_cap = 1
+	var cost_money := 0.20
+	var cost_cap := 1
 	if cfg != null and cfg.has_constant("economy", "regional_investments"):
 		var ri = cfg.get_dict("economy", "regional_investments")
 		cost_money = float(ri.get("resource_prospect_cost_money", cost_money))
@@ -1039,7 +1039,7 @@ static func prospect_resources(province_id: int, state: CountryState, regions: D
 		
 	state.current_cap -= cost_cap
 	var current_dep = int(reg.resource_deposits.get(resource_type, 0))
-	var gained = 6
+	var gained := 6
 	reg.resource_deposits[resource_type] = current_dep + gained
 	
 	return {

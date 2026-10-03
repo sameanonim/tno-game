@@ -120,9 +120,9 @@ func advance_taboritsky_clock(added_minutes: int, country_state: CountryState = 
 
 ## Действие Таборицкого: «Поиски Царевича Алексея»
 func taboritsky_action_hunt_alexei(country_state: CountryState) -> Dictionary:
-	var pc_cost = 15.0
-	var cap_cost = 1
-	var money_cost = 0.05
+	var pc_cost := 15.0
+	var cap_cost := 1
+	var money_cost := 0.05
 	
 	if country_state != null:
 		if country_state.political_capital < pc_cost or country_state.current_cap < cap_cost:
@@ -150,8 +150,8 @@ func taboritsky_action_hunt_alexei(country_state: CountryState) -> Dictionary:
 
 ## Действие Таборицкого: «Химическая дезинфекция региона» (Табун)
 func taboritsky_action_purification(country_state: CountryState) -> Dictionary:
-	var weapons_cost = 250
-	var pc_cost = 20.0
+	var weapons_cost := 250
+	var pc_cost := 20.0
 	
 	if country_state != null:
 		if country_state.infantry_weapons_stockpile < weapons_cost or country_state.political_capital < pc_cost:
@@ -181,8 +181,8 @@ func taboritsky_action_purification(country_state: CountryState) -> Dictionary:
 
 ## Действие Таборицкого: «Имперская верификация верности»
 func taboritsky_action_verify(country_state: CountryState) -> Dictionary:
-	var pc_cost = 25.0
-	var cap_cost = 2
+	var pc_cost := 25.0
+	var cap_cost := 2
 	
 	if country_state != null:
 		if country_state.political_capital < pc_cost or country_state.current_cap < cap_cost:
@@ -236,9 +236,9 @@ func trigger_midnight_collapse(country_state: CountryState) -> Dictionary:
 
 ## Действие Язова: «Строительство подземных бункеров Карбышева»
 func yazov_action_build_bunker(country_state: CountryState) -> Dictionary:
-	var money_cost = 0.08
-	var cap_cost = 1
-	var pc_cost = 10.0
+	var money_cost := 0.08
+	var cap_cost := 1
+	var pc_cost := 10.0
 	
 	if country_state != null:
 		if country_state.liquid_reserves_billions < money_cost or country_state.current_cap < cap_cost:
@@ -266,8 +266,8 @@ func yazov_action_build_bunker(country_state: CountryState) -> Dictionary:
 
 ## Действие Язова: «Синтез боевых токсинов "Омск-65"»
 func yazov_action_produce_chemical_weapons(country_state: CountryState) -> Dictionary:
-	var weapons_cost = 180
-	var pc_cost = 15.0
+	var weapons_cost := 180
+	var pc_cost := 15.0
 	
 	if country_state != null:
 		if country_state.infantry_weapons_stockpile < weapons_cost or country_state.political_capital < pc_cost:
@@ -293,8 +293,8 @@ func yazov_action_produce_chemical_weapons(country_state: CountryState) -> Dicti
 
 ## Действие Язова: «Полевые трибуналы и искоренение слабости»
 func yazov_action_field_tribunals(country_state: CountryState) -> Dictionary:
-	var pc_cost = 15.0
-	var cap_cost = 1
+	var pc_cost := 15.0
+	var cap_cost := 1
 	
 	if country_state != null:
 		if country_state.political_capital < pc_cost or country_state.current_cap < cap_cost:
@@ -360,8 +360,8 @@ func get_yazov_bunker_capacity_str() -> String:
 
 ## Действие Саблина: «Открытые дебаты в Советах» (Путь Идеализма)
 func sablin_action_soviet_democracy(country_state: CountryState) -> Dictionary:
-	var pc_cost = 10.0
-	var cap_cost = 1
+	var pc_cost := 10.0
+	var cap_cost := 1
 	
 	if country_state != null:
 		if country_state.political_capital < pc_cost or country_state.current_cap < cap_cost:
@@ -390,7 +390,7 @@ func sablin_action_soviet_democracy(country_state: CountryState) -> Dictionary:
 
 ## Действие Саблина: «Амнистия для оступившихся узников» (Путь Идеализма)
 func sablin_action_amnesty_prisoners(country_state: CountryState) -> Dictionary:
-	var pc_cost = 15.0
+	var pc_cost := 15.0
 	
 	if country_state != null:
 		if country_state.political_capital < pc_cost:
@@ -416,8 +416,8 @@ func sablin_action_amnesty_prisoners(country_state: CountryState) -> Dictionary:
 
 ## Действие Саблина: «Органы безопасности Революции» (Путь Прагматизма)
 func sablin_action_cheka_discipline(country_state: CountryState) -> Dictionary:
-	var pc_cost = 15.0
-	var cap_cost = 1
+	var pc_cost := 15.0
+	var cap_cost := 1
 	
 	if country_state != null:
 		if country_state.political_capital < pc_cost or country_state.current_cap < cap_cost:
@@ -445,8 +445,8 @@ func sablin_action_cheka_discipline(country_state: CountryState) -> Dictionary:
 
 ## Действие Саблина: «Формирование Красных Добровольческих Дружин»
 func sablin_action_red_volunteers(country_state: CountryState) -> Dictionary:
-	var pc_cost = 12.0
-	var cap_cost = 1
+	var pc_cost := 12.0
+	var cap_cost := 1
 	
 	if country_state != null:
 		if country_state.political_capital < pc_cost or country_state.current_cap < cap_cost:

@@ -569,6 +569,10 @@ func _connect_signals() -> void:
 		var vp_str = (" [★ %d VP]" % feat.get("vp")) if feat.get("vp", 0) > 0 else ""
 		label_log.text = "LOC: %s (PID: %d)%s | OWNER: %s" % [loc_name, pid, vp_str, data.get("owner", "WRRF")]
 	)
+	map_controller.province_unhovered.connect(func(_pid: int):
+		if label_log != null:
+			label_log.text = ""
+	)
 	map_controller.province_clicked.connect(func(pid, data, btn):
 		if btn == MOUSE_BUTTON_LEFT:
 			var prov_owner = data.get("owner", "NEU")
@@ -802,7 +806,7 @@ func _setup_initial_game_state() -> void:
 	var map_hud_hbox = get_node_or_null("TabContainer/TacticalMap/MapModeHUD/HBox")
 	if map_hud_hbox != null and btn_parliament_toggle == null:
 		btn_parliament_toggle = Button.new()
-		var p_label = "[ 🏛 ПАРЛАМЕНТ ]"
+		var p_label := "[ 🏛 ПАРЛАМЕНТ ]"
 		if is_usa: p_label = "[ 🏛 КОНГРЕСС ]"
 		elif is_german: p_label = "[ 🏛 РЕЙХСТАГ ]"
 		elif is_warlord: p_label = "[ 🏛 ВЕРХОВНЫЙ СОВЕТ ]"
@@ -959,7 +963,7 @@ func _update_hud() -> void:
 			tab_container.current_tab = 0
 
 	if btn_parliament_toggle != null:
-		var p_label = "[ 🏛 ПАРЛАМЕНТ ]"
+		var p_label := "[ 🏛 ПАРЛАМЕНТ ]"
 		if is_usa: p_label = "[ 🏛 КОНГРЕСС ]"
 		elif is_german: p_label = "[ 🏛 РЕЙХСТАГ ]"
 		elif is_warlord: p_label = "[ 🏛 ВЕРХОВНЫЙ СОВЕТ ]"
@@ -1139,12 +1143,12 @@ func _update_localized_ui() -> void:
 	var tab_dir = loc.tr_key("TAB_DIRECTIVES", "НАЦИОНАЛЬНЫЕ ДИРЕКТИВЫ") if loc != null else "НАЦИОНАЛЬНЫЕ ДИРЕКТИВЫ"
 	var tab_econ = loc.tr_key("TAB_ECONOMICS", "ГОСУДАРСТВЕННАЯ ЭКОНОМИКА") if loc != null else "ГОСУДАРСТВЕННАЯ ЭКОНОМИКА"
 	
-	var tab_smuta = "РУССКАЯ СМУТА // ВОССОЕДИНЕНИЕ"
-	var is_warlord = false
-	var is_german = false
-	var is_usa = false
-	var is_japan = false
-	var is_italy = false
+	var tab_smuta := "РУССКАЯ СМУТА // ВОССОЕДИНЕНИЕ"
+	var is_warlord := false
+	var is_german := false
+	var is_usa := false
+	var is_japan := false
+	var is_italy := false
 	if turn_manager != null and turn_manager.player_state != null:
 		var p_tag = turn_manager.player_state.country_tag.to_upper()
 		is_warlord = RussianUnificationManager.is_warlord(p_tag)
@@ -1264,7 +1268,7 @@ func _on_modal_event_opened(event: GameEvent) -> void:
 	# Create choice buttons
 	for idx in range(event.options.size()):
 		var opt = event.options[idx]
-		var btn = Button.new()
+		var btn := Button.new()
 		btn.text = "> %s" % opt.get("text", "Acknowledge")
 		var opt_eval: Dictionary = GameEvent.evaluate_option_availability(opt, turn_manager.player_state)
 		btn.disabled = not opt_eval["allowed"]
@@ -1321,53 +1325,53 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 	game_over_modal.mouse_filter = Control.MOUSE_FILTER_STOP
 	game_over_modal.z_index = 30
 
-	var backdrop = ColorRect.new()
+	var backdrop := ColorRect.new()
 	backdrop.name = "Backdrop"
 	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
 	backdrop.color = Color(0.02, 0.03, 0.04, 0.92)
 	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
 	game_over_modal.add_child(backdrop)
 
-	var center = CenterContainer.new()
+	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	center.mouse_filter = Control.MOUSE_FILTER_PASS
 	game_over_modal.add_child(center)
 
-	var panel = PanelContainer.new()
+	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(720, 460)
 	var border_col = Color(0.20, 0.95, 0.50, 0.95) if victory else Color(0.98, 0.22, 0.16, 0.95)
 	var bg_col = Color(0.04, 0.07, 0.08, 0.98) if victory else Color(0.08, 0.03, 0.03, 0.98)
 	TNOTheme.apply_box_style(panel, border_col, bg_col, 2)
 	center.add_child(panel)
 
-	var margin = MarginContainer.new()
+	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 32)
 	margin.add_theme_constant_override("margin_top", 32)
 	margin.add_theme_constant_override("margin_right", 32)
 	margin.add_theme_constant_override("margin_bottom", 32)
 	panel.add_child(margin)
 
-	var vbox = VBoxContainer.new()
+	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 16)
 	margin.add_child(vbox)
 
-	var lbl_top = Label.new()
+	var lbl_top := Label.new()
 	lbl_top.text = tr("[ ВЫСШИЙ ВОЕННЫЙ СОВЕТ // СИСТЕМНЫЙ ЭПИЛОГ ]")
 	lbl_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_top.add_theme_color_override("font_color", Color(0.5, 0.7, 0.65, 0.8))
 	vbox.add_child(lbl_top)
 
-	var lbl_status = Label.new()
+	var lbl_status := Label.new()
 	lbl_status.text = tr("★ ВЕЛИКАЯ ПОБЕДА ★") if victory else tr("▲ ГОСУДАРСТВЕННЫЙ КРАХ ▲")
 	lbl_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_status.add_theme_color_override("font_color", border_col)
 	lbl_status.add_theme_font_size_override("font_size", 24)
 	vbox.add_child(lbl_status)
 
-	var hs = HSeparator.new()
+	var hs := HSeparator.new()
 	vbox.add_child(hs)
 
-	var lbl_info = Label.new()
+	var lbl_info := Label.new()
 	var c_tag = turn_manager.player_state.country_tag if turn_manager != null and turn_manager.player_state != null else "STATE"
 	var c_name = turn_manager.player_state.country_name if turn_manager != null and turn_manager.player_state != null else "State"
 	var l_name = turn_manager.player_state.leader_name if turn_manager != null and turn_manager.player_state != null else "Leader"
@@ -1379,7 +1383,7 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 	lbl_info.add_theme_color_override("font_color", Color(0.85, 0.90, 0.88, 1.0))
 	vbox.add_child(lbl_info)
 
-	var rtl = RichTextLabel.new()
+	var rtl := RichTextLabel.new()
 	rtl.custom_minimum_size = Vector2(650, 160)
 	rtl.fit_content = false
 	rtl.scroll_active = true
@@ -1387,12 +1391,12 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 	rtl.add_theme_color_override("default_color", Color(0.80, 0.85, 0.85, 1.0))
 	vbox.add_child(rtl)
 
-	var btn_hbox = HBoxContainer.new()
+	var btn_hbox := HBoxContainer.new()
 	btn_hbox.add_theme_constant_override("separation", 24)
 	btn_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	vbox.add_child(btn_hbox)
 
-	var btn_menu = Button.new()
+	var btn_menu := Button.new()
 	btn_menu.text = tr("[ ВЕРНУТЬСЯ В ГЛАВНОЕ МЕНЮ ]")
 	btn_menu.custom_minimum_size = Vector2(240, 42)
 	TNOTheme.apply_button_style(btn_menu, border_col, bg_col)
@@ -1401,7 +1405,7 @@ func _show_game_over_modal(victory: bool, reason: String) -> void:
 	)
 	btn_hbox.add_child(btn_menu)
 
-	var btn_obs = Button.new()
+	var btn_obs := Button.new()
 	btn_obs.text = tr("[ РЕЖИМ НАБЛЮДАТЕЛЯ (ОСМОТР) ]")
 	btn_obs.custom_minimum_size = Vector2(240, 42)
 	TNOTheme.apply_button_style(btn_obs, Color(0.4, 0.6, 0.7), Color(0.04, 0.08, 0.12))
@@ -1852,7 +1856,7 @@ func _open_general_parliament_screen() -> void:
 func _toggle_research_screen() -> void:
 	if tab_container == null:
 		return
-	var r_tab_idx = -1
+	var r_tab_idx := -1
 	for idx in range(tab_container.get_tab_count()):
 		var child = tab_container.get_tab_control(idx)
 		if child != null and (child.name == "Research" or child is ResearchTerminalView or child.has_node("ResearchTerminalView")):

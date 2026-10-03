@@ -70,7 +70,7 @@ func _synthesize_tone(freq: float, duration_sec: float, decay_rate: float, wave_
 		var t = float(i) / float(sample_rate)
 		var decay = exp(-t * decay_rate)
 		var phase = TAU * freq * t
-		var sample_val = 0.0
+		var sample_val := 0.0
 
 		match wave_type:
 			"square":

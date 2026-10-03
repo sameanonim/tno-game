@@ -100,10 +100,10 @@ func _apply_mode_dimensions() -> void:
 # ==============================================================================
 
 func display_leader(leader_data: Variant, country_tag: String = "", animate_teletype: bool = true) -> void:
-	var l_id = ""
-	var l_name = ""
-	var l_portrait_path = ""
-	var l_ideology = ""
+	var l_id := ""
+	var l_name := ""
+	var l_portrait_path := ""
+	var l_ideology := ""
 	var direct_texture: Texture2D = null
 
 	if leader_data is LeaderResource:
@@ -265,7 +265,7 @@ func _load_portrait_file(p_path: String) -> Texture2D:
 
 
 func _find_in_portraits_directory(tag: String, leader_name: String) -> Texture2D:
-	var search_dir = "res://ui/assets/portraits"
+	var search_dir := "res://ui/assets/portraits"
 	if not DirAccess.dir_exists_absolute(search_dir):
 		return null
 
@@ -292,7 +292,7 @@ func _find_in_portraits_directory(tag: String, leader_name: String) -> Texture2D
 	if dir != null:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
-		var count = 0
+		var count := 0
 		while not file_name.is_empty() and count < 250:
 			count += 1
 			if not dir.current_is_dir() and file_name.ends_with(".png"):
@@ -330,8 +330,8 @@ func _set_classified_state() -> void:
 
 
 func _generate_classified_placeholder() -> ImageTexture:
-	var w = 156
-	var h = 210
+	var w := 156
+	var h := 210
 	var img = Image.create(w, h, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0.04, 0.06, 0.05, 1.0))
 

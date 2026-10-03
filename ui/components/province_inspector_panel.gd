@@ -43,7 +43,7 @@ func _get_country_display_name(tag: String) -> String:
 		return tr("Нейтральная территория")
 
 	if country_names_cache.is_empty():
-		var path = "res://map_data/starting_countries_state.json"
+		var path := "res://map_data/starting_countries_state.json"
 		if FileAccess.file_exists(path):
 			var f = FileAccess.open(path, FileAccess.READ)
 			if f != null:
@@ -107,7 +107,7 @@ func _update_display() -> void:
 		title_label.text = inspector_fmt % [display_title, pid]
 
 	# Формирование информационного текста CRT
-	var text = ""
+	var text := ""
 
 	# 1. Политический суверенитет и Победные очки
 	var owner_color = "#33ff66" if owner == player_tag else "#ffcc00"
@@ -152,7 +152,7 @@ func _update_display() -> void:
 	var b = f.get("buildings", {})
 	text += "[b][color=#88ccff]══ ВОЕННО-СТРАТЕГИЧЕСКИЕ ОБЪЕКТЫ ══[/color][/b]\n"
 
-	var has_buildings = false
+	var has_buildings := false
 	if b.get("naval_base", 0) > 0:
 		has_buildings = true
 		text += "[color=#00e5ff]⚓ Военно-морская база:[/color] Уровень %d\n" % b["naval_base"]
@@ -210,8 +210,8 @@ func _update_display() -> void:
 
 func _format_number(num: int) -> String:
 	var s = str(num)
-	var res = ""
-	var cnt = 0
+	var res := ""
+	var cnt := 0
 	for i in range(s.length() - 1, -1, -1):
 		res = s[i] + res
 		cnt += 1

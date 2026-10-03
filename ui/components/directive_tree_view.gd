@@ -203,7 +203,7 @@ func load_tree_for_country(country_tag: String, preferred_tree_id: String = "") 
 
 	_update_tree_selector_options()
 
-	var target_path = ""
+	var target_path := ""
 	if not preferred_tree_id.is_empty():
 		for t in available_trees:
 			if t.get("tree_id", "") == preferred_tree_id:
@@ -282,7 +282,7 @@ func load_tree_from_file(path: String) -> bool:
 
 
 func _update_tree_selector_options() -> void:
-	var active_id = ""
+	var active_id := ""
 	if focus_stage_controller != null and not focus_stage_controller.current_tree_id.is_empty():
 		active_id = focus_stage_controller.current_tree_id
 	elif not current_tree_path.is_empty():
@@ -302,9 +302,9 @@ func _update_active_tree_hud(target_tree_id: String = "") -> void:
 	if display_id.is_empty():
 		display_id = tr("СТАРТОВЫЙ КОМПЛЕКС")
 
-	var stage_cat = "GENERAL"
+	var stage_cat := "GENERAL"
 	var total_dirs = all_directives.size()
-	var is_start = false
+	var is_start := false
 
 	for t in available_trees:
 		if str(t.get("tree_id", "")) == display_id or t.get("path", "") == current_tree_path:
@@ -380,7 +380,7 @@ func _setup_ui_layout() -> void:
 	anchor_bottom = 1.0
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
-	var hbox = HBoxContainer.new()
+	var hbox := HBoxContainer.new()
 	hbox.name = "TreeMainHBox"
 	hbox.anchor_right = 1.0
 	hbox.anchor_bottom = 1.0
@@ -412,7 +412,7 @@ func _setup_ui_layout() -> void:
 	camera_rig.add_child(graph_canvas)
 
 	# 1.1. CRT Виджет статуса активного древа директив (Tree Status HUD вверху слева)
-	var tree_hud_panel = PanelContainer.new()
+	var tree_hud_panel := PanelContainer.new()
 	tree_hud_panel.name = "TreeStatusHUD"
 	tree_hud_panel.offset_left = 12
 	tree_hud_panel.offset_top = 10
@@ -421,11 +421,11 @@ func _setup_ui_layout() -> void:
 	_apply_terminal_panel_style(tree_hud_panel, Color(0.02, 0.05, 0.05, 0.92), COLOR_CRT_BORDER)
 	viewport_container.add_child(tree_hud_panel)
 
-	var tree_hud_hbox = HBoxContainer.new()
+	var tree_hud_hbox := HBoxContainer.new()
 	tree_hud_hbox.add_theme_constant_override("separation", 8)
 	tree_hud_panel.add_child(tree_hud_hbox)
 
-	var lbl_tree_prefix = Label.new()
+	var lbl_tree_prefix := Label.new()
 	lbl_tree_prefix.text = tr(" НАЦИОНАЛЬНЫЙ ПРОЕКТ:")
 	lbl_tree_prefix.add_theme_font_size_override("font_size", 10)
 	lbl_tree_prefix.add_theme_color_override("font_color", COLOR_PHOSPHOR_CYAN)
@@ -451,7 +451,7 @@ func _setup_ui_layout() -> void:
 	tree_hud_hbox.add_child(lbl_active_tree_count)
 
 	# 1.2. CRT Виджет управления масштабом (HUD в углу холста)
-	var hud_panel = PanelContainer.new()
+	var hud_panel := PanelContainer.new()
 	hud_panel.name = "ZoomHUD"
 	hud_panel.anchor_left = 1.0
 	hud_panel.anchor_top = 1.0
@@ -464,12 +464,12 @@ func _setup_ui_layout() -> void:
 	_apply_terminal_panel_style(hud_panel, Color(0.02, 0.05, 0.05, 0.90), COLOR_CRT_BORDER)
 	viewport_container.add_child(hud_panel)
 
-	var hud_hbox = HBoxContainer.new()
+	var hud_hbox := HBoxContainer.new()
 	hud_hbox.add_theme_constant_override("separation", 4)
 	hud_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	hud_panel.add_child(hud_hbox)
 
-	var btn_zoom_out = Button.new()
+	var btn_zoom_out := Button.new()
 	btn_zoom_out.text = "[-]"
 	btn_zoom_out.custom_minimum_size = Vector2(28, 24)
 	btn_zoom_out.pressed.connect(func(): _adjust_zoom(-ZOOM_STEP, viewport_container.size * 0.5))
@@ -483,13 +483,13 @@ func _setup_ui_layout() -> void:
 	lbl_zoom_info.add_theme_color_override("font_color", COLOR_PHOSPHOR_GREEN)
 	hud_hbox.add_child(lbl_zoom_info)
 
-	var btn_zoom_in = Button.new()
+	var btn_zoom_in := Button.new()
 	btn_zoom_in.text = "[+]"
 	btn_zoom_in.custom_minimum_size = Vector2(28, 24)
 	btn_zoom_in.pressed.connect(func(): _adjust_zoom(ZOOM_STEP, viewport_container.size * 0.5))
 	hud_hbox.add_child(btn_zoom_in)
 
-	var btn_zoom_reset = Button.new()
+	var btn_zoom_reset := Button.new()
 	btn_zoom_reset.text = "[R]"
 	btn_zoom_reset.tooltip_text = "Сброс камеры (100%)"
 	btn_zoom_reset.custom_minimum_size = Vector2(28, 24)
@@ -504,14 +504,14 @@ func _setup_ui_layout() -> void:
 	_apply_terminal_panel_style(inspector_panel, COLOR_BG_PANEL, COLOR_CRT_BORDER)
 	hbox.add_child(inspector_panel)
 
-	var insp_margin = MarginContainer.new()
+	var insp_margin := MarginContainer.new()
 	insp_margin.add_theme_constant_override("margin_left", 12)
 	insp_margin.add_theme_constant_override("margin_top", 12)
 	insp_margin.add_theme_constant_override("margin_right", 12)
 	insp_margin.add_theme_constant_override("margin_bottom", 12)
 	inspector_panel.add_child(insp_margin)
 
-	var insp_vbox = VBoxContainer.new()
+	var insp_vbox := VBoxContainer.new()
 	insp_vbox.add_theme_constant_override("separation", 10)
 	insp_margin.add_child(insp_vbox)
 
@@ -528,10 +528,10 @@ func _setup_ui_layout() -> void:
 	lbl_insp_title.add_theme_font_size_override("font_size", 15)
 	insp_vbox.add_child(lbl_insp_title)
 
-	var sep1 = HSeparator.new()
+	var sep1 := HSeparator.new()
 	insp_vbox.add_child(sep1)
 
-	var desc_scroll = ScrollContainer.new()
+	var desc_scroll := ScrollContainer.new()
 	desc_scroll.custom_minimum_size = Vector2(0, 140)
 	desc_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	insp_vbox.add_child(desc_scroll)
@@ -550,16 +550,16 @@ func _setup_ui_layout() -> void:
 	lbl_insp_cost.add_theme_font_size_override("font_size", 11)
 	insp_vbox.add_child(lbl_insp_cost)
 
-	var sep_req = HSeparator.new()
+	var sep_req := HSeparator.new()
 	insp_vbox.add_child(sep_req)
 
-	var lbl_req_header = Label.new()
+	var lbl_req_header := Label.new()
 	lbl_req_header.text = tr("ТРЕБОВАНИЯ И СТАТУС ВЕТКИ:")
 	lbl_req_header.add_theme_color_override("font_color", Color(0.4, 0.75, 0.65))
 	lbl_req_header.add_theme_font_size_override("font_size", 10)
 	insp_vbox.add_child(lbl_req_header)
 
-	var req_scroll = ScrollContainer.new()
+	var req_scroll := ScrollContainer.new()
 	req_scroll.custom_minimum_size = Vector2(0, 95)
 	req_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	insp_vbox.add_child(req_scroll)
@@ -571,16 +571,16 @@ func _setup_ui_layout() -> void:
 	lbl_insp_reqs.text = "[color=#668877]--[/color]"
 	req_scroll.add_child(lbl_insp_reqs)
 
-	var sep2 = HSeparator.new()
+	var sep2 := HSeparator.new()
 	insp_vbox.add_child(sep2)
 
-	var lbl_eff_header = Label.new()
+	var lbl_eff_header := Label.new()
 	lbl_eff_header.text = tr("ОЖИДАЕМЫЕ ПОСЛЕДСТВИЯ И НАГРАДЫ:")
 	lbl_eff_header.add_theme_color_override("font_color", Color(0.4, 0.75, 0.65))
 	lbl_eff_header.add_theme_font_size_override("font_size", 10)
 	insp_vbox.add_child(lbl_eff_header)
 
-	var eff_scroll = ScrollContainer.new()
+	var eff_scroll := ScrollContainer.new()
 	eff_scroll.custom_minimum_size = Vector2(0, 120)
 	eff_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	insp_vbox.add_child(eff_scroll)
@@ -731,7 +731,7 @@ func _calculate_node_position(dir: DirectiveResource, offset_x: float = 0.0, off
 
 	# Автоматический расчет по глубине предков при отсутствии явной сетки
 	var depth = _calculate_prereq_depth(dir)
-	var row = 0
+	var row := 0
 	for d in all_directives.values():
 		if d.id == dir.id:
 			break
@@ -744,7 +744,7 @@ func _calculate_node_position(dir: DirectiveResource, offset_x: float = 0.0, off
 func _calculate_prereq_depth(dir: DirectiveResource) -> int:
 	if dir.prerequisites.is_empty():
 		return 0
-	var max_d = 0
+	var max_d := 0
 	for p_id in dir.prerequisites:
 		if all_directives.has(p_id):
 			max_d = maxi(max_d, _calculate_prereq_depth(all_directives[p_id]) + 1)
@@ -756,7 +756,7 @@ func _calculate_prereq_depth(dir: DirectiveResource) -> int:
 # ==============================================================================
 
 func _create_directive_node(dir: DirectiveResource) -> Control:
-	var btn = Button.new()
+	var btn := Button.new()
 	btn.name = "Node_%s" % dir.id
 	btn.custom_minimum_size = node_size
 	btn.size = node_size
@@ -769,7 +769,7 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 	var can_start = dossier.get("allowed", false)
 
 	# Проверка на взаимную блокировку выбора
-	var is_mutually_locked = false
+	var is_mutually_locked := false
 	if player_state != null:
 		if player_state.has_flag("locked_focus_" + dir.id) or player_state.has_flag("mutually_locked_" + dir.id):
 			is_mutually_locked = true
@@ -779,7 +779,7 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 				break
 
 	var border_color = COLOR_PHOSPHOR_LOCKED
-	var bg_color = Color(0.02, 0.04, 0.04, 0.95)
+	var bg_color := Color(0.02, 0.04, 0.04, 0.95)
 
 	if is_completed:
 		border_color = COLOR_PHOSPHOR_CYAN
@@ -796,14 +796,14 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 
 	_apply_terminal_card_style(btn, bg_color, border_color)
 
-	var hbox = HBoxContainer.new()
+	var hbox := HBoxContainer.new()
 	hbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_KEEP_SIZE, 6)
 	hbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hbox.add_theme_constant_override("separation", 8)
 	btn.add_child(hbox)
 
 	# 1. Иконка директивы (TNO Goal Texture)
-	var icon_rect = TextureRect.new()
+	var icon_rect := TextureRect.new()
 	icon_rect.custom_minimum_size = Vector2(40, 40)
 	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -815,14 +815,14 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 	hbox.add_child(icon_rect)
 
 	# 2. Информационный стек
-	var vbox = VBoxContainer.new()
+	var vbox := VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	vbox.add_theme_constant_override("separation", 2)
 	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hbox.add_child(vbox)
 
-	var title_lbl = Label.new()
+	var title_lbl := Label.new()
 	title_lbl.text = dir.title
 	title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_lbl.add_theme_font_size_override("font_size", 11)
@@ -830,7 +830,7 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 	vbox.add_child(title_lbl)
 
 	# Статус и псевдографический индикатор ходов
-	var status_lbl = Label.new()
+	var status_lbl := Label.new()
 	status_lbl.add_theme_font_size_override("font_size", 10)
 
 	if is_completed:
@@ -885,7 +885,7 @@ func _build_directive_tooltip(dir: DirectiveResource) -> String:
 		t += "ПРЕРЕКВИЗИТЫ:\n"
 		for grp in dir.prerequisites_groups:
 			if grp is Array:
-				var grp_ok = false
+				var grp_ok := false
 				var titles: Array[String] = []
 				for pid in grp:
 					var p_title = all_directives[pid].title if all_directives.has(pid) else str(pid)
@@ -893,7 +893,7 @@ func _build_directive_tooltip(dir: DirectiveResource) -> String:
 					if player_state != null and player_state.completed_directives.has(str(pid)):
 						grp_ok = true
 				var mark = "✓" if grp_ok else "✖"
-				var join_op = " ИЛИ "
+				var join_op := " ИЛИ "
 				t += " %s Требуется: %s\n" % [mark, join_op.join(titles)]
 	elif not dir.prerequisites.is_empty():
 		t += "ПРЕРЕКВИЗИТЫ:\n"
@@ -932,9 +932,9 @@ func _build_directive_tooltip(dir: DirectiveResource) -> String:
 
 
 func _generate_ascii_bar(current: int, total: int) -> String:
-	var total_slots = 6
+	var total_slots := 6
 	var filled = clampi(int(round((float(current) / maxf(float(total), 1.0)) * total_slots)), 0, total_slots)
-	var s = "["
+	var s := "["
 	for i in range(total_slots):
 		if i < filled:
 			s += "█"
@@ -969,8 +969,8 @@ func _draw_canvas_content(canvas: Control) -> void:
 		if not child_ctrl.visible:
 			continue
 
-		var child_rect = Rect2(child_ctrl.position, node_size)
-		var child_entry = Vector2(child_rect.position.x + child_rect.size.x * 0.5, child_rect.position.y)
+		var child_rect := Rect2(child_ctrl.position, node_size)
+		var child_entry := Vector2(child_rect.position.x + child_rect.size.x * 0.5, child_rect.position.y)
 
 		# 1. Отрисовка направленных ортогональных шин пререквизитов с динамическим обходом скрытых нод
 		var visible_prereqs = _find_visible_prerequisites(dir_id)
@@ -982,11 +982,11 @@ func _draw_canvas_content(canvas: Control) -> void:
 			if not parent_ctrl.visible:
 				continue
 
-			var parent_rect = Rect2(parent_ctrl.position, node_size)
-			var parent_exit = Vector2(parent_rect.position.x + parent_rect.size.x * 0.5, parent_rect.position.y + parent_rect.size.y)
+			var parent_rect := Rect2(parent_ctrl.position, node_size)
+			var parent_exit := Vector2(parent_rect.position.x + parent_rect.size.x * 0.5, parent_rect.position.y + parent_rect.size.y)
 
 			var line_col = COLOR_PHOSPHOR_DIM
-			var line_width = 1.5
+			var line_width := 1.5
 
 			var is_p_done = player_state != null and player_state.completed_directives.has(prereq_id)
 			var is_c_done = player_state != null and player_state.completed_directives.has(dir_id)
@@ -1063,8 +1063,8 @@ func _get_all_prereq_ids(dir: DirectiveResource) -> Array[String]:
 func _draw_orthogonal_bus(canvas: Control, from: Vector2, to: Vector2, col: Color, width: float) -> void:
 	var mid_y = from.y + (to.y - from.y) * 0.5
 	var p1 = from
-	var p2 = Vector2(from.x, mid_y)
-	var p3 = Vector2(to.x, mid_y)
+	var p2 := Vector2(from.x, mid_y)
+	var p3 := Vector2(to.x, mid_y)
 	var p4 = to
 
 	canvas.draw_line(p1, p2, col, width)
@@ -1076,7 +1076,7 @@ func _draw_orthogonal_bus(canvas: Control, from: Vector2, to: Vector2, col: Colo
 	canvas.draw_circle(p4, width * 1.3, col)
 
 	# Направленная стрелка на входе в дочерний узел
-	var arrow_size = 4.0
+	var arrow_size := 4.0
 	var arrow_p1 = p4
 	var arrow_p2 = p4 + Vector2(-arrow_size, -arrow_size * 1.5)
 	var arrow_p3 = p4 + Vector2(arrow_size, -arrow_size * 1.5)
@@ -1113,7 +1113,7 @@ func _update_inspector(dir: DirectiveResource) -> void:
 	lbl_insp_title.text = "%s %s" % [dir.icon_symbol, dir.title.to_upper()]
 	lbl_insp_desc.text = "[color=#b0d0c0]%s[/color]" % (dir.description if not dir.description.is_empty() else "Описание директивы засекречено или отсутствует.")
 
-	var cost_txt = "ОПЕРАТИВНЫЕ ЗАТРАТЫ:\n"
+	var cost_txt := "ОПЕРАТИВНЫЕ ЗАТРАТЫ:\n"
 	cost_txt += "• Очки кабинета (CAP): %d\n" % dir.cost_initial_cap
 	cost_txt += "• Политический капитал (PC): %0.1f\n" % dir.cost_initial_pc
 	cost_txt += "• Финансирование за ход: $%0.2f B\n" % dir.cost_per_turn
@@ -1121,12 +1121,12 @@ func _update_inspector(dir: DirectiveResource) -> void:
 	lbl_insp_cost.text = cost_txt
 
 	# 1. Требования, пререквизиты и статус ветки
-	var req_txt = ""
+	var req_txt := ""
 	if not dir.prerequisites_groups.is_empty():
 		req_txt += "[b]ПРЕРЕКВИЗИТЫ (И/ИЛИ):[/b]\n"
 		for grp in dir.prerequisites_groups:
 			if grp is Array:
-				var grp_ok = false
+				var grp_ok := false
 				var titles: Array[String] = []
 				for pid in grp:
 					var p_title = all_directives[pid].title if all_directives.has(pid) else str(pid)
@@ -1175,7 +1175,7 @@ func _update_inspector(dir: DirectiveResource) -> void:
 		lbl_insp_reqs.text = req_txt
 
 	# 2. Вывод опкодов наград
-	var eff_txt = ""
+	var eff_txt := ""
 	for rew in dir.completion_rewards:
 		var op = str(rew.get("opcode", ""))
 		match op:
@@ -1215,7 +1215,7 @@ func _update_inspector(dir: DirectiveResource) -> void:
 	var can_start = dossier.get("allowed", false)
 
 	# Проверка на взаимную блокировку
-	var is_mutually_locked = false
+	var is_mutually_locked := false
 	if player_state != null:
 		if player_state.has_flag("locked_focus_" + dir.id) or player_state.has_flag("mutually_locked_" + dir.id):
 			is_mutually_locked = true
@@ -1246,7 +1246,7 @@ func _on_start_button_pressed() -> void:
 		return
 
 	var dir: DirectiveResource = all_directives[selected_directive_id]
-	var success = false
+	var success := false
 
 	if turn_manager != null:
 		success = turn_manager.start_directive(dir)
@@ -1392,39 +1392,39 @@ func _setup_reboot_overlay() -> void:
 	reboot_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	reboot_overlay.visible = false
 
-	var bg = ColorRect.new()
+	var bg := ColorRect.new()
 	bg.name = "RebootBG"
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.color = Color(0.01, 0.03, 0.02, 0.90)
 	reboot_overlay.add_child(bg)
 
-	var scanlines = ColorRect.new()
+	var scanlines := ColorRect.new()
 	scanlines.name = "Scanlines"
 	scanlines.set_anchors_preset(Control.PRESET_FULL_RECT)
 	scanlines.color = Color(0.05, 0.25, 0.15, 0.14)
 	reboot_overlay.add_child(scanlines)
 
-	var center = CenterContainer.new()
+	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	reboot_overlay.add_child(center)
 
-	var panel = PanelContainer.new()
+	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(580, 240)
 	_apply_terminal_panel_style(panel, Color(0.02, 0.05, 0.04, 0.98), COLOR_PHOSPHOR_CYAN)
 	center.add_child(panel)
 
-	var vbox = VBoxContainer.new()
+	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 10)
 	panel.add_child(vbox)
 
-	var header = Label.new()
+	var header := Label.new()
 	header.text = tr("/// ПЕРЕЗАГРУЗКА БАЗЫ ДИРЕКТИВ / СМЕНА СТАДИИ ///")
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.add_theme_font_size_override("font_size", 14)
 	header.add_theme_color_override("font_color", COLOR_PHOSPHOR_CYAN)
 	vbox.add_child(header)
 
-	var sep = HSeparator.new()
+	var sep := HSeparator.new()
 	vbox.add_child(sep)
 
 	lbl_reboot_log = RichTextLabel.new()
