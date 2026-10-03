@@ -277,6 +277,7 @@ func load_tree_from_file(path: String) -> bool:
 
 	print("[DirectiveTreeView] Загружено %d директив из [%s]." % [all_directives.size(), path])
 	refresh_tree()
+	_update_active_tree_hud()
 	return true
 
 
