@@ -78,8 +78,11 @@ signal territory_transferred(province_id: int, state_id: int, old_owner: String,
 
 @export_group("Country Labels & Typography")
 @export var show_country_labels: bool = true
+@export var show_state_labels: bool = true
 @export var use_russian_country_names: bool = true
 @export_file("*.json") var country_labels_file_path: String = "res://map_data/country_labels.json"
+@export_file("*.json") var state_labels_file_path: String = "res://map_data/state_labels.json"
+@export_file("*.json") var province_features_file_path: String = "res://map_data/province_features.json"
 
 @export_group("Navigation & Camera")
 @export var enable_camera_control: bool = true
@@ -154,6 +157,9 @@ var country_labels_overlay: CountryLabelsOverlay = null
 # ==============================================================================
 func _ready() -> void:
 	base_position = position
+	if scale.x != 1.0 and current_zoom == 1.0:
+		current_zoom = scale.x
+
 	if target_camera == null:
 		target_camera = get_node_or_null("../Camera2D")
 	if target_camera == null and get_viewport() != null:
@@ -369,8 +375,11 @@ func _setup_tactical_overlay() -> void:
 		country_labels_overlay.set_zoom_level(current_zoom)
 		country_labels_overlay.set_labels_visible(show_country_labels)
 		country_labels_overlay.set_use_russian(use_russian_country_names)
+		country_labels_overlay.set_show_state_names(show_state_labels)
 		if country_labels_file_path != "":
 			country_labels_overlay.load_labels_manifest(country_labels_file_path)
+		if state_labels_file_path != "":
+			country_labels_overlay.load_state_labels_manifest(state_labels_file_path)
 
 
 func _on_tactical_axis_clicked(axis: OperationalAxis) -> void:
@@ -463,6 +472,12 @@ func update_province_owner(province_id: int, owner_val: Variant, color: Color = 
 		ownership_lut_image.set_pixel(coord.x, coord.y, pixel_col)
 		if ownership_lut_texture != null:
 			ownership_lut_texture.update(ownership_lut_image)
+
+	# Обновление владельца в кеше особенностей провинций
+	if province_features_data.has(province_id):
+		province_features_data[province_id]["owner"] = clean_owner
+	if province_features_data.has(str(province_id)):
+		province_features_data[str(province_id)]["owner"] = clean_owner
 
 	# 3. Синхронизация сферы влияния в Data-LUT
 	var new_owner_tag = country_id_to_tag.get(owner_id, "TAG_%d" % owner_id)
@@ -1034,19 +1049,48 @@ func set_country_labels_language(use_russian: bool) -> void:
 
 
 ##
+## Управление видимостью тактических меток штатов/регионов
+##
+func set_state_labels_visible(visible_state: bool) -> void:
+	show_state_labels = visible_state
+	if country_labels_overlay != null:
+		country_labels_overlay.set_show_state_names(visible_state)
+
+
+##
+## Переключение видимости тактических меток штатов
+##
+func toggle_state_labels() -> bool:
+	set_state_labels_visible(not show_state_labels)
+	return show_state_labels
+
+
+##
 ## Возвращает тактические и географические особенности провинции
 ##
 func get_province_features(province_id: int) -> Dictionary:
 	if province_features_data.has(province_id):
 		return province_features_data[province_id]
+	if province_features_data.has(str(province_id)):
+		return province_features_data[str(province_id)]
+
 	var p_data = provinces_data.get(province_id, {})
 	var r_data = starting_regions_data.get(province_id, {})
+	var sid = province_to_state.get(province_id, int(p_data.get("state_id", 0)))
+	var s_info = states_data.get(sid, {})
+	var st_name = s_info.get("name", "Регион %d" % sid)
+	var owner_tag = str(p_data.get("owner", r_data.get("owner_tag", "")))
+	if owner_tag.is_empty():
+		owner_tag = s_info.get("owner", "Neutral")
+
 	var feat = {
 		"id": province_id,
-		"name": p_data.get("name", "Sector #%d" % province_id),
-		"owner": p_data.get("owner", r_data.get("owner_tag", "Neutral")),
-		"state_id": province_to_state.get(province_id, 0),
+		"state_id": sid,
+		"state_name": st_name,
+		"name": p_data.get("name", "Сектор #%d" % province_id),
+		"owner": owner_tag,
 		"terrain": p_data.get("terrain", r_data.get("terrain_type", "plains")),
+		"terrain_name_ru": "Равнины",
 		"population": r_data.get("population", 50000),
 		"ic": r_data.get("industrial_capacity", 1),
 		"infrastructure": r_data.get("civilian_infrastructure", 1),
@@ -1054,6 +1098,7 @@ func get_province_features(province_id: int) -> Dictionary:
 		"is_coastal": p_data.get("coastal", false)
 	}
 	province_features_data[province_id] = feat
+	province_features_data[str(province_id)] = feat
 	return feat
 
 
@@ -1385,3 +1430,19 @@ func _load_supplementary_data() -> void:
 						provinces_data[pid] = json_r.data[k]
 					if json_r.data[k].has("owner_tag"):
 						provinces_data[pid]["owner"] = json_r.data[k]["owner_tag"]
+
+	# Загрузка расширенных характеристик и инфраструктуры провинций
+	if FileAccess.file_exists(province_features_file_path):
+		var f_pf = FileAccess.open(province_features_file_path, FileAccess.READ)
+		if f_pf != null:
+			var pf_text = f_pf.get_as_text()
+			f_pf.close()
+			var json_pf = JSON.new()
+			if json_pf.parse(pf_text) == OK and json_pf.data is Dictionary:
+				for k in json_pf.data.keys():
+					var feat = json_pf.data[k]
+					var pid = int(k)
+					if provinces_data.has(pid) and provinces_data[pid].has("owner"):
+						feat["owner"] = provinces_data[pid]["owner"]
+					province_features_data[pid] = feat
+					province_features_data[k] = feat

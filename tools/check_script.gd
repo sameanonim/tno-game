@@ -18,6 +18,7 @@ func _init() -> void:
 		"res://ui/screens/main_menu.gd",
 		"res://ui/screens/japan/japan_terminal_screen.gd",
 		"res://ui/screens/terminal_main.gd",
+		"res://ui/components/province_inspector_panel.gd",
 		"res://ui/components/country_labels_overlay.gd",
 		"res://scripts/map_controller.gd"
 	]

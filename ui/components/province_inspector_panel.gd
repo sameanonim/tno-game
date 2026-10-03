@@ -34,9 +34,34 @@ func _ready() -> void:
 		btn_raid.pressed.connect(_on_raid_pressed)
 
 
+static var country_names_cache: Dictionary = {}
+
+
+func _get_country_display_name(tag: String) -> String:
+	var clean = tag.to_upper().strip_edges()
+	if clean.is_empty() or clean in ["WST", "WASTE", "NONE", "NEU", "NEUTRAL"]:
+		return tr("Нейтральная территория")
+
+	if country_names_cache.is_empty():
+		var path = "res://map_data/starting_countries_state.json"
+		if FileAccess.file_exists(path):
+			var f = FileAccess.open(path, FileAccess.READ)
+			if f != null:
+				var text = f.get_as_text()
+				f.close()
+				var json = JSON.new()
+				if json.parse(text) == OK and json.data is Dictionary:
+					for t in json.data.keys():
+						var c_info = json.data[t]
+						var name_ru = str(c_info.get("country_name_ru", c_info.get("country_name", t)))
+						country_names_cache[t] = name_ru
+
+	return country_names_cache.get(clean, clean)
+
+
 func inspect_province(
 	province_id: int,
-	features_dict: Dictionary,
+	features_dict: Dictionary = {},
 	current_player_tag: String = "KOM"
 ) -> void:
 	current_province_id = province_id
@@ -45,11 +70,13 @@ func inspect_province(
 	var p_key = str(province_id)
 	if features_dict.has(p_key):
 		current_feature_data = features_dict[p_key]
+	elif features_dict.has(province_id):
+		current_feature_data = features_dict[province_id]
 	else:
 		current_feature_data = {
 			"id": province_id,
-			"state_name": "Неизвестная территория",
-			"owner": "WST",
+			"state_name": "Регион #%d" % province_id,
+			"owner": "NEU",
 			"terrain": "plains",
 			"terrain_name_ru": "Равнины",
 			"vp": 0,
@@ -68,7 +95,7 @@ func _update_display() -> void:
 	if city_name.is_empty():
 		city_name = f.get("city_name_en", "")
 
-	var owner = f.get("owner", "WST")
+	var owner = str(f.get("owner", "NEU"))
 	var state_name = f.get("state_name", "Регион %d" % f.get("state_id", 0))
 	var vp = int(f.get("vp", 0))
 	var is_cap = bool(f.get("is_capital", false))
@@ -84,8 +111,12 @@ func _update_display() -> void:
 
 	# 1. Политический суверенитет и Победные очки
 	var owner_color = "#33ff66" if owner == player_tag else "#ffcc00"
+	var owner_display_name = _get_country_display_name(owner)
 	text += "[b][color=#88ccff]══ ГЕОПОЛИТИЧЕСКИЙ СТАТУС ══[/color][/b]\n"
-	text += "[color=#aaaaaa]ДЕРЖАВА-ВЛАДЕЛЕЦ:[/color] [color=%s]%s[/color] | [color=#aaaaaa]РЕГИОН:[/color] %s\n" % [owner_color, owner, state_name]
+	if owner != "NEU" and owner != "WST":
+		text += "[color=#aaaaaa]ДЕРЖАВА-ВЛАДЕЛЕЦ:[/color] [color=%s]%s [%s][/color] | [color=#aaaaaa]РЕГИОН:[/color] %s\n" % [owner_color, owner_display_name, owner, state_name]
+	else:
+		text += "[color=#aaaaaa]ДЕРЖАВА-ВЛАДЕЛЕЦ:[/color] [color=#888888]%s[/color] | [color=#aaaaaa]РЕГИОН:[/color] %s\n" % [owner_display_name, state_name]
 
 	if is_cap:
 		text += "[color=#ffdd44]★ НАЦИОНАЛЬНАЯ СТОЛИЦА // СТРАТЕГИЧЕСКИЙ ЦЕНТР (%d VP)[/color]\n" % vp
@@ -174,7 +205,7 @@ func _update_display() -> void:
 	if btn_manage != null:
 		btn_manage.visible = is_player_province
 	if btn_raid != null:
-		btn_raid.visible = (not is_player_province and owner != "WST")
+		btn_raid.visible = (not is_player_province and owner not in ["WST", "WASTE", "NONE", "NEU", ""])
 
 
 func _format_number(num: int) -> String:

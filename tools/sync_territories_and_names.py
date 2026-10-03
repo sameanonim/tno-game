@@ -171,6 +171,174 @@ def parse_history_states(states_dir: Path) -> Tuple[
     return states_db, prov_to_owner, prov_to_state, owner_to_states, owner_to_provs
 
 
+HOI4_MAP_NAMES_RU = {
+    "GER": "ГЕРМАНИЯ",
+    "ENG": "ВЕЛИКОБРИТАНИЯ",
+    "SCO": "ШОТЛАНДИЯ",
+    "WLS": "УЭЛЬС",
+    "WAL": "УЭЛЬС",
+    "IRE": "ИРЛАНДИЯ",
+    "NIR": "СЕВ. ИРЛАНДИЯ",
+    "FRS": "ФРАНЦИЯ",
+    "FRA": "ФРАНЦИЯ",
+    "BRG": "БУРГУНДИЯ",
+    "ITA": "ИТАЛИЯ",
+    "IBR": "ИБЕРИЯ",
+    "SPA": "ИСПАНИЯ",
+    "POR": "ПОРТУГАЛИЯ",
+    "USA": "СОЕДИНЁННЫЕ ШТАТЫ",
+    "CAN": "КАНАДА",
+    "MEX": "МЕКСИКА",
+    "JAP": "ЯПОНИЯ",
+    "MAN": "МАНЬЧЖУРИЯ",
+    "MEN": "МЭНЦЗЯН",
+    "CHI": "КИТАЙ",
+    "OST": "ОСТЛАНД",
+    "UKR": "УКРАИНА",
+    "MCW": "МОСКОВИЯ",
+    "CAU": "КАВКАЗ",
+    "GGN": "ГЕНЕРАЛ-ГУБЕРНАТОРСТВО",
+    "FIN": "ФИНЛЯНДИЯ",
+    "SWE": "ШВЕЦИЯ",
+    "NOR": "НОРВЕГИЯ",
+    "DEN": "ДАНИЯ",
+    "HOL": "НИДЕРЛАНДЫ",
+    "BEL": "БЕЛЬГИЯ",
+    "SWI": "ШВЕЙЦАРИЯ",
+    "HUN": "ВЕНГРИЯ",
+    "ROM": "РУМЫНИЯ",
+    "BUL": "БОЛГАРИЯ",
+    "SER": "СЕРБИЯ",
+    "CRO": "ХОРВАТИЯ",
+    "SLO": "СЛОВАКИЯ",
+    "POL": "ПОЛЬША",
+    "TUR": "ТУРЦИЯ",
+    "GRE": "ГРЕЦИЯ",
+    "ALB": "АЛБАНИЯ",
+    "MNT": "ЧЕРНОГОРИЯ",
+    "BRA": "БРАЗИЛИЯ",
+    "ARG": "АРГЕНТИНА",
+    "CHL": "ЧИЛИ",
+    "PER": "ПЕРУ",
+    "COL": "КОЛУМБИЯ",
+    "VEN": "ВЕНЕСУЭЛА",
+    "BOL": "БОЛИВИЯ",
+    "PAR": "ПАРАГВАЙ",
+    "URG": "УРУГВАЙ",
+    "AST": "АВСТРАЛИЯ",
+    "NZL": "НОВАЯ ЗЕЛАНДИЯ",
+    "SAF": "ЮЖНАЯ АФРИКА",
+    "EGY": "ЕГИПЕТ",
+    "ETH": "ЭФИОПИЯ",
+    "ANG": "АНГОЛА",
+    "MZB": "МОЗАМБИК",
+    "COG": "КОНГО",
+    "MAD": "МАДАГАСКАР",
+    "BUR": "БИРМА",
+    "THA": "ТАИЛАНД",
+    "VIN": "ВЬЕТНАМ",
+    "INS": "ИНДОНЕЗИЯ",
+    "PHI": "ФИЛИППИНЫ",
+    "IND": "ИНДИЯ",
+    "PAK": "ПАКИСТАН",
+    "IRA": "ИРАН",
+    "IRQ": "ИРАК",
+    "SAU": "САУДОВСКАЯ АРАВИЯ",
+    "KOM": "КОМИ",
+    "WRS": "ЗАП. РУССКИЙ ФРОНТ",
+    "VYT": "ВЯТКА",
+    "SAM": "САМАРА",
+    "GOR": "ГОРЬКИЙ",
+    "PRM": "ПЕРМЬ",
+    "ONE": "ОНЕГА",
+    "TYM": "ТЮМЕНЬ",
+    "OMS": "ОМСК",
+    "SVR": "СВЕРДЛОВСК",
+    "ZLT": "ЗЛАТОУСТ",
+    "NOV": "НОВОСИБИРСК",
+    "TOM": "ТОМСК",
+    "KEM": "КЕМЕРОВО",
+    "SBA": "СБА",
+    "PRC": "КРАСНОЯРСК",
+    "IRK": "ИРКУТСК",
+    "BRY": "БУРЯТИЯ",
+    "CHT": "ЧИТА",
+    "AMR": "АМУР",
+    "MAG": "МАГАДАН",
+    "YAK": "ЯКУТИЯ",
+    "KMC": "КАМЧАТКА",
+    "KAZ": "КАЗАХСТАН"
+}
+
+HOI4_MAP_NAMES_EN = {
+    "GER": "GERMANY",
+    "ENG": "BRITAIN",
+    "SCO": "SCOTLAND",
+    "WLS": "WALES",
+    "WAL": "WALES",
+    "IRE": "IRELAND",
+    "NIR": "N. IRELAND",
+    "FRS": "FRANCE",
+    "FRA": "FRANCE",
+    "BRG": "BURGUNDY",
+    "ITA": "ITALY",
+    "IBR": "IBERIA",
+    "SPA": "SPAIN",
+    "POR": "PORTUGAL",
+    "USA": "UNITED STATES",
+    "CAN": "CANADA",
+    "MEX": "MEXICO",
+    "JAP": "JAPAN",
+    "MAN": "MANCHURIA",
+    "MEN": "MENGJIANG",
+    "CHI": "CHINA",
+    "OST": "OSTLAND",
+    "UKR": "UKRAINE",
+    "MCW": "MOSKOWIEN",
+    "CAU": "KAUKASIEN",
+    "GGN": "GENERALGOUVERNEMENT",
+    "FIN": "FINLAND",
+    "SWE": "SWEDEN",
+    "NOR": "NORWAY",
+    "DEN": "DENMARK",
+    "HOL": "NETHERLANDS",
+    "BEL": "BELGIUM",
+    "SWI": "SWITZERLAND",
+    "HUN": "HUNGARY",
+    "ROM": "ROMANIA",
+    "BUL": "BULGARIA",
+    "SER": "SERBIA",
+    "CRO": "CROATIA",
+    "SLO": "SLOVAKIA",
+    "POL": "POLAND",
+    "TUR": "TURKEY",
+    "GRE": "GREECE",
+    "BRA": "BRAZIL",
+    "ARG": "ARGENTINA",
+    "CHL": "CHILE",
+    "PER": "PERU",
+    "COL": "COLOMBIA",
+    "VEN": "VENEZUELA",
+    "IND": "INDIA",
+    "BUR": "BURMA",
+    "THA": "THAILAND",
+    "INS": "INDONESIA",
+    "PHI": "PHILIPPINES",
+    "KOM": "KOMI",
+    "WRS": "WRRF",
+    "VYT": "VYATKA",
+    "SAM": "SAMARA",
+    "OMS": "OMSK",
+    "SVR": "SVERDLOVSK",
+    "TYM": "TYUMEN",
+    "NOV": "NOVOSIBIRSK",
+    "TOM": "TOMSK",
+    "MAG": "MAGADAN",
+    "IRK": "IRKUTSK",
+    "KAZ": "KAZAKHSTAN"
+}
+
+
 def calculate_country_label_metrics(
     tag: str,
     prov_ids: List[int],
@@ -229,20 +397,41 @@ def calculate_country_label_metrics(
     elif len(prov_ids) >= 18 or diag >= 350.0:
         tier = 2
 
-    # Calculate optimal font size range based on territorial footprint
-    base_font_size = 11
+    # Clean short names for HoI4 cartography
+    short_ru = HOI4_MAP_NAMES_RU.get(tag)
+    if not short_ru:
+        short_ru = country_name_ru
+        for pfx in ["Республика ", "Королевство ", "Государство ", "Царство ", "Эмират ", "Княжество "]:
+            if short_ru.startswith(pfx):
+                short_ru = short_ru[len(pfx):].strip()
+
+    short_en = HOI4_MAP_NAMES_EN.get(tag)
+    if not short_en:
+        short_en = country_name_en
+        for pfx in ["Republic of ", "Kingdom of ", "State of ", "Empire of "]:
+            if short_en.startswith(pfx):
+                short_en = short_en[len(pfx):].strip()
+
+    # Calculate optimal font size strictly constrained by country territorial width
+    chars_count = max(4, len(short_ru))
+    # Font size must ensure entire text fits inside ~65% of territorial width
+    max_char_width = (width * 0.65) / float(chars_count)
+    base_font_size = int(round(clamp(max_char_width * 1.35, 9.0, 32.0)))
+
     if tier == 1:
-        base_font_size = int(round(clamp(16.0 + (diag * 0.018), 16.0, 36.0)))
+        base_font_size = int(round(clamp(base_font_size, 14.0, 34.0)))
     elif tier == 2:
-        base_font_size = int(round(clamp(12.0 + (diag * 0.014), 12.0, 22.0)))
+        base_font_size = int(round(clamp(base_font_size, 11.0, 22.0)))
     else:
-        base_font_size = int(round(clamp(9.0 + (diag * 0.010), 9.0, 14.0)))
+        base_font_size = int(round(clamp(base_font_size, 8.0, 14.0)))
 
     return {
         "tag": tag,
-        "name_en": country_name_en,
-        "name_ru": country_name_ru,
-        "display_name": country_name_ru if country_name_ru else country_name_en,
+        "name_en": short_en,
+        "name_ru": short_ru,
+        "full_name_en": country_name_en,
+        "full_name_ru": country_name_ru,
+        "display_name": short_ru if short_ru else short_en,
         "centroid": [round(centroid_x, 2), round(centroid_y, 2)],
         "bbox": [round(min_x, 1), round(min_y, 1), round(max_x, 1), round(max_y, 1)],
         "width": round(width, 1),
@@ -424,7 +613,94 @@ def main() -> None:
         json.dump(country_labels, f, ensure_ascii=False, indent=2)
     print(f"[LABELS] Saved {len(country_labels)} country label definitions to {labels_output_path}")
 
-    # 8. Re-bake map_data/ownership_lut.png via TNOBorderLUTBuilder
+    # 8. Generate map_data/state_labels.json (HoI4 Tactical Regional Names)
+    print(f"[STATES] Generating HoI4-style state labels...")
+    state_labels: Dict[str, Any] = {}
+    for sid, sdata in states_db.items():
+        s_provs = sdata.get("provinces", [])
+        if not s_provs:
+            continue
+        s_points = [province_centroids[p] for p in s_provs if p in province_centroids]
+        if not s_points:
+            continue
+        xs = [p[0] for p in s_points]
+        ys = [p[1] for p in s_points]
+        sc_x = float(np.mean(xs))
+        sc_y = float(np.mean(ys))
+        min_x, max_x = float(min(xs)), float(max(xs))
+        min_y, max_y = float(min(ys)), float(max(ys))
+        w = round(max(12.0, max_x - min_x), 1)
+        h = round(max(12.0, max_y - min_y), 1)
+
+        s_name_en = en_loc.get(f"STATE_{sid}", sdata.get("name", f"State {sid}"))
+        s_name_ru = ru_loc.get(f"STATE_{sid}", s_name_en)
+
+        state_labels[str(sid)] = {
+            "id": sid,
+            "owner": sdata.get("owner", "WST"),
+            "name_en": s_name_en,
+            "name_ru": s_name_ru,
+            "centroid": [round(sc_x, 2), round(sc_y, 2)],
+            "bbox": [round(min_x, 1), round(min_y, 1), round(max_x, 1), round(max_y, 1)],
+            "width": w,
+            "height": h,
+            "span": round(math.sqrt(w * w + h * h), 1),
+            "province_count": len(s_provs)
+        }
+
+    state_labels_path = PROJECT_ROOT / "map_data" / "state_labels.json"
+    with open(state_labels_path, "w", encoding="utf-8") as f:
+        json.dump(state_labels, f, ensure_ascii=False, indent=2)
+    print(f"[STATES] Saved {len(state_labels)} state label definitions to {state_labels_path}")
+
+    # 9. Synchronize map_data/province_features.json (Fixing "Держава-владелец" WST bug)
+    pf_path = PROJECT_ROOT / "map_data" / "province_features.json"
+    if pf_path.exists():
+        print(f"[SYNC] Synchronizing {pf_path} with authentic state owners and Russian names...")
+        with open(pf_path, "r", encoding="utf-8") as f:
+            pf = json.load(f)
+
+        TERRAIN_RU = {
+            "plains": "Равнины",
+            "hills": "Холмы",
+            "mountain": "Горы",
+            "mountains": "Горы",
+            "forest": "Лес",
+            "jungle": "Джунгли",
+            "marsh": "Болото",
+            "desert": "Пустыня",
+            "urban": "Городская застройка",
+            "ocean": "Океан",
+            "sea": "Море",
+            "lake": "Озеро",
+            "water": "Водный массив"
+        }
+
+        pf_fixed = 0
+        for pid_str, pfeat in pf.items():
+            pid = int(pid_str)
+            auth_o = prov_to_owner.get(pid, "")
+            auth_s = prov_to_state.get(pid, pfeat.get("state_id", 0))
+
+            if auth_o and pfeat.get("owner") != auth_o:
+                pfeat["owner"] = auth_o
+                pf_fixed += 1
+            if auth_s:
+                pfeat["state_id"] = auth_s
+                st_ru = ru_loc.get(f"STATE_{auth_s}", en_loc.get(f"STATE_{auth_s}", pfeat.get("state_name", f"Регион {auth_s}")))
+                st_en = en_loc.get(f"STATE_{auth_s}", pfeat.get("state_name", f"State {auth_s}"))
+                pfeat["state_name"] = st_ru
+                pfeat["state_name_en"] = st_en
+
+            raw_terrain = str(pfeat.get("terrain", "plains")).lower()
+            pfeat["terrain_name_ru"] = TERRAIN_RU.get(raw_terrain, "Умеренный ландшафт")
+            pfeat["terrain_name_en"] = raw_terrain.capitalize()
+
+        with open(pf_path, "w", encoding="utf-8") as f:
+            json.dump(pf, f, ensure_ascii=False, indent=2)
+        print(f"[SYNC] Corrected {pf_fixed} province ownership records in province_features.json")
+
+    # 10. Re-bake map_data/ownership_lut.png via TNOBorderLUTBuilder
     lut_builder_script = PROJECT_ROOT / "tools" / "tno_border_lut_builder.py"
     if lut_builder_script.exists():
         print(f"[LUT] Re-baking ownership_lut.png...")
@@ -433,7 +709,8 @@ def main() -> None:
             sys.executable,
             str(lut_builder_script),
             "--manifest", str(manifest_path),
-            "--output", str(PROJECT_ROOT / "map_data" / "ownership_lut.png")
+            "--regions", str(starting_regions_path),
+            "--output-lut", str(PROJECT_ROOT / "map_data" / "ownership_lut.png")
         ]
         ret = subprocess.run(cmd, capture_output=True, text=True)
         print(f"[LUT] Output: {ret.stdout.strip()}")
