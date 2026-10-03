@@ -52,30 +52,158 @@ signal us_electoral_report_generated(report: Dictionary)
 		return player_state
 	set(val):
 		player_state = val
-@export var event_manager: EventManager
-@export var directive_manager: DirectiveManager
-@export var focus_stage_controller: FocusStageController
-@export var german_civil_war_manager: GermanCivilWarManager
+var _event_manager_node: EventManager = null
+@export var event_manager: EventManager:
+	get:
+		if _event_manager_node != null:
+			return _event_manager_node
+		if has_node("EventManager"):
+			_event_manager_node = get_node("EventManager") as EventManager
+		elif _event_manager_node == null:
+			_event_manager_node = EventManager.new()
+			_event_manager_node.name = "EventManager"
+			if is_inside_tree():
+				add_child(_event_manager_node)
+		return _event_manager_node
+	set(val):
+		_event_manager_node = val
+
+var _directive_manager_node: DirectiveManager = null
+@export var directive_manager: DirectiveManager:
+	get:
+		if _directive_manager_node != null:
+			return _directive_manager_node
+		if has_node("DirectiveManager"):
+			_directive_manager_node = get_node("DirectiveManager") as DirectiveManager
+		elif _directive_manager_node == null:
+			_directive_manager_node = DirectiveManager.new()
+			_directive_manager_node.name = "DirectiveManager"
+			if is_inside_tree():
+				add_child(_directive_manager_node)
+		return _directive_manager_node
+	set(val):
+		_directive_manager_node = val
+
+var _focus_stage_controller_node: FocusStageController = null
+@export var focus_stage_controller: FocusStageController:
+	get:
+		if _focus_stage_controller_node != null:
+			return _focus_stage_controller_node
+		if has_node("FocusStageController"):
+			_focus_stage_controller_node = get_node("FocusStageController") as FocusStageController
+		elif _focus_stage_controller_node == null:
+			_focus_stage_controller_node = FocusStageController.new()
+			_focus_stage_controller_node.name = "FocusStageController"
+			if is_inside_tree():
+				add_child(_focus_stage_controller_node)
+		return _focus_stage_controller_node
+	set(val):
+		_focus_stage_controller_node = val
+
+var _german_civil_war_manager_node: GermanCivilWarManager = null
+@export var german_civil_war_manager: GermanCivilWarManager:
+	get:
+		if _german_civil_war_manager_node != null:
+			return _german_civil_war_manager_node
+		if has_node("GermanCivilWarManager"):
+			_german_civil_war_manager_node = get_node("GermanCivilWarManager") as GermanCivilWarManager
+		elif _german_civil_war_manager_node == null:
+			_german_civil_war_manager_node = GermanCivilWarManager.new()
+			_german_civil_war_manager_node.name = "GermanCivilWarManager"
+			if is_inside_tree():
+				add_child(_german_civil_war_manager_node)
+		return _german_civil_war_manager_node
+	set(val):
+		_german_civil_war_manager_node = val
+
+var _germany_campaign_manager_node: GermanyCampaignManager = null
+@export var germany_campaign_manager: GermanyCampaignManager:
+	get:
+		if _germany_campaign_manager_node != null:
+			return _germany_campaign_manager_node
+		if has_node("GermanyCampaignManager"):
+			_germany_campaign_manager_node = get_node("GermanyCampaignManager") as GermanyCampaignManager
+		elif _germany_campaign_manager_node == null:
+			_germany_campaign_manager_node = GermanyCampaignManager.new()
+			_germany_campaign_manager_node.name = "GermanyCampaignManager"
+			if is_inside_tree():
+				add_child(_germany_campaign_manager_node)
+		return _germany_campaign_manager_node
+	set(val):
+		_germany_campaign_manager_node = val
+
 @export var russian_unification_manager: RussianUnificationManager:
 	get:
 		if russian_unification_manager == null:
-			russian_unification_manager = RussianUnificationManager.new()
-			russian_unification_manager.name = "RussianUnificationManager"
-			if is_inside_tree():
-				add_child(russian_unification_manager)
+			if has_node("RussianUnificationManager"):
+				russian_unification_manager = get_node("RussianUnificationManager") as RussianUnificationManager
+			else:
+				russian_unification_manager = RussianUnificationManager.new()
+				russian_unification_manager.name = "RussianUnificationManager"
+				if is_inside_tree():
+					add_child(russian_unification_manager)
 		return russian_unification_manager
 	set(val):
 		russian_unification_manager = val
-@export var japan_empire_manager: JapanEmpireManager = null
-@export var italy_empire_manager: ItalyEmpireManager = null
-@export var research_manager: ResearchManager = null
+
+var _japan_empire_manager_node: JapanEmpireManager = null
+@export var japan_empire_manager: JapanEmpireManager:
+	get:
+		if _japan_empire_manager_node != null:
+			return _japan_empire_manager_node
+		if has_node("JapanEmpireManager"):
+			_japan_empire_manager_node = get_node("JapanEmpireManager") as JapanEmpireManager
+		elif _japan_empire_manager_node == null:
+			_japan_empire_manager_node = JapanEmpireManager.new()
+			_japan_empire_manager_node.name = "JapanEmpireManager"
+			if is_inside_tree():
+				add_child(_japan_empire_manager_node)
+		return _japan_empire_manager_node
+	set(val):
+		_japan_empire_manager_node = val
+
+var _italy_empire_manager_node: ItalyEmpireManager = null
+@export var italy_empire_manager: ItalyEmpireManager:
+	get:
+		if _italy_empire_manager_node != null:
+			return _italy_empire_manager_node
+		if has_node("ItalyEmpireManager"):
+			_italy_empire_manager_node = get_node("ItalyEmpireManager") as ItalyEmpireManager
+		elif _italy_empire_manager_node == null:
+			_italy_empire_manager_node = ItalyEmpireManager.new()
+			_italy_empire_manager_node.name = "ItalyEmpireManager"
+			if is_inside_tree():
+				add_child(_italy_empire_manager_node)
+		return _italy_empire_manager_node
+	set(val):
+		_italy_empire_manager_node = val
+
+var _research_manager_node: ResearchManager = null
+@export var research_manager: ResearchManager:
+	get:
+		if _research_manager_node != null:
+			return _research_manager_node
+		if has_node("ResearchManager"):
+			_research_manager_node = get_node("ResearchManager") as ResearchManager
+		elif _research_manager_node == null:
+			_research_manager_node = ResearchManager.new()
+			_research_manager_node.name = "ResearchManager"
+			if is_inside_tree():
+				add_child(_research_manager_node)
+		return _research_manager_node
+	set(val):
+		_research_manager_node = val
+
 @export var boundary_manager: BoundaryManager:
 	get:
 		if boundary_manager == null:
-			boundary_manager = BoundaryManager.new()
-			boundary_manager.name = "BoundaryManager"
-			if is_inside_tree():
-				add_child(boundary_manager)
+			if has_node("BoundaryManager"):
+				boundary_manager = get_node("BoundaryManager") as BoundaryManager
+			else:
+				boundary_manager = BoundaryManager.new()
+				boundary_manager.name = "BoundaryManager"
+				if is_inside_tree():
+					add_child(boundary_manager)
 		return boundary_manager
 	set(val):
 		boundary_manager = val
@@ -544,8 +672,12 @@ func get_formatted_date() -> String:
 ## Главный метод завершения хода (вызывается кнопкой «Завершить ход» в UI)
 func end_turn() -> void:
 	if current_state == TurnState.WAITING_FOR_MODAL_EVENT:
-		push_warning("TurnManager: Нельзя завершить ход, пока открыт неразрешенный модальный кризис!")
-		return
+		if pending_modal_events.is_empty():
+			# Автоматическое восстановление, если модальное окно было разрешено без сброса стейта
+			current_state = TurnState.IDLE
+		else:
+			push_warning("TurnManager: Нельзя завершить ход, пока открыт неразрешенный модальный кризис!")
+			return
 
 	# 1. Сброс и начисление тактических очков (Data-Driven через ConfigManager)
 	var cfg = ConfigManager.get_instance()
