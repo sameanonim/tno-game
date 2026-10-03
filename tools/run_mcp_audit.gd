@@ -26,6 +26,8 @@ const DirectiveResourceScript = preload("res://core/data/directive_resource.gd")
 const RussianUnificationManagerScript = preload("res://core/systems/russia/russian_unification_manager.gd")
 const TurnManagerScript = preload("res://core/systems/turn_manager.gd")
 const TerminalSoundFxScript = preload("res://core/audio/terminal_sound_fx.gd")
+const GermanyCampaignStateScript = preload("res://core/data/germany/germany_campaign_state.gd")
+const GermanyCampaignManagerScript = preload("res://core/systems/germany/germany_campaign_manager.gd")
 
 func _init() -> void:
 	call_deferred("_run_audit")
@@ -36,7 +38,7 @@ func _run_audit() -> void:
 	print(">>> RUNNING AUTOMATED MCP ARCHITECTURE & SUBSYSTEMS AUDIT <<<")
 	print("================================================================================")
 
-	var total_checks: int = 5
+	var total_checks: int = 6
 	var passed_checks: int = 0
 
 	if _check_autoloads_and_singletons():
@@ -52,6 +54,9 @@ func _run_audit() -> void:
 		passed_checks += 1
 
 	if _check_multi_turn_simulation_consistency():
+		passed_checks += 1
+
+	if _check_germany_deep_systems():
 		passed_checks += 1
 
 	print("================================================================================")
@@ -316,4 +321,93 @@ func _check_multi_turn_simulation_consistency() -> bool:
 	print("  * Russian Warlord Conquest & Army Merging: OK (TASK-4.1)")
 	print("  * Global 1973 Oil Crisis Simulation: OK (TASK-4.2)")
 	print("  * CRT Shader Noise & Flyback Sound Synthesis: OK (TASK-4.3)")
+	return true
+
+
+func _check_germany_deep_systems() -> bool:
+	print("\n[CHECK 6/6] Verifying Germany Deep Systems, Contenders & Terminal UI...")
+	
+	# 1. Verify Germany State serialization & restoration
+	var st = GermanyCampaignStateScript.new()
+	st.hitler_health = 82.5
+	st.slaves_count_millions = 9.8
+	st.slave_unrest = 0.45
+	st.chosen_contender_tag = "SPE"
+	var d: Dictionary = st.to_dict()
+	var restored = GermanyCampaignStateScript.from_dict(d)
+	if restored == null or restored.hitler_health != 82.5 or restored.chosen_contender_tag != "SPE":
+		printerr("FAIL: GermanyCampaignState serialization roundtrip failed!")
+		return false
+	print("  * GermanyCampaignState data symmetry & serialization: OK")
+	
+	# 2. Verify Authentic Datasets
+	var ev_file = FileAccess.open("res://data/countries/GER/events.json", FileAccess.READ)
+	if ev_file == null:
+		printerr("FAIL: Cannot open res://data/countries/GER/events.json!")
+		return false
+	var ev_text = ev_file.get_as_text()
+	ev_file.close()
+	var ev_json = JSON.new()
+	if ev_json.parse(ev_text) != OK or not (ev_json.data is Array) or ev_json.data.size() < 1000:
+		printerr("FAIL: GER events.json does not contain authentic data (<1000 events)!")
+		return false
+	print("  * Germany Authentic Narrative Events: OK (%d events loaded)" % ev_json.data.size())
+	
+	var dec_file = FileAccess.open("res://data/countries/GER/decisions.json", FileAccess.READ)
+	if dec_file == null:
+		printerr("FAIL: Cannot open res://data/countries/GER/decisions.json!")
+		return false
+	var dec_text = dec_file.get_as_text()
+	dec_file.close()
+	var dec_json = JSON.new()
+	if dec_json.parse(dec_text) != OK or not (dec_json.data is Array) or dec_json.data.size() < 100:
+		printerr("FAIL: GER decisions.json does not contain authentic data (<100 decisions)!")
+		return false
+	print("  * Germany Authentic Crisis Decisions: OK (%d decisions loaded)" % dec_json.data.size())
+	
+	# 3. Verify Germany Campaign Manager simulation steps
+	var mgr = GermanyCampaignManagerScript.new()
+	root.add_child(mgr)
+	mgr.campaign_state = restored
+	
+	# Simulate 3 turns of prelude
+	for t in range(1, 4):
+		mgr.process_turn(t)
+	if restored.hitler_health >= 82.5:
+		printerr("FAIL: Hitler health decay did not process!")
+		mgr.queue_free()
+		return false
+	print("  * GermanyCampaignManager Prelude & Health Decay: OK (Health: %0.1f%%)" % restored.hitler_health)
+	
+	# Test contender actions
+	mgr.select_player_contender("BOR")
+	var g_ok: bool = mgr.execute_bormann_secure_district("GAU_BERLIN")
+	if not g_ok:
+		printerr("FAIL: Bormann secure gauleiter returned false!")
+		mgr.queue_free()
+		return false
+		
+	mgr.select_player_contender("SPE")
+	mgr.execute_speer_empower_advisor("erhard", 15.0)
+	var zd: Dictionary = restored.zollverein_data
+	var go4: Dictionary = zd.get("gang_of_four_influence", {})
+	if float(go4.get("erhard", 0.0)) != 65.0:
+		printerr("FAIL: Speer empower advisor did not update state!")
+		mgr.queue_free()
+		return false
+	print("  * Contender Engines (Kartenhaus & Zollverein execution): OK")
+	
+	# 4. Verify Germany Terminal Screen UI Scene
+	var scene = load("res://ui/screens/germany/germany_terminal_screen.tscn")
+	if scene == null:
+		printerr("FAIL: Could not load res://ui/screens/germany/germany_terminal_screen.tscn!")
+		mgr.queue_free()
+		return false
+	var screen_inst = scene.instantiate()
+	root.add_child(screen_inst)
+	screen_inst.setup(mgr)
+	print("  * GermanyTerminalScreen Scene instantiation & setup: OK")
+	
+	screen_inst.queue_free()
+	mgr.queue_free()
 	return true

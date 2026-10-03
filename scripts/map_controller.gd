@@ -76,6 +76,11 @@ signal territory_transferred(province_id: int, state_id: int, old_owner: String,
 @export var state_border_dash_scale: float = 80.0
 @export var state_border_dash_ratio: float = 0.55
 
+@export_group("Country Labels & Typography")
+@export var show_country_labels: bool = true
+@export var use_russian_country_names: bool = true
+@export_file("*.json") var country_labels_file_path: String = "res://map_data/country_labels.json"
+
 @export_group("Navigation & Camera")
 @export var enable_camera_control: bool = true
 @export var target_camera: Camera2D
@@ -141,6 +146,7 @@ var _shader_mat: ShaderMaterial
 
 var tactical_overlay: TacticalOverlay = null
 var map_markers_overlay: MapMarkersOverlay = null
+var country_labels_overlay: CountryLabelsOverlay = null
 
 
 # ==============================================================================
@@ -355,6 +361,17 @@ func _setup_tactical_overlay() -> void:
 		if not map_markers_overlay.rebellion_hotspot_clicked.is_connected(_on_rebellion_hotspot_clicked):
 			map_markers_overlay.rebellion_hotspot_clicked.connect(_on_rebellion_hotspot_clicked)
 
+	if country_labels_overlay == null:
+		country_labels_overlay = CountryLabelsOverlay.new()
+		country_labels_overlay.name = "CountryLabelsOverlay"
+		add_child(country_labels_overlay)
+		country_labels_overlay.position = origin_offset
+		country_labels_overlay.set_zoom_level(current_zoom)
+		country_labels_overlay.set_labels_visible(show_country_labels)
+		country_labels_overlay.set_use_russian(use_russian_country_names)
+		if country_labels_file_path != "":
+			country_labels_overlay.load_labels_manifest(country_labels_file_path)
+
 
 func _on_tactical_axis_clicked(axis: OperationalAxis) -> void:
 	if axis != null and not axis.target_region_ids.is_empty():
@@ -460,6 +477,9 @@ func update_province_owner(province_id: int, owner_val: Variant, color: Color = 
 	var sid = province_to_state.get(province_id, 0)
 	if sid == 0 and provinces_data.has(province_id):
 		sid = int(provinces_data[province_id].get("state_id", 0))
+
+	if country_labels_overlay != null:
+		country_labels_overlay.on_territory_transferred(province_id, sid, old_owner, clean_owner)
 
 	territory_transferred.emit(province_id, sid, old_owner, new_owner_tag)
 
@@ -996,6 +1016,24 @@ func set_province_owner(province_id: int, new_owner_tag: String, new_color: Colo
 
 
 ##
+## Управление видимостью меток государств на карте
+##
+func set_country_labels_visible(visible_state: bool) -> void:
+	show_country_labels = visible_state
+	if country_labels_overlay != null:
+		country_labels_overlay.set_labels_visible(visible_state)
+
+
+##
+## Переключение языка отображения названий государств (Русский / Английский)
+##
+func set_country_labels_language(use_russian: bool) -> void:
+	use_russian_country_names = use_russian
+	if country_labels_overlay != null:
+		country_labels_overlay.set_use_russian(use_russian)
+
+
+##
 ## Возвращает тактические и географические особенности провинции
 ##
 func get_province_features(province_id: int) -> Dictionary:
@@ -1048,6 +1086,8 @@ func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
 		tactical_overlay.set_zoom_level(current_zoom)
 	if map_markers_overlay != null:
 		map_markers_overlay.set_zoom_level(current_zoom)
+	if country_labels_overlay != null:
+		country_labels_overlay.set_zoom_level(current_zoom)
 
 	var should_be_tactical = (current_zoom >= tactical_zoom_threshold)
 	if should_be_tactical != is_tactical_view_active:
@@ -1321,6 +1361,14 @@ func _load_supplementary_data() -> void:
 							country_spheres[tag] = float(c_info["sphere_code"])
 						if c_info.has("faction"):
 							country_factions[tag] = str(c_info["faction"])
+						if c_info.has("owned_states") and c_info["owned_states"] is Array:
+							for sid_val in c_info["owned_states"]:
+								var sid = int(sid_val)
+								states_data[sid] = {
+									"id": sid,
+									"owner": tag,
+									"provinces": state_to_provinces.get(sid, [])
+								}
 
 
 	if FileAccess.file_exists(starting_regions_file_path):
@@ -1335,5 +1383,5 @@ func _load_supplementary_data() -> void:
 					starting_regions_data[pid] = json_r.data[k]
 					if not provinces_data.has(pid):
 						provinces_data[pid] = json_r.data[k]
-					elif not provinces_data[pid].has("owner") and json_r.data[k].has("owner_tag"):
+					if json_r.data[k].has("owner_tag"):
 						provinces_data[pid]["owner"] = json_r.data[k]["owner_tag"]

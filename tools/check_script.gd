@@ -14,7 +14,10 @@ func _init() -> void:
 		"res://ui/screens/gcw_operations_panel.gd",
 		"res://ui/components/russian_smuta_panel.gd",
 		"res://ui/screens/tno_economy_screen.gd",
-		"res://ui/components/region_management_panel.gd"
+		"res://ui/components/region_management_panel.gd",
+		"res://ui/screens/main_menu.gd",
+		"res://ui/screens/japan/japan_terminal_screen.gd",
+		"res://ui/screens/terminal_main.gd"
 	]
 	for path in scripts:
 		var script = load(path)

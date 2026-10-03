@@ -10,7 +10,13 @@ extends Node
 ## - Симуляция рабского труда и Восстания рабов (Sklavenaufstand 1970).
 ##
 
-signal germany_state_updated(state: GermanyCampaignState)
+const CampaignStateScript = preload("res://core/data/germany/germany_campaign_state.gd")
+const KartenhausEngineScript = preload("res://core/systems/germany/kartenhaus_engine.gd")
+const ZollvereinEngineScript = preload("res://core/systems/germany/zollverein_engine.gd")
+const WarPlansEngineScript = preload("res://core/systems/germany/warplans_engine.gd")
+const NuclearCustodyEngineScript = preload("res://core/systems/germany/nuclear_custody_engine.gd")
+
+signal germany_state_updated(state: Resource)
 signal hitler_health_changed(new_health: float, is_alive: bool)
 signal hitler_passed_away()
 signal campaign_stage_advanced(new_stage: int, stage_title: String)
@@ -18,7 +24,7 @@ signal slave_unrest_changed(new_unrest: float, is_critical: bool)
 signal contender_mechanic_stepped(contender_tag: String, step_result: Dictionary)
 signal log_message_generated(text: String, is_alert: bool)
 
-@export var campaign_state: GermanyCampaignState = null
+@export var campaign_state: Resource = null
 @export var current_turn: int = 1
 
 # Ссылки на внешние менеджеры
@@ -27,7 +33,7 @@ var civil_war_manager: GermanCivilWarManager = null
 
 func _ready() -> void:
 	if campaign_state == null:
-		campaign_state = GermanyCampaignState.new()
+		campaign_state = CampaignStateScript.new()
 
 
 func initialize(gcw_mgr: GermanCivilWarManager = null) -> void:
@@ -43,13 +49,13 @@ func process_turn(turn_number: int) -> void:
 	var turn_seed: int = turn_number * 1337 + 42
 	
 	match campaign_state.current_stage:
-		GermanyCampaignState.CampaignStage.STAGE_PRELUDE:
+		CampaignStateScript.CampaignStage.STAGE_PRELUDE:
 			_process_prelude_turn(turn_seed)
-		GermanyCampaignState.CampaignStage.STAGE_POWER_STRUGGLE:
+		CampaignStateScript.CampaignStage.STAGE_POWER_STRUGGLE:
 			_process_power_struggle_turn(turn_seed)
-		GermanyCampaignState.CampaignStage.STAGE_SUCCESSOR_RULE:
+		CampaignStateScript.CampaignStage.STAGE_SUCCESSOR_RULE:
 			_process_successor_rule_turn(turn_seed)
-		GermanyCampaignState.CampaignStage.STAGE_COLLAPSE:
+		CampaignStateScript.CampaignStage.STAGE_COLLAPSE:
 			_process_collapse_turn(turn_seed)
 			
 	# Общий расчет рабской экономики
@@ -79,7 +85,7 @@ func _process_prelude_turn(seed_val: int) -> void:
 func _trigger_hitler_death() -> void:
 	campaign_state.hitler_is_alive = false
 	campaign_state.hitler_health = 0.0
-	campaign_state.current_stage = GermanyCampaignState.CampaignStage.STAGE_POWER_STRUGGLE
+	campaign_state.current_stage = CampaignStateScript.CampaignStage.STAGE_POWER_STRUGGLE
 	
 	emit_signal("hitler_passed_away")
 	emit_signal("campaign_stage_advanced", int(campaign_state.current_stage), "КРИЗИС ПРЕСТОЛОНАСЛЕДИЯ // ГИТЛЕР МЁРТВ")
@@ -101,7 +107,7 @@ func _process_power_struggle_turn(_seed_val: int) -> void:
 	# Если гражданская война активна в civil_war_manager
 	if civil_war_manager != null and civil_war_manager.active_phase == GermanCivilWarManager.GCWPhase.PHASE_3_HEGEMONY:
 		# Война завершена, переход к фазе правления
-		campaign_state.current_stage = GermanyCampaignState.CampaignStage.STAGE_SUCCESSOR_RULE
+		campaign_state.current_stage = CampaignStateScript.CampaignStage.STAGE_SUCCESSOR_RULE
 		emit_signal("campaign_stage_advanced", int(campaign_state.current_stage), "ТРИУМФ НОВОГО ПРАВИТЕЛЯ // РЕКОНСТРУКЦИЯ")
 
 
@@ -112,15 +118,15 @@ func _process_successor_rule_turn(seed_val: int) -> void:
 	var step_res: Dictionary = {}
 	match campaign_state.chosen_contender_tag:
 		"BOR":
-			step_res = KartenhausEngine.process_turn_step(campaign_state, seed_val)
+			step_res = KartenhausEngineScript.process_turn_step(campaign_state, seed_val)
 		"SPE":
-			step_res = ZollvereinEngine.process_turn_step(campaign_state, seed_val)
+			step_res = ZollvereinEngineScript.process_turn_step(campaign_state, seed_val)
 		"GOR":
-			step_res = WarPlansEngine.process_turn_step(campaign_state, seed_val)
+			step_res = WarPlansEngineScript.process_turn_step(campaign_state, seed_val)
 		"HEY":
-			step_res = NuclearCustodyEngine.process_turn_step(campaign_state, seed_val)
+			step_res = NuclearCustodyEngineScript.process_turn_step(campaign_state, seed_val)
 			if step_res.get("apocalypse_triggered", false):
-				campaign_state.current_stage = GermanyCampaignState.CampaignStage.STAGE_COLLAPSE
+				campaign_state.current_stage = CampaignStateScript.CampaignStage.STAGE_COLLAPSE
 				emit_signal("campaign_stage_advanced", int(campaign_state.current_stage), "ЯДЕРНЫЙ АПОКАЛИПСИС // КОНЕЦ СВЕТА")
 				return
 				
@@ -160,23 +166,23 @@ func select_player_contender(tag: String) -> void:
 
 
 func execute_bormann_secure_district(district_id: String) -> bool:
-	var success: bool = KartenhausEngine.secure_gauleiter(campaign_state, district_id, current_turn * 991)
+	var success: bool = KartenhausEngineScript.secure_gauleiter(campaign_state, district_id, current_turn * 991)
 	emit_signal("germany_state_updated", campaign_state)
 	return success
 
 
 func execute_speer_empower_advisor(advisor_key: String, delta: float) -> void:
-	ZollvereinEngine.empower_advisor(campaign_state, advisor_key, delta)
+	ZollvereinEngineScript.empower_advisor(campaign_state, advisor_key, delta)
 	emit_signal("germany_state_updated", campaign_state)
 
 
 func execute_goering_campaign_victory(target_tag: String) -> Dictionary:
-	var res: Dictionary = WarPlansEngine.execute_campaign_victory(campaign_state, target_tag)
+	var res: Dictionary = WarPlansEngineScript.execute_campaign_victory(campaign_state, target_tag)
 	emit_signal("germany_state_updated", campaign_state)
 	return res
 
 
 func execute_heydrich_secure_silo() -> bool:
-	var success: bool = NuclearCustodyEngine.secure_silo_operation(campaign_state, current_turn * 773)
+	var success: bool = NuclearCustodyEngineScript.secure_silo_operation(campaign_state, current_turn * 773)
 	emit_signal("germany_state_updated", campaign_state)
 	return success

@@ -10,6 +10,10 @@ extends PanelContainer
 
 signal closed()
 
+const CampaignStateScript = preload("res://core/data/germany/germany_campaign_state.gd")
+const ZollvereinEngineScript = preload("res://core/systems/germany/zollverein_engine.gd")
+const KartenhausEngineScript = preload("res://core/systems/germany/kartenhaus_engine.gd")
+
 # Заголовок и управление
 @onready var btn_close: Button = $VBox/HeaderHBox/CloseButton
 @onready var lbl_header_title: Label = $VBox/HeaderHBox/TitleLabel
@@ -34,10 +38,10 @@ signal closed()
 
 # Элементы Вкладки 1 (Succession)
 @onready var lbl_hitler_bulletin: Label = $VBox/ContentScroll/SectionsVBox/SectionSuccession/HitlerCard/BulletinLabel
-@onready var btn_select_bormann: Button = $VBox/ContentScroll/SectionsVBox/SectionSuccession/ContendersHBox/CardBormann/SelectButton
-@onready var btn_select_speer: Button = $VBox/ContentScroll/SectionsVBox/SectionSuccession/ContendersHBox/CardSpeer/SelectButton
-@onready var btn_select_goering: Button = $VBox/ContentScroll/SectionsVBox/SectionSuccession/ContendersHBox/CardGoering/SelectButton
-@onready var btn_select_heydrich: Button = $VBox/ContentScroll/SectionsVBox/SectionSuccession/ContendersHBox/CardHeydrich/SelectButton
+@onready var btn_select_bormann: Button = $VBox/ContentScroll/SectionsVBox/SectionSuccession/ContendersHBox/CardBormann/VBox/SelectButton
+@onready var btn_select_speer: Button = $VBox/ContentScroll/SectionsVBox/SectionSuccession/ContendersHBox/CardSpeer/VBox/SelectButton
+@onready var btn_select_goering: Button = $VBox/ContentScroll/SectionsVBox/SectionSuccession/ContendersHBox/CardGoering/VBox/SelectButton
+@onready var btn_select_heydrich: Button = $VBox/ContentScroll/SectionsVBox/SectionSuccession/ContendersHBox/CardHeydrich/VBox/SelectButton
 
 # Элементы Вкладки 2 (Bormann / Kartenhaus)
 @onready var lbl_kartenhaus_stats: Label = $VBox/ContentScroll/SectionsVBox/SectionBormann/StatsLabel
@@ -61,7 +65,7 @@ signal closed()
 # Лог терминала внизу
 @onready var lbl_status_log: Label = $VBox/BottomBar/StatusLogLabel
 
-var campaign_manager: GermanyCampaignManager = null
+var campaign_manager: Node = null
 var current_tab: String = "succession"
 
 
@@ -71,7 +75,7 @@ func _ready() -> void:
 	_switch_tab("succession")
 
 
-func setup(manager: GermanyCampaignManager) -> void:
+func setup(manager: Node) -> void:
 	campaign_manager = manager
 	if campaign_manager != null:
 		if not campaign_manager.germany_state_updated.is_connected(_on_manager_updated):
@@ -137,14 +141,14 @@ func _switch_tab(tab_name: String) -> void:
 	btn_tab_warplans.add_theme_color_override("font_color", amber if tab_name == "warplans" else dim)
 
 
-func _on_manager_updated(_state: GermanyCampaignState) -> void:
+func _on_manager_updated(_state: Resource) -> void:
 	_refresh_ui()
 
 
 func _refresh_ui() -> void:
 	if campaign_manager == null or campaign_manager.campaign_state == null:
 		return
-	var st: GermanyCampaignState = campaign_manager.campaign_state
+	var st = campaign_manager.campaign_state
 	
 	# 1. Top HUD
 	if st.hitler_is_alive:
@@ -156,11 +160,11 @@ func _refresh_ui() -> void:
 		
 	var stage_name: String = "ПРЕЛЮДИЯ 1962"
 	match st.current_stage:
-		GermanyCampaignState.CampaignStage.STAGE_POWER_STRUGGLE:
+		CampaignStateScript.CampaignStage.STAGE_POWER_STRUGGLE:
 			stage_name = "СХВАТКА ЗА ВЛАСТЬ // КРИЗИС"
-		GermanyCampaignState.CampaignStage.STAGE_SUCCESSOR_RULE:
+		CampaignStateScript.CampaignStage.STAGE_SUCCESSOR_RULE:
 			stage_name = "ПРАВЛЕНИЕ НОВОГО ПРАВИТЕЛЯ"
-		GermanyCampaignState.CampaignStage.STAGE_COLLAPSE:
+		CampaignStateScript.CampaignStage.STAGE_COLLAPSE:
 			stage_name = "АНАРХИЯ И КОЛЛАПС РЕЙХА"
 	lbl_stage_info.text = _tr_str("UI_GER_STAGE_INFO", "ЭТАП: %s" % stage_name)
 	
@@ -199,7 +203,7 @@ func _refresh_ui() -> void:
 		"UI_GER_REGIME_METER",
 		"СЧЕТЧИК РЕЖИМА: %0.1f [%s]" % [
 			st.speer_regime_meter,
-			ZollvereinEngine.get_alignment_title(st.speer_regime_meter)
+			ZollvereinEngineScript.get_alignment_title(st.speer_regime_meter)
 		]
 	)
 	lbl_zollverein_trade.text = _tr_str(
@@ -258,7 +262,7 @@ func _on_secure_gauleiter_pressed() -> void:
 
 func _purge_faction(faction_key: String) -> void:
 	if campaign_manager != null and campaign_manager.campaign_state != null:
-		var res: Dictionary = KartenhausEngine.purge_faction(campaign_manager.campaign_state, faction_key)
+		var res: Dictionary = KartenhausEngineScript.purge_faction(campaign_manager.campaign_state, faction_key)
 		if res.get("success", false):
 			_on_log_message("Чистка завершена: Фракция [%s] разгромлена и лишена влияния!" % faction_key, false)
 			_refresh_ui()

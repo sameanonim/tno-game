@@ -149,7 +149,15 @@ func _render_yasuda_tab() -> void:
 	for c in sec_yasuda.get_children(): c.queue_free()
 
 	var head = Label.new()
-	head.text = _tr_str("UI_JAPAN_Y	var st_text = ""
+	head.text = _tr_str("UI_JAPAN_YASUDA_TITLE", {}, "--- РАССЛЕДОВАНИЕ КОРРУПЦИИ В ДЗАЙБАЦУ ЯСУДА ---")
+	head.modulate = Color(0.0, 0.95, 1.0)
+	sec_yasuda.add_child(head)
+
+	var p_status = PanelContainer.new()
+	var vb_st = VBoxContainer.new()
+	p_status.add_child(vb_st)
+
+	var st_text = ""
 	match japan_manager.yasuda_phase:
 		JapanEmpireManager.YasudaPhase.NORMAL:
 			st_text = _tr_str("UI_YASUDA_ST_NORMAL", {}, "[color=#88cc88]СТАТУС: БЕЗМЯТЕЖНОСТЬ.[/color] Финансовые рынки Токио стабильны, конгломерат Ясуда кредитует флот.")

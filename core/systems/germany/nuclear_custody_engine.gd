@@ -16,7 +16,7 @@ signal world_annihilated_in_nuclear_fire()
 const TOTAL_SILOS: int = 28
 const REQUIRED_FOR_SAFETY: int = 20
 
-static func process_turn_step(state: GermanyCampaignState, turn_seed: int) -> Dictionary:
+static func process_turn_step(state: Resource, turn_seed: int) -> Dictionary:
 	var result: Dictionary = {
 		"clock_delta": 0.0,
 		"apocalypse_triggered": false,
@@ -48,7 +48,7 @@ static func process_turn_step(state: GermanyCampaignState, turn_seed: int) -> Di
 	return result
 
 
-static func secure_silo_operation(state: GermanyCampaignState, turn_seed: int) -> bool:
+static func secure_silo_operation(state: Resource, turn_seed: int) -> bool:
 	if state == null:
 		return false
 	var nd: Dictionary = state.heydrich_nuclear_data

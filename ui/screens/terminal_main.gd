@@ -615,7 +615,7 @@ func _connect_signals() -> void:
 			if turn_manager.russian_unification_manager != null:
 				var res = turn_manager.russian_unification_manager.execute_diplomatic_summit(target_tag, turn_manager)
 				var success = res.get("success", false)
-				label_log.text = _tr_str("UI_AUTO_GEN_617", {}, "ДИПЛОМАТИЯ: %s") % (res.get("message")
+				label_log.text = _tr_str("UI_AUTO_GEN_617", {}, "ДИПЛОМАТИЯ: %s") % (res.get("message", ""))
 				if sound_fx != null:
 					if success: sound_fx.play_switch_click(1300.0)
 					else: sound_fx.play_alarm_buzz(450.0, 0.3)
@@ -1428,7 +1428,7 @@ func _open_raid_planning_panel(region_id: int, data: Dictionary) -> void:
 	var garrison = int(reg_obj.garrison_strength) if reg_obj != null else 60
 	var ic = reg_obj.industrial_capacity if reg_obj != null else 2
 
-	raid_panel_info.text = _tr_str("UI_AUTO_GEN_1430", {}, "[color=#00e5ff]СЕКТОР НАПАДЕНИЯ:[/color] %s [ID: %d]\n[color=#ffcc00]ВЛАДЕЛЕЦ:[/color] %s\n[color=#ff5555]ГАРНИЗОН:[/color] %d%% | [color=#33ff66]IC:[/color] %d\n[color=#888888]Оценка трофеев: склады оружия, наличность, рабочая сила.[/color]") % ([)
+	raid_panel_info.text = _tr_str("UI_AUTO_GEN_1430", {}, "[color=#00e5ff]СЕКТОР НАПАДЕНИЯ:[/color] %s [ID: %d]\n[color=#ffcc00]ВЛАДЕЛЕЦ:[/color] %s\n[color=#ff5555]ГАРНИЗОН:[/color] %d%% | [color=#33ff66]IC:[/color] %d\n[color=#888888]Оценка трофеев: склады оружия, наличность, рабочая сила.[/color]") % [
 		reg_name, region_id, owner_tag, garrison, ic
 	]
 	raid_panel.visible = true
