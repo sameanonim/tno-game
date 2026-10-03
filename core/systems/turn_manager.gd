@@ -322,6 +322,11 @@ func _ensure_directive_manager_connected() -> void:
 
 	if us_electoral_engine == null:
 		us_electoral_engine = USElectoralEngine.new()
+	if not us_electoral_engine.president_elected.is_connected(_on_us_president_elected):
+		us_electoral_engine.president_elected.connect(_on_us_president_elected)
+
+	if germany_campaign_manager != null and german_civil_war_manager != null:
+		germany_campaign_manager.initialize(german_civil_war_manager)
 
 	if russian_unification_manager == null:
 		russian_unification_manager = RussianUnificationManager.new()
@@ -377,11 +382,15 @@ func _on_directive_cancelled(dir: DirectiveResource, reason: String) -> void:
 	directive_cancelled.emit(dir, reason)
 
 
-func _on_directive_event_triggered(ev_id: String) -> void:
+func _on_directive_event_triggered(ev_id: String, delay_days: int = 0) -> void:
 	if event_manager != null:
-		var ev: GameEvent = event_manager.get_or_load_event(ev_id)
-		if ev != null:
-			pending_modal_events.append(ev)
+		if delay_days > 0:
+			var turns_delay = maxi(1, int(ceil(float(delay_days) / 7.0)))
+			event_manager.schedule_event(ev_id, turns_delay, current_turn, player_state.country_tag if player_state != null else "")
+		else:
+			var ev: GameEvent = event_manager.get_or_load_event(ev_id)
+			if ev != null:
+				pending_modal_events.append(ev)
 
 func _on_directive_region_conquered(province_id: int, new_owner_tag: String) -> void:
 	var old_owner: String = ""
@@ -816,6 +825,8 @@ func end_turn() -> void:
 	# 4.1. Кампания Германии / Немецкая Гражданская Война (GCW)
 	if german_civil_war_manager != null:
 		german_civil_war_manager.process_turn(current_turn)
+	if germany_campaign_manager != null:
+		germany_campaign_manager.process_turn(current_turn)
 
 	# 4.2. Кампания Русской Смуты и Воссоединения (Smuta / Unification)
 	if russian_unification_manager != null:
@@ -896,7 +907,6 @@ func _process_directives_phase() -> void:
 
 func _display_next_modal_event() -> void:
 	if pending_modal_events.is_empty():
-		current_state = TurnState.IDLE
 		_finalize_turn()
 		return
 
@@ -906,19 +916,77 @@ func _display_next_modal_event() -> void:
 
 ## Вызывается UI при выборе варианта в модальном диалоге события
 func resolve_modal_event_choice(event: GameEvent, option_index: int) -> void:
-	if option_index >= 0 and option_index < event.options.size():
+	if event != null and option_index >= 0 and option_index < event.options.size():
 		var chosen_opt: Dictionary = event.options[option_index]
-		event_manager.resolve_event_option(event, chosen_opt, player_state)
+		if event_manager != null:
+			event_manager.resolve_event_option(event, chosen_opt, player_state)
+		elif event.has_method("resolve_option_effects"):
+			event.resolve_option_effects(chosen_opt, player_state)
 
-	# Переход к следующему модальному событию в очереди, если есть
-	if not pending_modal_events.is_empty():
-		_display_next_modal_event()
-	else:
-		current_state = TurnState.IDLE
-		_finalize_turn()
+	# Переход к следующему модальному событию в очереди, либо финализация хода
+	_display_next_modal_event()
+
+
+## Принудительное снятие блокировки хода при сбое или закрытии внешнего UI
+func force_unlock_turn() -> void:
+	pending_modal_events.clear()
+	current_state = TurnState.IDLE
+
+
+## Обработчик победы кандидата на президентских выборах США
+func _on_us_president_elected(election_result: Dictionary) -> void:
+	var win_cand = election_result.get("winning_candidate", {})
+	if win_cand.is_empty():
+		return
+	var c_name: String = str(win_cand.get("name", ""))
+	var c_id: String = str(win_cand.get("id", ""))
+	var p_path: String = str(win_cand.get("portrait_path", ""))
+	var ideol: String = str(win_cand.get("ideology", ""))
+	var yr: int = int(election_result.get("year", 1964))
+
+	var target_usa: CountryState = player_state if (player_state != null and player_state.country_tag == "USA") else countries_world_state.get("USA", null)
+	if target_usa != null:
+		if not c_name.is_empty():
+			target_usa.leader_name = c_name
+		if not p_path.is_empty():
+			target_usa.leader_portrait_path = p_path
+		if not ideol.is_empty():
+			target_usa.ruling_ideology = ideol
+		target_usa.set_flag("president_" + c_id.to_lower(), true)
+		target_usa.set_flag("presidential_election_winner_%d" % yr, c_id)
+
+	# Определение канонического ID древа директив под нового президента США
+	var target_tree = ""
+	var cand_str = c_id.to_upper()
+	if cand_str.contains("JOHNSON") or cand_str.contains("LBJ"):
+		target_tree = "USA_LBJ_64"
+	elif cand_str.contains("KENNEDY") or cand_str.contains("RFK"):
+		target_tree = "USA_RFK_64"
+	elif cand_str.contains("WALLACE") and not cand_str.contains("BENNETT"):
+		target_tree = "USA_WAL_64"
+	elif cand_str.contains("BENNETT"):
+		target_tree = "USA_WFB_64"
+	elif cand_str.contains("GOLDWATER"):
+		target_tree = "USA_GLD_68"
+	elif cand_str.contains("HART"):
+		target_tree = "USA_Hart"
+	elif cand_str.contains("HARRINGTON"):
+		target_tree = "USA_HAR_68"
+	elif cand_str.contains("SMITH") or cand_str.contains("MCS"):
+		target_tree = "USA_MCS_68"
+	elif cand_str.contains("LEMAY"):
+		target_tree = "USA_LEMAY"
+
+	if player_state != null and player_state.country_tag == "USA" and focus_stage_controller != null and not target_tree.is_empty():
+		print("[TurnManager] ВЫБОРЫ США: Победа [%s] -> Переключение древа директив на [%s]" % [c_name, target_tree])
+		focus_stage_controller.switch_focus_tree(target_tree, true)
 
 
 func _finalize_turn() -> void:
+	if current_state == TurnState.IDLE:
+		return
+	current_state = TurnState.IDLE
+
 	# Продвижение календаря (1 ход = 7 реальных дней)
 	current_turn += 1
 	if player_state != null:
@@ -1221,6 +1289,42 @@ func save_game(save_path: String = "user://savegame.json") -> bool:
 				"completed_directives_archive": focus_stage_controller.completed_directives_archive.duplicate()
 			}
 
+	# Сериализация электоральной системы США
+	if us_electoral_engine != null:
+		save_dict["us_electoral_state"] = {
+			"senate_seats": us_electoral_engine.senate_seats.duplicate(),
+			"civil_rights_tension": us_electoral_engine.civil_rights_tension,
+			"civil_rights_status": us_electoral_engine.civil_rights_status,
+			"hawkish_frustration": us_electoral_engine.hawkish_frustration,
+			"last_midterm_turn": us_electoral_engine.last_midterm_turn,
+			"next_midterm_turn": us_electoral_engine.next_midterm_turn,
+			"next_presidential_turn": us_electoral_engine.next_presidential_turn,
+			"current_president": us_electoral_engine.current_president.duplicate()
+		}
+
+	# Сериализация кампании Германии
+	if germany_campaign_manager != null and germany_campaign_manager.campaign_state != null:
+		if germany_campaign_manager.campaign_state.has_method("to_dict"):
+			save_dict["germany_campaign_state"] = germany_campaign_manager.campaign_state.to_dict()
+
+	# Сериализация Сферы и кризиса Японии
+	if japan_empire_manager != null:
+		save_dict["japan_empire_state"] = {
+			"tse_index": japan_empire_manager.tse_index,
+			"yasuda_phase": int(japan_empire_manager.yasuda_phase),
+			"current_prime_minister": japan_empire_manager.current_prime_minister,
+			"active_prime_minister_key": japan_empire_manager.active_prime_minister_key,
+			"factions_diet": japan_empire_manager.factions_diet.duplicate(true)
+		}
+
+	# Сериализация Совета Италии
+	if italy_empire_manager != null:
+		save_dict["italy_empire_state"] = {
+			"council_balance": italy_empire_manager.council_balance,
+			"active_path_key": italy_empire_manager.active_path_key,
+			"triumvirate_state": int(italy_empire_manager.triumvirate_state)
+		}
+
 	var f = FileAccess.open(save_path, FileAccess.WRITE)
 	if f == null:
 		push_error("TurnManager: Не удалось открыть файл сохранения: %s" % save_path)
@@ -1356,6 +1460,47 @@ func load_game(save_path: String = "user://savegame.json") -> bool:
 				focus_stage_controller.completed_directives_archive.clear()
 				for a in fs_data["completed_directives_archive"]:
 					focus_stage_controller.completed_directives_archive.append(str(a))
+
+	# Восстановление электоральной системы США
+	if data.has("us_electoral_state") and us_electoral_engine != null:
+		var u_data = data["us_electoral_state"]
+		if u_data is Dictionary:
+			if u_data.has("senate_seats"):
+				us_electoral_engine.senate_seats = u_data["senate_seats"].duplicate()
+			us_electoral_engine.civil_rights_tension = float(u_data.get("civil_rights_tension", 50.0))
+			us_electoral_engine.civil_rights_status = str(u_data.get("civil_rights_status", "PENDING"))
+			us_electoral_engine.hawkish_frustration = float(u_data.get("hawkish_frustration", 20.0))
+			us_electoral_engine.last_midterm_turn = int(u_data.get("last_midterm_turn", 0))
+			us_electoral_engine.next_midterm_turn = int(u_data.get("next_midterm_turn", 104))
+			us_electoral_engine.next_presidential_turn = int(u_data.get("next_presidential_turn", 208))
+			if u_data.has("current_president"):
+				us_electoral_engine.current_president = u_data["current_president"].duplicate()
+
+	# Восстановление кампании Германии
+	if data.has("germany_campaign_state") and germany_campaign_manager != null and germany_campaign_manager.campaign_state != null:
+		var g_data = data["germany_campaign_state"]
+		if g_data is Dictionary and germany_campaign_manager.campaign_state.has_method("from_dict"):
+			germany_campaign_manager.campaign_state.from_dict(g_data)
+
+	# Восстановление состояния Японии
+	if data.has("japan_empire_state") and japan_empire_manager != null:
+		var j_data = data["japan_empire_state"]
+		if j_data is Dictionary:
+			japan_empire_manager.tse_index = float(j_data.get("tse_index", j_data.get("tse_stock_index", 1000.0)))
+			japan_empire_manager.yasuda_phase = int(j_data.get("yasuda_phase", 0)) as JapanEmpireManager.YasudaPhase
+			japan_empire_manager.current_prime_minister = str(j_data.get("current_prime_minister", "Хироя Ино"))
+			japan_empire_manager.active_prime_minister_key = str(j_data.get("active_prime_minister_key", "INO"))
+			if j_data.has("factions_diet") and j_data["factions_diet"] is Dictionary:
+				japan_empire_manager.factions_diet = j_data["factions_diet"].duplicate(true)
+
+	# Восстановление состояния Италии
+	if data.has("italy_empire_state") and italy_empire_manager != null:
+		var i_data = data["italy_empire_state"]
+		if i_data is Dictionary:
+			italy_empire_manager.council_balance = float(i_data.get("council_balance", i_data.get("council_power_balance", 15.0)))
+			italy_empire_manager.active_path_key = str(i_data.get("active_path_key", "STATUS_QUO"))
+			if i_data.has("triumvirate_state"):
+				italy_empire_manager.triumvirate_state = int(i_data["triumvirate_state"]) as ItalyEmpireManager.TriumvirateState
 
 	# Синхронизация карты после загрузки
 	if map_controller != null:

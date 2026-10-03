@@ -263,7 +263,7 @@ func can_advance_to_regional(country: CountryState) -> bool:
 
 
 ## Перевод на Стадию II: Региональная война
-func advance_to_regional() -> bool:
+func advance_to_regional(country: CountryState = null, turn_mgr: TurnManager = null) -> bool:
 	if current_stage != SmutaStage.STAGE_1_WARLORD:
 		return false
 	current_stage = SmutaStage.STAGE_2_REGIONAL
@@ -271,6 +271,8 @@ func advance_to_regional() -> bool:
 	var name_stage = get_stage_title(current_stage)
 	_log("ПРОРЕВЕЛИ ГОРНЫ: Эпоха раздробленности завершена. Началась Региональная кампания за объединение театра!")
 	stage_changed.emit(int(current_stage), name_stage)
+	if turn_mgr != null:
+		_switch_directives_tree(turn_mgr, "_regional")
 	return true
 
 
@@ -723,34 +725,116 @@ func _switch_directives_tree(turn_manager: TurnManager, stage_suffix: String) ->
 	if turn_manager == null:
 		return
 
-	# 1. Архитектурно чистый путь через FocusStageController
-	if turn_manager.focus_stage_controller != null:
-		var fsc = turn_manager.focus_stage_controller
-		var found_tree_id = ""
-		for tid in fsc.trees_manifest.keys():
-			if str(tid).to_lower().contains(stage_suffix.to_lower()):
-				found_tree_id = tid
-				break
-		if not found_tree_id.is_empty():
-			fsc.switch_focus_tree(found_tree_id, true)
-			_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s" % found_tree_id)
-			return
+	var country: CountryState = turn_manager.player_state
+	var clean_tag: String = player_tag.to_upper() if not player_tag.is_empty() else (country.country_tag.to_upper() if country != null else "")
+	var l_name: String = country.leader_name.to_lower() if country != null else ""
+	var ideol: String = country.ruling_ideology.to_lower() if country != null else ""
 
-	# 2. Fallback через файловую систему и FocusStageController
-	var dir_path = "res://data/countries/%s/directives" % player_tag.to_upper()
-	if DirAccess.dir_exists_absolute(dir_path):
-		var dir = DirAccess.open(dir_path)
-		if dir != null:
-			dir.list_dir_begin()
-			var file_name = dir.get_next()
-			while file_name != "":
-				if not dir.current_is_dir() and file_name.ends_with(".json") and file_name.to_lower().contains(stage_suffix.to_lower()):
-					var tree_id = file_name.trim_suffix(".json")
-					if turn_manager.focus_stage_controller != null:
-						turn_manager.focus_stage_controller.switch_focus_tree(tree_id, true)
-						_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s" % tree_id)
-						break
-				file_name = dir.get_next()
+	# Ключевые маркеры лидеров для сопоставления с именами деревьев
+	var leader_tokens: Array[String] = []
+	if l_name.contains("tabor") or l_name.contains("табориц"): leader_tokens.append("taboritsky")
+	elif l_name.contains("bukhar") or l_name.contains("бухарин"): leader_tokens.append("bukharina")
+	elif l_name.contains("suslov") or l_name.contains("суслов"): leader_tokens.append("suslov")
+	elif l_name.contains("zhdan") or l_name.contains("жданов"): leader_tokens.append("zhdanov")
+	elif l_name.contains("gumil") or l_name.contains("гумилев") or l_name.contains("гумилёв"): leader_tokens.append("gumilyov")
+	elif l_name.contains("serov") or l_name.contains("серов"): leader_tokens.append("serov")
+	elif l_name.contains("shafar") or l_name.contains("шафаревич"): leader_tokens.append("shafarevich")
+	elif l_name.contains("stalin") or l_name.contains("сталин"): leader_tokens.append("stalina")
+	elif l_name.contains("moroz") or l_name.contains("морозов"): leader_tokens.append("morozov")
+	elif l_name.contains("voznes") or l_name.contains("вознесенск"): leader_tokens.append("voznesensky")
+	elif l_name.contains("yazov") or l_name.contains("язов"): leader_tokens.append("yazov")
+	elif l_name.contains("zhukov") or l_name.contains("жуков"): leader_tokens.append("zhukov")
+	elif l_name.contains("tukhach") or l_name.contains("тухачевск"): leader_tokens.append("tukhachevsky")
+	elif l_name.contains("batov") or l_name.contains("батов"): leader_tokens.append("batov")
+	elif l_name.contains("yelts") or l_name.contains("ельцин"): leader_tokens.append("yeltsin")
+	elif l_name.contains("sablin") or l_name.contains("саблин"): leader_tokens.append("sablin")
+	elif l_name.contains("rodzaev") or l_name.contains("родзаевск"): leader_tokens.append("rodzaevsky")
+	elif l_name.contains("matkov") or l_name.contains("матковск"): leader_tokens.append("matkovsky")
+	elif l_name.contains("pokrysh") or l_name.contains("покрышкин"): leader_tokens.append("pokryshkin")
+	elif l_name.contains("shuksh") or l_name.contains("шукшин"): leader_tokens.append("shukshin")
+
+	var candidates: Array[String] = []
+
+	# 1. Из FocusStageController.trees_manifest
+	if turn_manager.focus_stage_controller != null:
+		for tid in turn_manager.focus_stage_controller.trees_manifest.keys():
+			var s_tid = str(tid)
+			if s_tid.to_lower().contains(stage_suffix.to_lower()):
+				candidates.append(s_tid)
+
+	# 2. Из файловой структуры директории страны
+	var dir_paths = [
+		"res://data/countries/%s/directives" % clean_tag,
+		"res://data/countries/%s/directives/trees" % clean_tag
+	]
+	for d_path in dir_paths:
+		if DirAccess.dir_exists_absolute(d_path):
+			var dir = DirAccess.open(d_path)
+			if dir != null:
+				dir.list_dir_begin()
+				var fn = dir.get_next()
+				while fn != "":
+					if not dir.current_is_dir() and fn.ends_with(".json") and fn.to_lower().contains(stage_suffix.to_lower()):
+						var tree_id = fn.trim_suffix(".json")
+						if not candidates.has(tree_id):
+							candidates.append(tree_id)
+					fn = dir.get_next()
+
+	if candidates.is_empty():
+		_log("ПРЕДУПРЕЖДЕНИЕ: Дерево директив для стадии [%s] не найдено." % stage_suffix)
+		return
+
+	# Скоринг кандидатов
+	var best_tree = ""
+	var best_score = -100
+
+	for cand in candidates:
+		var c_lower = cand.to_lower()
+		var score = 0
+
+		# Обязательный фильтр: дерево должно принадлежать тегу игрока
+		if not c_lower.contains(clean_tag.to_lower()):
+			continue
+
+		# Совпадение суффикса стадии
+		if c_lower.contains(stage_suffix.to_lower()):
+			score += 10
+
+		# Совпадение лидера
+		for token in leader_tokens:
+			if c_lower.contains(token):
+				score += 50
+				break
+
+		# Совпадение идеологии
+		if ideol.contains("communist") and (c_lower.contains("communist") or c_lower.contains("socialist") or c_lower.contains("socdem") or c_lower.contains("bukharin") or c_lower.contains("suslov") or c_lower.contains("zhdanov")):
+			score += 15
+		elif (ideol.contains("fascist") or ideol.contains("national_socialism")) and (c_lower.contains("fascist") or c_lower.contains("serov") or c_lower.contains("gumilyov") or c_lower.contains("shafarevich")):
+			score += 15
+		elif (ideol.contains("democrat") or ideol.contains("liberal")) and (c_lower.contains("democrat") or c_lower.contains("dsnp") or c_lower.contains("psd") or c_lower.contains("stalina")):
+			score += 15
+		elif (ideol.contains("despot") or ideol.contains("authoritarian")) and (c_lower.contains("despot") or c_lower.contains("morozov")):
+			score += 15
+		elif ideol.contains("burgund") and c_lower.contains("taboritsky"):
+			score += 25
+
+		if score > best_score:
+			best_score = score
+			best_tree = cand
+
+	if not best_tree.is_empty() and turn_manager.focus_stage_controller != null:
+		turn_manager.focus_stage_controller.switch_focus_tree(best_tree, true)
+		_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s (Оценка соответствия: %d)" % [best_tree, best_score])
+	elif candidates.size() > 0 and turn_manager.focus_stage_controller != null:
+		var fallback_cand = ""
+		for cand in candidates:
+			if cand.to_lower().contains(clean_tag.to_lower()):
+				fallback_cand = cand
+				break
+		if fallback_cand.is_empty():
+			fallback_cand = candidates[0]
+		turn_manager.focus_stage_controller.switch_focus_tree(fallback_cand, true)
+		_log("РАЗВЕРНУТО РЕЗЕРВНОЕ ДРЕВО ДИРЕКТИВ: %s" % fallback_cand)
 
 
 func _log(msg: String) -> void:

@@ -22,9 +22,10 @@ var all_events: Dictionary = {} # Key: String (event_id), Value: GameEvent
 var fired_events: Array[String] = []
 var pending_modal_events: Array[GameEvent] = []
 var scheduled_events_queue: Array[Dictionary] = [] # Elements: { "event_id": String, "trigger_turn": int, "target_tag": String }
+var active_conditional_event_ids: Array[String] = [] # Only events with actual trigger_conditions for the turn loop
 
 var _events_index: Dictionary = {} # Key: String (event_id), Value: String (file path)
-var _file_cache: Dictionary = {}   # Key: String (file path), Value: Dictionary of event JSON dicts
+var _file_cache: Dictionary = {}   # Key: String (file path), Value: Variant (Dictionary or Array)
 var _index_loaded: bool = false
 var _patterns_loaded: bool = false
 var _effect_opcodes: Dictionary = {}
@@ -72,29 +73,105 @@ func register_event(event: GameEvent) -> void:
 	all_events[event.event_id] = event
 
 
-## Загружает все события для конкретной страны (data/countries/<TAG>/events.json)
+## Индексирует и регистрирует события страны для ленивой подгрузки (Lazy / On-Demand Loading)
 func load_country_events(tag: String) -> Array[GameEvent]:
 	var upper_tag: String = tag.to_upper().strip_edges()
 	var ev_path: String = COUNTRIES_BASE_DIR.path_join(upper_tag).path_join("events.json")
-	var result: Array[GameEvent] = []
+	var initial_conditional_events: Array[GameEvent] = []
 
-	var events_data: Variant = _read_json(ev_path)
-	if events_data is Array:
-		for raw in events_data:
-			if raw is Dictionary:
-				var g_ev: GameEvent = GameEvent.from_dict(raw)
-				register_event(g_ev)
-				result.append(g_ev)
-	elif events_data is Dictionary:
-		for ev_id in events_data.keys():
-			var raw = events_data[ev_id]
-			if raw is Dictionary:
-				var g_ev: GameEvent = GameEvent.from_dict(raw)
-				register_event(g_ev)
-				result.append(g_ev)
+	if not FileAccess.file_exists(ev_path):
+		return initial_conditional_events
 
-	print("[EventManager] Loaded %d events for tag [%s]" % [result.size(), upper_tag])
-	return result
+	_load_index_if_needed()
+
+	# Кэшируем спарсенный JSON файла один раз
+	if not _file_cache.has(ev_path):
+		_file_cache[ev_path] = _read_json_file(ev_path)
+
+	var file_data: Variant = _file_cache.get(ev_path, {})
+	var indexed_count: int = 0
+
+	if file_data is Dictionary:
+		for ev_id in file_data.keys():
+			var s_id = str(ev_id)
+			if _is_foreign_event_for_tag(s_id, upper_tag):
+				continue
+
+			_events_index[s_id] = ev_path
+			indexed_count += 1
+
+			var raw = file_data[ev_id]
+			if raw is Dictionary:
+				var cond = raw.get("trigger_conditions", {})
+				var is_trig_only = bool(raw.get("is_triggered_only", false))
+				if not cond.is_empty() and not is_trig_only:
+					if not active_conditional_event_ids.has(s_id):
+						active_conditional_event_ids.append(s_id)
+					var g_ev: GameEvent = GameEvent.from_dict(raw)
+					register_event(g_ev)
+					initial_conditional_events.append(g_ev)
+
+	elif file_data is Array:
+		for raw in file_data:
+			if raw is Dictionary:
+				var s_id = str(raw.get("event_id", raw.get("id", "")))
+				if s_id.is_empty() or _is_foreign_event_for_tag(s_id, upper_tag):
+					continue
+
+				_events_index[s_id] = ev_path
+				indexed_count += 1
+
+				var cond = raw.get("trigger_conditions", {})
+				var is_trig_only = bool(raw.get("is_triggered_only", false))
+				if not cond.is_empty() and not is_trig_only:
+					if not active_conditional_event_ids.has(s_id):
+						active_conditional_event_ids.append(s_id)
+					var g_ev: GameEvent = GameEvent.from_dict(raw)
+					register_event(g_ev)
+					initial_conditional_events.append(g_ev)
+
+	print("[EventManager] Проиндексировано %d событий для [%s] (активных условных триггеров: %d, ленивых скриптовых: %d)" % [
+		indexed_count, upper_tag, active_conditional_event_ids.size(), indexed_count - active_conditional_event_ids.size()
+	])
+	return initial_conditional_events
+
+
+func _is_foreign_event_for_tag(event_id: String, country_tag: String) -> bool:
+	var l_id = event_id.to_lower()
+	var l_tag = country_tag.to_lower()
+
+	if l_tag == "kom":
+		if l_id.begins_with("guangdong_") or l_id.begins_with("ita_") or l_id.begins_with("ger_") or l_id.begins_with("usa_") or l_id.begins_with("japan_") or l_id.begins_with("brazil_") or l_id.begins_with("iberia_"):
+			return true
+	elif l_tag == "usa":
+		if l_id.begins_with("guangdong_") or l_id.begins_with("ger_") or l_id.begins_with("komi_") or l_id.begins_with("russia_"):
+			return true
+	elif l_tag == "ger":
+		if l_id.begins_with("guangdong_") or l_id.begins_with("usa_") or l_id.begins_with("komi_") or l_id.begins_with("japan_"):
+			return true
+
+	return false
+
+
+func _find_file_path_for_event(event_id: String) -> String:
+	var l_id = event_id.to_lower()
+	if l_id.contains("komi") or l_id.begins_with("kom_"):
+		return COUNTRIES_BASE_DIR.path_join("KOM").path_join("events.json")
+	if l_id.contains("usa") or l_id.contains("nixon") or l_id.contains("kennedy") or l_id.contains("johnson") or l_id.contains("sen_bill") or l_id.contains("gladio") or l_id.contains("civil_rights"):
+		return COUNTRIES_BASE_DIR.path_join("USA").path_join("events.json")
+	if l_id.contains("ger") or l_id.contains("hitler") or l_id.contains("gcw") or l_id.contains("bormann") or l_id.contains("speer") or l_id.contains("goering") or l_id.contains("heydrich"):
+		return COUNTRIES_BASE_DIR.path_join("GER").path_join("events.json")
+	if l_id.contains("japan") or l_id.contains("yasuda") or l_id.contains("diet") or l_id.contains("takagi") or l_id.contains("ikeda"):
+		return COUNTRIES_BASE_DIR.path_join("JAP").path_join("events.json")
+	if l_id.contains("ita") or l_id.contains("triumvirate") or l_id.contains("ciano") or l_id.contains("scorza"):
+		return COUNTRIES_BASE_DIR.path_join("ITA").path_join("events.json")
+	if l_id.contains("zhukov") or l_id.contains("tukhachevsky") or l_id.begins_with("wrs_"):
+		return COUNTRIES_BASE_DIR.path_join("WRS").path_join("events.json")
+	if l_id.contains("yazov") or l_id.begins_with("oms_"):
+		return COUNTRIES_BASE_DIR.path_join("OMS").path_join("events.json")
+	if l_id.begins_with("news."):
+		return NEWS_EVENTS_PATH
+	return GLOBAL_EVENTS_PATH
 
 
 ## Ленивый поиск и получение события по ID (из активных, по индексу или из глобальных/новостных)
@@ -106,7 +183,10 @@ func get_or_load_event(event_id: String) -> GameEvent:
 
 	var file_path: String = _events_index.get(event_id, "")
 	if file_path.is_empty():
-		return null
+		file_path = _find_file_path_for_event(event_id)
+		if file_path.is_empty() or not FileAccess.file_exists(file_path):
+			return null
+		_events_index[event_id] = file_path
 
 	var full_res_path: String = file_path
 	if not full_res_path.begins_with("res://"):
@@ -115,13 +195,19 @@ func get_or_load_event(event_id: String) -> GameEvent:
 	if not _file_cache.has(full_res_path):
 		_file_cache[full_res_path] = _read_json_file(full_res_path)
 
-	var file_data: Dictionary = _file_cache.get(full_res_path, {})
-	if file_data.has(event_id):
+	var file_data: Variant = _file_cache.get(full_res_path, {})
+	if file_data is Dictionary and file_data.has(event_id):
 		var raw = file_data[event_id]
 		if raw is Dictionary:
 			var ev: GameEvent = GameEvent.from_dict(raw)
 			register_event(ev)
 			return ev
+	elif file_data is Array:
+		for item in file_data:
+			if item is Dictionary and str(item.get("event_id", item.get("id", ""))) == event_id:
+				var ev: GameEvent = GameEvent.from_dict(item)
+				register_event(ev)
+				return ev
 
 	return null
 
@@ -139,7 +225,7 @@ func trigger_event(event_id: String) -> GameEvent:
 	return null
 
 
-## Проверка всех триггеров событий на текущем ходу
+## Проверка триггеров событий на текущем ходу (только созревшие таймеры и активные условные события)
 func evaluate_turn_triggers(state: CountryState, turn_number: int = -1) -> Array[GameEvent]:
 	var triggered: Array[GameEvent] = []
 
@@ -149,7 +235,7 @@ func evaluate_turn_triggers(state: CountryState, turn_number: int = -1) -> Array
 	if cur_turn <= 0:
 		cur_turn = 1
 
-	# 1. Проверяем созревшие запланированные отложенные события
+	# 1. Проверяем созревшие запланированные отложенные события (days -> turns)
 	var scheduled_ready: Array[GameEvent] = evaluate_scheduled_events(cur_turn)
 	for s_ev in scheduled_ready:
 		if s_ev.fire_only_once and fired_events.has(s_ev.event_id):
@@ -158,16 +244,20 @@ func evaluate_turn_triggers(state: CountryState, turn_number: int = -1) -> Array
 		if s_ev.fire_only_once:
 			fired_events.append(s_ev.event_id)
 
-	# 2. Проверяем обычные условные триггеры
-	for event_id in all_events.keys():
-		var event: GameEvent = all_events[event_id]
-		if event.fire_only_once and fired_events.has(event_id):
+	# 2. Проверяем только активные условные триггеры текущей кампании
+	for ev_id in active_conditional_event_ids:
+		if fired_events.has(ev_id):
+			continue
+		var event: GameEvent = get_or_load_event(ev_id)
+		if event == null:
+			continue
+		if event.fire_only_once and fired_events.has(event.event_id):
 			continue
 
 		if _check_event_triggers(event, state, cur_turn):
 			triggered.append(event)
 			if event.fire_only_once:
-				fired_events.append(event_id)
+				fired_events.append(ev_id)
 
 	return triggered
 
@@ -644,9 +734,9 @@ func _read_json(res_path: String) -> Variant:
 	return null
 
 
-func _read_json_file(res_path: String) -> Dictionary:
+func _read_json_file(res_path: String) -> Variant:
 	var data = _read_json(res_path)
-	if data is Dictionary:
+	if data is Dictionary or data is Array:
 		return data
 	return {}
 

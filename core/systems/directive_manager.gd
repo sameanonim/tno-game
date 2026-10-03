@@ -15,7 +15,7 @@ signal directive_started(directive: DirectiveResource)
 signal directive_completed(directive: DirectiveResource)
 signal directive_bypassed(directive: DirectiveResource)
 signal directive_cancelled(directive: DirectiveResource, reason: String)
-signal directive_event_triggered(event_id: String)
+signal directive_event_triggered(event_id: String, delay_days: int)
 signal directive_region_conquered(province_id: int, new_owner_tag: String)
 signal directive_state_conquered(state_id: int, new_owner_tag: String)
 
@@ -73,6 +73,14 @@ func can_start(directive_id: String, state: CountryState) -> bool:
 		return false
 	var dir: DirectiveResource = all_directives[directive_id]
 	return dir.can_be_started(state)["allowed"]
+
+
+func can_start_directive(target: Variant, state: CountryState) -> bool:
+	if target is DirectiveResource:
+		return target.can_be_started(state).get("allowed", false)
+	elif target is String:
+		return can_start(target, state)
+	return false
 
 
 func get_start_dossier(directive_id: String, state: CountryState) -> Dictionary:
@@ -262,12 +270,14 @@ func _apply_completion_effects(dir: DirectiveResource, state: CountryState) -> v
 				state.story_flags.erase(f_clr)
 			"FIRE_EVENT":
 				var ev_id = str(rew.get("event_id", ""))
+				var days = int(rew.get("days", rew.get("delay_days", 0)))
 				if not ev_id.is_empty():
-					directive_event_triggered.emit(ev_id)
+					directive_event_triggered.emit(ev_id, days)
 			"FIRE_NEWS":
 				var n_id = str(rew.get("event_id", ""))
+				var days = int(rew.get("days", rew.get("delay_days", 0)))
 				if not n_id.is_empty():
-					directive_event_triggered.emit(n_id)
+					directive_event_triggered.emit(n_id, days)
 			"MOD_MANPOWER":
 				state.manpower_pool = maxi(state.manpower_pool + int(rew.get("value", 0)), 0)
 			"MOD_STOCKPILE":
@@ -306,10 +316,10 @@ func _apply_completion_effects(dir: DirectiveResource, state: CountryState) -> v
 			state.set_flag(k, flags[k])
 	if eff.has("country_events"):
 		for ev in eff["country_events"]:
-			directive_event_triggered.emit(str(ev))
+			directive_event_triggered.emit(str(ev), 0)
 	if eff.has("news_events"):
 		for ev in eff["news_events"]:
-			directive_event_triggered.emit(str(ev))
+			directive_event_triggered.emit(str(ev), 0)
 
 
 ## Вычисляет актуальный визуальный статус директивы для UI

@@ -1052,6 +1052,9 @@ func load_country_decisions(tag: String) -> Array[Dictionary]:
 		if raw is Array:
 			for item in raw:
 				if item is Dictionary:
+					var req_tags = item.get("requires_tags", [])
+					if not req_tags.is_empty() and not req_tags.has(clean_tag):
+						continue
 					result.append(item)
 
 	# Если для страны нет отдельного пакета или список пуст — ищем релевантные в master_decisions

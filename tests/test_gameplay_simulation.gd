@@ -75,13 +75,9 @@ func _init() -> void:
 			tm.directive_manager.all_directives.size() if tm.directive_manager != null else 0
 		])
 		
-		# Подключаем авто-разрешение модальных событий
+		var active_events: Array[GameEvent] = []
 		tm.modal_event_opened.connect(func(ev: GameEvent):
-			print("     [Ход %d] СИГНАЛ МОДАЛЬНОГО СОБЫТИЯ: [%s] «%s» (Вариантов: %d)" % [
-				tm.current_turn, ev.event_id, ev.title, ev.options.size()
-			])
-			# Выбираем вариант 0
-			tm.resolve_modal_event_choice(ev, 0)
+			active_events.append(ev)
 		)
 		
 		# Симуляция 15 ходов
@@ -99,6 +95,9 @@ func _init() -> void:
 			
 			# Эмуляция завершения хода
 			tm.end_turn()
+			while not active_events.is_empty():
+				var ev = active_events.pop_front()
+				tm.resolve_modal_event_choice(ev, 0)
 			
 			if t % 5 == 0 or t == turns_to_run:
 				print("  -> Ход %d/%d завершен. ВВП: $%.2fB, Долг: $%.2fB, Резервы: $%.2fB, Инфляция: %.2f%%, Завершено директив: %d" % [

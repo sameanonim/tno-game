@@ -42,6 +42,9 @@ var selected_directive_id: String = ""
 var available_trees: Array[Dictionary] = []
 var current_tree_path: String = ""
 var opt_tree_select: OptionButton = null
+var lbl_active_tree_badge: Label = null
+var lbl_active_tree_title: Label = null
+var lbl_active_tree_count: Label = null
 var current_country_tag: String = ""
 var stage_manifest_data: Dictionary = {}
 var hidden_branch_nodes: Array[String] = []
@@ -278,27 +281,44 @@ func load_tree_from_file(path: String) -> bool:
 
 
 func _update_tree_selector_options() -> void:
-	if opt_tree_select == null:
-		return
-	opt_tree_select.clear()
-	if available_trees.is_empty():
-		opt_tree_select.add_item("Базовое древо")
-		opt_tree_select.disabled = true
+	var active_id = ""
+	if focus_stage_controller != null and not focus_stage_controller.current_tree_id.is_empty():
+		active_id = focus_stage_controller.current_tree_id
+	elif not current_tree_path.is_empty():
+		active_id = current_tree_path.get_file().trim_suffix(".json")
+	_update_active_tree_hud(active_id)
+
+
+func _update_active_tree_hud(target_tree_id: String = "") -> void:
+	if lbl_active_tree_title == null:
 		return
 
-	opt_tree_select.disabled = false
-	var sel_idx = 0
-	for i in range(available_trees.size()):
-		var t = available_trees[i]
-		var tid = str(t.get("tree_id", "Tree %d" % (i + 1)))
-		var cnt = int(t.get("total_directives", 0))
-		var stage_cat = str(t.get("stage_category", ""))
-		var badge = _get_stage_badge(stage_cat, bool(t.get("is_starting_tree", false)))
+	var display_id = target_tree_id
+	if display_id.is_empty() and focus_stage_controller != null:
+		display_id = focus_stage_controller.current_tree_id
+	if display_id.is_empty() and not current_tree_path.is_empty():
+		display_id = current_tree_path.get_file().trim_suffix(".json")
+	if display_id.is_empty():
+		display_id = "СТАРТОВЫЙ КОМПЛЕКС"
 
-		opt_tree_select.add_item("%s %s (%d)" % [badge, tid, cnt], i)
-		if t.get("path", "") == current_tree_path:
-			sel_idx = i
-	opt_tree_select.selected = sel_idx
+	var stage_cat = "GENERAL"
+	var total_dirs = all_directives.size()
+	var is_start = false
+
+	for t in available_trees:
+		if str(t.get("tree_id", "")) == display_id or t.get("path", "") == current_tree_path:
+			stage_cat = str(t.get("stage_category", stage_cat))
+			if int(t.get("total_directives", 0)) > 0:
+				total_dirs = int(t.get("total_directives", total_dirs))
+			is_start = bool(t.get("is_starting_tree", is_start))
+			break
+
+	if lbl_active_tree_badge != null:
+		lbl_active_tree_badge.text = _get_stage_badge(stage_cat, is_start)
+	if lbl_active_tree_title != null:
+		lbl_active_tree_title.text = "● " + display_id.to_upper()
+	if lbl_active_tree_count != null:
+		lbl_active_tree_count.text = "[ %d ДИРЕКТИВ ]" % total_dirs
 
 
 func _get_stage_badge(category: String, is_start: bool = false) -> String:
@@ -390,31 +410,44 @@ func _setup_ui_layout() -> void:
 	graph_canvas = canvas_ctrl
 	camera_rig.add_child(graph_canvas)
 
-	# 1.1. CRT Виджет переключения древа фокусов (Tree Selector HUD вверху слева)
+	# 1.1. CRT Виджет статуса активного древа директив (Tree Status HUD вверху слева)
 	var tree_hud_panel = PanelContainer.new()
-	tree_hud_panel.name = "TreeSelectorHUD"
+	tree_hud_panel.name = "TreeStatusHUD"
 	tree_hud_panel.offset_left = 12
 	tree_hud_panel.offset_top = 10
-	tree_hud_panel.offset_right = 380
+	tree_hud_panel.offset_right = 520
 	tree_hud_panel.offset_bottom = 44
 	_apply_terminal_panel_style(tree_hud_panel, Color(0.02, 0.05, 0.05, 0.92), COLOR_CRT_BORDER)
 	viewport_container.add_child(tree_hud_panel)
 
 	var tree_hud_hbox = HBoxContainer.new()
-	tree_hud_hbox.add_theme_constant_override("separation", 6)
+	tree_hud_hbox.add_theme_constant_override("separation", 8)
 	tree_hud_panel.add_child(tree_hud_hbox)
 
 	var lbl_tree_prefix = Label.new()
-	lbl_tree_prefix.text = tr(" ДРЕВО:")
-	lbl_tree_prefix.add_theme_font_size_override("font_size", 11)
+	lbl_tree_prefix.text = tr(" НАЦИОНАЛЬНЫЙ ПРОЕКТ:")
+	lbl_tree_prefix.add_theme_font_size_override("font_size", 10)
 	lbl_tree_prefix.add_theme_color_override("font_color", COLOR_PHOSPHOR_CYAN)
 	tree_hud_hbox.add_child(lbl_tree_prefix)
 
-	opt_tree_select = OptionButton.new()
-	opt_tree_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	opt_tree_select.add_theme_font_size_override("font_size", 11)
-	opt_tree_select.item_selected.connect(_on_tree_selected_from_menu)
-	tree_hud_hbox.add_child(opt_tree_select)
+	lbl_active_tree_badge = Label.new()
+	lbl_active_tree_badge.text = "[ СТАДИЯ ]"
+	lbl_active_tree_badge.add_theme_font_size_override("font_size", 10)
+	lbl_active_tree_badge.add_theme_color_override("font_color", COLOR_PHOSPHOR_AMBER)
+	tree_hud_hbox.add_child(lbl_active_tree_badge)
+
+	lbl_active_tree_title = Label.new()
+	lbl_active_tree_title.text = "ИНИЦИАЛИЗАЦИЯ..."
+	lbl_active_tree_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl_active_tree_title.add_theme_font_size_override("font_size", 11)
+	lbl_active_tree_title.add_theme_color_override("font_color", COLOR_PHOSPHOR_GREEN)
+	tree_hud_hbox.add_child(lbl_active_tree_title)
+
+	lbl_active_tree_count = Label.new()
+	lbl_active_tree_count.text = "[ 0 ]"
+	lbl_active_tree_count.add_theme_font_size_override("font_size", 10)
+	lbl_active_tree_count.add_theme_color_override("font_color", Color(0.6, 0.8, 0.7))
+	tree_hud_hbox.add_child(lbl_active_tree_count)
 
 	# 1.2. CRT Виджет управления масштабом (HUD в углу холста)
 	var hud_panel = PanelContainer.new()
@@ -1497,12 +1530,8 @@ func _on_focus_stage_switched(tree_id: String, new_directives_graph: Dictionary,
 		refresh_tree()
 	)
 
-	# Обновление выбора в OptionButton
-	if opt_tree_select != null:
-		for i in range(available_trees.size()):
-			if str(available_trees[i].get("tree_id", "")) == tree_id:
-				opt_tree_select.selected = i
-				break
+	# Обновление заголовка активного древа в статус-панели
+	_update_active_tree_hud(tree_id)
 
 
 func _on_branches_visibility_changed(hidden_node_ids: Array[String], visible_node_ids: Array[String]) -> void:

@@ -31,12 +31,19 @@ signal log_message_generated(text: String, is_alert: bool)
 var civil_war_manager: GermanCivilWarManager = null
 
 
+func _init() -> void:
+	if campaign_state == null:
+		campaign_state = CampaignStateScript.new()
+
+
 func _ready() -> void:
 	if campaign_state == null:
 		campaign_state = CampaignStateScript.new()
 
 
 func initialize(gcw_mgr: GermanCivilWarManager = null) -> void:
+	if campaign_state == null:
+		campaign_state = CampaignStateScript.new()
 	civil_war_manager = gcw_mgr
 	if civil_war_manager != null and not civil_war_manager.hitler_died.is_connected(_on_gcw_hitler_died):
 		civil_war_manager.hitler_died.connect(_on_gcw_hitler_died)
@@ -45,6 +52,8 @@ func initialize(gcw_mgr: GermanCivilWarManager = null) -> void:
 
 
 func process_turn(turn_number: int) -> void:
+	if campaign_state == null:
+		campaign_state = CampaignStateScript.new()
 	current_turn = turn_number
 	var turn_seed: int = turn_number * 1337 + 42
 	

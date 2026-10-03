@@ -647,7 +647,7 @@ func _on_raid_heavy_pressed() -> void:
 
 
 func _on_advance_regional_pressed() -> void:
-	if unification_mgr != null and unification_mgr.advance_to_regional():
+	if unification_mgr != null and unification_mgr.advance_to_regional(player_state, turn_manager):
 		stage_advance_requested.emit()
 		refresh_ui()
 

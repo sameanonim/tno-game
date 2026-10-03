@@ -91,8 +91,10 @@ var is_raid_mode_active: bool = false
 var planned_raid_region_id: int = 0
 var sound_fx: TerminalSoundFx
 var gcw_operations_panel: GCWOperationsPanel = null
+var germany_terminal_screen: GermanyTerminalScreen = null
 var us_congress_screen: USCongressScreen = null
 var btn_gcw_toggle: Button = null
+var btn_okw_toggle: Button = null
 var btn_parliament_toggle: Button = null
 var general_parliament_screen: GeneralParliamentScreen = null
 var btn_save_game: Button = null
@@ -296,6 +298,8 @@ func _connect_signals() -> void:
 			if tab_idx == 3:
 				if russian_smuta_panel != null and russian_smuta_panel.visible:
 					russian_smuta_panel.refresh_ui()
+				elif germany_terminal_screen != null and germany_terminal_screen.visible:
+					germany_terminal_screen._refresh_ui()
 				elif gcw_operations_panel != null and gcw_operations_panel.visible:
 					gcw_operations_panel.refresh_ui()
 				elif us_congress_screen != null and us_congress_screen.visible:
@@ -764,11 +768,29 @@ func _setup_initial_game_state() -> void:
 			if turn_manager.italy_empire_manager != null:
 				italy_terminal_screen.setup(turn_manager.italy_empire_manager)
 
+	# Инициализация национального терминала Германии (Рейхсканцелярия)
+	if is_german and germany_terminal_screen == null:
+		var ger_scene = load("res://ui/screens/germany/germany_terminal_screen.tscn")
+		if ger_scene != null:
+			germany_terminal_screen = ger_scene.instantiate()
+			germany_terminal_screen.name = "GermanyTerminalScreen"
+			if national_container != null:
+				national_container.add_child(germany_terminal_screen)
+			else:
+				add_child(germany_terminal_screen)
+			if turn_manager.germany_campaign_manager != null:
+				germany_terminal_screen.setup(turn_manager.germany_campaign_manager)
+			germany_terminal_screen.closed.connect(func():
+				if tab_container != null: tab_container.current_tab = 0
+			)
+
 	# Настройка видимости национальных механик в Табе 3
 	if russian_smuta_panel != null:
 		russian_smuta_panel.visible = is_warlord
+	if germany_terminal_screen != null:
+		germany_terminal_screen.visible = is_german
 	if gcw_operations_panel != null:
-		gcw_operations_panel.visible = is_german
+		gcw_operations_panel.visible = false
 	if us_congress_screen != null:
 		us_congress_screen.visible = is_usa
 	if japan_terminal_screen != null:
@@ -794,15 +816,41 @@ func _setup_initial_game_state() -> void:
 		)
 		map_hud_hbox.add_child(btn_parliament_toggle)
 
-	# Кнопка вызова штаба Рейха на тактической карте
+	# Кнопка терминала Рейхсканцелярии Германии на тактической карте
 	if map_hud_hbox != null and btn_gcw_toggle == null:
 		btn_gcw_toggle = Button.new()
-		btn_gcw_toggle.text = tr("[ ШТАБ РЕЙХА ]")
+		btn_gcw_toggle.text = tr("[ ⚡ РЕЙХСКАНЦЕЛЯРИЯ ]")
+		TNOTheme.apply_button_style(btn_gcw_toggle, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.08, 0.04, 0.95))
 		btn_gcw_toggle.pressed.connect(func():
 			if tab_container != null and tab_container.get_tab_count() > 3 and not tab_container.is_tab_hidden(3):
 				tab_container.current_tab = 3
+				if germany_terminal_screen != null:
+					germany_terminal_screen.visible = true
+					germany_terminal_screen._refresh_ui()
 				if gcw_operations_panel != null:
+					gcw_operations_panel.visible = false
+			elif germany_terminal_screen != null:
+				germany_terminal_screen.visible = not germany_terminal_screen.visible
+			if sound_fx != null: sound_fx.play_switch_click(1250.0)
+			label_log.text = _tr_str("UI_AUTO_GEN_810", {}, "РЕЙХСКАНЦЕЛЯРИЯ: СИТУАЦИОННЫЙ ТЕРМИНАЛ АКТИВИРОВАН")
+		)
+		map_hud_hbox.add_child(btn_gcw_toggle)
+	if btn_gcw_toggle != null:
+		btn_gcw_toggle.visible = is_german
+
+	# Кнопка оперативного штаба дивизий / GCW на тактической карте
+	if map_hud_hbox != null and btn_okw_toggle == null:
+		btn_okw_toggle = Button.new()
+		btn_okw_toggle.text = tr("[ ⚔ ШТАБ РЕЙХА ]")
+		TNOTheme.apply_button_style(btn_okw_toggle, TNOTheme.COLOR_BORDER_CYAN, Color(0.06, 0.12, 0.15, 0.95))
+		btn_okw_toggle.pressed.connect(func():
+			if tab_container != null and tab_container.get_tab_count() > 3 and not tab_container.is_tab_hidden(3):
+				tab_container.current_tab = 3
+				if gcw_operations_panel != null:
+					gcw_operations_panel.visible = true
 					gcw_operations_panel.refresh_ui()
+				if germany_terminal_screen != null:
+					germany_terminal_screen.visible = false
 			elif gcw_operations_panel != null:
 				gcw_operations_panel.visible = not gcw_operations_panel.visible
 				if gcw_operations_panel.visible:
@@ -810,9 +858,9 @@ func _setup_initial_game_state() -> void:
 			if sound_fx != null: sound_fx.play_switch_click(1250.0)
 			label_log.text = _tr_str("UI_AUTO_GEN_810", {}, "ОПЕРАТИВНЫЙ ШТАБ РЕЙХА: АКТИВИРОВАН")
 		)
-		map_hud_hbox.add_child(btn_gcw_toggle)
-	if btn_gcw_toggle != null:
-		btn_gcw_toggle.visible = is_german
+		map_hud_hbox.add_child(btn_okw_toggle)
+	if btn_okw_toggle != null:
+		btn_okw_toggle.visible = is_german
 
 	# Кнопка терминала Японии на тактической карте
 	if map_hud_hbox != null and btn_japan_toggle == null:
