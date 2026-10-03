@@ -10,6 +10,7 @@ signal event_resolved(event_id: String, option_id: String)
 signal super_event_triggered(super_event_id: String)
 signal territory_transfer_requested(state_id: int, new_owner: String)
 signal country_annexation_requested(victim_tag: String, annexer_tag: String)
+signal focus_tree_load_requested(target_tree_id: String, keep_completed: bool)
 
 const EVENTS_INDEX_PATH = "res://data/events/events_index.json"
 const GLOBAL_EVENTS_PATH = "res://data/events/global_events.json"
@@ -341,7 +342,23 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 
 	# 7. ДЕРЕВЬЯ ФОКУСОВ И СУПЕРИВЕНТЫ
 	if effects.has("load_focus_tree") or effects.has("LOAD_FOCUS_TREE"):
-		state.set_flag("pending_focus_tree_load", str(effects.get("LOAD_FOCUS_TREE", effects.get("load_focus_tree"))))
+		var raw_lft: Variant = effects.get("LOAD_FOCUS_TREE", effects.get("load_focus_tree"))
+		var target_tree: String = ""
+		var keep_comp: bool = true
+		if raw_lft is Dictionary:
+			target_tree = str(raw_lft.get("id", raw_lft.get("tree", raw_lft.get("target_tree", ""))))
+			if raw_lft.has("keep_completed"):
+				var raw_kc = raw_lft["keep_completed"]
+				if raw_kc is bool:
+					keep_comp = raw_kc
+				elif raw_kc is String:
+					keep_comp = (raw_kc.to_lower() == "yes" or raw_kc.to_lower() == "true")
+		else:
+			target_tree = str(raw_lft).strip_edges()
+
+		if not target_tree.is_empty():
+			state.set_flag("pending_focus_tree_load", target_tree)
+			focus_tree_load_requested.emit(target_tree, keep_comp)
 
 	if effects.has("super_event") or effects.has("SUPER_EVENT") or effects.has("FIRE_SUPER_EVENT") or effects.has("fire_super_event"):
 		var se_id: String = str(effects.get("FIRE_SUPER_EVENT", effects.get("fire_super_event", effects.get("SUPER_EVENT", effects.get("super_event")))))

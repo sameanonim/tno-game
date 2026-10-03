@@ -770,6 +770,56 @@ class FocusTreePipeline:
 
         print(f"[TRANSITIONS] Found {found_count} load_focus_tree calls in events.")
 
+        # Also scan decisions for load_focus_tree
+        print("[TRANSITIONS] Scanning decisions for load_focus_tree triggers...")
+        decision_files: List[Path] = []
+        for mod_path in self.mod_paths:
+            for d_name in ["decisions", os.path.join("common", "decisions")]:
+                d_dir = mod_path / d_name
+                if d_dir.exists():
+                    decision_files.extend(list(d_dir.glob("*.txt")))
+
+        dec_count = 0
+        for f in decision_files:
+            try:
+                content = f.read_text(encoding="utf-8-sig", errors="replace")
+            except Exception:
+                continue
+
+            for m in re.finditer(r"([A-Za-z0-9_]+)\s*=\s*\{([^}]+load_focus_tree[^}]+)\}", content):
+                dec_id = m.group(1)
+                dec_body = m.group(2)
+                for lft in re.finditer(r"\bload_focus_tree\s*=\s*(\{[^}]+\}|[A-Za-z0-9_]+)", dec_body):
+                    raw_target = lft.group(1).strip()
+                    target_tree_id = ""
+                    keep_completed = True
+
+                    if raw_target.startswith("{"):
+                        m_tid = re.search(r"\b(?:tree|id)\s*=\s*([A-Za-z0-9_]+)", raw_target)
+                        if m_tid:
+                            target_tree_id = m_tid.group(1)
+                        m_kc = re.search(r"\bkeep_completed\s*=\s*(yes|no)", raw_target)
+                        if m_kc:
+                            keep_completed = (m_kc.group(1).lower() == "yes")
+                    else:
+                        target_tree_id = raw_target
+
+                    if target_tree_id and target_tree_id != "ZZZ_blank_focus":
+                        visible_block = parse_inner_block(dec_body, "visible")
+                        cond_ast = parse_trigger_block_to_ast(visible_block)
+
+                        self.event_transitions.append({
+                            "trigger_type": "decision",
+                            "trigger_id": dec_id,
+                            "target_tree": target_tree_id,
+                            "keep_completed": keep_completed,
+                            "condition": cond_ast,
+                            "source_file": f.name
+                        })
+                        dec_count += 1
+
+        print(f"[TRANSITIONS] Found {dec_count} load_focus_tree calls in decisions.")
+
     # ==========================================================================
     # FOCUS PARSING & GRAPH BUILDING
     # ==========================================================================

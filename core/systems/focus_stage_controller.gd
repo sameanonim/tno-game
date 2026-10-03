@@ -77,6 +77,9 @@ func _connect_subsystems() -> void:
 			event_manager.event_resolved.connect(_on_event_resolved)
 		if not event_manager.event_triggered.is_connected(_on_event_triggered):
 			event_manager.event_triggered.connect(_on_event_triggered)
+		if event_manager.has_signal("focus_tree_load_requested"):
+			if not event_manager.focus_tree_load_requested.is_connected(_on_focus_tree_load_requested):
+				event_manager.focus_tree_load_requested.connect(_on_focus_tree_load_requested)
 
 
 # ==============================================================================
@@ -377,17 +380,29 @@ func switch_focus_tree(new_tree_id: String, preserve_history: bool = true) -> vo
 func _load_tree_data(tree_id: String) -> Dictionary:
 	var candidate_paths: Array[String] = []
 
-	if trees_manifest.has(tree_id):
-		var meta: Dictionary = trees_manifest[tree_id]
-		for k in ["path", "file_path", "legacy_path"]:
-			if meta.has(k) and not str(meta[k]).is_empty():
-				var p_str = str(meta[k])
-				if not candidate_paths.has(p_str):
-					candidate_paths.append(p_str)
+	var raw_id: String = tree_id.trim_prefix("tree_")
+	var prefixed_id: String = "tree_" + raw_id if not tree_id.begins_with("tree_") else tree_id
 
-	candidate_paths.append("res://data/countries/%s/directives/tree_%s.json" % [country_tag, tree_id])
-	candidate_paths.append("res://data/countries/%s/directives/trees/%s.json" % [country_tag, tree_id])
-	candidate_paths.append("res://data/countries/%s/directives/%s.json" % [country_tag, tree_id])
+	# 1. Поиск в деревьях манифеста по всем вариациям ключа
+	for check_id in [tree_id, raw_id, prefixed_id]:
+		if trees_manifest.has(check_id):
+			var meta: Dictionary = trees_manifest[check_id]
+			for k in ["path", "file_path", "legacy_path"]:
+				if meta.has(k) and not str(meta[k]).is_empty():
+					var p_str = str(meta[k])
+					if not candidate_paths.has(p_str):
+						candidate_paths.append(p_str)
+
+	# 2. Прямые файловые кандидаты для всех вариаций
+	for tid in [tree_id, raw_id, prefixed_id]:
+		if not tid.is_empty():
+			var p1 = "res://data/countries/%s/directives/tree_%s.json" % [country_tag, tid]
+			var p2 = "res://data/countries/%s/directives/trees/%s.json" % [country_tag, tid]
+			var p3 = "res://data/countries/%s/directives/%s.json" % [country_tag, tid]
+			var p4 = "res://data/trees/%s.json" % tid
+			for p in [p1, p2, p3, p4]:
+				if not candidate_paths.has(p):
+					candidate_paths.append(p)
 
 	if tree_id == "tree":
 		candidate_paths.insert(0, "res://data/countries/%s/directives/tree.json" % country_tag)
@@ -749,9 +764,32 @@ func _on_directive_completed(dir: DirectiveResource) -> void:
 
 	for rew in dir.completion_rewards:
 		var op = str(rew.get("opcode", "")).to_upper()
-		if op == "LOAD_FOCUS_TREE":
-			var target_tree = str(rew.get("tree_id", rew.get("target_tree", rew.get("tree", ""))))
-			var keep = bool(rew.get("keep_completed", true))
+		var is_lft = (op == "LOAD_FOCUS_TREE") or rew.has("load_focus_tree") or rew.has("LOAD_FOCUS_TREE")
+		if is_lft:
+			var target_tree: String = ""
+			var keep: bool = true
+			if rew.has("load_focus_tree"):
+				var v = rew["load_focus_tree"]
+				if v is Dictionary:
+					target_tree = str(v.get("id", v.get("tree", v.get("target_tree", ""))))
+					if v.has("keep_completed"):
+						var kc = v["keep_completed"]
+						keep = bool(kc) if kc is bool else (str(kc).to_lower() == "yes" or str(kc).to_lower() == "true")
+				else:
+					target_tree = str(v)
+			elif rew.has("LOAD_FOCUS_TREE"):
+				var v = rew["LOAD_FOCUS_TREE"]
+				if v is Dictionary:
+					target_tree = str(v.get("id", v.get("tree", v.get("target_tree", ""))))
+					if v.has("keep_completed"):
+						var kc = v["keep_completed"]
+						keep = bool(kc) if kc is bool else (str(kc).to_lower() == "yes" or str(kc).to_lower() == "true")
+				else:
+					target_tree = str(v)
+			else:
+				target_tree = str(rew.get("tree_id", rew.get("target_tree", rew.get("tree", ""))))
+				keep = bool(rew.get("keep_completed", true))
+
 			if not target_tree.is_empty() and target_tree != current_tree_id:
 				print("[FocusStageController] Директива [%s] инициировала LOAD_FOCUS_TREE -> [%s]" % [dir.id, target_tree])
 				switch_focus_tree(target_tree, keep)
@@ -810,6 +848,15 @@ func _on_event_triggered(event: GameEvent) -> void:
 					var keep = bool(tr.get("keep_completed", true))
 					switch_focus_tree(target, keep)
 					return
+
+
+## Обработчик прямого запроса на загрузку фокусного древа из EventManager
+func _on_focus_tree_load_requested(target_tree_id: String, keep_completed: bool) -> void:
+	if not target_tree_id.is_empty() and target_tree_id != current_tree_id:
+		print("[FocusStageController] Прямой запрос LOAD_FOCUS_TREE из депеши/события -> [%s] (keep_completed: %s)" % [
+			target_tree_id, keep_completed
+		])
+		switch_focus_tree(target_tree_id, keep_completed)
 
 
 # ==============================================================================

@@ -262,7 +262,21 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 
 		"has_completed_focus", "has_completed_directive", "completed_focus", "completed_directive":
 			var f_id = str(cond.get("focus", cond.get("directive", cond.get("value", cond.get("id", "")))))
-			return state.completed_directives.has(f_id) or state.has_flag("completed_focus_" + f_id) or (state.has_method("has_completed_directive") and state.has_completed_directive(f_id))
+			if state.completed_directives.has(f_id) or state.has_flag("completed_focus_" + f_id):
+				return true
+			var arch = state.story_flags.get("completed_directives_archive", [])
+			if arch is Array and arch.has(f_id):
+				return true
+			var hist = state.story_flags.get("completed_historical_focuses", [])
+			if hist is Array and hist.has(f_id):
+				return true
+			if state.has_method("has_completed_directive") and state.has_completed_directive(f_id):
+				return true
+			return false
+
+		"has_active_focus", "is_focus_active", "active_directive", "has_active_directive":
+			var f_id = str(cond.get("focus", cond.get("directive", cond.get("value", cond.get("id", "")))))
+			return state.active_directives.has(f_id)
 
 		"num_of_factories":
 			var op: String = str(cond.get("operator", ">="))
