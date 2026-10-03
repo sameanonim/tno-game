@@ -17,7 +17,9 @@ func _init() -> void:
 		"res://ui/components/region_management_panel.gd",
 		"res://ui/screens/main_menu.gd",
 		"res://ui/screens/japan/japan_terminal_screen.gd",
-		"res://ui/screens/terminal_main.gd"
+		"res://ui/screens/terminal_main.gd",
+		"res://ui/components/country_labels_overlay.gd",
+		"res://scripts/map_controller.gd"
 	]
 	for path in scripts:
 		var script = load(path)
