@@ -41,7 +41,7 @@ func display_focus_tree(country_tag: String) -> void:
 	if has_node("/root/GameSession"):
 		session = get_node("/root/GameSession")
 
-	var summary = {}
+	var summary := {}
 	if session != null and session.has_method("get_focus_tree_summary"):
 		summary = session.get_focus_tree_summary(current_tag)
 

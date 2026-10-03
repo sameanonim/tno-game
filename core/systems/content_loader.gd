@@ -915,7 +915,7 @@ func _load_package_leaders(_tag: String, leaders_dir: String) -> Array[LeaderRes
 func _load_package_directives(_tag: String, tree_path: String) -> Array[DirectiveResource]:
 	var result: Array[DirectiveResource] = []
 	var tree_data = _read_json_file(tree_path)
-	var dir_list = []
+	var dir_list := []
 	if tree_data.has("directives"):
 		var raw = tree_data["directives"]
 		if raw is Array:
@@ -1082,7 +1082,7 @@ func load_country_decisions(tag: String) -> Array[Dictionary]:
 	if FileAccess.file_exists(generic_path):
 		var gen_raw = _read_json(generic_path)
 		if gen_raw is Array:
-			var existing_ids = {}
+			var existing_ids := {}
 			for r in result:
 				existing_ids[r.get("id", "")] = true
 			for g in gen_raw:

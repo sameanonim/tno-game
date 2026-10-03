@@ -61,6 +61,8 @@ for d in dirs_to_process:
                                 is_safe = True
                             elif RE_SAFE_STRING.match(val):
                                 is_safe = True
+                            elif val in ("[]", "{}"):
+                                is_safe = True
                             elif RE_SAFE_BUILTIN.match(val):
                                 is_safe = True
                             else:

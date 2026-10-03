@@ -82,7 +82,7 @@ func get_effective_defense_power(army_readiness: float) -> float:
 
 
 func to_dict() -> Dictionary:
-	var cmd_dict = {}
+	var cmd_dict := {}
 	if commander != null:
 		cmd_dict = commander.to_dict()
 

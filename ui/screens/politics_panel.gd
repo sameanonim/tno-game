@@ -473,7 +473,7 @@ func _generate_law_tiers_bbcode(law_name: String, cur_tier: int) -> String:
 	var tag = current_state.country_tag.to_upper() if current_state != null else ""
 	var is_german = tag in ["GER", "SPE", "BOR", "GOR", "HEY"]
 
-	var tiers = []
+	var tiers := []
 	if "труд" in n and is_german:
 		tiers = [
 			"Ур. 1: [b]Подневольный / рабский труд (Sklaverei)[/b] — тотальная эксплуатация миллионов остарбайтеров.",

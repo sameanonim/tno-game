@@ -7,17 +7,19 @@ func _init() -> void:
 	var errors = 0
 	
 	for d in dirs_to_check:
-		var dir = DirAccess.open(d)
-		if dir == null:
-			continue
 		var files_to_scan = []
 		_collect_gd_files(d, files_to_scan)
 		
 		for fpath in files_to_scan:
 			total_checked += 1
-			var scr = ResourceLoader.load(fpath)
+			var scr: GDScript = load(fpath)
 			if scr == null:
-				print("ERROR: Failed to load/parse script: ", fpath)
+				print("ERROR: Failed to load: ", fpath)
+				errors += 1
+				continue
+			var err = scr.reload()
+			if err != OK:
+				print("ERROR: Parse/compile error in ", fpath, " (code ", err, ")")
 				errors += 1
 	
 	print("--- COMPILATION CHECK COMPLETE ---")
