@@ -14,6 +14,9 @@ extends RefCounted
 ## 7. Легковесный пошаговый расчет для ИИ-государств мира (process_ai_turn).
 ##
 
+const RegionalInvestmentsManagerScript = preload("res://core/systems/economy/regional_investments.gd")
+const CurrencyClearingManagerScript = preload("res://core/systems/economy/currency_clearing_manager.gd")
+
 const DEFAULT_TURNS_PER_YEAR = 52.143 # 365 дней / 7 дней в неделю
 
 ## Результат расчета экономики за ход
@@ -160,46 +163,12 @@ const SPHERE_HEGEMONS: Array[String] = ["USA", "GER", "JAP"]
 
 ## Определение валютной зоны державы
 static func get_country_currency_zone(state: CountryState) -> CurrencyZone:
-	if state == null:
-		return CurrencyZone.SOVEREIGN
-	var tag: String = state.country_tag.to_upper().strip_edges()
-	var sphere: String = state.global_sphere.to_upper().strip_edges()
-	if tag == "USA" or sphere == "OFN":
-		return CurrencyZone.USD
-	elif tag == "GER" or sphere in ["EINHEITSPAKT", "ZOLLVEREIN", "GERMAN_SPHERE"]:
-		return CurrencyZone.REICHSMARK
-	elif tag == "JAP" or sphere in ["CO_PROSPERITY", "CO_PROSPERITY_SPHERE", "JAPAN_SPHERE"]:
-		return CurrencyZone.YEN
-	return CurrencyZone.SOVEREIGN
+	return CurrencyClearingManagerScript.get_country_currency_zone(state) as CurrencyZone
 
 
 ## Динамический расчет курсов валют к доллару США ($1.00)
 static func calculate_currency_exchange_rates(hegemon_states: Dictionary) -> Dictionary:
-	var usa: CountryState = hegemon_states.get("USA", null)
-	var ger: CountryState = hegemon_states.get("GER", null)
-	var jap: CountryState = hegemon_states.get("JAP", null)
-
-	var usa_growth: float = usa.real_gdp_growth if usa != null else 0.04
-	var usa_infl: float = usa.inflation_rate if usa != null else 0.03
-
-	var ger_growth: float = ger.real_gdp_growth if ger != null else 0.035
-	var ger_infl: float = ger.inflation_rate if ger != null else 0.045
-
-	var jap_growth: float = jap.real_gdp_growth if jap != null else 0.05
-	var jap_infl: float = jap.inflation_rate if jap != null else 0.04
-
-	var rm_base: float = 2.50
-	var rm_rate: float = clampf(rm_base * ((1.0 + ger_infl - ger_growth) / maxf(1.0 + usa_infl - usa_growth, 0.5)), 1.20, 5.00)
-
-	var yen_base: float = 360.0
-	var yen_rate: float = clampf(yen_base * ((1.0 + jap_infl - jap_growth) / maxf(1.0 + usa_infl - usa_growth, 0.5)), 180.0, 600.0)
-
-	return {
-		CurrencyZone.USD: 1.0,
-		CurrencyZone.REICHSMARK: rm_rate,
-		CurrencyZone.YEN: yen_rate,
-		CurrencyZone.SOVEREIGN: 1.0
-	}
+	return CurrencyClearingManagerScript.calculate_currency_exchange_rates(hegemon_states)
 
 
 ## Расчет клиринговых пошлин и валютных издержек внешней торговли
@@ -208,33 +177,7 @@ static func calculate_trade_clearing(
 	importer: CountryState,
 	trade_volume: float
 ) -> Dictionary:
-	var exp_zone: CurrencyZone = get_country_currency_zone(exporter)
-	var imp_zone: CurrencyZone = get_country_currency_zone(importer)
-
-	var is_intra_sphere: bool = (exp_zone == imp_zone) and (exp_zone != CurrencyZone.SOVEREIGN)
-
-	if is_intra_sphere:
-		var clearing_fee: float = trade_volume * 0.02
-		return {
-			"is_intra_sphere": true,
-			"tariff_rate": 0.0,
-			"tariff_revenue": 0.0,
-			"clearing_fee": clearing_fee,
-			"reserve_drain": 0.0,
-			"currency_used": exp_zone
-		}
-	else:
-		var tariff_rate: float = 0.18
-		var tariff_total: float = trade_volume * tariff_rate
-		var reserve_drain: float = trade_volume * 0.15
-		return {
-			"is_intra_sphere": false,
-			"tariff_rate": tariff_rate,
-			"tariff_revenue": tariff_total,
-			"clearing_fee": 0.0,
-			"reserve_drain": reserve_drain,
-			"currency_used": CurrencyZone.USD
-		}
+	return CurrencyClearingManagerScript.calculate_trade_clearing(exporter, importer, trade_volume)
 
 static func get_economy_type(state: CountryState) -> EconomyType:
 	if state == null:
@@ -943,131 +886,17 @@ static func restructure_foreign_debt(state: CountryState) -> Dictionary:
 
 ## Инвестиция в модернизацию инфраструктуры провинции
 static func invest_in_infrastructure(province_id: int, state: CountryState, regions: Dictionary) -> Dictionary:
-	var cfg = ConfigManager.get_instance()
-	var cost_money := 0.15
-	var cost_cap := 1
-	if cfg != null and cfg.has_constant("economy", "regional_investments"):
-		var ri = cfg.get_dict("economy", "regional_investments")
-		cost_money = float(ri.get("infrastructure_cost_money", cost_money))
-		cost_cap = int(ri.get("infrastructure_cost_cap", cost_cap))
-		
-	if not regions.has(province_id):
-		return {"success": false, "message": _tr_str("ECON_PROVINCE_NOT_FOUND", {}, "Провинция не найдена.")}
-		
-	var reg: RegionData = regions[province_id]
-	if reg.owner_tag != state.country_tag:
-		return {"success": false, "message": _tr_str("ECON_PROVINCE_NOT_OWNED", {}, "Регион не находится под контролем государства.")}
-
-	# Проверка строительного пула: при нехватке свободных мощностей (все фабрики ушли в ТНП) применяются штрафы частных подрядчиков
-	if state.civilian_factories > 0 and get_available_construction_factories(state) <= 0:
-		cost_money *= 1.5
-		cost_cap += 1
-		
-	if state.current_cap < cost_cap:
-		return {"success": false, "message": _tr_str("ECON_INSUFFICIENT_CAP", {}, "Недостаточно очков действий кабинета (CAP).")}
-		
-	if state.liquid_reserves_billions < cost_money:
-		if state.is_in_fiscal_crisis:
-			return {"success": false, "message": _tr_str("ECON_FISCAL_CRISIS_BLOCK", {}, "Фискальный кризис: казна пуста, кредиторы заблокировали займы.")}
-		state.national_debt_billions += cost_money
-	else:
-		state.liquid_reserves_billions -= cost_money
-		
-	state.current_cap -= cost_cap
-	reg.civilian_infrastructure = mini(reg.civilian_infrastructure + 1, 10)
-	
-	return {
-		"success": true,
-		"new_level": reg.civilian_infrastructure,
-		"message": _tr_str("ECON_INVEST_INFRA_SUCCESS", {"name": reg.province_name, "level": reg.civilian_infrastructure}, "Инфраструктура региона %s модернизирована до ур. %d!" % [reg.province_name, reg.civilian_infrastructure])
-	}
+	return RegionalInvestmentsManagerScript.invest_in_infrastructure(province_id, state, regions)
 
 
 ## Строительство фабрики или военного завода в регионе
 static func invest_in_factory(province_id: int, state: CountryState, regions: Dictionary, is_military: bool) -> Dictionary:
-	var cfg = ConfigManager.get_instance()
-	var cost_money := 0.35
-	var cost_cap := 2
-	if cfg != null and cfg.has_constant("economy", "regional_investments"):
-		var ri = cfg.get_dict("economy", "regional_investments")
-		cost_money = float(ri.get("factory_cost_money", cost_money))
-		cost_cap = int(ri.get("factory_cost_cap", cost_cap))
-		
-	if not regions.has(province_id):
-		return {"success": false, "message": _tr_str("ECON_PROVINCE_NOT_FOUND", {}, "Провинция не найдена.")}
-		
-	var reg: RegionData = regions[province_id]
-	if reg.owner_tag != state.country_tag:
-		return {"success": false, "message": _tr_str("ECON_PROVINCE_NOT_OWNED", {}, "Регион не контролируется государством.")}
-
-	# Проверка строительного пула (Construction Pool / Consumer Goods lock)
-	if state.civilian_factories > 0 and get_available_construction_factories(state) <= 0:
-		return {
-			"success": false,
-			"message": _tr_str("ECON_NO_CONSTRUCTION_FACTORIES", {}, "Строительный пул исчерпан: все гражданские мощности задействованы на производство товаров народного потребления (ТНП).")
-		}
-		
-	if state.current_cap < cost_cap:
-		return {"success": false, "message": _tr_str("ECON_INSUFFICIENT_CAP", {}, "Недостаточно очков действий кабинета (CAP).")}
-		
-	if state.liquid_reserves_billions < cost_money:
-		if state.is_in_fiscal_crisis:
-			return {"success": false, "message": _tr_str("ECON_FISCAL_CRISIS_BLOCK", {}, "Фискальный кризис: казна пуста, новые займы недоступны.")}
-		state.national_debt_billions += cost_money
-	else:
-		state.liquid_reserves_billions -= cost_money
-		
-	state.current_cap -= cost_cap
-	reg.industrial_capacity += 1
-	if is_military:
-		state.military_factories += 1
-	else:
-		state.civilian_factories += 1
-		
-	var fac_msg = _tr_str("ECON_BUILD_FAC_MIL_SUCCESS", {"name": reg.province_name}, "Военный завод успешно возведен в регионе %s!" % reg.province_name) if is_military else _tr_str("ECON_BUILD_FAC_CIV_SUCCESS", {"name": reg.province_name}, "Гражданская фабрика успешно возведена в регионе %s!" % reg.province_name)
-	return {
-		"success": true,
-		"message": fac_msg
-	}
+	return RegionalInvestmentsManagerScript.invest_in_factory(province_id, state, regions, is_military)
 
 
 ## Геологоразведка и освоение месторождений в регионе
 static func prospect_resources(province_id: int, state: CountryState, regions: Dictionary, resource_type: String) -> Dictionary:
-	var cfg = ConfigManager.get_instance()
-	var cost_money := 0.20
-	var cost_cap := 1
-	if cfg != null and cfg.has_constant("economy", "regional_investments"):
-		var ri = cfg.get_dict("economy", "regional_investments")
-		cost_money = float(ri.get("resource_prospect_cost_money", cost_money))
-		cost_cap = int(ri.get("resource_prospect_cost_cap", cost_cap))
-		
-	if not regions.has(province_id):
-		return {"success": false, "message": _tr_str("ECON_PROVINCE_NOT_FOUND", {}, "Провинция не найдена.")}
-		
-	var reg: RegionData = regions[province_id]
-	if reg.owner_tag != state.country_tag:
-		return {"success": false, "message": _tr_str("ECON_PROVINCE_NOT_OWNED", {}, "Регион не контролируется государством.")}
-		
-	if state.current_cap < cost_cap:
-		return {"success": false, "message": _tr_str("ECON_INSUFFICIENT_CAP", {}, "Недостаточно очков действий кабинета (CAP).")}
-		
-	if state.liquid_reserves_billions < cost_money:
-		if state.is_in_fiscal_crisis:
-			return {"success": false, "message": _tr_str("ECON_FISCAL_CRISIS_BLOCK", {}, "Фискальный кризис: недостаточно средств для геологоразведки.")}
-		state.national_debt_billions += cost_money
-	else:
-		state.liquid_reserves_billions -= cost_money
-		
-	state.current_cap -= cost_cap
-	var current_dep = int(reg.resource_deposits.get(resource_type, 0))
-	var gained := 6
-	reg.resource_deposits[resource_type] = current_dep + gained
-	
-	return {
-		"success": true,
-		"new_amount": current_dep + gained,
-		"message": _tr_str("ECON_PROSPECT_SUCCESS", {"name": reg.province_name, "resource": resource_type.to_upper(), "amount": gained}, "Геологоразведка завершена: в %s открыты новые пласты (%s +%d)!" % [reg.province_name, resource_type.to_upper(), gained])
-	}
+	return RegionalInvestmentsManagerScript.prospect_resources(province_id, state, regions, resource_type)
 
 
 
@@ -1111,89 +940,6 @@ static func process_ai_turn(ai_state: CountryState) -> void:
 # 8. КЛИРИНГОВЫЕ СОЮЗЫ И ВАЛЮТНЫЕ СФЕРЫ (SPHERE MACROECONOMICS)
 # ==============================================================================
 
-##
-## Расчет клирингового союза и инфляционного давления периферии на гегемонов (Toolbox Theory)
-##
-## Моделирует:
-## 1. Сеньораж и клиринговые отчисления здоровых сателлитов в резервную казну гегемона.
-## 2. Перенос инфляционного давления (Spillover Inflation) при гиперинфляции или дефолте сателлитов на валюту метрополии.
-## 3. Финансовую помощь или экстренный клиринговый дефицит при кризисах в зоне влияния.
-##
+## Расчет клирингового союза и инфляционного давления периферии на гегемонов
 static func process_sphere_clearing_and_spillover(countries: Dictionary) -> Dictionary:
-	var turns_year: float = get_turns_per_year()
-	var report: Dictionary = {
-		"OFN": {"hegemon": "USA", "satellites": 0, "net_clearing_flow": 0.0, "inflation_spillover": 0.0},
-		"EINHEITSPAKT": {"hegemon": "GER", "satellites": 0, "net_clearing_flow": 0.0, "inflation_spillover": 0.0},
-		"CO_PROSPERITY_SPHERE": {"hegemon": "JAP", "satellites": 0, "net_clearing_flow": 0.0, "inflation_spillover": 0.0}
-	}
-
-	# Сопоставление гегемонов
-	var sphere_to_hegemon: Dictionary = {
-		"OFN": "USA",
-		"EINHEITSPAKT": "GER",
-		"CO_PROSPERITY_SPHERE": "JAP"
-	}
-
-	# Фоллбек для Немецкой Гражданской Войны (если GER сменился на претендента)
-	if not countries.has("GER"):
-		for gcw_tag: String in ["SPE", "BOR", "GOR", "HEY"]:
-			if countries.has(gcw_tag):
-				sphere_to_hegemon["EINHEITSPAKT"] = gcw_tag
-				report["EINHEITSPAKT"]["hegemon"] = gcw_tag
-				break
-
-	# Сбор статистики по сателлитам каждой сферы
-	for c_tag: String in countries.keys():
-		var st: CountryState = countries[c_tag]
-		if st == null:
-			continue
-
-		var sphere: String = st.global_sphere.to_upper().strip_edges()
-		if sphere.is_empty() or sphere == "NON_ALIGNED" or not sphere_to_hegemon.has(sphere):
-			continue
-
-		var hegemon_tag: String = sphere_to_hegemon[sphere]
-		if c_tag.to_upper() == hegemon_tag:
-			continue # Сам гегемон не является собственным сателлитом
-
-		report[sphere]["satellites"] += 1
-
-		# Клиринговый поток:
-		if st.is_in_fiscal_crisis or st.inflation_rate > 0.15:
-			# Кризис сателлита: утечка ликвидности и давление на резервную валюту
-			var debt_burden: float = (st.gdp_billions * 0.015) / turns_year
-			var excess_inf: float = maxf(st.inflation_rate - 0.12, 0.0) * 0.04 / turns_year
-			report[sphere]["net_clearing_flow"] -= debt_burden
-			report[sphere]["inflation_spillover"] += excess_inf
-		else:
-			# Здоровый сателлит: взнос в клиринговый союз и укрепление резервной валюты гегемона
-			var royalty: float = (st.gdp_billions * st.tax_rate * 0.05) / turns_year
-			report[sphere]["net_clearing_flow"] += royalty
-
-	# Применение эффектов к государствам-гегемонам
-	for sphere: String in report.keys():
-		var hegemon_tag: String = report[sphere]["hegemon"]
-		if not countries.has(hegemon_tag):
-			continue
-
-		var hegemon_st: CountryState = countries[hegemon_tag]
-		if hegemon_st == null:
-			continue
-
-		var net_flow: float = float(report[sphere]["net_clearing_flow"])
-		var inf_spill: float = float(report[sphere]["inflation_spillover"])
-
-		if net_flow >= 0.0:
-			hegemon_st.liquid_reserves_billions += net_flow
-		else:
-			var drain: float = absf(net_flow)
-			if hegemon_st.liquid_reserves_billions >= drain:
-				hegemon_st.liquid_reserves_billions -= drain
-			else:
-				hegemon_st.national_debt_billions += (drain - hegemon_st.liquid_reserves_billions)
-				hegemon_st.liquid_reserves_billions = 0.0
-
-		if inf_spill > 0.0:
-			hegemon_st.inflation_rate = clampf(hegemon_st.inflation_rate + inf_spill, 0.005, 0.95)
-
-	return report
+	return CurrencyClearingManagerScript.process_sphere_clearing_and_spillover(countries)

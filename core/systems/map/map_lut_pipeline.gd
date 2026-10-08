@@ -99,3 +99,64 @@ static func get_province_id_at_pixel(mask_image: Image, map_size: Vector2i, pixe
 					best_candidate_id = n_id
 
 	return best_candidate_id
+
+
+"""Определение скалярного кода сферы влияния для владельца провинции (0.0 .. 1.0).
+"""
+static func get_sphere_code_for_owner(owner_tag: String, country_spheres: Dictionary = {}) -> float:
+	var clean = owner_tag.to_upper().strip_edges()
+	if clean.is_empty():
+		return 0.05
+
+	if country_spheres.has(clean):
+		return float(country_spheres[clean])
+
+	# 1. Сфера США / OFN (Синий: > 0.12)
+	const OFN_TAGS = [
+		"USA", "CAN", "AST", "NZL", "ICE", "BLZ", "GUY", "SUR", "BAH", "JAM", "BRB",
+		"PAN", "COS", "NIC", "HON", "ELS", "GUA", "SAF", "LIB", "FIJ", "TRI", "SKN",
+		"SVI", "AAO", "FWI", "GDL", "WIN", "TND"
+	]
+	if clean in OFN_TAGS:
+		return 0.20
+
+	# 2. Триумвират (Средиземноморский изумруд: > 0.28)
+	const TRIUM_TAGS = [
+		"ITA", "IBR", "TUR", "CRO", "GRE", "MNT", "ALB", "EGY", "IRQ", "SNS", "LEB",
+		"JOR", "OMA", "YEM", "TUN", "MOR", "CYP", "SYR", "AOI", "IEA"
+	]
+	if clean in TRIUM_TAGS:
+		return 0.35
+
+	# 3. Единство / Einheitspakt (Серо-стальной: > 0.42)
+	const PAKT_TAGS = [
+		"GER", "BOR", "SPE", "GOR", "HEY", "GOB", "SPN", "DSR",
+		"OST", "UKR", "MCW", "MOS", "CAU", "KAU", "NOR", "HOL", "DEN", "GGN", "POL",
+		"SER", "SLO", "HUN", "ROM", "BUL", "BGR", "FIN", "FRS", "VIC", "FRA", "BRG",
+		"ANG", "COG", "MAD", "GRO", "AAG", "AAB", "TNS", "MZB", "BUR", "CZE", "BRP", "BLR"
+	]
+	if clean in PAKT_TAGS:
+		return 0.50
+
+	# 4. Сфера Сопроцветания Японии (Оранжево-солнечный: > 0.65)
+	const SPHERE_TAGS = [
+		"JAP", "MAN", "MEN", "GNG", "CHI", "THA", "VIN", "LAO", "CAM", "BUR", "BRM",
+		"PHI", "SPH", "MLY", "MAL", "SHO", "INS", "NRB", "SHX", "GUX", "GUZ", "QIN",
+		"XIK", "SIC", "AAJ", "AZH", "TAI", "KOR", "XSM", "YUN", "SZC"
+	]
+	if clean in SPHERE_TAGS:
+		return 0.75
+
+	# 5. Российские варлорды и Суверенная зона (Красный: > 0.85)
+	const RUS_TAGS = [
+		"WRS", "KOM", "VYT", "SAM", "PRM", "GOR", "ONG", "ONE", "FAV", "GAY",
+		"TYM", "OMS", "SVR", "ZLT", "URL", "ORE", "MGN", "DRL", "BKR", "TAR", "YGR",
+		"VOR", "KAZ", "AKT", "ARL", "KOK", "PAV", "NPL", "KRK", "TOM", "NOV", "KEM",
+		"ALT", "PRC", "SBA", "IRK", "BRY", "CHT", "AMR", "MAG", "YAK", "KMC", "KRS",
+		"TYU", "MIR", "KHA", "VLG", "KOS"
+	]
+	if clean in RUS_TAGS:
+		return 0.95
+
+	return 0.05
+

@@ -23,6 +23,7 @@ extends Sprite2D
 const MapManifestLoaderScript = preload("res://core/systems/map/map_manifest_loader.gd")
 const MapLUTPipelineScript = preload("res://core/systems/map/map_lut_pipeline.gd")
 const MapBorderStylerScript = preload("res://core/systems/map/map_border_styler.gd")
+const MapNavigationControllerScript = preload("res://core/systems/map/map_navigation_controller.gd")
 
 enum MapMode {
 	POLITICAL = 0,
@@ -177,16 +178,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not enable_camera_control:
 		return
-
-	var move_vec = Vector2.ZERO
-	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP): move_vec.y += 1.0
-	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN): move_vec.y -= 1.0
-	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT): move_vec.x += 1.0
-	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT): move_vec.x -= 1.0
-
-	if move_vec != Vector2.ZERO:
-		position += move_vec.normalized() * (pan_speed * delta)
-		_clamp_map_position()
+	MapNavigationControllerScript.process_keyboard_pan(self, delta, pan_speed, base_position, map_size, target_camera)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -640,61 +632,7 @@ func update_rebellion_hotspots(regions: Dictionary, player_tag: String = "") -> 
 
 
 func _get_sphere_code_for_owner(owner_tag: String, _player_tag: String = "") -> float:
-	var clean = owner_tag.to_upper().strip_edges()
-	if clean.is_empty():
-		return 0.05
-
-	if country_spheres.has(clean):
-		return country_spheres[clean]
-
-	# 1. Сфера США / OFN (Синий: > 0.12)
-	const OFN_TAGS = [
-		"USA", "CAN", "AST", "NZL", "ICE", "BLZ", "GUY", "SUR", "BAH", "JAM", "BRB",
-		"PAN", "COS", "NIC", "HON", "ELS", "GUA", "SAF", "LIB", "FIJ", "TRI", "SKN",
-		"SVI", "AAO", "FWI", "GDL", "WIN", "TND"
-	]
-	if clean in OFN_TAGS:
-		return 0.20
-
-	# 2. Триумвират (Средиземноморский изумруд: > 0.28)
-	const TRIUM_TAGS = [
-		"ITA", "IBR", "TUR", "CRO", "GRE", "MNT", "ALB", "EGY", "IRQ", "SNS", "LEB",
-		"JOR", "OMA", "YEM", "TUN", "MOR", "CYP", "SYR", "AOI", "IEA"
-	]
-	if clean in TRIUM_TAGS:
-		return 0.35
-
-	# 3. Единство / Einheitspakt (Серо-стальной: > 0.42)
-	const PAKT_TAGS = [
-		"GER", "BOR", "SPE", "GOR", "HEY", "GOB", "SPN", "DSR",
-		"OST", "UKR", "MCW", "MOS", "CAU", "KAU", "NOR", "HOL", "DEN", "GGN", "POL",
-		"SER", "SLO", "HUN", "ROM", "BUL", "BGR", "FIN", "FRS", "VIC", "FRA", "BRG",
-		"ANG", "COG", "MAD", "GRO", "AAG", "AAB", "TNS", "MZB", "BUR", "CZE", "BRP", "BLR"
-	]
-	if clean in PAKT_TAGS:
-		return 0.50
-
-	# 4. Сфера Сопроцветания Японии (Оранжево-солнечный: > 0.65)
-	const SPHERE_TAGS = [
-		"JAP", "MAN", "MEN", "GNG", "CHI", "THA", "VIN", "LAO", "CAM", "BUR", "BRM",
-		"PHI", "SPH", "MLY", "MAL", "SHO", "INS", "NRB", "SHX", "GUX", "GUZ", "QIN",
-		"XIK", "SIC", "AAJ", "AZH", "TAI", "KOR", "XSM", "YUN", "SZC"
-	]
-	if clean in SPHERE_TAGS:
-		return 0.75
-
-	# 5. Российские варлорды и Суверенная зона (Красный: > 0.85)
-	const RUS_TAGS = [
-		"WRS", "KOM", "VYT", "SAM", "PRM", "GOR", "ONG", "ONE", "FAV", "GAY",
-		"TYM", "OMS", "SVR", "ZLT", "URL", "ORE", "MGN", "DRL", "BKR", "TAR", "YGR",
-		"VOR", "KAZ", "AKT", "ARL", "KOK", "PAV", "NPL", "KRK", "TOM", "NOV", "KEM",
-		"ALT", "PRC", "SBA", "IRK", "BRY", "CHT", "AMR", "MAG", "YAK", "KMC", "KRS",
-		"TYU", "MIR", "KHA", "VLG", "KOS"
-	]
-	if clean in RUS_TAGS:
-		return 0.95
-
-	return 0.05
+	return MapLUTPipelineScript.get_sphere_code_for_owner(owner_tag, country_spheres)
 
 
 
@@ -1074,14 +1012,12 @@ func set_active_theater_radar(pos: Vector2, _radius: float = 0.22) -> void:
 # ==============================================================================
 
 func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
-	var new_zoom = clampf(current_zoom * factor, min_zoom, max_zoom)
-	if is_equal_approx(new_zoom, current_zoom):
+	var old_zoom = current_zoom
+	current_zoom = MapNavigationControllerScript.adjust_zoom(
+		self, current_zoom, factor, min_zoom, max_zoom, pivot_screen_pos, base_position, map_size, target_camera
+	)
+	if is_equal_approx(old_zoom, current_zoom):
 		return
-
-	var local_pivot = to_local(pivot_screen_pos)
-	scale = Vector2(new_zoom, new_zoom)
-	position += (local_pivot * (current_zoom - new_zoom))
-	current_zoom = new_zoom
 
 	if _shader_mat != null:
 		_shader_mat.set_shader_parameter("zoom_level", current_zoom)
@@ -1101,8 +1037,6 @@ func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
 		if map_markers_overlay != null:
 			map_markers_overlay.set_tactical_view_active(is_tactical_view_active)
 		tactical_view_toggled.emit(is_tactical_view_active)
-
-	_clamp_map_position()
 
 
 ##
@@ -1126,21 +1060,11 @@ func toggle_tactical_view() -> bool:
 
 
 func _clamp_map_position() -> void:
-	var scaled_half = (Vector2(map_size) * scale) * 0.5
-	var margin := Vector2(300.0, 300.0)
-	position.x = clampf(position.x, base_position.x - scaled_half.x - margin.x, base_position.x + scaled_half.x + margin.x)
-	position.y = clampf(position.y, base_position.y - scaled_half.y - margin.y, base_position.y + scaled_half.y + margin.y)
-	_update_camera_limits()
+	MapNavigationControllerScript.clamp_map_position(self, base_position, map_size, target_camera)
 
 
 func _update_camera_limits() -> void:
-	if target_camera == null or map_size == Vector2i.ZERO:
-		return
-	var half_size = Vector2(map_size) * 0.5 * scale.x
-	target_camera.limit_left = int(base_position.x - half_size.x - 300)
-	target_camera.limit_top = int(base_position.y - half_size.y - 300)
-	target_camera.limit_right = int(base_position.x + half_size.x + 300)
-	target_camera.limit_bottom = int(base_position.y + half_size.y + 300)
+	MapNavigationControllerScript.update_camera_limits(self, base_position, map_size, target_camera)
 
 
 # ==============================================================================
