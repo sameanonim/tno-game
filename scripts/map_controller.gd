@@ -20,6 +20,10 @@ extends Sprite2D
 ##      псевдографика [████░░░░], шевроны столкновений, кольца тревоги рейдов и восстаний.
 ## ==============================================================================
 
+const MapManifestLoaderScript = preload("res://core/systems/map/map_manifest_loader.gd")
+const MapLUTPipelineScript = preload("res://core/systems/map/map_lut_pipeline.gd")
+const MapBorderStylerScript = preload("res://core/systems/map/map_border_styler.gd")
+
 enum MapMode {
 	POLITICAL = 0,
 	ECONOMY = 1,
@@ -218,19 +222,11 @@ func _unhandled_input(event: InputEvent) -> void:
 # LUT COORDINATE HELPERS
 # ==============================================================================
 func _calculate_lut_size(total_elements: int) -> Vector2i:
-	var total = maxi(1, total_elements)
-	if total <= LUT_MAX_WIDTH:
-		return Vector2i(total, 1)
-	var h = int(ceil(float(total) / float(LUT_MAX_WIDTH)))
-	return Vector2i(LUT_MAX_WIDTH, h)
+	return MapLUTPipelineScript.calculate_lut_size(total_elements)
 
 
 func _id_to_lut_coords(id: int) -> Vector2i:
-	if lut_size.y <= 1:
-		return Vector2i(clampi(id, 0, lut_size.x - 1), 0)
-	var x = id % lut_size.x
-	var y = clampi(id / lut_size.x, 0, lut_size.y - 1)
-	return Vector2i(x, y)
+	return MapLUTPipelineScript.id_to_lut_coords(id, lut_size)
 
 
 # ==============================================================================
@@ -837,25 +833,7 @@ func set_state_dmz(state_id: int, is_dmz: bool) -> void:
 ## Динамическая адаптация шейдера карты к уровню международной напряженности DEFCON
 ##
 func update_defcon_visuals(defcon_level: int) -> void:
-	if _shader_mat == null:
-		return
-	match defcon_level:
-		1: # DEFCON 1: Ядерная полночь (Nuclear Brink)
-			_shader_mat.set_shader_parameter("dmz_pulse_speed", 10.0)
-			_shader_mat.set_shader_parameter("dmz_dash_scale", 16.0)
-			_shader_mat.set_shader_parameter("border_rendering_mode", 2)
-		2: # DEFCON 2: Военное положение (War Footing)
-			_shader_mat.set_shader_parameter("dmz_pulse_speed", 7.5)
-			_shader_mat.set_shader_parameter("dmz_dash_scale", 20.0)
-			_shader_mat.set_shader_parameter("border_rendering_mode", 2)
-		3: # DEFCON 3: Кризис (Crisis)
-			_shader_mat.set_shader_parameter("dmz_pulse_speed", 5.5)
-			_shader_mat.set_shader_parameter("dmz_dash_scale", 24.0)
-			_shader_mat.set_shader_parameter("border_rendering_mode", 2)
-		_:
-			_shader_mat.set_shader_parameter("dmz_pulse_speed", 3.5)
-			_shader_mat.set_shader_parameter("dmz_dash_scale", 30.0)
-			_shader_mat.set_shader_parameter("border_rendering_mode", 0)
+	MapBorderStylerScript.apply_defcon_visuals(_shader_mat, defcon_level)
 
 
 ##
@@ -965,30 +943,7 @@ func select_province(province_id: int) -> void:
 ## Синхронизирует параметры масштаба и границ с шейдерным материалом
 ##
 func _sync_border_uniforms_to_shader() -> void:
-	if _shader_mat != null:
-		_shader_mat.set_shader_parameter("zoom_level", current_zoom)
-		_shader_mat.set_shader_parameter("show_national_borders", show_national_borders)
-		_shader_mat.set_shader_parameter("show_state_borders", show_state_borders)
-		_shader_mat.set_shader_parameter("show_province_borders", show_province_borders)
-		_shader_mat.set_shader_parameter("show_coastlines", show_coastlines)
-		_shader_mat.set_shader_parameter("national_border_width", national_border_width)
-		_shader_mat.set_shader_parameter("state_border_width", state_border_width)
-		_shader_mat.set_shader_parameter("province_border_width", province_border_width)
-		_shader_mat.set_shader_parameter("coastline_width", coastline_width)
-		_shader_mat.set_shader_parameter("national_border_color", national_border_color)
-		_shader_mat.set_shader_parameter("state_border_color", state_border_color)
-		_shader_mat.set_shader_parameter("province_border_color", province_border_color)
-		_shader_mat.set_shader_parameter("coastline_color", coastline_color)
-		_shader_mat.set_shader_parameter("frontline_border_color", frontline_border_color)
-		_shader_mat.set_shader_parameter("river_color", river_color)
-		_shader_mat.set_shader_parameter("border_color_mode", border_color_mode)
-		_shader_mat.set_shader_parameter("enable_inner_border_glow", enable_inner_border_glow)
-		_shader_mat.set_shader_parameter("inner_border_glow_width", inner_border_glow_width)
-		_shader_mat.set_shader_parameter("inner_border_glow_intensity", inner_border_glow_intensity)
-		_shader_mat.set_shader_parameter("inner_border_glow_tint", inner_border_glow_tint)
-		_shader_mat.set_shader_parameter("enable_dashed_state_borders", enable_dashed_state_borders)
-		_shader_mat.set_shader_parameter("state_border_dash_scale", state_border_dash_scale)
-		_shader_mat.set_shader_parameter("state_border_dash_ratio", state_border_dash_ratio)
+	MapBorderStylerScript.sync_border_uniforms(_shader_mat, self)
 
 
 ##
@@ -1225,55 +1180,11 @@ func get_province_id_under_cursor() -> int:
 
 
 func get_province_id_at_pixel(pixel: Vector2i) -> int:
-	if mask_image == null or pixel.x < 0 or pixel.x >= map_size.x or pixel.y < 0 or pixel.y >= map_size.y:
-		return 0
-
-	# 1. Точечный сэмпл центрального пикселя
-	var raw_id: int = _sample_raw_pixel_id(pixel)
-	if raw_id > 0 and provinces_data.has(raw_id):
-		return raw_id
-
-	# 2. Если пиксель на стыке границ интерполирован/размыт — запускаем мажоритарную 3x3 фильтрацию
-	var neighbor_counts: Dictionary = {}
-	var best_candidate_id: int = 0
-	var max_frequency: int = 0
-
-	for dy: int in range(-1, 2):
-		var sample_y: int = pixel.y + dy
-		if sample_y < 0 or sample_y >= map_size.y:
-			continue
-		for dx: int in range(-1, 2):
-			var sample_x: int = pixel.x + dx
-			if sample_x < 0 or sample_x >= map_size.x:
-				continue
-
-			var n_id: int = _sample_raw_pixel_id(Vector2i(sample_x, sample_y))
-			if n_id > 0 and provinces_data.has(n_id):
-				var freq: int = int(neighbor_counts.get(n_id, 0)) + 1
-				neighbor_counts[n_id] = freq
-				if freq > max_frequency:
-					max_frequency = freq
-					best_candidate_id = n_id
-
-	return best_candidate_id
+	return MapLUTPipelineScript.get_province_id_at_pixel(mask_image, map_size, pixel, provinces_data)
 
 
-##
-## Быстрое декодирование RGB цвета пикселя маски в целочисленный 24-битный ID
-##
 func _sample_raw_pixel_id(pos: Vector2i) -> int:
-	if mask_image == null:
-		return 0
-	var mw: int = mask_image.get_width()
-	var mh: int = mask_image.get_height()
-	if mw <= 0 or mh <= 0:
-		return 0
-	var clamped_pos = Vector2i(clampi(pos.x, 0, mw - 1), clampi(pos.y, 0, mh - 1))
-	var col: Color = mask_image.get_pixelv(clamped_pos)
-	var r: int = int(round(col.r * 255.0))
-	var g: int = int(round(col.g * 255.0))
-	var b: int = int(round(col.b * 255.0))
-	return r | (g << 8) | (b << 16)
+	return MapLUTPipelineScript.sample_raw_pixel_id(mask_image, pos)
 
 
 ##
@@ -1330,15 +1241,7 @@ func _refresh_ownership_lut_frontlines() -> void:
 
 
 func _pack_ownership_pixel(owner_id: int, state_id: int, is_water: bool, is_frontline: bool = false, is_dmz: bool = false) -> Color:
-	var r = float(clampi(owner_id, 0, 255)) / 255.0
-	var g = float(state_id & 0xFF) / 255.0
-	var b = float((state_id >> 8) & 0xFF) / 255.0
-	var flags := 0
-	if is_water: flags |= 1
-	if is_frontline: flags |= 4
-	if is_dmz: flags |= 32
-	var a = float(flags) / 255.0
-	return Color(r, g, b, a)
+	return MapLUTPipelineScript.pack_ownership_pixel(owner_id, state_id, is_water, is_frontline, is_dmz)
 
 
 func _resolve_initial_province_color(pid: int) -> Color:
@@ -1352,165 +1255,33 @@ func _resolve_initial_province_color(pid: int) -> Color:
 
 
 func _compute_province_centroids() -> void:
-	province_centroids.clear()
-	for pid in provinces_data.keys():
-		if provinces_data[pid].has("centroid"):
-			var c = provinces_data[pid]["centroid"]
-			province_centroids[pid] = Vector2(c[0], c[1])
-
-	if province_centroids.is_empty() and mask_image != null:
-		var sums: Dictionary = {}
-		var counts: Dictionary = {}
-		var step = 4 if (map_size.x * map_size.y > 1000000) else 1
-
-		for y in range(0, map_size.y, step):
-			for x in range(0, map_size.x, step):
-				var pid = get_province_id_at_pixel(Vector2i(x, y))
-				if pid > 0:
-					if not sums.has(pid):
-						sums[pid] = Vector2(x, y)
-						counts[pid] = 1
-					else:
-						sums[pid] += Vector2(x, y)
-						counts[pid] += 1
-
-		for pid in sums.keys():
-			province_centroids[pid] = sums[pid] / float(counts[pid])
+	province_centroids = MapManifestLoaderScript.compute_province_centroids(provinces_data, mask_image, map_size, Callable(self, "get_province_id_at_pixel"))
 
 
 func _load_manifest(path: String) -> void:
-	if not FileAccess.file_exists(path):
-		return
-
-	var f = FileAccess.open(path, FileAccess.READ)
-	if f == null:
-		return
-	var text = f.get_as_text()
-	f.close()
-
-	var json = JSON.new()
-	if json.parse(text) == OK and json.data is Dictionary:
-		manifest_data = json.data
-		var meta = manifest_data.get("metadata", {})
-		max_province_id = int(meta.get("max_province_id", 0))
-
-		# 1. Загрузка штатов и привязка провинций
-		var states = manifest_data.get("states", {})
-		for k in states.keys():
-			var sid = int(k)
-			var s_info = states[k]
-			states_data[sid] = s_info
-			var s_owner = str(s_info.get("owner", ""))
-			var s_name = str(s_info.get("name", "Регион %d" % sid))
-			var s_provs = s_info.get("provinces", [])
-			for pid_raw in s_provs:
-				var pid = int(pid_raw)
-				province_to_state[pid] = sid
-				if not provinces_data.has(pid):
-					provinces_data[pid] = {"id": pid, "state_id": sid, "owner": s_owner, "state_name": s_name}
-				else:
-					provinces_data[pid]["state_id"] = sid
-					if not s_owner.is_empty():
-						provinces_data[pid]["owner"] = s_owner
-					provinces_data[pid]["state_name"] = s_name
-				if not state_to_provinces.has(sid):
-					state_to_provinces[sid] = []
-				if not state_to_provinces[sid].has(pid):
-					state_to_provinces[sid].append(pid)
-
-		# 2. Загрузка метаданных провинций
-		var provs = manifest_data.get("provinces", {})
-		for k in provs.keys():
-			var pid = int(k)
-			var p_info = provs[k]
-			if not provinces_data.has(pid):
-				provinces_data[pid] = p_info
-			else:
-				for pk in p_info.keys():
-					provinces_data[pid][pk] = p_info[pk]
-			if p_info.has("state_id") and p_info["state_id"] != null:
-				var sid = int(p_info["state_id"])
-				province_to_state[pid] = sid
-				if not state_to_provinces.has(sid):
-					state_to_provinces[sid] = []
-				if not state_to_provinces[sid].has(pid):
-					state_to_provinces[sid].append(pid)
+	var res = MapManifestLoaderScript.load_manifest(path)
+	manifest_data = res.manifest_data
+	max_province_id = res.max_province_id
+	states_data = res.states_data
+	provinces_data = res.provinces_data
+	province_to_state = res.province_to_state
+	state_to_provinces = res.state_to_provinces
 
 
 func _load_supplementary_data() -> void:
-	if FileAccess.file_exists(starting_countries_file_path):
-		var f = FileAccess.open(starting_countries_file_path, FileAccess.READ)
-		if f != null:
-			var text = f.get_as_text()
-			f.close()
-			var json = JSON.new()
-			if json.parse(text) == OK and json.data is Dictionary:
-				var cid := 1
-				for tag in json.data.keys():
-					var c_info = json.data[tag]
-					country_tag_to_id[tag] = cid
-					country_id_to_tag[cid] = tag
-					cid += 1
-					if c_info is Dictionary:
-						var c_arr = c_info.get("country_color", c_info.get("color", []))
-						if c_arr is Array and c_arr.size() >= 3:
-							var a = c_arr[3] if c_arr.size() >= 4 else 1.0
-							country_colors[tag] = Color(float(c_arr[0]), float(c_arr[1]), float(c_arr[2]), a)
-						if c_info.has("sphere_code"):
-							country_spheres[tag] = float(c_info["sphere_code"])
-						if c_info.has("faction"):
-							country_factions[tag] = str(c_info["faction"])
-						if c_info.has("owned_states") and c_info["owned_states"] is Array:
-							for sid_val in c_info["owned_states"]:
-								var sid = int(sid_val)
-								states_data[sid] = {
-									"id": sid,
-									"owner": tag,
-									"provinces": state_to_provinces.get(sid, [])
-								}
-
-
-	if FileAccess.file_exists(starting_regions_file_path):
-		var f_r = FileAccess.open(starting_regions_file_path, FileAccess.READ)
-		if f_r != null:
-			var r_text = f_r.get_as_text()
-			f_r.close()
-			var json_r = JSON.new()
-			if json_r.parse(r_text) == OK and json_r.data is Dictionary:
-				for k in json_r.data.keys():
-					var sid = int(k)
-					var s_dict = json_r.data[k]
-					starting_regions_data[sid] = s_dict
-					states_data[sid] = s_dict
-					var s_owner = str(s_dict.get("owner", s_dict.get("owner_tag", "")))
-					var s_name = str(s_dict.get("name", "Регион %d" % sid))
-					for pid_raw in s_dict.get("provinces", []):
-						var pid = int(pid_raw)
-						province_to_state[pid] = sid
-						if not provinces_data.has(pid):
-							provinces_data[pid] = {"id": pid, "state_id": sid, "owner": s_owner, "state_name": s_name}
-						else:
-							provinces_data[pid]["state_id"] = sid
-							if not s_owner.is_empty():
-								provinces_data[pid]["owner"] = s_owner
-							provinces_data[pid]["state_name"] = s_name
-						if not state_to_provinces.has(sid):
-							state_to_provinces[sid] = []
-						if not state_to_provinces[sid].has(pid):
-							state_to_provinces[sid].append(pid)
-
-	# Загрузка расширенных характеристик и инфраструктуры провинций
-	if FileAccess.file_exists(province_features_file_path):
-		var f_pf = FileAccess.open(province_features_file_path, FileAccess.READ)
-		if f_pf != null:
-			var pf_text = f_pf.get_as_text()
-			f_pf.close()
-			var json_pf = JSON.new()
-			if json_pf.parse(pf_text) == OK and json_pf.data is Dictionary:
-				for k in json_pf.data.keys():
-					var feat = json_pf.data[k]
-					var pid = int(k)
-					if provinces_data.has(pid) and provinces_data[pid].has("owner"):
-						feat["owner"] = provinces_data[pid]["owner"]
-					province_features_data[pid] = feat
-					province_features_data[k] = feat
+	var res = MapManifestLoaderScript.load_supplementary_data(
+		starting_countries_file_path,
+		starting_regions_file_path,
+		province_features_file_path,
+		provinces_data,
+		states_data,
+		province_to_state,
+		state_to_provinces
+	)
+	country_tag_to_id = res.country_tag_to_id
+	country_id_to_tag = res.country_id_to_tag
+	country_colors = res.country_colors
+	country_spheres = res.country_spheres
+	country_factions = res.country_factions
+	starting_regions_data = res.starting_regions_data
+	province_features_data = res.province_features_data
