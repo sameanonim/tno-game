@@ -1,0 +1,285 @@
+[
+  {
+    "id": "SWE_swap_herman_eriksson",
+    "category_id": "SWE_rationing_policies",
+    "name": "SWE_swap_herman_eriksson",
+    "desc": "",
+    "icon": "decision_generic_nationalism",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "SWE_herman_eriksson": {
+        "is_character_slot": "political_advisor",
+        "NOT": {
+          "has_trait": "SWE_minister_of_supply"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWE_rationing",
+      "SWE_herman_eriksson": {
+        "NOT": {
+          "has_trait": "SWE_minister_of_supply"
+        }
+      }
+    },
+    "complete_effect": {
+      "SWE_herman_eriksson": {
+        "add_trait": {
+          "slot": "political_advisor",
+          "trait": "SWE_minister_of_supply"
+        }
+      }
+    }
+  },
+  {
+    "id": "HGR_incorporate_KSS",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [KSS.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_KSS_req_tt",
+        "KSS": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_KSS_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "KSS": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_KSS",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_KSS_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KSS.GetFlag]Пожертвовать дополнительное снаряжение",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_KSS"
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KSS_influence_true",
+        "HGR_KSS_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "KSS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KSS_decision_a_1",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "HGR_increase_ss_moderate_opinion_low": true,
+      "KSS": {
+        "increase_Heydrich_influence_medium": true
+      },
+      "send_equipment": {
+        "equipment": "infantry_equipment",
+        "amount": 500,
+        "target": "KSS"
+      }
+    }
+  },
+  {
+    "id": "HGR_KSS_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KSS.GetFlag]Предоставить советников из СС",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_KSS"
+      },
+      "command_power": {
+        "_op": ">",
+        "value": 14
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KSS_influence_true",
+        "HGR_KSS_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "KSS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KSS_decision_a_2",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "HGR_increase_ss_hardliner_opinion_low": true,
+      "KSS": {
+        "add_command_power": 10,
+        "army_experience": 25,
+        "increase_Heydrich_influence_small": true
+      }
+    }
+  },
+  {
+    "id": "HGR_KSS_decision_b_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KSS.GetFlag]Укрепить силы Гилле",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action"
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KSS_influence_true",
+        "HGR_KSS_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "KSS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KSS_decision_b_1",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "HGR_increase_ss_moderate_opinion_low": true,
+      "HGR_decrease_ss_hardliner_opinion_low": true,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500,
+        "producer": "GER"
+      },
+      "KSS": {
+        "add_popularity": {
+          "ideology": "national_socialism",
+          "popularity": 0.1
+        },
+        "increase_Heydrich_influence_tiny": true
+      }
+    }
+  },
+  {
+    "id": "HGR_KSS_decision_b_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KSS.GetFlag]Поддержать Вафен-СС Штадлера",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action"
+      },
+      "command_power": {
+        "_op": ">",
+        "value": 14
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KSS_influence_true",
+        "HGR_KSS_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "KSS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KSS_decision_b_2",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "HGR_increase_militarist_opinion_low": true,
+      "HGR_decrease_ss_hardliner_opinion_low": true,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500,
+        "producer": "GER"
+      },
+      "KSS": {
+        "add_popularity": {
+          "ideology": "despotism",
+          "popularity": 0.1
+        },
+        "increase_Heydrich_influence_tiny": true
+      }
+    }
+  }
+]

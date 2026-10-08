@@ -1,0 +1,2331 @@
+[
+  {
+    "id": "AAT_norway.1",
+    "type": "country_event",
+    "title": "[NOR_lev_trotsky.GetName] страдает от фашистских притеснений",
+    "desc": "Пока пылкий революционер был на рыбалке с приютившим его хозяином, фашисты, связанные с партией «Национальное единение», вломились в дом Конрада Кнудсена, где остановился Троцкий.\n\nВзломщики искали любые улики, которые могли бы дать повод избавиться от ссыльного коммуниста, но, к счастью, дочь Кнудсена Хьёрдис спугнула их раньше, чем они смогли найти что-то важное.",
+    "picture": "GFX_report_event_NOR_quisling_rally",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "SOV": {
+        "NOT": {
+          "has_completed_focus": "SOV_the_left_opposition",
+          "focus_progress": {
+            "focus": "SOV_the_left_opposition",
+            "progress": {
+              "_op": ">",
+              "value": 0
+            }
+          }
+        }
+      },
+      "original_tag": "NOR",
+      "date": {
+        "_op": ">",
+        "value": "1936.7.05"
+      }
+    },
+    "immediate": {},
+    "options": [
+      {
+        "name": "Его нужно уберечь от неприятностей",
+        "name_key": "AAT_norway.1.a",
+        "trigger": {
+          "NOT": {
+            "has_completed_focus": "NOR_prosecute_the_nkp"
+          }
+        },
+        "effects": {
+          "country_event": {
+            "id": "AAT_norway.2",
+            "days": 5
+          }
+        }
+      },
+      {
+        "name": "Мы могли бы убить двух зайцев одним выстрелом",
+        "name_key": "AAT_norway.1.b",
+        "trigger": [],
+        "effects": {
+          "country_event": {
+            "id": "AAT_norway.3",
+            "days": 10
+          }
+        }
+      },
+      {
+        "name": "Дайте этому человеку кабинет!",
+        "name_key": "AAT_norway.1.c",
+        "trigger": {
+          "NOT": {
+            "has_completed_focus": [
+              "NOR_compromise_with_the_nkp",
+              "NOR_vote_of_no_confidence",
+              "NOR_continue_nygaardsvold_government",
+              "NOR_the_stumbling_storting"
+            ]
+          }
+        },
+        "effects": {
+          "country_event": {
+            "id": "AAT_norway.4",
+            "days": 2
+          },
+          "custom_effect_tooltip": "available_political_advisor",
+          "show_ideas_tooltip": "NOR_lev_trotsky",
+          "set_global_flag": "trotsky_in_norwegian_government",
+          "set_country_flag": "NOR_trotsky_embraced",
+          "if": {
+            "limit": {
+              "SOU": {
+                "has_government": "communism",
+                "exists": true
+              }
+            },
+            "SOU": {
+              "add_opinion_modifier": {
+                "target": "ROOT",
+                "modifier": "NOR_embraced_trotsky_opinion"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Его прошлое — само по себе доказательство. В тюрьму его!",
+        "name_key": "AAT_norway.1.d",
+        "trigger": {
+          "NOT": {
+            "has_completed_focus": "NOR_prosecute_the_nkp"
+          }
+        },
+        "effects": {
+          "country_event": {
+            "id": "AAT_norway.5",
+            "hours": 10
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_norway.2",
+    "type": "country_event",
+    "title": "Троцкий под домашним арестом на ферме",
+    "desc": "Сославшись на нарушение договоренности не заниматься политикой в ссылке и на хлипкие улики, украденные взломщиками-фашистами, мы добились своего — [NOR_lev_trotsky.GetName] сейчас на ферме в Хуруме, где будет находиться под полицейской охраной в изоляции от внешнего мира.\n\nНаказание сурово, но [SOU.GetNameDef] и местные фашисты не оставляют выбора.",
+    "picture": "GFX_report_event_generic_parliament",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Это лучшее, что мы сейчас можем сделать",
+        "name_key": "AAT_norway.2.a",
+        "trigger": [],
+        "effects": {
+          "set_country_flag": "NOR_trotsky_sent_to_the_farm",
+          "country_event": {
+            "id": "AAT_norway.6",
+            "days": 108
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_norway.3",
+    "type": "country_event",
+    "title": "[ROOT.GetLeader.GetName] обрушивается на инакомыслящих",
+    "desc": "После происшествия на вилле Кнудсена стало ясно одно: политическая обстановка в стране накалилась до предела из-за вражды коммунистов и фашистов.\n\nПора кончать с раздорами и неразберихой. [SOU.GetNameDef] не потерпит присутствия Троцкого в стране и может обрушить на нас свой гнев. «Национальное единение» в то же время при первой же возможности отдаст государство в чужие руки, и править им станет [FGR.GetLeader], так что влияние этой партии нужно сократить любой ценой.\n\nЛучший вариант — отправить изгнанника в Мексику, где его приютит [MEX.GetLeader].",
+    "picture": "GFX_report_event_NOR_storting",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Это ради выживания Норвегии",
+        "name_key": "AAT_norway.3.a",
+        "trigger": [],
+        "effects": {
+          "MEX": {
+            "country_event": {
+              "id": "mexico.17",
+              "days": 12
+            }
+          },
+          "add_stability": -0.1,
+          "remove_ideas": [
+            "NOR_anti_communist_sentiment_ns"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_norway.4",
+    "type": "country_event",
+    "title": "Троцкий присоединяется к нашему правительству!",
+    "desc": "Решение проблем [NOR.GetAdjective]ого народа было у нас прямо под носом. [NOR_lev_trotsky.GetName] — не только один из величайших марксистов-писателей нашего времени, но и харизматичный революционер и выдающийся военачальник.\n\n[SOV.GetNameDef], несомненно, выкажет свое недовольство нашим решением, но выгода того стоит. В конце концов, опыт Троцкого может привести нашу юную нацию и рабочих всей Скандинавии к величию.",
+    "picture": "GFX_report_event_NOR_trotsky_speech",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Изгнанник одного народа — спаситель другого!",
+        "name_key": "AAT_norway.4.a",
+        "trigger": [],
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "AAT_norway.5",
+    "type": "country_event",
+    "title": "[NOR_lev_trotsky.GetName] в тюрьме!",
+    "desc": "Кто-то может назвать улики, найденные в доме Кнудсена, неубедительными, нелогичными и даже сфабрикованными — и, вероятно, будет прав — но, возможно, однажды и при определенных обстоятельствах найдется судья, который признает их правомерными. К тому же факт остается фактом: злить «Национальное единение» сейчас опасно. Вот почему [NOR_lev_trotsky.GetName] был немедленно помещен под арест.\n\nКогда и как он снова увидит дневной свет — сейчас не главное. По крайней мере, мы сделаем все, чтобы здесь его условия были лучше, чем в Сибири.",
+    "picture": "GFX_report_event_NOR_storting",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Его нужно было остановить",
+        "name_key": "AAT_norway.5.a",
+        "trigger": [],
+        "effects": {
+          "set_global_flag": "trotsky_jailed_in_norway"
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_norway.6",
+    "type": "country_event",
+    "title": "Судьба Троцкого",
+    "desc": "Прошло уже достаточно много времени с тех пор, как [NOR_lev_trotsky.GetName] помещен нами под домашний арест на ферме в Хуруме, и такое решение, похоже, не устроило никого. [SOV.GetNameDefCap] требует экстрадировать задержанного, «Национальное единение» — повесить его, а все прочие за исключением завзятых троцкистов — изгнать из страны. Надо решить, что делать с этим неугомонным изгнанником.\n\nПрезидент Мексики [MEX.GetLeader] предлагает принять Троцкого у себя, если мы позволим изгнаннику продолжить ссылку — но и [SOV.GetLeader] с большой благодарностью примет его у себя.",
+    "picture": "GFX_report_event_NOR_trotsky_couple",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Мексиканское солнце ему понравится",
+        "name_key": "AAT_norway.6.a",
+        "trigger": [],
+        "effects": {
+          "country_event": {
+            "id": "AAT_norway.7",
+            "days": 10
+          },
+          "MEX": {
+            "country_event": {
+              "id": "mexico.17",
+              "days": 10
+            }
+          }
+        }
+      },
+      {
+        "name": "Сталин нас полюбит!",
+        "name_key": "AAT_norway.6.b",
+        "trigger": [],
+        "effects": {
+          "country_event": {
+            "id": "AAT_norway.8",
+            "days": 10
+          },
+          "SOU": {
+            "country_event": {
+              "id": "AAT_norway.8",
+              "days": 10
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_norway.7",
+    "type": "country_event",
+    "title": "[get_trotsky_lastname] прибывает в Мексику",
+    "desc": "После нескольких лет ссылки в нашей стране неугомонный изгнанник [NOR_lev_trotsky] прибыл в Мексику, где будет жить в доме художников Фриды Кало и Диего Риверы. Нет сомнения, они отлично поладят.\n\nТам, вероятно, Троцкого не достанет [SOV.GetNameDef] — и, что самое главное, он уже не будет нашей проблемой.",
+    "picture": "GFX_report_event_NOR_trotsky_frida",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Наконец-то мы обретем покой",
+        "name_key": "AAT_norway.7.a",
+        "trigger": [],
+        "effects": {
+          "if": {
+            "limit": {
+              "has_country_flag": "NOR_trotsky_sent_to_the_farm"
+            },
+            "clr_country_flag": "NOR_trotsky_sent_to_the_farm"
+          },
+          "clr_global_flag": "NOR_trotsky_in_norway",
+          "set_global_flag": "AAT_trotsky_in_mexico"
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_italy_missiolinis.02_north",
+    "type": "country_event",
+    "title": "Застой на Северном фронте",
+    "desc": "Наша контратака в Северной Абиссинии не увенчалась успехом. Дуче возмущен тем, что весь мир смеется над ним и его военными неудачами. Он уже наполовину готов лично возглавить северное наступление, чтобы убедиться, что солдаты должным образом мотивированы и управляемы.",
+    "picture": "GFX_report_event_generic_soldiers_surrendering",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {
+      "ITA_missiolinis_system_available": true
+    },
+    "immediate": {
+      "hidden_effect": {
+        "ITA_missiolinis_finalize_mission_effect": true,
+        "ITA_missiolinis_add_to_failed_missions": true
+      }
+    },
+    "options": [
+      {
+        "name": "Мы победим... рано или поздно.",
+        "name_key": "BBA_italy_missiolinis.02_north.a",
+        "trigger": {
+          "OR": {
+            "has_completed_focus": [
+              "ITA_the_abyssinian_fiasco",
+              "ITA_struggle_in_ethiopia"
+            ],
+            "NOT": {
+              "has_country_flag": "ITA_missiolini_conquer_the_north_failed_flag"
+            }
+          }
+        },
+        "effects": {
+          "ITA_missiolini_progress_in_ethiopia_failure_effect": true
+        }
+      },
+      {
+        "name": "Нам нужно другое командование!",
+        "name_key": "BBA_italy_missiolinis.02_north.b",
+        "trigger": {
+          "has_dlc": "By Blood Alone",
+          "NOT": {
+            "has_completed_focus": [
+              "ITA_the_abyssinian_fiasco",
+              "ITA_struggle_in_ethiopia"
+            ],
+            "has_country_flag": "ITA_missiolini_conquer_the_south_failed_flag"
+          }
+        },
+        "effects": {
+          "ITA_missiolini_progress_in_ethiopia_failure_effect": true,
+          "if": {
+            "limit": {
+              "NOT": [
+                {
+                  "has_completed_focus": "ITA_struggle_in_ethiopia"
+                },
+                {
+                  "has_completed_focus": "ITA_solid_progress"
+                }
+              ]
+            },
+            "complete_national_focus": "ITA_the_abyssinian_fiasco"
+          }
+        }
+      },
+      {
+        "name": "Полный провал!",
+        "name_key": "BBA_italy_missiolinis.02_north.c",
+        "trigger": {
+          "NOT": {
+            "has_completed_focus": [
+              "ITA_the_abyssinian_fiasco",
+              "ITA_struggle_in_ethiopia"
+            ],
+            "has_country_flag": "ITA_missiolini_conquer_the_south_failed_flag"
+          }
+        },
+        "effects": {
+          "ITA_missiolini_progress_in_ethiopia_failure_effect": true,
+          "if": {
+            "limit": {
+              "NOT": [
+                {
+                  "has_completed_focus": "ITA_the_abyssinian_fiasco"
+                },
+                {
+                  "has_completed_focus": "ITA_solid_progress"
+                }
+              ]
+            },
+            "complete_national_focus": "ITA_struggle_in_ethiopia"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_italy_missiolinis.03_north",
+    "type": "country_event",
+    "title": "Успех в Северной Эфиопии",
+    "desc": "Муссолини вовсю восхваляет армии в Северной Абиссинии и их успехи в борьбе с яростным противником. Он, разумеется, никогда и не сомневался в доблести наших войск — пока те получают правильную мотивацию от своего дуче и нужное снаряжение.",
+    "picture": "GFX_report_event_generic_military_parade",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {
+      "ITA_missiolinis_system_available": true
+    },
+    "immediate": {
+      "hidden_effect": {
+        "ITA_missiolinis_finalize_mission_effect": true,
+        "ITA_missiolinis_add_to_successful_missions": true
+      }
+    },
+    "options": [
+      {
+        "name": "Теперь враг бежит!",
+        "name_key": "BBA_italy_missiolinis.03_north.a",
+        "trigger": {},
+        "effects": {
+          "ITA_missiolini_progress_in_ethiopia_success_effect": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_usa_north_american_dominion.1",
+    "type": "country_event",
+    "title": "[USA.GetNameDefCap] хочет контролировать нашу внешнюю политику",
+    "desc": "В ходе того, что выглядит как часть слаженного дипломатического наступления по всей Северной Америке и в регионе Карибского моря, [USA.GetAdjective]ий посол передал нам ноту от президента. [USA.GetLeader] и его правительство ожидают, что отныне мы будет консультироваться с ними по поводу внешнеполитических решений «в интересах поддержания мира и доброй воли в отношениях между нашими странами».",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "У нас нет выбора.",
+        "name_key": "mtg_usa_north_american_dominion.1.a",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": "mtg_usa_north_american_dominion.2"
+          },
+          "effect_tooltip": {
+            "FROM": {
+              "puppet": "ROOT"
+            }
+          }
+        }
+      },
+      {
+        "name": "Ни за что!",
+        "name_key": "mtg_usa_southern_threat.1.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": "mtg_usa_north_american_dominion.3"
+          },
+          "set_country_flag": "north_american_dominion_refused",
+          "if": {
+            "limit": {
+              "not": {
+                "has_global_flag": "mtg_usa_north_american_dominion_refused_faction"
+              },
+              "is_in_faction": false
+            },
+            "unlock_decision_tooltip": {
+              "decision": "USA_form_defensive_alliance_north_american_dominion",
+              "show_effect_tooltip": true
+            }
+          },
+          "else_if": {
+            "limit": {
+              "is_in_faction": false
+            },
+            "unlock_decision_tooltip": {
+              "decision": "USA_join_defensive_alliance_north_american_dominion",
+              "show_effect_tooltip": true
+            }
+          },
+          "effect_tooltip": {
+            "FROM": {
+              "create_wargoal": {
+                "type": "puppet_wargoal_focus",
+                "target": "ROOT"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_usa_north_american_dominion.2",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] соглашается на требования",
+    "desc": "Правительство лидера [From.GetLeader] согласилось на нашу просьбу и предоставило нашему послу право вето в отношении любого крупного политического решения.",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мудрый выбор.",
+        "name_key": "mtg_usa_north_american_dominion.2.a",
+        "trigger": {},
+        "effects": {
+          "puppet": "FROM"
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_usa_north_american_dominion.3",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отказывается",
+    "desc": "[From.GetLeader] ответил на нашу дипломатическую ноту с выражением неподдельной озабоченности. Он заявил, что [From.GetNameDef] гордится долгой историей независимости и суверенитета и никогда не позволит какому-либо государству навязывать себе внешнюю политику.\n\nОн также попросил президента, лидера [USA.GetLeader], задуматься о последствиях войны по этому поводу, в результате чего государство [USA.GetNameDef] будет признано крупнейшей угрозой миру с непредсказуемыми последствиями.",
+    "picture": "GFX_report_event_british_inspect_troops",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Отважные слова для такого слабого руководителя.",
+        "name_key": "mtg_usa_north_american_dominion.3.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "puppet_wargoal_focus",
+            "target": "FROM"
+          }
+        }
+      },
+      {
+        "name": "Возможно, он прав.",
+        "name_key": "mtg_usa_north_american_dominion.3.b",
+        "trigger": {},
+        "effects": {
+          "add_war_support": -0.1
+        }
+      }
+    ]
+  },
+  {
+    "id": "SPQR.50",
+    "type": "country_event",
+    "title": "SPQR.50.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event SPQR.50"
+    },
+    "options": [
+      {
+        "name": "SPQR.50.a",
+        "name_key": "SPQR.50.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "RMN": [
+              {
+                "transfer_state": 348,
+                "add_state_core": 348,
+                "load_oob": "RMN_1962"
+              },
+              {
+                "country_event": {
+                  "id": "SPQR.51",
+                  "days": 1
+                }
+              }
+            ],
+            "TUR": {
+              "leave_faction": true
+            },
+            "set_global_flag": "the_lost_legion"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "SPQR.51",
+    "type": "country_event",
+    "title": "SPQR.51.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event SPQR.51"
+    },
+    "options": [
+      {
+        "name": "SPQR.51.a",
+        "name_key": "SPQR.51.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "RMN": {
+              "declare_war_on": {
+                "target": "TUR",
+                "type": "annex_everything"
+              }
+            },
+            "every_country": {
+              "limit": {
+                "NOT": {
+                  "tag": "RMN"
+                }
+              },
+              "news_event": {
+                "id": "WORLD.789"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "SPQR.52",
+    "type": "country_event",
+    "title": "SPQR.52.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event SPQR.52"
+    },
+    "options": [
+      {
+        "name": "SPQR.52.a",
+        "name_key": "SPQR.52.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "341": {
+              "set_state_name": "STATE_341_rmn"
+            },
+            "set_province_name": {
+              "id": 9833,
+              "name": "VICTORY_POINTS_9833_rmn"
+            },
+            "add_state_core": [
+              184,
+              341,
+              340,
+              339,
+              342,
+              343,
+              347,
+              49,
+              346,
+              345,
+              356,
+              348,
+              344,
+              355,
+              349,
+              350,
+              352,
+              353,
+              354,
+              783,
+              230,
+              677,
+              680,
+              781,
+              554
+            ],
+            "set_capital": {
+              "state": 341
+            },
+            "random_owned_controlled_state": [
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              },
+              {
+                "prioritize": [
+                  341
+                ],
+                "create_unit": {
+                  "division": "name = \"Turkish Auxiliaries\" division_template = \"Auxiliaries\" start_experience_factor = 0.5",
+                  "owner": "RMN"
+                }
+              }
+            ],
+            "country_event": {
+              "id": "SPQR.53",
+              "days": 7
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "SPQR.53",
+    "type": "country_event",
+    "title": "SPQR.53.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event SPQR.53"
+    },
+    "options": [
+      {
+        "name": "SPQR.53.a",
+        "name_key": "SPQR.53.a",
+        "trigger": {},
+        "effects": {
+          "every_country": {
+            "limit": {
+              "NOT": {
+                "tag": "RMN"
+              }
+            },
+            "declare_war_on": {
+              "type": "annex_everything",
+              "target": "RMN"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.1",
+    "type": "country_event",
+    "title": "Националист",
+    "desc": "В старом кабинете Квислинга в бывшем королевском дворце в Осло горела только одна лампочка. Прохожего, бросающего вызов холодному ночному воздуху, можно было бы простить за то, что он подумал, что дворецкий оставил свет включенным, прежде чем отправиться домой на ночь. Но офис не был пуст, его одинокий обитатель не собирался никуда уходить еще несколько часов.\n\nМертвец глубоко вдохнул, наполняя легкие теплым едким дымом от сигареты, зажатой между его тонкими губами. Оторвав взгляд от отчетов о сельскохозяйственном производстве на своем столе, он заметил свое отражение в тускло-сером темном экране телевизора в углу. Подсвеченные лампой на столе, его глазницы казались темными и пустыми. Посмеиваясь про себя, мертвец отложил авторучку и обошел вокруг стола, чтобы опереться на нее, в тысячный раз размышляя о своей смерти. Движущийся паром, внезапное осознание, крик его пассажира и крик его жены, когда глубины поднялись, чтобы забрать его машину. Он резко затянулся сигаретой, когда вспышки воспоминаний ускорились. Окно, взорвавшееся в его сторону, похоронив его и пассажиров в стене воды и стекла, давление на грудь, когда из него хлынула вода, обеспокоенное лицо ветерана Восточного фронта, который спас его, резкий укус солнца, когда он в замешательстве огляделся, безвольные тела, которые прохожие накрыли куртками. Затем сердитые взгляды двух офицеров гестапо в плащах, рука, тянущаяся за чем-то в пальто, только для того, чтобы другой офицер остановил его, похлопав по руке, когда толпа сомкнулась вокруг \"несчастного случая\"...\n\nМертвец невесело рассмеялся, оглядывая комнату. В Аду определенно была хорошая мебель. Он заметил картину с изображением самого Дьявола на стене. Его тюремщик, его убийца, его самопровозглашенный спаситель. Мертвец подошел к картине и одним решительным движением поместил тлеющий кончик своей сигареты прямо в середину нарисованного лица, как раз над дурацкими маленькими усиками. Когда лицо потемнело и исчезло в круге распространяющейся черноты, Гулбранд Лунде улыбнулся.",
+    "picture": "GFX_report_event_generic_mountain",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.1"
+    },
+    "options": [
+      {
+        "name": "\"Мы все еще живем.\"",
+        "name_key": "norway.1.a",
+        "trigger": {},
+        "effects": {
+          "country_event": {
+            "id": "norway.59",
+            "days": 1
+          },
+          "add_war_support": 0.05
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.2",
+    "type": "country_event",
+    "title": "norway.2.t",
+    "desc": "Как известно каждому немецкому бюрократу, с учреждением рейхскомиссариата наступает взрыв сопротивления, как мирного, так и насильственного. Администраторы обязаны быстро и компетентно устранять такие угрозы любыми необходимыми средствами. Некоторые движения сопротивления ярко пылают в течение нескольких лет, прежде чем угаснут навсегда, в то время как другие наносят себе больший ущерб, чем их цели, поскольку они разрушаются в междоусобицах. Этого нельзя сказать о Милорге.\n\nМилорг - название, которое вызывало страх, замешательство и ярость у немецких оккупантов Рейхскомиссариата Норвегии в течение последних двух десятилетий. Как группа асов, они парили вокруг нас и уклонялись от наших ударов, набрасываясь на нас, чтобы кусать нас снова и снова, когда мы меньше всего этого ожидали. Когда-то неорганизованная группа людей, Милорг теперь может похвастаться большой сетью преданных своему делу солдат, каждый из которых подпитывается жгучей ненавистью к немцам и решимостью втянуть свою страну обратно в демократическое вырождение. С 1941 года эта организация нарушала наши линии снабжения, саботировала нашу разведку и совершала набеги на наши склады. Враги государства были освобождены из тюрьмы и получили либо свободный доступ в Швецию, либо оружие для продолжения борьбы. Хорошие люди, как немцы, так и норвежцы, были хладнокровно убиты - не щадя ни в чем не повинных людей, убитых по пути.\n\nМилорг - чудовищная организация, которая мало заботится о последствиях сопутствующего ущерба. Многие гражданские норвежцы были застрелены и взорваны этими мразями, и все же Милорг продолжает вызывать поддержку у масс благодаря их огромным пропагандистским усилиям. От брошюр и плакатов до пиратских радиопередач и тайных митингов - эти повстанцы не остановятся ни перед чем, чтобы манипулировать людьми в их жалком деле. Если эти вредители не будут уничтожены в ближайшее время, они могут превратиться в угрозу, которую мы никак не могли ожидать много лет назад.",
+    "picture": "GFX_report_event_generic_people",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.2"
+    },
+    "options": [
+      {
+        "name": "Мы раздавим их, как насекомых.",
+        "name_key": "norway.2.a",
+        "trigger": {},
+        "effects": {
+          "TNO_improve_press_rights_policy_effectiveness_low": true,
+          "TNO_improve_security_policy_effectiveness_low": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.3",
+    "type": "country_event",
+    "title": "norway.3.t",
+    "desc": "Бедствие! Прошлой ночью под покровом темноты террористы Милорга устроили засаду на членов гарнизона и проникли на охраняемый склад оружия, и теперь у них есть некоторое количество нашего огнестрельного оружия.\n\nПока мы все еще расследуем это событие, становится ясно, что это была тщательно спланированная операция с несколькими диверсантами, действовавшими сообща, чтобы совершить набег на арсенал, прежде чем местные силы даже узнали, что происходит. Существенные запасы огнестрельного оружия теперь находятся в руках сопротивления, и несколько членов гарнизона убиты или ранены в результате нападения.\n\nПолиция расследует, куда пропали преступники, но, поскольку большинство свидетелей были застрелены, в настоящее время у нас есть лишь зацепки,оставленные во время медленного наступления. Тем не менее, поиски продолжаются, но если им удастся скрыться, то любой верный член рейхскомиссариата может оказаться под дулом пистолета. Местные СМИ в регионе нападения подвергаются цензуре, мы должны надеяться, что сможем принять решительные меры до того, как население узнает об этой неудаче.",
+    "picture": "GFX_report_event_generic_guns_crate_mosin",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.3"
+    },
+    "options": [
+      {
+        "name": "Черт!",
+        "name_key": "norway.3.a",
+        "trigger": {},
+        "effects": {
+          "add_equipment_to_stockpile": {
+            "type": "infantry_equipment_1",
+            "amount": -500,
+            "producer": "NOR"
+          },
+          "add_stability": -0.05
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.4",
+    "type": "country_event",
+    "title": "norway.4.t",
+    "desc": "Восточная граница долгое время была источником разногласий между Рейхскомиссариатом и Королевством Швеция, но из-за продолжающихся событий она превратилась в более острый вопрос. В противовес нашим методам управления норвежское сопротивление Милорг терроризирует как граждан, так и гарнизон. В рейхскомиссариате нет ничего нового в криминальных и боевых элементах, но наши методы борьбы с ними в последнее время стали более слабыми. Причина этого сложна, но одним из наиболее важных факторов является статус нашей границы со Швецией. Силы разведки и полиции подтвердили, что Милорг получает финансовую и материальную помощь из-за границы и это не подает никаких признаков прекращения. Запросы к шведам приносят только опровержения каких-либо должностных преступлений; их притворное невежество только укрепляет наши подозрения, что шведское правительство само может помогать террористическим элементам в рейхскомиссариате.\n\nОчевидно, что действовать необходимо, но у нас есть несколько вариантов. Мы можем увеличить присутствие полиции на пограничных контрольно-пропускных пунктах и проводить двойные проверки, чтобы попытаться поймать контрабанду, но это, вероятно, будет иметь только возврат на контрольно-пропускные пункты и сами пограничные станции. Мы могли бы расправиться еще сильнее и развернуть гарнизонные элементы на ключевых позициях вдоль всей границы, чтобы у Милорга не было путей входа или выхода; Однако такой шаг может вызвать у шведов беспокойство и повлиять на наши отношения.",
+    "picture": "GFX_report_event_GER_army_3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.4"
+    },
+    "options": [
+      {
+        "name": "Делайте все возможное, укрепляйте контрольно-пропускные пункты.",
+        "name_key": "norway.4.a",
+        "trigger": {},
+        "effects": {
+          "add_to_variable": {
+            "nor_demlove": 1
+          }
+        }
+      },
+      {
+        "name": "Нужно действовать решительно, граница должна быть надежной.",
+        "name_key": "norway.4.b",
+        "trigger": {},
+        "effects": {
+          "add_to_variable": {
+            "nor_gerlove": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.5",
+    "type": "country_event",
+    "title": "norway.5.t",
+    "desc": "Германизация; это конечная цель самой системы рейхскомиссариата, и тем не менее, даже по прошествии стольких десятилетий мы едва ли ближе к ее достижению, чем когда Кригсмарине прибыла во фьорды Норвегии. Основной поток наших постоянных усилий в Норвегии, немецкий язык, до сих пор находится не на своем законном месте, как Лингва Франка Скандинавского полуострова.\n\nЯрким примером этого явления, является стремление широкой общественности к фальшивой неграмотности по-немецки, игнорирование немецких знаков и правил, а также забывчивости - по правде говоря, игнорирования говорить по-немецки в общественных местах. Под давлением эти люди приносят извинения, утверждая, что у них нет времени учиться или что это лишь привычка, но сразу же на следующий день возвращаются к заменам на свой иностранный(норвежский) язык. Очевидно, согласно официальному документу, распространенному Департаментом по делам культуры в более широкую администрацию, этого достаточно. Разработаны меры, чтобы вернуть усилия рейхскомиссариата по германизации и привязать норвежцев к немецкому языку. В нескольких соответствующих разделах документа сказано, как должна начаться германизация носителей норвежского языка.\n\nРаздел 4.А3: Культурный норвежский язык классифицируется как ненормативная речь. В соответствии с арийским единством, национальный немецкий язык является единственным законным языком общения на публичных МЕРОПРИЯТИЯХ Рейхскомиссариата Норвегии...\n\nРаздел 6.C2: Все жилые, коммерческие и промышленные зоны должны удалить любые плакаты, содержащие или испорченные неправильной речью и должны быть заменены немецким арийским языком в течение не более двух недель...",
+    "picture": "GFX_report_event_GER_police",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.5"
+    },
+    "options": [
+      {
+        "name": "Раздел 9.А5: 'Хаиль Гитлер' должно быть единственным правильным приветствием...",
+        "name_key": "norway.5.a",
+        "trigger": {},
+        "effects": {
+          "TNO_improve_education_policy_effectiveness_monthly_low": true,
+          "set_temp_variable": {
+            "civilian_costs_temp": 0.01
+          },
+          "econ_civilian_costs_tooltip": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.6",
+    "type": "country_event",
+    "title": "norway.6.t",
+    "desc": "Рекомендации Департамента по делам культуры были встречены населением с нерешительностью. Хотя большинство норвежцев более чем способны вести диалог на немецком языке, несколько широкоизвестных представителей общественности заявили, что, применяя немецкий язык, мы совершим престепупление которое характерно для таких людей как молодых и необразованных. Пока приказы исполняются там, где это возможно - к большому облегчению гарнизона и администрации - среди местного населения может ощущаться беспокойство. Разговоры на немецком языке окрашены тревогой, поскольку коренные норвежцы, которые изо всех сил пытаются запомнить слова для определенных понятий или ситуаций, опасаются, что их поймают за диалогом на норвежском языке чрезмерно усердным соседом или полицейским.\n\nКроме того, высказались несколько членов администрации рейхскомиссариата,проявляя сочувствие к тем, кто действительно не говорит по-немецки, и считает, что Департамент по делам культуры использовал неэффективный метод ускорения германизации. Предложение было внесено Рейхскомиссариатом в надежде найти решение.\n\nУказы могут оставаться в законе, но не исполняться, чтобы угодить большинству сторон, но они замедлят процесс германизации в этой области. Или, однако, руководящие принципы могут быть продолжены, вводя период \"отхода\" норвежского населения для большей выгоды от превращения рейхскомиссариата в образцовую немецкую колонию.",
+    "picture": "GFX_report_event_generic_people",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.6"
+    },
+    "options": [
+      {
+        "name": "Здесь и там могут быть предоставлены незначительные исключения.",
+        "name_key": "norway.6.a",
+        "trigger": {},
+        "effects": {
+          "add_to_variable": {
+            "nor_demlove": 1
+          },
+          "TNO_worsen_admin_efficiency_low": true
+        }
+      },
+      {
+        "name": "Следуйте букве закона,пожалуйста",
+        "name_key": "norway.6.b",
+        "trigger": {},
+        "effects": {
+          "add_to_variable": {
+            "nor_gerlove": 1
+          },
+          "TNO_worsen_admin_efficiency_med": true,
+          "TNO_improve_education_policy_effectiveness_low": true,
+          "TNO_improve_security_policy_effectiveness_low": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.7",
+    "type": "country_event",
+    "title": "norway.7.t",
+    "desc": "Экономика, эта невидимая сила природы, не была слишком щедрой для Норвегии.\n\nХотя разведка природных ресурсов идет стремительными темпами, наиболее доминирующим сектором занятости в Рейхскомиссариате является сельское хозяйство. Но даже в этом норвежцам не повезло, поскольку короткие вегетационные периоды и посредственное количество пахотных земель препятствуют усилиям по расширению этой области экономического потенциала. Тем не менее, хотя Скандинавия никогда не будет соперничать с плодородными равнинами Рейхскомиссариата Украины в чистой продукции, их достаточно, чтобы прокормить наше население и оставить большую часть норвежцев занятыми.\n\nНаша экономика не была застойной, и в последнее время фактически показали первые преобразования в диверсифицирующий рынок. В связи с потребностями рейхскомиссариата, а также с преобразованием Норвегии в более современную страну, вырос спрос на промышленный потенциал и товары. Наши города продолжали расти отчасти за счет увеличения числа рабочих мест в промышленности и доступных вакансий, и респектабельная судостроительная промышленность сейчас укрепилась.\n\nНесмотря на это, факт остается фактом: Норвегия экспортирует свои товары в Рейх и Европу, и необходимо приложить усилия по возможности, для увеличения роста производства на Скандинавском полуострове.",
+    "picture": "GFX_report_event_generic_office",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.7"
+    },
+    "options": [
+      {
+        "name": "Очередной день,Очередная Рейхсмарка",
+        "name_key": "norway.7.a",
+        "trigger": {},
+        "effects": {
+          "set_temp_variable": {
+            "gdp_growth_temp": 0.5
+          },
+          "econ_gdp_growth_change": true,
+          "TNO_improve_poverty_low": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.8",
+    "type": "country_event",
+    "title": "norway.8.t",
+    "desc": "\"Это идиллия, не так ли?\" Шофер откинулся на кожаном сиденье \"Фольксвагена\" рейхскомиссара, пока они ехали по живописному маршруту к Стортингу, старому законодательному органу Норвегии. Сияло солнце, когда десятки горожан стояли у дороги и махали машине и ее сопровождающим...\n\n\"Я не виню вас за то, что вы так думаете\". Ответ вышел намного холоднее, чем предполагал рейхскомиссар. Выглянув из окна заднего сиденья, он улыбнулся прохожим, но его мысли были заняты гораздо более серьезными вопросами. Милорг, норвежское сопротивление правлению Рейха, долгое время находился на стадии беспокойства, но в последнее время они слишком осмелели. Их связи укрепились, были сообщения, что они снова действуют в городах с большей силой; если их не искоренить, то они попробуют что-то по-настоящему вопиющее будет лишь вопросом времени. Снова окинув взглядом горожан, он размышлял и задавался вопросом, сколько людей слушают сопротивление во все услышанье, сколько предоставляют им убежище, кто среди них на самом деле его члены.\n\nОторвавшись от окна, рейхскомиссар развернулся к шоферу. В последнее время усилия по слежке были слабыми, это необходимо исправить, чтобы обеспечить безопасность нации. Однако степень слежки требует контроля. Небольшое усиление государственного надзора необходимо, и оно не будет ощущаться слишком значительным, но специальная целевая группа для наблюдения за гражданами и значительное увеличение объема отчетности и анализа, несомненно, искоренит больше диссидентов.",
+    "picture": "GFX_report_event_generic_people",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.8"
+    },
+    "options": [
+      {
+        "name": "Мы не можем тратить слишком много времени на кучку заводских рабочих.",
+        "name_key": "norway.8.a",
+        "trigger": {},
+        "effects": {
+          "add_to_variable": {
+            "nor_demlove": 1
+          },
+          "TNO_improve_security_policy_effectiveness_monthly_low": true,
+          "add_timed_idea": {
+            "idea": "norway_8_a_misc_costs",
+            "days": 90
+          }
+        }
+      },
+      {
+        "name": "В целях национальной безопасности будем следить за всем чем можем.",
+        "name_key": "norway.8.b",
+        "trigger": {},
+        "effects": {
+          "add_to_variable": {
+            "nor_gerlove": 1
+          },
+          "TNO_improve_security_policy_effectiveness_monthly_high": true,
+          "add_timed_idea": {
+            "idea": "norway_8_b_misc_costs",
+            "days": 90
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.9",
+    "type": "country_event",
+    "title": "norway.9.t",
+    "desc": "Грядет ветер перемен, и все в Норвегии могут почувствовать, в какую сторону он дует; сначала он был постепенным, но совсем немного увеличил силу и скорость, и теперь угрожает уничтожить весь немецкий эксперимент.\n\nГде раньше можно было увидеть норвежцев, отдающих четкое немецкое приветствие членам администрации или гарнизона, теперь большим счастьем будет увидеть даже краткий кивок. Молодежь дебоширит и запятнала витрины наиболее преданных сотрудников, и немногие в сообществе пытаются привлечь их к ответственности. Хуже всего то, что общественная оппозиция и громкие протесты разразились всерьез впервые с худших лет рейхскомиссариата.\n\nЕстественно, расследования - и несколько допросов - быстро выявили для всех источник этого растущего недовольства , Милорг проникал в городские районы и общины и распространял свою вирусную пропаганду в форме разговоров, листовок и даже песен. Далее, в более сельских районах, гарнизоны имеют лишь ограниченный контроль над своими регионами, и сообщается о значительном количестве насильственных физических столкновений.\n\nСреднестатистические граждане начинают сомневаться в том, кого они считают своим истинным спасителем.",
+    "picture": "GFX_report_event_generic_newspaper",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.9"
+    },
+    "options": [
+      {
+        "name": "Ветер не может сдуть с горы.",
+        "name_key": "norway.9.a",
+        "trigger": {},
+        "effects": {
+          "TNO_worsen_public_meetings_policy_effectiveness_med": true,
+          "TNO_worsen_security_policy_effectiveness_med": true,
+          "TNO_worsen_press_rights_policy_effectiveness_med": true,
+          "add_popularity": [
+            {
+              "ideology": "conservatism",
+              "popularity": 0.02
+            },
+            {
+              "ideology": "liberal_conservatism",
+              "popularity": 0.02
+            },
+            {
+              "ideology": "liberalism",
+              "popularity": 0.02
+            },
+            {
+              "ideology": "progressivism",
+              "popularity": 0.02
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.10",
+    "type": "country_event",
+    "title": "norway.10.t",
+    "desc": "От кого: исполнительная канцелярия рейхскомиссариата Норвегии\n\nКому: федеральному Министерству иностранных дел Великогерманского Рейха\n\nТема: Несанкционированная гражданская пропаганда\n\nКак отмечалось в предыдущих сообщениях, элементы внутреннего сопротивления распространяли незаконную вирусную пропаганду внутри рейхскомиссариата. В ответ рейхскомиссар уполномочил все имеющиеся у государства возможности расследовать, выявлять и нейтрализовывать несанкционированную гражданскую пропаганду. С этой целью были организованы и проинструктированы: гарнизон рейхскомиссариата, местные и федеральные полицейские силы и органы государственной безопасности. Все они были мобилизованы для обеспечения культурной безопасности граждан рейхскомиссариата Норвегии. Внутренняя диверсионная группа, получившая название \"Милорг\", идентифицируется как пропагандист вышеупомянутого культурного саботажа и далее обозначается как наш высший приоритет для задержания и нейтрализации. \n\nКроме того, в городских центрах будет развернута более высокая концентрация общественного мониторинга и гражданских расследований. В настоящее время рассматривается вопрос о введении комендантского часа, но в промежуточный период граждане должны будут регистрировать свою деятельность для представления своих запросов следователю Службы безопасности. Кроме того, движение через Рейхскомиссариат будет разрешено только для зарегистрированных транспортных средств, включая в себя гарнизонные транспортные средства, военные транспортные средства, средства снабжения и транспортировки, транспортные средства, имеющие сертификат государственного агента рейхскомиссариата Норвегии, транспортные средства, имеющие сертификат государственного агента Великогерманского Рейха, и \"тайные\" инкассаторские транспортные средства (для получения подробной инофрмации см. файл 1A).",
+    "picture": "GFX_report_event_GER_army_3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.10"
+    },
+    "options": [
+      {
+        "name": "Понятно.",
+        "name_key": "norway.10.a",
+        "trigger": {},
+        "effects": {
+          "NOR": {
+            "army_funding_minimal_increase_med": true,
+            "TNO_improve_press_rights_policy_effectiveness_monthly_med": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.11",
+    "type": "country_event",
+    "title": "Доклад из Норвегии",
+    "desc": "От кого: исполнительная канцелярия рейхскомиссариата Норвегии\n\nКому: федеральному Министерству иностранных дел Великогерманского Рейха\n\nТема: Несанкционированная гражданская пропаганда\n\nКак отмечалось в предыдущих сообщениях, расследование предполагаемых внутренних подрывных элементов в настоящее время продолжается и будет продолжаться по мере поступления новых доказательств. Существующие оперативные силы будут перераспределены в места, где они более необходимы, до тех пор, пока Управление рейхскомиссара не сочтет это необходимым. Развертывание сил гарнизона, органов государственной безопасности, местной и федеральной полиции определяется комплексными потребностями рейхскомиссариата и может показаться неортодоксальным, но так они используются с наибольшей эффективностью. \n\nВ течение этого периода усилия по наблюдению за предполагаемыми внутренними подрывными элементами будут продолжаться по мере необходимости, но в соответствии с намерениями аппарата безопасности дополнительные прямые действия против предполагаемой пропаганды были сочтены контрпродуктивными. Таким образом, до тех пор, пока приказ не будет отменен, аппарат безопасности будет наблюдать и анализировать предполагаемую вражескую пропаганду до тех пор, пока канцелярия рейхскомиссара не сочтет это необходимым. \n\nТекущая миссия Великогерманского Рейха и его интересы в рейхскомиссариате Норвегия выполняется исключительно по установленному плану и, до дальнейшего уведомления, усиление активности антипропагандистских усилий не требуется.",
+    "picture": "GFX_report_event_GER_army_1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.11"
+    },
+    "options": [
+      {
+        "name": "Так много слов и так мало смысла...",
+        "name_key": "norway.11.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "norway.12",
+    "type": "country_event",
+    "title": "norway.12.t",
+    "desc": "Норвежские аграрные традиции уходят корнями в тысячелетие до железного века и по сей день остаются важнейшим элементом жизни и культуры Норвегии, так или иначе. Однако нескончаемый поток лет изменил лицо Норвегии, и многие из наших потребностей и желаний давно эволюционировали от потребностей наших предков-фермеров.\n\nНаши города развиваются темпами, невиданными ранее в нашей истории, а с ними приходит топливо, необходимое для продолжения работы; самолеты, поезда, радиоприемники и даже телевизоры стали ожидаемыми достопримечательностями городских жителей, а не любопытной роскошью. К сожалению, стране пока не хватает мощностей, необходимых для создания нашей собственной промышленности, и поэтому мы в конечном итоге платим большие суммы денег за импорт со всего из Пакта Единства.\n\nВозможно, переломный момент в норвежской экономике наступил. У нас есть большая и преданная своему делу рабочая сила по всей стране, но в настоящее время они работают на полях и в сельском хозяйстве. Норвежское сельское хозяйство, хотя и конкурирует с континентальным,но не может сравниться с ним по объему производства и в некотором смысле дало нам возможность перепрофилировать нашу экономику. Мы могли бы переключить наше внимание на рост функциональной и полноценной части легкой и тяжелой промышленности, чтобы конкурировать с Германией и снизить затраты на потребительские товары, или мы можем углубить наше сельскохозяйственное превосходство и сосредоточиться на экспорте натуральных товаров, которые мы уже производим, в страны Пакта для собственной выгоды. И то, и другое будет продолжать расти вместе с ростом нашей экономики, но принятие одной из этих доктрин даст ей основу, необходимую для того, чтобы Норвегия стала краеугольным камнем европейского рынка.",
+    "picture": "GFX_report_event_CHI_Industry_Synth_Refine",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.12"
+    },
+    "options": [
+      {
+        "name": "Решения, Решения.",
+        "name_key": "norway.12.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "norway.13",
+    "type": "country_event",
+    "title": "norway.13.t",
+    "desc": "Сегодня из Норвегии пришли новости, свидетельствующие о том, что рейхскомиссар, очевидно, осуществляет крупномасштабный промышленный план, который, вероятно, позволит модернизировать и оживить экономику страны. \n\nВ современную эпоху Норвегия никогда не имела ничего, кроме легкой промышленности, и на протяжении веков полагалась на сельское хозяйство и животноводство для своих крупнейших областей труда. Однако, благодаря Пакту Единства, Европа начала приходить в порядок и, кажется, что наш северный Рейхскомиссариат начинает осуществлять полный переход к промышленной революции. Заявки на получение разрешения на размещение в стране тяжелой промышленности, такой как авиационные двигатели, крупномасштабное судостроение, химические заводы и даже телевизионная фабрика, были выданы промышленным ведомствам Норвегии. \n\nВ то время как небольшие банки и инвестиционные группы с интересом наблюдают за растущим рынком, главы крупнейших корпораций Германии, таких как Сименс и ИГ Фарбен, уже предпринимают крупные финансовые шаги, чтобы извлечь выгоду из этого развития событий. Только время покажет, как в ближайшем будущем это повлияет на Рейх, но, похоже, что молодое норвежское население весьма заинтересовано в курсе правительства, поскольку они надеются вырваться на гораздо более прибыльный рынок труда, чем существовал в стране до этого.",
+    "picture": "GFX_report_event_BRG_industry_1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.13"
+    },
+    "options": [
+      {
+        "name": "Они открыты для бизнеса!",
+        "name_key": "norway.13.a",
+        "trigger": {},
+        "effects": {
+          "NOR": {
+            "set_temp_variable": {
+              "temp_econ_GDP_boost_percentage": 0.02
+            },
+            "econ_GDP_boost_once_percentage": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.14",
+    "type": "country_event",
+    "title": "norway.14.t",
+    "desc": "Сегодня к нам поступили новости из Норвегии, свидетельствующие о том, что рейхскомиссар планирует оживить сектор сельского хозяйства и животноводства, что, вероятно, укрепит его аграрное превосходство в регионе, а его торговые отношения с Рейхом станут еще более близкими. \n\nНа протяжении веков рынок труда Норвегии состоял из сельскохозяйственных рабочих мест и смежных областей, и продолжение в том же курсе во времена современной эпохи привело к снижению цен на продовольствие на всем Скандинавском полуострове. Хотя такая продукция в основном служит удовлетворению потребностей населения и бледнеет по сравнению с другими сельскохозяйственными регионами, такими как украинская житница, непрерывные инвестиции Норвегии сумели обуздать случаи голода, а также укрепить респектабельный экспортный рынок. \n\nНазывать такое развитие событий \"новостями\", пожалуй, будет враньем, поскольку для подавляющее большинство норвежских граждан - а также граждане Пакта Единства - не увидят заметной перемены в их жизнях. Тем не менее, работа по усилению аграрной отралси идет быстрыми темпами, и все это время жителям Скандинавии не придется бояться засыпать с пустым желудком. Помимо преимуществ продовольствия, это укрепит нашу торговую сеть и еще больше сделает Норвегию зависимой от немецкого экспорта и капитала; прекрасный фундамент для будущего роста Рейха.",
+    "picture": "GFX_report_event_RUS_farm",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.14"
+    },
+    "options": [
+      {
+        "name": "Продолжайте по плану.",
+        "name_key": "norway.14.a",
+        "trigger": {},
+        "effects": {
+          "NOR": {
+            "set_temp_variable": {
+              "temp_econ_GDP_boost_percentage": 0.02
+            },
+            "econ_GDP_boost_once_percentage": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.15",
+    "type": "country_event",
+    "title": "norway.15.t",
+    "desc": "С нашего высокого насеста мы видели, как сгущаются черные тучи, но только сейчас мы слышим грохот грома. Смерть Гитлера уничтожила всякую надежду на то, что наш государственный корабль продолжит свой беспрепятственный курс, и, по правде говоря, никто не может сказать, что ждет Норвегию в будущем.\n\nРейх разрывается по швам, а водостоки Германии уже залиты кровью, и это еще только начало. Звонки и сообщения приходят от тех, кто связан с преемниками ежечасно, приказывая, угрожая и умоляя о нашей поддержке, хотя на самом деле у нас нет безопасной гавани, к которой можно было бы прибиться. Мы плывем по течению в шторме, не имея ничего, кроме собственных усилий; мы должны надеяться, что наша работа в последние месяцы будет поддерживать нас на плаву.\n\nНаши действия по кодификации нашего национального языка, борьбе с существующей пропагандой и наблюдению за границей должны способствовать сокращению любых подрывных действий в эту неспокойную эпоху; последнее, чего мы желаем, - это тех, кто ищет новых потрясений в это время. Кроме того, мы надеемся, что благодаря недавним инвестициям в нашу транспортную сеть и экономику в целом мы сможем сохранить целостность в течение этого периода, хотя никто не может сказать, насколько долго. Мы должны надеяться, что кровопролитие на континенте быстро разрешится, поскольку без Германии не будет силы, к которой мы могли бы безопасно и легко закрепиться.\n\nВ конечном итоге результаты наших реформ могут иметь решающее значение для будущего Норвегии, даже если мы не видим как это может произойти. На данный момент ничего не остается делать, кроме как ждать, наблюдать и из первых уст узнавать, как быстро так называемые наследники,как волки начнут грызть друг друга. Мы молимся о том, чтобы все, что выходит из этого тигля, не было более ужасным, чем то, что возникло с самого начала.",
+    "picture": "GFX_report_event_generic_sign_treaty1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.15"
+    },
+    "options": [
+      {
+        "name": "Держись крепко, или тебя утащат вниз.",
+        "name_key": "norway.15.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "econ_leave_sphere": true,
+            "remove_ideas": "NOR_the_overstayed_occupation",
+            "if": {
+              "limit": {
+                "OR": {
+                  "AND": {
+                    "has_game_rule": {
+                      "rule": "NOR_ROUTE",
+                      "option": "DEFAULT"
+                    },
+                    "check_variable": {
+                      "nor_demlove": {
+                        "_op": ">",
+                        "value": "nor_gerlove"
+                      }
+                    },
+                    "has_country_flag": "NOR_forces_redistributed"
+                  },
+                  "has_game_rule": {
+                    "rule": "NOR_ROUTE",
+                    "option": "NOR_ROUTE_MILORG"
+                  }
+                }
+              },
+              "country_event": {
+                "id": "norway.16",
+                "days": 5
+              }
+            },
+            "else_if": [
+              {
+                "limit": {
+                  "OR": {
+                    "AND": {
+                      "has_game_rule": {
+                        "rule": "NOR_ROUTE",
+                        "option": "DEFAULT"
+                      },
+                      "check_variable": {
+                        "nor_demlove": {
+                          "_op": ">",
+                          "value": "nor_gerlove"
+                        }
+                      },
+                      "NOT": {
+                        "has_country_flag": "NOR_forces_redistributed"
+                      }
+                    },
+                    "has_game_rule": {
+                      "rule": "NOR_ROUTE",
+                      "option": "NOR_ROUTE_MODERATE"
+                    }
+                  }
+                },
+                "hidden_effect": {
+                  "country_event": {
+                    "id": "norway.17",
+                    "days": 5
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "OR": {
+                    "AND": {
+                      "has_game_rule": {
+                        "rule": "NOR_ROUTE",
+                        "option": "DEFAULT"
+                      },
+                      "check_variable": [
+                        {
+                          "nor_gerlove": {
+                            "_op": ">",
+                            "value": 2
+                          }
+                        },
+                        {
+                          "nor_gerlove": {
+                            "_op": "<",
+                            "value": 5
+                          }
+                        }
+                      ]
+                    },
+                    "has_game_rule": {
+                      "rule": "NOR_ROUTE",
+                      "option": "NOR_ROUTE_MAINSTREAM"
+                    }
+                  }
+                },
+                "hidden_effect": {
+                  "country_event": {
+                    "id": "norway.18",
+                    "days": 5
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "OR": {
+                    "AND": {
+                      "has_game_rule": {
+                        "rule": "NOR_ROUTE",
+                        "option": "DEFAULT"
+                      },
+                      "check_variable": {
+                        "nor_gerlove": {
+                          "_op": ">",
+                          "value": 4
+                        }
+                      }
+                    },
+                    "has_game_rule": {
+                      "rule": "NOR_ROUTE",
+                      "option": "NOR_ROUTE_HARDLINE"
+                    }
+                  }
+                },
+                "hidden_effect": {
+                  "country_event": {
+                    "id": "norway.19",
+                    "days": 5
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.16",
+    "type": "country_event",
+    "title": "norway.16.t",
+    "desc": "За последние двадцать лет сапоги тиранов истоптались по коридорам власти. Немецкие скоты издавна угнетали мирное и демократическое население, расстреливая всех несогласных и насилуя сельское хозяйство на благо Рейха. Роспуск администрации Тербовена ознаменовал небольшие изменения, поскольку фашистские свиньи режима Национального Единения впали в распри из-за вакуума власти. Однако граждане Норвегии не ожидали такой резкой смены руководства.\n\nРано утром организация сопротивления Милорг собрала столько мужчин, женщин и припасов, сколько они смогли собрать, и захватили город Осло. В ходе последовавшего за этим кровавого переворота подонки-коллаборационисты были отстранены от власти, а парламентские предатели НЕ были должным образом арестованы. Организатор революции и лидер Милорга седой бунтарь Кнут Мёйен объявил о формировании нового временного правительства. Хотя руководство Мёйена будет временно применять авторитарные меры, его цель - снова превратить Норвегию в функционирующую демократию.",
+    "picture": "GFX_report_event_generic_revolution_colour",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.16"
+    },
+    "options": [
+      {
+        "name": "Демократия Победит!",
+        "name_key": "norway.16.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "every_unit_leader": {
+              "retire": true
+            },
+            "add_country_leader_role": {
+              "character": "NOR_Gulbrand_Lunde",
+              "promote_leader": true,
+              "country_leader": {
+                "desc": "POLITICS_GULBRAND_LUNDE_DESC",
+                "expire": "1980.1.1",
+                "ideology": "fascism_subtype"
+              }
+            },
+            "set_cosmetic_tag": "NOR_milorg",
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasEuropeInterest": true
+              },
+              "news_event": {
+                "id": "WORLD_REICH.2201",
+                "days": 1
+              }
+            }
+          },
+          "remove_ideas": "NOR_Milorg",
+          "set_politics": {
+            "ruling_party": "paternalism"
+          },
+          "add_popularity": [
+            {
+              "ideology": "paternalism",
+              "popularity": 0.35
+            },
+            {
+              "ideology": "conservatism",
+              "popularity": 0.04
+            },
+            {
+              "ideology": "liberal_conservatism",
+              "popularity": 0.07
+            },
+            {
+              "ideology": "liberalism",
+              "popularity": 0.06
+            },
+            {
+              "ideology": "progressivism",
+              "popularity": 0.08
+            },
+            {
+              "ideology": "socialist",
+              "popularity": 0.04
+            },
+            {
+              "ideology": "communist",
+              "popularity": 0.02
+            }
+          ],
+          "143": {
+            "set_demilitarized_zone": false
+          },
+          "2141": {
+            "set_demilitarized_zone": false
+          },
+          "144": {
+            "set_demilitarized_zone": false
+          },
+          "2142": {
+            "set_demilitarized_zone": false
+          },
+          "set_global_flag": "NOR_freedom",
+          "load_focus_tree": "NOR_milorg_tree",
+          "remove_all_ministers": true,
+          "add_ideas": [
+            "NOR_Jens_Christian_Hauge_hog",
+            "NOR_Johan_Beichmann_for",
+            "NOR_Erling_Lorentzen_eco",
+            "NOR_Sven_Arntzen_sec"
+          ],
+          "add_field_marshal_role": {
+            "character": "NOR_Ole_Berg",
+            "traits": [
+              "inflexible_strategist",
+              "unyielding_defender",
+              "career_officer"
+            ],
+            "skill": 4,
+            "attack_skill": 2,
+            "defense_skill": 4,
+            "planning_skill": 4,
+            "logistics_skill": 2,
+            "legacy_id": 780
+          },
+          "add_corps_commander_role": [
+            {
+              "character": "NOR_Arnold_Rorholt",
+              "traits": [
+                "trait_cautious",
+                "trait_engineer"
+              ],
+              "skill": 4,
+              "attack_skill": 4,
+              "defense_skill": 4,
+              "planning_skill": 2,
+              "logistics_skill": 2,
+              "legacy_id": 781
+            },
+            {
+              "character": "NOR_Johan_Beichmann",
+              "traits": [
+                "organizer",
+                "infantry_leader"
+              ],
+              "skill": 4,
+              "attack_skill": 3,
+              "defense_skill": 2,
+              "planning_skill": 4,
+              "logistics_skill": 3,
+              "legacy_id": 782
+            },
+            {
+              "character": "NOR_Olaf_Helset",
+              "traits": [
+                "organizer",
+                "trickster"
+              ],
+              "skill": 4,
+              "attack_skill": 2,
+              "defense_skill": 3,
+              "planning_skill": 3,
+              "logistics_skill": 4,
+              "legacy_id": 783
+            }
+          ],
+          "set_temp_variable": {
+            "TNO_economy_type_temp": "token:Econ_Type_Capitalism"
+          },
+          "econ_type_change": true,
+          "GER_drop_embargoes": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.17",
+    "type": "country_event",
+    "title": "norway.17.t",
+    "desc": "Роспуск рейхскомиссариата Норвегии ознаменовал захват власти Национальным Единством, могущественной политической силой, которая последние два десятилетия сотрудничала с немецкими правителями. Вакуум власти, вызванный бегством Тербовена и его администрации, заполнил Пер Бортен, влиятельная фигура в норвежском парламенте.\n\nБортен, самый молодой из потенциальных новых лидеров Норвегии, присоединился к НЕ после Второй мировой войны и возрос, став значимым голосом в своей фракции Умеренных. Как проявится его отстаивание реформ, еще предстоит увидеть, но руководство Бортена, вероятно, уведет НЕ от своих фашистских корней к более современному авторитаризму, подходящему для меняющихся времен.",
+    "picture": "GFX_report_event_generic_congress",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.17"
+    },
+    "options": [
+      {
+        "name": "Может быть он сможет провести нас к светлому будущему.",
+        "name_key": "norway.17.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "despotism"
+          },
+          "add_popularity": {
+            "ideology": "despotism",
+            "popularity": 0.15
+          },
+          "remove_all_ministers": true,
+          "add_ideas": [
+            "NOR_Egil_Aarvik_hog",
+            "NOR_Svenn_Stray_for",
+            "NOR_Ole_Myrvoll_eco",
+            "NOR_Otto_Grieg_Tidemand_sec"
+          ],
+          "set_global_flag": "NOR_moderates",
+          "hidden_effect": {
+            "swap_ideas": {
+              "remove_idea": "NOR_Milorg",
+              "add_idea": "NOR_Weakened_Milorg"
+            },
+            "add_country_leader_role": {
+              "character": "NOR_Gulbrand_Lunde",
+              "promote_leader": true,
+              "country_leader": {
+                "desc": "POLITICS_GULBRAND_LUNDE_DESC",
+                "expire": "1980.1.1",
+                "ideology": "fascism_subtype"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.18",
+    "type": "country_event",
+    "title": "norway.18.t",
+    "desc": "Роспуск рейхскомиссариата Норвегии ознаменовал захват власти Национальным Единством, могущественной политической силой, которая последние два десятилетия сотрудничала с немецкими правителями. Вакуум власти, вызванный бегством Тербовена и его администрации, был заполнен Гулбрандом Лунде, генеральным секретарем партии.\n\nВетеран политики, Лунде был назначен в правительство НЕ во время Второй мировой войны. Его продвижение статуса-кво партии и желание уважать ее фашистское происхождение сделали его лидером фракции умеренных, которая теперь может проводить свою политику без влияния Германии.",
+    "picture": "GFX_report_event_generic_congress",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.18"
+    },
+    "options": [
+      {
+        "name": "Может быть он сможет провести нас к светлому будущему.",
+        "name_key": "norway.18.a",
+        "trigger": {},
+        "effects": {
+          "add_country_leader_role": {
+            "character": "NOR_Gulbrand_Lunde",
+            "promote_leader": true,
+            "country_leader": {
+              "desc": "POLITICS_GULBRAND_LUNDE_DESC",
+              "expire": "1980.1.1",
+              "ideology": "fascism_subtype"
+            }
+          },
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": 0.15
+          },
+          "remove_all_ministers": true,
+          "add_ideas": [
+            "NOR_Rolf_Jorgen_Fuglesang_hog",
+            "NOR_Finn_Thrana_for",
+            "NOR_Per_von_Hirsch_eco",
+            "NOR_Arnvid_Vasbotten_sec"
+          ],
+          "set_global_flag": "NOR_mainstream"
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.19",
+    "type": "country_event",
+    "title": "norway.19.t",
+    "desc": "Роспуск рейхскомиссариата Норвегии ознаменовал захват власти Национальным Единством, могущественной политической силой, которая последние два десятилетия сотрудничала с немецкими правителями. Вакуум власти, вызванный бегством Тербовена и его администрации, был заполнен Юнасом Ли, министром безопасности партии и начальником полиции Норвегии.\n\nЛи, который когда-то считался соперником покойного Видкуна Квислинга, доказал свою доблесть, возглавив войска Ваффен - СС во время вторжения в Советский Союз. Его тесные связи с администрацией Тербовена и верность Рейху побудили его стать номинальным главой радикальной фракции партии. По мнению Ли, нация может выжить, только полностью приняв национал-социализм. Достигнет ли Норвегия новых высот или фактически снова превратится в рейхскомиссариат со всем, кроме названия, еще неизвестно.",
+    "picture": "GFX_report_event_GER_march",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.19"
+    },
+    "options": [
+      {
+        "name": "Может быть он сможет провести нас к светлому будущему.",
+        "name_key": "norway.19.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "national_socialism"
+          },
+          "add_popularity": {
+            "ideology": "national_socialism",
+            "popularity": 0.15
+          },
+          "remove_all_ministers": true,
+          "add_ideas": [
+            "NOR_Sverre_Riisns_hog",
+            "NOR_Henrik_Rogstad_for",
+            "NOR_Axel_Heiberg_Stang_eco",
+            "NOR_Karl_Marthinsen_sec"
+          ],
+          "set_global_flag": "NOR_radicals",
+          "hidden_effect": {
+            "add_country_leader_role": {
+              "character": "NOR_Gulbrand_Lunde",
+              "promote_leader": true,
+              "country_leader": {
+                "desc": "POLITICS_GULBRAND_LUNDE_DESC",
+                "expire": "1980.1.1",
+                "ideology": "fascism_subtype"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.20",
+    "type": "country_event",
+    "title": "norway.20.t",
+    "desc": "В поздние часы прошлой ночи на одном из наших военных заводов произошла жестокая перестрелка. Нападавшие расправились с охранниками и проникли на территорию фабрики, заложив несколько взрывных устройств, прежде чем скрыться с места происшествия. Свидетели говорят о свете огня, бушующем на звездном ночном небе рано утром, и наши эксперты считают, что по меньшей мере десять сотрудников службы безопасности были убиты. Мы проанализировали тела нескольких преступников, застреленных во время первой засады, и группы криминалистов определили их как членов организации сопротивления Милорга. Власти осуждают этот гнусный акт и пообещали активизировать свои усилия против Милорга, который будет оставаться серьезной угрозой, пока они продолжают саботировать наше военное производство.",
+    "picture": "GFX_report_event_GER_city_burning",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.20"
+    },
+    "options": [
+      {
+        "name": "Чертовы Террористы!",
+        "name_key": "norway.20.a",
+        "trigger": {},
+        "effects": {
+          "add_stability": -0.025,
+          "random_owned_state": {
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 0.95
+            },
+            "econ_state_value_change_multiply_specified_state": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.21",
+    "type": "country_event",
+    "title": "norway.21.t",
+    "desc": "Террористы нанесли очередной удар! Прошлой ночью члены сопротивления атаковали некоторые объекты нашей жизненно важной инфраструктуры с помощью взрывных устройств, пытаясь разжечь страх и возмущение. Наши эксперты считают, что преступниками является террористическая группа Милорг, печально известная своими атаками на транспортные системы и сети связи по всей Норвегии. Власти осуждают этот гнусный акт и угрожают активизировать свою деятельность против Милорга, который остается для нас угрозой, пока они продолжают сеять хаос, разрушая инфраструктуру Норвегии.",
+    "picture": "GFX_report_event_GER_city_burning",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.21"
+    },
+    "options": [
+      {
+        "name": "Чертовы Террористы!",
+        "name_key": "norway.21.a",
+        "trigger": {},
+        "effects": {
+          "add_stability": -0.025,
+          "random_owned_state": {
+            "limit": {
+              "infrastructure": {
+                "_op": ">",
+                "value": 0
+              }
+            },
+            "damage_building": {
+              "type": "infrastructure",
+              "damage": 0.3
+            },
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 0.97
+            },
+            "econ_state_value_change_multiply_specified_state": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.22",
+    "type": "country_event",
+    "title": "norway.22.t",
+    "desc": "Нападение на гражданскую фабрику! Рано утром на одну из наших гражданских фабрик проникли боевики сопротивления и искусно устроили саботаж. Несколько ночных сторожей были убиты, и никто из выживших не видел саботажников. Чтобы повернуть общественность в нашу сторону, мы поручили прессе подчеркнуть невиновность этих убитых людей. Несмотря на отсутствие веских доказательств, наши эксперты считают, что только Милорг способен провести такую безупречную операцию. Власти осуждают этот гнусный акт и пообещали активизировать свои усилия против Милорга, который остается для нас угрозой, пока они продолжают наносить ущерб нашей торговле, нарушая производство потребительских товаров.",
+    "picture": "GFX_report_event_GER_city_burning",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.22"
+    },
+    "options": [
+      {
+        "name": "Чертовы Террористы!",
+        "name_key": "norway.22.a",
+        "trigger": {},
+        "effects": {
+          "add_stability": -0.025,
+          "random_owned_state": {
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 0.995
+            },
+            "econ_state_value_change_multiply_specified_state": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.23",
+    "type": "country_event",
+    "title": "norway.23.t",
+    "desc": "Детектив Ольсен осмотрел подвал с обычным хмурым взглядом, глубоко затягивая сигарету. Комната была похожа на картину, застывшую во времени. На столе стояли две полупустые кружки кофе. По полу было разбросано несколько запачканных документов. Детектив взглянул на разорванную карту Осло, приклеенную к дальней стене. Он насмешливо смотрел на нее.\n\nДым струился из носа Ольсена. Сколько из этих доказательств было намеренно оставлено позади, еще предстоит выяснить. Это будет не первый случай, когда террористы расставляют обманчивые ловушки в своих заброшенных убежищах.\n\nЧто-то привлекло его внимание. Олсен взглянул на клочок бумаги, застрявший под его ботинком. Листовка. Он наклонился и поднял ее, прижимая к своим налитым кровью глазам. На черно-белом изображении норвежцев, празднующих на улицах, были наложены два слова: \"МАЙ 17\". Олсен тяжело вздохнул. Национальный Праздник. Картина должна была быть снята в 1939 году, пока немцы не запретили эту традицию. Под ликующим изображением было объявление: \"ДЛЯ\".\n\nДетектив вынул сигарету изо рта и покачал головой. Даже он почувствовал укол тоски. Удивительно ли то, что Милорг был так привлекателен для простого гражданина?",
+    "picture": "GFX_report_event_GER_arms",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.23"
+    },
+    "options": [
+      {
+        "name": "Некоторые воспоминания никогда не исчезнут.",
+        "name_key": "norway.23.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 15,
+          "add_stability": 0.01,
+          "TNO_worsen_army_professionalism_low": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.25",
+    "type": "country_event",
+    "title": "norway.25.t",
+    "desc": "Двадцать лет. Целых два десятилетия своей жизни он без вопросов и жалоб посвятил управлению Рейхскомиссариатом Норвегия. Как легко, должно быть, было покойному Генриху Лозе, правившему Остландом без жестких ограничений, наложенных на администрацию Йозефа Тербовена.\n\nТербовен снял очки и тяжело вздыхая протер глаза. С момента начала ужасающей гражданской войны в Германии его мучили приступы паники и нескончаемые кошмары. От мысли о том, что братья арийцы убивают друг друга на алтаре высокомерия своего вождя, его живот заболел. Тысячелетний Рейх рухнул в кровопролитии и разрушениии всего через тридцать лет.\n\nРейхскомиссар снова надел очки и нахмурился, глубоко задумавшись. Весь его гарнизон бесцельно сидел в норвежских снегах, как дети, выброшенные на мель подальше от родителей. Норвегия пережила два десятилетия германизации, и Национальное Единение отчаянно пыталось полностью захватить власть и утвердить свою страну в качестве независимого, но лояльного члена Пакта. Зачем отказывать им в этой возможности? Разве это не был идеальный момент, чтобы предвещать такие радикальные перемены?\n\nТербовен взял ручку и начал писать. Он должен был взять дело в свои руки. Пришло время распустить рейхскомиссариат, передать власть Гулбранду Лунде и вернуть гарнизон Рейху.Вопрос какую фракцию его солдаты выберут в гражданской войне его не интересовал.\n\nПора возвращаться домой.",
+    "picture": "GFX_report_event_GER_court",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.25"
+    },
+    "options": [
+      {
+        "name": "Бюргеркриг нас ждет.",
+        "name_key": "norway.25.a",
+        "trigger": {},
+        "effects": {
+          "retire_country_leader": true,
+          "country_event": {
+            "id": "norway.15",
+            "days": 2
+          },
+          "every_unit_leader": [
+            {
+              "limit": {
+                "has_id": 784
+              },
+              "random_list": {
+                "60": {
+                  "set_nationality": "BGR"
+                },
+                "40": {
+                  "set_nationality": "SGR"
+                }
+              }
+            },
+            {
+              "limit": {
+                "has_id": 785
+              },
+              "random_list": {
+                "50": [
+                  {
+                    "set_nationality": "BGR"
+                  },
+                  {
+                    "set_nationality": "GGR"
+                  }
+                ]
+              }
+            }
+          ],
+          "random_navy_leader": {
+            "set_nationality": "BGR"
+          },
+          "tno_worsen_army_professionalism": true,
+          "add_corps_commander_role": [
+            {
+              "character": "NOR_Thorvald_Thronsen",
+              "traits": [
+                "politically_connected"
+              ],
+              "skill": 1,
+              "attack_skill": 1,
+              "defense_skill": 1,
+              "planning_skill": 1,
+              "logistics_skill": 1,
+              "legacy_id": 786
+            },
+            {
+              "character": "NOR_Frederik_Jensen",
+              "traits": [],
+              "skill": 1,
+              "attack_skill": 1,
+              "defense_skill": 1,
+              "planning_skill": 1,
+              "logistics_skill": 1,
+              "legacy_id": 787
+            },
+            {
+              "character": "NOR_Rolf_Holm",
+              "traits": [],
+              "skill": 1,
+              "attack_skill": 1,
+              "defense_skill": 1,
+              "planning_skill": 1,
+              "logistics_skill": 1,
+              "legacy_id": 788
+            }
+          ],
+          "hidden_effect": {
+            "drop_cosmetic_tag": true,
+            "add_country_leader_role": {
+              "character": "NOR_Interregnum",
+              "promote_leader": true,
+              "country_leader": {
+                "expire": "1980.1.1",
+                "ideology": "fascism_subtype"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "norway.26",
+    "type": "country_event",
+    "title": "norway.26.t",
+    "desc": "Поскольку коммунистические и социалистические призраки в Норвегии загнаны в подполье из-за нашего запрета, мы должны теперь обратиться к организациям, через которые социалистическая агитация в прошлом проникала в рабочих. Этой точкой входа были профсоюзы. Тем не менее, какое-то представление интересов рабочих необходимо, поскольку недовольство рабочего класса - это еще один способ проникновения марксистских идей в наше общество.\n\nПоэтому необходимо принять решение. Разрешить несоциалистические профсоюзы, такие как христианские, или гарантировать, что будет только один неделимый профсоюз под контролем государства.",
+    "picture": "GFX_report_event_generic_congress",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event norway.26"
+    },
+    "options": [
+      {
+        "name": "Позволить не-социалистические профсоюзы.",
+        "name_key": "norway.26.a",
+        "trigger": {},
+        "effects": {
+          "add_ideas": "tno_trade_unions_nonsocialist_allowed",
+          "add_political_power": -20
+        }
+      },
+      {
+        "name": "Будет один профсоюз под контролем государства.",
+        "name_key": "norway.26.b",
+        "trigger": {},
+        "effects": {
+          "add_ideas": "tno_trade_unions_state_controlled",
+          "add_political_power": -30
+        }
+      }
+    ]
+  },
+  {
+    "id": "UKR_VanNordenIntro.1",
+    "type": "country_event",
+    "title": "Отец",
+    "desc": "С самых первых дней своей жизни Питера Ван Нордена воспитывали с убеждением, что самая правильная жизнь - это жизнь без задних мыслей и лишних рассуждений, и что такая правильная жизнь - это всё, что имеет значение. Он родился в Амстердаме всего за год до начала войны, и его детство прошло в мире радиопередач и вожатых Гитлерюгенда. Блицкриг пропаганды врезался в его сознание, и день ото дня держаться за прошлое становилось всё труднее и труднее. К тому времени, когда он приземлился в Московии с винтовкой на спине, он уже твердо и чётко выбрал свой путь.\n\nИ всё же принятие фашистских ценностей было не только ради удобства. Свободное владение немецким, звание в вермахте, растущее число убийств - всё это придавало Питеру значение, с которым не могли сравниться его семья и друзья в Голландии. Они были неудачниками, прикованными к трупу своей страны. Питер же был идеальным арийским солдатом, вносящим свой вклад в построение Рейха, который надолго переживет то провальное государство, что он когда-то поглотил.\n\nВ конце концов, служба Питера закончилась ранением в плечо, и ему приказали приступить к новому заданию: обустройству Украины. Это был новый идеал, к которому нужно было стремиться, и Питер ухватился за эту возможность. Он быстро нашёл себе жену в лице старой подруги по школе и поспешил в усадьбу близ Киева, чтобы начать всё с нуля.\n\nТеперь у него новый распорядок дня: возделывать землю, собирать урожай, просыпаться на рассвете и засыпать на закате. Да, это не похоже на его жизнь в Амстердаме, но Питеру уже всё равно. Возможно, если бы он на секунду остановился, чтобы подумать, то понял бы, как далеко он ушёл от всего, что знал и какой одинокой и пустой кажется его новая земля. Но он не остановится, ибо движение без каких-либо мыслей - это путь Рейха, а Питер Ван Норден - его любимое дитя.",
+    "picture": "GFX_report_event_UKR_van_norden_1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event UKR_VanNordenIntro.1"
+    },
+    "options": [
+      {
+        "name": "Работать и работать вечно.",
+        "name_key": "UKR_VanNordenIntro.1.a",
+        "trigger": {},
+        "effects": {
+          "country_event": {
+            "id": "UKR_VanNordenIntro.2",
+            "days": 40
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "UKR_VanNordenIntro.2",
+    "type": "country_event",
+    "title": "Мать",
+    "desc": "Внешне Антония Ван Норден явно была женщиной арийского происхождения. Её глаза были бледно-голубыми, не поразительными, но всегда приятными. Волосы были светлые и прямые, словно блестящий водопад. Руки и ноги были длинными и стройными, элегантными и достойными.\n\nВ прошлой жизни эта красота принесла ей всё. До обрушения рынка, Антония кружилась в вихре ухажеров и приключений, бесконечных вечеринок на улицах Амстердама. И всё это закончилось вместе с Питером, единственным мужчиной, что смог вырвать её из круговорота страстей и помог ей остепениться.\n\nЖизнь на Украине была новой жизнью, более спокойной. Она проснулась, поцеловала мужа и начала готовить сытный завтрак. Затем она сходила в город, чтобы купить продуктов, и вернулась, чтобы помочь мужу с прополкой. Потом она прочитала Маркусу сказку, поцеловала мужа перед сном и завалилась в постель.\n\nНо в глубине души Украина разрушала Антонию. Её волосы становились всё более блеклыми и кучерявыми, под глазами появилась паутина из мешочков и пятен, а от работы в поле вместо тонкой и белоснежной кожи появлялся слой отвратительных морщин. Она проводила слишком много времени в ванной, глядя в зеркало. Она чувствовала, что гниёт изнутри.",
+    "picture": "GFX_report_event_generic_woman_books",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event UKR_VanNordenIntro.2"
+    },
+    "options": [
+      {
+        "name": "Каждую ночь перед сном она молилась, чтобы её семья ничего не узнала.",
+        "name_key": "UKR_VanNordenIntro.2.a",
+        "trigger": {},
+        "effects": {
+          "country_event": {
+            "id": "UKR_VanNordenIntro.3",
+            "days": 40
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "UKR_VanNordenIntro.3",
+    "type": "country_event",
+    "title": "Сын",
+    "desc": "Маркус Ван Норден был милым ребенком, с носом-пуговкой и вьющимися светлыми волосами. Он был тихим и отзывчивым, умел выполнять приказы, как его отец, и умело избегать дискомфорта, как его мать. Его сердце было широким и пустым, готовое к тому, чтобы его заполнили окружающие. Он редко плакал.\n\nАнтония часто беспокоилась, что их сын станет угрюмым. Она нервно исследовала округу в поисках возможных друзей, но не находила детей, против которых не был бы её муж. Она смотрела в глаза Маркуса и видела огромную пропасть, которую нужно было заполнить так быстро, как только можно.\n\nПитер переживал из-за слабости своего сына, из-за маленьких рук и его шаткого шага. Рейх возлагал большие надежды на своих детей и Маркус не мог остаться позади своего народа. Когда он видел, что его ребенок плачет, Питер не находил себе места. Он метался из стороны в сторону, пытаясь успокоить и ребенка и себя. Когда его сын вырастет, он мог лишь представить себе тяжкую пустоту человека, который не сможет служить своему народу или помогать своей семье.\n\nМаркус ничего этого не понимал. Он смотрел на свою семью и видел их улыбки и теплые слова. Он возился со своими игрушками, ел свои обеды и не обращал внимания на нервные взгляды, которыми всегда обменивались его родители.",
+    "picture": "GFX_report_event_UKR_van_norden_2",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event UKR_VanNordenIntro.3"
+    },
+    "options": [
+      {
+        "name": "Лишь годы спустя он начал понимать, как провёл все эти годы.",
+        "name_key": "UKR_VanNordenIntro.3.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "UKR_VanNordenIntro.4",
+    "type": "country_event",
+    "title": "Ничего нового",
+    "desc": "Из столовой на кухню через динамики пронзительно доносились последние ноты гимна НСДАП, атакуя барабанные перепонки своих слушателей. Питер Ван Норден сидел на старом деревянном стуле, свесив голову к радиоприемнику. Всё его лицо было покрыто потом. Он не мог поднять глаза, не испытывая стыд и страх.\n\nИз радиоприемника доносились новости: бандиты, вероятно, связанные с жидобольшевистскими силами, совершили покушение на рейхскомиссара Коха. Диктор заверил, что рейхскомиссар не погиб, что он слишком силен, чтобы умереть. Однако представители НСДАП отказались уточнить, в каком состоянии находится Кох. Это был явный признак его ужасной судьбы и источник бесконечного, неугасающего беспокойства.\n\nВ течении дня Антония наблюдала, как новости сминали её мужа. Это известие выбило его из сил в решающий день сбора урожая, заставив опустить руки и придаваться унынию. \"Кох был хорошим человеком,\" - пыталась она уверить мужа, - \"но у Рейха ещё куча таких же компетентных людей.\" В ответ Питер лишь резко приказал оставить его в покое и приступать к ужину.\n\nВозможно, это была своего рода травма, подумала Антония. Несмотря на это, часть её беспокоилась, что такое известие могло полностью сломать её мужа. Пока она работала над горящей печью, а рядом сидел Маркус, одна мысль не выходила у неё из головы:",
+    "picture": "GFX_report_event_generic_crying_man",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event UKR_VanNordenIntro.4"
+    },
+    "options": [
+      {
+        "name": "Он же не думал, что Кох будет править вечно?",
+        "name_key": "UKR_VanNordenIntro.4.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "UKR_VanNordenIntro.5",
+    "type": "country_event",
+    "title": "История ребенка",
+    "desc": "Маркуса отправили в школу, расположенную за множество километров от его дома. Идти в класс, знакомиться со своими товарищами-немцами всегда было восхитительно, даже если уроки там были длинными, и он не мог играть так много, как ему хотелось.\n\nВ школе его любимым уроком была история, Маркусу она очень нравилась. Его отец любил рассказывать длинные и суровые легенды о захватывающих войнах и скучных империях. Но сегодняшний урок был особенным, потому что учитель обещал рассказать классу об истории Украины. Казалось, этот урок был очень важным.\n\nОднако всё рассказанное не имело для Маркуса никакого смысла. Учитель говорил о том, что Украина была провинцией Рейха: когда-то она была населена украинцами, а теперь полнится здоровыми немцами-арийцами. Однако Маркус видел возле своего дома много украинцев, а немцев, с которыми он мог бы играть, нигде не было. Почему его заставили жить рядом с ними? С украинцами было неинтересно, да и папа не считал их за людей. Может ли он переехать туда, где живут другие немцы?\n\nМаркус хотел спросить учителя обо всех тех украинцах рядом с его домом. Но он знал, что может сделать учитель с ребенком, который говорит не по делу, и потому промолчал.",
+    "picture": "GFX_report_event_UKR_nazi_classroom",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event UKR_VanNordenIntro.5"
+    },
+    "options": [
+      {
+        "name": "Кажется, что этот урок был каким-то неправильным.",
+        "name_key": "UKR_VanNordenIntro.5.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "UKR_VanNordenIntro.6",
+    "type": "country_event",
+    "title": "Королевство Маркуса",
+    "desc": "Пока мать с отцом спорили о деньгах, Маркус наконец-то освободился от их всевидящего взгляда. Он выскользнул через щель во входной двери и прыгнул в окружавшие его дом пшеничные поля. Его приключения начались.\n\nМальчик исследовал территорию, словно новый континент. Он чувствовал всё: воздух, грязь, насекомых, зерно. Парень объявил всё это своим королевством, и с каждым шагом его владения росли.\n\nНо приключение Маркуса длилось всего несколько минут. Антония вскоре заметила пропажу сына и увидела, что входная дверь лениво колышется на ветру. Она окликнула его с крыльца и заметила меняющийся силуэт мальчика недалеко от леса, где, по словам некоторых соседей, скрывались партизаны. Она бросилась к ребенку и потащила его обратно в дом.\n\nВ ту ночь он с наслаждением вспоминал эти поля. Ему снилось, что он лежит в янтарном поле, а вокруг него кружатся мухи и жуки, его верные подданные. Ему снилось, как он сгибает стебли в руках, а его босые ноги шлепают по грязи.",
+    "picture": "GFX_report_event_generic_wheat",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event UKR_VanNordenIntro.6"
+    },
+    "options": [
+      {
+        "name": "Королевство, ожидающее его возвращения.",
+        "name_key": "UKR_VanNordenIntro.6.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "UKR_VanNordenIntro.7",
+    "type": "country_event",
+    "title": "Цель",
+    "desc": "\"Питер?\"\n\nГлава семьи Ван Норден стоял в полях возле своего дома, винтовка дрожала в его руках. Дул сильный ветер, и стебли пшена то появлялись, то исчезали. Он проверил ствол ружья, а затем прицелился и выстрелил в стоящей в отдалении стог сена.\n\nПуля пролетела мимо и попала в лес - это был плохой выстрел. Из листвы выпорхнула стая ворон.\n\nПитер заговорил, но его руки всё ещё крепко сжимали винтовку. \"Сегодня я ужасно неточен... боюсь, что мои навыки немного притупились после войны. Партизанская угроза - это вещь, к которой не стоит относится легкомысленно, поэтому мне нужно отточить своё мастерство. Всё, дорогая, не отвлекай меня.\"\n\nАнтония наклонилась к мужу, нахмурившись. \"Питер, эта земля небезопасна. Коха больше нет, некому стало сдержать украинцев, они формируют свои армии. Совет рассматривает эвакуацию всего региона. Ты должен знать, что твоя винтовка не сможет спасти эту ферму. Даже если ты был бы лучшим стрелком во всей Украине, этого всё равно будет нед...\"\n\nПитер бросил злой взгляд на свою жену. \"Помолчи,\" - холодно сказал он. - \"Такие рассуждения выходят далеко за рамки позволенного. Немецкий колонист - это человек, способный двигать горы. Либо я смогу сделать то, что требует Рейх, либо же я ничего не заслуживаю.\"\n\nЕго ноги нашли точку опоры. Он повернулся к своей цели и сделал ещё один выстрел.",
+    "picture": "GFX_report_event_UKR_target",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event UKR_VanNordenIntro.7"
+    },
+    "options": [
+      {
+        "name": "И опять промахнулся.",
+        "name_key": "UKR_VanNordenIntro.7.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  }
+]

@@ -1,0 +1,211 @@
+[
+  {
+    "id": "RUS_coring_integrate_adygea",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Adygea",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 1559
+    },
+    "visible": {
+      "owns_state": 1559,
+      "1559": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "RUS_SWRW_ongoing"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GLD68_the_fbi_decision",
+    "category_id": "USA_GLD68_shady_measures_category",
+    "name": "Вовлечение ФБР",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "GLD68_intelligence_gathering",
+    "category_id": "USA_GLD68_shady_measures_category",
+    "name": "Сбор разведданных",
+    "desc": "",
+    "icon": "",
+    "cost": 35,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_GLD68_the_fbi_desii_dne"
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "GLD68_track_them_down",
+    "category_id": "USA_GLD68_shady_measures_category",
+    "name": "Отслеживать их",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_GLD68_the_fbi_desii_dne"
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ADY_withdraw_from_the_war",
+    "category_id": "SWRW_Adygea_category",
+    "name": "Withdraw from the War",
+    "desc": "",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "1558": {
+        "is_controlled_by": "ADY"
+      },
+      "1559": {
+        "is_controlled_by": "ADY"
+      },
+      "1560": {
+        "is_controlled_by": "ADY"
+      },
+      "1561": {
+        "is_controlled_by": "ADY"
+      }
+    },
+    "visible": {
+      "has_war_with": "CAU",
+      "original_tag": "ADY"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: DAG_withdraw_from_the_war",
+      "white_peace": "CAU",
+      "ADY": {
+        "transfer_state": [
+          1558,
+          1559,
+          1560,
+          1561
+        ]
+      }
+    }
+  },
+  {
+    "id": "SGV_ready_to_conquest",
+    "category_id": "SGV_WSB_forming_nation_category",
+    "name": "Prepare for harsh combat conditions",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_guns_brown",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false,
+      "custom_trigger_tooltip": {
+        "tooltip": "SGV_ready_to_conquest_tt",
+        "has_country_flag": [
+          "SGV_reliable_military_command",
+          "SGV_analysis_of_our_critical_situation",
+          "SGV_initial_equipment",
+          "SGV_initial_goods_for_population"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "SGV_begin_salvation",
+        "is_warlord"
+      ],
+      "OR": {
+        "has_country_flag": [
+          "SGV_analysis_of_our_critical_situation",
+          "SGV_reliable_military_command"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_ready_to_conquest",
+      "add_political_power": 75,
+      "add_stability": 0.075,
+      "add_war_support": 0.075,
+      "if": {
+        "limit": {
+          "has_idea": "RUS_shattered_ambitions"
+        },
+        "modify_timed_idea": {
+          "idea": "RUS_shattered_ambitions",
+          "days": -20
+        }
+      },
+      "TNO_improve_conscription_policy_effectiveness_low": true,
+      "add_opinion_modifier": {
+        "target": "ZLT",
+        "modifier": "medium_increase"
+      },
+      "ZLT": {
+        "add_opinion_modifier": {
+          "target": "SGV",
+          "modifier": "medium_increase"
+        }
+      },
+      "OMS": {
+        "add_opinion_modifier": {
+          "target": "SGV",
+          "modifier": "medium_increase"
+        }
+      },
+      "hidden_effect": {
+        "set_variable": {
+          "national_debt": 0
+        },
+        "calculate_display_variables": true,
+        "army_experience": -15,
+        "add_political_power": -15,
+        "division_template": {
+          "name": "Redemption Brigade",
+          "regiments": {
+            "infantry": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              }
+            ]
+          },
+          "support": {
+            "artillery": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      }
+    }
+  }
+]

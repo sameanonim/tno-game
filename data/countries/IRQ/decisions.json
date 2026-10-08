@@ -1,0 +1,334 @@
+[
+  {
+    "id": "IRQ_nationalise_the_oil",
+    "category_id": "political_actions",
+    "name": "Национализировать нефть",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        676,
+        291,
+        1011
+      ]
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_war_support": 0.1,
+      "ENG": {
+        "remove_resource_rights": [
+          676,
+          291,
+          1010
+        ]
+      }
+    }
+  },
+  {
+    "id": "IRQ_recruit_arab_free_legion",
+    "category_id": "IRQ_arab_free_legion_cat",
+    "name": "Нанять легион «Свободная Аравия» в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "IRQ_recruited_arab_legion_here"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "IRQ_recruiting_arab_legion"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_completed_focus": "IRQ_arab_free_legion",
+        "OR": {
+          "has_government": [
+            "fascism",
+            "neutrality"
+          ]
+        }
+      },
+      "NOT": {
+        "FROM": {
+          "has_state_flag": "IRQ_recruited_arab_legion_here"
+        },
+        "has_war_with": "FROM.owner"
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -25,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -2000
+      },
+      "hidden_effect": {
+        "set_country_flag": "IRQ_recruiting_arab_legion"
+      }
+    }
+  },
+  {
+    "id": "IRQ_core_state",
+    "category_id": "greater_iraq_decision_cat",
+    "name": "Интегрировать регион [FROM.GetName] в Великий Ирак",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IRQ_coring_state_in_progress"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "IRQ_greater_iraq"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "IRQ_coring_state_in_progress",
+          "value": 1,
+          "days": 31
+        }
+      }
+    }
+  },
+  {
+    "id": "IRQ_invite_to_federation",
+    "category_id": "hashemite_federation_cat",
+    "name": "Пригласить [FROM.OWNER.GetNameRuAcc] в [ROOT.GetNameRuAcc].",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IRQ_inviting_to_federation_in_progress"
+      },
+      "FROM": {
+        "NOT": {
+          "has_country_flag": "IRQ_has_permanently_rejected_fed"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "IRQ_expand_membership",
+      "OR": {
+        "has_government": [
+          "democratic",
+          "neutrality"
+        ]
+      },
+      "FROM": {
+        "exists": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "is_subject": false
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "IRQ_inviting_to_federation_in_progress",
+        "value": 1,
+        "days": 31
+      },
+      "FROM": {
+        "set_country_flag": "is_the_current_invitation_target_of_IRQ_hashemite_flag"
+      }
+    }
+  },
+  {
+    "id": "IRQ_invite_to_federation_africa",
+    "category_id": "hashemite_federation_cat",
+    "name": "$IRQ_invite_to_federation$",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IRQ_inviting_to_federation_in_progress"
+      },
+      "FROM": {
+        "NOT": {
+          "has_country_flag": "IRQ_has_permanently_rejected_fed"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "IRQ_expand_membership",
+      "OR": {
+        "has_government": [
+          "democratic",
+          "neutrality"
+        ]
+      },
+      "FROM": {
+        "exists": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "is_subject": false
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "IRQ_inviting_to_federation_in_progress",
+        "value": 1,
+        "days": 31
+      },
+      "FROM": {
+        "set_country_flag": "is_the_current_invitation_target_of_IRQ_hashemite_flag"
+      }
+    }
+  },
+  {
+    "id": "IRQ_flood_the_plains",
+    "category_id": "IRQ_flood_the_plains_cat",
+    "name": "Затопить равнины",
+    "desc": "Евфрат и Тигр издавна питали нас и были основой нашей экономики. Но благодаря обширным ирригационным работам последних десятилетий у нас теперь есть возможность контролировать воду их притоков. Скоординированное затопление может на время превратить низины в непреодолимые болота.",
+    "icon": "hol_inundate_water_lines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "ROOT": {
+        "controls_province": 2097
+      }
+    },
+    "visible": {
+      "IRQ": {
+        "has_completed_focus": "IRQ_construct_the_kut_barrage"
+      }
+    },
+    "complete_effect": {
+      "291": {
+        "add_province_modifier": {
+          "static_modifiers": [
+            "flooded"
+          ],
+          "province": {
+            "id": [
+              12839,
+              3795,
+              12046,
+              7994,
+              10876,
+              2097
+            ]
+          }
+        },
+        "damage_building": [
+          {
+            "type": "infrastructure",
+            "damage": 2
+          },
+          {
+            "type": "industrial_complex",
+            "damage": 0.5
+          },
+          {
+            "type": "arms_factory",
+            "damage": 0.5
+          }
+        ]
+      },
+      "1011": {
+        "add_province_modifier": {
+          "static_modifiers": [
+            "flooded"
+          ],
+          "province": {
+            "id": [
+              2089,
+              8001,
+              2004,
+              12726,
+              7977
+            ]
+          }
+        },
+        "damage_building": [
+          {
+            "type": "infrastructure",
+            "damage": 2
+          },
+          {
+            "type": "industrial_complex",
+            "damage": 0.5
+          },
+          {
+            "type": "arms_factory",
+            "damage": 0.5
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "IRQ_march_on_syrian_kurdistan_mission",
+    "category_id": "KUR_syrian_border_skrimish_cat",
+    "name": "Внедрение в Западный Курдистан",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_OC_Send_Volunteers_to_IRQ",
+    "category_id": "GNG_Research_Team_category",
+    "name": "Отправить исследовательскую группу в [IRQ.GetFlag] [IRQ.GetNameDef]",
+    "desc": "Чтобы получить необходимые данные для наших исследований, было бы разумно отправить ИГТП в [IRQ.GetNameDef], где группа сможет в боевых условиях протестировать новое снаряжение.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "ITA": {
+        "is_in_faction_with": "JAP"
+      },
+      "has_country_flag": "GNG_PTRG_OC",
+      "NOT": {
+        "has_global_flag": "OC_Iraq_CW_over"
+      },
+      "IRQ": [
+        {
+          "exists": true
+        },
+        {
+          "has_war": true
+        }
+      ],
+      "GNG_not_sending_volunteers_OC": true
+    },
+    "complete_effect": {
+      "set_country_flag": "GNG_OC_is_sending_volunteers_IRQ",
+      "custom_effect_tooltip": "GNG_OC_sending_volunteers",
+      "hidden_effect": {
+        "set_country_flag": "may_send_volunteers",
+        "set_temp_variable": [
+          {
+            "target": "IRQ"
+          },
+          {
+            "number": 1
+          }
+        ],
+        "TNO_set_num_volunteers": true
+      }
+    }
+  }
+]

@@ -1,0 +1,1001 @@
+[
+  {
+    "id": "AFG_support_resistance_in_state",
+    "category_id": "AFG_turkik_alliance_category",
+    "name": "Создать ячейку сопротивления в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AFG_supporting_resistance_in_state_in_progress"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "AFG_alliance_with_turkik_peoples",
+          "AFG_appraoch_anti_communist_theologians",
+          "AFG_the_amu_darya_plan"
+        ]
+      },
+      "NOT": {
+        "has_war_with": "FROM.OWNER"
+      },
+      "FROM": [
+        {
+          "is_owned_and_controlled_by": "SOU"
+        },
+        {
+          "NOT": {
+            "has_dynamic_modifier": {
+              "modifier": "AFG_resistance_active_here"
+            }
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "AFG_supporting_resistance_in_state_in_progress",
+          "value": 1,
+          "days": 15
+        }
+      }
+    }
+  },
+  {
+    "id": "AFG_support_resistance_in_state_middle_east",
+    "category_id": "AFG_turkik_alliance_category",
+    "name": "$AFG_support_resistance_in_state$",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "is_owned_and_controlled_by": "SOV",
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "AFG_resistance_active_here"
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "AFG_supporting_resistance_in_state_in_progress"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "AFG_alliance_with_turkik_peoples",
+          "AFG_appraoch_anti_communist_theologians",
+          "AFG_the_amu_darya_plan"
+        ]
+      },
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "AFG_resistance_active_here"
+          }
+        }
+      },
+      "NOT": {
+        "has_war_with": "FROM.OWNER"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "AFG_supporting_resistance_in_state_in_progress"
+      }
+    }
+  },
+  {
+    "id": "SOV_afg_crush_resistance_in_state",
+    "category_id": "AFG_turkik_alliance_category",
+    "name": "Подавить ячейки сопротивления в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "is_owned_and_controlled_by": "ROOT",
+        "has_dynamic_modifier": {
+          "modifier": "AFG_resistance_active_here"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_afg_clamp_down_in_state_in_progress"
+      }
+    },
+    "visible": {
+      "FROM": {
+        "has_dynamic_modifier": {
+          "modifier": "AFG_resistance_active_here"
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "SOV_afg_clamp_down_in_state_in_progress"
+      }
+    }
+  },
+  {
+    "id": "BUL_balkan_federation_demand_turkish_territory",
+    "category_id": "BUL_the_balkan_federation_dream",
+    "name": "Потребовать турецкие территории",
+    "desc": "Мы вышлем делегацию, с которой [TUR.GetLeader] обсудит передачу [TUR.GetAdjective]их территорий на Балканах под контроль державы [BUL.GetNameDef].",
+    "icon": "GFX_decision_generic_military",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_war_with": "FROM"
+      },
+      "strength_ratio": {
+        "tag": "TUR",
+        "ratio": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "visible": {
+      "country_exists": "TUR",
+      "TUR": {
+        "OR": {
+          "controls_state": [
+            341,
+            797
+          ]
+        }
+      },
+      "NOT": {
+        "is_in_faction_with": "TUR"
+      },
+      "has_government": "communism",
+      "has_completed_focus": "BUL_the_unification_of_the_balkans"
+    },
+    "complete_effect": {
+      "TUR": {
+        "country_event": {
+          "id": "bftb_bulgaria_balkan_federation.16",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ROOT_invest_in_turkish_state_building",
+    "category_id": "economy_decisions",
+    "name": "Инвестировать в [FROM.GetAdjective]ое государственное строительство",
+    "desc": "Важная [FROM.GetAdjective]ая инфраструктура остаётся недоразвитой во многих регионах страны. Нам по силам это исправить.",
+    "icon": "generic_construction",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_capitulated": false,
+      "NOT": {
+        "ROOT": {
+          "has_war_with": "FROM"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "ROOT": {
+          "has_war_with": "FROM"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": [
+        "TUR_investment_financing_spirit"
+      ],
+      "clr_country_flag": "TUR_investment_in_turkey_pending_flag",
+      "hidden_effect": {
+        "remove_targeted_decision": [
+          {
+            "target": "TUR",
+            "decision": "ROOT_invest_in_turkish_state_light_industry"
+          },
+          {
+            "target": "TUR",
+            "decision": "ROOT_invest_in_turkish_state_heavy_industry"
+          }
+        ],
+        "FROM": {
+          "country_event": {
+            "id": "bftb_turkey.128"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ROOT_invest_in_turkish_state_light_industry",
+    "category_id": "economy_decisions",
+    "name": "Инвестировать в [FROM.GetAdjective]ую лёгкую промышленность",
+    "desc": "Лёгкая [FROM.GetAdjective]ая промышленность остаётся недоразвитой во многих регионах страны. Нам по силам это исправить.",
+    "icon": "generic_construction",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_capitulated": false,
+      "NOT": {
+        "ROOT": {
+          "has_war_with": "FROM"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "ROOT": {
+          "has_war_with": "FROM"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": [
+        "TUR_investment_financing_spirit"
+      ],
+      "clr_country_flag": "TUR_investment_in_turkey_pending_flag",
+      "hidden_effect": {
+        "remove_targeted_decision": [
+          {
+            "target": "TUR",
+            "decision": "ROOT_invest_in_turkish_state_building"
+          },
+          {
+            "target": "TUR",
+            "decision": "ROOT_invest_in_turkish_state_heavy_industry"
+          }
+        ],
+        "FROM": {
+          "country_event": {
+            "id": "bftb_turkey.129"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ROOT_invest_in_turkish_state_heavy_industry",
+    "category_id": "economy_decisions",
+    "name": "Инвестировать в [FROM.GetAdjective]ую тяжёлую промышленность",
+    "desc": "Тяжёлая [FROM.GetAdjective]ая промышленность остаётся недоразвитой во многих регионах страны. Нам по силам это исправить.",
+    "icon": "generic_construction",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_capitulated": false,
+      "NOT": {
+        "ROOT": {
+          "has_war_with": "FROM"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "ROOT": {
+          "has_war_with": "FROM"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": [
+        "TUR_investment_financing_spirit"
+      ],
+      "clr_country_flag": "TUR_investment_in_turkey_pending_flag",
+      "hidden_effect": {
+        "remove_targeted_decision": [
+          {
+            "target": "TUR",
+            "decision": "ROOT_invest_in_turkish_state_building"
+          },
+          {
+            "target": "TUR",
+            "decision": "ROOT_invest_in_turkish_state_light_industry"
+          }
+        ],
+        "FROM": {
+          "country_event": {
+            "id": "bftb_turkey.130"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "release_turkish_kurdistan",
+    "category_id": "form_transcaucasus_category",
+    "name": "Усмирить анатолийских курдов",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "controls_state": [
+        352,
+        353,
+        350
+      ]
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "GEO",
+          "ARM",
+          "AZR"
+        ]
+      },
+      "has_global_flag": "form_transcaucasia_flag",
+      "NOT": {
+        "has_global_flag": "anatolian_kurds_subjugated_flag"
+      },
+      "has_dlc": "No Step Back"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "release_anatolian_kurdistan_tt",
+      "hidden_effect": {
+        "set_global_flag": "anatolian_kurds_subjugated_flag",
+        "KUR": {
+          "transfer_state": [
+            350,
+            352,
+            353
+          ],
+          "if": {
+            "limit": {
+              "ROOT": {
+                "controls_state": 344
+              }
+            },
+            "add_state_core": 344,
+            "transfer_state": 344
+          },
+          "load_oob": "KUR_liberation_troops"
+        },
+        "puppet": "KUR",
+        "if": {
+          "limit": {
+            "has_war_with": "TUR"
+          },
+          "KUR": {
+            "add_to_war": {
+              "targeted_alliance": "ROOT",
+              "enemy": "TUR",
+              "hostility_reason": "asked_to_join"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GRE_anti_turkish_stratagems",
+    "category_id": "GRE_hellenic_academy_category",
+    "name": "Стратагемы против [FROM.GetAdjective]ого государства",
+    "desc": "",
+    "icon": "generic_operation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war_with": "TUR",
+      "has_completed_focus": [
+        "GRE_the_hellenic_air_force",
+        "GRE_the_hellenic_army",
+        "GRE_the_hellenic_navy"
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "GRE_hellenic_armed_forces",
+      "TUR": {
+        "has_completed_focus": [
+          "TUR_pivot_to_the_past",
+          "TUR_reconfigure_our_foreign_policy"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ITA_demand_turkish_demilitarization",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Потребовать демилитаризацию регионов [342.GetName] и [339.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "ITA": {
+        "has_completed_focus": "ITA_befriend_greece"
+      },
+      "any_country": {
+        "controls_state": [
+          342,
+          339
+        ],
+        "has_war": false,
+        "NOT": {
+          "is_in_faction_with": "ITA"
+        }
+      }
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ITA_antalya_demilitarized"
+      }
+    },
+    "complete_effect": {
+      "random_country": {
+        "limit": {
+          "controls_state": 342
+        },
+        "country_event": {
+          "id": "BBA_italy_interaction_events.14",
+          "days": 1,
+          "random": 4
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_antalya_demilitarized"
+      }
+    }
+  },
+  {
+    "id": "RAJ_GOE_provide_working_opportunities",
+    "category_id": "RAJ_GOE_eic_cat",
+    "name": "Создание рабочих мест для военнослужащих",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "ROOT": {
+        "OR": {
+          "infrastructure": {
+            "_op": ">",
+            "value": 63
+          },
+          "industrial_complex": {
+            "_op": ">",
+            "value": 18
+          },
+          "arms_factory": {
+            "_op": ">",
+            "value": 12
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "idea_RAJ_military_into_the_workforce",
+        "days": 400
+      },
+      "add_tech_bonus": {
+        "bonus": 0.25,
+        "uses": 2,
+        "category": "industry"
+      }
+    }
+  },
+  {
+    "id": "ita_send_volunteers_to_levant",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "Отправить добровольцев",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_global_flag": "italy_turkey_war"
+    },
+    "visible": {
+      "has_global_flag": "italy_turkey_war",
+      "set_temp_variable": {
+        "target": "IME"
+      },
+      "TNO_volunteer_cap_less_5": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ita_send_volunteers_to_levant",
+      "add_to_variable": {
+        "var": "ITA_advisor_level",
+        "value": 1
+      },
+      "set_temp_variable": {
+        "target": "IME"
+      },
+      "TNO_increase_volunteer_cap_1": true,
+      "IME": {
+        "set_country_flag": "ITA_entered_war"
+      }
+    }
+  },
+  {
+    "id": "ita_send_advisors",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "Послать советников",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "ita_tur_ita_lose"
+        },
+        {
+          "has_global_flag": "ita_tur_ita_win"
+        }
+      ],
+      "IME": {
+        "has_war_with": "TUR"
+      },
+      "has_global_flag": "italy_turkey_war",
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "IME": {
+        "army_experience": 5,
+        "add_doctrine_cost_reduction": {
+          "name": "land_doc_bonus",
+          "cost_reduction": 0.25,
+          "uses": 1,
+          "category": "land_doctrine"
+        }
+      }
+    }
+  },
+  {
+    "id": "ita_send_blackshirts",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "Послать чернорубашечников",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "ita_tur_ita_lose"
+        },
+        {
+          "has_global_flag": "ita_tur_ita_win"
+        }
+      ],
+      "IME": {
+        "has_war_with": "TUR"
+      },
+      "has_global_flag": "italy_turkey_war",
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "IME": {
+        "add_manpower": 5000
+      },
+      "ITA": {
+        "add_manpower": -5000
+      }
+    }
+  },
+  {
+    "id": "ita_send_old_guns",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "Отправить старое вооружение",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "ita_tur_ita_lose"
+        },
+        {
+          "has_global_flag": "ita_tur_ita_win"
+        }
+      ],
+      "IME": {
+        "has_war_with": "TUR"
+      },
+      "has_global_flag": "italy_turkey_war",
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "ITA": {
+        "add_equipment_to_stockpile": [
+          {
+            "type": "infantry_equipment_0",
+            "amount": -1000,
+            "producer": "ITA"
+          },
+          {
+            "type": "support_equipment_1",
+            "amount": -500,
+            "producer": "ITA"
+          }
+        ]
+      },
+      "IME": {
+        "add_equipment_to_stockpile": [
+          {
+            "type": "infantry_equipment_0",
+            "amount": 1000,
+            "producer": "ITA"
+          },
+          {
+            "type": "support_equipment_1",
+            "amount": 500,
+            "producer": "ITA"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ita_send_new_guns",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "Отправить новое вооружение",
+    "desc": "",
+    "icon": "",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "ita_tur_ita_lose"
+        },
+        {
+          "has_global_flag": "ita_tur_ita_win"
+        }
+      ],
+      "IME": {
+        "has_war_with": "TUR"
+      },
+      "has_global_flag": "italy_turkey_war",
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "ITA": {
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment_2",
+          "amount": -2500,
+          "producer": "ITA"
+        }
+      },
+      "IME": {
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment_2",
+          "amount": 2500,
+          "producer": "ITA"
+        }
+      }
+    }
+  },
+  {
+    "id": "ita_involve_the_greeks",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "Включить греков в конфликт",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "ita_tur_ita_lose"
+        },
+        {
+          "has_global_flag": "ita_tur_ita_win"
+        }
+      ],
+      "IME": {
+        "has_war_with": "TUR"
+      },
+      "has_global_flag": "italy_turkey_war",
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "GRE": {
+        "add_manpower": -1000,
+        "army_experience": 5
+      },
+      "731": {
+        "add_building_construction": [
+          {
+            "type": "bunker",
+            "level": 1,
+            "province": 895,
+            "instant_build": true
+          },
+          {
+            "type": "bunker",
+            "level": 1,
+            "province": 3936,
+            "instant_build": true
+          },
+          {
+            "type": "bunker",
+            "level": 1,
+            "province": 3526,
+            "instant_build": true
+          }
+        ]
+      },
+      "TUR": {
+        "add_manpower": -2000,
+        "army_experience": 5
+      },
+      "ITA": {
+        "add_manpower": -1000,
+        "army_experience": 5
+      }
+    }
+  },
+  {
+    "id": "ita_victory_over_there",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "ita_victory_over_there",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_global_flag": [
+        "ita_tur_ita_win",
+        "italy_turkey_war"
+      ],
+      "NOT": {
+        "has_global_flag": "ita_tur_ita_lose"
+      },
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_stability": 0.025,
+      "country_event": {
+        "id": "ciano.11"
+      }
+    }
+  },
+  {
+    "id": "ita_address_the_defeat",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "ita_address_the_defeat",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_global_flag": [
+        "ita_tur_ita_lose",
+        "italy_turkey_war"
+      ],
+      "NOT": {
+        "has_global_flag": "ita_tur_ita_win"
+      },
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "ciano.12"
+      },
+      "add_stability": -0.025
+    }
+  },
+  {
+    "id": "ita_call_for_peace",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "Призвать к миру",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_global_flag": [
+          "ita_tur_ita_lose",
+          "ita_tur_ita_win"
+        ]
+      },
+      "has_global_flag": "italy_turkey_war",
+      "country_exists": [
+        "TUR",
+        "IME"
+      ],
+      "date": {
+        "_op": ">",
+        "value": "1962.12.01"
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "itatur.3"
+      }
+    }
+  },
+  {
+    "id": "GNG_market_to_the_turkish_market",
+    "category_id": "GNG_Product_Decisions_GUI",
+    "name": "Выход на  турецкий рынок",
+    "desc": "Далеко не всем победителям во Второй мировой войне повезло так же, как Японии, Германии или Италии. Да, турки приобрели новые территории на Кавказе и установили гегемонию на Ближнем Востоке, но это мало помогло их вечно больной экономике и не усмирило народное недовольство в их новых владениях. Всё это означает, что Турция не может позволить себе роскошь развивать промышленность, способную производить передовую электронику как для государственного, так и для гражданского потребления. К счастью для них, наши теплые отношения с Италией открывают нам путь через Суэцкий канал и, следовательно, обеспечивают легкий доступ к турецким рынкам.",
+    "icon": "GFX_decision_GNG_turkey_market",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "GNG_disable_all_mechanics_IJA"
+        },
+        {
+          "check_variable": {
+            "GNG_target_market": 5
+          }
+        }
+      ],
+      "has_country_flag": [
+        "GNG_show_market_decisions",
+        "GNG_Post_Yasuda_Markets"
+      ]
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "GNG_market_temp": 5
+      },
+      "GNG_select_market": true
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_kharkiv",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Kharkiv",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 221
+    },
+    "visible": {
+      "owns_state": 221,
+      "221": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "RUS_SWRW_ongoing"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AMR_yakutsk_working_undesirables",
+    "category_id": "AMR_rodz_econ_development_category",
+    "name": "Привлечь к работе нерадивых жителей Якутска",
+    "desc": "Неудивительно, что после того, как мы вернули Якутск под полный российский контроль, выяснилось, что его население до отказа набито нежелательными людьми, в немалой степени благодаря их недавним заигрываниям с плутократическим либерализмом. Старая власть и её приверженцы нуждаются в суровых исправительных работах. Мы переместим значительную часть наиболее мятежных элементов бывшей республики в более сдерживаемое место и позаботимся о том, чтобы оставшиеся были подвергнуты суровым исправительным работам, чтобы излечить их от прежних заблуждений.",
+    "icon": "GFX_decision_generic_independence",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_dynamic_modifier": {
+        "modifier": "AMR_oil_for_food_dynamic_modifier"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AMR_yakutsk_working_undesirables",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.05
+      },
+      "TNO_improve_slavery_policy_effectiveness_med": true,
+      "TNO_improve_public_meetings_policy_effectiveness_low": true,
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_dynamic_modifier": {
+        "modifier": "AMR_labor_unto_redemption_dynamic_modifier"
+      },
+      "add_to_variable": {
+        "AMR_rodz_econ_pop_debuff": -0.02
+      },
+      "custom_effect_tooltip": "AMR_rodz_worsen_pop_growth",
+      "760": {
+        "add_manpower": -6000
+      }
+    }
+  },
+  {
+    "id": "ARM_demand_turkish_surrender",
+    "category_id": "SWRW_Armenia_category",
+    "name": "ARM_demand_turkish_surrender",
+    "desc": "",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "230": {
+        "is_controlled_by": "ARM"
+      },
+      "1567": {
+        "is_controlled_by": "ARM"
+      },
+      "1568": {
+        "is_controlled_by": "ARM"
+      },
+      "OR": {
+        "1565": [
+          {
+            "is_controlled_by": "GEO"
+          },
+          {
+            "is_controlled_by": "ADY"
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_global_flag": "TUR_mountain_war",
+      "original_tag": "ARM"
+    },
+    "complete_effect": []
+  }
+]

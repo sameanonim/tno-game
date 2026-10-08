@@ -1,0 +1,466 @@
+[
+  {
+    "id": "BALTIC_promote_communism",
+    "category_id": "convert_neighbours_baltic_cat",
+    "name": "Социалистическая пропаганда в государстве [From.Owner.GetNameDef]",
+    "desc": "Многие крестьяне [From.Owner.GetNameRuGen] по-прежнему считают социализм враждебным своему образу жизни. Возможно, нам не удастся залечить шрамы, оставленные Красной Армией, но мы можем убедить народ, что наша революция не настолько кровава.",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "owner": {
+          "is_baltic_country": true,
+          "NOT": {
+            "original_tag": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "ROOT": {
+        "has_completed_focus": "BALTIC_influence_neighbours"
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "owner": {
+          "add_timed_idea": {
+            "idea": "BALTIC_communist_propaganda",
+            "days": 70
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "BALTIC_promote_communism_militancy",
+    "category_id": "convert_neighbours_baltic_cat",
+    "name": "Поддержать [From.Owner.GetAdjective]их бойцов",
+    "desc": "В сердцах многих [From.Owner.GetAdjective]их рабочих ярко пылает пламя социализма, нужно лишь немного поддержать их, и они пойдут по пути свержения диктатуры.",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "owner": {
+          "is_baltic_country": true,
+          "NOT": [
+            {
+              "original_tag": "ROOT"
+            },
+            {
+              "has_country_flag": "banned_communism_flag"
+            }
+          ]
+        }
+      }
+    },
+    "visible": {
+      "ROOT": {
+        "has_completed_focus": "BALTIC_influence_neighbours"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -25,
+        "add_command_power": -25
+      },
+      "FROM": {
+        "owner": {
+          "add_timed_idea": {
+            "idea": "BALTIC_communist_militancy",
+            "days": 70
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_bop_concesions_to_the_bourgeoisie",
+    "category_id": "ITA_balance_of_power_category",
+    "name": "Уступки буржуазии",
+    "desc": "",
+    "icon": "GFX_decision_generic_fundraising",
+    "cost": "ITA_bop_concesions_to_the_bourgeoisie_cost",
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_government": [
+          "communism",
+          "democratic"
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_common_ground"
+    },
+    "complete_effect": {
+      "add_popularity": {
+        "ideology": "democratic",
+        "popularity": 0.1
+      },
+      "ITA_bop_medium_increase_effect": true
+    }
+  },
+  {
+    "id": "give_djibouti_to_the_aoi",
+    "category_id": "ITA_colonial_management_dec_cat",
+    "name": "Передать Джибути ИВА",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "AOI": {
+        "exists": true
+      },
+      "OR": {
+        "ITA": {
+          "controls_state": 268
+        },
+        "any_country": {
+          "is_subject_of": "ITA",
+          "controls_state": 268
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_ministry_of_italian_africa",
+      "original_tag": "ITA",
+      "has_global_flag": "italian_east_africa_flag",
+      "NOT": {
+        "has_global_flag": "italian_east_africa_has_djibouti_flag"
+      }
+    },
+    "complete_effect": {
+      "AOI": {
+        "transfer_state": 268
+      },
+      "hidden_effect": {
+        "set_global_flag": "italian_east_africa_has_djibouti_flag"
+      }
+    }
+  },
+  {
+    "id": "liberate_djibouti",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [DJI.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": 268
+        },
+        "DJI": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_CIA_Operation_vineyard_bounty",
+    "category_id": "USA_BoP_category",
+    "name": "Операция АТТРАКЦИОН ЩЕДРОСТИ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_CentralAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_CIA_Operation_vineyard_bounty_Unlocked"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_Operation_vineyard_bounty_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@CentralAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "JAM_flavor.69",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "GNG_besiege_GFT_neighbourhoods",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Осада жилых кварталов  ФРГ",
+    "desc": "ФРГ превратили несколько жилых комплексов в неприступные крепости. Взятие их измором потребует времени, но гарантирует успех.",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_GFT",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_GFT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_guangdong_or_anarchy",
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_besiege_CCL_neighbourhoods",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Осада жилых кварталов  ККТ",
+    "desc": "ККТ превратили несколько жилых комплексов в неприступные крепости. Взятие их измором потребует времени, но гарантирует успех.",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_CCL",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_CCL"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_guangdong_or_anarchy",
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_raze_GFT_neighbourhoods",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Сровнять кварталы  ФРГ с землей",
+    "desc": "ФРГ окопалась в нескольких жилых комплексах, наивно полагая, что поддержка местных жителей даст им передышку. К их несчастью, нас никогда не волновал побочный ущерб. Пора выкатывать тяжелую артиллерию.",
+    "icon": "GFX_decision_generic_destroy_city",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_GFT",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_GFT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_no_negotiations",
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.6
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "GNG_raze_CCL_neighbourhoods",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Сровнять кварталы  ККТ с землей",
+    "desc": "ККТ окопался в нескольких жилых комплексах, наивно полагая, что поддержка местных жителей даст им передышку. К их несчастью, нас никогда не волновал побочный ущерб. Пора выкатывать тяжелую артиллерию.",
+    "icon": "GFX_decision_generic_destroy_city",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_CCL",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_CCL"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_no_negotiations",
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.6
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "JAP_labour_protection_laws",
+    "category_id": "JAP_political_favors",
+    "name": "Усилить меры по охране труда",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "JAP_passing_reform"
+        },
+        {
+          "has_completed_focus": "JAP_kaya_destroy_them_and_start_anew"
+        }
+      ]
+    },
+    "visible": {
+      "has_country_flag": "JAP_reforms_next_stage",
+      "NOT": {
+        "has_completed_focus": "JAP_kaya_destroy_them_and_start_anew"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_labour_protection_laws",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -100,
+        "JAP_PM_decrease_power_avg": true
+      }
+    }
+  },
+  {
+    "id": "MEX_tolerate_labour_discourse",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Терпимый трудовой дискурс",
+    "desc": "",
+    "icon": "GFX_decision_generic_protest",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": [
+          "MEX_doctorsstrike_second_doctorsstrike",
+          "absorb_the_unions"
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_doctor_intern_radicalism_decrease_med": true,
+      "MEX_PRI_decrease_power_workers_med": true
+    }
+  },
+  {
+    "id": "GRO_fortify_bouhlerstadt",
+    "category_id": "GRO_unified_holdouts_category",
+    "name": "Укрепить Боулерштадт",
+    "desc": "Наша традиционная столица в Остафрике, укрепление этой позиции имеет решающее значение для противодействия любому наступлению ОСН и защиты административных и промышленных активов региона.",
+    "icon": "",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 544
+    },
+    "visible": {
+      "has_country_flag": "GRO_unified_holdout_program"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_fortify_bouhlerstadt"
+    }
+  },
+  {
+    "id": "MAG_labourists_victorious",
+    "category_id": "MAG_regional_factions_category",
+    "name": "Арестовать предателей",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "MAG_will_of_the_people",
+      "check_variable": {
+        "var": "MAG_labourist_influence",
+        "value": "MAG_reformers_influence",
+        "compare": "greater_than"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision MAG_labourists_victorious",
+      "country_event": {
+        "id": "magreg.5",
+        "days": 1
+      }
+    }
+  },
+  {
+    "id": "WRS_zhukov_deploy_red_army_labour_battalions",
+    "category_id": "WRS_power_struggle_zhukov_category",
+    "name": "Развернуть трудовые батальоны Красной Армии",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  }
+]

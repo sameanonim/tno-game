@@ -1,0 +1,1053 @@
+[
+  {
+    "id": "JUNO_specialize_in_breakthrough_tanks",
+    "category_id": "improving_our_army_category",
+    "name": "Специализация: танки авангарда",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "SMB_tank_warfare",
+      "NOT": {
+        "has_country_flag": "JUNO_already_specialized_in_tanks_dummy"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SMB_tank_warfare",
+      "NOT": {
+        "has_country_flag": "JUNO_already_specialized_in_tanks"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -40,
+        "set_country_flag": "JUNO_already_specialized_in_tanks_dummy"
+      }
+    }
+  },
+  {
+    "id": "ENG_Faction_Join_Pakt_Mission",
+    "category_id": "ENG_BoP_category",
+    "name": "Мы войдем в [GER.GetFlag]немецкую сферу",
+    "desc": "Наши дипломатические эксперты предсказали, что если дипломатический курс нашей страны не отклонится от того пути, по которому она идёт в настоящее время, то мы можем быть вынуждены присоединиться к [GER.GetFlag] Рейху и Пакту Единства в конце этого дипломатического противостояния.",
+    "icon": "GFX_decision_generic_document_target",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "TNO_fopo_england_influence_battle_selected": true
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_Pakt_Speer_Mission",
+    "category_id": "ENG_BoP_category",
+    "name": "Наша интеграция в Пакт...",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_Pakt_Bormann_Mission",
+    "category_id": "ENG_BoP_category",
+    "name": "Наша интеграция в Пакт...",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_CIA_SC_increase_pakt_readiness",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ЛОТУС",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_30_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.029
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": [
+        {
+          "TNO_Espionage_Viewing_MiddleEast": true,
+          "is_ai": true
+        },
+        {
+          "has_global_flag": [
+            "subcontinental_crisis_ongoing_confrontation",
+            "subcontinental_crisis_ongoing_buildup"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_SC_increase_pakt_readiness_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@MiddleEast"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_SC_increase_pakt_readiness_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.03
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_debug_break_pakt",
+    "category_id": "GER_debug_category",
+    "name": "Германия - Упразднить Пакт",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "is_faction_leader": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_debug_break_pakt",
+      "dismantle_faction": true,
+      "every_country": [
+        {
+          "limit": {
+            "is_puppet_of": "GER"
+          },
+          "GER": {
+            "end_puppet": "PREV"
+          }
+        },
+        {
+          "limit": {
+            "is_subject_of": "GER"
+          },
+          "set_autonomy": {
+            "target": "PREV",
+            "autonomy_state": "autonomy_free"
+          }
+        }
+      ],
+      "BUL": {
+        "remove_ideas": "Pakt_Bundnispartner"
+      },
+      "FRA": [
+        {
+          "remove_ideas": "Pakt_Mitstreiter"
+        },
+        {
+          "every_state": {
+            "set_demilitarized_zone": false
+          }
+        }
+      ],
+      "SER": {
+        "remove_ideas": "Pakt_Marionettenstaat"
+      },
+      "FIN": {
+        "remove_ideas": "Pakt_Observer"
+      },
+      "PER": {
+        "remove_ideas": "Pakt_Observer"
+      },
+      "diplomatic_relation": {
+        "country": "BRG",
+        "relation": "non_aggression_pact",
+        "active": false
+      },
+      "SWE": {
+        "remove_ideas": [
+          "Pakt_Observer",
+          "SWE_schwedenisierung_3",
+          "SWE_exports_3"
+        ]
+      },
+      "remove_resource_rights": [
+        38,
+        217,
+        229,
+        1552,
+        1554,
+        232,
+        235,
+        1564,
+        235,
+        1564,
+        234,
+        236,
+        539,
+        1162,
+        1164,
+        718
+      ]
+    }
+  },
+  {
+    "id": "SGR_StateReich_open_pakt",
+    "category_id": "SGR_state_of_the_reich_category",
+    "name": "Показать решения, связанные с Пактом",
+    "desc": "Кликните, чтобы показать решения, связанные с расширением Пакта Единства.",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SGR_pakt_open"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "SGR_pakt_open"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_StateReich_open_pakt",
+      "set_country_flag": "SGR_pakt_open"
+    }
+  },
+  {
+    "id": "SGR_StateReich_close_pakt",
+    "category_id": "SGR_state_of_the_reich_category",
+    "name": "Спрятать решения, связанные с Пактом",
+    "desc": "Кликните, чтобы спрятать решения, связанные с расширением Пакта Единства.",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SGR_pakt_open"
+    },
+    "visible": {
+      "has_country_flag": "SGR_pakt_open"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_StateReich_close_pakt",
+      "clr_country_flag": "SGR_pakt_open"
+    }
+  },
+  {
+    "id": "IBR_invest_slovakia_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в Словакию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "country_exists": "SLO",
+      "SLO": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_slovakia_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.011
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_bulgaria_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в Болгарию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "BUL": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_bulgaria_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.022
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_romania_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в Румынию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "ROM": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_romania_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.038
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_poland_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в Польшу",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "OR": {
+        "POL": {
+          "is_in_faction_with": "GER"
+        },
+        "GGN": {
+          "is_in_faction_with": "GER"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_poland_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.03
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_ukraine_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в РК Украина",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "UKR": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_ukraine_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.04
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_kaukasien_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в РК Кавказия",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "CAU": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_kaukasien_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.023
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invite_IG_Farben_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции ИГ Фарбен",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_invite_Siemens_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции Сименс",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_invite_Reichswerke_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции Рейхсверке",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_invite_Daimler_Benz_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции Даймлер-Бенц",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_Decision_Smuta_Strategies_BreakThroughTheWalls",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Усилить натиск",
+    "desc": "Взаимоисключающее с решением $RUS_Decision_Smuta_Strategies_IncreaseTheDefences$.",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "has_war": true,
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Strategies_IncreaseTheDefences"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Strategies_BreakThroughTheWalls",
+      "hidden_effect": {
+        "army_experience": -5
+      }
+    }
+  },
+  {
+    "id": "SAF_cut_off_trade_with_the_pakt",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Прекратить торговлю с Пактом",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_end_trade",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_global_flag": "german_civil_war"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_global_flag": [
+          "south_african_war_happening",
+          "german_civil_war"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_cut_off_trade_with_the_pakt",
+      "add_manpower": 10000,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 3750,
+        "producer": "USA"
+      },
+      "SAF_gain_5_diamonds": true,
+      "SAF_end_pakt_trade": true,
+      "set_temp_variable": {
+        "gdp_growth_temp": -1
+      },
+      "econ_gdp_growth_change": true,
+      "set_country_flag": "SAF_ended_pakt_trade"
+    }
+  },
+  {
+    "id": "SAF_buy_Pakt_guns",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Купить оружие у Пакта",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_guns",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_global_flag": "german_civil_war",
+        "custom_trigger_tooltip": {
+          "tooltip": "SAF_displeasure_50",
+          "check_variable": {
+            "var": "SAF_Pakt_Displeasure",
+            "value": 0.5,
+            "compare": "greater_than_or_equals"
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "var": "SAF_Pakt_Displeasure",
+          "value": 0.5,
+          "compare": "greater_than_or_equals"
+        },
+        "has_global_flag": [
+          "german_civil_war",
+          "south_african_war_happening"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_buy_Pakt_guns",
+      "add_to_variable": {
+        "SAF_diamond_count": -8
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 1250,
+        "producer": "GER"
+      },
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": -0.075
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "SAF_attract_Pakt_business",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Привлечь немецкие компании",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_business",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_global_flag": "german_civil_war",
+        "custom_trigger_tooltip": {
+          "tooltip": "SAF_displeasure_50",
+          "check_variable": {
+            "var": "SAF_Pakt_Displeasure",
+            "value": 0.5,
+            "compare": "greater_than_or_equals"
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "var": "SAF_Pakt_Displeasure",
+          "value": 0.5,
+          "compare": "greater_than_or_equals"
+        },
+        "has_global_flag": [
+          "german_civil_war",
+          "south_african_war_happening"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_attract_Pakt_business",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true,
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": -0.1
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "SAF_buy_Pakt_research",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Купить разработки у Пакта",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_research",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_global_flag": "german_civil_war",
+        "custom_trigger_tooltip": {
+          "tooltip": "SAF_displeasure_100",
+          "check_variable": {
+            "var": "SAF_Pakt_Displeasure",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "var": "SAF_Pakt_Displeasure",
+          "value": 1,
+          "compare": "greater_than_or_equals"
+        },
+        "has_global_flag": [
+          "german_civil_war",
+          "south_african_war_happening"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_buy_Pakt_research",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "TNO_improve_research_facilities_med": true,
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": -0.15
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "USA_WFB_ENG_promote_anti_pakt_diplo",
+    "category_id": "USA_WFB_CFN_category",
+    "name": "Продвигать антинемецкую дипломатию",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "CFN_selected_reform": 1
+      },
+      "has_global_flag": "FEN_GF_WonEcw",
+      "ENG": {
+        "is_in_faction_with": "USA",
+        "has_country_flag": "CFN_founding_member"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_WFB_ENG_promote_anti_pakt_diplo",
+      "add_to_variable": {
+        "ENG.CFN_voting_desire^1": 10
+      },
+      "ENG": {
+        "custom_effect_tooltip": "WFB_opinion_increase_diplo_10"
+      }
+    }
+  },
+  {
+    "id": "SWRW_FRA_push_them_back",
+    "category_id": "SWRW_FRA_vs_Paktkommission_category",
+    "name": "SWRW_FRA_push_them_back",
+    "desc": "",
+    "icon": "GFX_decision_clock",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "FRA": {
+        "has_war_with": "GLC"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWRW_GLC_demand_ceasefire",
+    "category_id": "SWRW_FRA_vs_Paktkommission_category",
+    "name": "SWRW_GLC_demand_ceasefire",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_formable_nations",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "786": {
+        "is_controlled_by": "GLC"
+      }
+    },
+    "visible": {
+      "GLC": {
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "FRA": {
+        "white_peace": "GLC"
+      },
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "Global_Conflicts.18",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_inclusion_of_aktobe",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Aktobe District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 402
+    },
+    "visible": {
+      "owns_state": 402,
+      "AND": {
+        "2527": {
+          "is_core_of": "ROOT"
+        },
+        "402": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_military_conscripted_aktobe",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Aktobe to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "402": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "2527": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        402,
+        2527
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_aktobe",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "402": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "2527": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_aktobe",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Aktobe to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "402": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "2527": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        402,
+        2527
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_aktobe",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "402": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "2527": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_aktobe",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Aktobe",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "402": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "2527": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        402,
+        2527
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_aktobe",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "402": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "2527": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "402": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "2527": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "402": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "2527": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

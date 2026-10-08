@@ -1,0 +1,78 @@
+[
+  {
+    "id": "GER_expand_rkc_adminsitrative_area",
+    "category_id": "GER_reichskommissariats",
+    "name": "Расширить Балканский административный район",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "163": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "RKC": {
+        "exists": true
+      },
+      "NOT": {
+        "has_country_flag": "GER_handed_over_zadar_to_rkc"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_rkc_expanding_effect_tt",
+      "hidden_effect": [
+        {
+          "every_state": [
+            {
+              "limit": {
+                "GER_is_RKC_zadar_state": true,
+                "OR": {
+                  "is_owned_by": "ROOT",
+                  "owner": {
+                    "is_subject_of": "ROOT"
+                  }
+                }
+              },
+              "transfer_state_to": "RKC",
+              "add_compliance": 20
+            },
+            {
+              "limit": {
+                "GER_is_RKC_zadar_state": true,
+                "NOT": {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              },
+              "add_contested_owner": "RKC",
+              "set_state_controller_to": "RKC",
+              "add_claim_by": "RKC",
+              "add_compliance": 20
+            }
+          ]
+        },
+        {
+          "set_country_flag": "GER_handed_over_zadar_to_rkc"
+        }
+      ]
+    }
+  }
+]

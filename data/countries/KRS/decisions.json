@@ -1,0 +1,85 @@
+[
+  {
+    "id": "RUS_Decision_Smuta_Occupation_KRS",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [KRS.GetFlag] [KRS.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "KRS": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "KRS"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_KRS",
+      "set_temp_variable": {
+        "TargetTag": "KRS"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "KRS.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "KRS"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "KRS"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_KRS": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_KRS_Generic",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Атаковать [KRS.GetFlag] [KRS.GetName]",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "is_central_siberian_nation": true,
+      "is_neighbor_of": "KRS",
+      "has_war": false,
+      "NOT": {
+        "has_non_aggression_pact_with": "KRS"
+      },
+      "RUS_Smuta_ScriptedTrigger_Expansion_KRS_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_KRS_Generic",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Y": -0.3
+        },
+        "RUS_Smuta_Supplies_Add_Y": true,
+        "set_country_flag": "RUS_Smuta_preparing_expansion"
+      },
+      "if": {
+        "limit": {
+          "tag": "TOM"
+        },
+        "country_event": "TOM.38"
+      }
+    }
+  }
+]

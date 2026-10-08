@@ -1,0 +1,244 @@
+[
+  {
+    "id": "HGR_incorporate_APF",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [APF.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_APF_req_tt",
+        "APF": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_APF_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "APF": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_APF",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_APF_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[APF.GetFlag]Пролить свет на гиммлеровскую идеологию",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_APF"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_APF_influence_true",
+        "HGR_APF_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "APF": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_APF_decision_a_1",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "HGR_decrease_ss_hardliner_opinion_low": true,
+      "APF": {
+        "increase_Heydrich_influence_small": true,
+        "add_popularity": {
+          "ideology": "national_socialism",
+          "popularity": -0.075
+        },
+        "add_political_power": -25
+      }
+    }
+  },
+  {
+    "id": "HGR_APF_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[APF.GetFlag]Восхвалять судетскую идентичность",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_APF"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_APF_influence_true",
+        "HGR_APF_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "APF": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_APF_decision_a_2",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "APF": {
+        "increase_Heydrich_influence_medium": true,
+        "add_stability": 0.05
+      }
+    }
+  },
+  {
+    "id": "HGR_APF_decision_b_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[APF.GetFlag]Вооружить местные силы",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_APF"
+      },
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 999
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 249
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_APF_influence_true",
+        "HGR_APF_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "APF": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_APF_decision_b_1",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "HGR_increase_ss_moderate_opinion_low": true,
+      "send_equipment": [
+        {
+          "equipment": "infantry_equipment",
+          "amount": 1000,
+          "target": "APF"
+        },
+        {
+          "equipment": "support_equipment",
+          "amount": 250,
+          "target": "APF"
+        }
+      ],
+      "APF": {
+        "increase_Heydrich_influence_medium": true
+      }
+    }
+  },
+  {
+    "id": "HGR_APF_decision_b_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[APF.GetFlag]Послать верных советников",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_APF"
+      },
+      "has_manpower": {
+        "_op": ">",
+        "value": 499
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_APF_influence_true",
+        "HGR_APF_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "APF": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_APF_decision_b_2",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "HGR_increase_ss_hardliner_opinion_low": true,
+      "hidden_effect": {
+        "add_manpower": -500
+      },
+      "APF": {
+        "add_manpower": 500,
+        "army_experience": 25,
+        "increase_Heydrich_influence_medium": true
+      }
+    }
+  }
+]

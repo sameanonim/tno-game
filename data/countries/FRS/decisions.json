@@ -1,0 +1,742 @@
+[
+  {
+    "id": "FRS_IBRWARS_Support_SPS",
+    "category_id": "FRS_BoP_category",
+    "name": "Поддержать [SPS.GetFlag]Испанскую национальную хунту",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_stationing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_IBW_selected": true,
+      "has_global_flag": "IBW_CONFLICT",
+      "IBR_Wars_SPS_support_trigger": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Support_SPS",
+      "SPS": {
+        "save_event_target_as": "IBR_new_supported_faction"
+      },
+      "IBR_wars_add_to_proxy": true
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Support_FSR",
+    "category_id": "FRS_BoP_category",
+    "name": "Поддержать [FSR.GetFlag]Королевство Испания",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_stationing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_IBW_selected": true,
+      "has_global_flag": "IBW_CONFLICT",
+      "IBR_Wars_FSR_support_trigger": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Support_FSR",
+      "remove_from_array": {
+        "ROOT.Iberian_Wars_supported_factions": "SPS.id"
+      },
+      "FSR": {
+        "save_event_target_as": "IBR_new_supported_faction"
+      },
+      "IBR_wars_add_to_proxy": true
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Support_FZL",
+    "category_id": "FRS_BoP_category",
+    "name": "Поддержать [FZL.GetFlag]Испанский национальный совет",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_stationing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_IBW_selected": true,
+      "has_global_flag": "IBW_CONFLICT",
+      "IBR_Wars_FZL_support_trigger": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Support_FZL",
+      "remove_from_array": {
+        "ROOT.Iberian_Wars_supported_factions": "SPS.id"
+      },
+      "FZL": {
+        "save_event_target_as": "IBR_new_supported_faction"
+      },
+      "IBR_wars_add_to_proxy": true
+    }
+  },
+  {
+    "id": "FRS_IBR_Wars_mission_request",
+    "category_id": "FRS_BoP_category",
+    "name": "Запрос от гос-ва [?IBR_Wars_request_sender_var.GetNameWithFlag]",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "IBR_Wars_current_request_quantity_temp": "IBR_Wars_current_request_quantity"
+      },
+      "subtract_from_temp_variable": {
+        "IBR_Wars_current_request_quantity_temp": 1
+      },
+      "if": {
+        "limit": {
+          "check_variable": {
+            "IBR_Wars_current_request_type": 1
+          }
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 2
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 3
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 4
+            }
+          },
+          "has_equipment": {
+            "infantry_equipment": {
+              "_op": ">",
+              "value": "IBR_Wars_current_request_quantity_temp"
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 5
+            }
+          },
+          "has_equipment": {
+            "support_equipment": {
+              "_op": ">",
+              "value": "IBR_Wars_current_request_quantity_temp"
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 6
+            }
+          },
+          "has_equipment": {
+            "artillery_equipment": {
+              "_op": ">",
+              "value": "IBR_Wars_current_request_quantity_temp"
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 7
+            }
+          },
+          "has_equipment": {
+            "motorized_equipment": {
+              "_op": ">",
+              "value": "IBR_Wars_current_request_quantity_temp"
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 8
+            }
+          },
+          "if": {
+            "limit": {
+              "has_dlc": "No Step Back"
+            },
+            "has_equipment": {
+              "IFV_chassis": {
+                "_op": ">",
+                "value": "IBR_Wars_current_request_quantity_temp"
+              }
+            }
+          },
+          "else": {
+            "has_equipment": {
+              "IFV_equipment": {
+                "_op": ">",
+                "value": "IBR_Wars_current_request_quantity_temp"
+              }
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 9
+            }
+          },
+          "if": {
+            "limit": {
+              "has_dlc": "No Step Back"
+            },
+            "has_equipment": {
+              "MBT_chassis": {
+                "_op": ">",
+                "value": "IBR_Wars_current_request_quantity_temp"
+              }
+            }
+          },
+          "else": {
+            "has_equipment": {
+              "MBT_equipment": {
+                "_op": ">",
+                "value": "IBR_Wars_current_request_quantity_temp"
+              }
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 10
+            }
+          },
+          "has_equipment": {
+            "fighter_equipment": {
+              "_op": ">",
+              "value": "IBR_Wars_current_request_quantity_temp"
+            }
+          }
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBR_Wars_mission_request",
+      "clr_country_flag": "supporter_request_flag",
+      "var:IBR_Wars_request_sender_var": [
+        {
+          "clr_country_flag": "sent_request_FRS",
+          "set_temp_variable": {
+            "alert_id": "token:Alert_IBR_Wars_request_accepted"
+          },
+          "set_variable": {
+            "alert_data": "FRS.id"
+          },
+          "add_TNO_alert": true
+        },
+        {
+          "set_temp_variable": [
+            {
+              "IBR_Wars_influence_category_temp": 0
+            },
+            {
+              "IBR_Wars_influence_change_temp": "ROOT.IBR_Wars_current_requester_influence_change"
+            }
+          ],
+          "IBR_Wars_change_influence": true
+        }
+      ],
+      "if": {
+        "limit": {
+          "check_variable": {
+            "IBR_Wars_current_request_type": 1
+          }
+        },
+        "set_temp_variable": [
+          {
+            "IBR_Wars_loan_temp": "IBR_Wars_current_request_quantity"
+          },
+          {
+            "temp_econ_spending_amount": "IBR_Wars_loan_temp"
+          }
+        ],
+        "divide_temp_variable": {
+          "IBR_Wars_loan_temp": 1000
+        },
+        "econ_spend_money_once_effect_raw_money": true,
+        "var:IBR_Wars_request_sender_var": {
+          "set_temp_variable": {
+            "money_reserves_temp": "IBR_Wars_loan_temp"
+          },
+          "econ_money_reserves_change_raw_money": true
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 2
+            }
+          },
+          "set_temp_variable": {
+            "IBR_Wars_temp_fuel_negative": "IBR_Wars_current_request_quantity"
+          },
+          "multiply_temp_variable": {
+            "IBR_Wars_temp_fuel_negative": -1
+          },
+          "add_fuel": "IBR_Wars_temp_fuel_negative",
+          "var:IBR_Wars_request_sender_var": {
+            "add_fuel": "IBR_Wars_current_request_quantity"
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 3
+            }
+          },
+          "var:IBR_Wars_request_sender_var": {
+            "set_temp_variable": {
+              "homefront_commodities_total_temp": "IBR_Wars_current_request_quantity"
+            },
+            "IBR_wars_change_hc_quantity": true
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 4
+            }
+          },
+          "send_equipment": {
+            "equipment": "infantry_equipment",
+            "amount": "IBR_Wars_current_request_quantity",
+            "target": "var:IBR_Wars_request_sender_var"
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 5
+            }
+          },
+          "send_equipment": {
+            "equipment": "support_equipment",
+            "amount": "IBR_Wars_current_request_quantity",
+            "target": "var:IBR_Wars_request_sender_var"
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 6
+            }
+          },
+          "send_equipment": {
+            "equipment": "artillery_equipment",
+            "amount": "IBR_Wars_current_request_quantity",
+            "target": "var:IBR_Wars_request_sender_var"
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 7
+            }
+          },
+          "send_equipment": {
+            "equipment": "motorized_equipment",
+            "amount": "IBR_Wars_current_request_quantity",
+            "target": "var:IBR_Wars_request_sender_var"
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 8
+            }
+          },
+          "if": {
+            "limit": {
+              "has_dlc": "No Step Back"
+            },
+            "send_equipment": {
+              "equipment": "IFV_chassis",
+              "amount": "IBR_Wars_current_request_quantity",
+              "target": "var:IBR_Wars_request_sender_var"
+            }
+          },
+          "else": {
+            "send_equipment": {
+              "equipment": "IFV_equipment",
+              "amount": "IBR_Wars_current_request_quantity",
+              "target": "var:IBR_Wars_request_sender_var"
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 9
+            }
+          },
+          "if": {
+            "limit": {
+              "has_dlc": "No Step Back"
+            },
+            "send_equipment": {
+              "equipment": "MBT_chassis",
+              "amount": "IBR_Wars_current_request_quantity",
+              "target": "var:IBR_Wars_request_sender_var"
+            }
+          },
+          "else": {
+            "send_equipment": {
+              "equipment": "MBT_equipment",
+              "amount": "IBR_Wars_current_request_quantity",
+              "target": "var:IBR_Wars_request_sender_var"
+            }
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "IBR_Wars_current_request_type": 10
+            }
+          },
+          "send_equipment": {
+            "equipment": "jet_fighter_equipment_2",
+            "amount": "IBR_Wars_current_request_quantity",
+            "target": "var:IBR_Wars_request_sender_var"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Meet_Staff",
+    "category_id": "FRS_BoP_category",
+    "name": "[FRS.GetFlag] Провести совещание со штабом",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_stationing",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_IBW_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Meet_Staff",
+      "add_command_power": 25
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Send_Volunteers",
+    "category_id": "FRS_BoP_category",
+    "name": "[?IBR_Wars_currently_selected_faction_var.GetFlag] Расширить наше вмешательство",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_hat",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_WARS_send_volunteers_independent_trigger_tt",
+        "check_variable": {
+          "Iberian_Wars_independent_influence": {
+            "_op": ">",
+            "value": 49.99
+          }
+        }
+      }
+    },
+    "visible": {
+      "TNO_fopo_IBW_selected": true,
+      "NOT": {
+        "var:IBR_Wars_currently_selected_faction_var": {
+          "has_country_flag": "IBRWARS_has_volunteers_FRS"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Send_Volunteers",
+      "set_temp_variable": {
+        "target": "IBR_Wars_currently_selected_faction_var"
+      },
+      "TNO_increase_volunteer_cap_1": true,
+      "var:IBR_Wars_currently_selected_faction_var": {
+        "set_country_flag": "IBRWARS_has_volunteers_FRS"
+      }
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Loan_Money",
+    "category_id": "FRS_BoP_category",
+    "name": "[?IBR_Wars_currently_selected_faction_var.GetFlag] Предоставить военные займы",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_IBW_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Loan_Money",
+      "add_political_power": 35,
+      "var:IBR_Wars_currently_selected_faction_var": {
+        "set_temp_variable": [
+          {
+            "money_reserves_temp": 0.2
+          },
+          {
+            "IBR_Wars_influence_category_temp": 0
+          },
+          {
+            "IBR_Wars_influence_change_temp": 2
+          }
+        ],
+        "econ_money_reserves_change_raw_money": true,
+        "IBR_Wars_change_influence": true
+      },
+      "set_temp_variable": {
+        "debt_temp": 0.2
+      },
+      "econ_national_debt_change": true
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Shipment_A",
+    "category_id": "FRS_BoP_category",
+    "name": "[?IBR_Wars_currently_selected_faction_var.GetFlag] Отправить стрелковое оружие",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_crate",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "command_power": {
+        "_op": ">",
+        "value": 9.99
+      }
+    },
+    "visible": {
+      "TNO_fopo_IBW_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Shipment_A",
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "send_equipment": {
+        "target": "IBR_Wars_currently_selected_faction_var",
+        "type": "infantry_equipment",
+        "amount": 750
+      },
+      "var:IBR_Wars_request_sender_var": {
+        "set_temp_variable": [
+          {
+            "IBR_Wars_influence_category_temp": 0
+          },
+          {
+            "IBR_Wars_influence_change_temp": 2
+          }
+        ],
+        "IBR_Wars_change_influence": true
+      },
+      "set_temp_variable": {
+        "money_reserves_temp": 0.075
+      },
+      "econ_money_reserves_change_raw_money": true
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Shipment_B",
+    "category_id": "FRS_BoP_category",
+    "name": "[?IBR_Wars_currently_selected_faction_var.GetFlag] Отправить партию спец. вооружения",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "command_power": {
+        "_op": ">",
+        "value": 9.99
+      }
+    },
+    "visible": {
+      "TNO_fopo_IBW_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Shipment_B",
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "send_equipment": [
+        {
+          "target": "IBR_Wars_currently_selected_faction_var",
+          "type": "anti_tank_equipment",
+          "amount": 500
+        },
+        {
+          "target": "IBR_Wars_currently_selected_faction_var",
+          "type": "support_equipment",
+          "amount": 200
+        }
+      ],
+      "var:IBR_Wars_request_sender_var": {
+        "set_temp_variable": [
+          {
+            "IBR_Wars_influence_category_temp": 0
+          },
+          {
+            "IBR_Wars_influence_change_temp": 2
+          }
+        ],
+        "IBR_Wars_change_influence": true
+      },
+      "set_temp_variable": {
+        "money_reserves_temp": 0.115
+      },
+      "econ_money_reserves_change_raw_money": true
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Shipment_C",
+    "category_id": "FRS_BoP_category",
+    "name": "[?IBR_Wars_currently_selected_faction_var.GetFlag] Отправить партию автотранспорта",
+    "desc": "",
+    "icon": "GFX_decision_generic_motorized",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "command_power": {
+        "_op": ">",
+        "value": 9.99
+      }
+    },
+    "visible": {
+      "TNO_fopo_IBW_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Shipment_C",
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "send_equipment": {
+        "target": "IBR_Wars_currently_selected_faction_var",
+        "type": "motorized_equipment",
+        "amount": 250
+      },
+      "var:IBR_Wars_request_sender_var": {
+        "set_temp_variable": [
+          {
+            "IBR_Wars_influence_category_temp": 0
+          },
+          {
+            "IBR_Wars_influence_change_temp": 4
+          }
+        ],
+        "IBR_Wars_change_influence": true
+      },
+      "set_temp_variable": {
+        "money_reserves_temp": 0.2
+      },
+      "econ_money_reserves_change_raw_money": true
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Shipment_D",
+    "category_id": "FRS_BoP_category",
+    "name": "[?IBR_Wars_currently_selected_faction_var.GetFlag] Отправить партию бронетехники",
+    "desc": "",
+    "icon": "GFX_decision_generic_apc",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "command_power": {
+        "_op": ">",
+        "value": 14.99
+      }
+    },
+    "visible": {
+      "TNO_fopo_IBW_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Shipment_D",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "send_equipment": {
+        "equipment": "IFV_chassis",
+        "amount": 100,
+        "target": "IBR_Wars_currently_selected_faction_var"
+      },
+      "var:IBR_Wars_request_sender_var": {
+        "set_temp_variable": [
+          {
+            "IBR_Wars_influence_category_temp": 0
+          },
+          {
+            "IBR_Wars_influence_change_temp": 5
+          }
+        ],
+        "IBR_Wars_change_influence": true
+      },
+      "set_temp_variable": {
+        "money_reserves_temp": 0.2
+      },
+      "econ_money_reserves_change_raw_money": true
+    }
+  },
+  {
+    "id": "FRS_IBRWARS_Shipment_E",
+    "category_id": "FRS_BoP_category",
+    "name": "[?IBR_Wars_currently_selected_faction_var.GetFlag] Отправить партию танков",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "command_power": {
+        "_op": ">",
+        "value": 14.99
+      }
+    },
+    "visible": {
+      "TNO_fopo_IBW_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FRS_IBRWARS_Shipment_E",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "send_equipment": {
+        "equipment": "MBT_chassis",
+        "amount": 100,
+        "target": "IBR_Wars_currently_selected_faction_var"
+      },
+      "var:IBR_Wars_request_sender_var": {
+        "set_temp_variable": [
+          {
+            "IBR_Wars_influence_category_temp": 0
+          },
+          {
+            "IBR_Wars_influence_change_temp": 6
+          }
+        ],
+        "IBR_Wars_change_influence": true
+      },
+      "set_temp_variable": {
+        "money_reserves_temp": 0.2
+      },
+      "econ_money_reserves_change_raw_money": true
+    }
+  }
+]

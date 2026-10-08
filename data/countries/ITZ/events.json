@@ -1,0 +1,3841 @@
+[
+  {
+    "id": "BBA_switzerland.1",
+    "type": "country_event",
+    "title": "[ROOT.GetAdjective]ие основополагающие принципы",
+    "desc": "[ROOT.GetNameDefCap] ожидает приближения бури: политическая ситуация как внутри, так и снаружи быстро ухудшается, и множатся те, кто призывает разработать основополагающие принципы, которые позволят нам выбрать правильный курс. Вопрос в том, что именно окажется эффективным.\n\n Мы не знаем, как поступят наши соседи, но мы должны решить, какой именно подход позволит государству [ROOT.GetName] выжить.",
+    "picture": "GFX_report_event_SWI_president_talking_flag",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы должны защитить наши демократические ценности и нейтралитет",
+        "name_key": "BBA_switzerland.1.a",
+        "trigger": [],
+        "effects": {
+          "add_power_balance_modifier": {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_cantons"
+          }
+        }
+      },
+      {
+        "name": "Возможно, нам стоит более активно защищать нашу демократию",
+        "name_key": "BBA_switzerland.1.b",
+        "trigger": [],
+        "effects": {
+          "add_power_balance_modifier": {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_council"
+          }
+        }
+      },
+      {
+        "name": "В данных обстоятельствах мы не можем сохранять нейтралитет",
+        "name_key": "BBA_switzerland.1.c",
+        "trigger": [],
+        "effects": {
+          "add_power_balance_modifier": {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_council"
+          },
+          "add_popularity": {
+            "ideology": "democratic",
+            "popularity": -0.1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.2",
+    "type": "country_event",
+    "title": "Убит представитель нацистской партии в Швейцарии",
+    "desc": "Давид Франкфуртер, еврейский хорват, проживающий в Берне, сдался граубюнденской полиции и признался в убийстве Вильгельма Густлоффа, главы швейцарского отделения НСДАП.\n\nПричиной убийства нападавший назвал нетерпимость нацистской партии к еврейскому народу и роль Густлоффа в ее распространении в государстве [SWI.GetName].\n\nПо результатам того, как мы поведем себя в этом потенциально долгом процессе, [GER.GetNameDef] и остальной мир будут судить о нашей приверженности к беспристрастности и верховенству закона.",
+    "picture": "GFX_report_event_journalists_speech",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "GER": {
+        "has_government": "fascism"
+      }
+    },
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Ему уготован справедливый суд.",
+        "name_key": "BBA_switzerland.2.a",
+        "trigger": [],
+        "effects": {
+          "custom_effect_tooltip": "SWI_frankfurter_trial_will_continue_TT",
+          "hidden_effect": {
+            "set_country_flag": "SWI_prepare_for_trial"
+          }
+        }
+      },
+      {
+        "name": "Замести следы и завербовать его в агенты!",
+        "name_key": "BBA_switzerland.2.b",
+        "trigger": {
+          "has_intelligence_agency": true,
+          "has_dlc": "La Resistance"
+        },
+        "effects": {
+          "SWI_create_david_frankfurter_operative": true,
+          "hidden_effect": {
+            "set_country_flag": "SWI_faked_frankfurters_death"
+          },
+          "if": {
+            "limit": {
+              "SWI_fascist_germany_exists": true
+            },
+            "random_list": {
+              "70": {
+                "var:SWI.SWI_fascist_germany": {
+                  "country_event": {
+                    "id": "BBA_switzerland.9",
+                    "hours": 4
+                  },
+                  "effect_tooltip": {
+                    "add_opinion_modifier": {
+                      "modifier": "SWI_recruited_assasin_as_agent",
+                      "target": "SWI"
+                    }
+                  }
+                }
+              },
+              "30": {
+                "var:SWI.SWI_fascist_germany": {
+                  "country_event": {
+                    "id": "BBA_switzerland.7",
+                    "hours": 4
+                  },
+                  "add_opinion_modifier": {
+                    "modifier": "SWI_suspicions_of_coverup",
+                    "target": "SWI"
+                  }
+                }
+              }
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "Он признался — значит, должен немедленно получить максимальный срок.",
+        "name_key": "BBA_switzerland.2.c",
+        "trigger": [],
+        "effects": {
+          "custom_effect_tooltip": "SWI_frankfurter_immediate_harsh_sentence_TT",
+          "Hidden_effect": {
+            "set_country_flag": "SWI_frankfurter_immediate_harsh_sentence"
+          },
+          "var:SWI.SWI_fascist_germany": {
+            "add_opinion_modifier": {
+              "modifier": "SWI_swift_retribution_for_gustloff",
+              "target": "SWI"
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "target": "SWI",
+              "modifier": "SWI_too_harsh_on_frankfurter"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.3",
+    "type": "country_event",
+    "title": "Близится суд над Давидом Франкфуртером",
+    "desc": "Скоро состоится суд над Давидом Франкфуртером, убившим в феврале представителя нацистской партии в Давосе. Мы обещали ему справедливый и беспристрастный суд, но есть, разумеется, и другие варианты.\n\nМы могли бы тайно освободить его и завербовать для разведопераций; или можно умаслить [?SWI.SWI_fascist_germany.GetNameRuAcc], отменив суд и сразу вынеся приговор.\n\nКак бы мы ни поступили, удовлетворить сразу все стороны будет невозможно.",
+    "picture": "GFX_report_event_SWI_parliament_members",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "ROOT": {
+        "OR": {
+          "has_completed_focus": [
+            "SWI_fortify_border_with_italy",
+            "SWI_fortify_border_with_france",
+            "SWI_fortify_border_with_germany"
+          ]
+        },
+        "has_country_flag": "SWI_prepare_for_trial"
+      }
+    },
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Суд продолжится, как и было запланировано",
+        "name_key": "BBA_switzerland.3.a",
+        "trigger": [],
+        "effects": {
+          "if": {
+            "limit": {
+              "SWI_fascist_germany_exists": true
+            },
+            "effect_tooltip": {
+              "country_event": {
+                "id": "BBA_switzerland.8",
+                "days": 25,
+                "random_days": 10
+              }
+            },
+            "var:SWI.SWI_fascist_germany": {
+              "country_event": {
+                "id": "BBA_switzerland.5",
+                "days": 2,
+                "random_days": 3
+              }
+            },
+            "hidden_effect": {
+              "SWI": {
+                "set_country_flag": "SWI_trial_being_prepared"
+              }
+            }
+          },
+          "else": {
+            "country_event": {
+              "id": "BBA_switzerland.8",
+              "days": 30,
+              "random_days": 10
+            }
+          }
+        }
+      },
+      {
+        "name": "Мы используем его в целях разведки",
+        "name_key": "BBA_switzerland.3.b",
+        "trigger": {
+          "has_intelligence_agency": true,
+          "has_dlc": "La Resistance"
+        },
+        "effects": {
+          "SWI_create_david_frankfurter_operative": true,
+          "hidden_effect": {
+            "set_country_flag": "SWI_faked_frankfurters_death"
+          },
+          "if": {
+            "limit": {
+              "SWI_fascist_germany_exists": true
+            },
+            "random_list": {
+              "30": {
+                "var:SWI.SWI_fascist_germany": {
+                  "country_event": {
+                    "id": "BBA_switzerland.9",
+                    "hours": 4
+                  },
+                  "add_opinion_modifier": {
+                    "modifier": "SWI_recruited_assasin_as_agent",
+                    "target": "SWI"
+                  }
+                }
+              },
+              "70": {
+                "var:SWI.SWI_fascist_germany": {
+                  "country_event": {
+                    "id": "BBA_switzerland.7",
+                    "hours": 4
+                  },
+                  "add_opinion_modifier": {
+                    "modifier": "SWI_suspicions_of_coverup",
+                    "target": "SWI"
+                  }
+                }
+              }
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "С другой стороны, его вина несомненна",
+        "name_key": "BBA_switzerland.3.c",
+        "trigger": [],
+        "effects": {
+          "custom_effect_tooltip": "SWI_frankfurter_immediate_harsh_sentence_TT",
+          "Hidden_effect": {
+            "set_country_flag": "SWI_frankfurter_immediate_harsh_sentence"
+          },
+          "if": {
+            "limit": {
+              "SWI_fascist_germany_exists": true
+            },
+            "var:SWI.SWI_fascist_germany": {
+              "add_opinion_modifier": {
+                "modifier": "SWI_swift_retribution_for_gustloff",
+                "target": "SWI"
+              }
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "target": "SWI",
+              "modifier": "SWI_too_harsh_on_frankfurter"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.4",
+    "type": "country_event",
+    "title": "[?SWI.SWI_fascist_germany.GetLeader] радуется решению [SWI.GetNameRuGen]",
+    "desc": "[?SWI.SWI_fascist_germany.Getleader], лидер [?SWI.SWI_fascist_germany.GetNameRuGen], выражает свою благодарность державе [SWI.GetNameDef] за то, что та быстро разобралось с убийцей Вильяма Густлоффа. Теперь всем очевидно, какую позицию занимает [SWI.GetName] в таких делах. Такое пренебрежение правами человека и демократическими ценностями несомненно улучшит отношение к нам [?SWI.SWI_fascist_germany.GetNameRuGen]. \n\nНесмотря на позитивную оценку главы государства, нам ясно дали понять, что идеальным выходом для нацистской партии в данном случае была бы экстрадиция виновного в [?SWI.SWI_fascist_germany.GetNameRuAcc], даже если сейчас [SWI.GetNameDef] такой вопрос не рассматривает.",
+    "picture": "GFX_report_event_fascist_gathering",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "ROOT": {
+        "OR": {
+          "has_completed_focus": [
+            "SWI_fortify_border_with_italy",
+            "SWI_fortify_border_with_france",
+            "SWI_fortify_border_with_germany"
+          ]
+        },
+        "has_country_flag": "SWI_frankfurter_immediate_harsh_sentence",
+        "SWI_fascist_germany_exists": true
+      }
+    },
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Дело сделано",
+        "name_key": "BBA_switzerland.4.a",
+        "trigger": [],
+        "effects": {
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": 0.1
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_sentenced_frankfurter_without_a_trial",
+              "target": "SWI"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.5",
+    "type": "country_event",
+    "title": "[SWI.GetName] решает продолжить суд на убийцей Густлоффа",
+    "desc": "Власти [SWI.GetNameRuGen] объявили, что дело Давида Франкфуртера, признавшегося в убийстве председателя отделения НСДАП в Давосе, будет рассматриваться на справедливой и беспристрастной основе по граубюнденским законам, как и любое другое дело об убийстве.\n\nУчитывая наше влияние на беззащитного соседа и тот факт, что Густлофф был функционером нацистской партии, мы могли бы послать юриста, представляющего интересы вдовы Густлоффа, чтобы тот продавливал суд к решению, выгодному нам. Так мы сможем убедиться, что наказание будет под стать преступлению.\n\nЕсли выражаться более прагматично, такая мера может вынудить [SWI.GetNameRuAcc] наконец занять чью-то сторону, отринув эту тонкую завесу нейтралитета, на который они так любят упирать.",
+    "picture": "GFX_report_event_gre_trial",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Вдова достойна справедливого воздаяния за жуткое преступление!",
+        "name_key": "BBA_switzerland.5.a",
+        "trigger": [],
+        "effects": {
+          "SWI": {
+            "country_event": {
+              "id": "BBA_switzerland.6",
+              "days": 20,
+              "random_days": 5
+            }
+          }
+        }
+      },
+      {
+        "name": "Ни к чему вмешиваться в [SWI.GetAdjective]ие дела",
+        "name_key": "BBA_switzerland.5.b",
+        "trigger": [],
+        "effects": {
+          "hidden_effect": {
+            "SWI": {
+              "set_country_flag": "SWI_Germany_ignored_gustloff_affair"
+            }
+          },
+          "SWI": {
+            "country_event": {
+              "id": "BBA_switzerland.8",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.6",
+    "type": "country_event",
+    "title": "[GER.GetAdjective]ие представители требуют сурового приговора для Давида Франкфуртера",
+    "desc": "Юрист, представляющий интересы вдовы Густлоффа и, без сомнения, отправленный к нам государством [?SWI.SWI_fascist_germany.GetNameDef], пытается надавить на Федеральный совет, чтобы суд вынес как можно более суровый приговор Давиду Франкфуртеру. Это весьма необычный запрос, и он, очевидно, вызван стремлением [?SWI.SWI_fascist_germany.GetNameRuGen] влиять на нас.\n\nЕсли мы примем их требование, это может сказаться на нашей репутации в мире — но мы, если хотим его отвергнуть, должны быть уверены, что можем себе это позволить.",
+    "picture": "GFX_report_event_canada_patriation",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Это должен решать суд",
+        "name_key": "BBA_switzerland.6.a",
+        "trigger": [],
+        "effects": {
+          "country_event": {
+            "id": "BBA_switzerland.8",
+            "days": 20,
+            "random_days": 5
+          },
+          "FROM": {
+            "add_opinion_modifier": {
+              "modifier": "SWI_rejected_our_request",
+              "target": "SWI"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "Мы подумаем над этим",
+        "name_key": "BBA_switzerland.6.b",
+        "trigger": [],
+        "effects": {
+          "hidden_effect": {
+            "set_country_flag": "SWI_considering_harsh_treatment"
+          },
+          "custom_effect_tooltip": "SWI_frankfurter_german_expectations_TT",
+          "country_event": {
+            "id": "BBA_switzerland.8",
+            "days": 20,
+            "random_days": 5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.7",
+    "type": "country_event",
+    "title": "Франкфуртер таинственным образом убит в тюрьме",
+    "desc": "Власти Граубюндена сообщают, что Давид Франкфуртер, находившийся в заключении после признания в убийстве члена нацистской партии Вильгельма Густлоффа, сегодня утром был найден мертвым в своей камере. Было ли это самоубийством или нападением разъяренного сторонника нацистов, пока неясно, но федеральная полиция обещает все выяснить.\n\nУ нас нет никаких доказательств нарушения, но обстоятельства дела весьма туманны, и некоторые находят подозрительным то, что [SWI.GetAdjective]ое правительство не пускает [?SWI.SWI_fascist_germany.GetAdjective]их представителей осмотреть тело или место преступления.",
+    "picture": "GFX_report_event_journalists_speech",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Ну что ж...",
+        "name_key": "BBA_switzerland.7.a",
+        "trigger": [],
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.79",
+    "type": "country_event",
+    "title": "BBA_switzerland.79.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "SWI_bba": true,
+      "SWI": {
+        "NOT": {
+          "has_country_flag": "SWI_frankfurter_trial_started"
+        },
+        "has_country_flag": "SWI_prepare_for_trial"
+      },
+      "SWI_fascist_germany_exists": false
+    },
+    "immediate": {
+      "SWI": {
+        "country_event": {
+          "id": "BBA_switzerland.8",
+          "hours": 1
+        }
+      }
+    },
+    "options": []
+  },
+  {
+    "id": "BBA_switzerland.8",
+    "type": "country_event",
+    "title": "Суд над Давидом Франкфуртером",
+    "desc": "Все государство [SWI.GetName] и его соседи пристально следят за судом над Давидом Франкфуртером. Итог процесса решит не только участь убийцы, явившегося с повинной, но и судьбу [SWI.GetNameRuGen] в целом; он покажет, до какой степени держава готова поступиться своими институтами и традициями.\n\nВ суде все указывает на справедливый приговор к тюремному заключению, но влияние совета может изменить решение суда и, возможно, саму суть страны.",
+    "picture": "GFX_report_event_SWI_parliament_members",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true,
+        "set_country_flag": "SWI_frankfurter_trial_started"
+      }
+    },
+    "options": [
+      {
+        "name": "Пусть суды принимают решение",
+        "name_key": "BBA_switzerland.8.a",
+        "trigger": [],
+        "effects": {
+          "hidden_effect": {
+            "set_country_flag": "SWI_frankfurter_trial_result_fair"
+          },
+          "var:SWI.SWI_fascist_germany": {
+            "country_event": {
+              "id": "BBA_switzerland.11",
+              "days": 1,
+              "random_days": 5
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_light_sentence_for_frankfurter",
+              "target": "SWI"
+            },
+            "if": {
+              "limit": {
+                "SWI": {
+                  "has_country_flag": "SWI_considering_harsh_treatment"
+                }
+              },
+              "add_opinion_modifier": {
+                "modifier": "SWI_they_lied_to_us",
+                "target": "SWI"
+              }
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_fair_trial_for_frankfurter",
+              "target": "SWI"
+            }
+          },
+          "country_event": {
+            "id": "BBA_switzerland.11",
+            "days": 10,
+            "random_days": 5
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "Он оказал услугу демократии. Его надо помиловать!",
+        "name_key": "BBA_switzerland.8.b",
+        "trigger": [],
+        "effects": {
+          "hidden_effect": {
+            "set_country_flag": "SWI_pardoned_frankfurter_at_trial"
+          },
+          "var:SWI.SWI_fascist_germany": {
+            "country_event": {
+              "id": "BBA_switzerland.9",
+              "days": 10,
+              "random_days": 5
+            },
+            "effect_tooltip": {
+              "add_opinion_modifier": {
+                "modifier": "SWI_pardoned_frankfurter_bad",
+                "target": "SWI"
+              },
+              "if": {
+                "limit": {
+                  "SWI": {
+                    "has_country_flag": "SWI_considering_harsh_treatment"
+                  }
+                },
+                "add_opinion_modifier": {
+                  "modifier": "SWI_they_lied_to_us",
+                  "target": "SWI"
+                }
+              }
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_pardoned_frankfurter_good",
+              "target": "SWI"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "Мы не можем рисковать, настраивая против себя [?SWI.SWI_fascist_germany.GetNameRuAcc]. Ему нужно дать максимальный срок!",
+        "name_key": "BBA_switzerland.8.c",
+        "trigger": {
+          "has_country_flag": "SWI_considering_harsh_treatment"
+        },
+        "effects": {
+          "hidden_effect": {
+            "set_country_flag": "SWI_frankfurter_trial_result_harsh"
+          },
+          "var:SWI.SWI_fascist_germany": {
+            "country_event": {
+              "id": "BBA_switzerland.13",
+              "days": 5,
+              "random_days": 3
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_slow_retribution_for_gustoff",
+              "target": "SWI"
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_too_harsh_on_frankfurter",
+              "target": "SWI"
+            }
+          },
+          "country_event": {
+            "id": "BBA_switzerland.10",
+            "days": 10,
+            "random_days": 5
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.9",
+    "type": "country_event",
+    "title": "[SWI.GetName] провоцирует наш гнев!",
+    "desc": "Наши агенты в государстве [SWI.GetName] доложили, что, несмотря на свои претензии на беспристрастность и верховенство закона, государство [SWI.GetNameDef] тайком освободило Давида Франкфуртера, признавшегося в убийстве Вильгельма Густлоффа, сымитировав его смерть в тюрьме и завербовав его в разведку.\n\nЭто доказывает, что им нельзя доверять и при первой же возможности их надо уничтожить. Нельзя спускать с рук столь неприкрытое оскорбление государству [?SWI.SWI_fascist_germany.GetNameDef].",
+    "picture": "GFX_report_event_SWI_open_air_gathering",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Они за это заплатят!",
+        "name_key": "BBA_switzerland.9.a",
+        "trigger": [],
+        "effects": {
+          "if": {
+            "limit": {
+              "SWI": {
+                "has_country_flag": "SWI_frankfurter_trial_result_fair"
+              }
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_light_sentence_for_frankfurter",
+              "target": "SWI"
+            },
+            "if": {
+              "limit": {
+                "SWI": {
+                  "has_country_flag": "SWI_considering_harsh_treatment"
+                }
+              },
+              "add_opinion_modifier": {
+                "modifier": "SWI_they_lied_to_us",
+                "target": "SWI"
+              }
+            }
+          },
+          "else_if": [
+            {
+              "limit": {
+                "SWI": {
+                  "has_country_flag": "SWI_faked_frankfurters_death"
+                }
+              },
+              "effect_tooltip": {
+                "add_opinion_modifier": {
+                  "modifier": "SWI_recruited_assasin_as_agent",
+                  "target": "SWI"
+                }
+              }
+            },
+            {
+              "limit": {
+                "SWI": {
+                  "has_country_flag": "SWI_pardoned_frankfurter_at_trial"
+                }
+              },
+              "add_opinion_modifier": {
+                "modifier": "SWI_pardoned_frankfurter_bad",
+                "target": "SWI"
+              },
+              "if": {
+                "limit": {
+                  "SWI": {
+                    "has_country_flag": "SWI_considering_harsh_treatment"
+                  }
+                },
+                "add_opinion_modifier": {
+                  "modifier": "SWI_they_lied_to_us",
+                  "target": "SWI"
+                }
+              }
+            }
+          ],
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.10",
+    "type": "country_event",
+    "title": "[?SWI.SWI_fascist_germany.GetNameDefCap] довольствуется решением [SWI.GetNameRuGen]",
+    "desc": "Представители [?SWI.SWI_fascist_germany.GetNameRuGen] и вдова Густлоффа выразили свою благодарность державе [SWI.GetNameDef] за строгий приговор Франкфуртеру. Теперь нет сомнения, чью позицию [SWI.GetNameDef] занимает в подобных делах. [?SWI.SWI_fascist_germany.GetName] непременно пересмотрит свое отношение к [SWI.GetNameRuDat] в лучшую сторону.\n\nНесмотря на позитивную оценку, нам ясно дали понять, что идеальным исходом для нацистской партии в данном случае была бы экстрадиция виновного в [?SWI.SWI_fascist_germany.GetNameRuAcc].",
+    "picture": "GFX_report_event_gre_trial",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Возможно, это гарантирует нашу безопасность",
+        "name_key": "BBA_switzerland.10.a",
+        "trigger": [],
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.0",
+    "type": "country_event",
+    "title": "PHI_Blitz.0.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.0",
+      "if": {
+        "limit": {
+          "exists": true,
+          "OR": {
+            "has_war_with": [
+              "SPH",
+              "UPH"
+            ]
+          }
+        },
+        "add_to_variable": [
+          {
+            "PHI.PHI_fucking_surrender_limit": -0.05
+          },
+          {
+            "UPH.UPH_fucking_surrender_limit": -0.05
+          }
+        ],
+        "country_event": {
+          "id": "PHI_Blitz.0",
+          "days": 30
+        }
+      }
+    },
+    "options": []
+  },
+  {
+    "id": "PHI_Blitz.1",
+    "type": "country_event",
+    "title": "Война на Филиппинах",
+    "desc": "1945 год во многих отношениях ознаменовал конец целой эпохи. Для Соединенных Штатов это означало возвращение к временам Великой депрессии, вызванным сокрушительным поражением 1812 года. Оптимизм и неукротимая вера, которые помогли пережить гражданскую войну и нищету, исчезли с Перл-Харбором. И пока Америка скорбела о потерях, их убийцы в Токио злорадствовали новым порядком, построенным на их трупах.\n\nТо же самое произошло и с ее владениями за морями. Восходящее Солнце наносило удар за ударом, и к концу войны захватило Филиппинский архипелаг целиком, как и все остальные. Народ, которому обещали свободу через десять лет, встретил одиннадцатый год под сапогом другой империи. Смирившись с еще одним столетием рабства, большая часть из старого Содружества сложило оружие и попросила о помиловании в дни после Акаги.\n\nНекоторые, однако, ушли в джунгли к северу и югу от Манилы, густые леса которой были непроглядными как для взгляда ястреба, так и для пронизывающих лучей Токио. Здесь процветает непокорное сопротивление, убежденное в том, что их войну ждет хороший конец. Филиппинцы ждут своей свободы, за которую было пролито немало крови; американцы же ждут билет домой. Эти два типа людей, их различия очевидны, но оба тоскуют по чему-то дорогому, но не совсем близкому.\n\nКакой истории последуем?",
+    "picture": "GFX_report_event_USA_saw_soldier9",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.1"
+    },
+    "options": [
+      {
+        "name": "Следовать за солдатом",
+        "name_key": "PHI_Blitz.1.a",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "USA_PHI_soldier",
+          "custom_effect_tooltip": "USA_PHI_soldier_tt"
+        }
+      },
+      {
+        "name": "Следовать за революционером",
+        "name_key": "PHI_Blitz.1.b",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "USA_PHI_revolutionary_tt"
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.2",
+    "type": "country_event",
+    "title": "Война на Филиппинах",
+    "desc": "Летописцы императорского двора навсегда увековечат двадцатого Сёву как солнцестояние нашей восходящей звезды. Некоторые народы могут насмехаться над таким хвастовством, но разве не мы завоевали те земли, по которым прошли наши храбрые воины? Разве не мы одерживали победу за победой, порой против превосходящих сил? И разве не мы положили конец войне таким светом, который навсегда оставил их тени на земле под ногами? Богатые участки земли, на которые мы претендовали, множество новых народов под нашей эгидой, -далеко не праздное хвастовство, это было правдой, которую сыновья императора Джимму приветствовали с полным апломбом.\n\nУвы, даже столь ошеломляющие победы эфемерны. Подобно солнцестоянию, наше солнце медленно но верно опускалось вниз с каждым днем. Нигде это не было так видно, как на Филиппинских островах, где с тех пор, как семнадцать лет назад предположительно был нанесен удар, было нестабильно. Повстанцы все еще разгуливают по сельской местности и грабят деревни за пределами досягаемости Манилы. Непокорившиеся династии и клики все еще мешают повседневным делам республики, постепенно разрушая наследие ушедшего президента Лауреля. Нашей 14-й армии еще предстоит вернуть себе ту устрашающую силу, с которой она закончила освободительную войну. Подвергаясь угрозам изнутри и извне, втянутая в войну с момента своего основания, братская республика Империи может не дожить до своего восемнадцатилетия.\n\nНо что бы не ожидало нас в будущем, знайте, что император желает Филиппинам счастья и процветания. Эту задачу он поручил отважным мужчинам и женщинам, а также своим азиатским союзникам. Со Сферой в своем распоряжении они не дрогнут.\n\nЗа кем из них же мы последуем?",
+    "picture": "GFX_report_event_PHI_blitz_begins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.2"
+    },
+    "options": [
+      {
+        "name": "Следовать за новобранцем",
+        "name_key": "PHI_Blitz.2.a",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "JAP_PHI_conscript",
+          "custom_effect_tooltip": "JAP_PHI_conscript_tt"
+        }
+      },
+      {
+        "name": "Следовать за ополченцем",
+        "name_key": "PHI_Blitz.2.b",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "JAP_PHI_militiaman_tt"
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.3",
+    "type": "country_event",
+    "title": "Блиц начинается",
+    "desc": "Первыми об этом сообщили аванпосты, расположенные в нескольких милях за фронтом. Большинство из них были миниатюрными и незаметными, высотой всего в два этажа, сделанными из соломы и нипы, соединенными с внешним миром старыми радиоприемниками и сигнальными огнями. Большую часть войны они передавали движение противника и оставались незамеченными. Но этим утром все поменялось; большинство аванпостов замолчали прежде чем смогли передать армии, что что-то затевается.\n\nДалее были деревни и районы расположенные вдоль фронта. В любой другой день их жители бы проснулись для подготовки к сбору урожая, но не в этот. Люди с оружием вышли для противостояния, поскольку их дома и поля были взяты без единого выстрела. Некоторым беглецам удалось добраться до цивилизации.\n\nТретьими были городские окраины, укрепленные лучше, чем захолустные лачуги провинций. Именнно здесь гремели самые ожесточенные бои, пока солнце выглядывало из-за горизонта. Оборонявшиеся получили сообщения о бедствиях от аванпостов и деревенских беглецов, именно в тот момент, когда взрыввы унесли жизни дюжины полицейских. Сама смерть пробудила горожан ото сна.\n\nПоследней из всех бой приняла Манила, Жемчужина востока. Издалека, вместе с утренним солнцем, поднимались столбы черного дыма. Звуки выстрелов и взрывов переплетались и образовывали гулкий, отдающий эхом рев, такой далекий, но в то же время таким близким. Только сейчас армия получила информацию о захваченных позициях, потерях и осожденных городах от Пампанги до Негроса.\n\nЗа четыре часа обе группы повстанцев были менее чем в ста милях от Малаканского дворца.",
+    "picture": "GFX_report_event_PHI_blitz_begins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.3",
+      "hidden_effect": {
+        "JAP": {
+          "end_puppet": "PHI"
+        },
+        "TNO_Start_Balintawak_Blitz": true
+      }
+    },
+    "options": [
+      {
+        "name": "Заключительная фаза войны начинается всерьёз.",
+        "name_key": "PHI_Blitz.3.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": "WORLD.18122"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.4",
+    "type": "country_event",
+    "title": "Покушение на Хосе Юло",
+    "desc": "Все произошло так быстро, что толпу охватила паника, прежде чем кто-либо смог осознать правду о происходящем.\n\nМинуту назат Манила была воплощением фестиваля. Трепещущие киоски заполонили улицы, оркестры барабанили и трубили торжественные мелодии у мерцающего Пасега, фейерверки среляли в небо до назначенного времени, настроение города было настолько заразительным, что даже незначительные мелочи заставляли двигаться энергичной походкой. Девушки гуляли с парнями, дети смеялись и бегали трусцой, а старики наблюдали за безумствами молодежи с невозмутимым, но теплым выражением лица. Годы подготовки к войне воспитали сдержанность в жителях Манилы; когда призрак войны был изгнан навсегда, сдерживаемая энергия высвободилась и поглотила город.\n\nУ его очей стоял любимый спаситель республики. Исчезла непокорная старая реликвия служения покойного Лауреля. На ее месте появился равный, вырвавший победу из двойной пасти коммунизма и империализма. Миллионы людей твердо верили в его безукаризненное мастерство управления, и были вознаграждены прочным миром, к которому стремились из отцы, и поэтому они приветствовали его с крыш из окон вдоль 19-й улицы Хунио, по которой его кортеж \"Мицубиси\" неспешно следовал. Он был так близко, что некоторые обожатели президента даже смогли разглядеть его пламенный взгляд.\n\nЗатем под безоблачным, освещенным дневным светом небом прогремел гром. Мнгновение спустя огонь изчес, оставляя на асфальте красные и серые пятна.\n\nКогда серены и крики разнеслись по всему городу, когда миллионам людей открылась правда, которую они до последнего отрицали, дикторы новостей мрачно объявили:\n\nМы с сожалением сообщаем вам, что...",
+    "picture": "GFX_report_event_PHI_jose_yulo",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.4"
+    },
+    "options": [
+      {
+        "name": "...что президент Хосе Юло ушёл из жизни...",
+        "name_key": "PHI_Blitz.4.a",
+        "trigger": {},
+        "effects": {
+          "PHI": {
+            "promote_character": "PHI_National_Assembly",
+            "set_politics": {
+              "ruling_party": "despotism"
+            },
+            "set_party_name": {
+              "ideology": "despotism",
+              "name": "PHI_paternalism_party",
+              "long_name": "PHI_paternalism_party_long"
+            }
+          },
+          "hidden_effect": {
+            "JAP": {
+              "country_event": {
+                "days": 3,
+                "id": "PHI_flavor.3"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.5",
+    "type": "country_event",
+    "title": "Отвечая на вопрос",
+    "desc": "Возможно, именно принцип держал \"вопрос\" в секрете. В конце концов, большая часть Филиппинского департамента пережила восстание. Несмотря на все их ошибки, никто не мог обвинить их в том, что они забыли кто такие настоящие бандидос. Это мог быть широко распространенный фатализм, как до атаки на Балинтавак. Тогда коммунисты казались повсюду; если красные и синие погибнут в \"последнем рывке\", по крайней мере руководство избавит себя от необходимости давать четкий ответ.\n\nКак бы то ни было, Саид брасс настолько часто это откладывал, что это стало сардонической шуткой среди пехотинцев. Наступите на мину, а затем ответьте на \"вопрос\". Подбейте танк штыком потом ответьте на \"вопрос\". Поднимите былую славу над Манильским заливом, затем ответьте на \"вопрос\".\n\nОни ожидаемо постарели, когда Манила действительно пала. На этот раз Тарук сам попросил о кульминации. С тонко завуалированным ультиматумом, надвисшим над ними, самы светлые умы содружества вынесли \"вопрос\" на 18-й этаж отеля \"Манила\".\n\nКак и следовало ожидать, личности столкнулись, эго столкнулось лбами, а принципы вели войну с прагматизмом от восхода до заката в застенках пентхауса. Только острые напоминания о шатком положении Содружества (и множество разбитых чашек кофе) предотвратили эскалацию. Тем не менее, собравшиеся люди все еще были людьми из плоти и крови. Их горло болело все сильнее с каждым криком, и каждый крик, в свою очередь, истощал силы и волю.\n\nВ конце концов, [USA.GetLeader] сам вышел из тупика, сказав...",
+    "picture": "GFX_report_event_PHI_map",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.5"
+    },
+    "options": [
+      {
+        "name": "\"Скажи Таруку, что наш союз ещё действует.\"",
+        "name_key": "PHI_Blitz.5.a",
+        "trigger": {
+          "UPH": {
+            "NOT": {
+              "AND": {
+                "UPH_Carlos_Garcia": {
+                  "is_country_leader": true
+                },
+                "has_country_flag": "UPH_magsaysay_countercoup"
+              }
+            }
+          }
+        },
+        "effects": {
+          "country_event": {
+            "id": "PHI_Blitz.7",
+            "days": 1
+          },
+          "set_country_flag": "USA_PHI_negotiations_over"
+        }
+      },
+      {
+        "name": "\"Скажи Таруку, что пусть заберёт своих красных обратно в джунгли.\"",
+        "name_key": "PHI_Blitz.5.b",
+        "trigger": {
+          "NOT": {
+            "UPH": {
+              "UPH_Jose_Avelino": {
+                "is_country_leader": true
+              }
+            }
+          }
+        },
+        "effects": {
+          "set_global_flag": "PHI_negotiations_failed",
+          "SPH": {
+            "country_event": {
+              "id": "PHI_Blitz.8",
+              "days": 30
+            }
+          },
+          "set_country_flag": "USA_PHI_negotiations_over"
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.6",
+    "type": "country_event",
+    "title": "Наш преемник",
+    "desc": "Кто станет правителем после Юло (неважная лока)",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [
+      {
+        "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.6"
+      },
+      {
+        "JAP": {
+          "end_puppet": "PHI"
+        }
+      }
+    ],
+    "options": [
+      {
+        "name": "Квентин Паредес",
+        "name_key": "PHI_Blitz.6.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "paternalism"
+          },
+          "promote_character": "PHI_Quentin_Paredes",
+          "remove_ideas": "Sphere_Fully_Dependent",
+          "add_ideas": "Sphere_Economic_Dependent",
+          "set_popularities": {
+            "ultranationalism": 5,
+            "paternalism": 60,
+            "despotism": 35
+          },
+          "JAP": {
+            "add_to_faction": "PHI"
+          },
+          "every_country": {
+            "limit": {
+              "is_ai": false,
+              "HasSphereInterest": true
+            },
+            "news_event": {
+              "id": "WORLD.18127"
+            }
+          }
+        }
+      },
+      {
+        "name": "Кларо Ректо",
+        "name_key": "PHI_Blitz.6.b",
+        "trigger": {},
+        "effects": {
+          "promote_character": "PHI_Claro_Recto",
+          "remove_ideas": "Sphere_Fully_Dependent",
+          "add_ideas": "Sphere_Economic_Dependent",
+          "set_popularities": {
+            "ultranationalism": 5,
+            "paternalism": 60,
+            "despotism": 35
+          },
+          "set_politics": {
+            "ruling_party": "paternalism"
+          },
+          "JAP": {
+            "add_to_faction": "PHI"
+          },
+          "every_country": {
+            "limit": {
+              "is_ai": false,
+              "HasSphereInterest": true
+            },
+            "news_event": {
+              "id": "WORLD.18130"
+            }
+          }
+        }
+      },
+      {
+        "name": "Осменья",
+        "name_key": "PHI_Blitz.6.c",
+        "trigger": {},
+        "effects": {
+          "promote_character": "PHI_Sergio_Osmena_Jr",
+          "remove_ideas": "Sphere_Fully_Dependent",
+          "add_ideas": "Sphere_Economic_Dependent",
+          "set_popularities": {
+            "ultranationalism": 5,
+            "paternalism": 30,
+            "despotism": 65
+          },
+          "set_politics": {
+            "ruling_party": "paternalism"
+          },
+          "JAP": {
+            "add_to_faction": "PHI"
+          },
+          "every_country": {
+            "limit": {
+              "is_ai": false,
+              "HasSphereInterest": true
+            },
+            "news_event": {
+              "id": "WORLD.18131"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.7",
+    "type": "country_event",
+    "title": "Становление Объединённого филиппинского фронта",
+    "desc": "Подписание состоялось в соломенной хижине примерно в шестидесяти милях к югу от Тарлака. В одном конце зала сидели представители Филиппинского департамента, в другом функционеры КПФ. Как бы то ни было, ни один из них не был настроен на прекращение вооруженного конфликта. Казалось, что от старых привычек тяжело избавиться.\n\nТем не менее, каждый знал, что им предстоит делать. Это было не раз отработано и отрепетировано. Встретиться, подписать бумагу и пожать друг другу руки. Звучит просто, не так ли?\n\nШли минуты. Никто не сдвинулся с места. Напряжение, нависшее над хижиной, казалось бы, могло свести всех с ума. Некоторые вцепились в рукоятку своего огнестрела. Мир замер.\n\nРовно до тех пор, как кто-то положил свою винтовку на пол, словно преступник, сдающий оружие. Между ними как-будто рухнула стена. Один за другим последовали его примеру, пока все не оказались вооружены только ручкой и бумагой.\n\nТеперь, безоружные и менее враждебно настроенные группы людей, поступили так, как и планировалось: расписались и пожали друг другу руки. Они улыбнулись камере, пока она снимала историю в режиме реального времени.\n\nОни отправятся в свои штаб-квартиры, заложив основу для продолжения переговоров: по-настоящему единый фронт против второго вторжения.",
+    "picture": "GFX_report_event_PHI_UFF",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.7"
+    },
+    "options": [
+      {
+        "name": "Не дадим же прошлым ошибкам повториться.",
+        "name_key": "PHI_Blitz.7.a",
+        "trigger": {},
+        "effects": {
+          "UPH": {
+            "create_faction_from_template": {
+              "name": "United_Filipino_Front",
+              "template": "faction_template_generic"
+            },
+            "add_faction_goal_slot": [
+              {
+                "category": "short_term",
+                "value": -10
+              },
+              {
+                "category": "medium_term",
+                "value": -10
+              },
+              {
+                "category": "long_term",
+                "value": -10
+              }
+            ],
+            "add_to_faction": "SPH",
+            "hidden_effect": {
+              "add_ideas": "UFF_Faction"
+            }
+          },
+          "hidden_effect": {
+            "SPH": {
+              "add_ideas": "UFF_Faction"
+            }
+          },
+          "set_variable": {
+            "PHI_UFF_exists": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.8",
+    "type": "country_event",
+    "title": "Революция",
+    "desc": "AFRSR forms the PRP, loc unecessary",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.8"
+    },
+    "options": [
+      {
+        "name": "Option",
+        "name_key": "PHI_Blitz.8.a",
+        "trigger": {},
+        "effects": {
+          "diplomatic_relation": {
+            "country": "UPH",
+            "relation": "non_aggression_pact",
+            "active": false
+          },
+          "add_war_support": 0.5,
+          "set_cosmetic_tag": "SPH_PRP",
+          "set_popularities": {
+            "communist": 61,
+            "socialist": 39
+          },
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_War_Communism"
+          },
+          "econ_subtype_change": true,
+          "set_politics": {
+            "ruling_party": "communist"
+          },
+          "hidden_effect": {
+            "SPH_Luis_Taruc": {
+              "set_portraits": {
+                "civilian": {
+                  "large": "gfx/leaders/SPH/Portrait_SPH_Luis_Taruc_PRP.png"
+                }
+              }
+            },
+            "if": {
+              "limit": {
+                "owns_state": 327
+              },
+              "set_variable": {
+                "SPH_para_sa_ating_himagsikan_surrender": 0.23
+              }
+            },
+            "else": {
+              "set_variable": {
+                "SPH_para_sa_ating_himagsikan_surrender": 0.2
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.9",
+    "type": "country_event",
+    "title": "Мстящее Солнце возвращается",
+    "desc": "Возмездие империи пришло с берегов залива Лингайен оглушительным шквалом.\n\nТогда казалось, что все подразделения Кидо бутаи дали волю своему гневу. От величавых линкоров до скромных эсминцев, орудия всех калибров часами перекапывали несколько миль берега и суши. Реактивные бомбардировщики десятками взлетали со своих авианосцев и покрывали небо словно тучи, наказывая провинившихся с воздуха. Ни человек, ни природа не могли пережить столь упорный натиск: ни хижина от залпа снарядов, ни роща от напалмовой бомбы, ни здание от того и другого. Однако в эту же минуту часть островов, кишащих дьяволами, была уничтожена приказом императора.\n\nРев сотен клаксонов безжалостно прервал передышку. С транспортных кораблей высадилось по роте лучших морских пехотинцев. То ничтожное сопротивление, которое мы до сих пор оказывали, было жестоко подавлено превосходящей по силе армией. Ветераны войн в горах Циньлин до Малаккского пролива также несли тяжелые потери.\n\nЭто была самая крупномасштабная десантная операция со времен Освододительной войны. Все блекнет перед памятью о погибших японцах, перед разжигаемой ими ненависти. Пусть же небеса благословят наших людей, дабы свершилась наша месть.",
+    "picture": "GFX_report_event_JAP_flamethrower3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.9"
+    },
+    "options": [
+      {
+        "name": "И пусть наши враги дрогнут перед рассерженной Империей.",
+        "name_key": "PHI_Blitz.9.a",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "TNO_Second_Invasion_Volunteer_anouncement",
+          "hidden_effect": {
+            "JAP": {
+              "set_temp_variable": {
+                "Victory_ID": 20
+              },
+              "Cold_War_GUI_AddVictory": true
+            },
+            "USA": {
+              "set_temp_variable": {
+                "Victory_ID": 20
+              },
+              "Cold_War_GUI_AddVictory": true
+            },
+            "TNO_Blitz_Landing_Start": true,
+            "if": {
+              "limit": {
+                "check_variable": {
+                  "USA_UPH_Morale_Drops": {
+                    "_op": "<",
+                    "value": 5
+                  }
+                }
+              },
+              "hidden_effect": {
+                "ZZZ": {
+                  "activate_mission": "ZZZ_USA_Philippines_Dummy"
+                }
+              }
+            }
+          },
+          "if": {
+            "limit": {
+              "UPH": {
+                "is_in_faction": true
+              }
+            },
+            "custom_effect_tooltip": "TNO_Second_Invasion_Great_Equalizer"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.10",
+    "type": "country_event",
+    "title": "Loc unecessary, hidden event",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.10",
+      "if": {
+        "limit": {
+          "country_exists": "FGB",
+          "has_global_flag": "PHI_landing_ongoing"
+        },
+        "subtract_from_variable": {
+          "JAP.JP_PHI_supply": "JAP.JP_PHI_supply_decay"
+        },
+        "TNO_JP_PHI_Check_Supply": true,
+        "country_event": {
+          "id": "PHI_Blitz.10",
+          "days": 7
+        }
+      }
+    },
+    "options": []
+  },
+  {
+    "id": "PHI_Blitz.12",
+    "type": "country_event",
+    "title": "Последнее отступление",
+    "desc": "Наш второй этап войны на филиппинском архипелаге закончился так же, как и первый: поражение за поражением, а затем уничижительное отступление.\n\nПо крайней мере не так громко по сравнению с предыдущими боями. Сам отъезд сопровождался различными помпезностями. Марши потрепанных бойцов гремели вблизи залива Лингайен. Во временной гавани их ожидали транспортные корабли. Контуженные остатки прославленной 14-й армии несли гробы своих поверженных товарищей. В некоторых гробах тела были целыми, в других же лежали совсем неузнаваемые трупы. Многие опознавались лишь по фотографиям и жетонам на шее. Империалисты и их подхалимы устроили это, и никто другой.\n\nВы спросите, где сейчас был дух армии? Их праведная месть, которая когда-то стелила землю огнем и снарядами? Под землей или по кускам в траве, что можно сказать и о тех, кому они пришли мстить. Поспешность Японии в оправдании смертей своих солдат не привела ни к чему хорошему, а только к большему количеству погибших. И это, возможно, задело их сильнее, чем первое безоговорочное поражение - то, что все жертвы были напрасны.\n\nКогда солнце опустилось за горизонт и последний гроб был погружен, сирены пропели панихиду, пушки отдали прощальный салют, а солнечные лучи в последний раз опустились на кладбище империи.",
+    "picture": "GFX_report_event_generic_wounded_man",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.12"
+    },
+    "options": [
+      {
+        "name": "Более не будет героических смертей.",
+        "name_key": "PHI_Blitz.12.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -50,
+          "JAP_IJN_decrease_med": true,
+          "hidden_effect": {
+            "if": [
+              {
+                "limit": {
+                  "country_exists": "FGB",
+                  "OR": {
+                    "country_exists": "SPH",
+                    "UPH": {
+                      "is_in_faction": true
+                    }
+                  }
+                },
+                "SPH": {
+                  "annex_country": {
+                    "target": "FGB",
+                    "transfer_troops": false
+                  }
+                },
+                "else": {
+                  "UPH": {
+                    "annex_country": {
+                      "target": "FGB",
+                      "transfer_troops": false
+                    }
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "UPH": {
+                    "is_in_faction_with": "SPH"
+                  }
+                },
+                "USA": {
+                  "country_event": {
+                    "id": "PHI_Blitz.17",
+                    "days": 1
+                  }
+                },
+                "AAO": {
+                  "set_country_flag": "AAO_win_phi"
+                }
+              }
+            ],
+            "else_if": [
+              {
+                "limit": {
+                  "SPH": {
+                    "exists": false
+                  }
+                },
+                "USA": {
+                  "country_event": {
+                    "id": "PHI_Blitz.166",
+                    "days": 1
+                  }
+                },
+                "AAO": {
+                  "set_country_flag": "AAO_win_phi"
+                }
+              },
+              {
+                "limit": {
+                  "UPH": {
+                    "exists": false
+                  },
+                  "SPH": {
+                    "has_cosmetic_tag": "SPH_PRP"
+                  }
+                },
+                "USA": {
+                  "country_event": {
+                    "id": "PHI_Blitz.18",
+                    "days": 1
+                  }
+                }
+              }
+            ],
+            "else": {
+              "USA": {
+                "country_event": "PHI_Blitz.122"
+              }
+            },
+            "TNO_fopo_remove_war_for_philippines_tab": true,
+            "set_temp_variable": {
+              "target": "FGB"
+            },
+            "TNO_clear_num_volunteers": true,
+            "AZH": {
+              "set_temp_variable": {
+                "target": "FGB"
+              },
+              "TNO_clear_num_volunteers": true
+            },
+            "USA": {
+              "set_temp_variable": [
+                {
+                  "Victory_ID": 20
+                },
+                {
+                  "Victory_Outcome": 4
+                },
+                {
+                  "Victory_Points": 75
+                }
+              ],
+              "Cold_War_GUI_ManipulateVictory": true
+            },
+            "JAP": {
+              "set_temp_variable": [
+                {
+                  "Victory_ID": 20
+                },
+                {
+                  "Victory_Outcome": 2
+                },
+                {
+                  "Victory_Points": -75
+                }
+              ],
+              "Cold_War_GUI_ManipulateVictory": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.13",
+    "type": "country_event",
+    "title": "Лусон за нами",
+    "desc": "Отвоевание Манилы должно было доказать, что восстановление контроля было неминуемо. В конце концов, повторная потеря их любимой столицы усугубит проблемы с истощением и деморализует повстанцев до грани капитуляции. На короткий миг после этого их дивизии уступили 14-й армии, горожане отдали город без сопротивления. Мы маршировали из города в город, из провинции в провинцию.\n\nПервое поражение должно было научить нас, чем сулит недооценка этой породы бунтарей. К сожалению, наше наступление захлебнулось, как только мы заняли центральные острова. Сопротивление только усиливалось по мере того, как мы углублялись вглубь страны. И в то время как множество наших людей гибнут от засад, мин и перестрелок, редут американцев на острове Лейта оставался непоколебимым.\n\nВ следствии этого премьер-министр [JAP.GetLeader] заключил сделку с самим Вашингтоном. Условия сделки были просты: Лусон - наш, остальное - их. Президент Никсон дал свое согласие, и на следующий день в 12 часов ночи по всему архипелагу смолкли орудия, впервые за двадцать лет.\n\nФилиппины встречают рассвет, безвозвратно разделенной между восходящим солнцем и колоссом запада. Ничто, кроме полного завоевания архипелага, не могло искупить наши прошлые неудачи...но ничего не поделаешь. Придется на это пойти.",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.13"
+    },
+    "options": [
+      {
+        "name": "А пока мы должны вернуть наших павших.",
+        "name_key": "PHI_Blitz.13.a",
+        "trigger": {},
+        "effects": {
+          "set_temp_variable": {
+            "gdp_growth_temp": 0.25
+          },
+          "econ_gdp_growth_change": true,
+          "add_to_variable": {
+            "JAP_colonial_costs": 0.94
+          },
+          "hidden_effect": {
+            "JAP": [
+              {
+                "add_to_faction": "FGB",
+                "JAP": {
+                  "country_event": {
+                    "id": "PHI_flavor.10",
+                    "days": 100
+                  }
+                }
+              },
+              {
+                "set_temp_variable": [
+                  {
+                    "Victory_ID": 20
+                  },
+                  {
+                    "Victory_Outcome": 4
+                  },
+                  {
+                    "Victory_Points": 50
+                  }
+                ],
+                "Cold_War_GUI_ManipulateVictory": true
+              }
+            ],
+            "FGB": {
+              "set_politics": {
+                "ruling_party": "despotism"
+              },
+              "set_popularities": {
+                "despotism": 60,
+                "ultranationalism": 15,
+                "despotism_2": 15,
+                "paternalism": 10
+              },
+              "set_cosmetic_tag": "PHI_JAP_Administration",
+              "add_ideas": "Sphere_Imp_Protectorate",
+              "remove_ideas": [
+                "PHI_vengeance_for_the_dead",
+                "PHI_vengeance_for_the_dead_UF",
+                "PHI_vengeance_for_the_dead_UF_USP",
+                "PHI_vengeance_for_the_dead_USP",
+                "PHI_well_supplied_army",
+                "PHI_not_supplied_army"
+              ],
+              "give_resource_rights": [
+                {
+                  "receiver": "JAP",
+                  "state": 627,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 628,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 1461,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 1463,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 327,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 626,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 1457,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 623,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                }
+              ],
+              "country_event": [
+                {
+                  "id": "PHI_Blitz.26"
+                },
+                {
+                  "id": "PHI_Blitz.27",
+                  "days": 60
+                }
+              ]
+            },
+            "TNO_14th_Army_Ceasefire_North": true,
+            "UPH": {
+              "econ_join_sphere_USA": true,
+              "country_event": {
+                "id": "PHI_Blitz.34",
+                "days": 1
+              }
+            },
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": "WORLD.18134"
+            },
+            "set_global_flag": "FGB_Luzon",
+            "TNO_War_For_Philippines_closing": true,
+            "USA": [
+              {
+                "country_event": "PHI_Blitz.133"
+              },
+              {
+                "set_temp_variable": [
+                  {
+                    "Victory_ID": 20
+                  },
+                  {
+                    "Victory_Outcome": 2
+                  },
+                  {
+                    "Victory_Points": -50
+                  }
+                ],
+                "Cold_War_GUI_ManipulateVictory": true
+              }
+            ],
+            "NZL": {
+              "add_to_variable": [
+                {
+                  "NZL_World_Stage_var": -1
+                },
+                {
+                  "NZ_lost_proxies": 1
+                }
+              ],
+              "NZ_Skeleton_Effect": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.14",
+    "type": "country_event",
+    "title": "Лусон и Висайские острова за нами",
+    "desc": "Отвоевание Манилы должно было доказать, что восстановление контроля было неминуемо. В конце концов, повторная потеря их любимой столицы усугубит проблемы с истощением и деморализует повстанцев до грани капитуляции. На короткий миг после этого их дивизии уступили 14-й армии, горожане отдали город без сопротивления. Мы маршировали из города в город, из провинции в провинцию.\n\nПервое поражение должно было научить нас, чем сулит недооценка этой породы бунтарей. К сожалению, наше наступление захлебнулось, как только мы заняли центральные острова. Сопротивление только усиливалось по мере того, как мы углублялись вглубь страны. И в то время как множество наших людей гибнут от засад, мин и перестрелок, редут американцев на острове Лейта оставался непоколебимым.\n\nВ следствии этого премьер-министр [JAP.GetLeader] заключил сделку с самим Вашингтоном. Условия сделки были просты: Лусон - наш, остальное - их. Президент Никсон дал свое согласие, и на следующий день в 12 часов ночи по всему архипелагу смолкли орудия, впервые за двадцать лет.\n\nФилиппины встречают рассвет, безвозвратно разделенной между восходящим солнцем и колоссом запада. Ничто, кроме полного завоевания архипелага, не могло искупить наши прошлые неудачи...но ничего не поделаешь. Придется на это пойти.",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.14"
+    },
+    "options": [
+      {
+        "name": "А пока мы должны вернуть наших павших.",
+        "name_key": "PHI_Blitz.14.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 35,
+          "set_temp_variable": {
+            "gdp_growth_temp": 0.35
+          },
+          "econ_gdp_growth_change": true,
+          "add_to_variable": {
+            "JAP_colonial_costs": 1.64
+          },
+          "hidden_effect": {
+            "JAP": [
+              {
+                "add_to_faction": "FGB",
+                "JAP": {
+                  "country_event": {
+                    "id": "PHI_flavor.10",
+                    "days": 100
+                  }
+                }
+              },
+              {
+                "set_temp_variable": [
+                  {
+                    "Victory_ID": 20
+                  },
+                  {
+                    "Victory_Outcome": 4
+                  },
+                  {
+                    "Victory_Points": 75
+                  }
+                ],
+                "Cold_War_GUI_ManipulateVictory": true
+              }
+            ],
+            "FGB": {
+              "set_politics": {
+                "ruling_party": "despotism"
+              },
+              "set_popularities": {
+                "despotism": 60,
+                "ultranationalism": 15,
+                "despotism_2": 15,
+                "paternalism": 10
+              },
+              "set_cosmetic_tag": "PHI_JAP_Administration",
+              "add_ideas": "Sphere_Imp_Protectorate",
+              "remove_ideas": [
+                "PHI_vengeance_for_the_dead",
+                "PHI_vengeance_for_the_dead_UF",
+                "PHI_vengeance_for_the_dead_UF_USP",
+                "PHI_vengeance_for_the_dead_USP",
+                "PHI_well_supplied_army",
+                "PHI_not_supplied_army"
+              ],
+              "country_event": [
+                {
+                  "id": "PHI_Blitz.26"
+                },
+                {
+                  "id": "PHI_Blitz.27",
+                  "days": 60
+                }
+              ],
+              "give_resource_rights": [
+                {
+                  "receiver": "JAP",
+                  "state": 627,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 628,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 1461,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 1463,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 327,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 626,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 1457,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 623,
+                  "resources": [
+                    "oil",
+                    "aluminium",
+                    "rubber",
+                    "tungsten",
+                    "steel",
+                    "chromium",
+                    "uranium"
+                  ]
+                }
+              ]
+            },
+            "TNO_14th_Army_Ceasefire_Mid": true,
+            "UPH": {
+              "econ_join_sphere_USA": true,
+              "country_event": {
+                "id": "PHI_Blitz.34",
+                "days": 1
+              }
+            },
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": "WORLD.18135"
+            },
+            "set_global_flag": "FGB_Central",
+            "TNO_War_For_Philippines_closing": true,
+            "USA": [
+              {
+                "country_event": "PHI_Blitz.144"
+              },
+              {
+                "set_temp_variable": [
+                  {
+                    "Victory_ID": 20
+                  },
+                  {
+                    "Victory_Outcome": 2
+                  },
+                  {
+                    "Victory_Points": -75
+                  }
+                ],
+                "Cold_War_GUI_ManipulateVictory": true
+              }
+            ],
+            "NZL": {
+              "add_to_variable": [
+                {
+                  "NZL_World_Stage_var": -1
+                },
+                {
+                  "NZ_lost_proxies": 1
+                }
+              ],
+              "NZ_Skeleton_Effect": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.15",
+    "type": "country_event",
+    "title": "На что похожа месть",
+    "desc": "\"Впрервы я столкнулся с американцем во время нашего первого патрулирования после падения Даваоку. Его состояние оставляло желать лучшего. Он лежал на обочине дороги, истекающий кровью и покрытый запекшейся грязью. Закричав, он взмахнул пистолетом и приготовился стрелять, спустил курок первый раз, второй, но оружие не послушалось. Вскоре его голос охрип, он прекратил тщетные попытки выстрелить и уронил пистолет, после чего испустил дух. Я бы хотел знать что скрывалось за его налитыми кровью глазами. В руке он мертвой хваткой сжал катушку с пленкой. Криптоаналитик позже сказал, что на пленке были изображены мужчина и беременная женщина.\"\n\n\"Во име мести, американец умер от пули в голову.\"\n\n\"Несколько дней спустя нас направили в сельскую местность на поиски повстанцев. Летчики отнеслись к своей работе с пристрастием: от близлижайшей деревни, в которую мы прибыли, ничего не осталось, только пылающие хижины, воронки от снарядов и мертвые тела. Посреди этого месива стоял туземец с мачете в изодранной униформе. Позади него - земляные холмы с прибитыми деревянными крестами на них. Один холмик был в пять раз больше остальных, видимо, это была братская могила. Обезумевший туземец кричал во все стороны, его посыл был ясен: подойдете еще ближе, и он оторвет нам головы.\"\n\n\"Пулеметная очередь отправила его к праотцам.\"\n\n\"Затем была экспедиция в горы. Мы не до конца верили слухам. В конце концов, коммунисты были повержены в Багио, а мы были в девятистах милях к югу. Засада доказала обратное, для многих она обернулась смертельным исходом. Когда мы подошли они уже бежали, оставив позади мальчика не старше 12 лет, в красной бандане и с винтовкой в два раза больше его самого. Прямо как в Багио. Впервые мы оказались в растерянности, не зная что делать.\"\n\n\"Не волнуйтесь, сказал командир, он сделает выбор за нас. И так, во имя искупления....\"",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.15"
+    },
+    "options": [
+      {
+        "name": "\"Он взвалил на свои плечи наше бремя, только на этот раз.\"",
+        "name_key": "PHI_Blitz.15.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 50,
+          "JAP_PM_increase_power_avg": true,
+          "JAP_PA_support_increase_med": true,
+          "JAP_IJA_increase_med": true,
+          "set_temp_variable": {
+            "gdp_growth_temp": 0.5
+          },
+          "econ_gdp_growth_change": true,
+          "custom_effect_tooltip": "JAP_PHI_Army_RR_tt",
+          "add_to_variable": {
+            "JAP_colonial_costs": 2.14
+          },
+          "hidden_effect": {
+            "JAP": [
+              {
+                "add_to_faction": "FGB",
+                "JAP": {
+                  "country_event": {
+                    "id": "PHI_flavor.10",
+                    "days": 100
+                  }
+                }
+              },
+              {
+                "set_temp_variable": [
+                  {
+                    "Victory_ID": 20
+                  },
+                  {
+                    "Victory_Outcome": 5
+                  },
+                  {
+                    "Victory_Points": 125
+                  }
+                ],
+                "Cold_War_GUI_ManipulateVictory": true
+              }
+            ],
+            "if": {
+              "limit": {
+                "OR": {
+                  "country_exists": [
+                    "UPH",
+                    "SPH"
+                  ]
+                }
+              },
+              "FGB": {
+                "annex_country": [
+                  {
+                    "target": "UPH",
+                    "transfer_troops": false
+                  },
+                  {
+                    "target": "SPH",
+                    "transfer_troops": false
+                  }
+                ]
+              }
+            },
+            "FGB": [
+              {
+                "set_capital": {
+                  "state": 327,
+                  "remember_old_capital": false
+                },
+                "set_politics": {
+                  "ruling_party": "despotism"
+                },
+                "set_popularities": {
+                  "despotism": 60,
+                  "ultranationalism": 15,
+                  "despotism_2": 15,
+                  "paternalism": 10
+                },
+                "add_ideas": "Sphere_Imp_Protectorate",
+                "remove_ideas": [
+                  "PHI_vengeance_for_the_dead",
+                  "PHI_vengeance_for_the_dead_UF",
+                  "PHI_vengeance_for_the_dead_UF_USP",
+                  "PHI_vengeance_for_the_dead_USP",
+                  "PHI_well_supplied_army",
+                  "PHI_not_supplied_army"
+                ],
+                "every_owned_state": {
+                  "add_core_of": "FGB",
+                  "remove_core_of": [
+                    "SPH",
+                    "UPH"
+                  ]
+                },
+                "give_resource_rights": [
+                  {
+                    "receiver": "JAP",
+                    "state": 627,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 628,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 1461,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 1463,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 327,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 626,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 1457,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 623,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  }
+                ],
+                "country_event": [
+                  {
+                    "id": "PHI_Blitz.26"
+                  },
+                  {
+                    "id": "PHI_Blitz.27",
+                    "days": 60
+                  }
+                ]
+              },
+              {
+                "every_owned_state": {
+                  "add_core_of": "FGB"
+                },
+                "give_resource_rights": [
+                  {
+                    "receiver": "JAP",
+                    "state": 627,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 628,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 1461,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 1463,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 327,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 626,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 1457,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 623,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": "WORLD.18136"
+            },
+            "set_global_flag": "FGB_Total",
+            "TNO_War_For_Philippines_closing": true,
+            "USA": [
+              {
+                "country_event": "PHI_Blitz.155"
+              },
+              {
+                "set_temp_variable": [
+                  {
+                    "Victory_ID": 20
+                  },
+                  {
+                    "Victory_Outcome": 1
+                  },
+                  {
+                    "Victory_Points": -125
+                  }
+                ],
+                "Cold_War_GUI_ManipulateVictory": true
+              }
+            ],
+            "NZL": {
+              "if": [
+                {
+                  "limit": {
+                    "NOT": {
+                      "has_country_flag": "NZL_first_election"
+                    }
+                  },
+                  "add_to_variable": {
+                    "NZ_Election_var": -3
+                  },
+                  "set_country_flag": "NZL_Philippines_First"
+                },
+                {
+                  "limit": {
+                    "has_country_flag": "NZL_first_election",
+                    "NOT": {
+                      "has_country_flag": "NZL_Philippines_First"
+                    }
+                  },
+                  "add_to_variable": {
+                    "NZ_Election_var": -3
+                  }
+                }
+              ],
+              "add_to_variable": [
+                {
+                  "NZL_World_Stage_var": -2
+                },
+                {
+                  "NZL_Social_Fabric_var": -1
+                },
+                {
+                  "NZL_First_Election_Proxy_var": 1
+                },
+                {
+                  "NZ_lost_proxies": 1
+                }
+              ],
+              "NZ_Skeleton_Effect": true
+            },
+            "AZH": {
+              "set_temp_variable": {
+                "target": "FGB"
+              },
+              "TNO_clear_and_recall_volunteers": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.166",
+    "type": "country_event",
+    "title": "Два слова",
+    "desc": "Первым американским лайнером, приземлившимся в международном аэропорту Манилы, был Боинг-707 компании Pan-American, спустя три дня после завершения эвакуации. Чем меньше новостей, тем быстрее они распространяются, а поскольку хорошие новости с островов были так редки, празднования в Маниле ещё даже не начались, когда семьи изгнанников начали бронировать места в самолётах, направляющихся на родину.\n\nВо главе этой разношёрстной группы был Диосдадо Макапагал, вернувшийся из поездки в Вашингтон он был давним сторонником независимости от Токио и один из немногих, кто остался от правительства военного времени президента Мануэля Кесона. В предвкушении этого события оживленная Манила украсила себя ностальгией по эпохе Кесона: флагштоки со звездами и полосами, марширующие оркестры с \"Национальным филиппинским маршем\" и лучший английский язык на этой стороне света. Как будто Содружество никогда не покидало его все это время.\n\nИные же семьи собирались в других местах, ворча. Почему бы и нет? Старик Фертиг передал гражданское правительство им, а не изгнанникам. Их борьба закончилась в Акаги. Законные лидеры Филиппин боролись за свое право с провозглашения Лейте в 46-м году. Поэтому они сплотились вокруг Карлоса, на этот раз среди Гарсиасов Бохоля. Делегат \"новых филиппинцев\" в Филиппинском департаменте вновь взвалил на себя ношу, на этот раз для того, чтобы представлять их на высшем посту страны в день выборов.\n\nПо мере восстановления нации, её политика всё больше вращается вокруг двух людей. Один предлагает возвращение старого, американского образа жизни. Другой предлагает возможность построить из пепла нечто уникально филиппинское. Народ, находящийся на перепутье, определит свой путь через шесть месяцев; до тех пор великие семьи накапливают силы и средства для новой, более цивилизованной войны за рычаги власти.",
+    "picture": "GFX_report_event_PHI_usfip",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [
+      {
+        "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.166"
+      },
+      {
+        "set_country_flag": "conclusion_victory"
+      }
+    ],
+    "options": [
+      {
+        "name": "Старое сталкивается с новым, а новое со старым.",
+        "name_key": "PHI_Blitz.166.a",
+        "trigger": {},
+        "effects": {
+          "set_temp_variable": [
+            {
+              "conclusion_weeks": 8
+            },
+            {
+              "conclusion_bonus": 0.025
+            }
+          ],
+          "USA_proxy_conclusion_effect": true,
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": {
+                "id": "WORLD.181377",
+                "days": 1
+              }
+            },
+            "UPH": {
+              "every_owned_state": {
+                "remove_core_of": [
+                  "SPH",
+                  "FGB"
+                ],
+                "add_core_of": "UPH"
+              },
+              "set_capital": {
+                "state": 327,
+                "remember_old_capital": false
+              },
+              "country_event": {
+                "id": "PHI_Blitz.30",
+                "days": 100
+              },
+              "set_cosmetic_tag": "UPH_peace"
+            },
+            "TNO_War_For_Philippines_closing": true,
+            "USA": {
+              "set_temp_variable": [
+                {
+                  "Victory_ID": 20
+                },
+                {
+                  "Victory_Outcome": 5
+                },
+                {
+                  "Victory_Points": 125
+                }
+              ],
+              "Cold_War_GUI_ManipulateVictory": true
+            },
+            "NZL": {
+              "if": [
+                {
+                  "limit": {
+                    "NOT": {
+                      "has_country_flag": "NZL_first_election"
+                    }
+                  },
+                  "add_to_variable": {
+                    "NZ_Election_var": 3
+                  }
+                },
+                {
+                  "limit": {
+                    "has_country_flag": "NZL_first_election"
+                  },
+                  "add_to_variable": {
+                    "NZ_Election_var": -3
+                  },
+                  "set_country_flag": "NZL_Philippines_First"
+                },
+                {
+                  "limit": {
+                    "has_country_flag": "NZL_first_election",
+                    "NOT": {
+                      "has_country_flag": "NZL_Philippines_First"
+                    }
+                  },
+                  "add_to_variable": {
+                    "NZ_Election_var": -3
+                  }
+                }
+              ],
+              "add_to_variable": [
+                {
+                  "NZL_World_Stage_var": 2
+                },
+                {
+                  "NZL_Social_Fabric_var": 1
+                },
+                {
+                  "NZL_First_Election_Proxy_var": 1
+                },
+                {
+                  "NZ_lost_proxies": 1
+                }
+              ],
+              "NZ_Skeleton_Effect": true
+            },
+            "JAP": {
+              "set_temp_variable": [
+                {
+                  "Victory_ID": 20
+                },
+                {
+                  "Victory_Outcome": 1
+                },
+                {
+                  "Victory_Points": -125
+                }
+              ],
+              "Cold_War_GUI_ManipulateVictory": true
+            }
+          },
+          "TNO_fopo_add_philippines_reconstruction_tab": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.17",
+    "type": "country_event",
+    "title": "ОФФ выбивает японских захватчиков с островов",
+    "desc": "[?global.date.GetDateStringNoHourLong] станет датой, прочно вошедшей в историю. Объединённый филиппинский фронт, результат тесного сотрудничества между Свободной республикой и Хуками на севере, наконец-то принёс свои плоды, так как, возможно, без этого союза исход войны на Филиппинах мог бы быть совершенно другим. Начиная с 40-х годов, острова Филиппин были опустошены войной и страданиями, и не было никаких признаков окончания войны вплоть до настоящего времени, пока совместный военный штаб Объединённого филиппинского фронта не сообщил о победе над японской 14-й армией, поскольку последние из японцев бежали с островов или сдались местным силам.\n\nОднако хорошие новости ещё не закончились, Луис Тарук и [UPH.GetLeader] [UPH.GetLeader] начали переговоры об объединении, в надежде окончательно положить конец разногласиям на островах после десятилетий разделения. Теперь, когда исчезло всякое влияние дряхлого коллаборационистского правительства или каких-либо подрывных сил, обе фракции могут свободно определять будущее островов по своему усмотрению, и возникла новая концепция. Коалиционное правительство.\n\nНовое единое государство, как планируется, будет называться Коалиционное правительство Республики Филиппины, с упором на тесное сотрудничество между семьями, левой партией Танады и волей народа. И с этим, наконец, кровь больше не запятнает острова.\n\nОднако наша задача ещё не выполнена, мы восстановим разрушенные острова и проложим путь к светлому будущему свободных и независимых Филиппин. И когда всё будет сказано и сделано, мы будем праздновать это знаменательное событие как великую победу свободного мира и дальнейшее поражение японских империалистов.",
+    "picture": "GFX_report_event_PHI_UFF",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [
+      {
+        "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.17"
+      },
+      {
+        "set_country_flag": "conclusion_victory"
+      }
+    ],
+    "options": [
+      {
+        "name": "Начнём.",
+        "name_key": "PHI_Blitz.17.a",
+        "trigger": {},
+        "effects": {
+          "set_temp_variable": [
+            {
+              "conclusion_weeks": 8
+            },
+            {
+              "conclusion_bonus": 0.025
+            }
+          ],
+          "USA_proxy_conclusion_effect": true,
+          "TNO_fopo_add_philippines_reconstruction_tab": true,
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": {
+                "id": "WORLD.18133",
+                "days": 1
+              }
+            },
+            "SPH": {
+              "country_event": {
+                "id": "PHI_Blitz.19",
+                "days": 14
+              }
+            },
+            "UPH": {
+              "country_event": {
+                "id": "PHI_Blitz.19",
+                "days": 14
+              }
+            },
+            "TNO_War_For_Philippines_closing": true,
+            "USA": {
+              "set_temp_variable": [
+                {
+                  "Victory_ID": 20
+                },
+                {
+                  "Victory_Outcome": 5
+                },
+                {
+                  "Victory_Points": 125
+                }
+              ],
+              "Cold_War_GUI_ManipulateVictory": true
+            },
+            "JAP": {
+              "set_temp_variable": [
+                {
+                  "Victory_ID": 20
+                },
+                {
+                  "Victory_Outcome": 1
+                },
+                {
+                  "Victory_Points": -125
+                }
+              ],
+              "Cold_War_GUI_ManipulateVictory": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.18",
+    "type": "country_event",
+    "title": "Победа НРФ в борьбе за Филиппины",
+    "desc": "Филиппинские острова находятся в состоянии войны уже не менее двух десятилетий, но исход конфликта не мог быть иным, чем мы предсказывали. Ни мы, ни японцы не одержали победу, это сделали свирепые и решительные партизаны социалистических повстанцев на севере.\n\nВследствие многих просчетов, недостаточного снабжения, низкого морального духа и многих других факторов во время войны за Филиппины нашими силами, поступили сообщения, что последние солдаты [UPH.GetName] сдались силам Луиса Тарука и [SPH.GetName]. Также поступили сообщения о том, что японская 14-я армия была вынуждена эвакуироваться со своего плацдарма на Лусоне, а цепи островов перешли под единоличное правление Народной Республики Филиппины.\n\nБудущее Филиппинских островов теперь неопределенно, так как ни мы, ни японцы не имеем влияния на новое филиппинское правительство. Мы считаем этот сценарий приемлемой альтернативой вместо победы Японии, но это не лучшая из ситуаций. С этого момента мы должны более детально и внимательно подходить к подобным ситуациям, чтобы избежать повторения того, что произошло на Филиппинах.",
+    "picture": "GFX_report_event_PHI_luis_taruc",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [
+      {
+        "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.18"
+      },
+      {
+        "set_country_flag": "conclusion_victory"
+      }
+    ],
+    "options": [
+      {
+        "name": "Хотя бы это были не японцы",
+        "name_key": "PHI_Blitz.18.a",
+        "trigger": {},
+        "effects": {
+          "set_temp_variable": [
+            {
+              "conclusion_weeks": 4
+            },
+            {
+              "conclusion_bonus": 0.01
+            }
+          ],
+          "USA_proxy_conclusion_effect": true,
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": {
+                "id": "WORLD.18138",
+                "days": 1
+              }
+            },
+            "SPH": {
+              "every_owned_state": {
+                "remove_core_of": [
+                  "UPH",
+                  "FGB"
+                ],
+                "add_core_of": "SPH"
+              },
+              "set_capital": {
+                "state": 327,
+                "remember_old_capital": false
+              },
+              "country_event": {
+                "id": "PHI_flavor.7",
+                "days": 90
+              }
+            },
+            "TNO_War_For_Philippines_closing": true,
+            "USA": {
+              "set_temp_variable": [
+                {
+                  "Victory_ID": 20
+                },
+                {
+                  "Victory_Outcome": 4
+                },
+                {
+                  "Victory_Points": 45
+                }
+              ],
+              "Cold_War_GUI_ManipulateVictory": true
+            },
+            "NZL": {
+              "add_to_variable": {
+                "NZL_World_Stage_var": 1
+              },
+              "NZ_Skeleton_Effect": true
+            },
+            "JAP": {
+              "set_temp_variable": [
+                {
+                  "Victory_ID": 20
+                },
+                {
+                  "Victory_Outcome": 1
+                },
+                {
+                  "Victory_Points": -125
+                }
+              ],
+              "Cold_War_GUI_ManipulateVictory": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.19",
+    "type": "country_event",
+    "title": "Соединены",
+    "desc": "Loc unecessary",
+    "picture": "GFX_report_event_PHI_usfip",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.19"
+    },
+    "options": [
+      {
+        "name": "option",
+        "name_key": "PHI_Blitz.19.a",
+        "trigger": {
+          "tag": "UPH"
+        },
+        "effects": {
+          "hidden_effect": {
+            "add_to_variable": {
+              "global.PHI_form_coalition_government_var": 1
+            },
+            "TNO_SPH_Form_Coalition_Government": true,
+            "log": "[GetDateText]: [Root.GetName]: UPH has clicked their PHI_Blitz.19 option"
+          }
+        }
+      },
+      {
+        "name": "option",
+        "name_key": "PHI_Blitz.19.b",
+        "trigger": {
+          "tag": "SPH"
+        },
+        "effects": {
+          "hidden_effect": {
+            "add_to_variable": {
+              "global.PHI_form_coalition_government_var": 1
+            },
+            "TNO_SPH_Form_Coalition_Government": true,
+            "log": "[GetDateText]: [Root.GetName]: SPH has clicked their PHI_Blitz.19 option"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.20",
+    "type": "country_event",
+    "title": "Референдум",
+    "desc": "Loc unecessary",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {
+      "SPH": {
+        "NOT": {
+          "has_country_leader": {
+            "character": "SPH_Ramon_Magsaysay",
+            "ruling_only": true
+          }
+        }
+      }
+    },
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.20"
+    },
+    "options": [
+      {
+        "name": "Лоренсо Таньяда удерживает власть",
+        "name_key": "PHI_Blitz.20.a",
+        "trigger": {},
+        "effects": {
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_Social_Market"
+          },
+          "econ_subtype_change": true
+        }
+      },
+      {
+        "name": "Тарук берёт власть",
+        "name_key": "PHI_Blitz.20.b",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "set_popularities": {
+              "socialist": 61,
+              "liberalism": 29,
+              "paternalism": 10
+            },
+            "set_politics": {
+              "ruling_party": "socialist"
+            },
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": "WORLD.18141"
+            }
+          },
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_Socialized_Economy"
+          },
+          "econ_subtype_change": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.200",
+    "type": "country_event",
+    "title": "Переворот во всём, кроме имени",
+    "desc": "Лоренсо Таньяда считал себя игроком политической арены, не уступающим лучшим крысоловам в Зале заседаний. Смелое утверждение, но с таким резюме, как у него, кто бы не был? Иначе он не смог бы продержаться десять лет в качестве единственного независимого представителя. Некоторые вещи случаются слишком часто, чтобы приписывать их только удаче. Поэтому он выбрал мастерство: то, что подсказывает человеку, когда блефовать, когда назвать блеф блефом... а когда не дать другому несчастному дураку раскрыть его блеф.\n\nВот что раздражало его больше, чем военные за окном или то, что они стремительно сокращали срок его полномочий. Возвращение к законотворчеству, игра в диссидента вне правительства не казались ему слишком плохими теперь, когда у него было шесть месяцев опыта того, что такое быть президентом. Больше власти тому самоубийце, который ухватился за столь ядовитую чашу. Если бы только этим самоубийцей не был Магсайсай, тогда, возможно, Таньяда мог бы правдиво заявить, что покинул свой пост без обиды. Вместо этого он расхаживал вокруг своего стола, размышляя о том, как из всех людей именно этот карьерист разоблачил его блеф. Он показал ему, что он не такой уж хитрый игрок, как он думал.\n\nВоеннослужащие покидали свои грузовики, выстраиваясь аккуратными рядами на территории дворца. Неудивительно - ВСФ, якобы отвечающие за поддержание мира, любили Магсайсая до безумия. Они следили за каждым словом своего золотого мальчика, спрашивая, как высоко он велит им прыгать, как далеко идти, как долго не подчиняться приказам и возвращаться в казармы, оставляя столицу беззащитной перед грабежами, убийствами и изнасилованиями...\n\nСтук разнёсся по комнате, затем рывком распахнулась большая дубовая дверь. \"Господин президент\", - дрожащим голосом сказал вошедший, - \"Мистер Магсайсай хочет встретиться с вами\". Это была одна из сотрудниц дворца. Хорошая голова на плечах, хотя и немного кроткая. Талант, растраченный на толстого Замбалену на следующие четыре года. Ну что ж.\n\nПочти будущий экс-президент покачал головой. \"Я буду в земле с червями задолго до того, как снова увижу людоеда лично, Синтия\", - сказал он. \"Скажи ему, что Малаканьян в его распоряжении. Затем подготовь моё имущество вместе с прочим.\"",
+    "picture": "GFX_report_event_PHI_usfip",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.200"
+    },
+    "options": [
+      {
+        "name": "Таньяда покинул дворец из его парадных ворот, согласно всем правилам.",
+        "name_key": "PHI_Blitz.200.a",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "PHI_Blitz.200_tt",
+          "hidden_effect": {
+            "SPH": {
+              "set_popularities": {
+                "socialist": 11,
+                "liberalism": 19,
+                "paternalism": 70
+              },
+              "set_politics": {
+                "ruling_party": "paternalism"
+              },
+              "every_country": {
+                "limit": {
+                  "is_ai": false,
+                  "HasSouthAsiaInterest": true
+                },
+                "news_event": {
+                  "id": "WORLD.18142",
+                  "days": 1
+                }
+              },
+              "remove_ideas": "OFN_Observer",
+              "drop_cosmetic_tag": true,
+              "set_cosmetic_tag": "SPH_Magsaysays_Republic"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.21",
+    "type": "country_event",
+    "title": "Губернатор-президент",
+    "desc": "\"Народ Филиппин!\" Слова нынешнего президента Ромуло прозвучали в утреннем воздухе парка Лунета. Может быть, его английский язык и не так хорошо звучал в толпе, как это было до войны, но намерение оратора все равно должно было преодолеть любой языковой барьер, стоящий перед ним. \"Худшее приходит к худшему\" - вот для чего были нужны его переводчики.\n\n\"Я должен признаться, - продолжал Ромуло. \"Двадцать лет - это слишком много для таких простых людей, как мы. Я не Всемогущий Бог, который ожидает и принимает нашу безоговорочную веру, и я не претендую на то, чтобы подражать ему. Многие из вас по понятным причинам потеряли надежду на освобождение до этого дня; за это я вас не упрекаю, только прошу прощения за то, что был бессилен предотвратить ту ситуацию, в которой мы оказались.\n\nОднако многие люди - генерал Макартур, президент Кесон, президент Осменья и другие - обещали вернуться, несмотря ни на что. Они сегодня с нами духом: с деревьями, с птицами майя, с многочисленными лицами людей, за которых они проливали пот и кровь. Даже если я мало заслуживаю вашей веры, то, что я сейчас стою свидетелем перед вами и доктором Рисалем, доказывает, что обещания, однажды произнесённые, почти не нарушены.\n\nПоэтому я умоляю вас поверить во второй раз. Поверьте, что моё правительство сможет залечить раны нашей земли. Верьте, что надежда вечна, что есть возможность избавиться от страданий, которые определили это столетие. Верьте, что в конце наших испытаний нас ждет сияющее будущее, к которому стремились наши предки. Ибо вера - в наших лидеров, в наших друзей за морем, друг в друга и в самих себя - это самое мощное оружие человечества против отчаяния, и только используя его как единое целое, мы свергали тиранов, разбивали цепи и совершали другие такие невероятные поступки...\"",
+    "picture": "GFX_report_event_generic_riot",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.21"
+    },
+    "options": [
+      {
+        "name": "Теперь люди доверяют другу Америки.",
+        "name_key": "PHI_Blitz.21.a",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "PHI_Blitz.21_tt"
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.22",
+    "type": "country_event",
+    "title": "Первый среди равных",
+    "desc": "Стояла знойная жара, прохладный ветерок утих несколько часов назад, а его костюм, на два размера меньший чем нужно, за несколько минут собрал больше пота, чем за целый день. Согласно нормам приличия, он должен был остаться на трибуне один; его друзьям, одетым в погоны и медали, были предоставлены места в первом ряду впереди него, но не более того. О, государственный деятель и раньше произносил свою долю речей, но Багумбайан каким-то образом взял весь его опыт и разорвал его, как офисную бумагу.\n\nНесмотря на все это, Карлосу П. Гарсии, третьему президенту Филиппин, больше негде было находиться. Прочистив горло, он наклонился к десятку микрофонов на трибуне. \"Как вы, возможно, знаете, - начал он, - я имел честь сопровождать генерала Фертига в его поездках. Я следовал за ним и его штабом, и их кампании привели меня на большее количество полей сражений, чем я когда-либо мог запомнить. На каждом из них я был свидетелем подвигов героизма и трагедий, совершенных людьми со всех концов света и носителями всех языков. Тогда мне казалось, что я видел всё.\"\n\n\"Никто из них не подготовил меня к тому дню, когда я дам свою самую тяжелую клятву. Решения на полях сражений - это пули: простые, хотя и жестокие. Наша страна не может прибегнуть к такому способу решения проблемы своей бедности, своих боевых ран или своей больной экономики. Только лишь я в одиночку гожусь для их решения также, как молоток в стеклянном доме.\"\n\n\"Тем не менее, ни один человек не одинок даже сегодня. Ведь вы, народ, избрали вместе со мной лучших государственных слуг страны: тех самых, которые поддерживали её жизнь на протяжении всей оккупации. Наши мнения расходятся, как и наше происхождение, это правда. Многие назовут это признаком слабости. Им я могу только сказать, что разнообразие - это то, что сделало нас сильными, свободными и более сплоченными, чем когда-либо прежде...\"",
+    "picture": "GFX_report_event_generic_riot",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.22"
+    },
+    "options": [
+      {
+        "name": "Один из них поднимается на президентский пост.",
+        "name_key": "PHI_Blitz.22.a",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "PHI_Blitz.22_tt",
+          "hidden_effect": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.24",
+    "type": "country_event",
+    "title": "Искра и пороховая бочка",
+    "desc": "Печально известные в истории происшествия кажутся прежде всего спонтанными. Конечно, они жестоки, но жестоки в той мере, в какой бывает жестоким удар грома: громкий, болезненный, короткий и внезапный, не оставляющий очевидцам времени ни на что, кроме реакции. Если смотреть на происшествия по отдельности, они кажутся результатом случайного стечения обстоятельств. Человек может погибнуть от рук обезумевшего стрелка в любое время, в любом месте и без какой-либо видимой причины.\n\nНевидимая... но не несуществующая. Электрические заряды, которые приводят в движение молнии, невидимы, но они все равно есть, и их присутствие замечают, слышат и ощущают те, кто становится свидетелем их оглушительных раскатов. Можно представить себе \"невидимки\", которые предшествуют историческим событиям, но приводят к их возникновению. Войны, которые доводят миллионы людей до нищеты. Неэффективные лидеры, которые много обещают, но мало выполняют. Благополучие во дворцах, но не на убогих улицах. Вещи, которые делают из стрелков безумцев - и вещи, которых в Маниле, по состоянию на [GetYear], было предостаточно. Всё, что оставалось для начала Манильского инцидента, - это одна короткая, жестокая искра. Несчастье настигло пьяницу с пистолетом \"Намбу\".\n\nСреди тех, кто больше всего пострадал от реконструкции, были макапили, эти прославленные вспомогательные подразделения филиппинской полиции. Их численность выросла больше, чем нужно просто для \"соседского дозора\", которым они были задуманы. Когда война закончилась, Госсобрание, испытывавшая нехватку денег, отправила более половины домой без жалованья, хотя им разрешили оставить оружие на память. Четверо таких мужчин взяли с собой оружие на память в придорожный бар. О том, что произошло дальше, ходят разные слухи, но наиболее распространенная версия гласит, что они разыгрывали русскую рулетку, не зная, что в одном из пистолетов на самом деле был патрон. Один из опьяневших товарищей осмелился выстрелить из заряженного пистолета. И он это сделал.\n\nБар разразился насилием, стены окрасились кровью и серым веществом. Через несколько дней трупы усеяли близлежащую улицу. То, что началось как драка в баре, переросло в беспорядки, которые охватили Манилу, в то время как члены Госсобрания препирались в Зале заседаний, пока они не сбежали в летнюю столицу Багио. Этим трагикомическим актом завершилась одна глава филиппинской истории и началась следующая, не менее удручающая...",
+    "picture": "GFX_report_event_generic_riot",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.24"
+    },
+    "options": [
+      {
+        "name": "Слёзы от смеха, слёзы от печали.",
+        "name_key": "PHI_Blitz.24.a",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "PHI_Blitz.24_tt",
+          "hidden_effect": {
+            "327": {
+              "set_demilitarized_zone": true
+            },
+            "PHI": {
+              "set_capital": {
+                "state": 1455
+              }
+            },
+            "country_event": {
+              "id": "PHI_Blitz.25",
+              "days": 3
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.25",
+    "type": "country_event",
+    "title": "Что ждало их там",
+    "desc": "Анонимный помощник члена Госсобрания вспоминает события [?global.date.getdatestringnohourlong], далекие от кровопролития, которое влечет за собой переворот, как \"мирные, хотя и напряженные\".\n\nИ действительно, слово \"напряжённый\" было бы преуменьшением при описании Государственного собрания, собравшейся в парке Бернхэм в Багио. По крайней мере, то, что от нее осталось - поскольку большая часть констебля либо дезертировала, либо присоединилась к бунтовщикам, а сильно сократившаяся 14-я армия была выведена из столицы заранее, спасающиеся автобусы были заполнены кормом для мстительных толп. Впоследствии при подсчете голов пропало около шестой части из 120 членов Госсобрания и их семей. Мрачные новости для и без того мрачного дня.\n\nТогда генерал Масадзуми Инада, \"герой времени\", встретился с собравшимися с батальоном людей на буксире. Объяснения были отвергнуты взмахом руки, когда он выступил с собственным заявлением: \"В соответствии с полномочиями, предоставленными ему императором, Национальное собрание было распущено. 14-я армия будет лично следить за умиротворением столицы и окрестностей. До тех пор члены Госсобрания могли оставаться в Каса Вальехо.\n\nИ опять же, теперь уже бывшее правительство не выступило против - с какой армией? Но и не были расстреляны поголовно. Большинство смирилось со своей участью и разместилось в самом старом отеле города. У них есть время; если понадобится, они смогут переждать хаос в течение многих лет.\n\nТолько старый Ректо остался сидеть, глядя на бассейн. Что творилось у него в голове, никто не знал, но тот самый сотрудник мельком увидел его уродливое, залитое слезами отражение:",
+    "picture": "GFX_report_event_generic_riot",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.25"
+    },
+    "options": [
+      {
+        "name": "Как будто он видел, как его страна умирала снова, и снова, и снова, и снова.",
+        "name_key": "PHI_Blitz.25.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -50,
+          "custom_effect_tooltip": "PHI_Blitz.25_tt",
+          "hidden_effect": {
+            "JAP": {
+              "end_puppet": true
+            },
+            "PHI": [
+              {
+                "set_cosmetic_tag": "PHI_JAP_Administration",
+                "set_popularities": {
+                  "despotism": 100
+                },
+                "set_politics": {
+                  "ruling_party": "despotism"
+                },
+                "set_party_name": [
+                  {
+                    "ideology": "despotism",
+                    "name": "FGB_ultranationalism_party",
+                    "long_name": "FGB_ultranationalism_party_long"
+                  },
+                  {
+                    "ideology": "despotism",
+                    "name": "PHI_despotism_party",
+                    "long_name": "PHI_despotism_party_long"
+                  }
+                ],
+                "promote_character": "PHI_Masazumi_Inada",
+                "remove_ideas": "Sphere_Fully_Dependent",
+                "add_ideas": [
+                  "PHI_home_of_the_14th_army_crisis",
+                  "Sphere_Imp_Protectorate"
+                ],
+                "set_temp_variable": {
+                  "TNO_economy_subtype_temp": "token:Econ_Subtype_Military_Directed"
+                },
+                "econ_subtype_change": true
+              },
+              {
+                "give_resource_rights": [
+                  {
+                    "receiver": "JAP",
+                    "state": 627,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 628,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 1461,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 1463,
+                    "resources": [
+                      "oil",
+                      "aluminium",
+                      "rubber",
+                      "tungsten",
+                      "steel",
+                      "chromium",
+                      "uranium"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSphereInterest": true
+              },
+              "news_event": {
+                "id": "WORLD.181234",
+                "days": 1
+              }
+            },
+            "hidden_effect": {
+              "JAP": {
+                "country_event": {
+                  "id": "PHI_flavor.10",
+                  "days": 100
+                }
+              }
+            },
+            "add_to_variable": {
+              "JAP_colonial_costs": 0.25
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.26",
+    "type": "country_event",
+    "title": "PHI_Blitz.26.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.26",
+      "if": [
+        {
+          "limit": {
+            "owns_state": 624
+          },
+          "624": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 628
+          },
+          "628": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1452
+          },
+          "1452": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1456
+          },
+          "1456": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1457
+          },
+          "1457": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1458
+          },
+          "1458": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1460
+          },
+          "1460": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1461
+          },
+          "1461": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1462
+          },
+          "1462": {
+            "set_demilitarized_zone": true
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1463
+          },
+          "1463": {
+            "set_demilitarized_zone": true
+          }
+        }
+      ]
+    },
+    "options": []
+  },
+  {
+    "id": "PHI_Blitz.27",
+    "type": "country_event",
+    "title": "PHI_Blitz.27.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.27",
+      "if": {
+        "limit": {
+          "owns_state": 1457
+        },
+        "1457": {
+          "set_demilitarized_zone": false
+        }
+      },
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true,
+      "country_event": {
+        "id": "PHI_Blitz.35",
+        "days": 200
+      }
+    },
+    "options": []
+  },
+  {
+    "id": "PHI_Blitz.28",
+    "type": "country_event",
+    "title": "PHI_Blitz.28.t",
+    "desc": "",
+    "picture": "GFX_report_event_generic_handshake",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.28"
+    },
+    "options": [
+      {
+        "name": "PHI_Blitz.28.a",
+        "name_key": "PHI_Blitz.28.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "despotism"
+          },
+          "set_popularities": {
+            "paternalism": 40,
+            "despotism": 60
+          },
+          "country_event": {
+            "id": "PHI_Blitz.29",
+            "days": 8
+          }
+        }
+      },
+      {
+        "name": "PHI_Blitz.28.b",
+        "name_key": "PHI_Blitz.28.b",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": {
+                "id": "WORLD.181210",
+                "days": 1
+              }
+            }
+          },
+          "set_country_flag": "UPH_coup_failure"
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.29",
+    "type": "country_event",
+    "title": "PHI_Blitz.29.t",
+    "desc": "",
+    "picture": "GFX_report_event_generic_handshake",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.29"
+    },
+    "options": [
+      {
+        "name": "PHI_Blitz.29.a",
+        "name_key": "PHI_Blitz.29.a",
+        "trigger": {},
+        "effects": {
+          "promote_character": "UPH_Jose_Avelino",
+          "econ_join_sphere_USA": true,
+          "set_country_flag": "UPH_avelino",
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": {
+                "id": "WORLD.181211",
+                "days": 1
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "PHI_Blitz.29.b",
+        "name_key": "PHI_Blitz.29.b",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "paternalism"
+          },
+          "set_country_flag": "UPH_magsaysay_countercoup",
+          "set_popularities": {
+            "liberal_conservatism": 45,
+            "paternalism": 55
+          },
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_Military_Directed"
+          },
+          "econ_subtype_change": true,
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasSouthAsiaInterest": true
+              },
+              "news_event": {
+                "id": "WORLD.181212",
+                "days": 1
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.30",
+    "type": "country_event",
+    "title": "Президентские выборы на Филиппинах [GetYear] года",
+    "desc": "Демократия? На Филиппинах?! Я должно быть сплю.",
+    "picture": "GFX_report_event_",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.30"
+    },
+    "options": [
+      {
+        "name": "Лоренцо Танада",
+        "name_key": "PHI_Blitz.30.a",
+        "trigger": {
+          "NOT": {
+            "has_global_flag": "PHI_negotiations_failed"
+          }
+        },
+        "effects": {
+          "meta_effect": {
+            "text": {
+              "set_politics": {
+                "ruling_party": "progressivism",
+                "last_election": "[current_election_date]",
+                "elections_allowed": true,
+                "election_frequency": 48
+              }
+            },
+            "current_election_date": "[?global.date.GetDateStringNoHour]"
+          },
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_Social_Market"
+          },
+          "econ_subtype_change": true,
+          "set_popularities": {
+            "progressivism": 40,
+            "liberal_conservatism": 25,
+            "despotism": 35
+          }
+        }
+      },
+      {
+        "name": "Макапагал",
+        "name_key": "PHI_Blitz.30.b",
+        "trigger": {},
+        "effects": {
+          "set_popularities": {
+            "liberal_conservatism": 55,
+            "paternalism": 45
+          },
+          "meta_effect": {
+            "text": {
+              "set_politics": {
+                "ruling_party": "liberal_conservatism",
+                "last_election": "[current_election_date]",
+                "elections_allowed": true,
+                "election_frequency": 48
+              }
+            },
+            "current_election_date": "[?global.date.GetDateStringNoHour]"
+          }
+        }
+      },
+      {
+        "name": "Гарсия",
+        "name_key": "PHI_Blitz.30.c",
+        "trigger": {},
+        "effects": {
+          "set_popularities": {
+            "liberal_conservatism": 40,
+            "paternalism": 60
+          },
+          "meta_effect": {
+            "text": {
+              "set_politics": {
+                "ruling_party": "paternalism",
+                "last_election": "[current_election_date]",
+                "elections_allowed": true,
+                "election_frequency": 48
+              }
+            },
+            "current_election_date": "[?global.date.GetDateStringNoHour]"
+          },
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_Corporate_Oligopoly"
+          },
+          "econ_subtype_change": true
+        }
+      },
+      {
+        "name": "Магсайсай",
+        "name_key": "PHI_Blitz.30.d",
+        "trigger": {
+          "NOT": {
+            "has_global_flag": "PHI_negotiations_failed"
+          }
+        },
+        "effects": {
+          "set_popularities": {
+            "progressivism": 10,
+            "liberal_conservatism": 35,
+            "paternalism": 55
+          },
+          "meta_effect": {
+            "text": {
+              "set_politics": {
+                "ruling_party": "paternalism",
+                "last_election": "[current_election_date]",
+                "elections_allowed": true,
+                "election_frequency": 48
+              }
+            },
+            "current_election_date": "[?global.date.GetDateStringNoHour]"
+          },
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_Corporate_Oligopoly"
+          },
+          "econ_subtype_change": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.31",
+    "type": "country_event",
+    "title": "Раздор в тропиках",
+    "desc": "ОТПРАВЛЕНО ПРЕЗИДЕНТУ НИКСОНУ\n\nСобытия во временном правительстве Филиппин привели к столкновению после оккупации города Таклобана бывшим инженером Уэнделлом Фертигом и свержения националистического правительства Гарсии-Магсайсая. В то время как Фертиг и его кабинет военных офицеров продолжают обсуждать, как они могли бы восстановить функционирующее правительство, многие филиппинцы, особенно те, кто все еще верен Гарсии и Магсайсаю, продолжают протестовать против того, что они считают вмешательством американцев в их внутренние дела.\n\nДля американского правительства проблема сводится к одному существенному конфликту интересов: изучению возможности создания единого фронта с коммунистическим правительством Северного Лусона, возглавляемым Таруком. Следовательно, учет обеих сторон и их общих интересов с Соединенными Штатами должен быть первостепенным при нашем вмешательстве в политический конфликт.\n\nУэнделл Фертиг и его сторонники в либеральном крыле правительства намерены образовать единый фронт с социалистами для борьбы с японским марионеточным правительством. Тем временем, Гарсия и Магсайсай продолжают объединять свои силы против предлагаемого союза с коммунистическим правительством. Они хотят создать демократическое и националистическое правительство, свободное от любых левых искажений.\n\nУчитывая все вышесказанное, нам необходим трезвый взгляд. А именно, какой из этих вариантов принесет Соединенным Штатам наибольшую выгоду и послужит на пользу будущему Азии.\n\nПодпись: Роберт Макнамара, государственный секретарь.",
+    "picture": "GFX_report_event_generic_handshake",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.31"
+    },
+    "options": [
+      {
+        "name": "\"Конечно же Фертиг. В конце концов, он все еще наш американец!\"",
+        "name_key": "PHI_Blitz.31.a",
+        "trigger": {},
+        "effects": {}
+      },
+      {
+        "name": "\"Хватит финансировать коммунистов. Гарсия прав.\"",
+        "name_key": "PHI_Blitz.31.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.32",
+    "type": "country_event",
+    "title": "PHI_Blitz.32.t",
+    "desc": "",
+    "picture": "GFX_report_event_PHI_map",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.32"
+    },
+    "options": [
+      {
+        "name": "PHI_Blitz.32.a",
+        "name_key": "PHI_Blitz.32.a",
+        "trigger": {
+          "UPH": {
+            "NOT": {
+              "has_country_flag": "UPH_magsaysay_countercoup"
+            }
+          }
+        },
+        "effects": {
+          "country_event": {
+            "id": "PHI_Blitz.7",
+            "days": 1
+          },
+          "set_country_flag": "USA_PHI_negotiations_over"
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.33",
+    "type": "country_event",
+    "title": "PHI_Blitz.33.t",
+    "desc": "",
+    "picture": "GFX_report_event_PHI_map",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.33"
+    },
+    "options": [
+      {
+        "name": "PHI_Blitz.33.a",
+        "name_key": "PHI_Blitz.33.a",
+        "trigger": {
+          "UPH": {
+            "NOT": {
+              "has_country_flag": "UPH_avelino"
+            }
+          }
+        },
+        "effects": {
+          "set_global_flag": "PHI_negotiations_failed",
+          "SPH": {
+            "country_event": {
+              "id": "PHI_Blitz.8",
+              "days": 30
+            }
+          },
+          "set_country_flag": "USA_PHI_negotiations_over"
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.34",
+    "type": "country_event",
+    "title": "PHI_Blitz.34.t",
+    "desc": "",
+    "picture": "GFX_report_event_PHI_map",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.34"
+    },
+    "options": [
+      {
+        "name": "PHI_Blitz.34.a",
+        "name_key": "PHI_Blitz.34.a",
+        "trigger": {},
+        "effects": {
+          "promote_character": "UPH_Ramon_Magsaysay",
+          "set_politics": {
+            "ruling_party": "despotism"
+          },
+          "set_popularities": {
+            "despotism": 60,
+            "conservatism": 20,
+            "paternalism": 20
+          },
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_Military_Directed"
+          },
+          "econ_subtype_change": true,
+          "set_country_flag": "UPH_military_junta"
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.35",
+    "type": "country_event",
+    "title": "PHI_Blitz.35.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.35",
+      "if": [
+        {
+          "limit": {
+            "owns_state": 1463
+          },
+          "1463": {
+            "set_demilitarized_zone": false
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 635
+          },
+          "635": {
+            "set_demilitarized_zone": false
+          }
+        }
+      ],
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true,
+      "country_event": {
+        "id": "PHI_Blitz.36",
+        "days": 200
+      }
+    },
+    "options": []
+  },
+  {
+    "id": "PHI_Blitz.36",
+    "type": "country_event",
+    "title": "PHI_Blitz.36.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.36",
+      "if": [
+        {
+          "limit": {
+            "owns_state": 1458
+          },
+          "1458": {
+            "set_demilitarized_zone": false
+          }
+        },
+        {
+          "limit": {
+            "owns_state": 1460
+          },
+          "1460": {
+            "set_demilitarized_zone": false
+          }
+        }
+      ],
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true
+    },
+    "options": []
+  },
+  {
+    "id": "PHI_Blitz.111",
+    "type": "country_event",
+    "title": "Дважды одураченные, дважды взбешенные",
+    "desc": "Аллен Даллес осушил свой стакан с джином, откинулся на спинку стула и вздохнул. Спиртное обожгло ему горло и вонзилось в мозг, как ледяная игла, проникая все глубже, пока не пронзило каждый его нерв. Он предавался воспоминанием и в очередной раз проклинал Хосе Юло за его обман Америку в 1942 году. Там, находясь на отвергнутом Богом побережье, стоял перебежчик. Он возвышался над разбросанными телами американцев и филиппинцев, уверенный в своей непоколебимости и в безопасности положения своей страны. Из всех возможных исходов этот был самым ужасным: юрист с американским образованием дважды победил США.\n\nРуки Даллеса налились свинцом. Он зевнул и взглянул на богато украшенные серебряные часы \"Элджин\", отсчитывая время. Была почти полночь. Возможно, прямо сейчас далеко-далеко на востоке какой-нибудь увешанный медалями бюрократ из Кэмпэйтай сидит в приземистом токийском офисе, просматривает отчеты и чувствует себя еще хуже.\n\nОднако было во всей этой истории и что-то положительное. Японцы потеряли почти столько же людей, сколько и США, и Даллес не мог не чувствовать от этого удовлетворение. Прямо сейчас какой-нибудь очередной поджигатель войны из ИАЯ краснел как рак от кипящий злости. Великой и славной Японской империи, которой по Божественному праву суждено господствовать над этим миром, дали по носу кучка фермеров с лопатами в руках!",
+    "picture": "GFX_report_event_PHI_blitz_begins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.111"
+    },
+    "options": [
+      {
+        "name": "Думаю, они потеряли даже больше, чем мы.",
+        "name_key": "PHI_Blitz.111.a",
+        "trigger": {},
+        "effects": {
+          "set_temp_variable": [
+            {
+              "conclusion_weeks": 11
+            },
+            {
+              "conclusion_bonus": 0.025
+            }
+          ],
+          "USA_proxy_conclusion_effect": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.122",
+    "type": "country_event",
+    "title": "Выжившие приветствуют тебя",
+    "desc": "Первое, что запланировал [UPH.GetLeader] после бесславного отступления 14-й армии, была поездка в Форт Миллс. Это застало его собственный штаб врасплох; они ожидали и желали празднеств в самой Маниле. [UPH.GetLeader] проигнорировал их мольбы. До сих пор они затягивали пояса на протяжении двадцати лет. Что такое еще один день самопожертвования в честь погибших?\n\nТак что штаб, и отобранные лучшие силы, на рассвете сели в поезд на Батаан. Ближайшей остановкой был сонный городок Сан-Фернандо. Оттуда конвой повез их на юг, в Балангу, затем мимо горы Маривелес и, наконец, в порт на оконечности полуострова. Часть колонны, молодые и горячие, бесконечно препирались по поводу жары, выбоин, сидений, которые были либо твердыми, как кирпичи, либо прогнившими. Те немногие седовласые, что шли с ними, считали свои благословения, пока их подошвы покалывали шрамы от мозолей. Слава Богу, им не приходилось идти пешком всю дорогу. Больше не придётся.\n\nПоследнюю часть пути [UPH.GetLeader] и его люди проделали на баржах, прибыв в Форт Миллс к закату. После того, как 14-я армия разнесла форт в щепки, Манила посчитала, что его ценность меньше, чем стоимость восстановления, и поэтому оставила нетронутым остров, усеянный руинами, ракушками и крестами неглубоких могил. Со временем мать-природа восстановила с помощью сорняков и бурьяна - парадные площадки, казармы, батареи - то, что не смогли сделать пушки леди Колумбии.\n\nЦеремония в Топсайде длилась несколько минут, по сравнению с почти сутками, которые потребовались, чтобы добраться туда. Были подняты флаги, произнесены речи. Но когда огневой рубеж выпустил в закатное небо двадцать одну холостую пулю, свидетели поклялись бы на смертном одре, что несли на своих спинах груз, о котором никогда не думали, и что его снял орудийный салют на Коррегидоре.",
+    "picture": "GFX_report_event_PHI_blitz_begins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.122"
+    },
+    "options": [
+      {
+        "name": "А павшие в свою очередь отсалютовали в ответ.",
+        "name_key": "PHI_Blitz.122.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.133",
+    "type": "country_event",
+    "title": "Компромиссный вариант",
+    "desc": "Когда-то скептики говорили, что Восходящее солнце никогда не удастся согнать с Филиппинских островов; что бандиты никогда не смогут противостоять могуществу империи. Но когда Содружество испустило последний вздох, настроения резко изменились, как маятник. Теперь именно патриоты возвещали триумф с вершины руин. Пусть он был избит, но филиппинец теперь был свободен - и, несмотря ни на что, филиппинец останется свободным.\n\nДни, последовавшие за вторым пришествием Японии, доказали всем и каждому, что Бог наказывает за высокомерие. Огнём, газом и снарядами 14-я армия утоляла свою жажду крови на Лусоне. Дивизии дробились под тяжестью артиллерийских снарядов. Деревни сгорали на глазах. Манила пала во второй раз - и это едва не превратило отступление в катастрофический разгром, если бы не героизм, проявленный людьми Свободной республики на холмах Бикола. Преодолев пределы человеческой выносливости, они остановили наступление 14-й армии и не позволили ей продвинуться дальше.\n\nОказавшись в тупике, Токио и Вашингтон послали друг другу условия перемирия. Уверенность американцев ослабла, так как быстрая блиц-атака превратилась в затяжную войну, всё ближе приближаясь к ядерному обмену. Подобным образом, месть может увлечь Японию только до тех пор, пока разочарование не вытеснит ее. Если они не могут вернуть острова за шесть месяцев, что толку от ещё шести? Обе стороны искали изящный выход из игры своих пешек; после нескольких резких слов они нашли его в компромиссе.\n\nТаким образом, Филиппины встретили рассвет не как одно целое, а как два: японская \"зона умиротворения\" на Лусоне и военная хунта на остальных территориях. Мир вернулся ценой безвозвратного раскола народа.",
+    "picture": "GFX_report_event_PHI_blitz_begins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.133"
+    },
+    "options": [
+      {
+        "name": "Но это должно сработать.",
+        "name_key": "PHI_Blitz.133.a",
+        "trigger": {},
+        "effects": {
+          "TNO_fopo_add_philippines_reconstruction_tab": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.144",
+    "type": "country_event",
+    "title": "Компромиссный вариант",
+    "desc": "Когда-то скептики говорили, что Восходящее солнце никогда не удастся согнать с Филиппинских островов; что бандиты никогда не смогут противостоять могуществу империи. Но когда Содружество испустило последний вздох, настроения резко изменились, как маятник. Теперь именно патриоты возвещали триумф с вершины руин. Пусть он был избит, но филиппинец теперь был свободен - и, несмотря ни на что, филиппинец останется свободным.\n\nДни, последовавшие за вторым пришествием Японии, доказали всем и каждому, что Бог наказывает за высокомерие. Огнём, газом и снарядами 14-я армия утоляла свою жажду крови на Лусоне и Висайских островах. Дивизии дробились под тяжестью артиллерийских снарядов. Деревни сгорали на глазах. Столицы захватывались как домино - сначала Манила, затем Таклобан, затем Кагаян-де-Оро - пока Свободная республика стояла до коцна в неприступных горах Букиднона.\n\nОказавшись в тупике, Токио и Вашингтон послали друг другу условия перемирия. Уверенность американцев ослабла, так как быстрая блиц-атака превратилась в затяжную войну, всё ближе приближаясь к ядерному обмену. Подобным образом, месть может увлечь Японию только до тех пор, пока разочарование не вытеснит ее. Если они не могут вернуть острова за шесть месяцев, что толку от ещё шести? Обе стороны искали изящный выход из игры своих пешек; после нескольких резких слов они нашли его в компромиссе.\n\nТаким образом, Филиппины встретили рассвет не как одно целое, а как два: японская \"зона умиротворения\" в Лусоне и Висайских островах и военная хунта в Минданао. Мир вернулся ценой безвозвратного раскола народа.",
+    "picture": "GFX_report_event_PHI_blitz_begins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.144"
+    },
+    "options": [
+      {
+        "name": "Но это должно сработать.",
+        "name_key": "PHI_Blitz.144.a",
+        "trigger": {},
+        "effects": {
+          "TNO_fopo_add_philippines_reconstruction_tab": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "PHI_Blitz.155",
+    "type": "country_event",
+    "title": "Что случается со старыми солдатами",
+    "desc": "Когда-то был гордый генерал, который оставил своих людей, чтобы сражаться в войне, которую он проиграет. Он поклялся вернуться, но страна запретила ему, и в праведном гневе он поклялся во второй раз: он не успокоится, пока не увидит своих людей в безопасности и на родине. Их воспоминания были его единственной памятью, и время от времени они будоражили его и юношеской энергией, и творческими планами по возвращению их владельцев домой.\n\nШли годы, и возраст всё больше подводил больного генерала. Оставшись без гроша в кармане из-за своих грандиозных планов, седеющий мужчина пил и пил, пока не перестал чувствовать свои ноги. После этого военная прокуратура приковала его к инвалидному креслу в доме престарелых, вдали от общества и ещё дальше от Манилы. Это не мешало паралитику составлять те же расписания, которые он составлял во время ходьбы, или говорить всем подряд, что когда-нибудь он сам сотрет клеймо Батаана.\n\nЭта честь досталась вакханалии пьянства генерала, которая отправила его вместе с печенью в госпиталь Уолтера Рида. Там обездоленный человек не писал никаких планов и не произносил никаких хвастливых речей; на самом деле он казался скорее роботом, чем человеком, прикованным к пищащим металлическим машинам в стерильной серой комнате. Именно такое зрелище встретило специального курьера, который привёз ему новости из внешнего мира.\n\nКогда курьер вошел в комнату, умирающего генерала охватил прилив энергии. Что-то подсказывало ему, что посылка курьера будет его последней. Он вновь обрел голос, вцепился в ладонь юноши и сказал дрожащим, хриплым, судорожным голосом: \"Мои ребята. Они вернулись домой? Они дома?!\"\n\nВ комнате не было ни звука, кроме гудков. Это было всё, что нужно было знать нарушившему присягу генералу. Его планы снова провалились. Он снова подвёл своих людей. Понемногу угасали воспоминания, которые с того мартовского дня поддерживали в нём раскаяние и жизнь, оставляя после себя шелуху, которая дышит, гадит и не может ничего больше.",
+    "picture": "GFX_report_event_USA_macarthur_funeral",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {
+      "NOT": {
+        "has_country_flag": "USA_MacArthur_has_died"
+      }
+    },
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event PHI_Blitz.155"
+    },
+    "options": [
+      {
+        "name": "И в один длинный гудок жизнь из затуманенных глаз Дугласа Макартура последовала его примеру.",
+        "name_key": "PHI_Blitz.155.a",
+        "trigger": {},
+        "effects": {
+          "set_temp_variable": [
+            {
+              "conclusion_weeks": 12
+            },
+            {
+              "conclusion_bonus": 0.03
+            }
+          ],
+          "USA_proxy_conclusion_effect": true,
+          "set_country_flag": "USA_MacArthur_has_died"
+        }
+      }
+    ]
+  }
+]

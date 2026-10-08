@@ -1,0 +1,164 @@
+[
+  {
+    "id": "develop_bombay_tungsten_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разрабатывать залежи вольфрама в регионе [429.GetName]",
+    "desc": "",
+    "icon": "tungsten",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 429,
+      "controls_state": 429,
+      "has_tech": "excavation3",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_completed_focus": "RAJ_exploit_the_frontier",
+      "owns_state": 429,
+      "controls_state": 429,
+      "429": {
+        "NOT": {
+          "has_state_flag": "bombay_tungsten_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GER_BOR_HVA_assassinate_baymirza",
+    "category_id": "GER_BoP_category",
+    "name": "GER_BOR_HVA_assassinate_baymirza",
+    "desc": "",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": [
+        {
+          "TNO_Espionage_Viewing_Russia": true,
+          "is_ai": true
+        },
+        {
+          "AND": {
+            "OR": {
+              "has_country_flag": [
+                "TNO_CA_BORMANN_WORKING_WITH_BAYMIRZA",
+                "TNO_CA_BORMANN_WORKING_WITH_VEYUUM"
+              ]
+            },
+            "NOT": {
+              "has_country_flag": "TNO_CA_BORMANN_BAYMIRZA_DEAD"
+            }
+          },
+          "has_country_flag": "BOR_HVA_decisions_debug"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_BOR_HVA_assassinate_baymirza",
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.05
+        },
+        {
+          "TNO_Espionage_Expertise": 20
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ],
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "MAG_DEC_econ_werbell_4_construct_medical_fob_and_sick_bay",
+    "category_id": "MAG_DECCAT_economic_development_werbell",
+    "name": "Построить медицинские ПОБ и лазареты",
+    "desc": "Строительство и содержание медицинских ПОБ с прилегающим лазаретом позволит нам лечить раненых или больных и помогать солдатам восстанавливаться после посттравматического стрессового расстройства, вызванного службой в наших боевых частях. Хотя мы не увидим большой пользы от этого дома, это поможет снизить наши боевые потери за рубежом и будет способствовать развитию боевого медицинского лечения.",
+    "icon": "GFX_decision_MAG_werbell_medical_unit",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_econ_werbell_phase": 4
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.12
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "USA_Bayh_Delay",
+    "category_id": "USA_the_heartless",
+    "name": "Изменить программу",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bayh_delay_used"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_bayh_bill_delay_flag",
+        "USA_conservative_activism_uri_repeal"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_Bayh_Delay",
+      "custom_effect_tooltip": [
+        "USA_delayed_bill_2_wk_tt",
+        "USA_bill_delay_2weeks_tt"
+      ],
+      "set_country_flag": "USA_bayh_delay_used",
+      "add_days_mission_timeout": {
+        "mission": "USA_Conservative_Bill_Countdown",
+        "days": 14
+      },
+      "USA_Chep_Motivation_down": true,
+      "hidden_effect": {
+        "USA_Chep_Motivation_down": true
+      }
+    }
+  },
+  {
+    "id": "USA_Assign_Bayard_Rustin_to_CRA",
+    "category_id": "USA_the_heartless",
+    "name": "Назначить Баярда Растина организовывать активистов за гражданские права",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_URI_defense_mechanic"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_chep_presidency",
+        "USA_URI_Rustin_unlocked",
+        "USA_conservative_activism_uri_repeal"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_Assign_Bayard_Rustin_to_CRA",
+      "set_variable": {
+        "var_USA_URI_Leader_Civil_Rights": 3
+      },
+      "custom_effect_tooltip": "USA_URI_repeal_CRA_BR_tt"
+    }
+  }
+]

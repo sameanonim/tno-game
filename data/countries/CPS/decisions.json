@@ -1,0 +1,474 @@
+[
+  {
+    "id": "JAP_GEACPS_economic_integration_decision",
+    "category_id": "JAP_the_co_prosperity_sphere_decisions",
+    "name": "Потребовать интеграции [FROM.GetAdjRuLower]ой экономики",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "fighting_army_strength_ratio": {
+        "tag": "FROM",
+        "ratio": {
+          "_op": ">",
+          "value": 2
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "JAP_develop_the_yen_bloc"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "SEA_japan_foreign_policy.45",
+          "days": 1
+        },
+        "set_country_flag": "JAP_has_sent_invitation_for_integration_once_already_flag"
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": {
+          "target": "FROM",
+          "end_wars": false,
+          "end_civil_wars": false
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_GEACPS_develop_member_industry_decision",
+    "category_id": "JAP_the_co_prosperity_sphere_decisions",
+    "name": "Развитие [FROM.GetAdjRuLower]ой промышленности",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "JAP_east_asia_development_board"
+    },
+    "complete_effect": {
+      "FROM": [
+        {
+          "country_event": {
+            "id": "SEA_japan_foreign_policy.48",
+            "days": 1
+          },
+          "set_country_flag": "JAP_has_developed_froms_industry_once_already_flag"
+        },
+        {
+          "effect_tooltip": {
+            "add_tech_bonus": {
+              "bonus": 0.5,
+              "uses": 2,
+              "category": "industry"
+            }
+          },
+          "random_core_state": {
+            "limit": {
+              "is_owned_and_controlled_by": "FROM",
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 1
+                },
+                "include_locked": true
+              }
+            },
+            "set_state_flag": "JAP_state_development_target",
+            "effect_tooltip": {
+              "add_extra_state_shared_building_slots": 2,
+              "add_building_construction": {
+                "type": "industrial_complex",
+                "level": 2,
+                "instant_build": true
+              },
+              "IF": {
+                "limit": {
+                  "infrastructure": {
+                    "_op": "<",
+                    "value": 5
+                  }
+                },
+                "add_building_construction": {
+                  "type": "infrastructure",
+                  "level": 1,
+                  "instant_build": true
+                }
+              }
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "if_they_accept_tt"
+    }
+  },
+  {
+    "id": "OMS_post_nuke_test_cps",
+    "category_id": "OMS_2WRW_debug_category",
+    "name": "Post-Nuke Asia Set-Up",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "OMS_debug_nukes_shown"
+    },
+    "complete_effect": {
+      "ZZZ": [
+        {
+          "annex_country": [
+            {
+              "target": "MAN"
+            },
+            {
+              "target": "MEN"
+            },
+            {
+              "target": "GAN"
+            },
+            {
+              "target": "SHX"
+            },
+            {
+              "target": "JAP"
+            },
+            {
+              "target": "CHI"
+            },
+            {
+              "target": "GUZ"
+            },
+            {
+              "target": "GUX"
+            },
+            {
+              "target": "GNG"
+            },
+            {
+              "target": "YUN"
+            },
+            {
+              "target": "VIN"
+            },
+            {
+              "target": "VIC"
+            },
+            {
+              "target": "LAO"
+            },
+            {
+              "target": "CAM"
+            },
+            {
+              "target": "THA"
+            },
+            {
+              "target": "BUR"
+            },
+            {
+              "target": "AZH"
+            },
+            {
+              "target": "BHU"
+            },
+            {
+              "target": "MLY"
+            },
+            {
+              "target": "SHO"
+            },
+            {
+              "target": "INS"
+            },
+            {
+              "target": "NRB"
+            },
+            {
+              "target": "PHI"
+            },
+            {
+              "target": "SPH"
+            },
+            {
+              "target": "UPH"
+            }
+          ]
+        },
+        {
+          "every_owned_state": {
+            "limit": {
+              "NOT": {
+                "OR": {
+                  "is_postnuke_state": true,
+                  "has_state_flag": "nuke_cleared"
+                }
+              }
+            },
+            "add_core_of": "ZZZ",
+            "set_temp_variable": [
+              {
+                "local_state_population_k_temp": "state_population_k"
+              },
+              {
+                "state_value_multiplier_temp": 0
+              }
+            ],
+            "add_manpower": [
+              -2000000,
+              -2000000,
+              -2000000,
+              -2000000,
+              -2000000,
+              -2000000,
+              -2000000,
+              -2000000,
+              -2000000,
+              -2000000,
+              "local_state_population_k_temp"
+            ],
+            "set_state_flag": "nuke_cleared",
+            "econ_state_value_change_multiply": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "organise_publicity",
+    "category_id": "QIN_CCPStruggle",
+    "name": "Organise Publicity",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_formable_nations",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "QIN",
+        "PC_10": true
+      }
+    },
+    "visible": {
+      "tag": "QIN"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "CCP_PC": 5
+      },
+      "add_to_variable": {
+        "CCP_People_Support": 5
+      },
+      "custom_effect_tooltip": "organise_publicity_tt"
+    }
+  },
+  {
+    "id": "work_with_duf",
+    "category_id": "QIN_CCPStruggle",
+    "name": "Work with the United Front",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_foreign_policy",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "QIN",
+        "PC_10": true
+      }
+    },
+    "visible": {
+      "tag": "QIN"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "CCP_PC": 5
+      },
+      "add_to_variable": {
+        "CCP_Outsider_Support": 15
+      },
+      "custom_effect_tooltip": "work_with_duf_tt"
+    }
+  },
+  {
+    "id": "party_education_sessions",
+    "category_id": "QIN_CCPStruggle",
+    "name": "Party Education Sessions",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_education",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "QIN",
+        "PC_10": true
+      }
+    },
+    "visible": {
+      "tag": "QIN"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "CCP_PC": 5
+      },
+      "add_to_variable": [
+        {
+          "CCP_Party_Support": 5
+        },
+        {
+          "CCP_Outsider_Support": 5
+        }
+      ],
+      "custom_effect_tooltip": "party_education_sessions_tt"
+    }
+  },
+  {
+    "id": "distribute_supplies",
+    "category_id": "QIN_CCPStruggle",
+    "name": "Distribute Goods and Supplies",
+    "desc": "",
+    "icon": "GFX_decision_category_supply",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "QIN",
+        "PC_20": true
+      }
+    },
+    "visible": {
+      "tag": "QIN"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.02
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_to_variable": {
+        "CCP_People_Support": 10
+      },
+      "custom_effect_tooltip": "distribute_supplies_tt",
+      "subtract_from_variable": {
+        "CCP_PC": 10
+      }
+    }
+  },
+  {
+    "id": "pledge_support_for_independents",
+    "category_id": "QIN_CCPStruggle",
+    "name": "Pledge Support for Independents",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_democracy",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "QIN",
+        "OR": {
+          "NOT": [
+            {
+              "PC_20": true
+            },
+            {
+              "PC_10": true
+            }
+          ]
+        }
+      }
+    },
+    "visible": {
+      "tag": "QIN"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "pledge_support_for_independents_tt",
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "CCP_Outsider_Support": 5
+        },
+        "random_list": {
+          "60": {
+            "add_to_variable": {
+              "CCP_PC": 10
+            }
+          },
+          "40": {
+            "add_to_variable": {
+              "CCP_PC": 15
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "holidays_in_yushu",
+    "category_id": "QIN_CCPStruggle",
+    "name": "Holidays in Yushu",
+    "desc": "",
+    "icon": "GFX_decision_category_humanitarian_aid",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "QIN",
+        "PC_20": true
+      }
+    },
+    "visible": {
+      "tag": "QIN"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "holidays_in_yushu_tt",
+      "subtract_from_variable": [
+        {
+          "CCP_PC": 10
+        },
+        {
+          "CCP_People_Support": 5
+        }
+      ],
+      "add_to_variable": {
+        "CCP_Party_Support": 10
+      }
+    }
+  },
+  {
+    "id": "promote_upper_party_democratic_association",
+    "category_id": "QIN_CCPStruggle",
+    "name": "Promote Upper Party Democratic Association",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_voting",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "QIN",
+        "PC_20": true
+      }
+    },
+    "visible": {
+      "tag": "QIN"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "CCP_PC": 10
+      },
+      "random_list": {
+        "60": {
+          "custom_effect_tooltip": "CCP_promote_upper_party_democratic_association_1_tt",
+          "add_to_variable": {
+            "CCP_Party_Support": 10
+          }
+        },
+        "40": {
+          "custom_effect_tooltip": "CCP_promote_upper_party_democratic_association_2_tt",
+          "subtract_from_variable": {
+            "CCP_Party_Support": 15
+          }
+        }
+      }
+    }
+  }
+]

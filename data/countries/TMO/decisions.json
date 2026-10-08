@@ -1,0 +1,362 @@
+[
+  {
+    "id": "AM_fight_TMO",
+    "category_id": "RUS_after_midnight_category",
+    "name": "Напасть на [TMO.GetFlag] [TMO.GetName]",
+    "desc": "",
+    "icon": "GFX_AM_BL",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "global.AM_sandbox_mode": 1
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AM_fight_TMO",
+      "declare_war_on": {
+        "target": "TMO",
+        "type": "annex_everything"
+      },
+      "subtract_from_variable": {
+        "global.AM_progress_count": 1
+      },
+      "TNO_am_counter_calculate": true
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_TMO",
+    "category_id": "RUS_AM_coring_category",
+    "name": "Интегрировать [TMO.GetFlag] [TMO.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "all_state": {
+        "OR": {
+          "NOT": {
+            "is_core_of": "TMO"
+          },
+          "AND": {
+            "is_owned_by": "ROOT",
+            "NOT": {
+              "is_core_of": "ROOT"
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_inclusion_of_westmongolia",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Western Mongolia District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 814
+    },
+    "visible": {
+      "owns_state": 814,
+      "AND": {
+        "2402": {
+          "is_core_of": "ROOT"
+        },
+        "814": {
+          "is_core_of": "ROOT"
+        },
+        "2400": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_military_conscripted_westmongolia",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Western Mongolia to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "814": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "2400": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "2402": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        814,
+        2400,
+        2402
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_westmongolia",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "814": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "2400": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "2402": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_westmongolia",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Western Mongolia to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "814": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "2400": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "2402": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        814,
+        2400,
+        2402
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_westmongolia",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "814": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "2400": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "2402": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_westmongolia",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Western Mongolia",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "814": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "2400": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "2402": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        814,
+        2400,
+        2402
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_westmongolia",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "814": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "2400": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "2402": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "814": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "2400": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "2402": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "814": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "2400": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "2402": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,1307 @@
+[
+  {
+    "id": "BRA_IBRWARS_Support_RPP",
+    "category_id": "BRA_BoP_Category",
+    "name": "Поддержать [RPP.GetFlag]Португальскую Республику",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_stationing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_IBW_selected": true,
+      "has_global_flag": "IBW_CONFLICT",
+      "IBR_Wars_RPP_support_trigger": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRA_IBRWARS_Support_RPP",
+      "RPP": {
+        "save_event_target_as": "IBR_new_supported_faction"
+      },
+      "IBR_wars_add_to_proxy": true
+    }
+  },
+  {
+    "id": "ITA_IBRWARS_Support_RPP",
+    "category_id": "ITA_BoP_category",
+    "name": "Поддержать [RPP.GetFlag]Португальскую Республику",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_stationing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_IBW_selected": true,
+      "has_global_flag": "IBW_CONFLICT",
+      "IBR_Wars_RPP_support_trigger": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_IBRWARS_Support_RPP",
+      "RPP": {
+        "save_event_target_as": "IBR_new_supported_faction"
+      },
+      "IBR_wars_add_to_proxy": true
+    }
+  },
+  {
+    "id": "ita_support_RPP",
+    "category_id": "ita_iberian_war",
+    "name": "ita_support_RPP",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "country_exists": "RPP",
+      "OR": {
+        "NOT": [
+          {
+            "IBR": {
+              "has_country_flag": "IBR_backed_by_italy"
+            }
+          },
+          {
+            "POR": {
+              "has_country_flag": "IBR_backed_by_italy"
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "RPP": {
+        "set_country_flag": "IBR_backed_by_italy",
+        "country_event": {
+          "id": "scorza.9005",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "NOV_load_vrpp_tree",
+    "category_id": "NOV_debug_category",
+    "name": "Load VRPP Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_load_VRPP_tree",
+      "load_focus_tree": {
+        "tree": "NOV_novosibirsk_victory_shukshin",
+        "keep_completed": true
+      },
+      "set_country_flag": "NOV_VRPP_Presidency",
+      "clr_country_flag": [
+        "NOV_DSPR_Presidency",
+        "NOV_RSLP_Presidency",
+        "NOV_RAPP_Presidency"
+      ],
+      "mark_focus_tree_layout_dirty": true
+    }
+  },
+  {
+    "id": "NOV_Megacorp_Crisis",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "The State is in Crisis!",
+    "desc": "",
+    "icon": "GFX_decision_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      },
+      "vrpp_megacorp_crisis": true,
+      "has_country_flag": "NOV_VRPP_GUI_1_VRPP"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "NOV_Megacorp_Demands",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "The Megacorporations' Demands",
+    "desc": "",
+    "icon": "GFX_decision_document_target",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "vrpp_megacorp_gone": true
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      },
+      "has_country_flag": [
+        "NOV_Megacorp_Demanding",
+        "NOV_VRPP_GUI_1_VRPP"
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "NOV_VRPP_grant_favourable_loans",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Grant Favourable Loans",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_grant_favourable_loans",
+      "set_temp_variable": {
+        "inflation_temp": 0.2
+      },
+      "econ_inflation_change": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_temporary_tax_breaks",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Temporary Tax Breaks",
+    "desc": "",
+    "icon": "GFX_decision_generic_economy_graph",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_temporary_tax_breaks"
+    }
+  },
+  {
+    "id": "NOV_VRPP_divert_state_funds",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Divert State Funds",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_divert_state_funds",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.02
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_lease_state_owned_resource_companies",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Lease State-owned Resource Companies",
+    "desc": "",
+    "icon": "GFX_decision_oil_icon",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_lease_state_owned_resource_companies",
+      "set_temp_variable": {
+        "money_reserves_temp": 0.04
+      },
+      "econ_money_reserves_change_raw_money": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_provide_lucrative_arms_contracts",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Provide Lucrative Arms Contracts",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_provide_lucrative_arms_contracts",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.025
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_titan_scholarship_program",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Titan Scholarship Program",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_education",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_provide_lucrative_arms_contracts",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.01
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "NOV_Megacorp_Resisting",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Megacorps are Resisting Our Efforts!",
+    "desc": "",
+    "icon": "GFX_decision_document_target",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_feniks_ded": true,
+      "dspr_sibir_ded": true,
+      "dspr_titan_ded": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Switch",
+        "NOV_VRPP_GUI_1"
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "NOV_DSPR_generic_folder",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "[getGenericFolderLoc]",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": "NOV_DSPR_Switch"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_country_flag": "NOV_DSPR_Generic"
+        },
+        "clr_country_flag": "NOV_DSPR_Generic"
+      },
+      "else": {
+        "set_country_flag": "NOV_DSPR_Generic"
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_generic",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "=== GENERIC DECISIONS ===",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "NOV_DSPR_generic_target_feniks",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Target Feniks",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "DSPR_Selected"
+          }
+        },
+        "set_country_flag": "DSPR_Selected"
+      },
+      "set_variable": {
+        "dspr_decision_target": 0
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_generic_target_sibir",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Target Sibir",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "DSPR_Selected"
+          }
+        },
+        "set_country_flag": "DSPR_Selected"
+      },
+      "set_variable": {
+        "dspr_decision_target": 1
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_generic_target_titan",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Target Titan",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "DSPR_Selected"
+          }
+        },
+        "set_country_flag": "DSPR_Selected"
+      },
+      "set_variable": {
+        "dspr_decision_target": 2
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_sway_public_opinion",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Sway Public Opinion",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_propaganda",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_selected": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_sway_public_opinion",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -7.5
+        },
+        {
+          "target": "dspr_decision_target"
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_root_out_political_corruption",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Root Out Political Corruption",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_selected": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_root_out_political_corruption",
+      "set_temp_variable": [
+        {
+          "temp_influence": -7.5
+        },
+        {
+          "target": "dspr_decision_target"
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_influence": true,
+      "add_stability": -0.025
+    }
+  },
+  {
+    "id": "NOV_DSPR_expose_corporate_scandals",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Expose Corporate Scandals",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 125,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_selected": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_expose_corporate_scandals",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -12.5
+        },
+        {
+          "target": "dspr_decision_target"
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true,
+      "add_stability": -0.05,
+      "TNO_worsen_admin_efficiency_low": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_slash_federal_funding",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Slash Federal Fundings",
+    "desc": "",
+    "icon": "GFX_decision_document_cancel",
+    "cost": 150,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_selected": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_slash_federal_funding",
+      "set_temp_variable": [
+        {
+          "temp_influence": -12.5
+        },
+        {
+          "target": "dspr_decision_target"
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_influence": true,
+      "add_stability": -0.05,
+      "TNO_worsen_poverty_low": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_sibir_folder",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "[getSibirFolderLoc]",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": "NOV_DSPR_Switch"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_country_flag": "NOV_DSPR_Sibir"
+        },
+        "clr_country_flag": "NOV_DSPR_Sibir"
+      },
+      "else": {
+        "set_country_flag": "NOV_DSPR_Sibir"
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_sibir",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "=== SIBIR DECISIONS ===",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Sibir",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "NOV_DSPR_sponsor_the_patriot_pantry",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Sponsor the Patriot's Pantry",
+    "desc": "",
+    "icon": "GFX_decision_category_supply",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_sibir_1": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Sibir",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_sponsor_the_patriot_pantry",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -20
+        },
+        {
+          "target": 1
+        },
+        {
+          "temp_influence": -15
+        },
+        {
+          "target": 1
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true,
+      "NOV_VRPP_increase_specific_megacorp_influence": true,
+      "TNO_improve_poverty_low": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_investigate_executive_treason",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Investigate Executive Treason",
+    "desc": "",
+    "icon": "GFX_decision_arrest",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_sibir_2": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Sibir",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_investigate_executive_treason",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -35
+        },
+        {
+          "target": 1
+        },
+        {
+          "temp_influence": -25
+        },
+        {
+          "target": 1
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true,
+      "NOV_VRPP_increase_specific_megacorp_influence": true,
+      "add_stability": -0.075
+    }
+  },
+  {
+    "id": "NOV_DSPR_prosecute_the_implicated",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Prosecute the Implicated",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_sibir_3": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Sibir",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_prosecute_the_implicated",
+      "add_stability": 0.1,
+      "set_country_flag": "DSPR_Sibir_Dismantle",
+      "custom_effect_tooltip": "DSPR_Dismantlement_tt_1"
+    }
+  },
+  {
+    "id": "NOV_DSPR_titan_folder",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "[getTitanFolderLoc]",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": "NOV_DSPR_Switch"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_country_flag": "NOV_DSPR_Titan"
+        },
+        "clr_country_flag": "NOV_DSPR_Titan"
+      },
+      "else": {
+        "set_country_flag": "NOV_DSPR_Titan"
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_titan",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "=== TITAN DECISIONS ===",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Titan",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "NOV_DSPR_infiltrate_the_academia",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Infiltrate the Academia",
+    "desc": "",
+    "icon": "GFX_decision_generic_education",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_titan_1": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Titan",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_infiltrate_the_academia",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -20
+        },
+        {
+          "target": 2
+        },
+        {
+          "temp_influence": -15
+        },
+        {
+          "target": 2
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true,
+      "NOV_VRPP_increase_specific_megacorp_influence": true,
+      "TNO_worsen_research_facilities_low": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_reveal_exorbitant_spending",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Reveal Exorbitant Spending",
+    "desc": "",
+    "icon": "GFX_decision_document_target",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_titan_2": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Titan",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_reveal_exorbitant_spending",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -35
+        },
+        {
+          "target": 2
+        },
+        {
+          "temp_influence": -15
+        },
+        {
+          "target": 2
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true,
+      "NOV_VRPP_increase_specific_megacorp_influence": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_nationalise_the_think_tanks",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Nationalize the Think Tanks",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_education",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_titan_3": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Titan",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_nationalise_the_think_tanks",
+      "add_stability": 0.075,
+      "add_political_power": 100,
+      "set_country_flag": "DSPR_Titan_Dismantle",
+      "custom_effect_tooltip": "DSPR_Dismantlement_tt_2"
+    }
+  },
+  {
+    "id": "NOV_DSPR_feniks_folder",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "[getFeniksFolderLoc]",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": "NOV_DSPR_Switch"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_country_flag": "NOV_DSPR_Feniks"
+        },
+        "clr_country_flag": "NOV_DSPR_Feniks"
+      },
+      "else": {
+        "set_country_flag": "NOV_DSPR_Feniks"
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_feniks",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "=== FENIKS DECISIONS ===",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Feniks",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "NOV_DSPR_look_into_their_closet",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Look Into Their Closet",
+    "desc": "",
+    "icon": "GFX_decision_OMS_assassinate_batov",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_feniks_1": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Feniks",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_look_into_their_closet",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -20
+        },
+        {
+          "target": 0
+        },
+        {
+          "temp_influence": -15
+        },
+        {
+          "target": 0
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true,
+      "NOV_VRPP_increase_specific_megacorp_influence": true,
+      "TNO_worsen_admin_efficiency_low": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_expose_the_manchurian_operation",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Expose the Manchurian Operation",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_feniks_2": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Feniks",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_expose_the_manchurian_operation",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -35
+        },
+        {
+          "target": 0
+        },
+        {
+          "temp_influence": -25
+        },
+        {
+          "target": 0
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true,
+      "NOV_VRPP_increase_specific_megacorp_influence": true,
+      "add_stability": -0.15
+    }
+  },
+  {
+    "id": "NOV_DSPR_break_the_trusts",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Break the Trusts",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_feniks_3": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Feniks",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_break_the_trusts",
+      "add_stability": 0.2,
+      "add_political_power": 150,
+      "set_country_flag": "DSPR_Feniks_Dismantle",
+      "custom_effect_tooltip": "DSPR_Dismantlement_tt_3"
+    }
+  },
+  {
+    "id": "NOV_VRPP_Media_Fortnightly_Gain",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Our Fortnightly Profit",
+    "desc": "",
+    "icon": "GFX_decision_document_target",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": "NOV_VRPP_GUI_2"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "NOV_VRPP_grab_money_from_the_nmg",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Siphon NMG Funds",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_grab_money_from_the_nmg",
+      "add_stability": -0.01
+    }
+  },
+  {
+    "id": "NOV_VRPP_invest_into_the_nmg",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Invest into the NMG",
+    "desc": "Diverting some money from the state into the media could help with NMG's situation. On the outside, we will simply explain the move as helping to promote Russian culture, cinematography and entertainment for all to access. After all, that is somewhat true, so long as all the revenue comes to us.",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_invest_into_the_nmg",
+      "set_temp_variable": [
+        {
+          "temp_debt": "national_debt"
+        },
+        {
+          "temp_econ_spending_amount": "temp_debt"
+        },
+        {
+          "temp_storer": "temp_debt"
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_debt": 200
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "multiply_temp_variable": {
+        "temp_storer": 1000
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_conduct_customer_survey",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Conduct Customer Survey",
+    "desc": "To succeed as a company, we still have to listen to what our audience truly wants. We will mobilize some of the subsidiaries to conduct mass surveys all across the nation. As each region have its own preferences, tailoring the programs to their taste is absolutely crucial.",
+    "icon": "GFX_decision_category_generic_document",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_conduct_customer_survey"
+    }
+  },
+  {
+    "id": "NOV_VRPP_copy_american_game_shows",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Copy American Game Shows",
+    "desc": "American citizens enjoy some of the most sophisticated and creative television programs, which have greatly improved Americans' satisfaction with life. Though the  VRPP is no popular organization, it does not mean we must make life so boring. Through imitation or licensing, we will air some American-style programs to the Russian people.",
+    "icon": "GFX_decision_generic_USA_aid",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_copy_american_game_shows",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 20
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_copy_american_cartoons",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Copy American Cartoons",
+    "desc": "During the war-torn 1950s and 1960s, sometimes the only source of happiness for Russian children were smuggled tapes of American cartoons, which has left quite the impression amongst young Russians, who are now in the workforce and fathering their first children. The NMG will seek to strategically buy off some of the rights, especially those 'classic' ones that are much cheaper than recent animations.",
+    "icon": "GFX_decision_generic_USA_aid",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_copy_american_cartoons",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 10
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_copy_japanese_game_shows",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Copy Japanese Game Shows",
+    "desc": "Japan's massive population has resulted in many opportunities for the media industry, where some of the fiercest competition on the face of the Earth takes place. This offers us ample amounts of chances to create shows imitating some of theirs and avoid their mistakes along the way.",
+    "icon": "GFX_decision_generic_JAP_aid",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_copy_japanese_game_shows",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 20
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_copy_japanese_cartoons",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Copy Japanese Cartoons",
+    "desc": "Japanese cartoons have recently become sensational amongst Asian and Russian youths. These so-called 'anime' often features fictional, fantasy settings and advanced cinematography not seen in Western hand-drawn animated films. If we can secure exclusive rights to some of these works, the NMG can benefit greatly.",
+    "icon": "GFX_decision_generic_JAP_aid",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_copy_japanese_cartoons",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 10
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_produce_a_war_movie",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Produce a War Movie",
+    "desc": "War films have been some of the most popular genres after the Great Wars, and Russia is in a unique position. After the Second West-Russian War, we are left with a great number of retired veterans and ample amounts of captured German materiel. Maybe we can work something out with this stuff...",
+    "icon": "GFX_decision_category_usa_intervention_mandate",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_produce_a_war_movie",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 5
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  },
+  {
+    "id": "NOV_RSLP_vrpp",
+    "category_id": "NOV_RSLP_russia_ofn",
+    "name": "--- Swaying  Reactionaries ---",
+    "desc": "",
+    "icon": "GFX_decision_chess_knight_rook_bishop_pawn",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "NOT": {
+        "rslp_shukshin": true
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "NOV_RSLP_vrpp_campaign",
+    "category_id": "NOV_RSLP_russia_ofn",
+    "name": "The  VRPP is campaigning against the OFN!",
+    "desc": "",
+    "icon": "GFX_decision_document_target",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  }
+]

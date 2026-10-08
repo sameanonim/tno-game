@@ -1,0 +1,86 @@
+[
+  {
+    "id": "TUR_kemalist_ideological_entrenchment_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_ideological_entrenchment_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "has_state_flag": "TUR_ideological_battleground_state"
+        },
+        "save_event_target_as": "TUR_kemalist_state_event_target"
+      },
+      "random_list": {
+        "50": [
+          {
+            "event_target:TUR_kemalist_state_event_target": {
+              "TUR_kemalist_influenced_state_effect": true
+            }
+          },
+          {
+            "event_target:TUR_kemalist_state_event_target": {
+              "TUR_kemalist_influenced_state_effect": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "USA_move_government_to_richmond",
+    "category_id": "USA_honor_the_confederacy",
+    "name": "Перевезти правительство в Ричмонд",
+    "desc": "",
+    "icon": "generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "362": {
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_did_move_government_to_richmond"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_did_move_government_to_richmond",
+      "add_stability": 0.1,
+      "set_capital": {
+        "state": 362
+      },
+      "add_popularity": {
+        "ideology": "fascism",
+        "popularity": 0.05
+      },
+      "if": {
+        "limit": {
+          "not": {
+            "has_country_flag": "USA_CSA_legitimacy"
+          }
+        },
+        "set_country_flag": {
+          "flag": "USA_CSA_legitimacy",
+          "value": 1
+        }
+      },
+      "else": {
+        "modify_country_flag": {
+          "flag": "USA_CSA_legitimacy",
+          "value": 1
+        }
+      }
+    }
+  }
+]

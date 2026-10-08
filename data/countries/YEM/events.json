@@ -1,0 +1,819 @@
+[
+  {
+    "id": "YEM.0",
+    "type": "country_event",
+    "title": "YEM.0.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.0"
+    },
+    "options": [
+      {
+        "name": "YEM.0.a",
+        "name_key": "YEM.0.a",
+        "trigger": {},
+        "effects": {
+          "retire_character": "YEM_Ahmad_bin_Yahya",
+          "add_country_leader_role": {
+            "character": "YEM_Muhammad_al_Badr",
+            "promote_leader": true,
+            "country_leader": {
+              "desc": "POLITICS_MUHAMMAD_AL_BADR_DESC",
+              "expire": "1992.1.1",
+              "ideology": "despotism_absolute_monarchy_subtype",
+              "traits": [],
+              "id": -1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.1",
+    "type": "country_event",
+    "title": "Попытка государственного переворота",
+    "desc": "",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [
+      {
+        "log": "[GetDateText]: [Root.GetName]: event YEM.1"
+      },
+      {
+        "ITA": {
+          "end_puppet": "OMA"
+        }
+      },
+      {
+        "hidden_effect": {
+          "NYM": {
+            "inherit_technology": "YEM",
+            "add_state_core": [
+              910,
+              911,
+              912,
+              293,
+              908,
+              909,
+              925,
+              659,
+              1705,
+              2160,
+              2161,
+              2162,
+              2163,
+              2164
+            ],
+            "transfer_state": [
+              910,
+              2160,
+              911,
+              2161
+            ],
+            "set_capital": {
+              "state": 2160,
+              "remember_old_capital": false
+            },
+            "set_country_flag": "BaathistCountry",
+            "add_ideas": "NYM_civil_war",
+            "add_opinion_modifier": {
+              "target": "ITA",
+              "modifier": "arab_imperialist_oppressor"
+            },
+            "load_oob": "NYM_uprising",
+            "add_manpower": 40000
+          },
+          "YEM": {
+            "add_ideas": [
+              "YEM_civil_war"
+            ],
+            "remove_ideas": "YEM_italian_overlordship",
+            "hidden_effect": {
+              "leave_faction": true,
+              "ITA": {
+                "end_puppet": "YEM"
+              }
+            }
+          },
+          "set_global_flag": "arab_war_ongoing",
+          "OIL_get_supported_factions": true
+        }
+      }
+    ],
+    "options": [
+      {
+        "name": "(Играть за Йеменская Арабская Республика)",
+        "name_key": "YEM.1.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -100,
+          "add_stability": -0.3,
+          "country_event": {
+            "id": "YEM.2",
+            "days": 4
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.2",
+    "type": "country_event",
+    "title": "Начинается война",
+    "desc": "",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [
+      {
+        "log": "[GetDateText]: [Root.GetName]: event YEM.2"
+      },
+      {
+        "hidden_effect": {
+          "JAP": [
+            {
+              "TNO_fopo_add_baathism_support_tab": true
+            },
+            {
+              "set_temp_variable": {
+                "Victory_ID": 9
+              },
+              "Cold_War_GUI_AddVictory": true
+            }
+          ],
+          "for_each_scope_loop": [
+            {
+              "array": "global.OIL_supported_by_JAP",
+              "JAP": {
+                "set_temp_variable": {
+                  "target": "PREV"
+                },
+                "TNO_increase_volunteer_cap_1": true
+              }
+            },
+            {
+              "array": "global.OIL_supported_by_USA",
+              "USA": {
+                "set_temp_variable": {
+                  "target": "PREV"
+                },
+                "TNO_increase_volunteer_cap_1": true
+              }
+            }
+          ],
+          "USA": [
+            {
+              "TNO_fopo_add_baathism_support_tab": true
+            },
+            {
+              "set_temp_variable": {
+                "Victory_ID": 9
+              },
+              "Cold_War_GUI_AddVictory": true
+            }
+          ],
+          "GER": {
+            "set_temp_variable": {
+              "Victory_ID": 9
+            },
+            "Cold_War_GUI_AddVictory": true
+          }
+        }
+      }
+    ],
+    "options": [
+      {
+        "name": "",
+        "name_key": "YEM.2.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": [
+            {
+              "every_country": {
+                "news_event": {
+                  "id": "WORLD.934",
+                  "days": 1
+                }
+              }
+            },
+            {
+              "ITA": {
+                "country_event": {
+                  "id": "YEM.3",
+                  "days": 1
+                }
+              }
+            }
+          ],
+          "YEM": {
+            "declare_war_on": {
+              "target": "NYM",
+              "type": "civil_war"
+            }
+          },
+          "NYM": {
+            "change_tag_from": "YEM"
+          },
+          "add_to_variable": {
+            "var": "global.PanArabRadicalism",
+            "value": 1
+          }
+        }
+      },
+      {
+        "name": "YEM.2.b",
+        "name_key": "YEM.2.b",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": [
+            {
+              "every_country": {
+                "news_event": {
+                  "id": "WORLD.934",
+                  "days": 1
+                }
+              }
+            },
+            {
+              "ITA": {
+                "country_event": {
+                  "id": "YEM.3",
+                  "days": 1
+                }
+              },
+              "USA": {
+                "country_event": {
+                  "id": "OILflavor.6",
+                  "days": 21
+                }
+              }
+            }
+          ],
+          "YEM": {
+            "declare_war_on": {
+              "target": "NYM",
+              "type": "civil_war"
+            }
+          },
+          "add_to_variable": {
+            "var": "global.PanArabRadicalism",
+            "value": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.3",
+    "type": "country_event",
+    "title": "Итальянское вмешательство",
+    "desc": "Империя в кризисе. Уже сейчас хрупкая сеть региональных союзов, договорённостей и соглашений о разделении власти начала разваливаться в разгар стремительных волн радикализации, прокатывающихся по Ближнему Востоку. От дюн Дубая до доков Александрии вскипает недовольство, готовое разрушить все, что мы сотворили со времен Второй мировой войны.\n\nСегодня поступают вести из Йемена о тамошних волнениях. Султан был в лучшем случае был с нами в одной связке и не мог удовлетворить всех наших амбиций, и все же он все еще был важным звеном в паутине, которая скрепляла империю. Его сын, правящий монарх, сейчас вкушает плоды многих лет бесхозяйственности и жестокого подавления: восстание.\n\nЧто ещё более печально, настроения, проповедуемые йеменскими повстанцами при республиканце Абдалле ас-Саляле были встречены с одобрением по всему Ближнему Востоку. Даже самые оптимистично настроенные не находят отговорок на явление все более шокирующих сообщений. Что бы ни случилось дальше, мы должны быть готовы встретить надвигающуюся бурю.",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.3"
+    },
+    "options": [
+      {
+        "name": "Ветры перемен.",
+        "name_key": "YEM.3.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "GER": {
+              "country_event": {
+                "id": "YEM.4",
+                "days": 5
+              }
+            },
+            "set_temp_variable": [
+              {
+                "target": "YEM"
+              },
+              {
+                "number": 1
+              },
+              {
+                "target": "EGY"
+              },
+              {
+                "number": 1
+              },
+              {
+                "target": "IRQ"
+              },
+              {
+                "number": 1
+              },
+              {
+                "target": "OMA"
+              },
+              {
+                "number": 1
+              },
+              {
+                "target": "SAU"
+              },
+              {
+                "number": 1
+              }
+            ],
+            "TNO_set_num_volunteers": [
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.4",
+    "type": "country_event",
+    "title": "Йеменская Арабская Республика",
+    "desc": "Гражданская война разразилась в песках и горах пустоши, известной как Мутаваккильский имамат Йемен, и в наших интересах поддержать повстанцев, сражающихся против отдаленного Арабского имамата.\n\nПовстанцы сражаются за Арабскую Республику во имя идеологии, называемой \"Баасизм\", которая представляет собой панарабское националистическое и псевдосоциалистическое движение, идеологические хитросплетения которого очень сложны и запутаны  Важно то, что они бросают вызов влиянию Италии и Саудовской Аравии в богатом на нефть регионе Персидского залива, и некоторые фракции их движения симпатизируют Германии.\n\nЕсли мы отправим помощь этим повстанцам-баасистам, и они успешно свергнут своего проитальянского монарха, мы сможем увидеть, как наше собственное геополитическое влияние и экономическая мощь ширятся.",
+    "picture": "GFX_report_event_generic_arab_soldiers1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.4"
+    },
+    "options": [
+      {
+        "name": "Ещё одна фигура на шахматной доске.",
+        "name_key": "YEM.4.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "OR": {
+                "has_global_flag": [
+                  "german_civil_war_bormannvic",
+                  "german_civil_war_speervic"
+                ]
+              }
+            },
+            "custom_effect_tooltip": "BOR_begin_supply_runs_tt",
+            "set_country_flag": "GER_OC_intervention",
+            "TNO_fopo_add_baathism_support_tab": true,
+            "set_temp_variable": [
+              {
+                "target": "NYM"
+              },
+              {
+                "number": 1
+              },
+              {
+                "target": "EGB"
+              },
+              {
+                "number": 1
+              },
+              {
+                "target": "SDS"
+              },
+              {
+                "number": 1
+              },
+              {
+                "target": "BIR"
+              },
+              {
+                "number": 1
+              },
+              {
+                "target": "OMB"
+              },
+              {
+                "number": 1
+              }
+            ],
+            "TNO_set_num_volunteers": [
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "hidden_effect": {
+              "country_event": [
+                {
+                  "id": "OILflavor.1",
+                  "days": 50
+                },
+                {
+                  "id": "OILflavor.8",
+                  "days": 15
+                },
+                {
+                  "id": "OILflavor.5",
+                  "days": 3
+                }
+              ]
+            }
+          },
+          "hidden_effect": {
+            "JAP": {
+              "country_event": {
+                "id": "YEM.5",
+                "days": 30
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.5",
+    "type": "country_event",
+    "title": "Эсминец ИФЯ затонул у берегов Йемена!",
+    "desc": "Вести приходили на военные аванпосты по всему Индийскому океану и обратно, пока, наконец, не попали сегодня на токийские передатчики. Гудящий приёмник заглушил сообщение об инциденте в Аденском заливе. Военное командование собралось вокруг молодого офицера-связиста, управлявшего радиооборудованием, сидящего и в напряжении вслушивающегося в радиочастоты, дабы подготовиться к возможным сводкам об очередной конфронтации с Берлином или Вашингтоном с фронтов Холодной войны.\n\nПотрескивающее гудение едва было слышно за неспокойным ворчанием присутствующих офицеров и адмиралов. В этом затхлом пункте связи молодой офицер связи возился с кнопками и рычагами, чувствуя пристальный взгляд своего начальства у себя на спине. Обрывки слов и еле уловимый сигнал собирались воедино, становясь в цельную картину: эсминец Японского Императорского Флота был потоплен у берегов Йемена, места действия развернушвихся революции и политической нестабильности.\n\nНекоторые из офицеров сомкнули рты, отягощенные обреченными мыслями о конфронтации, а другие вскочили со своих мест, чтобы ослабить внезапное, пронзительное напряжение. Напряжение и ужас, осязаемые, повисли в воздухе. Всем присутствующим стало ясно, что Япония обязана вмешаться в ближневосточную авантюру на другой стороне океана.",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.5"
+    },
+    "options": [
+      {
+        "name": "Это чрезвычайная ситуация!",
+        "name_key": "YEM.5.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "YEM.6",
+    "type": "country_event",
+    "title": "Победа монархистов",
+    "desc": "я, абсолютный монархист:",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.6"
+    },
+    "options": [
+      {
+        "name": "wait for BGRS",
+        "name_key": "YEM.6.a",
+        "trigger": {},
+        "effects": {
+          "YEM": {
+            "ITA": {
+              "set_autonomy": {
+                "target": "YEM",
+                "autonomy_state": "autonomy_reliant"
+              }
+            },
+            "set_politics": {
+              "ruling_party": "despotism"
+            },
+            "set_popularities": {
+              "communist": 0,
+              "socialist": 10,
+              "progressivism": 0,
+              "liberalism": 0,
+              "conservatism": 0,
+              "paternalism": 26,
+              "despotism": 64,
+              "fascism": 0,
+              "ultranationalism": 0
+            },
+            "remove_ideas": "YEM_civil_war"
+          },
+          "if": {
+            "limit": {
+              "ITA": {
+                "is_in_faction_with": "USA"
+              }
+            },
+            "USA": {
+              "add_to_faction": "YEM"
+            },
+            "YEM": {
+              "add_ideas": "OFN_Independent_Member"
+            }
+          },
+          "else_if": [
+            {
+              "limit": {
+                "ITA": {
+                  "is_in_faction_with": "JAP"
+                }
+              },
+              "JAP": {
+                "add_to_faction": "YEM"
+              },
+              "YEM": {
+                "add_ideas": "Sphere_Coequal"
+              }
+            },
+            {
+              "limit": {
+                "ITA": {
+                  "is_in_faction": true
+                }
+              },
+              "ITA": {
+                "add_to_faction": "YEM"
+              },
+              "YEM": {
+                "if": [
+                  {
+                    "limit": {
+                      "ITA": {
+                        "has_idea": "ITA_Mediterranean_Bloc_Leader"
+                      }
+                    },
+                    "add_ideas": "ITA_Mediterranean_Bloc_Member"
+                  },
+                  {
+                    "limit": {
+                      "ITA": {
+                        "has_idea": "ITA_Imperial_Alliance_Leader"
+                      }
+                    },
+                    "add_ideas": "ITA_Imperial_Alliance_Member"
+                  },
+                  {
+                    "limit": {
+                      "ITA": {
+                        "has_idea": "ITA_Rome_Pact_Leader"
+                      }
+                    },
+                    "add_ideas": "ITA_Rome_Pact_Member"
+                  }
+                ]
+              }
+            }
+          ],
+          "news_event": {
+            "id": "WORLD.18022",
+            "days": 1
+          },
+          "JAP": {
+            "country_event": {
+              "id": "OILflavor.9",
+              "days": 15
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.7",
+    "type": "country_event",
+    "title": "Победа Саляля",
+    "desc": "саляль не нассерист. нассер - салялист",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.7"
+    },
+    "options": [
+      {
+        "name": "wait for BGRS",
+        "name_key": "YEM.7.a",
+        "trigger": {},
+        "effects": {
+          "country_event": {
+            "id": "YEM.8",
+            "days": 30
+          },
+          "transfer_state": 1705,
+          "load_oob": "NYM_pre_saudi",
+          "remove_ideas": "NYM_civil_war",
+          "news_event": {
+            "id": "WORLD.18023",
+            "days": 1
+          },
+          "JAP": {
+            "country_event": {
+              "id": "OILflavor.9",
+              "days": 15
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.8",
+    "type": "country_event",
+    "title": "Йеменско-саудовская война",
+    "desc": "это до боли нереалистично, вау, я действительно в восторге от дизайна, и вы в восторге от:",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.8"
+    },
+    "options": [
+      {
+        "name": "wait for BGRS",
+        "name_key": "YEM.8.a",
+        "trigger": {},
+        "effects": {
+          "NYM": {
+            "declare_war_on": {
+              "target": "SAU",
+              "type": "annex_everything"
+            }
+          },
+          "SAU": {
+            "add_ideas": "YUN_SEA_NOT_YOUR_BUSINESS_STOP"
+          },
+          "set_global_flag": "SaudiWar"
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.9",
+    "type": "country_event",
+    "title": "Победа Саудитов",
+    "desc": "нет больше прямого правления саудитов из рияда!",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.9"
+    },
+    "options": [
+      {
+        "name": "wait for BGRS",
+        "name_key": "YEM.9.a",
+        "trigger": {},
+        "effects": {
+          "release_puppet": "YEM",
+          "SAU": {
+            "set_autonomy": {
+              "target": "YEM",
+              "autonomy_state": "autonomy_reliant"
+            }
+          },
+          "YEM": {
+            "set_popularities": {
+              "communist": 5,
+              "socialist": 25,
+              "progressivism": 0,
+              "liberalism": 0,
+              "conservatism": 0,
+              "paternalism": 35,
+              "despotism": 15,
+              "fascism": 0,
+              "ultranationalism": 20
+            },
+            "if": {
+              "limit": {
+                "SAU": {
+                  "has_idea": "Sphere_Observer"
+                }
+              },
+              "econ_join_sphere_JAP": true,
+              "add_ideas": "Sphere_Observer"
+            },
+            "remove_ideas": "YEM_civil_war"
+          },
+          "if": [
+            {
+              "limit": {
+                "GUL": {
+                  "has_country_flag": "GUL_SAU"
+                }
+              },
+              "GUL": [
+                {
+                  "get_current_government_type": true,
+                  "save_party_popularities": true
+                },
+                {
+                  "restore_previous_government_type": true,
+                  "apply_party_popularities": true
+                }
+              ],
+              "SAU": {
+                "set_autonomy": {
+                  "target": "GUL",
+                  "autonomy_state": "autonomy_associated"
+                }
+              },
+              "if": {
+                "limit": {
+                  "SAU": {
+                    "has_idea": "Sphere_Observer"
+                  }
+                },
+                "GUL": {
+                  "econ_join_sphere_JAP": true,
+                  "add_ideas": "Sphere_Observer"
+                }
+              },
+              "else_if": {
+                "limit": {
+                  "SAU": {
+                    "check_variable": {
+                      "ECON_SPHERE_LEADER": "ITA"
+                    }
+                  }
+                },
+                "GUL": {
+                  "econ_join_sphere_ITA": true
+                }
+              }
+            },
+            {
+              "limit": {
+                "SAU": {
+                  "check_variable": {
+                    "ECON_SPHERE_LEADER": "ITA"
+                  }
+                }
+              },
+              "YEM": {
+                "econ_join_sphere_ITA": true
+              }
+            }
+          ],
+          "news_event": {
+            "id": "WORLD.18025",
+            "days": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "YEM.10",
+    "type": "country_event",
+    "title": "Победа Саляля 2",
+    "desc": "серьёзно",
+    "picture": "GFX_report_event_GER_bormann_wins",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event YEM.10"
+    },
+    "options": [
+      {
+        "name": "wait for BGRS",
+        "name_key": "YEM.10.a",
+        "trigger": {},
+        "effects": {
+          "set_cosmetic_tag": "NYM_ARABIA",
+          "every_owned_state": {
+            "add_core_of": "NYM"
+          },
+          "set_temp_variable": {
+            "TNO_economy_subtype_temp": "token:Econ_Subtype_Dirigisme"
+          },
+          "econ_subtype_change": true,
+          "set_country_flag": [
+            "UAR_can_form",
+            "UAR_can_join"
+          ],
+          "news_event": {
+            "id": "WORLD.18024",
+            "days": 1
+          }
+        }
+      }
+    ]
+  }
+]

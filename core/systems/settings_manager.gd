@@ -271,9 +271,9 @@ func apply_vsync(mode: int, emit_signal: bool = true) -> void:
 
 func apply_ui_scale(scale_val: float, emit_signal: bool = true) -> void:
 	current_ui_scale = clampf(scale_val, 0.5, 3.0)
-	var root_viewport = get_tree().root
-	if root_viewport != null:
-		root_viewport.content_scale_factor = current_ui_scale
+	var tree = get_tree() if is_inside_tree() else Engine.get_main_loop() as SceneTree
+	if tree != null and tree.root != null:
+		tree.root.content_scale_factor = current_ui_scale
 	if emit_signal:
 		ui_scale_changed.emit(current_ui_scale)
 
@@ -307,6 +307,9 @@ func _setup_revert_timer() -> void:
 
 
 func test_display_mode(target_res: Vector2i, target_mode: int, countdown_seconds: int = 15) -> void:
+	if _revert_timer == null:
+		_setup_revert_timer()
+
 	if not _is_testing_display_mode:
 		_backup_resolution = current_resolution
 		_backup_window_mode = current_window_mode
@@ -317,13 +320,15 @@ func test_display_mode(target_res: Vector2i, target_mode: int, countdown_seconds
 	apply_window_mode(target_mode)
 	apply_resolution(target_res)
 
-	_revert_timer.start()
+	if _revert_timer.is_inside_tree():
+		_revert_timer.start()
 	revert_countdown_tick.emit(_revert_seconds_left)
 
 
 func confirm_display_mode() -> void:
 	if _is_testing_display_mode:
-		_revert_timer.stop()
+		if _revert_timer != null and _revert_timer.is_inside_tree():
+			_revert_timer.stop()
 		_is_testing_display_mode = false
 		_backup_resolution = current_resolution
 		_backup_window_mode = current_window_mode
@@ -333,7 +338,8 @@ func confirm_display_mode() -> void:
 
 func revert_display_mode() -> void:
 	if _is_testing_display_mode:
-		_revert_timer.stop()
+		if _revert_timer != null and _revert_timer.is_inside_tree():
+			_revert_timer.stop()
 		_is_testing_display_mode = false
 		apply_window_mode(_backup_window_mode)
 		apply_resolution(_backup_resolution)

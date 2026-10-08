@@ -1,0 +1,1096 @@
+[
+  {
+    "id": "GER_sharpen_air_safety_regulations",
+    "category_id": "political_actions",
+    "name": "Усилить правила воздушной безопасности",
+    "desc": "Введя более строгие правила, мы сможем предотвратить самые частые причины катастроф, в том числе катастроф дирижаблей.",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_government": "neutrality"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_air_safety_regulations",
+        "days": 1095
+      },
+      "set_global_flag": "GER_air_safety_regulations_flag"
+    }
+  },
+  {
+    "id": "ITA_train_irregulars",
+    "category_id": "ITA_colonial_management_dec_cat",
+    "name": "Подготовить нерегулярные части",
+    "desc": "Наняв местные войска, мы снизим нагрузку на свою армию. К тому же местные жители отлично знают население и ландшафт этих мест.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "NOT": {
+        "has_global_flag": "second_italo_ethiopian_war_flag"
+      },
+      "any_controlled_state": {
+        "OR": {
+          "is_core_of": [
+            "LBA",
+            "ERI",
+            "SOM",
+            "ETH"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_ministry_of_italian_africa"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -50,
+        "add_political_power": -50
+      }
+    }
+  },
+  {
+    "id": "ITA_disband_irregulars",
+    "category_id": "ITA_colonial_management_dec_cat",
+    "name": "Расформировать нерегулярные части",
+    "desc": "Нам больше не нужны нерегулярные колониальные войска. Пусть возвращаются домой или откуда они там взялись.",
+    "icon": "GFX_decision_generic_disband_irregulars",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_global_flag": "second_italo_ethiopian_war_flag"
+      },
+      "any_country_division": {
+        "division_has_majority_template": "irregular_infantry"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_ministry_of_italian_africa"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ITA_disband_irregulars_tt",
+      "hidden_effect": {
+        "delete_units": [
+          {
+            "division_template": "Banda Indigena Irregolare",
+            "disband": false
+          },
+          {
+            "division_template": "Truppe Irregolari a Cavallo",
+            "disband": false
+          },
+          {
+            "division_template": "Banda Irregolare Libica",
+            "disband": false
+          },
+          {
+            "division_template": "Banda Irregolare Eritrea",
+            "disband": false
+          },
+          {
+            "division_template": "Banda Irregolare Somala",
+            "disband": false
+          },
+          {
+            "division_template": "Truppe Irregolari di Cammelli",
+            "disband": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ITA_reorganize_irregulars",
+    "category_id": "ITA_colonial_management_dec_cat",
+    "name": "Реорганизовать нерегулярные части",
+    "desc": "Переорганизовав свои нерегулярные части, мы сможем усилить и укрепить их.",
+    "icon": "GFX_decision_generic_reorganize_irregulars",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_tech": "tech_recon"
+    },
+    "visible": {
+      "has_completed_focus": "ITA_ministry_of_italian_africa",
+      "NOT": {
+        "has_country_flag": "ITA_improved_irregular_templates_flag"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -50,
+        "add_political_power": -50,
+        "army_experience": -15
+      }
+    }
+  },
+  {
+    "id": "PER_support_kurds_in_iraq",
+    "category_id": "PER_gulf_decisions_cat",
+    "name": "Сплотить курдов в регионе [FROM.OWNER.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "PER_communist_destabilize_iraq",
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "KUR_resistance_modifier"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      },
+      "set_country_flag": "PER_orchestrating_rebellions"
+    }
+  },
+  {
+    "id": "PER_send_weapons_to_kurds",
+    "category_id": "PER_gulf_decisions_cat",
+    "name": "Отправить оружие курдам в регионе [FROM.OWNER.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "PER_communist_destabilize_iraq",
+      "FROM": {
+        "has_dynamic_modifier": {
+          "modifier": "KUR_resistance_modifier"
+        }
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 1999
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "PER_communist_destabilize_iraq",
+      "NOT": {
+        "FROM": {
+          "OWNER": {
+            "has_country_flag": "PER_kurds_armed_and_ready"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "PER_kurdish_revolt_mission",
+    "category_id": "PER_gulf_decisions_cat",
+    "name": "Назревает курдское восстание",
+    "desc": "",
+    "icon": "generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "PER",
+      "has_country_flag": "PER_kurdish_rebellion_growing",
+      "676": {
+        "has_dynamic_modifier": {
+          "modifier": "KUR_resistance_modifier"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "PER_pashtuns_in_pakistan",
+    "category_id": "PER_gulf_decisions_cat",
+    "name": "Поддержать пуштунское сопротивление в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "PER_communist_liberate_pashtuns",
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "PER_promoting_resistance_here"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      },
+      "set_country_flag": "PER_orchestrating_rebellions_psh"
+    }
+  },
+  {
+    "id": "PER_promote_resistance_in_gulf_states",
+    "category_id": "PER_gulf_decisions_cat",
+    "name": "Поддержать сопротивление в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "PER_communist_destabilize_iraq",
+      "NOT": {
+        "has_country_flag": "PER_promoting_resistance_in_progress"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "PER_revolution_in_the_gulf",
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "PER_promoting_resistance_here"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      },
+      "set_country_flag": "PER_promoting_resistance_in_progress"
+    }
+  },
+  {
+    "id": "PER_clampdown_on_resistance",
+    "category_id": "PER_anti_gulf_decisions_cat",
+    "name": "Преследовать курдских сепаратистов в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "FROM": {
+          "has_state_flag": "clearing_kurdish_resistance_flag"
+        }
+      }
+    },
+    "visible": {
+      "FROM": {
+        "has_dynamic_modifier": {
+          "modifier": "KUR_resistance_modifier"
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -50,
+        "FROM": {
+          "set_state_flag": "clearing_kurdish_resistance_flag"
+        }
+      }
+    }
+  },
+  {
+    "id": "SIA_finish_the_triangular_defense_network",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Завершить оборонительный треугольник",
+    "desc": "Достроив две крепости — одну на севере и одну на юге, — мы получим оборонительный треугольник с третьей вершиной в Бангкоке. Даже если одна крепость падет, останутся две другие.",
+    "icon": "GFX_decision_generic_fortification",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_province": [
+        7408,
+        4075,
+        4401
+      ],
+      "has_country_flag": [
+        "has_built_fortress_saigon",
+        "has_built_fortress_hanoi"
+      ]
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_DEBUG_REGULAR_PURGE_DECISIONS_DURATION_HERE",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_REGULAR_PURGE_DECISIONS_DURATION_HERE",
+    "desc": "",
+    "icon": "eng_ally_imperialist_coup",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "SOV_debug_fast_purge_decisions_flag",
+      "is_debug": true
+    },
+    "complete_effect": {
+      "clr_country_flag": "SOV_debug_fast_purge_decisions_flag",
+      "set_variable": [
+        {
+          "SOV_reinforce_officer_ranks_days": 365
+        },
+        {
+          "SOV_reinstate_aircraft_designer_days": 180
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_general_accused_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_general_accused_dec",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_regular_purge_general_accused_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_conspiracy_in_the_academy_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_conspiracy_in_the_academy_dec",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_regular_purge_conspiracy_in_the_academy_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_anti_saboteur_campaign_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_anti_saboteur_campaign_dec",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_regular_purge_anti_saboteur_campaign_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_general_accuses_general_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_general_accuses_general_dec",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_regular_purge_general_accuses_general_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_advisor_accused_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_advisor_accused_dec",
+    "desc": "",
+    "icon": "eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_advisor_accused_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_civil_servants_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_civil_servants_dec",
+    "desc": "",
+    "icon": "eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_civil_servants_purged_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_nkvd_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_nkvd_dec",
+    "desc": "",
+    "icon": "eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_nkvd_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_admiral_accused_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_admiral_accused_dec",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_admiral_accused_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_naval_conspiracy_in_the_academys_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_naval_conspiracy_in_the_academys_dec",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_naval_conspiracy_in_the_academy_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_naval_anti_saboteur_campaign_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_naval_anti_saboteur_campaign_dec",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_naval_anti_saboteur_campaign_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_airforce_conspiracy_in_the_academys_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_airforce_conspiracy_in_the_academys_dec",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_airforce_conspiracy_in_the_academy_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_airforce_anti_saboteur_campaign_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_airforce_anti_saboteur_campaign_dec",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_airforce_anti_saboteur_campaign_effect": true
+    }
+  },
+  {
+    "id": "SOV_debug_REGULAR_CAMPAIGN_DURATION_HERE",
+    "category_id": "SOV_propaganda_campaigns",
+    "name": "SOV_debug_REGULAR_CAMPAIGN_DURATION_HERE",
+    "desc": "",
+    "icon": "eng_ally_imperialist_coup",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "SOV_debug_fast_propaganda_campaigns_flag",
+      "is_debug": true
+    },
+    "complete_effect": {
+      "clr_country_flag": "SOV_debug_fast_propaganda_campaigns_flag",
+      "set_variable": [
+        {
+          "SOV_default_propaganda_campaign_duration": 180
+        },
+        {
+          "SOV_default_propaganda_campaign_cooldown": 90
+        },
+        {
+          "SOV_default_propaganda_campaign_old_days": 150
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_debug_merge_designers_BACK_TO_REGULAR_STUFF",
+    "category_id": "SOV_merge_designers_dec_cat",
+    "name": "SOV_debug_merge_designers_BACK_TO_REGULAR_STUFF",
+    "desc": "",
+    "icon": "eng_ally_imperialist_coup",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "SOV_merge_tank_and_materiel_plants",
+          "SOV_merge_naval_plants",
+          "SOV_merge_aircraft_plants"
+        ]
+      },
+      "has_country_flag": "SOV_debug_fast_merge_desingers_flag",
+      "is_debug": true
+    },
+    "complete_effect": {
+      "clr_country_flag": "SOV_debug_fast_merge_desingers_flag",
+      "set_variable": [
+        {
+          "SOV_merge_designers_cost": 50
+        },
+        {
+          "SOV_merge_designers_time": 90
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_debug_BACK_TO_REGULAR_STUFF",
+    "category_id": "SOV_national_academy_of_sciences_dec_cat",
+    "name": "SOV_debug_BACK_TO_REGULAR_STUFF",
+    "desc": "",
+    "icon": "eng_ally_imperialist_coup",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "is_debug": true,
+      "has_completed_focus": "SOV_national_academies_of_sciences",
+      "has_country_flag": "SOV_debug_fast_national_academy_of_sicences_flag"
+    },
+    "complete_effect": {
+      "clr_country_flag": "SOV_debug_fast_national_academy_of_sicences_flag",
+      "set_variable": [
+        {
+          "SOV_national_academy_of_sciences_construction_cost": 50
+        },
+        {
+          "SOV_national_academy_of_sciences_construction_time": 90
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_construct_the_zonguldak_coal_refinery",
+    "category_id": "TUR_industrial_projects_category",
+    "name": "Построить углеперерабатывающее предприятие в Зонгулдаке",
+    "desc": "Правительство оценивает каждый потенциальный индустриальный проект отдельно.",
+    "icon": "generic_factory",
+    "cost": "TUR_etatism_cost_penalty_var?50",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_completed_focus": "TUR_nationalise_all_private_industry",
+          "has_country_flag": "TUR_financing_private_enterprise_flag"
+        }
+      },
+      "347": {
+        "free_building_slots": {
+          "building": "synthetic_refinery",
+          "size": {
+            "_op": ">",
+            "value": 1
+          },
+          "include_locked": true
+        }
+      },
+      "has_tech": "synth_oil_experiments"
+    },
+    "visible": {
+      "has_completed_focus": "TUR_the_sanayiciler",
+      "NOT": {
+        "OR": {
+          "has_country_leader": {
+            "character": "TUR_sefik_husnu",
+            "ruling_only": true
+          },
+          "has_completed_focus": "TUR_nationalise_all_private_industry"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "TUR_financing_private_enterprise",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_financing_private_enterprise_flag",
+          "value": 1,
+          "days": 260
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_put_new_safety_regulations_regarding_the_operation_of_aircraft_into_effect",
+    "category_id": "TUR_reforming_our_armed_forces_category",
+    "name": "Принять новые правила воздушной безопасности",
+    "desc": "Мы всегда гордились тем, что находимся на острие европейских авиационных инноваций, но при этом наши пилоты известны своим безрассудным нравом.",
+    "icon": "generic_air",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_air_experience": {
+        "_op": ">",
+        "value": 10
+      },
+      "has_completed_focus": "TUR_expand_the_air_bases"
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_idea": [
+            "TUR_disorganised_armed_forces",
+            "TUR_disorganised_armed_forces_1",
+            "TUR_disorganised_armed_forces_2",
+            "TUR_disorganised_armed_forces_3",
+            "TUR_disorganised_armed_forces_4",
+            "TUR_disorganised_armed_forces_5",
+            "TUR_disorganised_armed_forces_6",
+            "TUR_disorganised_armed_forces_7",
+            "TUR_disorganised_armed_forces_8",
+            "TUR_disorganised_armed_forces_9",
+            "TUR_disorganised_armed_forces_10",
+            "TUR_disorganised_armed_forces_11",
+            "TUR_disorganised_armed_forces_12",
+            "TUR_disorganised_armed_forces_13",
+            "TUR_disorganised_armed_forces_14",
+            "TUR_disorganised_armed_forces_27"
+          ]
+        },
+        {
+          "has_completed_focus": [
+            "TUR_learning_from_the_great_war",
+            "TUR_hava_okulu"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "air_experience": -5,
+      "if": {
+        "limit": {
+          "has_idea": "TUR_disorganised_armed_forces"
+        },
+        "swap_ideas": {
+          "remove_idea": "TUR_disorganised_armed_forces",
+          "add_idea": "TUR_disorganised_armed_forces_21"
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_1"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_1",
+            "add_idea": "TUR_disorganised_armed_forces_15"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_2"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_2",
+            "add_idea": "TUR_disorganised_armed_forces_16"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_3"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_3",
+            "add_idea": "TUR_disorganised_armed_forces_17"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_4"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_4",
+            "add_idea": "TUR_disorganised_armed_forces_18"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_5"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_5",
+            "add_idea": "TUR_disorganised_armed_forces_19"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_6"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_6",
+            "add_idea": "TUR_disorganised_armed_forces_20"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_7"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_7",
+            "add_idea": "TUR_disorganised_armed_forces_26"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_8"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_8",
+            "add_idea": "TUR_disorganised_armed_forces_28"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_9"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_9",
+            "add_idea": "TUR_disorganised_armed_forces_29"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_10"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_10",
+            "add_idea": "TUR_disorganised_armed_forces_25"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_11"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_11",
+            "add_idea": "TUR_disorganised_armed_forces_30"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_12"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_12",
+            "add_idea": "TUR_disorganised_armed_forces_24"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_13"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_13",
+            "add_idea": "TUR_disorganised_armed_forces_23"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_14"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_14",
+            "add_idea": "TUR_disorganised_armed_forces_22"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_27"
+          },
+          "remove_ideas": "TUR_disorganised_armed_forces_27"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ITA_increase_exploitation_persian_gulf",
+    "category_id": "ITA_ENI_exploitation",
+    "name": "[Get.GetPersian_Gulf_ENI_invest]",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "OR": {
+          "AND": [
+            {
+              "check_variable": {
+                "ITA_ENI_persian_gulf_stage": 2
+              },
+              "has_country_flag": "ILG_low_turnout_persian_gulf"
+            },
+            {
+              "check_variable": {
+                "ITA_ENI_persian_gulf_stage": 4
+              },
+              "has_country_flag": "ILG_medium_turnout_persian_gulf"
+            }
+          ],
+          "check_variable": {
+            "ITA_ENI_persian_gulf_stage": 5
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_loosening_regulations",
+    "category_id": "USA_BoP_category",
+    "name": "Ослабить некоторые нормы",
+    "desc": "",
+    "icon": "",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_IRCW_new_contracts"
+    },
+    "visible": {
+      "has_country_flag": "USA_IRCW_new_contracts",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA)IRCW_losening_regulations",
+      "custom_effect_tooltip": "USA_IRCW_loosening_regulations_tt",
+      "hidden_effect": {
+        "IRL": {
+          "set_country_flag": "IRL_no_regulations"
+        }
+      }
+    }
+  },
+  {
+    "id": "Iberian_Wars_economic_decisions_relax_industrial_regulations",
+    "category_id": "iberian_wars_political_mechanic",
+    "name": "Ослабить пром. регулирование",
+    "desc": "Загрязнение убьет наших граждан куда медленнее, чем вражеские пули. Отменяем все экологические нормы, какие только возможно.",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_iberianwar_mainland_nation": true,
+      "has_country_flag": "IBR_economic_decisions_opened"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_economic_decisions_relax_industrial_regulations",
+      "set_temp_variable": {
+        "IBR_wars_opposition_temp": 2
+      },
+      "IBR_wars_change_political_opposition": true,
+      "TNO_worsen_regulations_policy_effectiveness_med": true
+    }
+  },
+  {
+    "id": "IBR_reduce_regulations",
+    "category_id": "IBR_emergency_reforms",
+    "name": "Сократите бюрократию",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_passing_reform"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_reduce_regulations",
+      "set_country_flag": "IBR_passing_reform"
+    }
+  },
+  {
+    "id": "JAP_reduce_regulations",
+    "category_id": "JAP_emergency_reforms",
+    "name": "Сократить регулирование",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption_yen",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "GDP_growth_real": {
+          "_op": "<",
+          "value": 3
+        }
+      },
+      "NOT": {
+        "has_country_flag": "JAP_reforms_next_stage"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_reduce_regulations",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -30,
+        "JAP_PM_decrease_power_small": true
+      }
+    }
+  },
+  {
+    "id": "SBA_Industrial_Regulations_Decision",
+    "category_id": "SBA_general_assembly_category",
+    "name": "Индустриальные регуляции",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "WRS_yakovlev_abolish_gulag",
+    "category_id": "WRS_Tangle_Decisions_Category",
+    "name": "Отменить систему принудительного труда",
+    "desc": "",
+    "icon": "",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "WRS_need_yakovlev_influence_40_tt",
+          "check_variable": {
+            "WRS_Yakovlev_Balance": {
+              "_op": ">",
+              "value": 39.99
+            }
+          }
+        },
+        {
+          "tooltip": "WRS_reform_timer_tt",
+          "has_country_flag": {
+            "flag": "WRS_reformed_flag",
+            "days": {
+              "_op": ">",
+              "value": 364
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "WRS_Yakovlev_Balance": {
+          "_op": ">",
+          "value": 33.33
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WRS_yakovlev_abolish_gulag",
+      "custom_effect_tooltip": "WRS_yakovlev_abolish_gulag_tt",
+      "WRS_zhukovregional_increase_yakovlev_influence_high": true,
+      "WRRFTangle_calcXY": true,
+      "add_ideas": "tno_penal_system_incarceration",
+      "set_country_flag": "WRS_reformed_flag"
+    }
+  },
+  {
+    "id": "VOR_Industrial_Regulations_Decision",
+    "category_id": "VOR_mixed_economic_management_assembly_category",
+    "name": "Industrial Regulations Resolution",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  }
+]

@@ -1,0 +1,2002 @@
+{
+  "tree_id": "horn_of_africa_tree",
+  "tag": "GEN",
+  "directives_count": 58,
+  "directives": [
+    {
+      "id": "HOA_develop_capitalstate",
+      "name": "Развить город [Root.Capital.GetName]",
+      "desc": "Для блага нашего народа и безопасности [ROOT.GetNameRuGen] мы должны нарастить темпы индустриализации. Следовательно, надо вкладывать средства в окрестности города [ROOT.Capital.GetCapitalVictoryPointName], превратив их в индустриальный центр страны.",
+      "icon": "GFX_focus_generic_industry_1",
+      "cost_turns": 3,
+      "x": 3,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "capital_scope": {
+          "ETH_upgrade_state_category": true,
+          "add_extra_state_shared_building_slots": 1,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 1,
+            "instant_build": true
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_the_state_bank_of_name",
+      "name": "Государственный банк державы [ROOT.GetNameDef]",
+      "desc": "Расширив ресурсы госбанка державы [ROOT.GetNameDef], мы сможем выделить народу новую кредитную линию и послужить «финансовым диуретиком» для хворающей [ROOT.GetAdjective]ой экономики.",
+      "icon": "GFX_focus_mex_privatisation",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "HOA_develop_capitalstate"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "HOA_state_bank_idea"
+      }
+    },
+    {
+      "id": "HOA_pave_the_roads",
+      "name": "Вымостить дороги",
+      "desc": "Сейчас перевозка людей и товаров через государство [ROOT.GetNameDef] слишком неэффективна. Инвестиции в наши дороги не только пойдут на пользу экономике, но и сделают страну безопаснее, облегчив заодно перемещение военных ресурсов.",
+      "icon": "GFX_goal_reichsautobahn",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_develop_capitalstate"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": [
+          {
+            "add_building_construction": {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          },
+          {
+            "add_building_construction": {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_the_steam_locomotive",
+      "name": "Паровой локомотив",
+      "desc": "Легковые машины и грузовики полезны для перевозок на небольшие расстояния или небольшими партиями; поезда же куда более эффективны при перевозке большого количества пассажиров или грузов. Инвестировав в сеть железных дорог, мы сможем значительно улучшить экономику нации.",
+      "icon": "GFX_goal_generic_construct_infrastructure",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_pave_the_roads"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "NOT": {
+              "has_tech": "basic_train"
+            }
+          },
+          "set_technology": {
+            "basic_train": 1,
+            "popup": true
+          }
+        },
+        "add_equipment_to_stockpile": {
+          "type": "train_equipment_1",
+          "amount": 10,
+          "producer": "ETH"
+        }
+      }
+    },
+    {
+      "id": "HOA_the_adjective_regional_development_fund",
+      "name": "Фонд [ROOT.GetAdjective]ого регионального развития",
+      "desc": "Регионы [ROOT.GetNameRuGen] стагнируют и отчаянно нуждаются в инвестициях. Создав региональный фонд развития, мы сможем дать местным правительствам средства для модернизации их региона.",
+      "icon": "GFX_focus_generic_concessions",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_state_bank_of_name"
+      ],
+      "mutually_exclusive": [
+        "HOA_the_adjective_industrial_fund"
+      ],
+      "available": [],
+      "completion_reward": {
+        "every_owned_state": {
+          "custom_effect_tooltip": "HOA_state_owned_industry_tt",
+          "add_to_variable": [
+            {
+              "ETH_state_development_production_speed": 0.15
+            },
+            {
+              "ETH_state_development_local_building_slots_factor": 0.15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "HOA_the_adjective_industrial_fund",
+      "name": "[ROOT.GetAdjective]ий индустриальный фонд",
+      "desc": "[ROOT.GetNameDefCap] отчаянно требует индустриализации. Если мы хотим улучшить жизнь людей и защищать их от иностранной агрессии, нам нужно быстро развить промышленность страны.",
+      "icon": "GFX_goal_generic_construct_civ_factory",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_state_bank_of_name"
+      ],
+      "mutually_exclusive": [
+        "HOA_the_adjective_regional_development_fund"
+      ],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": [
+          {
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            }
+          },
+          {
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_exploit_national_resources",
+      "name": "Эксплуатировать национальные ресурсы",
+      "desc": "[ROOT.GetNameDefCap] обладает избытком природных ресурсов, которые так и просят, чтобы их собрали. Произведя небольшие вложения, мы наконец-то сможем эксплуатировать эти ресурсы.",
+      "icon": "GFX_focus_generic_rubber",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_steam_locomotive"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "IF": {
+          "limit": {
+            "original_tag": "AFA"
+          },
+          "908": {
+            "is_controlled_by": "ROOT"
+          }
+        },
+        "ELSE_IF": [
+          {
+            "limit": {
+              "original_tag": "ORO"
+            },
+            "836": {
+              "is_controlled_by": "ROOT"
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "QEM"
+            },
+            "841": {
+              "is_controlled_by": "ROOT"
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "TIG"
+            },
+            "842": {
+              "is_controlled_by": "ROOT"
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "BEG"
+            },
+            "840": {
+              "is_controlled_by": "ROOT"
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "HAR"
+            },
+            "835": {
+              "is_controlled_by": "ROOT"
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "SID"
+            },
+            "837": {
+              "is_controlled_by": "ROOT"
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "GBA"
+            },
+            "838": {
+              "is_controlled_by": "ROOT"
+            }
+          }
+        ]
+      },
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "original_tag": "AFA"
+          },
+          "add_resource": {
+            "type": "oil",
+            "amount": 8,
+            "state": 908
+          }
+        },
+        "ELSE_IF": [
+          {
+            "limit": {
+              "original_tag": "ORO"
+            },
+            "add_resource": {
+              "type": "oil",
+              "amount": 8,
+              "state": 836
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "QEM"
+            },
+            "add_resource": {
+              "type": "steel",
+              "amount": 8,
+              "state": 841
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "TIG"
+            },
+            "add_resource": {
+              "type": "aluminium",
+              "amount": 8,
+              "state": 842
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "BEG"
+            },
+            "add_resource": {
+              "type": "steel",
+              "amount": 8,
+              "state": 840
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "HAR"
+            },
+            "add_resource": {
+              "type": "oil",
+              "amount": 8,
+              "state": 835
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "SID"
+            },
+            "add_resource": {
+              "type": "rubber",
+              "amount": 8,
+              "state": 837
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "GBA"
+            },
+            "add_resource": {
+              "type": "rubber",
+              "amount": 8,
+              "state": 838
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_support_the_agrarians",
+      "name": "Поддержать аграриев",
+      "desc": "Деревенское население [ROOT.GetNameRuGen], занятое в сельском хозяйстве, — костяк нашей нации. Мы должны поддержать его в его жизненно важной работе.",
+      "icon": "GFX_focus_generic_diplomatic_treaty",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_adjective_regional_development_fund"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "every_owned_state": {
+          "custom_effect_tooltip": "HOA_support_the_agrarians_tt",
+          "add_to_variable": [
+            {
+              "ETH_state_development_production_speed": 0.1
+            },
+            {
+              "ETH_state_development_local_building_slots_factor": 0.1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "HOA_promote_local_crafts",
+      "name": "Продвигать местные ремесла",
+      "desc": "В государстве [ROOT.GetNameDefCap] полно мастеров, работающих в малом масштабе и снабжающих страну товарами. Нам следует воспользоваться их опытом и облегчить им расширение деятельности и производство товаров.",
+      "icon": "GFX_focus_generic_treaty",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_adjective_regional_development_fund",
+        "HOA_the_adjective_industrial_fund"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": [
+          {
+            "name": "HOA_promote_local_crafts",
+            "bonus": 0.25,
+            "uses": 2,
+            "category": "industry"
+          },
+          {
+            "name": "HOA_promote_local_crafts",
+            "bonus": 0.5,
+            "uses": 1,
+            "category": "support_tech"
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_use_the_natural_harbors",
+      "name": "Использование естественных гаваней",
+      "desc": "С нашим недавним приобретением прибрежной земли у нас появилась возможность значительно улучшить доступ к международному рынку, основав свой собственный порт. Это заметно облегчит нам экспорт и импорт товаров и очень поможет нашей экономике.",
+      "icon": "GFX_goal_generic_construct_naval_dockyard",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_promote_local_crafts"
+      ],
+      "mutually_exclusive": [
+        "HOA_the_capital_city_airport"
+      ],
+      "available": {
+        "any_owned_state": {
+          "is_coastal": true,
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "is_coastal": true
+          },
+          "add_extra_state_shared_building_slots": 1,
+          "add_building_construction": {
+            "type": "dockyard",
+            "level": 1,
+            "instant_build": true
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_the_capital_city_airport",
+      "name": "Аэропорт города [Root.Capital.GetCapitalVictoryPointName]",
+      "desc": "Авиация соединяет все больше городов мира, развивая глобальную экономику. Нам следует построить собственный аэропорт, чтобы воспользоваться этой модой.",
+      "icon": "GFX_goal_generic_air_fighter2",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_promote_local_crafts"
+      ],
+      "mutually_exclusive": [
+        "HOA_use_the_natural_harbors"
+      ],
+      "available": [],
+      "completion_reward": {
+        "capital_scope": {
+          "add_building_construction": {
+            "type": "air_base",
+            "level": 2,
+            "instant_build": true
+          }
+        },
+        "add_equipment_to_stockpile": {
+          "type": "transport_plane_equipment",
+          "amount": 10,
+          "producer": "ROOT"
+        }
+      }
+    },
+    {
+      "id": "HOA_a_steamboat_fleet",
+      "name": "Пароходный флот",
+      "desc": "Чтобы защитить свое побережье и торговые пути, нам нужно построить флот прибрежных кораблей, способный отразить любую иностранную агрессию.",
+      "icon": "GFX_focus_generic_destroyer",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_use_the_natural_harbors"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "HOA_a_steamboat_fleet",
+          "bonus": 0.5,
+          "uses": 2,
+          "category": "dd_tech"
+        },
+        "navy_experience": 25
+      }
+    },
+    {
+      "id": "HOA_improved_irrigation_systems",
+      "name": "Улучшенная система ирригации",
+      "desc": "Без надежной пищевой промышленности немыслима национальная безопасность. Чтобы повысить урожайность полей, мы вложим средства в масштабную программу орошения плодородных почв.",
+      "icon": "GFX_goal_generic_construction2",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_use_the_natural_harbors",
+        "HOA_the_capital_city_airport"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "every_owned_state": {
+          "custom_effect_tooltip": "HOA_improved_irrigation_systems_tt",
+          "add_to_variable": [
+            {
+              "ETH_state_development_production_speed": 0.15
+            },
+            {
+              "ETH_state_development_local_building_slots_factor": 0.15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "HOA_the_adjective_air_fleet",
+      "name": "[ROOT.GetAdjective]ий воздушный флот",
+      "desc": "Воздушная война быстро становится ключевой ареной, на которой определяются победители в конфликтах. Следовательно, мы должны основать свои ВВС и подготовить их к защите небес [ROOT.GetNameRuGen].",
+      "icon": "GFX_goal_generic_air_fighter",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_capital_city_airport"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": [
+          {
+            "name": "HOA_the_adjective_air_fleet",
+            "bonus": 0.5,
+            "uses": 1,
+            "category": "light_air"
+          },
+          {
+            "name": "HOA_the_adjective_air_fleet",
+            "bonus": 0.5,
+            "uses": 1,
+            "category": "medium_air"
+          },
+          {
+            "name": "HOA_the_adjective_air_fleet",
+            "bonus": 0.5,
+            "uses": 1,
+            "category": "heavy_air"
+          }
+        ],
+        "air_experience": 20
+      }
+    },
+    {
+      "id": "HOA_state-funded_projects",
+      "name": "Проекты с госфинансированием",
+      "desc": "Наша экономика в застое из-за недостатка инфраструктуры и промышленности. Чтобы исправить положение, мы сделаем большие вложения в новые проекты по всему государству [ROOT.GetNameDef].",
+      "icon": "GFX_goal_generic_demand_territory",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "HOA_a_steamboat_fleet",
+        "HOA_the_adjective_air_fleet",
+        "HOA_improved_irrigation_systems"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "HOA_state_funded_projects_idea"
+      }
+    },
+    {
+      "id": "HOA_the_grand_university_of_capital",
+      "name": "Большой университет города [Root.Capital.GetCapitalVictoryPointName]",
+      "desc": "Передача знаний от одного поколения другому очень важна для безопасности и роста любой нации. Следовательно, мы построим в городе [ROOT.Capital.GetCapitalVictoryPointName] новый большой университет, чтобы обеспечить хорошую подготовку следующему поколению ученых, историков и творцов.",
+      "icon": "GFX_focus_research",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_state-funded_projects"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "HOA_the_adjective_armed_forces",
+      "name": "[ROOT.GetAdjective]ие вооруженные силы",
+      "desc": "В мире сейчас растет нестабильность, между великими державами накапливается напряженность. Если мы хотим сохранить независимость, [ROOT.GetAdjective]ая армия должна быть готова к войне.",
+      "icon": "GFX_goal_generic_small_arms",
+      "cost_turns": 2,
+      "x": 8,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "army_experience": 25
+      }
+    },
+    {
+      "id": "HOA_warrior_tradition",
+      "name": "Военные традиции",
+      "desc": "У [ROOT.GetNameRuGen] долгая история отважных воинов, защищающих свои дома от завоевателей. Сейчас нам как никогда важно опереться на эту традицию, чтобы оборонять родину.",
+      "icon": "GFX_focus_RAJ_lions_of_the_great_war",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_adjective_armed_forces"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "division_template": {
+          "name": "East African Irregulars",
+          "is_locked": true,
+          "regiments": {
+            "irregular_infantry": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 2
+              }
+            ]
+          }
+        },
+        "capital_scope": {
+          "create_unit": {
+            "division": "name = \"Irregular Infantry\" division_template = \"East African Irregulars\" start_experience_factor = 0.05 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT",
+            "count": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_strengthen_the_irregulars",
+      "name": "Усиление нерегулярных войск",
+      "desc": "Система нерегулярных частей и ополчения веками служила нам верой и правдой. Мало причин менять то, что работает.",
+      "icon": "GFX_focus_ETH_keep_the_chitet",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_warrior_tradition"
+      ],
+      "mutually_exclusive": [
+        "HOA_every_man_a_warrior"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_units_to_division_template": {
+          "template_name": "East African Irregulars",
+          "regiments": {
+            "irregular_infantry": [
+              0,
+              1
+            ]
+          }
+        },
+        "add_ideas": "HOA_improved_irregulars_idea"
+      }
+    },
+    {
+      "id": "HOA_every_man_a_warrior",
+      "name": "Каждый человек — воин",
+      "desc": "Чтобы государство [ROOT.GetNameDef] успешно дало отпор иностранным агрессорам, нужно военизировать общество до такой степени, чтобы каждый человек при необходимости мог взять в руки оружие и вступить в ряды национальной обороны.",
+      "icon": "GFX_focus_generic_manpower",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_warrior_tradition"
+      ],
+      "mutually_exclusive": [
+        "HOA_strengthen_the_irregulars"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "HOA_every_man_a_warrior_idea",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "set_technology": {
+          "militia_tech": 1,
+          "popup": false
+        }
+      }
+    },
+    {
+      "id": "HOA_names_finest",
+      "name": "Лучшие люди [ROOT.GetNameRuGen]",
+      "desc": "Наши войска знают, что они — единственная защита нации от подчинения иностранной державой. Это знание дает им непоколебимую преданность делу защиты родины и сохранения [ROOT.GetAdjective]ой свободы.",
+      "icon": "GFX_focus_ETH_sway_the_warlords",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_strengthen_the_irregulars"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "HOA_our_finest_idea"
+      }
+    },
+    {
+      "id": "HOA_utilize_our_strengths",
+      "name": "Задействовать наши сильные стороны",
+      "desc": "Хоть наша армия и не так обширна или формализована, как у других стран, у нее есть большой опыт ведения боев в необычных условиях, и он нам пригодится.",
+      "icon": "GFX_goal_generic_allies_build_infantry",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_strengthen_the_irregulars",
+        "HOA_every_man_a_warrior"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "OR": {
+              "original_tag": [
+                "AFA",
+                "TIG",
+                "SID"
+              ]
+            }
+          },
+          "add_ideas": "HOA_our_strength_fighting_idea"
+        },
+        "ELSE_IF": [
+          {
+            "limit": {
+              "OR": {
+                "original_tag": [
+                  "ORO",
+                  "GBA",
+                  "BEG"
+                ]
+              }
+            },
+            "add_ideas": "HOA_our_strength_production_idea"
+          },
+          {
+            "limit": {
+              "OR": {
+                "original_tag": [
+                  "HAR",
+                  "QEM"
+                ]
+              }
+            },
+            "add_ideas": "HOA_our_strength_research_idea"
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_reform_the_conscription",
+      "name": "Реформировать призыв",
+      "desc": "Сейчас, когда ситуация в мире становится все более напряженной, пора расширить программу призыва, чтобы быть готовыми к любому виду иностранной агрессии.",
+      "icon": "GFX_focus_generic_military_academy",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_every_man_a_warrior"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "IF": {
+          "limit": {
+            "NOT": [
+              {
+                "has_idea": "extensive_conscription"
+              },
+              {
+                "has_idea": "service_by_requirement"
+              },
+              {
+                "has_idea": "all_adults_serve"
+              },
+              {
+                "has_idea": "scraping_the_barrel"
+              }
+            ]
+          },
+          "add_ideas": "extensive_conscription"
+        }
+      }
+    },
+    {
+      "id": "HOA_eyes_on_the_imperialists",
+      "name": "Взгляд империалистов",
+      "desc": "Империалистические державы региона глядят на независимость [ROOT.GetNameRuGen] с презрением. Надо сохранять бдительность и не стать жертвой их амбиций.",
+      "icon": "GFX_goal_generic_army_doctrines",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_utilize_our_strengths"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_doctrine_cost_reduction": [
+          {
+            "name": "HOA_eyes_on_the_imperialists",
+            "cost_reduction": 0.25,
+            "uses": 1,
+            "category": "land_doctrine"
+          },
+          {
+            "name": "HOA_eyes_on_the_imperialists",
+            "cost_reduction": 0.25,
+            "uses": 1,
+            "category": "air_doctrine"
+          },
+          {
+            "name": "HOA_eyes_on_the_imperialists",
+            "cost_reduction": 0.25,
+            "uses": 1,
+            "category": "naval_doctrine"
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_encourage_local_arms_production",
+      "name": "Поощрить локальное производство оружия",
+      "desc": "Если мы не сможем снабдить наши войска нужным снаряжением, войска не смогут организовать адекватную оборону. Следовательно, необходимо нарастить объем производства оружия.",
+      "icon": "GFX_goal_generic_construct_mil_factory",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_utilize_our_strengths"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": [
+          {
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 1,
+              "instant_build": true
+            }
+          },
+          {
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_metal_beasts",
+      "name": "Металлические звери",
+      "desc": "Сейчас всем становится очевидна растущая роль бронетехники на поле боя. Армия должна научиться эффективно использовать бронетехнику и противостоять ей.",
+      "icon": "GFX_goal_generic_army_tanks",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_eyes_on_the_imperialists"
+      ],
+      "mutually_exclusive": [
+        "HOA_the_roars_of_thunder",
+        "HOA_develop_indigenous_models"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "HOA_metal_beasts",
+          "bonus": 0.5,
+          "uses": 2,
+          "category": "armor"
+        }
+      }
+    },
+    {
+      "id": "HOA_the_roars_of_thunder",
+      "name": "Раскаты грома",
+      "desc": "Иногда единственный способ потеснить врага на поле боя — это превосходящая огневая мощь. Эффективнее всего ее обеспечивает артиллерия.",
+      "icon": "GFX_goal_generic_army_artillery2",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_eyes_on_the_imperialists",
+        "HOA_encourage_local_arms_production"
+      ],
+      "mutually_exclusive": [
+        "HOA_metal_beasts",
+        "HOA_develop_indigenous_models"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "HOA_the_roars_of_thunder",
+          "bonus": 0.5,
+          "uses": 2,
+          "category": [
+            "artillery",
+            "cat_anti_tank"
+          ]
+        }
+      }
+    },
+    {
+      "id": "HOA_develop_indigenous_models",
+      "name": "Разработка собственных проектов",
+      "desc": "Если полагаться на зарубежные проекты пехотного снаряжения, мы рискуем отстать от других держав технологически. Чтобы снизить такой риск, нужно нарабатывать опыт в области развития стрелкового оружия.",
+      "icon": "GFX_focus_secret_rearmament",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_encourage_local_arms_production"
+      ],
+      "mutually_exclusive": [
+        "HOA_metal_beasts",
+        "HOA_the_roars_of_thunder"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "HOA_develop_indigenous_models",
+          "bonus": 0.25,
+          "uses": 2,
+          "category": "infantry_weapons"
+        }
+      }
+    },
+    {
+      "id": "HOA_the_steel_lions",
+      "name": "Стальные львы",
+      "desc": "Эпоха статичной войны миновала. Нам пора выводить на поле боя собственную бронетехнику и изучать методы ведения мобильной войны.",
+      "icon": "GFX_focus_generic_army_tanks2",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_metal_beasts"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "IF": [
+          {
+            "limit": {
+              "has_dlc": "No Step Back"
+            },
+            "has_tech": "gwtank_chassis"
+          },
+          {
+            "limit": {
+              "NOT": {
+                "has_dlc": "No Step Back"
+              }
+            },
+            "has_tech": "gwtank"
+          }
+        ]
+      },
+      "completion_reward": {
+        "division_template": {
+          "name": "Steel Lions",
+          "is_locked": false,
+          "regiments": {
+            "light_armor": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              }
+            ]
+          }
+        },
+        "hidden_effect": {
+          "IF": {
+            "limit": {
+              "has_dlc": "No Step Back"
+            },
+            "create_equipment_variant": {
+              "name": "Roaring Thunder",
+              "type": "light_tank_chassis_0",
+              "parent_version": 0,
+              "modules": {
+                "main_armament_slot": "tank_heavy_machine_gun",
+                "turret_type_slot": "tank_light_one_man_tank_turret",
+                "suspension_type_slot": "tank_bogie_suspension",
+                "armor_type_slot": "tank_riveted_armor",
+                "engine_type_slot": "tank_gasoline_engine"
+              },
+              "upgrades": {
+                "tank_nsb_engine_upgrade": 1,
+                "tank_nsb_armor_upgrade": 1
+              },
+              "icon": "GFX_gwtank_medium"
+            }
+          }
+        },
+        "capital_scope": {
+          "create_unit": {
+            "division": "name = \"Steel Lions Brigade\" division_template = \"Steel Lions\" start_experience_factor = 0.05 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT",
+            "count": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_warfare_from_afar",
+      "name": "Война издалека",
+      "desc": "Артиллерия уже не раз доказала свою эффективность на поле боя. Пора начать использовать ее еще эффективнее, плотнее интегрировав артиллерийские части в наши пехотные дивизии.",
+      "icon": "GFX_goal_generic_occupy_start_war",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_roars_of_thunder"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_units_to_division_template": {
+          "template_name": "East African Irregulars",
+          "support": {
+            "artillery": 0
+          },
+          "regiments": {
+            "artillery_brigade": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_modern_infantry",
+      "name": "Современная пехота",
+      "desc": "Реформы нашей армии многое сделали для повышения ее эффективности. Следует продолжать наращивать эффективность, повысив количество дивизий в поле.",
+      "icon": "GFX_focus_ETH_peacekeeping_forces",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_develop_indigenous_models"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "division_template": {
+          "name": "Regular Infantry",
+          "is_locked": false,
+          "regiments": {
+            "infantry": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 3
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 3
+              }
+            ]
+          }
+        },
+        "capital_scope": {
+          "create_unit": {
+            "division": "name = \"Regular Infantry Division\" division_template = \"Regular Infantry\" start_experience_factor = 0.1 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT",
+            "count": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_the_first_album",
+      "name": "[ROOT.GetNameDefCap]",
+      "desc": "Между великими державами растет напряженность, и обстановка в мире выглядит все более опасной — но это же открывает новые возможности для тех наций, что желают и готовы воспользоваться моментом.",
+      "icon": "GFX_focus_spr_masters_of_our_own_fate",
+      "cost_turns": 3,
+      "x": 17,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_political_power": 100,
+        "add_war_support": 0.1
+      }
+    },
+    {
+      "id": "HOA_a_loyal_subject",
+      "name": "Верные подданные",
+      "desc": "Пока ситуация на мировой арене становится все более нестабильной, возможно, лучше оставаться под защитой более сильной нации — по крайней мере, пока...",
+      "icon": "GFX_goal_generic_major_alliance",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_first_album"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "add_autonomy_score": {
+          "value": 250
+        },
+        "add_stability": 0.05
+      }
+    },
+    {
+      "id": "HOA_political_stability",
+      "name": "Политическая стабильность",
+      "desc": "Мы не можем оставаться независимой нацией, если разделены сами по себе. Лишь создав единый фронт, мы сумеем сопротивляться ветрам перемен, объявшим сейчас весь мир.",
+      "icon": "GFX_goal_generic_neutrality_focus",
+      "cost_turns": 3,
+      "x": 4,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_first_album"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_political_power": 100,
+        "add_stability": 0.15
+      }
+    },
+    {
+      "id": "HOA_the_capital_railroad",
+      "name": "Железная дорога города [Root.Capital.GetCapitalVictoryPointName]",
+      "desc": "Соединив свою железнодорожную сеть с соседскими, мы сможем улучшить экспорт своих товаров и ресурсов к соседям — а заодно, в идеале, и улучшить свою экономику.",
+      "icon": "GFX_goal_generic_production",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_a_loyal_subject"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": true,
+        "IF": {
+          "limit": {
+            "is_subject": true
+          },
+          "ROOT.OVERLORD": {
+            "any_owned_state": {
+              "any_neighbor_state": {
+                "is_owned_by": "ROOT"
+              }
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "is_subject": true,
+            "any_owned_state": {
+              "any_neighbor_state": {
+                "is_owned_by": "ROOT.OVERLORD"
+              }
+            }
+          },
+          "capital_scope": {
+            "random_neighbor_state": {
+              "limit": {
+                "is_owned_by": "ROOT.OVERLORD"
+              },
+              "build_railway": {
+                "level": 1,
+                "start_state": "THIS",
+                "target_state": "PREV"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_invite_foreign_settlers",
+      "name": "Пригласить иностранных поселенцев",
+      "desc": "В том, что касается модернизации нашей нации, нам еще предстоит многому научиться. Нужно воспользоваться навыками наивных колонистов, дав им стимул перебраться в государство [ROOT.GetNameDef].",
+      "icon": "GFX_focus_ETH_invite_italian_settlers",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_a_loyal_subject"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "capital_scope": {
+          "ETH_upgrade_state_category": true,
+          "add_manpower": 75000
+        }
+      }
+    },
+    {
+      "id": "HOA_countryleader",
+      "name": "[ROOT.GetLeader]",
+      "desc": "[ROOT.GetLeader] — единственный человек, способный сберечь нацию от распада в эти трудные времена. Вот за кем должен сплотиться народ!",
+      "icon": "GFX_focus_generic_monarchy_1",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "HOA_political_stability"
+      ],
+      "mutually_exclusive": [
+        "HOA_securing_the_adjective_future"
+      ],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "IF": {
+          "limit": {
+            "any_character": {
+              "is_country_leader": true,
+              "is_field_marshal": true
+            }
+          },
+          "random_character": {
+            "limit": {
+              "is_country_leader": true,
+              "is_field_marshal": true
+            },
+            "add_attack": 1
+          }
+        },
+        "ELSE": {
+          "random_character": {
+            "limit": {
+              "is_country_leader": true
+            },
+            "add_field_marshal_role": {
+              "traits": [],
+              "skill": 2,
+              "attack_skill": 2,
+              "defense_skill": 1,
+              "planning_skill": 2,
+              "logistics_skill": 1
+            },
+            "add_random_trait": [
+              "old_guard",
+              "brilliant_strategist",
+              "inflexible_strategist",
+              "trait_reckless",
+              "irregulars_officer"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_securing_the_adjective_future",
+      "name": "На благо [ROOT.GetAdjective]ого будущего",
+      "desc": "[ROOT.GetNameDefCap] — небольшая нация, у которой очень мало друзей на мировой арене. Изменив это, мы сделаем большой шаг навстречу нашей будущей свободе и независимости.",
+      "icon": "GFX_goal_generic_forceful_treaty",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "HOA_political_stability"
+      ],
+      "mutually_exclusive": [
+        "HOA_countryleader"
+      ],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_political_power": 75,
+        "every_other_country": {
+          "limit": {
+            "is_major": true,
+            "any_owned_state": {
+              "is_on_continent": "africa"
+            }
+          },
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "HOA_african_cooperation"
+          },
+          "ROOT": {
+            "add_opinion_modifier": {
+              "target": "PREV",
+              "modifier": "HOA_african_cooperation"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_improving_the_educational_system",
+      "name": "Улучшение образовательной системы",
+      "desc": "Судьба нации — в руках наших детей. Следовательно, дав им лучшее образование из возможных, мы по максимуму вложимся в будущее [ROOT.GetNameRuGen].",
+      "icon": "GFX_focus_hol_the_foundations_of_defense",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_capital_railroad",
+        "HOA_invite_foreign_settlers"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "add_stability": 0.05,
+        "IF": {
+          "limit": {
+            "is_subject": true
+          },
+          "IF": {
+            "limit": {
+              "OVERLORD": {
+                "has_government": "neutrality"
+              }
+            },
+            "add_popularity": {
+              "ideology": "neutrality",
+              "popularity": 0.1
+            }
+          },
+          "ELSE_IF": [
+            {
+              "limit": {
+                "OVERLORD": {
+                  "has_government": "communism"
+                }
+              },
+              "add_popularity": {
+                "ideology": "communism",
+                "popularity": 0.1
+              }
+            },
+            {
+              "limit": {
+                "OVERLORD": {
+                  "has_government": "fascism"
+                }
+              },
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.1
+              }
+            },
+            {
+              "limit": {
+                "OVERLORD": {
+                  "has_government": "democratic"
+                }
+              },
+              "add_popularity": {
+                "ideology": "democratic",
+                "popularity": 0.1
+              }
+            }
+          ]
+        },
+        "add_ideas": "HOA_education_idea"
+      }
+    },
+    {
+      "id": "HOA_construct_great_monuments",
+      "name": "Соорудить великие монументы",
+      "desc": "[ROOT.GetAdjective]ому народу есть чем гордиться. У нас давняя история, которую следует увековечить в монументах, что вдохновят народ на новые, еще более великие свершения.",
+      "icon": "GFX_goal_generic_construction",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_countryleader"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_stability": 0.15,
+        "capital_scope": {
+          "ETH_upgrade_main_city": true
+        }
+      }
+    },
+    {
+      "id": "HOA_the_adjective_volunteer_force",
+      "name": "Отряд [ROOT.GetAdjective]их добровольцев",
+      "desc": "Мелкие пограничные стычки на другом континенте могут перерасти в крупные конфликты, охватывающие весь мир. Мы должны помочь искоренить эти стычки, пока они не привели к новой Великой войне.",
+      "icon": "GFX_focus_generic_little_entente",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_securing_the_adjective_future"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_ideas": "HOA_volunteers_idea",
+        "set_rule": {
+          "can_send_volunteers": true
+        }
+      }
+    },
+    {
+      "id": "HOA_military_cooperation",
+      "name": "Военное сотрудничество",
+      "desc": "Мы движемся семимильными шагами к улучшению армии, но нам все равно есть чему поучиться у друзей за границей посредством совместных учений и наращивания военного сотрудничества.",
+      "icon": "GFX_goal_generic_military_deal",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_securing_the_adjective_future"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_command_power": 50,
+        "army_experience": 100
+      }
+    },
+    {
+      "id": "HOA_that_which_is_rightfully_ours",
+      "name": "То, что принадлежит нам по праву",
+      "desc": "[ROOT.GetNameDefCap] сейчас — бледная тень себя в прошлом. История показывает, что владения наших предков были куда обширнее, чем теперь, но с течением времени многие наши земли были украдены у нас. Пора нам вернуть себе то, что наше по праву.",
+      "icon": "GFX_focus_generic_support_the_left_right",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "HOA_countryleader"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_political_power": 75,
+        "add_timed_idea": {
+          "idea": "HOA_rightfully_ours_idea",
+          "days": 720
+        }
+      }
+    },
+    {
+      "id": "HOA_commandos",
+      "name": "Коммандо",
+      "desc": "Иногда на войне небольшая, но хорошо подготовленная группа бойцов может добиться в тылу врага большего, чем крупная армия на поле боя.",
+      "icon": "GFX_focus_prc_infiltration",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_adjective_volunteer_force"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "set_technology": {
+          "tech_special_forces": 1
+        },
+        "add_tech_bonus": {
+          "name": "HOA_commandos",
+          "bonus": 0.25,
+          "uses": 2,
+          "category": "cat_special_forces_generic"
+        }
+      }
+    },
+    {
+      "id": "HOA_a_jagged_alliance",
+      "name": "Непростой союз",
+      "desc": "Мы не всегда сходимся во мнении с другими нациями, но часто сталкиваемся с одними и теми же угрозами. Сосредоточившись на общих проблемах, мы заложим фундамент долгосрочного союза и усилим национальную безопасность.",
+      "icon": "GFX_goal_generic_national_unity",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_the_adjective_volunteer_force",
+        "HOA_military_cooperation"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_ideas": "HOA_jagged_alliance_idea"
+      }
+    },
+    {
+      "id": "HOA_observe_and_learn",
+      "name": "Наблюдать и учиться",
+      "desc": "Война постоянно развивается, и причина тому — технологические прорывы и инновационное мышление. Чтобы поддерживать военную мощь, нужно извлекать из войны уроки и всегда искать возможности улучшения армии.",
+      "icon": "GFX_goal_generic_secret_weapon",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_military_cooperation"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_doctrine_cost_reduction": {
+          "name": "HOA_observe_and_learn",
+          "cost_reduction": 0.5,
+          "uses": 2,
+          "category": [
+            "land_doctrine",
+            "air_doctrine",
+            "naval_doctrine"
+          ]
+        }
+      }
+    },
+    {
+      "id": "HOA_foreign_investors",
+      "name": "Иностранные инвесторы",
+      "desc": "Чтобы мы процветали, нам необходимы вложения в индустрию и инфраструктуру. К счастью, сейчас нет недостатка в иностранцах, желающих заработать.",
+      "icon": "GFX_goal_generic_intelligence_exchange",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "HOA_improving_the_educational_system"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "HOA_foreign_investors",
+          "bonus": 0.25,
+          "uses": 1,
+          "category": "industry"
+        },
+        "random_owned_controlled_state": {
+          "limit": {
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 0
+              },
+              "include_locked": true
+            }
+          },
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 1,
+            "instant_build": true
+          },
+          "add_extra_state_shared_building_slots": 1
+        }
+      }
+    },
+    {
+      "id": "HOA_research_exchange_programmes",
+      "name": "Программы обмена исследованиями",
+      "desc": "Наша индустрия отчаянно нуждается в модернизации. Основав программы обмена, мы сможем получать из-за границы знания о том, как лучше применять новые технологические достижения на наших заводах.",
+      "icon": "GFX_goal_generic_scientific_exchange",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_improving_the_educational_system"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "HOA_research_exchange_programmes",
+          "bonus": 0.25,
+          "uses": 2,
+          "category": [
+            "industry",
+            "electronics"
+          ]
+        },
+        "IF": {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_tech_bonus": {
+              "bonus": 0.25,
+              "uses": 2,
+              "category": [
+                "industry",
+                "electronics"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "HOA_foreign_trained_officials",
+      "name": "Управленцы, подготовленные за границей",
+      "desc": "Нам до сих пор есть чему поучиться за границей. Будет правильно задействовать зарубежный опыт, давая иностранным управленцам должности в нашем аппарате власти.",
+      "icon": "GFX_focus_generic_military_mission",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_research_exchange_programmes"
+      ],
+      "mutually_exclusive": [
+        "HOA_countryadjective_loyalist_advisors"
+      ],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "add_political_power": 250
+      }
+    },
+    {
+      "id": "HOA_countryadjective_loyalist_advisors",
+      "name": "[ROOT.GetAdjective]ие лоялисты-советники",
+      "desc": "Нельзя допустить, чтобы наша нация и культура были поглощены империалистами. Надо назначить людей, лояльных государству [ROOT.GetNameDef], на позиции власти и запустить процесс возвращения свободы.",
+      "icon": "GFX_focus_ETH_empower_the_ras",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "HOA_research_exchange_programmes"
+      ],
+      "mutually_exclusive": [
+        "HOA_foreign_trained_officials"
+      ],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "add_autonomy_score": {
+          "value": 750,
+          "localization": "HOA_countryadjective_loyalist_advisors"
+        }
+      }
+    },
+    {
+      "id": "HOA_lay_claim_to_the_danakil",
+      "name": "Заявить претензии на Данакиль",
+      "desc": "Государство [ROOT.GetNameDefCap] всегда будет уязвимо для вторжения с моря, если не заполучить северный регион Данакиль.",
+      "icon": "GFX_goal_generic_major_war",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "HOA_that_which_is_rightfully_ours"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "every_state": [
+          {
+            "limit": {
+              "region": 273,
+              "NOT": {
+                "is_owned_by": "ROOT"
+              }
+            },
+            "add_claim_by": "ROOT"
+          },
+          {
+            "limit": {
+              "region": 273,
+              "OWNER": {
+                "capital_scope": {
+                  "region": 273
+                },
+                "is_subject": false,
+                "NOT": {
+                  "tag": "ROOT"
+                }
+              }
+            },
+            "OWNER": {
+              "ROOT": {
+                "create_wargoal": {
+                  "type": "take_claimed_state",
+                  "target": "PREV"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_push_for_the_highlands",
+      "name": "Претензии на горную местность",
+      "desc": "Экономический центр Восточной Африки — это нагорье. Если оно отойдет государству [ROOT.GetNameDef], наш экономический потенциал заметно возрастет.",
+      "icon": "GFX_goal_generic_major_war",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_that_which_is_rightfully_ours"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "every_state": [
+          {
+            "limit": {
+              "region": 17,
+              "NOT": {
+                "is_owned_by": "ROOT"
+              }
+            },
+            "add_claim_by": "ROOT"
+          },
+          {
+            "limit": {
+              "region": 17,
+              "OWNER": {
+                "capital_scope": {
+                  "region": 17
+                },
+                "is_subject": false,
+                "NOT": {
+                  "tag": "ROOT"
+                }
+              }
+            },
+            "OWNER": {
+              "ROOT": {
+                "create_wargoal": {
+                  "type": "take_claimed_state",
+                  "target": "PREV"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_secure_the_ogaden",
+      "name": "Захват Огадена",
+      "desc": "Заполучив Огаден, мы обзаведемся естественными преградами между нашей землей и любыми потенциальными агрессорами. Также мы откроем свою экономику для торговли через Индийский океан.",
+      "icon": "GFX_goal_generic_major_war",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "HOA_that_which_is_rightfully_ours"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "every_state": [
+          {
+            "limit": {
+              "region": 274,
+              "NOT": {
+                "is_owned_by": "ROOT"
+              }
+            },
+            "add_claim_by": "ROOT"
+          },
+          {
+            "limit": {
+              "region": 274,
+              "OWNER": {
+                "capital_scope": {
+                  "region": 274
+                },
+                "is_subject": false,
+                "NOT": {
+                  "tag": "ROOT"
+                }
+              }
+            },
+            "OWNER": {
+              "ROOT": {
+                "create_wargoal": {
+                  "type": "take_claimed_state",
+                  "target": "PREV"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "HOA_rallying_the_adjective_people",
+      "name": "Сбор [ROOT.GetAdjective]ого народа",
+      "desc": "Мир раздирают конфликты. Все, что стоит между нашими свободами и бездной подчинения, — решимость [ROOT.GetAdjective]ого народа сражаться. Вместе мы выстоим, порознь мы падем.",
+      "icon": "GFX_goal_generic_propaganda",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_a_jagged_alliance"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_ideas": "HOA_rallying_the_people_idea"
+      }
+    },
+    {
+      "id": "HOA_the_capital_school_of_technology",
+      "name": "Технологический институт города [Root.Capital.GetCapitalVictoryPointName]",
+      "desc": "Многое из того, что лишь несколько лет назад было на острие прогресса в бою и на заводах, сегодня уже устарело. Чтобы не отставать в освоении новых технологий, нужно вкладывать средства в образование нового поколения.",
+      "icon": "GFX_focus_research",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_foreign_trained_officials"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "HOA_promote_countryadjective_nationalism",
+      "name": "Пропагандировать [ROOT.GetAdjective]ий национализм",
+      "desc": "Народ [ROOT.GetNameRuGen] больше не станет терпеть угнетение иностранными державами. Нужно воспользоваться моментом и ускорить приближение независимости.",
+      "icon": "GFX_focus_ETH_freedom_at_gunpoint",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_countryadjective_loyalist_advisors"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": true
+      },
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "add_political_power": 100,
+        "add_autonomy_score": {
+          "value": 500,
+          "localization": "HOA_promote_countryadjective_nationalism"
+        }
+      }
+    },
+    {
+      "id": "HOA_crowning_of_the_negusa_nagast",
+      "name": "Коронование Царя царей",
+      "desc": "Мы постепенно становимся доминирующей силой в регионе, и нам пора принять эту роль, назначив своего лидера новым Царем царей. Все должны собраться рядом с [ROOT.GetLeader.GetHerHim], если не хотят познать наш гнев.",
+      "icon": "GFX_focus_ETH_negusa-nagast",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_push_for_the_highlands",
+        "HOA_secure_the_ogaden",
+        "HOA_lay_claim_to_the_danakil"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "custom_trigger_tooltip": {
+          "tooltip": "HOA_control_ethiopia_tt",
+          "NOT": {
+            "any_state": {
+              "is_core_of": "ETH",
+              "NOT": {
+                "is_controlled_by": "ROOT"
+              }
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "every_state": {
+          "limit": {
+            "is_controlled_by": "ROOT",
+            "is_core_of": "ETH"
+          },
+          "add_core_of": "ROOT",
+          "remove_core_of": "ETH"
+        }
+      }
+    },
+    {
+      "id": "HOA_proclaim_east-african_hegemony",
+      "name": "Провозгласить восточноафриканскую гегемонию",
+      "desc": "Непростую ситуацию с Африканским Рогом можно стабилизировать, лишь если на троне будет сидеть наш славный император [ROOT.GetName]. Пришло время объединить регион.",
+      "icon": "GFX_focus_ETH_consolidate_east_africa",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "HOA_crowning_of_the_negusa_nagast"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": "form_the_horn_of_africa"
+      }
+    }
+  ]
+}

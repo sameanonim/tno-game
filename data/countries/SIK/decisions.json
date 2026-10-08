@@ -1,0 +1,484 @@
+[
+  {
+    "id": "AFG_sikh_recruitment",
+    "category_id": "AFG_sikh_recruitment_cat",
+    "name": "Вербовка сикхов",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "controller": {
+          "OR": {
+            "original_tag": "ROOT",
+            "is_subject_of": "ROOT"
+          }
+        }
+      },
+      "has_tech": "gw_artillery"
+    },
+    "visible": {
+      "has_completed_focus": "AFG_ally_the_sikhs"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SIK_war_halting",
+    "category_id": "CHI_war_in_sinkiang",
+    "name": "Нарастающее сопротивление войне",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "original_tag": "SIK",
+      "has_war_with": "KHM"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RAJ_GOE_sikh_recruitment",
+    "category_id": "RAJ_GOE_sikh_recruitment_cat",
+    "name": "Вербовка сикхов",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "controller": {
+          "OR": {
+            "original_tag": "ROOT",
+            "is_subject_of": "ROOT"
+          }
+        }
+      },
+      "has_tech": "gw_artillery"
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "RAJ_punjab_autonomy",
+          "RAJ_the_punjab_accord"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_sinkiang_mineral_prospection_sik",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Предложить добычу ресурсов в государстве Юж. [SIK.GetNameDef]",
+    "desc": "[ROOT.GetAdjective]ие представители заинтересовались золотом и редкими полезными ископаемыми, добываемыми на Алтае, в регионе [SIK.GetNameDef]. Чтобы получить доступ к синьцзянскому рынку, мы предложим вести разведку новых залежей и улучшить инфраструктуру в регионе [619.GetName], богатом ископаемыми, но бедном техникой и современными методами добычи.",
+    "icon": "generic_construction",
+    "cost": "SOV_sinkiang_proposal_cost",
+    "fire_only_once": false,
+    "available": {
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          619
+        ]
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      },
+      "NOT": {
+        "has_country_flag": "SOV_sinkiang_investment_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          619
+        ]
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_country_flag": "SOV_sinkiang_prospection_rejected_flag"
+        },
+        {
+          "has_country_flag": "SOV_sinkiang_prospection_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_sinkiang_investment_ongoing_flag",
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.273",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt"
+      ],
+      "effect_tooltip": [
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_complied_with_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_cg_tt_sov"
+        },
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_rejected_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_refuse_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_sinkiang_oil_prospection_sik",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Предложить добычу ресурсов в государстве Сев. [SIK.GetNameDef]",
+    "desc": "Область [618.GetName], что в северной части региона [SIK.GetNameDef], богата нефтью и полезными ископаемыми, но ни то, ни другое наши соседи не добывают. Мы попросим у них разрешения провести в тех местах геологоразведку и разрабатывать найденные месторождения.",
+    "icon": "generic_construction",
+    "cost": "SOV_sinkiang_proposal_cost",
+    "fire_only_once": false,
+    "available": {
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          618
+        ]
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 1
+      },
+      "NOT": {
+        "has_country_flag": "SOV_sinkiang_investment_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          618
+        ]
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_country_flag": "SOV_sinkiang_oil_prospection_rejected_flag"
+        },
+        {
+          "has_country_flag": "SOV_sinkiang_oil_prospection_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_sinkiang_investment_ongoing_flag",
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.276",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt"
+      ],
+      "effect_tooltip": [
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_complied_with_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_cg_tt_sov"
+        },
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_rejected_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_refuse_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_sinkiang_military_aid_sik",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Военная помощь региону [SIK.GetNameDef]",
+    "desc": "Мы предложим региону [SIK.GetNameDef] военную помощь в обмен на увеличение экспорта его промышленных товаров, необходимых нашей стране.",
+    "icon": "generic_military",
+    "cost": "SOV_sinkiang_proposal_cost",
+    "fire_only_once": false,
+    "available": {
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          618
+        ]
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      },
+      "has_equipment": [
+        {
+          "small_plane_airframe": {
+            "_op": ">",
+            "value": 39
+          }
+        },
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 499
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "SOV_sinkiang_investment_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          759
+        ]
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_country_flag": "SOV_sinkiang_military_aid_rejected_flag"
+        },
+        {
+          "has_country_flag": "SOV_sinkiang_military_aid_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_sinkiang_investment_ongoing_flag",
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.278",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt"
+      ],
+      "effect_tooltip": [
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_complied_with_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_cg_tt_sov",
+          "send_equipment": [
+            {
+              "type": "small_plane_airframe",
+              "amount": 40,
+              "target": "SIK"
+            },
+            {
+              "type": "infantry_equipment",
+              "amount": 500,
+              "target": "SIK"
+            }
+          ]
+        },
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_rejected_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_refuse_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_sinkiang_support_expansion_sik",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Поддержка экспансии региона [SIK.GetNameDef]",
+    "desc": "Наши торговые посредники в регионе [SIK.GetNameDef] требуют политики расширения экспорта в державу [ROOT.GetNameDef], поскольку территориальная экспансия Синьцзяня увеличила ассортимент товаров.",
+    "icon": "infiltrate_state",
+    "cost": "SOV_sinkiang_proposal_cost",
+    "fire_only_once": false,
+    "available": {
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "is_in_faction_with": "ROOT",
+        "has_full_control_of_state": [
+          604,
+          755,
+          756,
+          754,
+          753,
+          283,
+          616
+        ]
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "has_equipment": {
+        "motorized_equipment": {
+          "_op": ">",
+          "value": 299
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_sinkiang_investment_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          759
+        ]
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_country_flag": "SOV_sinkiang_support_expansion_rejected_flag"
+        },
+        {
+          "has_country_flag": "SOV_sinkiang_support_expansion_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_sinkiang_investment_ongoing_flag",
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.280",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt"
+      ],
+      "effect_tooltip": [
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_complied_with_our_demands"
+          },
+          "send_equipment": {
+            "type": "motorized_equipment",
+            "amount": 300,
+            "target": "SIK"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_cg_tt_sov"
+        },
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_rejected_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_refuse_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_sponsor_the_nuri_demirag_besiktas_aircraft_factory",
+    "category_id": "TUR_industrial_projects_category",
+    "name": "Спонсировать открытие авиазавода «Нури Демираг» в Бешикташе",
+    "desc": "Правительство оценивает каждый потенциальный индустриальный проект отдельно.",
+    "icon": "generic_factory",
+    "cost": "TUR_etatism_cost_penalty_var?50",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_completed_focus": "TUR_nationalise_all_private_industry",
+          "has_country_flag": "TUR_financing_private_enterprise_flag"
+        }
+      },
+      "797": {
+        "free_building_slots": {
+          "building": "arms_factory",
+          "size": {
+            "_op": ">",
+            "value": 1
+          },
+          "include_locked": true
+        }
+      },
+      "has_idea": "TUR_nuri_demirag"
+    },
+    "visible": {
+      "has_completed_focus": "TUR_the_sanayiciler",
+      "NOT": {
+        "OR": {
+          "has_country_leader": {
+            "character": "TUR_sefik_husnu",
+            "ruling_only": true
+          },
+          "has_completed_focus": "TUR_nationalise_all_private_industry"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "TUR_financing_private_enterprise",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_financing_private_enterprise_flag",
+          "value": 1,
+          "days": 260
+        }
+      }
+    }
+  }
+]

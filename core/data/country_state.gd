@@ -372,7 +372,7 @@ func get_debt_ceiling() -> float:
 
 ## Кредитный рейтинг страны (AAA, AA, A, BBB, BB, B, CCC, D) либо статус казны варлорда
 func get_credit_rating() -> String:
-	var eco_type = EconomyEngine.get_economy_type(self)
+	var eco_type = EconomyEngine.get_economy_type(self as Variant)
 	if eco_type == EconomyEngine.EconomyType.WARLORD:
 		if liquid_reserves_billions >= 0.2:
 			return "КАЗНА: СТАБИЛЬНА"
@@ -446,14 +446,36 @@ func has_national_spirit(spirit_id: String) -> bool:
 	return false
 
 
+## Проверка наличия активного закона
+func has_active_law(law_id: String) -> bool:
+	if active_laws.has(law_id):
+		return true
+	for val in active_laws.values():
+		if val is LawResource and val.law_id == law_id:
+			return true
+		elif val is Dictionary and (val.get("id", "") == law_id or val.get("law_id", "") == law_id):
+			return true
+		elif str(val) == law_id:
+			return true
+	for sl in societal_laws:
+		if sl.get("id", "") == law_id or sl.get("law_id", "") == law_id:
+			return true
+	return has_flag("law_" + law_id) or has_flag(law_id)
+
+
+## Проверка наличия идеи, национального духа или закона
+func has_idea(idea_id: String) -> bool:
+	return has_flag("idea_" + idea_id) or has_flag(idea_id) or has_active_law(idea_id) or has_national_spirit(idea_id)
+
+
 ## Совокупные доходы бюджета за ход ($ млрд)
 func calculate_total_revenue() -> float:
-	return EconomyEngine.calculate_turn_revenue(self)
+	return EconomyEngine.calculate_turn_revenue(self as Variant)
 
 
 ## Совокупные расходы бюджета за ход ($ млрд)
 func calculate_total_expenses() -> float:
-	var exp_dict = EconomyEngine.calculate_turn_expenses(self)
+	var exp_dict = EconomyEngine.calculate_turn_expenses(self as Variant)
 	return float(exp_dict.get("total", 0.0))
 
 
@@ -1076,6 +1098,25 @@ static func from_dict(data: Dictionary) -> CountryState:
 		for c_data in raw_commanders:
 			if c_data is Dictionary:
 				state.military_commanders.append(LeaderResource.from_dict(c_data))
+
+	# Парсинг лидеров и министров из массива Clausewitz leaders (если не были заданы в ministers)
+	if data.has("leaders") and data["leaders"] is Array:
+		var leaders_arr: Array = data["leaders"]
+		for lead in leaders_arr:
+			if lead is Dictionary:
+				var res = LeaderResource.from_dict(lead)
+				if res.is_head_of_state and state.head_of_state == null:
+					state.head_of_state = res
+					if state.leader_name.is_empty():
+						state.leader_name = res.leader_name
+					if state.leader_portrait_path == "res://icon.svg":
+						state.leader_portrait_path = res.portrait_path
+				elif res.is_military_commander:
+					if not state.military_commanders.has(res):
+						state.military_commanders.append(res)
+				else:
+					if not state.cabinet_members.has(res):
+						state.cabinet_members.append(res)
 
 	state.political_capital = float(pol.get("political_capital", 100.0))
 	state.pc_gain_per_turn = float(pol.get("pc_gain_per_turn", 5.0))

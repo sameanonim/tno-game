@@ -1,0 +1,1754 @@
+[
+  {
+    "id": "JAP_promote_hayao_tada_to_lieutenant_general_decision",
+    "category_id": "political_actions",
+    "name": "Повысить Хаяо Тада до генерал-лейтенанта",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_civil_war": false,
+      "NOT": {
+        "has_idea": "JAP_military_strike_idea"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "JAP_promoted_hayao_tada_flag"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "develop_western_visayas_coal_mines",
+    "category_id": "prospect_for_resources",
+    "name": "Основать угольные шахты в регионе [628.GetName]",
+    "desc": "",
+    "icon": "coal",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 628,
+      "controls_state": 628,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "owns_state": 628,
+      "controls_state": 628,
+      "628": {
+        "NOT": {
+          "has_state_flag": "western_visayas_coal_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AST_request_resource_rights_in_malaya",
+    "category_id": "AST_resource_acquisition_cat",
+    "name": "Попросить права на ресурсы у [MAL.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_rubber",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AST_resource_request_ongoing_flag"
+      },
+      "1064": {
+        "controller": {
+          "NOT": {
+            "has_war_with": "AST"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AST_demand_resources"
+    },
+    "complete_effect": {
+      "every_country": [
+        {
+          "limit": {
+            "controls_state": 1064,
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "country_event": {
+              "id": "AST_diplomatic_events.30",
+              "hours": 3
+            }
+          }
+        },
+        {
+          "limit": {
+            "controls_state": 1064,
+            "is_subject": false
+          },
+          "country_event": {
+            "id": "AST_diplomatic_events.30",
+            "hours": 3
+          }
+        }
+      ],
+      "set_country_flag": [
+        "AST_mal_resources_flag",
+        "AST_resource_request_ongoing_flag"
+      ]
+    }
+  },
+  {
+    "id": "CHL_mapuche_liberate_maya",
+    "category_id": "CHL_mapuche_nationalism_decisions",
+    "name": "Освободить [MAY.GetAdjective]ий народ",
+    "desc": "",
+    "icon": "GFX_decision_CHL_mapuche_liberate_maya",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "MAY": {
+        "exists": false
+      },
+      "OR": [
+        {
+          "controls_state": 313,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 313
+          }
+        },
+        {
+          "controls_state": 475,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 475
+          }
+        },
+        {
+          "controls_state": 476,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 476
+          }
+        },
+        {
+          "controls_state": 474,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 474
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "NOT": {
+        "has_country_flag": "CHL_released_maya_flag"
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "OR": [
+            {
+              "is_controlled_by": "ROOT",
+              "any_country": {
+                "is_subject_of": "ROOT",
+                "controls_state": "PREV"
+              }
+            },
+            {
+              "state": [
+                313,
+                475,
+                476,
+                474
+              ]
+            }
+          ]
+        },
+        "add_core_of": "MAY",
+        "transfer_state_to": "MAY"
+      },
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_subject": "MAY"
+          }
+        },
+        "puppet": "MAY"
+      },
+      "MAY": {
+        "add_stability": 0.15,
+        "add_war_support": 0.1,
+        "add_political_power": 150,
+        "add_manpower": 10000,
+        "hidden_effect": {
+          "division_template": {
+            "name": "Mayan Warriors",
+            "is_locked": false,
+            "division_names_group": "SPR_INF_01",
+            "template_counter": 85,
+            "override_model": "CHL_infantry_alt_1_entity",
+            "priority": 1,
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "recon": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          }
+        },
+        "random_state": [
+          {
+            "limit": {
+              "is_controlled_by": "MAY"
+            },
+            "create_unit": [
+              {
+                "division": "name = \"1st Mayan Warriors\" division_template = \"Mayan Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "MAY"
+              },
+              {
+                "division": "name = \"2nd Mayan Warriors\" division_template = \"Mayan Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "MAY"
+              },
+              {
+                "division": "name = \"3rd Mayan Warriors\" division_template = \"Mayan Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "MAY"
+              }
+            ]
+          },
+          {
+            "limit": {
+              "is_controlled_by": "MAY"
+            },
+            "create_unit": [
+              {
+                "division": "name = \"4th Mayan Warriors\" division_template = \"Mayan Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "MAY"
+              },
+              {
+                "division": "name = \"5th Mayan Warriors\" division_template = \"Mayan Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "MAY"
+              },
+              {
+                "division": "name = \"6th Mayan Warriors\" division_template = \"Mayan Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "MAY"
+              }
+            ]
+          }
+        ]
+      },
+      "hidden_effect": {
+        "set_country_flag": "CHL_released_maya_flag"
+      }
+    }
+  },
+  {
+    "id": "INS_start_limited_war_malaya",
+    "category_id": "INS_limited_wars_cat",
+    "name": "Начало ограниченной войны в Малайе",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "is_ally_with": "FROM",
+        "has_war_with": "FROM",
+        "has_non_aggression_pact_with": "FROM",
+        "FROM": {
+          "is_guaranteed_by": "ROOT"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "is_not_engaged_in_a_limited_war",
+        "NOT": {
+          "has_variable": "limited_war_target"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "INS_destroy_pacific_colonialism"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "SIA_start_limited_war_indochina_tt_main",
+        "newline_tt",
+        "SIA_start_limited_war_can_join_faction"
+      ],
+      "clear_variable": [
+        "pre_limited_war_faction_leader",
+        "limited_war_target"
+      ],
+      "if": [
+        {
+          "limit": {
+            "is_in_faction": true,
+            "is_faction_leader": false
+          },
+          "faction_leader": {
+            "set_variable": {
+              "ROOT.pre_limited_war_faction_leader": "THIS"
+            }
+          },
+          "leave_faction": true,
+          "custom_effect_tooltip": [
+            "SIA_start_limited_war_rejoin_faction",
+            "newline_tt"
+          ]
+        },
+        {
+          "limit": {
+            "var:limited_war_target": {
+              "is_subject": true
+            }
+          },
+          "var:limited_war_target": {
+            "overlord": {
+              "add_to_array": {
+                "array": "ROOT.limited_war_target_allies",
+                "value": "THIS"
+              }
+            }
+          }
+        }
+      ],
+      "set_rule": {
+        "can_join_factions": false
+      },
+      "clear_array": [
+        "limited_war_states",
+        "limited_war_target_allies"
+      ],
+      "for_each_scope_loop": {
+        "array": "malaya_states",
+        "if": {
+          "limit": {
+            "is_controlled_by": "FROM"
+          },
+          "add_to_array": {
+            "array": "ROOT.limited_war_states",
+            "value": "THIS"
+          }
+        }
+      },
+      "set_variable": {
+        "limited_war_target": "FROM"
+      },
+      "declare_war_on": {
+        "target": "FROM",
+        "type": "annex_everything"
+      },
+      "activate_mission": "INS_limited_war_malaya",
+      "add_to_array": {
+        "previous_limited_war_targets": "FROM"
+      }
+    }
+  },
+  {
+    "id": "INS_limited_war_malaya",
+    "category_id": "INS_limited_wars_cat",
+    "name": "Конфронтация!",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "all_of_scopes": {
+        "array": "ROOT.limited_war_states",
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "INS_limited_war_events.1",
+        "hours": 2
+      }
+    }
+  },
+  {
+    "id": "SIA_develop_northern_malaya",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Развитие Си Рат Малай",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        1062,
+        1064,
+        1061,
+        1065
+      ],
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 3
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "1062": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1064": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1061": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1065": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_CIA_Execution_Phase_3_Malaya_Decision",
+    "category_id": "Antarctica_GUI_AAO_CIA",
+    "name": "Отправить припасы с воздуха",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "Antarctica_GUI_AAO_CIA_War_Array^Antarctica_GUI_AAO_CIA_Selected_War": 0
+        },
+        {
+          "Antarctica_GUI_AAO_CIA_Phase_Array^Antarctica_GUI_AAO_CIA_Selected_War": 1
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_CIA_Execution_Phase_3_Malaya_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_CIA_Execution_Phase_3_Malaya_Decision",
+      "add_command_power": -30
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_1_Malaya_Decision",
+    "category_id": "Antarctica_GUI_AAO_CIA",
+    "name": "Спасти военнопленных",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "Antarctica_GUI_AAO_CIA_War_Array^Antarctica_GUI_AAO_CIA_Selected_War": 0
+        },
+        {
+          "Antarctica_GUI_AAO_CIA_Phase_Array^Antarctica_GUI_AAO_CIA_Selected_War": 2
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_1_Malaya_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_CIA_Conclusion_Phase_1_Malaya_Decision",
+      "add_command_power": -40
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_2_Malaya_Decision",
+    "category_id": "Antarctica_GUI_AAO_CIA",
+    "name": "Фальсификация бюллетеней",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "Antarctica_GUI_AAO_CIA_War_Array^Antarctica_GUI_AAO_CIA_Selected_War": 0
+        },
+        {
+          "Antarctica_GUI_AAO_CIA_Phase_Array^Antarctica_GUI_AAO_CIA_Selected_War": 2
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_2_Malaya_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_CIA_Conclusion_Phase_2_Malaya_Decision",
+      "add_command_power": -40
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_3_Malaya_Decision",
+    "category_id": "Antarctica_GUI_AAO_CIA",
+    "name": "Приобрести плантацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "Antarctica_GUI_AAO_CIA_War_Array^Antarctica_GUI_AAO_CIA_Selected_War": 0
+        },
+        {
+          "Antarctica_GUI_AAO_CIA_Phase_Array^Antarctica_GUI_AAO_CIA_Selected_War": 2
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_3_Malaya_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_CIA_Conclusion_Phase_3_Malaya_Decision",
+      "add_command_power": -40
+    }
+  },
+  {
+    "id": "AAC_support_uruguayan_antarctica",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Поддержать [AAV.GetFlag] уругвайцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_indent",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": [
+        {
+          "mobility": 75
+        },
+        {
+          "endurance": 75
+        },
+        {
+          "aggression": 55
+        }
+      ],
+      "AAC_mobility_check": true,
+      "AAC_endurance_check": true,
+      "AAC_aggression_check": true
+    },
+    "visible": {
+      "has_country_flag": "AAC_coordinating_with_uruguay_available"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]:Complete AAC_support_uruguayan_antarctica",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "tempEq": -15
+        },
+        "Antarctica_change_equipment": true
+      },
+      "clr_country_flag": "AAC_coordinating_with_uruguay_available"
+    }
+  },
+  {
+    "id": "USA_CIA_contact_paraguayan_political_exiles_in_uruguay",
+    "category_id": "USA_BoP_category",
+    "name": "Операция §<ПРЕЛЮДИЯ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_SouthAmerica": true,
+          "is_ai": true
+        },
+        "has_country_flag": "USA_CIA_paraguay_prelude"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_CIA_contact_paraguayan_political_exiles_in_uruguay",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "custom_effect_tooltip": "USA_CIA_PAR_contacting_exiles_in_uruguay",
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_CIA_paraguay_contacting_exiles"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_destabilize_paraguayan_fascist_regime",
+    "category_id": "USA_BoP_category",
+    "name": "Операция СЕРЕБРЯНАЯ МЕДАЛЬ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_SouthAmerica": true,
+          "is_ai": true
+        },
+        "has_country_flag": "USA_CIA_paraguay_prelude"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_CIA_destabilize_paraguayan_fascist_regime",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "custom_effect_tooltip": "USA_CIA_PAR_destabilizing_regime",
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_CIA_paraguay_destabilizing_regime"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_assist_the_paraguayan_insurgency",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ЗЕЛЕНЫЙ ДЕМОН",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_SouthAmerica": true,
+          "is_ai": true
+        },
+        "has_country_flag": "USA_CIA_paraguay",
+        "check_variable": {
+          "USA_CIA_paraguay_times_taken": {
+            "_op": "<",
+            "value": 3
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_CIA_assist_the_paraguayan_insurgency",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "custom_effect_tooltip": "USA_CIA_PAR_assist_insurgency",
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": [
+            "USA_CIA_paraguay_assisting_insurgency",
+            "PAR_green_demon_taken"
+          ]
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "GNG_Malaya_Withdraw",
+    "category_id": "GNG_Research_Team_category",
+    "name": "Завершить тестирование продукта в Малайе",
+    "desc": "Мы выполнили достаточно задач и вполне удовлетворены результатами испытаний в Малайе. Пора отзывать группу, чтобы не тратить лишние ресурсы.",
+    "icon": "GFX_decision_GNG_PTRG",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_flag": "GNG_PTRG_Malaya"
+    },
+    "complete_effect": {
+      "GNG": {
+        "GNG_PTRG_Malaya_END": true
+      }
+    }
+  },
+  {
+    "id": "JAP_kaya_do_navy_branch",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Начать реформы ИФЯ",
+    "desc": "",
+    "icon": "GFX_decision_generic_battleship",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_kaya_imperial_navy"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_navy_branch"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_army_branch",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Начать реформы ИАЯ",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_kaya_imperial_army"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_army_branch"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_expand_dockyards",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Инвестировать в новые конструкции авианосцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_floating_airbases"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_expand_dockyards"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_further_indocrination",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Обеспечить лояльность Вооруженных сил",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda_off",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_kaya_ensure_political_loyalty"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_further_indocrination"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_floating_airbases",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Ускорить модернизацию ВМФ",
+    "desc": "",
+    "icon": "GFX_decision_generic_battleship",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_a_ready_navy"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_floating_airbases"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_review_our_armour",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Модернизировать конструкции бронетехники",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_review_our_armour"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_review_our_armour"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_the_hidden_menace",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Развить подводный флот",
+    "desc": "",
+    "icon": "GFX_decision_generic_battleship",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_the_hidden_menace"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_the_hidden_menace"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_strike_anywhere",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Инвестировать в армейскую авиацию",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_strike_anywhere"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_strike_anywhere"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_our_ships_rule_the_waves",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Завершить модернизацию ИФЯ",
+    "desc": "",
+    "icon": "GFX_decision_generic_battleship",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_our_ships_rule_the_waves"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_our_ships_rule_the_waves"
+    }
+  },
+  {
+    "id": "JAP_kaya_do_our_soldiers_control_the_ground",
+    "category_id": "JAP_kaya_military_rivalry",
+    "name": "Завершить модернизацию ИАЯ",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_our_soldiers_control_the_ground"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_our_soldiers_control_the_ground"
+    }
+  },
+  {
+    "id": "JAP_kaya_appointment",
+    "category_id": "JAP_debug_decisions",
+    "name": "Назначить Каю",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_appointment",
+      "set_country_flag": "JAP_Ino_deposed",
+      "country_event": {
+        "id": "jap_interregnum.78"
+      }
+    }
+  },
+  {
+    "id": "JAP_load_kaya_tree_two",
+    "category_id": "JAP_debug_decisions",
+    "name": "Загрузить второе дерево Каи",
+    "desc": "Сначала назначь Каю, чтобы это решение дало эффект.",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_load_kaya_tree_two",
+      "set_country_flag": "japan_kaya_tree_one_complete",
+      "JAP_tree_swap": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_begin_the_reforms",
+    "category_id": "JAP_faction_relations",
+    "name": "Утвердить назначение  радикалов на министерские должности",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_concessions",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_begin_the_reforms"
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_political_power": 25,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.025
+        },
+        {
+          "temp_hl_inf_change": 0.015
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_integrate_the_military",
+    "category_id": "JAP_faction_relations",
+    "name": "Успокоить военных",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_red",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_integrate_the_military"
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_political_power": -15,
+      "JAP_IJA_increase_small": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.025
+        },
+        {
+          "temp_hl_inf_change": 0.01
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_the_civilians_will_learn",
+    "category_id": "JAP_faction_relations",
+    "name": "Предоставить финансирование Маньчжурской компании по промышленному развитию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_the_civilians_will_learn"
+    },
+    "visible": [],
+    "complete_effect": {
+      "MAN": {
+        "set_temp_variable": {
+          "temp_econ_GDP_boost_flat": 0.25
+        },
+        "econ_GDP_boost_once_flat": true
+      },
+      "set_temp_variable": [
+        {
+          "temp_econ_GDP_boost_flat": 0.25
+        },
+        {
+          "temp_hl_approval_change": 0.035
+        },
+        {
+          "temp_hl_inf_change": 0.025
+        },
+        {
+          "inflation_temp": 0.15
+        },
+        {
+          "temp_econ_spending_amount": 0.25
+        }
+      ],
+      "econ_GDP_boost_once_flat": true,
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true,
+      "econ_inflation_change": true,
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_political_cleansing",
+    "category_id": "JAP_faction_relations",
+    "name": "Нацелиться на  реформистов",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_political_cleansing"
+    },
+    "visible": [],
+    "complete_effect": {
+      "JAP_Takagi_decrease_power_small": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.02
+        },
+        {
+          "temp_hl_inf_change": 0.015
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_crush_dissenters",
+    "category_id": "JAP_faction_relations",
+    "name": "Увеличить штат полиции во всей стране",
+    "desc": "",
+    "icon": "GFX_decision_generic_riot_police",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_crush_dissenters"
+    },
+    "visible": [],
+    "complete_effect": {
+      "TNO_improve_security_policy_effectiveness_med": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.02
+        },
+        {
+          "temp_hl_inf_change": 0.01
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_untangle_the_economy",
+    "category_id": "JAP_faction_relations",
+    "name": "Назначить  радикалов в СПП",
+    "desc": "",
+    "icon": "GFX_decision_generic_economy_graph",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_untangle_the_economy"
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "gdp_growth_temp": 0.1
+        },
+        {
+          "econ_centralization_temp": 2
+        },
+        {
+          "temp_hl_approval_change": 0.035
+        },
+        {
+          "temp_hl_inf_change": 0.025
+        }
+      ],
+      "econ_gdp_growth_change": true,
+      "econ_centralization_change": true,
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_prepare_our_tools",
+    "category_id": "JAP_faction_relations",
+    "name": "Увеличить бюджет министерства исследований",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_prepare_our_tools"
+    },
+    "visible": [],
+    "complete_effect": {
+      "TNO_improve_research_facilities_med": true,
+      "research_funding_maximal_increase_med": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.03
+        },
+        {
+          "temp_hl_inf_change": 0.025
+        },
+        {
+          "temp_econ_spending_amount": 0.1
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true,
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_by_any_means",
+    "category_id": "JAP_faction_relations",
+    "name": "Подчеркнуть главенство СПП",
+    "desc": "",
+    "icon": "GFX_decision_generic_judge",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_by_any_means"
+    },
+    "visible": [],
+    "complete_effect": {
+      "admin_funding_maximal_increase_low": true,
+      "set_temp_variable": [
+        {
+          "econ_centralization_temp": 2
+        },
+        {
+          "temp_hl_approval_change": 0.025
+        },
+        {
+          "temp_hl_inf_change": 0.015
+        }
+      ],
+      "econ_centralization_change": true,
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_oil_sufficiency",
+    "category_id": "JAP_faction_relations",
+    "name": "Дополнительные субсидии для производителей синтетического топлива",
+    "desc": "",
+    "icon": "GFX_decision_generic_economy_graph",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_oil_sufficiency"
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_owned_controlled_state": [
+        {
+          "limit": {
+            "is_core_of": "JAP",
+            "OR": {
+              "has_state_category": [
+                "large_city",
+                "large_town",
+                "city",
+                "metropolis",
+                "megalopolis"
+              ]
+            }
+          },
+          "add_building_construction": {
+            "type": "synthetic_refinery",
+            "level": 1,
+            "instant_build": true
+          },
+          "add_extra_state_shared_building_slots": 1,
+          "set_temp_variable": {
+            "state_value_multiplier_temp": 1.05
+          },
+          "econ_state_value_change_multiply": true
+        },
+        {
+          "limit": {
+            "is_core_of": "JAP",
+            "OR": {
+              "has_state_category": [
+                "large_city",
+                "large_town",
+                "city",
+                "metropolis",
+                "megalopolis"
+              ]
+            }
+          },
+          "add_building_construction": {
+            "type": "synthetic_refinery",
+            "level": 1,
+            "instant_build": true
+          },
+          "add_extra_state_shared_building_slots": 1,
+          "set_temp_variable": {
+            "state_value_multiplier_temp": 1.05
+          },
+          "econ_state_value_change_multiply": true
+        }
+      ],
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.05
+        },
+        {
+          "temp_hl_inf_change": 0.025
+        },
+        {
+          "temp_econ_spending_amount": 0.2
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true,
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_outweave_the_reformists",
+    "category_id": "JAP_faction_relations",
+    "name": "Атаковать собрания  реформистов",
+    "desc": "",
+    "icon": "GFX_decision_generic_protest",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_outweave_the_reformists"
+    },
+    "visible": [],
+    "complete_effect": {
+      "JAP_Takagi_decrease_power_mini": true,
+      "TNO_worsen_public_meetings_policy_effectiveness_low": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.03
+        },
+        {
+          "temp_hl_inf_change": 0.025
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_break_their_backs",
+    "category_id": "JAP_faction_relations",
+    "name": "Ограничить влияние Дзайбацу",
+    "desc": "",
+    "icon": "GFX_decision_generic_lockdown",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_break_their_backs"
+    },
+    "visible": [],
+    "complete_effect": {
+      "JAP_Takagi_decrease_power_mini": true,
+      "TNO_improve_admin_efficiency_med": true,
+      "TNO_improve_political_parties_policy_effectiveness_med": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.02
+        },
+        {
+          "temp_hl_inf_change": 0.05
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_reignite_the_rivalries",
+    "category_id": "JAP_faction_relations",
+    "name": "Увеличить напряженность между Дзайбацу",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support_red",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_reignite_the_rivalries"
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_political_power": 75,
+      "set_temp_variable": [
+        {
+          "gdp_growth_temp": -0.1
+        },
+        {
+          "temp_hl_approval_change": 0.03
+        },
+        {
+          "temp_hl_inf_change": 0.025
+        }
+      ],
+      "econ_gdp_growth_change": true,
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_economic_consolidation",
+    "category_id": "JAP_faction_relations",
+    "name": "Предоставить субсидии на промышленные исследования",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_economic_consolidation"
+    },
+    "visible": [],
+    "complete_effect": {
+      "TNO_improve_research_facilities_med": true,
+      "TNO_improve_industrial_expertise_high": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.03
+        },
+        {
+          "temp_hl_inf_change": 0.025
+        },
+        {
+          "temp_econ_spending_amount": 0.35
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true,
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_our_trusted_stronghold",
+    "category_id": "JAP_faction_relations",
+    "name": "Усилить полномочия министерства внутренних дел",
+    "desc": "",
+    "icon": "GFX_decision_generic_judge",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_our_trusted_stronghold"
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_political_power": 50,
+      "TNO_improve_admin_efficiency_low": true,
+      "TNO_improve_security_policy_effectiveness_low": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.03
+        },
+        {
+          "temp_hl_inf_change": 0.035
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_aokis_bureaucratic_revival",
+    "category_id": "JAP_faction_relations",
+    "name": "Увеличить кол-во  радикалов в министерствах",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_aokis_bureaucratic_revival"
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_political_power": -35,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.05
+        },
+        {
+          "temp_hl_inf_change": 0.05
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_the_new_old_bureaucrats",
+    "category_id": "JAP_faction_relations",
+    "name": "Отправить на пенсию  реформистских бюрократов",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_the_new_old_bureaucrats"
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_political_power": 50,
+      "JAP_Kaya_decrease_power_mini": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.05
+        },
+        {
+          "temp_hl_inf_change": 0.035
+        },
+        {
+          "temp_selected_faction": 2
+        },
+        {
+          "temp_support_change": -0.1
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true,
+      "JAP_change_faction_support": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_are_also_the_most_responsible",
+    "category_id": "JAP_faction_relations",
+    "name": "Потребовать больше штрафов за коррупцию",
+    "desc": "",
+    "icon": "GFX_decision_generic_investors_yen",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_are_also_the_most_responsible"
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "JAP_Kaya_most_responsible_demand",
+        "days": 180
+      },
+      "add_political_power": 50,
+      "TNO_improve_admin_efficiency_low": true,
+      "set_temp_variable": [
+        {
+          "money_reserves_temp": 0.5
+        },
+        {
+          "temp_hl_approval_change": 0.045
+        },
+        {
+          "temp_hl_inf_change": 0.035
+        }
+      ],
+      "econ_money_reserves_change_raw_money": true,
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_a_sufficient_injection",
+    "category_id": "JAP_faction_relations",
+    "name": "Увеличить число военных объектов",
+    "desc": "",
+    "icon": "GFX_decision_generic_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_a_sufficient_injection"
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_owned_controlled_state": [
+        {
+          "limit": {
+            "is_core_of": "ROOT"
+          },
+          "add_building_construction": {
+            "type": "barracks",
+            "level": 1,
+            "instant_build": true
+          },
+          "add_extra_state_shared_building_slots": 1
+        },
+        {
+          "limit": {
+            "is_core_of": "ROOT"
+          },
+          "add_building_construction": {
+            "type": "barracks",
+            "level": 1,
+            "instant_build": true
+          },
+          "add_extra_state_shared_building_slots": 1
+        },
+        {
+          "limit": {
+            "is_core_of": "ROOT"
+          },
+          "add_building_construction": {
+            "type": "barracks",
+            "level": 1,
+            "instant_build": true
+          },
+          "add_extra_state_shared_building_slots": 1
+        }
+      ],
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.05
+        },
+        {
+          "temp_hl_inf_change": 0.05
+        },
+        {
+          "temp_econ_spending_amount": 0.175
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true,
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_military_industrial_complex",
+    "category_id": "JAP_faction_relations",
+    "name": "Расширить военно-исследовательские центры",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_inspection",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_military_industrial_complex"
+    },
+    "visible": [],
+    "complete_effect": {
+      "TNO_improve_research_facilities_low": true,
+      "TNO_improve_industrial_expertise_high": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.025
+        },
+        {
+          "temp_hl_inf_change": 0.035
+        },
+        {
+          "temp_econ_spending_amount": 0.2
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true,
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "RUS_Udachnaya_Excavation",
+    "category_id": "far_east_sakha_category",
+    "name": "Карьер трубки \"Удачная\"",
+    "desc": "Хотя с нашим нынешним оборудованием будет трудно получить прибыль, открытие ещё одного алмазного месторождения за Полярным кругом сделало очевидным, что это, по крайней мере, стоящая долгосрочная инвестиция. Установив постоянное присутствие в этом районе, мы начнём длительный процесс превращения этих месторождений в настоящие шахты для крупномасштабных раскопок. Чтобы облегчить этот процесс, крупные государственные средства будут вложены в улучшение старых советских железных дорог в регионе, чтобы помочь в транспортировке грузов в эти новые промышленные центры и обратно.\nУчитывая это, мы можем считать, что экспедиция в Саха-Якутию была дорогостоящим успехом, но, тем не менее, успехом, который окупится в долгосрочной перспективе.",
+    "icon": "GFX_decision_generic_diamond",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_Sakha_Extend_Roads_flag"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "USA_Assign_Bayard_Rustin_to_CRA",
+    "category_id": "USA_the_heartless",
+    "name": "Назначить Баярда Растина организовывать активистов за гражданские права",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_URI_defense_mechanic"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_chep_presidency",
+        "USA_URI_Rustin_unlocked",
+        "USA_conservative_activism_uri_repeal"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_Assign_Bayard_Rustin_to_CRA",
+      "set_variable": {
+        "var_USA_URI_Leader_Civil_Rights": 3
+      },
+      "custom_effect_tooltip": "USA_URI_repeal_CRA_BR_tt"
+    }
+  }
+]

@@ -1,0 +1,965 @@
+[
+  {
+    "id": "ZLT_shatter_western_siberia",
+    "category_id": "ZLT_debug_category",
+    "name": "Разделить Западную Сибирь",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_shatter_western_siberia",
+      "country_event": {
+        "id": "ZLT.16"
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_ZLT",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [ZLT.GetFlag] [ZLT.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "ZLT": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "ZLT"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_ZLT",
+      "set_temp_variable": {
+        "TargetTag": "ZLT"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "ZLT.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "ZLT"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "ZLT"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_ZLT": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_ZLT_Generic",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Атаковать [ZLT.GetFlag] [ZLT.GetName]",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "is_west_siberian_nation": true,
+      "is_neighbor_of": "ZLT",
+      "has_war": false,
+      "NOT": {
+        "has_non_aggression_pact_with": "ZLT"
+      },
+      "RUS_Smuta_ScriptedTrigger_Expansion_ZLT_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_ZLT_Generic",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Y": -0.3
+        },
+        "RUS_Smuta_Supplies_Add_Y": true,
+        "set_country_flag": "RUS_Smuta_preparing_expansion",
+        "if": {
+          "limit": {
+            "tag": "SVR"
+          },
+          "set_country_flag": "SVR_zlatoust_war"
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_ZLT_SVR_LetsBeFriends",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Отправить ультиматум [ZLT.GetFlag] Златоусту",
+    "desc": "Теперь, когда другие крупные конкуренты Западной Сибири побеждены, пришло время предоставить оружейникам Златоуста решить свою судьбу.",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "country_exists": "TYM"
+        },
+        {
+          "country_exists": "OMS"
+        },
+        {
+          "country_exists": "YGR"
+        }
+      ],
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "tag": "SVR",
+      "ZLT": {
+        "exists": true
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ZLT_black_market_buyer_infantry_equipment_fulfill",
+    "category_id": "ZLT_Black_Market_Order_Received",
+    "name": "Заказ на пехотное снаряжение. Заказ от [From.GetName]",
+    "desc": "[FROM.GetNameDefCap] делает заказ на 1000 единиц пехотного снаряжения. Снаряжение придет после того как мы примем контракт. В противном случае мы временно перестанем получать заказы от [From.GetNameDef].",
+    "icon": "GFX_decision_market_infantry",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": {
+      "has_political_power": {
+        "_op": ">",
+        "value": 4
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 999
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_black_market_buyer_infantry_equipment_fulfill",
+      "set_temp_variable": {
+        "money_reserves_temp": 0.05
+      },
+      "econ_money_reserves_change_raw_money": true,
+      "send_equipment": {
+        "equipment": "infantry_equipment",
+        "amount": 1000,
+        "target": "FROM"
+      },
+      "ZLT": {
+        "custom_effect_tooltip": "gain_loot_1",
+        "add_to_variable": {
+          "loot_amount": 1
+        }
+      },
+      "FROM": {
+        "clr_country_flag": "ZLT_infantry_equipment_ordered",
+        "if": {
+          "limit": {
+            "is_warlord": true
+          },
+          "add_timed_idea": {
+            "idea": "ZLT_black_market_payments",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "zlatoust_sales.7",
+              "days": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ZLT_black_market_buyer_support_equipment_fulfill",
+    "category_id": "ZLT_Black_Market_Order_Received",
+    "name": "Заказ на дополнительное снаряжение. Заказ от [From.GetName].",
+    "desc": "[FROM.GetNameDefCap] делает заказ на 200 единиц дополнительного снаряжения! Снаряжение придет после того как мы примем контракт. В противном случае мы временно перестанем получать заказы от [From.GetNameDef].",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": {
+      "has_political_power": {
+        "_op": ">",
+        "value": 4
+      },
+      "has_equipment": {
+        "support_equipment_1": {
+          "_op": ">",
+          "value": 199
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_black_market_buyer_support_equipment_fulfill",
+      "set_temp_variable": {
+        "money_reserves_temp": 0.075
+      },
+      "econ_money_reserves_change_raw_money": true,
+      "send_equipment": {
+        "equipment": "support_equipment_1",
+        "amount": 200,
+        "target": "FROM"
+      },
+      "ZLT": {
+        "custom_effect_tooltip": "gain_loot_1",
+        "add_to_variable": {
+          "loot_amount": 1
+        }
+      },
+      "FROM": {
+        "clr_country_flag": "ZLT_support_equipment_ordered",
+        "if": {
+          "limit": {
+            "is_warlord": true
+          },
+          "add_timed_idea": {
+            "idea": "ZLT_black_market_payments",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "zlatoust_sales.7",
+              "days": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ZLT_black_market_buyer_anti_tank_equipment_fulfill",
+    "category_id": "ZLT_Black_Market_Order_Received",
+    "name": "Заказ на противотанковое снаряжение. Заказ от [From.GetName].",
+    "desc": "[FROM.GetNameDefCap] делает заказ на 150 единиц противотанкового снаряжения! Снаряжение придет после того как мы примем контракт. В противном случае мы временно перестанем получать заказы от [From.GetNameDef].",
+    "icon": "GFX_decision_market_towed_artillery",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": {
+      "has_political_power": {
+        "_op": ">",
+        "value": 4
+      },
+      "has_equipment": {
+        "anti_tank_equipment": {
+          "_op": ">",
+          "value": 149
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_black_market_buyer_anti_tank_equipment_fulfill",
+      "set_temp_variable": {
+        "money_reserves_temp": 0.06
+      },
+      "econ_money_reserves_change_raw_money": true,
+      "send_equipment": {
+        "equipment": "anti_tank_equipment",
+        "amount": 150,
+        "target": "FROM"
+      },
+      "ZLT": {
+        "custom_effect_tooltip": "gain_loot_2",
+        "add_to_variable": {
+          "loot_amount": 2
+        }
+      },
+      "FROM": {
+        "clr_country_flag": "ZLT_anti_tank_equipment_ordered",
+        "if": {
+          "limit": {
+            "is_warlord": true
+          },
+          "add_timed_idea": {
+            "idea": "ZLT_black_market_payments",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "zlatoust_sales.7",
+              "days": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ZLT_black_market_buyer_towed_artillery_equipment_fulfill",
+    "category_id": "ZLT_Black_Market_Order_Received",
+    "name": "Заказ на артиллерийское снаряжение от [From.GetName].",
+    "desc": "[FROM.GetNameDefCap] делает заказ на 100 единиц артиллерийского снаряжения. Снаряжение придет после того как мы примем контракт. В противном случае мы временно перестанем получать заказы от [From.GetNameDef].",
+    "icon": "GFX_decision_market_towed_artillery",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": {
+      "has_political_power": {
+        "_op": ">",
+        "value": 4
+      },
+      "has_equipment": {
+        "artillery_equipment": {
+          "_op": ">",
+          "value": 99
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_black_market_buyer_towed_artillery_equipment_fulfill",
+      "set_temp_variable": {
+        "money_reserves_temp": 0.075
+      },
+      "econ_money_reserves_change_raw_money": true,
+      "send_equipment": {
+        "equipment": "artillery_equipment",
+        "amount": 100,
+        "target": "FROM"
+      },
+      "ZLT": {
+        "custom_effect_tooltip": "gain_loot_2",
+        "add_to_variable": {
+          "loot_amount": 2
+        }
+      },
+      "FROM": {
+        "clr_country_flag": "ZLT_towed_artillery_equipment_ordered",
+        "if": {
+          "limit": {
+            "is_warlord": true
+          },
+          "add_timed_idea": {
+            "idea": "ZLT_black_market_payments",
+            "days": 50
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "zlatoust_sales.7",
+              "days": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ZLT_black_market_buyer_infantry_equipment",
+    "category_id": "ZLT_Black_Market_Purchase_Foreign",
+    "name": "Купить пехотное снаряжение",
+    "desc": "Златоуст продаст нам 1000 штук пехотного снаряжения",
+    "icon": "GFX_decision_market_infantry",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "ZLT_sphere_of_influence"
+      },
+      "has_political_power": {
+        "_op": ">",
+        "value": 9
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "ZLT_black_market_deal_failed",
+            "ZLT_infantry_equipment_ordered"
+          ]
+        },
+        "has_idea": "ZLT_black_market_payments"
+      },
+      "ZLT": {
+        "has_equipment": {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 999
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ZLT_sphere_of_influence"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_black_market_buyer_infantry_equipment",
+      "set_country_flag": "ZLT_infantry_equipment_ordered",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.05
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_black_market_buyer_support_equipment",
+    "category_id": "ZLT_Black_Market_Purchase_Foreign",
+    "name": "Купить дополнительное снаряжение",
+    "desc": "Златоуст продаст нам 200 штук дополнительного снаряжения.",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "ZLT_sphere_of_influence"
+      },
+      "has_political_power": {
+        "_op": ">",
+        "value": 9
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "ZLT_black_market_deal_failed",
+            "ZLT_support_equipment_ordered"
+          ]
+        },
+        "has_idea": "ZLT_black_market_payments"
+      },
+      "ZLT": {
+        "has_equipment": {
+          "support_equipment_1": {
+            "_op": ">",
+            "value": 199
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ZLT_sphere_of_influence"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_black_market_buyer_support_equipment",
+      "set_country_flag": "ZLT_support_equipment_ordered",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.075
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_black_market_buyer_anti_tank_equipment",
+    "category_id": "ZLT_Black_Market_Purchase_Foreign",
+    "name": "Купить противотанковое снаряжение",
+    "desc": "Златоуст продаст нам 150 штук противотанкового снаряжения.",
+    "icon": "GFX_decision_market_towed_artillery",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "ZLT_sphere_of_influence"
+      },
+      "has_political_power": {
+        "_op": ">",
+        "value": 9
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "ZLT_black_market_deal_failed",
+            "ZLT_anti_tank_equipment_ordered"
+          ]
+        },
+        "has_idea": "ZLT_black_market_payments"
+      },
+      "ZLT": {
+        "has_equipment": {
+          "anti_tank_equipment": {
+            "_op": ">",
+            "value": 149
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ZLT_sphere_of_influence"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_black_market_buyer_anti_tank_equipment",
+      "set_country_flag": "ZLT_anti_tank_equipment_ordered",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.06
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_black_market_buyer_towed_artillery_equipment",
+    "category_id": "ZLT_Black_Market_Purchase_Foreign",
+    "name": "Купить артиллерийское снаряжение",
+    "desc": "Златоуст продаст нам 100 штук артиллерийского снаряжения.",
+    "icon": "GFX_decision_market_towed_artillery",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "ZLT_sphere_of_influence"
+      },
+      "has_political_power": {
+        "_op": ">",
+        "value": 9
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "ZLT_black_market_deal_failed",
+            "ZLT_towed_artillery_equipment_ordered"
+          ]
+        },
+        "has_idea": "ZLT_black_market_payments"
+      },
+      "ZLT": {
+        "has_equipment": {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 99
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ZLT_sphere_of_influence"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_black_market_buyer_towed_artillery_equipment",
+      "set_country_flag": "ZLT_towed_artillery_equipment_ordered",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.075
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_purchase_military_access",
+    "category_id": "ZLT_Black_Market_Purchase_Foreign",
+    "name": "Купить проход войск у Златоуста",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "ZLT_sphere_of_influence"
+      },
+      "has_political_power": {
+        "_op": ">",
+        "value": 9
+      },
+      "NOT": [
+        {
+          "has_country_flag": "ZLT_black_market_deal_failed",
+          "has_idea": "ZLT_black_market_payments"
+        },
+        {
+          "has_country_flag": "ZLT_GRANTED_MILITARY_ACCESS"
+        }
+      ]
+    },
+    "visible": {
+      "has_country_flag": "ZLT_sphere_of_influence",
+      "ZLT": {
+        "has_country_flag": "ZLT_PAY_TO_PASS_FLAG"
+      },
+      "NOT": [
+        {
+          "has_country_flag": "ZLT_GRANTED_MILITARY_ACCESS"
+        },
+        {
+          "has_war_with": "ZLT"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_purchase_military_access",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.02
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "ZLT": {
+        "country_event": {
+          "id": "zlatoust_sales.1",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ZLT_hire_mercenary_brigades",
+    "category_id": "ZLT_Expenditures",
+    "name": "Нанять бригаду наемников",
+    "desc": "",
+    "icon": "GFX_decision_generic_guard",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ZLT_CAN_HIRE_MERCS"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_hire_mercenary_brigades",
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.5
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "TNO_worsen_military_supervision_policy_effectiveness_high": true
+    }
+  },
+  {
+    "id": "ZLT_hire_mercenary_motorized_brigades",
+    "category_id": "ZLT_Expenditures",
+    "name": "Нанять мотобригаду наемников",
+    "desc": "",
+    "icon": "GFX_decision_generic_motorized",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ZLT_CAN_HIRE_MERCS"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_hire_mercenary_motorized_brigades",
+      "subtract_from_variable": {
+        "loot_amount": 3
+      },
+      "TNO_worsen_military_supervision_policy_effectiveness_high": true,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.5
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_purchase_yugran_guarantee",
+    "category_id": "ZLT_Expenditures",
+    "name": "Купить защиту у Югры",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ZLT_CAN_INVEST_IN_YUGRA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_purchase_yugran_guarantee",
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "YGR": {
+        "country_event": {
+          "id": "ZLT.14",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ZLT_expand_industrial_base",
+    "category_id": "ZLT_Expenditures",
+    "name": "Инвестировать в индустриальную базу",
+    "desc": "",
+    "icon": "GFX_decision_generic_gear_blue",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "random_owned_controlled_state": {
+        "set_temp_variable": {
+          "temp_state_value_addition": 0.2
+        },
+        "econ_state_value_change_addition_specified_state": true
+      }
+    }
+  },
+  {
+    "id": "ZLT_invest_in_weapons_r_and_d",
+    "category_id": "ZLT_Expenditures",
+    "name": "Инвестировать в разработку оружия",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 1
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_invest_in_culture",
+    "category_id": "ZLT_Expenditures",
+    "name": "Инвестировать в культуру",
+    "desc": "",
+    "icon": "GFX_decision_generic_farm",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 1
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_invest_in_worker_training",
+    "category_id": "ZLT_Expenditures",
+    "name": "Инвестировать в обучение рабочих",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "TNO_improve_unemployment_policy_effectiveness_med": true,
+      "TNO_improve_regulations_policy_effectiveness_med": true
+    }
+  },
+  {
+    "id": "ZLT_invest_in_industrial_equipment",
+    "category_id": "ZLT_Expenditures",
+    "name": "Инвестировать в новые станки",
+    "desc": "",
+    "icon": "GFX_decision_generic_destroy_city",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "random_owned_controlled_state": {
+        "set_temp_variable": {
+          "temp_state_value_addition": 0.1
+        },
+        "econ_state_value_change_addition_specified_state": true
+      }
+    }
+  },
+  {
+    "id": "ZLT_invest_in_education",
+    "category_id": "ZLT_Expenditures",
+    "name": "Инвестировать в образование",
+    "desc": "",
+    "icon": "GFX_decision_generic_education",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "TNO_improve_education_policy_effectiveness_med": true
+    }
+  },
+  {
+    "id": "ZLT_invest_in_general_research",
+    "category_id": "ZLT_Expenditures",
+    "name": "Инвестировать в исследования",
+    "desc": "",
+    "icon": "GFX_decision_generic_research",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_invest_in_agriculture",
+    "category_id": "ZLT_Expenditures",
+    "name": "Инвестировать в агрокультуру",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "TNO_improve_agriculture_med": true
+    }
+  },
+  {
+    "id": "ZLT_expand_anti_air",
+    "category_id": "ZLT_Defense_And_Influence",
+    "name": "Расширить сеть ПВО",
+    "desc": "",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "subtract_from_variable": {
+        "loot_amount": 1
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_send_mercenary_support",
+    "category_id": "ZLT_Defense_And_Influence",
+    "name": "Отправить добровольцев в [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "has_war": true
+      },
+      "has_idea": "ZLT_warlord_interventions"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_send_mercenary_support",
+      "custom_effect_tooltip": "ZLT_send_mercenary_support_tt",
+      "FROM": [
+        {
+          "set_country_flag": "ZLT_SUPPORTED"
+        },
+        {
+          "country_event": {
+            "id": "ZLT.11",
+            "days": 1
+          }
+        }
+      ],
+      "set_temp_variable": {
+        "money_reserves_temp": 0.1
+      },
+      "econ_money_reserves_change_raw_money": true
+    }
+  },
+  {
+    "id": "ZLT_send_armaments",
+    "category_id": "ZLT_Defense_And_Influence",
+    "name": "Отправить оружие в [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_send_armaments",
+      "set_temp_variable": {
+        "money_reserves_temp": 0.05
+      },
+      "econ_money_reserves_change_raw_money": true,
+      "FROM": {
+        "country_event": {
+          "id": "ZLT.12",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ZLT_send_advisors",
+    "category_id": "ZLT_Defense_And_Influence",
+    "name": "Послать советников в [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_send_advisors",
+      "set_temp_variable": {
+        "money_reserves_temp": 0.075
+      },
+      "econ_money_reserves_change_raw_money": true,
+      "FROM": {
+        "country_event": {
+          "id": "ZLT.13",
+          "days": 1
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,555 @@
+[
+  {
+    "id": "AUS_reintegrate_FROM_switzerland_decision",
+    "category_id": "AUS_reintegrating_the_empire_category",
+    "name": "Заново интегрировать территорию [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_propaganda",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_reintegrating_state_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_reclaim_habsburg"
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_reintegrating_state_flag"
+    }
+  },
+  {
+    "id": "CHL_mapuche_liberate_itza",
+    "category_id": "CHL_mapuche_nationalism_decisions",
+    "name": "Освободить [ITZ.GetAdjective]ий народ",
+    "desc": "",
+    "icon": "GFX_decision_CHL_mapuche_liberate_itza",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "ITZ": {
+        "exists": false
+      },
+      "OR": {
+        "controls_state": 311,
+        "any_country": {
+          "is_subject_of": "ROOT",
+          "controls_state": 311
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "NOT": {
+        "has_country_flag": "CHL_released_itza_flag"
+      }
+    },
+    "complete_effect": {
+      "311": {
+        "add_victory_points": {
+          "province": 2077,
+          "value": 2
+        },
+        "set_province_name": {
+          "id": 2077,
+          "name": "2077_indigenous_city_name"
+        }
+      },
+      "every_state": {
+        "limit": {
+          "OR": {
+            "is_controlled_by": "ROOT",
+            "any_country": {
+              "is_subject_of": "ROOT",
+              "controls_state": "PREV"
+            }
+          },
+          "state": 311
+        },
+        "add_core_of": "ITZ",
+        "transfer_state_to": "ITZ"
+      },
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_subject": "ITZ"
+          }
+        },
+        "puppet": "ITZ"
+      },
+      "ITZ": {
+        "add_stability": 0.15,
+        "add_war_support": 0.1,
+        "add_political_power": 150,
+        "add_manpower": 10000,
+        "hidden_effect": {
+          "division_template": {
+            "name": "Itza Warriors",
+            "is_locked": false,
+            "division_names_group": "SPR_INF_01",
+            "template_counter": 85,
+            "override_model": "CHL_infantry_alt_1_entity",
+            "priority": 1,
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "recon": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          }
+        },
+        "random_state": {
+          "limit": {
+            "is_controlled_by": "ITZ"
+          },
+          "create_unit": [
+            {
+              "division": "name = \"1st Itza Warriors\" division_template = \"Itza Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "ITZ"
+            },
+            {
+              "division": "name = \"2nd Itza Warriors\" division_template = \"Itza Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "ITZ"
+            },
+            {
+              "division": "name = \"3rd Itza Warriors\" division_template = \"Itza Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "ITZ"
+            }
+          ]
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "CHL_released_itza_flag"
+      }
+    }
+  },
+  {
+    "id": "ENG_promote_the_blitz_spirit",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Повысить дух «Блица»",
+    "desc": "",
+    "icon": "GFX_decision_eng_install_government",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "has_completed_focus": "general_rearmament_focus"
+    },
+    "visible": {
+      "has_war_with": "GER",
+      "NOT": {
+        "has_idea": "ENG_blitz_spirit_idea"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_isolate_switzerland",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Изолировать Швейцарию",
+    "desc": "Мы можем сосредоточиться на том, чтобы держава [SWI.GetName] была самодостаточной и могла сама за себя постоять. Возможно, это наш единственный шанс сохранить независимость.",
+    "icon": "GFX_decision_SWI_isolate_switzerland",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "has_trait": "SWI_conservative_democrat"
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "TNO_Haitian_Blitz",
+    "category_id": "global_debug_decisions",
+    "name": "Begin Haitian Blitz",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_wif_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "TNO_HAI_civil_war_start": true,
+      "USA": {
+        "country_event": {
+          "id": "HIS_HAI.8"
+        }
+      },
+      "every_country": {
+        "limit": {
+          "is_ai": false,
+          "HasPaktAmericasInterest": true
+        },
+        "news_event": {
+          "id": "hispaniola_news.11",
+          "days": 1
+        }
+      },
+      "DOM": {
+        "declare_war_on": {
+          "type": "annex_everything",
+          "target": "HAI"
+        }
+      }
+    }
+  },
+  {
+    "id": "debug_PHI_blitz_crisis",
+    "category_id": "global_debug_decisions",
+    "name": "Начать Балинтавакский блиц",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_global_flag": "PHI_proxy_war"
+        }
+      ],
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_asia_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "TNO_Start_Balintawak_Blitz": true,
+      "every_country": {
+        "limit": {
+          "is_ai": false,
+          "HasSouthAsiaInterest": true
+        },
+        "news_event": "WORLD.18122"
+      }
+    }
+  },
+  {
+    "id": "debug_PHI_blitz_crisis_UPH_win",
+    "category_id": "global_debug_decisions",
+    "name": "Победу коммунист. Филиппин",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_global_flag": "UPH_Win_PHI"
+        },
+        {
+          "has_global_flag": "PHI_PW_End"
+        }
+      ],
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_asia_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "TNO_Blitz_UPH_victory": true
+    }
+  },
+  {
+    "id": "debug_PHI_blitz_crisis_SPH_win",
+    "category_id": "global_debug_decisions",
+    "name": "Победа Свободных Филиппин",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_global_flag": "SPH_Win_PHI"
+        },
+        {
+          "has_global_flag": "PHI_PW_End"
+        }
+      ],
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_asia_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "TNO_Blitz_SPH_victory": true
+    }
+  },
+  {
+    "id": "debug_PHI_blitz_crisis_fourteenth_army_landing",
+    "category_id": "global_debug_decisions",
+    "name": "Победа 14-й армии (ИСПОЛЬЗОВАТЬ ТОЛЬКО ПОСЛЕ ПОБЕДЫ СВОБ. ФИЛИППИН)",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_global_flag": "PHI_PW_End"
+        }
+      ],
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_asia_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "PHI": {
+        "set_cosmetic_tag": "PHI_fourteenth"
+      },
+      "1455": {
+        "set_demilitarized_zone": true
+      },
+      "ZZZ": {
+        "country_event": {
+          "id": "PHI_Blitz.9",
+          "days": 2
+        }
+      }
+    }
+  },
+  {
+    "id": "debug_PHI_blitz_crisis_SPR_win",
+    "category_id": "global_debug_decisions",
+    "name": "Победа прояпонских Филиппин",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_global_flag": "SPR_Win_PHI"
+        },
+        {
+          "has_global_flag": "SPH_Win_PHI"
+        },
+        {
+          "has_global_flag": "UPH_Win_PHI"
+        },
+        {
+          "has_global_flag": "PHI_PW_End"
+        }
+      ],
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_asia_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "PHI": [
+        {
+          "annex_country": {
+            "target": "SPH",
+            "transfer_troops": false
+          }
+        },
+        {
+          "annex_country": {
+            "target": "UPH",
+            "transfer_troops": false
+          }
+        }
+      ],
+      "TNO_Blitz_PHI_victory": true
+    }
+  },
+  {
+    "id": "RUS_blitz_to_baku",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Blitz To Baku",
+    "desc": "",
+    "icon": "generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        1552,
+        1554,
+        229,
+        1561
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "RUS": {
+        "set_temp_variable": {
+          "temp_exhaustion": -5
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "add_war_support": 0.015,
+      "GER": {
+        "add_stability": -0.075,
+        "add_war_support": -0.05,
+        "add_fuel": -8000,
+        "set_temp_variable": {
+          "temp_exhaustion": 5
+        },
+        "WRW_add_war_exhaustion": true
+      }
+    }
+  },
+  {
+    "id": "RUS_blitz_belarus",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Blitz Belarus",
+    "desc": "",
+    "icon": "generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        194,
+        95,
+        96,
+        204,
+        206,
+        1407,
+        1406,
+        1405,
+        1404,
+        1403
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "RUS": {
+        "set_temp_variable": {
+          "temp_exhaustion": -5
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "GER": {
+        "set_temp_variable": {
+          "temp_exhaustion": 3
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "add_war_support": 0.015
+    }
+  },
+  {
+    "id": "FUK_project_cossack_blitz",
+    "category_id": "FUK_replace_wehrmacht_category",
+    "name": "Project TANKOVIY BLITZ",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 165,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_afh_upgrades_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_afh_upgrades"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_cossack_blitz",
+      "set_country_flag": [
+        "FUK_doing_afh_upgrades",
+        "FUK_AFH_UPGRATING_5_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "debt_temp": 0.369
+      },
+      "econ_national_debt_change": true
+    }
+  }
+]

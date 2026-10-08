@@ -1,0 +1,223 @@
+[
+  {
+    "id": "iberian_wars_declare_war_CNT",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Объявить войну каталонским анархистам",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_global_flag": "IBW_happening",
+      "has_war": false,
+      "OR": {
+        "AND": {
+          "tag": "SPR",
+          "NOT": {
+            "has_global_flag": "IBR_Wars_SPR_regionals_alliance_flag"
+          }
+        },
+        "NOT": {
+          "tag": "SPR"
+        }
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_war_with": "SPR"
+        },
+        {
+          "has_war_with": "SPS"
+        },
+        {
+          "has_war_with": "FSR"
+        },
+        {
+          "has_war_with": "FZL"
+        },
+        {
+          "tag": "CNT"
+        },
+        {
+          "has_war_with": "CNT"
+        }
+      ],
+      "CNT": {
+        "any_owned_state": {
+          "is_claimed_by": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision iberian_wars_declare_war_CNT",
+      "set_variable": {
+        "IBRW_Planning_War": 1
+      }
+    }
+  },
+  {
+    "id": "IBR_Wars_decision_invade_baleares_CNT",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "IBR_Wars_decision_invade_baleares_CNT",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "tag": "CNT",
+      "NOT": [
+        {
+          "CTL": {
+            "controls_state": 177
+          }
+        },
+        {
+          "ITA": {
+            "controls_state": 177
+          }
+        },
+        {
+          "CNT": {
+            "controls_state": 177
+          }
+        },
+        {
+          "AND": {
+            "SPR": {
+              "controls_state": 177
+            },
+            "has_global_flag": "IBR_Wars_SPR_regionals_alliance_flag"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_Wars_decision_invade_baleares_CNT"
+    }
+  },
+  {
+    "id": "IBR_AAS_CNT_offensive_decision",
+    "category_id": "IBR_terrorism_category",
+    "name": "Начать наступление на ДИ",
+    "desc": "В связи с критической ситуацией в Каталонии армия готовится к полномасштабному наступлению на Дефенсу Интериор.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "IBR_offensive_decisions_blocked"
+        },
+        {
+          "has_idea": "military_budget_cuts"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_CNT_Broken"
+      },
+      "OR": {
+        "check_variable": [
+          {
+            "IBR_CNT_Activity": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_CNT_Resources": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_CNT_Support": {
+              "_op": ">",
+              "value": 5.99
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "IBR_offensive_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_AAS_CNT_AI_dismantlement",
+    "category_id": "IBR_terrorism_category",
+    "name": "IBR_AAS_CNT_AI_dismantlement",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "check_variable": {
+        "var": "IBR_AAS_Resources",
+        "variable": "IBR_CNT_BUYDOWN",
+        "compare": "greater_than_or_equals"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_CNT_Broken"
+      },
+      "is_ai": true
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "IBR_AAS_Resources": "IBR_CNT_BUYDOWN"
+      },
+      "round_variable": "IBR_AAS_Resources",
+      "country_event": {
+        "id": "IBR_terror.100",
+        "days": 3
+      }
+    }
+  },
+  {
+    "id": "MAG_WA_support_cnt",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт государству [CNT.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "CNT": {
+        "exists": true
+      },
+      "MAG_WA_iberian_wars_active": true,
+      "NOT": {
+        "OR": {
+          "SPS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "CTL": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "CNT": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GNS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_cnt",
+      "CNT": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  }
+]

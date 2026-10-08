@@ -1,0 +1,333 @@
+[
+  {
+    "id": "lar_congress_of_paris.1",
+    "type": "country_event",
+    "title": "Парижский конгресс",
+    "desc": "[This.GetLeader] объявляет официальное приглашение, и [ITA.GetLeader], [SPA.GetLeader] и [POR.GetLeader] прибывают в Париж обсудить сферы колониального влияния в Африке. Поскольку Франция и Италия — основные державы, заинтересованные в расширении своих империй, необходимо пойти на уступки для государств [SPA.GetNameDef] и [POR.GetNameDef], чтобы они вступили в союз и отправились на войну ради этих целей.\n\n[POR.GetLeader], скорее всего, попытается заручиться поддержкой для воплощения своего давнего плана по объединению Анголы и Мозамбика. [SPA.GetLeader] же потребует себе часть французских северо-африканских территорий.",
+    "picture": "GFX_report_event_fascist_gathering",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы получим компенсацию в другом месте.",
+        "name_key": "lar_congress_of_paris.1.a",
+        "trigger": {},
+        "effects": {
+          "add_state_claim": [
+            558,
+            900,
+            901,
+            902,
+            274,
+            700,
+            701,
+            538,
+            718,
+            768,
+            769,
+            890,
+            888,
+            889
+          ],
+          "if": {
+            "limit": {
+              "is_in_faction_with": "ITA"
+            },
+            "ITA": {
+              "country_event": "lar_congress_of_paris.2"
+            }
+          },
+          "else_if": [
+            {
+              "limit": {
+                "is_in_faction_with": "SPA"
+              },
+              "SPA": {
+                "country_event": "lar_congress_of_paris.5"
+              }
+            },
+            {
+              "limit": {
+                "is_in_faction_with": "POR"
+              },
+              "POR": {
+                "country_event": "lar_congress_of_paris.6"
+              }
+            }
+          ],
+          "else": {
+            "hidden_effect": {
+              "news_event": {
+                "id": "lar_news.3",
+                "days": 3,
+                "random_days": 5
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "lar_congress_of_paris.2",
+    "type": "country_event",
+    "title": "Изменение карты Африки",
+    "desc": "В первом раунде переговоров французская делегация предложила просто разделить континент посередине, отдав нам права на Египет, Судан и территории вплоть до юга Кении. Хотя в этом предложении мало конкретики и оно в основном относится к землям, которые никто из нас не контролирует, с его помощью можно заручиться поддержкой французов в завоевании большой Африканской империи.",
+    "picture": "GFX_report_event_fascist_gathering",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мечта об Итальянской империи в Африке стоит того, чтобы немного рискнуть.",
+        "name_key": "lar_congress_of_paris.2.a",
+        "trigger": {},
+        "effects": {
+          "FRA_congress_of_paris_italian_claims_setup_effect": true,
+          "FRA": {
+            "country_event": "lar_congress_of_paris.3"
+          },
+          "if": {
+            "limit": {
+              "is_in_faction_with": "SPA"
+            },
+            "SPA": {
+              "country_event": "lar_congress_of_paris.5"
+            }
+          },
+          "else_if": {
+            "limit": {
+              "is_in_faction_with": "POR"
+            },
+            "POR": {
+              "country_event": "lar_congress_of_paris.6"
+            }
+          },
+          "else": {
+            "hidden_effect": {
+              "news_event": {
+                "id": "lar_news.3",
+                "days": 3,
+                "random_days": 5
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "У нас нет ни единой причины поддерживать это предложение.",
+        "name_key": "lar_congress_of_paris.2.b",
+        "trigger": {},
+        "effects": {
+          "FRA": {
+            "country_event": "lar_congress_of_paris.4",
+            "FRA_congress_of_paris_italian_claims_setup_effect": true,
+            "effect_tooltip": {
+              "remove_from_faction": "PREV"
+            }
+          },
+          "if": {
+            "limit": {
+              "is_in_faction_with": "SPA"
+            },
+            "SPA": {
+              "country_event": "lar_congress_of_paris.5"
+            }
+          },
+          "else_if": {
+            "limit": {
+              "is_in_faction_with": "POR"
+            },
+            "POR": {
+              "country_event": "lar_congress_of_paris.6"
+            }
+          },
+          "else": {
+            "hidden_effect": {
+              "news_event": {
+                "id": "lar_news.3",
+                "days": 3,
+                "random_days": 5
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "lar_congress_of_paris.3",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] соглашается",
+    "desc": "Делегация [From.GetNameRuGen] в принципе согласна с предлагаемыми территориальными изменениями. Нужно ещё проработать несколько мелких деталей и обсудить точное расположение новой границы, но крупных проблем, мешающих заключению соглашения, наши дипломаты не предвидят.",
+    "picture": "GFX_report_event_generic_conference",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Отлично.",
+        "name_key": "lar_congress_of_paris.3.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "lar_congress_of_paris.4",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отвечает отказом",
+    "desc": "Делегация из [From.GetNameRuGen] объявила о завершении переговоров. Сославшись на фундаментальные разногласия касательно предложенных изменений, она покинула Париж и возвращается в государство [From.GetNameDef].\n\n Вскоре после её поспешного отъезда [From.GetAdjective]ий посол объявил, что [From.GetAdjective]ое правительство более не связано с нами каким-либо договором о взаимопомощи или союзом.",
+    "picture": "GFX_report_event_german_politician_speech",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Нам же больше достанется.",
+        "name_key": "lar_congress_of_paris.4.a",
+        "trigger": {},
+        "effects": {
+          "remove_from_faction": "FROM"
+        }
+      }
+    ]
+  },
+  {
+    "id": "lar_congress_of_paris.5",
+    "type": "country_event",
+    "title": "Изменение карты Африки",
+    "desc": "Пока другие делегации в Париже спорили о том, кому из них достанутся территории, на самом деле не контролируемые их странами, наши дипломаты добивались более реальных целей. Французское правительство дало понять, что оно благосклонно настроено к нашему предложению и готово уступить нам Марокко в обмен на поддержку в любой будущей войне. Таким образом мы объединим свои владения в Северной и Западной Африке.",
+    "picture": "GFX_report_event_fascist_gathering",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Если они готовы заплатить оговоренную цену, мы готовы выполнить свои обязательства.",
+        "name_key": "lar_congress_of_paris.5.a",
+        "trigger": {},
+        "effects": {
+          "FRA": {
+            "country_event": "lar_congress_of_paris.3"
+          },
+          "transfer_state": [
+            461,
+            462
+          ],
+          "if": {
+            "limit": {
+              "is_in_faction_with": "POR"
+            },
+            "POR": {
+              "country_event": "lar_congress_of_paris.6"
+            }
+          },
+          "else": {
+            "hidden_effect": {
+              "news_event": {
+                "id": "lar_news.3",
+                "days": 3,
+                "random_days": 5
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Никакая пустыня, сколь угодно большая, не стоит и капли испанской крови.",
+        "name_key": "lar_congress_of_paris.5.b",
+        "trigger": {},
+        "effects": {
+          "FRA": {
+            "country_event": "lar_congress_of_paris.4",
+            "effect_tooltip": {
+              "remove_from_faction": "PREV"
+            }
+          },
+          "if": {
+            "limit": {
+              "is_in_faction_with": "POR"
+            },
+            "POR": {
+              "country_event": "lar_congress_of_paris.6"
+            }
+          },
+          "else": {
+            "hidden_effect": {
+              "news_event": {
+                "id": "lar_news.3",
+                "days": 3,
+                "random_days": 5
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "lar_congress_of_paris.6",
+    "type": "country_event",
+    "title": "Изменение карты Африки",
+    "desc": "Хотя из-за недостатка жёсткой политической силы нашим дипломатам в Париже не удаётся заметно повлиять на ситуацию, нам тем не менее предложили поддержку при захвате территорий между Анголой и Мозамбиком, а также возможность заявить права на большую часть Южной Африки. Похоже, что передача нам этих территорий позволит двум большим державам избежать конфликта, который может поставить под угрозу всё соглашение.\n\nОднако, приняв это предложение, мы должны будем сражаться на стороне Франции и Италии, помогая им расширять свои империи.",
+    "picture": "GFX_report_event_fascist_gathering",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это небольшая цена.",
+        "name_key": "lar_congress_of_paris.6.a",
+        "trigger": {},
+        "effects": {
+          "FRA_congress_of_paris_portugese_claims_setup_effect": true,
+          "FRA": {
+            "country_event": "lar_congress_of_paris.3"
+          },
+          "hidden_effect": {
+            "news_event": {
+              "id": "lar_news.3",
+              "days": 3,
+              "random_days": 5
+            }
+          }
+        }
+      },
+      {
+        "name": "Они просят слишком много и предлагают слишком мало.",
+        "name_key": "lar_congress_of_paris.6.b",
+        "trigger": {},
+        "effects": {
+          "FRA": {
+            "country_event": "lar_congress_of_paris.4",
+            "FRA_congress_of_paris_portugese_claims_setup_effect": true,
+            "effect_tooltip": {
+              "remove_from_faction": "PREV"
+            }
+          },
+          "hidden_effect": {
+            "news_event": {
+              "id": "lar_news.3",
+              "days": 3,
+              "random_days": 5
+            }
+          }
+        }
+      }
+    ]
+  }
+]

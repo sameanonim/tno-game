@@ -1,0 +1,1300 @@
+[
+  {
+    "id": "JAP_develop_sichuan_aluminium_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разработка месторождений бокситов в Сычуани",
+    "desc": "",
+    "icon": "aluminium",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "605": {
+        "is_controlled_by_ROOT_or_subject": true
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "JAP_transformation_of_nature",
+          "JAP_develop_the_chinese_resources"
+        ]
+      },
+      "605": {
+        "NOT": {
+          "has_state_flag": "sichuan_aluminium_developed"
+        }
+      }
+    },
+    "complete_effect": {
+      "605": {
+        "add_resource": {
+          "type": "aluminium",
+          "amount": 12
+        },
+        "set_state_flag": "sichuan_aluminium_developed"
+      }
+    }
+  },
+  {
+    "id": "develop_sichuan_aluminium_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разработка месторождений бокситов в Сычуани",
+    "desc": "",
+    "icon": "aluminium",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation3",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "owns_state": 605,
+      "controls_state": 605
+    },
+    "visible": {
+      "owns_state": 605,
+      "controls_state": 605,
+      "605": {
+        "NOT": {
+          "has_state_flag": "sichuan_aluminium_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SIC_push_into_xikang",
+    "category_id": "SIC_xikang_offensive",
+    "name": "Начать продвигаться вглубь Сикана",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "SIC_push_back_the_tibetans",
+      "601": {
+        "owner": {
+          "NOT": {
+            "has_war_with": "SIC",
+            "is_in_faction_with": "SIC",
+            "has_non_aggression_pact_with": "SIC",
+            "is_puppet_of": "SIC"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SIC_push_back_the_tibetans",
+      "752": {
+        "is_controlled_by": "SIC"
+      }
+    },
+    "complete_effect": {
+      "activate_mission": "SIC_push_into_xikang_mission",
+      "custom_effect_tooltip": "generic_skip_one_line_tt",
+      "start_border_war": {
+        "change_state_after_war": false,
+        "combat_width": 180,
+        "minimum_duration_in_days": 40,
+        "attacker": {
+          "on_win": "tsr_sichuan_border_war.1",
+          "on_lose": "tsr_sichuan_border_war.2",
+          "on_cancel": "tsr_sichuan_border_war.2",
+          "state": 752,
+          "num_provinces": 2,
+          "leader_score": {
+            "base": 1,
+            "modifier": [
+              {
+                "skill": {
+                  "_op": ">",
+                  "value": 2
+                },
+                "factor": 5
+              },
+              {
+                "skill": {
+                  "_op": ">",
+                  "value": 3
+                },
+                "factor": 10
+              }
+            ]
+          },
+          "dig_in_factor": 0,
+          "terrain_factor": 0
+        },
+        "defender": {
+          "state": 601,
+          "num_provinces": 2,
+          "on_lose": "tsr_sichuan_border_war.1",
+          "on_win": "tsr_sichuan_border_war.2",
+          "on_cancel": "tsr_sichuan_border_war.2"
+        }
+      }
+    }
+  },
+  {
+    "id": "SIC_push_into_xikang_mission",
+    "category_id": "SIC_xikang_offensive",
+    "name": "Битва за Сикан",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "CHL_integrate_corsica",
+    "category_id": "CHL_monarchist_decisions",
+    "name": "Восстановить власть в Корсике",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_return_to_the_continent",
+      "controls_state": 1
+    },
+    "visible": {
+      "original_tag": "CHL",
+      "has_completed_focus": "CHL_return_to_the_continent",
+      "NOT": {
+        "has_country_flag": "CHL_integrated_corsica_flag"
+      },
+      "1": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "WTT_build_support_in_sichuan",
+    "category_id": "CHI_political_power_struggle",
+    "name": "Укрепление поддержки в Сычуане ([?605.state_political_support_value|+0])",
+    "desc": "[605.GetStateMajorityCountryName] обладает большинством в регионе и будет получать очки политической поддержки ([?605.state_political_support_value|+0]) до тех пор, пока другая страна не заручится более активной местной поддержкой\n\nМестная поддержка:\n[605.GetLocalStateSupport_CHI][605.GetLocalStateSupport_PRC][605.GetLocalStateSupport_GXC][605.GetLocalStateSupport_YUN][605.GetLocalStateSupport_SHX][605.GetLocalStateSupport_XSM][605.GetLocalStateSupport_SIK]",
+    "icon": "generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_political_power": {
+        "_op": ">",
+        "value": 0
+      },
+      "605": {
+        "WTT_can_ROOT_select_state_support_decision_state": true
+      }
+    },
+    "visible": {
+      "605": {
+        "WTT_should_show_state_decision": true
+      },
+      "WTT_show_build_support_decisions": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "WTT_remove_opposition_in_sichuan",
+    "category_id": "CHI_political_power_struggle",
+    "name": "Устранение оппозиции в Сычуане",
+    "desc": "",
+    "icon": "oppression",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "605": {
+        "WTT_can_select_state_remove_support_state": true
+      }
+    },
+    "visible": {
+      "WTT_is_ROOT_current_leader_of_china": true,
+      "605": {
+        "WTT_can_select_state_remove_support_state": true
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "CHI_WI_Sichuan_tick",
+    "category_id": "CHI_RGOC_WI_Sichuan",
+    "name": "Столкновения в Сычуани заканчиваются",
+    "desc": "Судьба Сычуани предрешена, это последнее затишье перед Освободительной бурей.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission CHI_WI_Sichuan_tick Completed"
+    }
+  },
+  {
+    "id": "CHI_WI_fund_bureaucrats",
+    "category_id": "CHI_RGOC_WI_Sichuan",
+    "name": "Спонсировать чиновников Сычуаня",
+    "desc": "Благодаря модернизации мы, наконец, можем выделить часть наших ресурсов на поддержку деятельности местного правительства провинции Сычуань.",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_WI_fund_partisans_tooltip",
+        "NOT": {
+          "has_country_flag": "ECON_ONGOING_FISCAL_CRISIS"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: CHI_WI_fund_burecrats decision taken",
+      "custom_effect_tooltip": "CHI_WI_fund_bureaucrats_tt",
+      "add_to_variable": [
+        {
+          "global.WI_Sichuan_RGOC_support": 15
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.WI_Sichuan_RGOC_support",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.25
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHI_WI_send_weapons_to_garrisons",
+    "category_id": "CHI_RGOC_WI_Sichuan",
+    "name": "Отправить пушки гарнизовам",
+    "desc": "Мы отправим пару подразделений наших людей, чтобы обеспечить доставку всего оружия в руки гарнизонов.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: CHI_WI_send_weapons_to_partisans decision taken",
+      "add_to_variable": [
+        {
+          "global.WI_Sichuan_RGOC_support": 15
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.WI_Sichuan_RGOC_support",
+        "min": 0,
+        "max": 100
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500
+      }
+    }
+  },
+  {
+    "id": "CHI_WI_establish_curfew",
+    "category_id": "CHI_RGOC_WI_Sichuan",
+    "name": "Установить комендантский час",
+    "desc": "Мы введем комендантский час в провинции Сычуань, чтобы ограничить любые контакты партизан с жителями Сычуани.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "command_power": {
+          "_op": ">",
+          "value": 9
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: CHI_WI_establish_curfew decision taken",
+      "custom_effect_tooltip": "CHI_WI_establish_curfew_tt",
+      "add_to_variable": [
+        {
+          "global.GUI_SIC_NPA_Influence": -5
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.GUI_SIC_NPA_Influence",
+        "min": 0,
+        "max": 100
+      },
+      "add_command_power": -50
+    }
+  },
+  {
+    "id": "CHI_WI_bribe_liu_subordinates",
+    "category_id": "CHI_RGOC_WI_Sichuan",
+    "name": "Подкупить подчиненных Лю Вэньхуэя",
+    "desc": "Лю Вэньхуэй может быть упрямым старым призраком, который все еще продолжает свое жалкое сопротивление против нашего законного режима, но его подчиненные думают иначе: эти умные люди не потеряли здравый смысл и останавливают Лю, чтобы противостоять нам в делах Сычуани. Возможно, люди Лю смогут оказать нам больше услуг, если мы покажем им, насколько бессильны партизаны перед нашей мощью...",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "YUN_WI_fund_partisans_tooltip",
+          "NOT": {
+            "has_country_flag": "ECON_ONGOING_FISCAL_CRISIS"
+          }
+        },
+        {
+          "tooltip": "CHI_WI_bribe_liu_subordinates_tooltip",
+          "check_variable": {
+            "global.GUI_SIC_RGOC_Influence": {
+              "_op": ">",
+              "value": 70
+            }
+          }
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: CHI_WI_bribe_liu_subordinate decision taken",
+      "custom_effect_tooltip": "CHI_WI_bribe_liu_subordinates_tt",
+      "hidden_effect": {
+        "add_to_variable": [
+          {
+            "global.GUI_SIC_RGOC_Influence": 25
+          },
+          {
+            "global.GUI_SIC_NPA_Influence": -25
+          }
+        ],
+        "clamp_variable": [
+          {
+            "var": "global.GUI_SIC_NPA_Influence",
+            "min": 0,
+            "max": 100
+          },
+          {
+            "var": "global.GUI_SIC_RGOC_Influence",
+            "min": 0,
+            "max": 100
+          }
+        ],
+        "country_event": {
+          "id": "yun_wi.6"
+        },
+        "YUN": {
+          "country_event": {
+            "id": "yun_wi.6"
+          }
+        }
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 1.0
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_to_variable": {
+        "global.YUN_WI_Sichuan_dirty": 1
+      }
+    }
+  },
+  {
+    "id": "CHI_WI_Sichuan_movement",
+    "category_id": "CHI_RGOC_WI_Sichuan",
+    "name": "Столкновения в Сычуани!",
+    "desc": "Из-за поддержки со стороны чужаков группировки в Сычуани начинают конфликтовать!",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_global_flag": "WI_Sichuan_Struggle_begin"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_sic_PMC_on_GFT",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Натравить ЧВК на  ФРГ",
+    "desc": "Наем хорошо экипированных, решительных парней для поддержания 'порядка' на улицах их собственными методами - безусловно, эффективный способ подавления беспорядков. Жаль только, что это стоит немалых денег.",
+    "icon": "GFX_decision_generic_document_target",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "GNG_isnt_reallocating_from_GFT",
+          "NOT": {
+            "has_country_flag": "GNG_reallocating_from_GFT"
+          }
+        },
+        {
+          "tooltip": "GNG_budget_isnt_frozen",
+          "NOT": {
+            "has_country_flag": "GNG_freeze_the_budget_passed"
+          }
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      },
+      "has_country_flag": "GNG_no_room_to_breathe"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.4
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "GNG_sic_PMC_on_CCL",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Натравить ЧВК на  ККТ",
+    "desc": "Наем хорошо экипированных, решительных парней для поддержания 'порядка' на улицах их собственными методами - безусловно, эффективный способ подавления беспорядков. Жаль только, что это стоит немалых денег.",
+    "icon": "GFX_decision_generic_document_target",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "GNG_isnt_reallocating_from_CCL",
+          "NOT": {
+            "has_country_flag": "GNG_reallocating_from_CCL"
+          }
+        },
+        {
+          "tooltip": "GNG_budget_isnt_frozen",
+          "NOT": {
+            "has_country_flag": "GNG_freeze_the_budget_passed"
+          }
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      },
+      "has_country_flag": "GNG_no_room_to_breathe"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.4
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "GNG_sic_the_fujitsu_PMC_on_the_GFT",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Натравить ЧВК  \"Фудзицу\" на  ФРГ",
+    "desc": "Корпорация  \"Фудзицу\" и раньше сталкивалась с недовольством рабочих, пусть и не в таких масштабах. К счастью, мы знаем пару специалистов, обладающих исключительным опытом в силовом подавлении трудовых бунтов.",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_GFT",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_GFT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      },
+      "has_country_flag": "GNG_rapture"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_sic_the_fujitsu_PMC_on_the_CCL",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Натравить ЧВК  \"Фудзицу\" на  ККТ",
+    "desc": "Корпорация  \"Фудзицу\" и раньше сталкивалась с недовольством рабочих, пусть и не в таких масштабах. К счастью, мы знаем пару специалистов, обладающих исключительным опытом в силовом подавлении трудовых бунтов.",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_CCL",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_CCL"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      },
+      "has_country_flag": "GNG_rapture"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MAG_DEC_econ_werbell_4_construct_medical_fob_and_sick_bay",
+    "category_id": "MAG_DECCAT_economic_development_werbell",
+    "name": "Построить медицинские ПОБ и лазареты",
+    "desc": "Строительство и содержание медицинских ПОБ с прилегающим лазаретом позволит нам лечить раненых или больных и помогать солдатам восстанавливаться после посттравматического стрессового расстройства, вызванного службой в наших боевых частях. Хотя мы не увидим большой пользы от этого дома, это поможет снизить наши боевые потери за рубежом и будет способствовать развитию боевого медицинского лечения.",
+    "icon": "GFX_decision_MAG_werbell_medical_unit",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_econ_werbell_phase": 4
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.12
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "RUS_nukes_theory_develop_physics_institutes",
+    "category_id": "RUS_nuke_development_category",
+    "name": "Развитие физических институтов",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_nuclear_program_phase_1"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_nukes_theory_develop_physics_institutes",
+      "custom_effect_tooltip": "RUS_nukes_theory_develop_physics_institutes_cost_tt",
+      "set_temp_variable": {
+        "debt_temp": 0.3
+      },
+      "econ_national_debt_change": true,
+      "add_timed_idea": {
+        "idea": "RUS_nukes_theory_develop_physics_institutes_misc_costs",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "USA_sic_semper_tyrannis",
+    "category_id": "USA_coalition_unity",
+    "name": "Так всегда бывает с тиранами",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_sic_semper_tyrannis_hawkishness",
+        "check_variable": {
+          "USA_hawkishness": {
+            "_op": ">",
+            "value": 59
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_show_NPP_screen"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_sic_semper_tyrannis",
+      "hidden_effect": {
+        "activate_mission": "USA_sic_semper_tyrannis_mission"
+      },
+      "custom_effect_tooltip": "USA_sic_semper_tyrannis_tt",
+      "set_temp_variable": {
+        "tempSupport": 0.1
+      },
+      "USA_change_hardline_r_coalition_support": false
+    }
+  },
+  {
+    "id": "USA_sic_semper_tyrannis_mission",
+    "category_id": "USA_coalition_unity",
+    "name": "Так всегда бывает с тиранами",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_sic_semper_tyrannis_hawkishness_mission",
+        "check_variable": {
+          "USA_hawkishness": {
+            "_op": "<",
+            "value": 60
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision complete USA_sic_semper_tyrannis_mission"
+    }
+  },
+  {
+    "id": "YUN_WI_Sichuan_tick",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Столкновения в Сычуани завершены",
+    "desc": "Судьба Сычуани предрешена, это последнее затишье перед Освободительной бурей.",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_global_flag": "WI_Sichuan_Struggle_begin"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_WI_Sichuan_tick Completed"
+    }
+  },
+  {
+    "id": "YUN_WI_fund_partisans",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Спонсировать партизан",
+    "desc": "Мы проспонсируем партизан, чтобы помочь им действовать более эффективно.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_WI_fund_partisans_tooltip",
+        "NOT": {
+          "has_country_flag": "ECON_ONGOING_FISCAL_CRISIS"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_fund_partisans decision taken",
+      "custom_effect_tooltip": "YUN_WI_fund_partisans_tt",
+      "add_to_variable": [
+        {
+          "global.WI_Sichuan_NPA_support": 15
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.WI_Sichuan_NPA_support",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "YUN_WI_send_weapons_to_partisans",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Отправить партизанам пушки",
+    "desc": "Мы выделим несколько подразделений элитных войск, чтобы убедиться, что наше оружие точно попадет к партизанам.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 999
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_send_weapons_to_partisans decision taken",
+      "custom_effect_tooltip": "YUN_WI_fund_partisans_tt",
+      "add_to_variable": [
+        {
+          "global.WI_Sichuan_NPA_support": 15
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.WI_Sichuan_NPA_support",
+        "min": 0,
+        "max": 100
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -1000
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_ambush_RGOC_officials",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Засада на чиновников РПК",
+    "desc": "Благодаря холмистой местности Сычуани, мы можем направить наши горные войска против блуждающих чиновников РПК, чтобы искалечить чиновников местного правительства, препятствуя их борьбе против партизан.",
+    "icon": "GFX_decision_OMS_assassinate_batov",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "command_power": {
+          "_op": ">",
+          "value": 9
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_ambush_RGOC_officials decision taken",
+      "custom_effect_tooltip": "YUN_WI_ambush_RGOC_officials_tt",
+      "add_to_variable": [
+        {
+          "global.GUI_SIC_RGOC_Influence": -5
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.GUI_SIC_RGOC_Influence",
+        "min": 0,
+        "max": 100
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_persuade_liuwenhui",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Убедить Лю Вэньхуэя",
+    "desc": "Будучи одним из военачальников, которые никогда не сдавались режиму Ван Цзинвэя, Лю Вэньхуэй, по слухам, очень сочувствовал и поддерживал партизан Сычуани. Однако внутреннее давление со стороны его подчиненных не позволило Лю дальше вмешиваться в ситуацию. Если партизаны получат преимущество над коллаборационистами, возможно, мы сможем заставить Лю изменить свое мнение, несмотря на диссидентов...",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_WI_persuade_liuwenhui_tooltip",
+        "check_variable": {
+          "global.GUI_SIC_NPA_Influence": {
+            "_op": ">",
+            "value": 70
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_persuade_liuwenhui decision taken",
+      "custom_effect_tooltip": "YUN_WI_persuade_liuwenhui_tt",
+      "hidden_effect": {
+        "add_to_variable": [
+          {
+            "global.GUI_SIC_NPA_Influence": 25
+          },
+          {
+            "global.GUI_SIC_RGOC_Influence": -25
+          }
+        ],
+        "clamp_variable": [
+          {
+            "var": "global.GUI_SIC_NPA_Influence",
+            "min": 0,
+            "max": 100
+          },
+          {
+            "var": "global.GUI_SIC_RGOC_Influence",
+            "min": 0,
+            "max": 100
+          }
+        ],
+        "country_event": {
+          "id": "yun_wi.5"
+        },
+        "CHI": {
+          "country_event": {
+            "id": "yun_wi.5"
+          }
+        }
+      },
+      "add_command_power": -5,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_to_variable": {
+        "global.YUN_WI_Sichuan_dirty": 1
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_Sichuan_movement",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Столкновения в Сычуани!",
+    "desc": "Группы в Сычуани начнут конфликтовать, уровень поддержки и влияния фракции упадет между 5-20 и 1-2 соответственно!",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_global_flag": "WI_Sichuan_Struggle_begin"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "BNW_Image_test",
+    "category_id": "TMM_Sichuan",
+    "name": "BNW_Image_test",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "set_variable": {
+        "JAP_Electoral_District": "token:JAP_Region_Karafuto"
+      }
+    }
+  },
+  {
+    "id": "BNW_Management_test",
+    "category_id": "TMM_Sichuan",
+    "name": "BNW_Management_test",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "set_country_flag": "open_asia_management_gui"
+    }
+  },
+  {
+    "id": "core_sichuan",
+    "category_id": "QIN_Management",
+    "name": "Reestablish administration in Sichuan",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 140,
+    "fire_only_once": false,
+    "available": {
+      "date": {
+        "_op": ">",
+        "value": "1970.11.01"
+      },
+      "OR": {
+        "AND": {
+          "QIN": {
+            "owns_state": [
+              2372,
+              2371,
+              605,
+              2369,
+              2368,
+              2373,
+              2370,
+              1537,
+              2359,
+              2358,
+              1538,
+              2438
+            ]
+          },
+          "2372": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "2371": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "605": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "2369": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "2368": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "2373": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "2370": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "1537": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "2359": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "2358": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "1538": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "2438": {
+            "NOT": {
+              "is_core_of": "QIN"
+            }
+          },
+          "check_variable": [
+            {
+              "var": "State_Stability^14",
+              "value": 75,
+              "compare": "greater_than"
+            },
+            {
+              "var": "State_Tension^14",
+              "value": 10,
+              "compare": "less_than"
+            }
+          ]
+        },
+        "hidden_trigger": {
+          "AND": {
+            "if": {
+              "limit": {
+                "is_ai": true
+              },
+              "QIN": {
+                "owns_state": [
+                  2372,
+                  2371,
+                  605,
+                  2369,
+                  2368,
+                  2373,
+                  2370,
+                  1537,
+                  2359,
+                  2358,
+                  1538,
+                  2438
+                ]
+              },
+              "2372": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2371": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "605": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2369": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2368": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2373": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2370": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "1537": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2359": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2358": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "1538": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2438": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              }
+            },
+            "else": {
+              "QIN": {
+                "owns_state": [
+                  2372,
+                  2371,
+                  605,
+                  2369,
+                  2368,
+                  2373,
+                  2370,
+                  1537,
+                  2359,
+                  2358,
+                  1538,
+                  2438
+                ]
+              },
+              "2372": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2371": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "605": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2369": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2368": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2373": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2370": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "1537": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2359": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2358": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "1538": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "2438": {
+                "NOT": {
+                  "is_core_of": "QIN"
+                }
+              },
+              "check_variable": [
+                {
+                  "var": "State_Stability^14",
+                  "value": 75,
+                  "compare": "greater_than"
+                },
+                {
+                  "var": "State_Tension^14",
+                  "value": 10,
+                  "compare": "less_than"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "tag": "QIN",
+      "QIN": {
+        "owns_state": [
+          2372,
+          2371,
+          605,
+          2369,
+          2368,
+          2373,
+          2370,
+          1537,
+          2359,
+          2358,
+          1538,
+          2438
+        ]
+      },
+      "2372": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2371": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "605": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2369": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2368": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2373": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2370": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "1537": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2359": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2358": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "1538": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2438": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      }
+    },
+    "complete_effect": {}
+  }
+]

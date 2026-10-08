@@ -318,8 +318,12 @@ func _evaluate_legacy_trigger(trg: Dictionary, state: CountryState) -> bool:
 			var tension = float(state.story_flags.get("world_tension", state.story_flags.get("defcon_tension", 25.0)))
 			return ConditionEvaluator._compare(tension, op_t, float(trg.get("value", 0.0)))
 		"HAS_IDEA":
-			var idea_id = str(trg.get("idea", trg.get("value", "")))
-			return state.has_flag("idea_" + idea_id) or state.has_flag(idea_id) or state.has_active_law(idea_id)
+			var idea_id = str(trg.get("idea_id", trg.get("idea", trg.get("target", trg.get("id", trg.get("value", ""))))))
+			if state.has_method("has_idea"):
+				return state.has_idea(idea_id)
+			var has_law = state.has_active_law(idea_id) if state.has_method("has_active_law") else false
+			var has_spirit = state.has_national_spirit(idea_id) if state.has_method("has_national_spirit") else false
+			return state.has_flag("idea_" + idea_id) or state.has_flag(idea_id) or has_law or has_spirit
 		"CHECK_DATE":
 			var op_d = str(trg.get("operator", ">="))
 			return ConditionEvaluator._compare(float(state.turn_count), op_d, float(trg.get("turn", trg.get("value", 1))))
@@ -384,10 +388,30 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 	elif data.has("directive_id"):
 		res.id = str(data["directive_id"])
 
-	res.title = str(data.get("title", res.id))
-	res.description = str(data.get("description", ""))
+	# Название директивы: поддержка HoI4/Clausewitz полей ("name", "name_text", "title")
+	if data.has("title") and not str(data["title"]).is_empty():
+		res.title = str(data["title"])
+	elif data.has("name") and not str(data["name"]).is_empty():
+		res.title = str(data["name"])
+	elif data.has("name_text") and not str(data["name_text"]).is_empty():
+		res.title = str(data["name_text"])
+	else:
+		res.title = res.id
+
+	# Описание директивы: поддержка HoI4/Clausewitz "desc"
+	if data.has("description") and not str(data["description"]).is_empty():
+		res.description = str(data["description"])
+	elif data.has("desc") and not str(data["desc"]).is_empty():
+		res.description = str(data["desc"])
+	elif data.has("desc_text") and not str(data["desc_text"]).is_empty():
+		res.description = str(data["desc_text"])
+	else:
+		res.description = ""
+
 	res.category = str(data.get("category", "doctrine"))
 	res.icon_symbol = str(data.get("icon_symbol", "[★]"))
+
+	# Иконка фокуса
 	if data.has("icon_path"):
 		res.icon_path = str(data["icon_path"])
 	elif data.has("icon") and data["icon"] is String:
@@ -398,20 +422,25 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 	if not res.icon_path.is_empty() and ResourceLoader.exists(res.icon_path):
 		res.icon = load(res.icon_path) as Texture2D
 
-	# Координаты сетки
-	var gp = data.get("grid_position", [0.0, 0.0])
-	if gp is Array and gp.size() >= 2:
-		res.grid_position = Vector2(float(gp[0]), float(gp[1]))
-	elif gp is Vector2:
-		res.grid_position = gp
-	elif gp is Vector2i:
-		res.grid_position = Vector2(gp.x, gp.y)
+	# Координаты сетки: поддержка HoI4 "x" и "y"
+	if data.has("x") and data.has("y"):
+		res.grid_position = Vector2(float(data["x"]), float(data["y"]))
+	else:
+		var gp = data.get("grid_position", [0.0, 0.0])
+		if gp is Array and gp.size() >= 2:
+			res.grid_position = Vector2(float(gp[0]), float(gp[1]))
+		elif gp is Vector2:
+			res.grid_position = gp
+		elif gp is Vector2i:
+			res.grid_position = Vector2(gp.x, gp.y)
 
-	# Сроки и стоимость
-	if data.has("turns_to_complete"):
-		res.turns_to_complete = int(data["turns_to_complete"])
+	# Сроки выполнения: поддержка HoI4 "cost_turns"
+	if data.has("cost_turns"):
+		res.turns_to_complete = maxi(1, int(data["cost_turns"]))
+	elif data.has("turns_to_complete"):
+		res.turns_to_complete = maxi(1, int(data["turns_to_complete"]))
 	elif data.has("turns_required"):
-		res.turns_to_complete = int(data["turns_required"])
+		res.turns_to_complete = maxi(1, int(data["turns_required"]))
 	else:
 		res.turns_to_complete = 4
 
@@ -429,8 +458,13 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 
 	# Связи пререквизитов
 	res.prerequisites.clear()
-	for p in data.get("prerequisites", []):
-		res.prerequisites.append(str(p))
+	var raw_prereqs = data.get("prerequisites", data.get("prerequisite", []))
+	if raw_prereqs is Array:
+		for p in raw_prereqs:
+			if p is String:
+				res.prerequisites.append(str(p))
+			elif p is Dictionary and p.has("focus"):
+				res.prerequisites.append(str(p["focus"]))
 
 	res.prerequisites_groups.clear()
 	if data.has("prerequisites_groups") and data["prerequisites_groups"] is Array:
@@ -441,15 +475,18 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 					grp_arr.append(str(elem))
 				res.prerequisites_groups.append(grp_arr)
 	elif not res.prerequisites.is_empty():
-		# Если групп нет, но есть плоский список — каждая нода считается обязательной (группа из 1 элемента)
 		for p in res.prerequisites:
 			res.prerequisites_groups.append([p])
 
 	# Взаимоисключения
 	res.mutually_exclusive.clear()
 	var raw_excl = data.get("mutually_exclusive", data.get("mutually_exclusive_with", []))
-	for m in raw_excl:
-		res.mutually_exclusive.append(str(m))
+	if raw_excl is Array:
+		for m in raw_excl:
+			if m is String:
+				res.mutually_exclusive.append(str(m))
+			elif m is Dictionary and m.has("focus"):
+				res.mutually_exclusive.append(str(m["focus"]))
 
 	# AST логика
 	res.available_ast = data.get("available_ast", {}).duplicate(true)
@@ -468,6 +505,11 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 		if rew is Dictionary:
 			res.completion_rewards.append(rew.duplicate(true))
 
+	# Парсинг HoI4 Clausewitz completion_reward (Dictionary)
+	if data.has("completion_reward") and data["completion_reward"] is Dictionary:
+		var raw_cr: Dictionary = data["completion_reward"]
+		_parse_hoi4_completion_reward(raw_cr, res)
+
 	res.completion_effects = data.get("completion_effects", {}).duplicate(true)
 
 	res.bypass_rewards.clear()
@@ -483,3 +525,50 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 		res.icon = load(res.icon_path)
 
 	return res
+
+
+## Парсинг HoI4 словаря наград в структурированные опкоды DirectiveResource
+static func _parse_hoi4_completion_reward(cr: Dictionary, res: DirectiveResource) -> void:
+	if cr.has("add_political_power"):
+		res.completion_rewards.append({
+			"opcode": "MOD_PC",
+			"value": float(cr["add_political_power"])
+		})
+	if cr.has("add_war_support"):
+		res.completion_rewards.append({
+			"opcode": "MOD_WAR_SUPPORT",
+			"value": float(cr["add_war_support"])
+		})
+	if cr.has("add_stability"):
+		res.completion_rewards.append({
+			"opcode": "MOD_STABILITY",
+			"value": float(cr["add_stability"])
+		})
+	if cr.has("add_manpower"):
+		res.completion_rewards.append({
+			"opcode": "MOD_MANPOWER",
+			"value": int(cr["add_manpower"])
+		})
+	if cr.has("country_event"):
+		var ev_id := ""
+		if cr["country_event"] is Dictionary:
+			ev_id = str(cr["country_event"].get("id", ""))
+		elif cr["country_event"] is String:
+			ev_id = str(cr["country_event"])
+		if not ev_id.is_empty():
+			res.completion_rewards.append({
+				"opcode": "FIRE_EVENT",
+				"event_id": ev_id
+			})
+	if cr.has("set_country_flag"):
+		res.completion_rewards.append({
+			"opcode": "SET_FLAG",
+			"flag": str(cr["set_country_flag"])
+		})
+	if cr.has("transfer_state"):
+		res.completion_rewards.append({
+			"opcode": "TRANSFER_STATE",
+			"state_id": int(cr["transfer_state"])
+		})
+	for k in cr.keys():
+		res.completion_effects[k] = cr[k]

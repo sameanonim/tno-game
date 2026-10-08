@@ -1,0 +1,486 @@
+[
+  {
+    "id": "SAU_refining_our_national_identity_decision",
+    "category_id": "political_actions",
+    "name": "Усовершенствовать национальное самосознание",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_stability": {
+        "_op": ">",
+        "value": 0.6
+      },
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.6
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "add_ideas": "SAU_refining_the_national_identity_idea",
+      "hidden_effect": {
+        "set_cosmetic_tag": "SAU_modern_tag"
+      }
+    }
+  },
+  {
+    "id": "JAP_assault_tauran_decision",
+    "category_id": "operations",
+    "name": "Приготовиться к штурму [MON.GetAdjRuLower]их позиций",
+    "desc": "После того как [MON.GetAdjRuLower]ие войска устроили провокацию и оккупировали деревню Тауран у озера Буйр-Нур, стала очевидна необходимость подготовить ответный удар и вытеснить захватчика, пока тот не успел узаконить свою претензию на нашу землю.",
+    "icon": "border_war",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_war_with": "MON",
+        "is_in_faction_with": "MON",
+        "has_non_aggression_pact_with": "MON",
+        "MON": {
+          "is_puppet_of": "ROOT"
+        }
+      },
+      "761": {
+        "any_neighbor_state": {
+          "is_controlled_by": "MON"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "AND": [
+          {
+            "761": {
+              "is_owned_and_controlled_by": "ROOT"
+            },
+            "is_subject": false
+          },
+          {
+            "any_subject_country": {
+              "761": {
+                "is_owned_and_controlled_by": "PREV"
+              }
+            }
+          }
+        ]
+      },
+      "819": {
+        "is_owned_and_controlled_by": "MON"
+      },
+      "NOT": {
+        "has_global_flag": "failed_to_assault_in_time_flag"
+      },
+      "has_global_flag": "tauran_incident_has_begun_flag"
+    },
+    "complete_effect": {
+      "761": {
+        "save_event_target_as": "MAN_MON_attacker_state",
+        "set_state_flag": "border_incident_active"
+      },
+      "819": {
+        "save_event_target_as": "MAN_MON_defender_state",
+        "set_state_flag": "border_incident_active"
+      },
+      "MON": {
+        "country_event": {
+          "id": "SEA_border_incidents_events.4",
+          "days": 1
+        },
+        "activate_targeted_decision": {
+          "target": "ROOT",
+          "decision": "JAP_tauran_border_conflict_warning_MON"
+        }
+      },
+      "hidden_effect": {
+        "set_global_flag": "initial_tauran_decision_taken_flag"
+      }
+    }
+  },
+  {
+    "id": "PRC_assaulting_guyuan",
+    "category_id": "PRC_border_wars_cat",
+    "name": "Штурмует регион [1045.GetName]",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "PRC_assaulting_shanxi",
+    "category_id": "PRC_border_wars_cat",
+    "name": "Штурмует регион [615.GetName]",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "PRC_assaulting_yanan",
+    "category_id": "PRC_border_wars_cat",
+    "name": "Штурмует регион [1032.GetName]",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "liberate_guinea_bissau",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [GNB.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": 296
+        },
+        "GNB": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "Antarctica_GUI_AAJ_Decision_Air_Assault_Combat_Exercises",
+    "category_id": "Antarctica_GUI_AAJ",
+    "name": "Air Assault Combat Exercises",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAJ_Decision_Air_Assault_Combat_Exercises",
+      "hidden_effect": [
+        {
+          "add_command_power": -40
+        },
+        {
+          "add_to_variable": {
+            "Antarctica_Equipment": -10
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "ita_send_volunteers_to_saudis",
+    "category_id": "ITA_oil_crisis_category",
+    "name": "Отправить добровольцев в [SAU.GetFlag] Саудовскую Аравию",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_global_flag": "SaudiWar",
+      "SAU": {
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "target": "SAU"
+      },
+      "TNO_increase_volunteer_cap_1": true
+    }
+  },
+  {
+    "id": "GER_BOR_HVA_saudi_sabotage",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Чёрное золото\"",
+    "desc": "Ближний Восток долгое время был под контролем Италии. Таким образом, большая часть ресурсов, содержащихся в этом районе, стала недоступна для нас, когда итальянцы вышли из нашего пакта. Однако неприязнь к Италии принесла нам на их место еще одного друга в регионе. Баасистское движение, строго антиколониальное, презирает Италию. Мы их естественные друзья, и поэтому они, вероятно, будут рады поделиться своими ресурсами, в случае прихода к власти. Если мы сможем саботировать военную инфраструктуру их врагов, баасисты смогут объединить арабский мир в противостоянии Италии создать государства, которые будут готовы тесно сотрудничать с Рейхом!",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": [
+        {
+          "TNO_Espionage_Viewing_MiddleEast": true,
+          "is_ai": true
+        },
+        {
+          "has_country_flag": [
+            "BOR_HVA_saudi_sabotage_mission",
+            "BOR_HVA_decisions_debug"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_BOR_HVA_saudi_sabotage",
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.06
+        },
+        {
+          "TNO_Espionage_Expertise": 20
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ],
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "MAG_yemeni_saudi_war_effigy",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "САУДО-ЙЕМЕНСКАЯ ВОЙНА",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "NYM": {
+        "has_war_with": "SAU"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_yemeni_saudi_war_effigy"
+    }
+  },
+  {
+    "id": "MAG_WA_support_saudis",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Королевству Саудовская Аравия",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "SAU": {
+        "exists": true
+      },
+      "NYM": {
+        "has_war_with": "SAU"
+      },
+      "NOT": {
+        "OR": {
+          "NYM": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "SAU": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_saudis",
+      "SAU": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "ONG_assault",
+    "category_id": "ONG_deal_with_bandits",
+    "name": "Атаковать бандитский склад оружия",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_debug_oil_Saudi",
+    "category_id": "USA_debug_trees_category",
+    "name": "Древо на нефтяной кризис - Саудиты",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_debug_decisions"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_debug_oil_Saudi",
+      "set_country_flag": [
+        "USA_Oil_Crisis",
+        "USA_back_saudi"
+      ],
+      "load_focus_tree": "USA_oil_Saudi"
+    }
+  },
+  {
+    "id": "OMS_PT_2WRW_ceaseless_assault_stratagem_decision",
+    "category_id": "OMS_2WRW_great_trial_PT_category",
+    "name": "Ceaseless Assault Stratagem",
+    "desc": "Our commissars will instill in our soldiers the patriotic fervor needed to relentlessly charge the enemy, never stopping until all reactionaries are eliminated.",
+    "icon": "GFX_decision_generic_",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMS_2WRW_has_western_front_decision"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "custom_effect_tooltip": "OMS_readiness_decrease_tt",
+      "hidden_effect": {
+        "add_command_power": -25,
+        "set_country_flag": "OMS_2WRW_has_western_front_decision"
+      },
+      "add_ideas": "OMS_ceaseless_assault_stratagem"
+    }
+  },
+  {
+    "id": "OMS_PT_2WRW_firestorm_assault_stratagem_decision",
+    "category_id": "OMS_2WRW_great_trial_PT_category",
+    "name": "Firestorm Assault Stratagem",
+    "desc": "The plague of Germania will be eradicated by a firestorm that will burn down his fortresses, his homes, and his dreams. Just as scorched earth greeted the enemy when they marched on our Motherland, so too shall scorched earth greet the Teutons as our soldiers raze their nests.",
+    "icon": "GFX_decision_generic_",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMS_2WRW_has_western_front_decision"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "custom_effect_tooltip": "OMS_readiness_decrease_tt",
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "OMS_readiness": 2
+        },
+        "add_command_power": -25,
+        "set_country_flag": "OMS_2WRW_has_western_front_decision"
+      },
+      "add_ideas": "OMS_firestorm_assault_stratagem",
+      "every_possible_country": {
+        "limit": {
+          "OR": {
+            "original_tag": [
+              "GER",
+              "MCW",
+              "OST",
+              "CAU"
+            ]
+          }
+        },
+        "add_ideas": "OMS_firestorm_assault_stratagem_pakt_side"
+      }
+    }
+  },
+  {
+    "id": "OMS_2WRW_ceaseless_assault_stratagem_decision",
+    "category_id": "OMS_2WRW_great_trial_category",
+    "name": "Ceaseless Assault Stratagem",
+    "desc": "Our commissars will instill into our soldiers the patriotic fervor needed to charge relentlessly towards the enemy and never stop until all opposition has been obliterated.",
+    "icon": "GFX_decision_generic_",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMS_2WRW_has_western_front_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "OMS_2WRW_show_western_front_decisions"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "OMS_readiness_decrease_tt",
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "OMS_readiness": 2
+        },
+        "add_command_power": -25,
+        "set_country_flag": "OMS_2WRW_has_western_front_decision"
+      },
+      "add_ideas": "OMS_ceaseless_assault_stratagem"
+    }
+  },
+  {
+    "id": "OMS_2WRW_firestorm_assault_stratagem_decision",
+    "category_id": "OMS_2WRW_great_trial_category",
+    "name": "Firestorm Assault Stratagem",
+    "desc": "The Germanic disease will be eradicated by a storm of fire that will burn down his forts, his homes, his dreams. As scorched earth greeted the enemy when he marched into our Motherland, scorched earth will greet our men as they lay waste to the Teuton's nest.",
+    "icon": "GFX_decision_generic_",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMS_2WRW_has_western_front_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "OMS_2WRW_show_western_front_decisions"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "OMS_readiness_decrease_tt",
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "OMS_readiness": 2
+        },
+        "add_command_power": -25,
+        "set_country_flag": "OMS_2WRW_has_western_front_decision"
+      },
+      "add_ideas": "OMS_firestorm_assault_stratagem",
+      "every_possible_country": {
+        "limit": {
+          "OR": {
+            "original_tag": [
+              "GER",
+              "MCW",
+              "OST",
+              "CAU"
+            ]
+          }
+        },
+        "add_ideas": "OMS_firestorm_assault_stratagem_pakt_side"
+      }
+    }
+  }
+]

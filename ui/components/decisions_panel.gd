@@ -797,12 +797,12 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	panel.custom_minimum_size = Vector2(0, 100)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
-	var dec_id = dec["id"]
+	var dec_id = str(dec.get("id", "decision_unknown"))
 	var cd_turn = decisions_cooldowns.get(dec_id, 0)
 	var on_cooldown = (current_turn < cd_turn)
 	var cd_remaining = cd_turn - current_turn
 
-	var cost_pc = float(dec.get("cost_pc", 0.0))
+	var cost_pc = float(dec.get("cost_pc", dec.get("cost", 0.0)))
 	var cost_cap = int(dec.get("cost_cap", 0))
 	var cost_money = float(dec.get("cost_money", 0.0))
 
@@ -826,15 +826,16 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	var icon_path := "res://assets/gfx/interface/war_support_icon.png"
-	if dec["category"] == "economy":
+	var cat_str = str(dec.get("category", dec.get("category_id", "state"))).to_lower()
+	if cat_str.contains("econ") or cat_str.contains("industry"):
 		icon_path = "res://assets/gfx/interface/industrial_capacity_icon.png"
-	elif dec["category"] == "smuta":
+	elif cat_str.contains("smuta") or cat_str.contains("manpower"):
 		icon_path = "res://assets/gfx/interface/manpower_icon.png"
-	elif dec["category"] == "usa":
+	elif cat_str.contains("usa") or cat_str.contains("america"):
 		icon_path = "res://assets/gfx/interface/flag_overlay_tno.png"
-	elif dec["category"] == "military":
+	elif cat_str.contains("milit") or cat_str.contains("war") or cat_str.contains("army"):
 		icon_path = "res://assets/gfx/interface/war_support_icon.png"
-	elif dec["category"] == "state":
+	elif cat_str.contains("state") or cat_str.contains("stab") or cat_str.contains("polit"):
 		icon_path = "res://assets/gfx/interface/stability_icon.png"
 	icon_rect.texture = TNOTheme.get_texture(icon_path)
 	hbox.add_child(icon_rect)
@@ -845,7 +846,7 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	vbox.add_theme_constant_override("separation", 3)
 	hbox.add_child(vbox)
 
-	var raw_cat = str(dec.get("category_name", ""))
+	var raw_cat = str(dec.get("category_name", dec.get("category_id", dec.get("category", ""))))
 	var cat_key = "DEC_" + dec_id.to_upper() + "_CAT"
 	var cat_lbl := Label.new()
 	cat_lbl.text = _tr(cat_key, _tr(raw_cat, raw_cat)) if not raw_cat.is_empty() else _tr("DEC_DEFAULT_CAT", "ОПЕРАЦИЯ")
@@ -853,7 +854,7 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	cat_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_SECONDARY)
 	vbox.add_child(cat_lbl)
 
-	var raw_title = str(dec.get("title", ""))
+	var raw_title = str(dec.get("title", dec.get("name", "")))
 	var title_key = "DEC_" + dec_id.to_upper() + "_TITLE"
 	var title_lbl := Label.new()
 	title_lbl.text = _tr(title_key, _tr(raw_title, raw_title))
@@ -861,7 +862,7 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_PRIMARY if can_afford else TNOTheme.COLOR_TEXT_SECONDARY)
 	vbox.add_child(title_lbl)
 
-	var raw_desc = str(dec.get("description", ""))
+	var raw_desc = str(dec.get("description", dec.get("desc", "")))
 	var desc_key = "DEC_" + dec_id.to_upper() + "_DESC"
 	var desc_lbl := Label.new()
 	desc_lbl.text = _tr(desc_key, _tr(raw_desc, raw_desc))
@@ -912,8 +913,8 @@ func _execute_decision(dec: Dictionary) -> void:
 	if player_state == null:
 		return
 
-	var dec_id = dec["id"]
-	var cost_pc = float(dec.get("cost_pc", 0.0))
+	var dec_id = str(dec.get("id", ""))
+	var cost_pc = float(dec.get("cost_pc", dec.get("cost", 0.0)))
 	var cost_cap = int(dec.get("cost_cap", 0))
 	var cost_money = float(dec.get("cost_money", 0.0))
 

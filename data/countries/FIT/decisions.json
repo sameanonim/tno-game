@@ -1,0 +1,329 @@
+[
+  {
+    "id": "AST_refit_a_retired_british_carrier",
+    "category_id": "AST_naval_efforts_cat",
+    "name": "Переоснастить списанный британский авианосец",
+    "desc": "",
+    "icon": "GFX_decision_eng_ally_imperialist_coup",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_war_with": "ENG"
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "refit_to_destroyer_nor",
+    "category_id": "economy_decisions",
+    "name": "Refit Convoys to Destroyers",
+    "desc": "",
+    "icon": "GFX_decision_generic_merge_plant_ship",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "nor_building_ship"
+      },
+      "if": [
+        {
+          "limit": {
+            "has_dlc": "Man the Guns"
+          },
+          "has_tech": "early_ship_hull_light"
+        },
+        {
+          "limit": {
+            "NOT": {
+              "has_dlc": "Man the Guns"
+            }
+          },
+          "has_tech": "early_destroyer"
+        }
+      ]
+    },
+    "visible": {
+      "has_country_flag": "refit_convoy_ships_flag_nor"
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "convoy_1",
+        "amount": -4
+      },
+      "set_country_flag": {
+        "flag": "nor_building_ship",
+        "days": 14,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "refit_to_destroyer_mass_nor",
+    "category_id": "economy_decisions",
+    "name": "Refit Convoys to Destroyers En Masse",
+    "desc": "",
+    "icon": "GFX_decision_generic_merge_plant_ship",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "nor_building_ship"
+      },
+      "if": [
+        {
+          "limit": {
+            "has_dlc": "Man the Guns"
+          },
+          "has_tech": "early_ship_hull_light"
+        },
+        {
+          "limit": {
+            "NOT": {
+              "has_dlc": "Man the Guns"
+            }
+          },
+          "has_tech": "early_destroyer"
+        }
+      ]
+    },
+    "visible": {
+      "has_country_flag": "refit_convoy_ships_flag_nor"
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "convoy_1",
+        "amount": -40
+      },
+      "set_country_flag": {
+        "flag": "nor_building_ship",
+        "days": 105,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "GER_refit_convoys_to_cruisers",
+    "category_id": "GER_hilfskreuzer_cat",
+    "name": "Переделать торговые суда в коммерческие рейдеры",
+    "desc": "",
+    "icon": "GFX_decision_generic_merge_plant_ship",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "convoy": {
+          "_op": ">",
+          "value": 19
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "PER_sell_oil",
+    "category_id": "PER_profit_from_war_category",
+    "name": "Продать [PER.GetAdjRuLower]ую нефть [FROM.GetNameRuDat]",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "413": {
+        "is_fully_controlled_by": "ROOT"
+      },
+      "is_subject": false,
+      "NOT": {
+        "has_country_flag": "PER_offers_oil_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "PER_profit_from_war",
+      "NOT": {
+        "has_country_flag": "PER_sold_oil_flag"
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "PER_industrial_events.1",
+          "days": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "PER_resource_rights_on_war_tt"
+      ],
+      "effect_tooltip": {
+        "FROM": {
+          "give_guarantee": "ROOT"
+        },
+        "ROOT": {
+          "give_resource_rights": {
+            "receiver": "FROM",
+            "state": 413
+          }
+        },
+        "add_offsite_building": {
+          "type": "industrial_complex",
+          "level": 3
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "PER_offers_oil_flag"
+      }
+    }
+  },
+  {
+    "id": "refit_to_destroyer",
+    "category_id": "generic_refit_civilian_ships_category",
+    "name": "Refit ships to Destroyers",
+    "desc": "",
+    "icon": "GFX_decision_generic_merge_plant_ship",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "convoy": {
+          "_op": ">",
+          "value": 9
+        }
+      },
+      "if": {
+        "limit": {
+          "has_dlc": "Man the Guns"
+        },
+        "has_tech": "early_ship_hull_light"
+      },
+      "else": {
+        "has_tech": "early_destroyer"
+      }
+    },
+    "visible": {
+      "has_country_flag": "refit_convoy_ships_flag"
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "convoy_1",
+        "amount": -10
+      }
+    }
+  },
+  {
+    "id": "refit_to_cruiser",
+    "category_id": "generic_refit_civilian_ships_category",
+    "name": "Refit ships to Cruisers",
+    "desc": "",
+    "icon": "GFX_decision_generic_merge_plant_ship",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "convoy": {
+          "_op": ">",
+          "value": 19
+        }
+      },
+      "if": {
+        "limit": {
+          "has_dlc": "Man the Guns"
+        },
+        "has_tech": "early_ship_hull_cruiser"
+      },
+      "else": {
+        "has_tech": "early_light_cruiser"
+      }
+    },
+    "visible": {
+      "has_country_flag": "refit_convoy_ships_flag"
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "convoy_1",
+        "amount": -25
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_dominica_tight_fit",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ПЛОТНАЯ ПОСАДКА",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_CentralAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_CIA_Operation_Tight_Fit_Unlocked"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_dominica_tight_fit_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@CentralAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "Caribbean_flavor.230",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "VOR_More_Benefits_for_Russians_Decision",
+    "category_id": "VOR_mixed_economic_management_assembly_category",
+    "name": "More Benefits for Russians Resolution",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  }
+]

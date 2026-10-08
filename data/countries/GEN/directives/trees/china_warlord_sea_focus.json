@@ -1,0 +1,6575 @@
+{
+  "tree_id": "china_warlord_sea_focus",
+  "tag": "GEN",
+  "directives_count": 155,
+  "directives": [
+    {
+      "id": "CHI_sea_secure_internal_politics",
+      "name": "CHI_sea_secure_internal_politics",
+      "desc": "",
+      "icon": "GFX_goal_generic_major_alliance",
+      "cost_turns": 2,
+      "x": 6,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "original_tag": "SND"
+          },
+          "custom_effect_tooltip": "SND_unlock_loyalty_decision_tt"
+        },
+        "add_political_power": 120,
+        "warlord_rule_all_parties": true
+      }
+    },
+    {
+      "id": "CHI_sea_cooperation_with_the_nationalists",
+      "name": "CHI_sea_cooperation_with_the_nationalists",
+      "desc": "",
+      "icon": "GFX_focus_chi_cooperation_with_the_nationalists",
+      "cost_turns": 3,
+      "x": -5,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_secure_internal_politics"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_cooperation_with_the_communists",
+        "CHI_sea_opposition"
+      ],
+      "available": {
+        "OR": {
+          "is_subject": false,
+          "is_subject_of": "event_target:WTT_current_china_leader"
+        },
+        "NOT": {
+          "has_war_with": "CHI"
+        }
+      },
+      "completion_reward": {
+        "add_stability": 0.05,
+        "custom_effect_tooltip": "CHI_cooperation_with_the_nationalists_effect_tooltip",
+        "CHI": {
+          "add_opinion_modifier": {
+            "modifier": "CHI_cooperation_with_the_nationalists_positive",
+            "target": "ROOT"
+          }
+        },
+        "PRC": {
+          "add_opinion_modifier": {
+            "modifier": "CHI_cooperation_with_the_nationalists_negative",
+            "target": "ROOT"
+          }
+        },
+        "add_relation_rule_override": {
+          "target": "CHI",
+          "can_send_volunteers": true
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_anti_opposition_campaigns",
+      "name": "CHI_sea_anti_opposition_campaigns",
+      "desc": "",
+      "icon": "GFX_focus_generic_provoke_border_clashes",
+      "cost_turns": 2,
+      "x": 3,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_cooperation_with_the_nationalists",
+        "CHI_sea_cooperation_with_the_communists"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "CHI_anti_opposition_campaigns_effect_tooltip",
+        "if": [
+          {
+            "limit": {
+              "AND": {
+                "has_completed_focus": "CHI_sea_cooperation_with_the_nationalists",
+                "NOT": {
+                  "any_other_country": {
+                    "has_completed_focus": "CHI_sea_cooperation_with_the_communists"
+                  }
+                }
+              }
+            },
+            "custom_effect_tooltip": "CHI_anti_opposition_campaigns_effect_tooltip_no_communists"
+          },
+          {
+            "limit": {
+              "AND": {
+                "has_completed_focus": "CHI_sea_cooperation_with_the_communists",
+                "NOT": {
+                  "any_other_country": {
+                    "has_completed_focus": "CHI_sea_cooperation_with_the_nationalists"
+                  }
+                }
+              }
+            },
+            "custom_effect_tooltip": "CHI_anti_opposition_campaigns_effect_tooltip_no_nationalists"
+          }
+        ],
+        "IF": {
+          "limit": {
+            "is_in_faction": true
+          },
+          "add_faction_influence_ratio": 0.01
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_technological_cooperation",
+      "name": "CHI_sea_technological_cooperation",
+      "desc": "",
+      "icon": "GFX_goal_generic_scientific_exchange",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_cooperation_with_the_nationalists"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "CHI": {
+                "is_in_tech_sharing_group": "CHI_technological_cooperation_tech_group"
+              }
+            }
+          },
+          "CHI": {
+            "add_to_tech_sharing_group": "CHI_technological_cooperation_tech_group"
+          }
+        },
+        "add_to_tech_sharing_group": "CHI_technological_cooperation_tech_group"
+      }
+    },
+    {
+      "id": "CHI_sea_new_model_province",
+      "name": "CHI_sea_new_model_province",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_infrastructure",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_cooperation_with_the_nationalists"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.1,
+        "IF": {
+          "limit": {
+            "is_in_faction": true
+          },
+          "add_faction_influence_ratio": 0.01
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_root_out_corruption",
+      "name": "CHI_sea_root_out_corruption",
+      "desc": "",
+      "icon": "GFX_goal_demand_sudetenland",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_new_model_province"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_embrace_the_illicit_trade"
+      ],
+      "available": {
+        "has_idea": "PRC_government_corruption"
+      },
+      "completion_reward": {
+        "remove_ideas": "PRC_government_corruption"
+      }
+    },
+    {
+      "id": "CHI_sea_embrace_the_illicit_trade",
+      "name": "CHI_sea_embrace_the_illicit_trade",
+      "desc": "",
+      "icon": "GFX_goal_generic_trade",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_new_model_province"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_root_out_corruption"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_embrace_the_opium_trade"
+      }
+    },
+    {
+      "id": "CHI_sea_land_reform",
+      "name": "CHI_sea_land_reform",
+      "desc": "",
+      "icon": "GFX_focus_generic_land_redistribution",
+      "cost_turns": 2,
+      "x": -2,
+      "y": 2,
+      "prerequisites": [
+        "CHI_sea_root_out_corruption"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "every_owned_state": {
+          "limit": {
+            "impassable": false,
+            "is_controlled_by": "ROOT"
+          },
+          "add_extra_state_shared_building_slots": 1
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_reform_the_administration",
+      "name": "CHI_sea_reform_the_administration",
+      "desc": "",
+      "icon": "GFX_focus_generic_improve_the_administration",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "CHI_sea_root_out_corruption",
+        "CHI_sea_embrace_the_illicit_trade"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_idea": "CHI_ineffective_bureaucracy_warlord"
+      },
+      "completion_reward": {
+        "remove_ideas": "CHI_ineffective_bureaucracy_warlord",
+        "IF": {
+          "limit": {
+            "is_in_faction": true
+          },
+          "add_faction_influence_ratio": 0.02
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_join_the_republican_government",
+      "name": "CHI_sea_join_the_republican_government",
+      "desc": "",
+      "icon": "GFX_goal_generic_national_unity",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 3,
+      "prerequisites": [
+        "CHI_sea_land_reform",
+        "CHI_sea_reform_the_administration"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_battle_for_china"
+      ],
+      "available": {
+        "custom_trigger_tooltip": {
+          "tooltip": "is_not_supporting_someone_in_political_struggle",
+          "NOT": {
+            "any_country": {
+              "ROOT": {
+                "has_country_flag": "warlord_supports_@PREV"
+              }
+            }
+          }
+        },
+        "is_subject": false,
+        "NOT": {
+          "has_war_with": "CHI"
+        },
+        "is_in_faction_with": "event_target:WTT_current_china_leader",
+        "if": {
+          "limit": {
+            "event_target:WTT_current_china_leader": {
+              "original_tag": "CHI"
+            }
+          },
+          "event_target:WTT_current_china_leader": {
+            "has_completed_focus": "CHI_dang_guo"
+          }
+        }
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": "enable_power_struggle",
+        "set_variable": {
+          "ROOT.increase_party_support_decision_cost": 75
+        },
+        "set_country_flag": "tsr_political_struggle",
+        "IF": {
+          "limit": {
+            "is_in_faction": true
+          },
+          "add_faction_influence_ratio": 0.05
+        },
+        "hidden_effect": {
+          "add_dynamic_modifier": {
+            "modifier": "CHI_cooperating_with_republicans_dynamic_modifier"
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_gain_warlord_support",
+      "name": "CHI_sea_gain_warlord_support",
+      "desc": "",
+      "icon": "GFX_goal_generic_military_deal",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_join_the_republican_government"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": "CHI_allow_warlord_support_tt",
+        "set_country_flag": "tsr_warlord_support"
+      }
+    },
+    {
+      "id": "CHI_sea_propaganda_campaigns",
+      "name": "CHI_sea_propaganda_campaigns",
+      "desc": "",
+      "icon": "GFX_goal_generic_propaganda",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_join_the_republican_government"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": "CHI_propaganda_decisions_tt",
+        "set_country_flag": "tsr_warlord_propaganda"
+      }
+    },
+    {
+      "id": "CHI_sea_battle_for_china",
+      "name": "CHI_sea_battle_for_china",
+      "desc": "",
+      "icon": "GFX_focus_CHI_weaponise_the_faithful",
+      "cost_turns": 3,
+      "x": 4,
+      "y": 0,
+      "prerequisites": [
+        "CHI_sea_land_reform",
+        "CHI_sea_reform_the_administration"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_join_the_republican_government"
+      ],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "tag": "event_target:WTT_current_china_leader",
+          "is_in_faction_with": "event_target:WTT_current_china_leader"
+        }
+      },
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_timed_idea": {
+          "idea": "tsr_the_true_china",
+          "days": 365
+        },
+        "event_target:WTT_current_china_leader": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "tsr_fake_china_opm"
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_rally_the_warlords",
+      "name": "CHI_sea_rally_the_warlords",
+      "desc": "",
+      "icon": "GFX_focus_CHI_decisive_battles",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_battle_for_china"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "tag": "event_target:WTT_current_china_leader",
+          "is_in_faction_with": "event_target:WTT_current_china_leader"
+        }
+      },
+      "completion_reward": {
+        "every_country": {
+          "limit": {
+            "is_chinese_warlord": true,
+            "is_subject": false,
+            "not": {
+              "tag": [
+                "event_target:WTT_current_china_leader",
+                "ROOT"
+              ]
+            }
+          },
+          "country_event": {
+            "id": "SEA_warlords.23"
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_a_new_expedition",
+      "name": "CHI_sea_a_new_expedition",
+      "desc": "",
+      "icon": "GFX_focus_CHI_protracted_warfare",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_battle_for_china"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "controls_state": [
+            1035,
+            608
+          ],
+          "tag": "event_target:WTT_current_china_leader",
+          "is_in_faction_with": "event_target:WTT_current_china_leader"
+        }
+      },
+      "completion_reward": {
+        "every_other_country": {
+          "limit": {
+            "OR": {
+              "controls_state": [
+                1035,
+                608
+              ],
+              "tag": "event_target:WTT_current_china_leader"
+            }
+          },
+          "ROOT": {
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "PREV"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_power_struggle",
+      "name": "CHI_sea_power_struggle",
+      "desc": "",
+      "icon": "GFX_goal_generic_demand_territory",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 2,
+      "prerequisites": [
+        "CHI_sea_gain_warlord_support",
+        "CHI_sea_propaganda_campaigns",
+        "CHI_sea_a_new_expedition",
+        "CHI_sea_rally_the_warlords"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "OR": {
+          "WTT_is_ROOT_current_leader_of_china": true,
+          "AND": {
+            "1035": {
+              "is_controlled_by_ROOT_or_subject": true
+            },
+            "608": {
+              "is_controlled_by_ROOT_or_subject": true
+            }
+          }
+        },
+        "IF": {
+          "limit": {
+            "original_tag": "XIC"
+          },
+          "NOT": {
+            "has_completed_focus": "XIC_reclaim_the_lost_birthright"
+          }
+        }
+      },
+      "completion_reward": {
+        "load_focus_tree": "china_nationalist_warlord_focus",
+        "set_cosmetic_tag": "CHI_warlord_leader",
+        "every_state": {
+          "limit": {
+            "is_core_of": "CHI"
+          },
+          "add_core_of": "ROOT"
+        },
+        "custom_effect_tooltip": [
+          "CHL_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "CHI_no_longer_a_warlord_idea_removal": true,
+        "IF": [
+          {
+            "limit": {
+              "has_idea": "SIK_battle_for_sinkiang"
+            },
+            "remove_ideas": [
+              "SIK_battle_for_sinkiang"
+            ]
+          },
+          {
+            "limit": {
+              "has_idea": "SIC_a_loose_unity"
+            },
+            "remove_ideas": [
+              "SIC_a_loose_unity"
+            ]
+          },
+          {
+            "limit": {
+              "has_idea": "KHM_unrest"
+            },
+            "remove_ideas": "KHM_unrest"
+          },
+          {
+            "limit": {
+              "has_idea": "GXC_uneasy_minds_idea"
+            },
+            "remove_ideas": "GXC_uneasy_minds_idea"
+          },
+          {
+            "limit": {
+              "has_idea": "CHI_warlord_looting_idea"
+            },
+            "remove_ideas": "CHI_warlord_looting_idea"
+          }
+        ],
+        "ELSE_IF": {
+          "limit": {
+            "has_idea": "KHM_unrest_2"
+          },
+          "remove_ideas": "KHM_unrest_2"
+        },
+        "ma_clique_remove_the_collective_effect": true
+      }
+    },
+    {
+      "id": "CHI_sea_cooperation_with_the_communists",
+      "name": "CHI_sea_cooperation_with_the_communists",
+      "desc": "",
+      "icon": "GFX_focus_chi_cooperation_with_the_communists",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_secure_internal_politics"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_cooperation_with_the_nationalists",
+        "CHI_sea_opposition"
+      ],
+      "available": {
+        "OR": {
+          "is_subject": false,
+          "is_subject_of": "event_target:WTT_communist_china"
+        },
+        "NOT": [
+          {
+            "has_war_with": "PRC"
+          },
+          {
+            "has_war_with": "SOV"
+          }
+        ]
+      },
+      "completion_reward": {
+        "add_political_power": 50,
+        "custom_effect_tooltip": "CHI_cooperation_with_the_communists_effect_tooltip",
+        "SOV": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "CHI_cooperation_with_the_communists_positive"
+          },
+          "add_ai_strategy": {
+            "type": "support",
+            "id": "ROOT",
+            "value": 100
+          }
+        },
+        "PRC": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "CHI_cooperation_with_the_communists_positive"
+          }
+        },
+        "CHI": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "CHI_cooperation_with_the_communists_negative"
+          }
+        },
+        "add_relation_rule_override": {
+          "target": "PRC",
+          "can_send_volunteers": true
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_land_redistribution",
+      "name": "CHI_sea_land_redistribution",
+      "desc": "",
+      "icon": "GFX_goal_generic_soviet_construction",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_cooperation_with_the_communists"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "every_owned_state": {
+          "limit": {
+            "impassable": false,
+            "is_controlled_by": "ROOT"
+          },
+          "add_extra_state_shared_building_slots": 1
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_ideological_education",
+      "name": "CHI_sea_ideological_education",
+      "desc": "",
+      "icon": "GFX_focus_generic_socialist_science",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_land_redistribution"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "OR": {
+          "is_subject": false,
+          "if": {
+            "limit": {
+              "is_subject": true
+            },
+            "OVERLORD": {
+              "has_government": "communism"
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "CHI_ideological_education",
+          "days": 1095
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_land_value_tax",
+      "name": "CHI_sea_land_value_tax",
+      "desc": "",
+      "icon": "GFX_focus_PRC_land_revolution_expedited",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_land_redistribution"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_land_value_tax"
+      }
+    },
+    {
+      "id": "CHI_sea_judiciary_reforms",
+      "name": "CHI_sea_judiciary_reforms",
+      "desc": "",
+      "icon": "GFX_goal_generic_forceful_treaty",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 2,
+      "prerequisites": [
+        "CHI_sea_ideological_education"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_idea": "PRC_government_corruption"
+      },
+      "completion_reward": {
+        "remove_ideas": "PRC_government_corruption"
+      }
+    },
+    {
+      "id": "CHI_sea_communist_administrators",
+      "name": "CHI_sea_communist_administrators",
+      "desc": "",
+      "icon": "GFX_focus_generic_soviet_politics",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 2,
+      "prerequisites": [
+        "CHI_sea_land_value_tax"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_idea": "CHI_ineffective_bureaucracy_warlord"
+      },
+      "completion_reward": {
+        "remove_ideas": "CHI_ineffective_bureaucracy_warlord"
+      }
+    },
+    {
+      "id": "CHI_sea_join_the_chinese_soviet",
+      "name": "CHI_sea_join_the_chinese_soviet",
+      "desc": "",
+      "icon": "GFX_focus_generic_befriend_the_chinese_soviet",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 3,
+      "prerequisites": [
+        "CHI_sea_judiciary_reforms",
+        "CHI_sea_communist_administrators"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "communism": {
+          "_op": ">",
+          "value": 0.4
+        },
+        "NOT": [
+          {
+            "has_war_with": "PRC"
+          },
+          {
+            "has_war_with": "SOV"
+          }
+        ],
+        "SOV": {
+          "has_government": "communism"
+        },
+        "is_subject": false
+      },
+      "completion_reward": {
+        "set_politics": {
+          "ruling_party": "communism",
+          "elections_allowed": false
+        },
+        "add_opinion_modifier": {
+          "target": "SOV",
+          "modifier": "CHI_join_the_chinese_soviet"
+        },
+        "SOV": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "CHI_join_the_chinese_soviet"
+          }
+        },
+        "if": {
+          "limit": {
+            "event_target:WTT_communist_china": {
+              "NOT": {
+                "is_in_faction_with": "ROOT"
+              },
+              "is_in_faction": false
+            }
+          },
+          "event_target:WTT_communist_china": {
+            "set_rule": {
+              "can_create_factions": true
+            },
+            "create_faction_from_template": {
+              "template": "faction_template_POR_popular_front_bloc",
+              "name": "CHI_the_peoples_front"
+            },
+            "add_to_faction": [
+              "event_target:WTT_communist_china",
+              "ROOT"
+            ],
+            "country_event": "wtt_warlord_vs_prc.35"
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_unified_army_structure",
+      "name": "CHI_sea_unified_army_structure",
+      "desc": "",
+      "icon": "GFX_focus_SOV_builder_of_the_red_army",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_join_the_chinese_soviet"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_war_with": "PRC"
+        },
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_political_power": 50,
+        "army_experience": 50,
+        "add_war_support": 0.05
+      }
+    },
+    {
+      "id": "CHI_sea_the_yanan_incident",
+      "name": "CHI_sea_the_yanan_incident",
+      "desc": "",
+      "icon": "GFX_goal_support_communism",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 5,
+      "prerequisites": [
+        "CHI_sea_unified_army_structure"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_opinion": {
+          "target": "SOU",
+          "value": {
+            "_op": ">",
+            "value": 50
+          }
+        },
+        "is_subject": false,
+        "NOT": [
+          {
+            "has_war_with": "PRC"
+          },
+          {
+            "has_war_with": "SOU"
+          }
+        ],
+        "SOU": {
+          "has_government": "communism"
+        },
+        "IF": {
+          "limit": {
+            "original_tag": "XIC"
+          },
+          "NOT": {
+            "has_completed_focus": "XIC_reclaim_the_lost_birthright"
+          }
+        }
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "CHI_the_yanan_incident_effect_tt",
+          "CHL_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "save_event_target_as": "warlord",
+        "add_ideas": "PRC_soviet_tribute_1",
+        "SOU": {
+          "country_event": {
+            "id": "wtt_warlord_vs_prc.1"
+          }
+        },
+        "CHI_no_longer_a_warlord_idea_removal": true,
+        "IF": [
+          {
+            "limit": {
+              "has_idea": "SIK_battle_for_sinkiang"
+            },
+            "remove_ideas": [
+              "SIK_battle_for_sinkiang"
+            ]
+          },
+          {
+            "limit": {
+              "has_idea": "SIC_a_loose_unity"
+            },
+            "remove_ideas": [
+              "SIC_a_loose_unity"
+            ]
+          },
+          {
+            "limit": {
+              "has_idea": "KHM_unrest"
+            },
+            "remove_ideas": "KHM_unrest"
+          },
+          {
+            "limit": {
+              "has_idea": "GXC_uneasy_minds_idea"
+            },
+            "remove_ideas": "GXC_uneasy_minds_idea"
+          },
+          {
+            "limit": {
+              "has_idea": "CHI_warlord_looting_idea"
+            },
+            "remove_ideas": "CHI_warlord_looting_idea"
+          }
+        ],
+        "ELSE_IF": {
+          "limit": {
+            "has_idea": "KHM_unrest_2"
+          },
+          "remove_ideas": "KHM_unrest_2"
+        },
+        "ma_clique_remove_the_collective_effect": true
+      }
+    },
+    {
+      "id": "CHI_sea_opposition",
+      "name": "CHI_sea_opposition",
+      "desc": "",
+      "icon": "GFX_goal_generic_demand_territory",
+      "cost_turns": 3,
+      "x": 5,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_secure_internal_politics"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_cooperation_with_the_communists",
+        "CHI_sea_cooperation_with_the_nationalists"
+      ],
+      "available": {
+        "OR": {
+          "is_subject": false,
+          "is_subject_of": "CHI"
+        }
+      },
+      "completion_reward": {
+        "add_war_support": 0.05,
+        "CHI": {
+          "add_opinion_modifier": {
+            "modifier": "CHI_opposition",
+            "target": "ROOT"
+          }
+        },
+        "if": [
+          {
+            "limit": {
+              "is_subject": true,
+              "OVERLORD": {
+                "is_literally_china": true
+              }
+            },
+            "OVERLORD": {
+              "set_autonomy": {
+                "target": "ROOT",
+                "autonomy_state": "autonomy_free"
+              },
+              "create_wargoal": {
+                "target": "ROOT",
+                "type": "puppet_wargoal_focus",
+                "expire": 0
+              }
+            }
+          },
+          {
+            "limit": {
+              "is_faction_leader": true,
+              "event_target:WTT_current_china_leader": {
+                "is_in_faction_with": "ROOT"
+              }
+            },
+            "event_target:WTT_current_china_leader": {
+              "ROOT": {
+                "remove_from_faction": "PREV"
+              }
+            }
+          }
+        ],
+        "else_if": {
+          "limit": {
+            "is_faction_leader": false,
+            "any_country": {
+              "is_in_faction_with": "ROOT",
+              "is_literally_china": true
+            }
+          },
+          "random_country": {
+            "limit": {
+              "is_in_faction_with": "ROOT",
+              "is_faction_leader": true
+            },
+            "remove_from_faction": "ROOT"
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_institute_cross_border_raids",
+      "name": "CHI_sea_institute_cross_border_raids",
+      "desc": "",
+      "icon": "GFX_focus_generic_provoke_border_clashes",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_opposition"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": "CHI_institute_cross_border_raids_effect_tooltip",
+        "set_country_flag": "CHI_institute_cross_border_raids"
+      }
+    },
+    {
+      "id": "CHI_sea_public_works",
+      "name": "CHI_sea_public_works",
+      "desc": "",
+      "icon": "GFX_focus_generic_public_works",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 2,
+      "prerequisites": [
+        "CHI_sea_cooperation_with_the_communists",
+        "CHI_sea_opposition"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_public_works"
+      }
+    },
+    {
+      "id": "CHI_sea_labor_reform",
+      "name": "CHI_sea_labor_reform",
+      "desc": "",
+      "icon": "GFX_goal_generic_construction2",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_public_works"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_labor_reform"
+      }
+    },
+    {
+      "id": "CHI_sea_rural_militias",
+      "name": "CHI_sea_rural_militias",
+      "desc": "",
+      "icon": "GFX_goal_generic_military_sphere",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_public_works"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_rural_militias"
+      }
+    },
+    {
+      "id": "CHI_sea_war_taxes",
+      "name": "CHI_sea_war_taxes",
+      "desc": "",
+      "icon": "GFX_goal_generic_consumer_goods",
+      "cost_turns": 3,
+      "x": 3,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_opposition"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_war_taxes"
+      }
+    },
+    {
+      "id": "CHI_sea_seek_japanese_support",
+      "name": "CHI_sea_seek_japanese_support",
+      "desc": "",
+      "icon": "GFX_focus_chi_collaboration_with_the_japanese",
+      "cost_turns": 2,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_war_taxes"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "has_war_with": "JAP"
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_category_tooltip": "CHI_seek_japanese_support"
+      }
+    },
+    {
+      "id": "CHI_sea_personal_leadership",
+      "name": "CHI_sea_personal_leadership",
+      "desc": "",
+      "icon": "GFX_goal_generic_political_pressure",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_war_taxes"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_command_power": 30,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "IF": {
+          "limit": {
+            "any_character": {
+              "is_country_leader": true,
+              "is_field_marshal": true
+            }
+          },
+          "random_character": {
+            "limit": {
+              "is_country_leader": true,
+              "is_field_marshal": true
+            },
+            "add_attack": 1,
+            "add_defense": 1,
+            "custom_effect_tooltip": [
+              "generic_skip_one_line_tt",
+              "CHI_personal_leadership_custom_tt"
+            ],
+            "hidden_effect": {
+              "add_random_trait": [
+                "old_guard",
+                "brilliant_strategist",
+                "cavalry_officer",
+                "politically_connected",
+                "career_officer",
+                "infantry_officer",
+                "war_hero"
+              ]
+            }
+          }
+        },
+        "ELSE_IF": {
+          "limit": {
+            "any_character": {
+              "is_country_leader": true,
+              "is_corps_commander": true
+            }
+          },
+          "random_character": {
+            "limit": {
+              "is_country_leader": true,
+              "is_corps_commander": true
+            },
+            "promote_leader": true,
+            "custom_effect_tooltip": "CHI_personal_leadership_custom_tt",
+            "hidden_effect": {
+              "add_random_trait": [
+                "old_guard",
+                "brilliant_strategist",
+                "cavalry_officer",
+                "politically_connected",
+                "career_officer",
+                "infantry_officer",
+                "war_hero"
+              ]
+            }
+          }
+        },
+        "ELSE": {
+          "random_character": {
+            "limit": {
+              "is_country_leader": true
+            },
+            "add_field_marshal_role": {
+              "traits": [],
+              "skill": 2,
+              "attack_skill": 2,
+              "defense_skill": 2,
+              "planning_skill": 2,
+              "logistics_skill": 1
+            },
+            "custom_effect_tooltip": "CHI_personal_leadership_custom_tt",
+            "hidden_effect": {
+              "add_random_trait": [
+                "old_guard",
+                "brilliant_strategist",
+                "cavalry_officer",
+                "politically_connected",
+                "career_officer",
+                "infantry_officer",
+                "war_hero"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_cult_of_personality",
+      "name": "CHI_sea_cult_of_personality",
+      "desc": "",
+      "icon": "GFX_goal_generic_propaganda",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_war_taxes"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.1,
+        "add_war_support": 0.05
+      }
+    },
+    {
+      "id": "CHI_sea_provoke_border_clashes",
+      "name": "CHI_sea_provoke_border_clashes",
+      "desc": "",
+      "icon": "GFX_focus_generic_provoke_border_clashes",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_personal_leadership"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_defensive_posture"
+      ],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "CHI_provoke_border_clashes_effect_tooltip",
+        "set_country_flag": "CHI_provoke_border_clashes"
+      }
+    },
+    {
+      "id": "CHI_sea_defensive_posture",
+      "name": "CHI_sea_defensive_posture",
+      "desc": "",
+      "icon": "GFX_goal_generic_defence",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_personal_leadership"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_provoke_border_clashes"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_defensive_posture"
+      }
+    },
+    {
+      "id": "CHI_sea_rapid_mobilization",
+      "name": "CHI_sea_rapid_mobilization",
+      "desc": "",
+      "icon": "GFX_focus_CHI_baojia_system",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "CHI_sea_provoke_border_clashes",
+        "CHI_sea_defensive_posture"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_rapid_mobilization"
+      }
+    },
+    {
+      "id": "CHI_sea_proclaim_rival_government",
+      "name": "CHI_sea_proclaim_rival_government",
+      "desc": "",
+      "icon": "GFX_focus_chi_proclaim_rival_government",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 3,
+      "prerequisites": [
+        "CHI_sea_rural_militias",
+        "CHI_sea_rapid_mobilization"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "IF": {
+          "limit": {
+            "original_tag": "XIC"
+          },
+          "NOT": {
+            "has_completed_focus": "XIC_reclaim_the_lost_birthright"
+          }
+        }
+      },
+      "completion_reward": {
+        "every_state": {
+          "limit": {
+            "is_core_of": "CHI"
+          },
+          "add_core_of": "ROOT"
+        },
+        "if": {
+          "limit": {
+            "OR": {
+              "has_government": "communism",
+              "communism": {
+                "_op": ">",
+                "value": 0.5
+              }
+            },
+            "NOT": {
+              "neutrality": {
+                "_op": ">",
+                "value": 0.5
+              }
+            }
+          },
+          "load_focus_tree": "china_communist_warlord_focus"
+        },
+        "else": {
+          "load_focus_tree": "china_nationalist_warlord_focus"
+        },
+        "custom_effect_tooltip": [
+          "CHL_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "CHI_no_longer_a_warlord_idea_removal": true,
+        "IF": [
+          {
+            "limit": {
+              "has_idea": "SIK_battle_for_sinkiang"
+            },
+            "remove_ideas": [
+              "SIK_battle_for_sinkiang"
+            ]
+          },
+          {
+            "limit": {
+              "has_idea": "SIC_a_loose_unity"
+            },
+            "remove_ideas": [
+              "SIC_a_loose_unity"
+            ]
+          },
+          {
+            "limit": {
+              "has_idea": "KHM_unrest"
+            },
+            "remove_ideas": "KHM_unrest"
+          },
+          {
+            "limit": {
+              "has_idea": "GXC_uneasy_minds_idea"
+            },
+            "remove_ideas": "GXC_uneasy_minds_idea"
+          },
+          {
+            "limit": {
+              "has_idea": "CHI_warlord_looting_idea"
+            },
+            "remove_ideas": "CHI_warlord_looting_idea"
+          }
+        ],
+        "ELSE_IF": {
+          "limit": {
+            "has_idea": "KHM_unrest_2"
+          },
+          "remove_ideas": "KHM_unrest_2"
+        },
+        "ma_clique_remove_the_collective_effect": true
+      }
+    },
+    {
+      "id": "CHI_sea_develop_capital",
+      "name": "CHI_sea_develop_capital",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_civ_factory",
+      "cost_turns": 2,
+      "x": 14,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "capital_scope": {
+          "IF": {
+            "limit": {
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 3,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_further_industrial_investment",
+      "name": "CHI_sea_further_industrial_investment",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_civilian",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_develop_capital"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "impassable": false,
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 0
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 1,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 1,
+            "instant_build": true
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_develop_capital_arsenal",
+      "name": "CHI_sea_develop_capital_arsenal",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_mil_factory",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_develop_capital"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "capital_scope": {
+          "IF": {
+            "limit": {
+              "free_building_slots": {
+                "building": "arms_factory",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_small_arms_production",
+      "name": "CHI_sea_small_arms_production",
+      "desc": "",
+      "icon": "GFX_goal_generic_small_arms",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_develop_capital_arsenal"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "capital_scope": {
+          "IF": {
+            "limit": {
+              "free_building_slots": {
+                "building": "arms_factory",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        },
+        "add_tech_bonus": {
+          "name": "CHI_local_arms_development",
+          "bonus": 1.0,
+          "uses": 1,
+          "category": "infantry_weapons"
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_heavy_weapons_development",
+      "name": "CHI_sea_heavy_weapons_development",
+      "desc": "",
+      "icon": "GFX_goal_generic_army_artillery",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_small_arms_production"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_breakthrough_progress": {
+          "specialization": "specialization_land",
+          "value": 0.5
+        },
+        "add_tech_bonus": {
+          "name": "CHI_heavy_weapons_development",
+          "bonus": 1.0,
+          "uses": 1,
+          "category": "artillery"
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_long_term_economic_planning",
+      "name": "CHI_sea_long_term_economic_planning",
+      "desc": "",
+      "icon": "GFX_goal_generic_production2",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_further_industrial_investment"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_long_term_economic_planning"
+      }
+    },
+    {
+      "id": "CHI_sea_industrial_research_projects",
+      "name": "CHI_sea_industrial_research_projects",
+      "desc": "",
+      "icon": "GFX_focus_generic_industrialists",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_long_term_economic_planning"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "CHI_sea_industrial_research_projects",
+          "bonus": 1.0,
+          "uses": 2,
+          "category": "industry"
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_expand_public_education",
+      "name": "CHI_sea_expand_public_education",
+      "desc": "",
+      "icon": "GFX_focus_research",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_further_industrial_investment",
+        "CHI_sea_develop_capital_arsenal"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "CHI_sea_fund_research_projects",
+      "name": "CHI_sea_fund_research_projects",
+      "desc": "",
+      "icon": "GFX_focus_research2",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_expand_public_education"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "CHI_tsr_funding_public_research"
+      }
+    },
+    {
+      "id": "CHI_sea_rely_on_our_infantry",
+      "name": "CHI_sea_rely_on_our_infantry",
+      "desc": "",
+      "icon": "GFX_focus_generic_little_entente",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_fund_research_projects"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_modern_warfare"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": [
+          {
+            "name": "CHI_sea_rely_on_our_infantry",
+            "bonus": 1.0,
+            "uses": 1,
+            "category": "artillery"
+          },
+          {
+            "name": "CHI_sea_rely_on_our_infantry",
+            "bonus": 0.75,
+            "uses": 2,
+            "category": "infantry_weapons"
+          }
+        ],
+        "army_experience": 50
+      }
+    },
+    {
+      "id": "CHI_sea_modern_warfare",
+      "name": "CHI_sea_modern_warfare",
+      "desc": "",
+      "icon": "GFX_goal_generic_army_tanks",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_fund_research_projects"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_rely_on_our_infantry"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "CHI_sea_modern_warfare",
+          "bonus": 0.75,
+          "uses": 2,
+          "category": "armor"
+        },
+        "army_experience": 50,
+        "air_experience": 25,
+        "navy_experience": 25
+      }
+    },
+    {
+      "id": "CHI_sea_strenghten_warlord_authority",
+      "name": "CHI_sea_strenghten_warlord_authority",
+      "desc": "",
+      "icon": "GFX_focus_generic_military_dictatorship",
+      "cost_turns": 3,
+      "x": 20,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": [
+          {
+            "limit": {
+              "has_idea": "CHI_warlord_state_idea"
+            },
+            "swap_ideas": {
+              "remove_idea": "CHI_warlord_state_idea",
+              "add_idea": "CHI_warlord_state_idea_2"
+            }
+          },
+          {
+            "limit": {
+              "original_tag": "KHM",
+              "has_idea": "KHM_unrest"
+            },
+            "swap_ideas": {
+              "remove_idea": "KHM_unrest",
+              "add_idea": "KHM_unrest_2"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "CHI_sea_uplift_the_cavalry_regiments",
+      "name": "CHI_sea_uplift_the_cavalry_regiments",
+      "desc": "",
+      "icon": "GFX_goal_generic_cavalry",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_strenghten_warlord_authority"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_uplift_the_mountain_brigades"
+      ],
+      "available": [],
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "CHI_warlord_state_idea_2",
+          "add_idea": "CHI_warlord_state_idea_cav"
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_uplift_the_mountain_brigades",
+      "name": "CHI_sea_uplift_the_mountain_brigades",
+      "desc": "",
+      "icon": "GFX_focus_secret_rearmament",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_strenghten_warlord_authority"
+      ],
+      "mutually_exclusive": [
+        "CHI_sea_uplift_the_cavalry_regiments"
+      ],
+      "available": [],
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "CHI_warlord_state_idea_2",
+          "add_idea": "CHI_warlord_state_idea_mnt"
+        },
+        "add_tech_bonus": {
+          "name": "CHI_uplift_the_mountain_brigades",
+          "bonus": 0.75,
+          "uses": 1,
+          "category": "mountaineers_tech"
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_consolidate_our_rule",
+      "name": "CHI_sea_consolidate_our_rule",
+      "desc": "",
+      "icon": "GFX_focus_CHI_dang_guo",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_uplift_the_mountain_brigades",
+        "CHI_sea_uplift_the_cavalry_regiments"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.05,
+        "add_political_power": 50,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_dynamic_modifier": {
+          "modifier": "CHI_warlord_army_dynamic_modifier"
+        },
+        "add_to_variable": {
+          "ROOT.CHI_warlord_army_political_power_gain": 0.1,
+          "tooltip": "political_power_gain_tt"
+        },
+        "IF": {
+          "limit": {
+            "original_tag": "KHM",
+            "has_idea": "KHM_unrest"
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "remove_ideas": "KHM_unrest"
+        },
+        "ELSE_IF": {
+          "limit": {
+            "original_tag": "KHM",
+            "has_idea": "KHM_unrest_2"
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "remove_ideas": "KHM_unrest_2"
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_fortification_efforts",
+      "name": "CHI_sea_fortification_efforts",
+      "desc": "",
+      "icon": "GFX_goal_fortify_the_westwall",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_consolidate_our_rule"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "every_owned_state": {
+          "limit": {
+            "is_fully_controlled_by": "ROOT",
+            "impassable": false
+          },
+          "add_building_construction": {
+            "type": "bunker",
+            "level": 1,
+            "instant_build": true,
+            "province": {
+              "all_provinces": true,
+              "limit_to_border": true
+            }
+          }
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "modify_warlord_army_tt"
+        ],
+        "add_to_variable": {
+          "ROOT.CHI_warlord_army_production_speed_buildings_factor": 0.05,
+          "tooltip": "production_speed_buildings_factor_tt"
+        }
+      }
+    },
+    {
+      "id": "CHI_sea_infantry_efforts",
+      "name": "CHI_sea_infantry_efforts",
+      "desc": "",
+      "icon": "GFX_focus_CHI_popular_army",
+      "cost_turns": 2,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_consolidate_our_rule"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "modify_warlord_army_tt",
+        "add_to_variable": [
+          {
+            "ROOT.CHI_warlord_army_army_infantry_attack_factor": 0.05,
+            "tooltip": "army_infantry_attack_factor_tt"
+          },
+          {
+            "ROOT.CHI_warlord_army_army_infantry_defence_factor": 0.025,
+            "tooltip": "army_infantry_defence_factor_tt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CHI_sea_brigade_specialization",
+      "name": "CHI_sea_brigade_specialization",
+      "desc": "",
+      "icon": "GFX_focus_CHI_tongzi_jun",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_consolidate_our_rule"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "modify_warlord_army_tt",
+        "add_to_variable": [
+          {
+            "ROOT.CHI_warlord_army_special_forces_cap": 0.05,
+            "tooltip": "special_forces_cap_tt"
+          },
+          {
+            "ROOT.CHI_warlord_army_special_forces_out_of_supply_factor": -0.05,
+            "tooltip": "special_forces_out_of_supply_factor_tt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CHI_sea_the_army",
+      "name": "CHI_sea_the_army",
+      "desc": "",
+      "icon": "GFX_focus_CHI_military_affairs_commission",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_brigade_specialization",
+        "CHI_sea_infantry_efforts"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "modify_warlord_army_tt",
+        "add_to_variable": [
+          {
+            "ROOT.CHI_warlord_army_army_core_attack_factor": 0.05,
+            "tooltip": "army_core_attack_factor_tt"
+          },
+          {
+            "ROOT.CHI_warlord_army_army_core_defence_factor": 0.025,
+            "tooltip": "army_core_defence_factor_tt"
+          }
+        ],
+        "add_war_support": 0.1
+      }
+    },
+    {
+      "id": "CHI_crackdown_on_looting",
+      "name": "CHI_crackdown_on_looting",
+      "desc": "",
+      "icon": "GFX_focus_AUS_lawmaking_leniency",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_the_army"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_idea": "CHI_warlord_looting_idea"
+      },
+      "completion_reward": {
+        "remove_ideas": "CHI_warlord_looting_idea"
+      }
+    },
+    {
+      "id": "SIK_cooperate_with_the_ussr",
+      "name": "SIK_cooperate_with_the_ussr",
+      "desc": "",
+      "icon": "GFX_focus_chi_mission_to_the_soviet_union",
+      "cost_turns": 3,
+      "x": 36,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_stability": 0.1,
+        "add_political_power": 50,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "SOV": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "SOV_cooperation_with_sinkiang"
+          },
+          "add_ai_strategy": {
+            "type": "support",
+            "id": "ROOT",
+            "value": 150
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_office_of_sinkiang_border_commissioner",
+      "name": "SIK_office_of_sinkiang_border_commissioner",
+      "desc": "",
+      "icon": "GFX_focus_generic_befriend_sinkiang",
+      "cost_turns": 2,
+      "x": 30,
+      "y": 1,
+      "prerequisites": [
+        "CHI_sea_strenghten_warlord_authority"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "add_command_power": 25,
+        "add_manpower": 5000
+      }
+    },
+    {
+      "id": "SIK_six_great_policies",
+      "name": "SIK_six_great_policies",
+      "desc": "",
+      "icon": "GFX_focus_PRC_three_rules_of_discipline",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIK_office_of_sinkiang_border_commissioner"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_political_power": 75,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_ideas": "SIK_the_six_policies"
+      }
+    },
+    {
+      "id": "SIK_establish_the_xinjiangneft",
+      "name": "SIK_establish_the_xinjiangneft",
+      "desc": "",
+      "icon": "GFX_focus_generic_resource_extraction",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "SIK_cooperate_with_the_ussr"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        },
+        "controls_state": 618
+      },
+      "completion_reward": {
+        "add_resource": {
+          "type": "oil",
+          "amount": 8,
+          "state": 618
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "available_industrial_concern"
+        ],
+        "show_ideas_tooltip": "sino_soviet_resource_surveyors",
+        "hidden_effect": {
+          "set_country_flag": "SIK_established_the_xinjiangneft_flag"
+        }
+      }
+    },
+    {
+      "id": "SIK_invest_in_the_dushanzi_oil_fields",
+      "name": "SIK_invest_in_the_dushanzi_oil_fields",
+      "desc": "",
+      "icon": "GFX_goal_generic_oil_refinery",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIK_establish_the_xinjiangneft"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        },
+        "controls_state": 618
+      },
+      "completion_reward": {
+        "IF": [
+          {
+            "limit": {
+              "SOV": {
+                "exists": true,
+                "NOT": {
+                  "has_war_with": "ROOT"
+                }
+              }
+            },
+            "give_resource_rights": {
+              "receiver": "SOV",
+              "state": 618,
+              "resources": [
+                "oil"
+              ]
+            }
+          },
+          {
+            "limit": {
+              "618": {
+                "infrastructure": {
+                  "_op": "<",
+                  "value": 5
+                }
+              }
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "618": {
+              "add_building_construction": {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              }
+            }
+          }
+        ],
+        "add_resource": {
+          "type": "oil",
+          "amount": 35,
+          "state": 618
+        }
+      }
+    },
+    {
+      "id": "SIK_military_cooperation",
+      "name": "SIK_military_cooperation",
+      "desc": "",
+      "icon": "GFX_focus_SOV_builder_of_the_red_army",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "SIK_cooperate_with_the_ussr"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_equipment_to_stockpile": [
+          {
+            "type": "infantry_equipment",
+            "amount": 2000,
+            "producer": "SOV"
+          },
+          {
+            "type": "artillery_equipment",
+            "amount": 150,
+            "producer": "SOV"
+          },
+          {
+            "type": "motorized_equipment_0",
+            "amount": 50,
+            "producer": "SOV"
+          }
+        ],
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_ideas": "SIK_soviet_military_cooperation",
+        "hidden_effect": {
+          "delete_unit_template_and_units": {
+            "division_template": "Soviet Volunteers",
+            "disband": true
+          },
+          "division_template": {
+            "name": "Soviet Volunteers",
+            "division_names_group": "SIK_INF_01",
+            "role": "garrison",
+            "template_counter": 118,
+            "is_locked": false,
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                }
+              ]
+            },
+            "support": []
+          }
+        },
+        "random_owned_state": {
+          "limit": {
+            "state": 618,
+            "is_controlled_by": "ROOT"
+          },
+          "create_unit": {
+            "division": "name = \"Altai Garrison Force\" division_template = \"Soviet Volunteers\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+            "owner": "ROOT"
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_a_soviet_airforce",
+      "name": "SIK_a_soviet_airforce",
+      "desc": "",
+      "icon": "GFX_focus_PER_the_peoples_airforce",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIK_military_cooperation"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "IF": [
+          {
+            "limit": {
+              "617": {
+                "is_owned_and_controlled_by": "ROOT",
+                "air_base": {
+                  "_op": "<",
+                  "value": 6
+                }
+              }
+            },
+            "617": {
+              "add_building_construction": {
+                "type": "air_base",
+                "level": 4,
+                "instant_build": true
+              }
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt"
+          },
+          {
+            "limit": {
+              "has_dlc": "By Blood Alone"
+            },
+            "add_equipment_to_stockpile": {
+              "type": "small_plane_airframe_0",
+              "amount": 100,
+              "producer": "SOV"
+            }
+          }
+        ],
+        "add_ideas": "SIK_soviet_pilot_schools",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "ELSE": {
+          "add_equipment_to_stockpile": {
+            "type": "fighter_equipment_0",
+            "amount": 100,
+            "producer": "SOV"
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_utilize_asperovs_contacts",
+      "name": "SIK_utilize_asperovs_contacts",
+      "desc": "",
+      "icon": "GFX_goal_generic_soviet_construction",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "SIK_cooperate_with_the_ussr"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "impassable": false,
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 1
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 2,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 2,
+            "instant_build": true
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_cooperate_with_the_nkvd",
+      "name": "SIK_cooperate_with_the_nkvd",
+      "desc": "",
+      "icon": "GFX_focus_JAP_learn_from_the_nkvd",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "SIK_utilize_asperovs_contacts"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "has_dlc": "La Resistance"
+          },
+          "IF": {
+            "limit": {
+              "has_intelligence_agency": false
+            },
+            "create_intelligence_agency": true
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "add_ideas": "SIK_the_nkvd_lar"
+        },
+        "ELSE": {
+          "add_ideas": "SIK_the_nkvd_no_lar"
+        }
+      }
+    },
+    {
+      "id": "SIK_three_year_plan_for_reconstruction",
+      "name": "SIK_three_year_plan_for_reconstruction",
+      "desc": "",
+      "icon": "GFX_focus_generic_central_planning",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "SIK_utilize_asperovs_contacts"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "SIK_three_year_plan",
+          "days": 1095
+        }
+      }
+    },
+    {
+      "id": "SIK_a_new_xinjiang",
+      "name": "SIK_a_new_xinjiang",
+      "desc": "",
+      "icon": "GFX_focus_PRC_revolutionary_war_of_the_masses",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "SIK_three_year_plan_for_reconstruction",
+        "SIK_cooperate_with_the_nkvd"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        },
+        "NOT": {
+          "has_idea": "SIK_three_year_plan"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "SIK_a_modern_province"
+      }
+    },
+    {
+      "id": "SIK_march_into_khotan",
+      "name": "SIK_march_into_khotan",
+      "desc": "",
+      "icon": "GFX_focus_generic_attack_kuomintang",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 2,
+      "prerequisites": [
+        "SIK_military_cooperation",
+        "SIK_office_of_sinkiang_border_commissioner"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_in_faction": false,
+        "KHM": {
+          "exists": true
+        }
+      },
+      "completion_reward": {
+        "declare_war_on": {
+          "target": "KHM",
+          "type": "annex_everything"
+        },
+        "country_event": {
+          "id": "SEA_warlords.4"
+        },
+        "custom_effect_tooltip": "SIK_march_into_khotan_tt",
+        "hidden_effect": {
+          "country_event": {
+            "id": "SEA_warlords.63",
+            "days": 42
+          },
+          "activate_mission": "SIK_war_halting",
+          "KHM": {
+            "activate_mission": "KHM_holding_out"
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_a_united_sinkiang_clique",
+      "name": "SIK_a_united_sinkiang_clique",
+      "desc": "",
+      "icon": "GFX_focus_prc_agrarian_socialism",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "SIK_march_into_khotan"
+      ],
+      "mutually_exclusive": [
+        "SIK_pursue_further_soviet_integration",
+        "SIK_soviet_intervention"
+      ],
+      "available": {
+        "NOT": {
+          "has_war_with": [
+            "KHM",
+            "KUM"
+          ]
+        },
+        "KHM": {
+          "exists": false
+        },
+        "1042": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "SIK_sheng_shicai": {
+          "swap_country_leader_traits": {
+            "remove": "SIK_communist_in_name_only",
+            "add": "JAP_socialist_revolutionary",
+            "ideology": "stalinism"
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "IF": {
+          "limit": {
+            "has_idea": "SIK_battle_for_sinkiang"
+          },
+          "remove_ideas": [
+            "SIK_battle_for_sinkiang"
+          ],
+          "custom_effect_tooltip": "generic_skip_one_line_tt"
+        },
+        "add_political_power": 50,
+        "add_stability": 0.05
+      }
+    },
+    {
+      "id": "SIK_pursue_further_soviet_integration",
+      "name": "SIK_pursue_further_soviet_integration",
+      "desc": "",
+      "icon": "GFX_focus_generic_soviet_politics",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIK_march_into_khotan"
+      ],
+      "mutually_exclusive": [
+        "SIK_a_united_sinkiang_clique",
+        "SIK_soviet_intervention"
+      ],
+      "available": {
+        "is_subject": false,
+        "SOV": {
+          "exists": true,
+          "has_government": "communism"
+        },
+        "NOT": {
+          "has_war_with": [
+            "KHM",
+            "KUM"
+          ]
+        },
+        "1042": {
+          "is_controlled_by": "ROOT"
+        },
+        "all_owned_state": {
+          "is_fully_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "SOV": {
+          "puppet": "ROOT"
+        },
+        "set_cosmetic_tag": "SIK_ssr",
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "set_party_name": {
+          "ideology": "communism",
+          "long_name": "SIK_CPSU_communism_party_long",
+          "name": "SIK_CPSU_communism_party"
+        },
+        "IF": {
+          "limit": {
+            "has_idea": "SIK_battle_for_sinkiang"
+          },
+          "remove_ideas": [
+            "SIK_battle_for_sinkiang"
+          ],
+          "custom_effect_tooltip": "generic_skip_one_line_tt"
+        },
+        "add_political_power": 75,
+        "add_stability": 0.1
+      }
+    },
+    {
+      "id": "SIK_soviet_intervention",
+      "name": "SIK_soviet_intervention",
+      "desc": "",
+      "icon": "GFX_focus_SOV_military_purge",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "SIK_march_into_khotan"
+      ],
+      "mutually_exclusive": [
+        "SIK_a_united_sinkiang_clique",
+        "SIK_pursue_further_soviet_integration"
+      ],
+      "available": {
+        "is_subject": false,
+        "SOV": {
+          "exists": true,
+          "has_government": "communism"
+        },
+        "NOT": {
+          "has_war_with": [
+            "KHM",
+            "KUM"
+          ]
+        },
+        "1042": {
+          "NOT": {
+            "is_controlled_by": "ROOT"
+          }
+        },
+        "all_owned_state": {
+          "is_fully_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "SOV": {
+          "puppet": "ROOT"
+        },
+        "set_cosmetic_tag": "SIK_ssr",
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "set_party_name": {
+          "ideology": "communism",
+          "long_name": "SIK_CPSU_communism_party_long",
+          "name": "SIK_CPSU_communism_party"
+        },
+        "IF": {
+          "limit": {
+            "has_idea": "SIK_battle_for_sinkiang"
+          },
+          "remove_ideas": [
+            "SIK_battle_for_sinkiang"
+          ],
+          "custom_effect_tooltip": "generic_skip_one_line_tt"
+        },
+        "add_country_leader_role": {
+          "character": "SIK_ishaq_musonov",
+          "promote_leader": true,
+          "country_leader": {
+            "ideology": "stalinism",
+            "expire": "1965.1.1.1",
+            "traits": [
+              "JAP_socialist_revolutionary"
+            ]
+          }
+        },
+        "SIK_ishaq_musonov": {
+          "promote_leader": true
+        },
+        "retire_character": "SIK_sheng_shicai"
+      }
+    },
+    {
+      "id": "SIK_ensure_a_clean_government",
+      "name": "SIK_ensure_a_clean_government",
+      "desc": "",
+      "icon": "GFX_focus_SOV_the_last_purge",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "SIK_soviet_intervention",
+        "SIK_pursue_further_soviet_integration"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_manpower": -5000,
+        "add_stability": 0.1,
+        "add_political_power": 50,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "IF": [
+          {
+            "limit": {
+              "has_idea": "PRC_government_corruption"
+            },
+            "remove_ideas": "PRC_government_corruption"
+          },
+          {
+            "limit": {
+              "has_character": "KHM_mahmut_muhiti"
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "retire_character": "KHM_mahmut_muhiti"
+          }
+        ]
+      }
+    },
+    {
+      "id": "SIK_protector_of_the_kyrgiz",
+      "name": "SIK_protector_of_the_kyrgiz",
+      "desc": "",
+      "icon": "GFX_focus_AFG_integrate_tajik_and_uzbek_republics",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "SIK_soviet_intervention"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_government": "communism",
+        "SOV": {
+          "exists": true,
+          "has_subject": "ROOT",
+          "controls_state": 732,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "SOV": {
+          "country_event": {
+            "id": "SEA_warlords.65",
+            "hours": 6,
+            "random_hours": 12
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_transformation_of_nature",
+      "name": "SIK_transformation_of_nature",
+      "desc": "",
+      "icon": "GFX_focus_CHI_students_to_the_countryside",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "SIK_soviet_intervention",
+        "SIK_pursue_further_soviet_integration",
+        "SIK_a_new_xinjiang"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "SIK_transformation_of_nature_idea"
+      }
+    },
+    {
+      "id": "SIK_a_new_nationality_policy",
+      "name": "SIK_a_new_nationality_policy",
+      "desc": "",
+      "icon": "GFX_focus_PER_university_of_isfahan",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "SIK_a_united_sinkiang_clique",
+        "SIK_pursue_further_soviet_integration"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "SIK_state_atheism_freedom_of_religion"
+      }
+    },
+    {
+      "id": "SIK_settle_dzungarian_tribes",
+      "name": "SIK_settle_dzungarian_tribes",
+      "desc": "",
+      "icon": "GFX_focus_generic_concessions",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "SIK_a_united_sinkiang_clique"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "controls_state": 618
+      },
+      "completion_reward": {
+        "add_manpower": 10000,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "IF": {
+          "limit": {
+            "618": {
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            }
+          },
+          "618": {
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_king_of_sinkiang",
+      "name": "SIK_king_of_sinkiang",
+      "desc": "",
+      "icon": "GFX_focus_GER_proletarian_dictatorship",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "SIK_a_united_sinkiang_clique",
+        "SIK_a_new_nationality_policy"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "SOV": {
+              "exists": true,
+              "has_government": "communism",
+              "NOT": {
+                "has_war_with": "ROOT"
+              }
+            }
+          },
+          "SOV": {
+            "add_opinion_modifier": {
+              "target": "ROOT",
+              "modifier": "SIK_detracting_from_party_line"
+            }
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt"
+        },
+        "SIK_sheng_shicai": {
+          "swap_country_leader_traits": {
+            "remove": "SIK_duban",
+            "add": "SIK_the_king_of_sinkiang",
+            "ideology": "stalinism"
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_rejoin_the_central_government",
+      "name": "SIK_rejoin_the_central_government",
+      "desc": "",
+      "icon": "GFX_focus_CHI_lay_the_foundation_for_a_united_china",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "SIK_king_of_sinkiang"
+      ],
+      "mutually_exclusive": [
+        "SIK_reestablish_the_guominjun",
+        "SIK_reaffirm_soviet_connections"
+      ],
+      "available": {
+        "is_subject": false,
+        "CHI": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "set_politics": {
+          "ruling_party": "neutrality",
+          "elections_allowed": false
+        },
+        "add_popularity": {
+          "ideology": "neutrality",
+          "popularity": 0.7
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "hidden_effect": {
+          "IF": {
+            "limit": {
+              "SIK_sheng_shicai": {
+                "has_ideology": "despotism"
+              }
+            },
+            "promote_character": {
+              "character": "SIK_sheng_shicai",
+              "ideology": "despotism"
+            },
+            "SIK_sheng_shicai": {
+              "add_country_leader_trait": [
+                {
+                  "ideology": "despotism",
+                  "trait": "SIK_the_king_of_sinkiang"
+                },
+                {
+                  "ideology": "despotism",
+                  "trait": "SIK_socialist_revolutionary_in_name"
+                }
+              ]
+            }
+          }
+        },
+        "SIK_sheng_shicai": {
+          "add_country_leader_role": {
+            "character": "SIK_sheng_shicai",
+            "country_leader": {
+              "expire": "1965.1.1",
+              "ideology": "despotism",
+              "traits": [
+                "SIK_the_king_of_sinkiang",
+                "SIK_socialist_revolutionary_in_name"
+              ]
+            },
+            "promote_leader": true
+          }
+        },
+        "set_cosmetic_tag": "SIK_kmt",
+        "IF": [
+          {
+            "limit": {
+              "is_in_faction": true
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "add_faction_influence_ratio": 0.05
+          },
+          {
+            "limit": {
+              "SOV": {
+                "has_resources_rights": {
+                  "state": 618,
+                  "resources": [
+                    "oil"
+                  ]
+                }
+              }
+            },
+            "SOV": {
+              "remove_resource_rights": 618
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "SIK_reestablish_the_guominjun",
+      "name": "SIK_reestablish_the_guominjun",
+      "desc": "",
+      "icon": "GFX_focus_MAN_restore_the_beiyang_army",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIK_king_of_sinkiang"
+      ],
+      "mutually_exclusive": [
+        "SIK_rejoin_the_central_government",
+        "SIK_reaffirm_soviet_connections"
+      ],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_ideas": "SIC_the_new_guominjun_idea",
+        "IF": [
+          {
+            "limit": {
+              "CHI": {
+                "exists": true
+              }
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "CHI": {
+              "country_event": {
+                "id": "SEA_warlords.68",
+                "hours": 6
+              }
+            },
+            "effect_tooltip": {
+              "CHI": {
+                "CHI_feng_yuxiang": {
+                  "set_nationality": "ROOT"
+                },
+                "add_manpower": -5000
+              },
+              "add_manpower": 5000
+            }
+          },
+          {
+            "limit": {
+              "SOV": {
+                "has_resources_rights": {
+                  "state": 618,
+                  "resources": [
+                    "oil"
+                  ]
+                }
+              }
+            },
+            "SOV": {
+              "remove_resource_rights": 618
+            }
+          }
+        ],
+        "ELSE": {
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "add_manpower": 5000,
+          "CHI": {
+            "CHI_feng_yuxiang": {
+              "set_nationality": "ROOT"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "SIK_reaffirm_soviet_connections",
+      "name": "SIK_reaffirm_soviet_connections",
+      "desc": "",
+      "icon": "GFX_focus_PRC_embrace_stalinism",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "SIK_king_of_sinkiang"
+      ],
+      "mutually_exclusive": [
+        "SIK_rejoin_the_central_government",
+        "SIK_reestablish_the_guominjun"
+      ],
+      "available": {
+        "is_subject": false,
+        "has_government": "SOV",
+        "SOV": {
+          "exists": true,
+          "is_faction_leader": true
+        },
+        "NOT": {
+          "is_in_faction_with": "SOV"
+        }
+      },
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "SOV": {
+              "has_opinion_modifier": "SIK_detracting_from_party_line"
+            }
+          },
+          "SOV": {
+            "remove_opinion_modifier": {
+              "target": "SIK",
+              "modifier": "SIK_detracting_from_party_line"
+            }
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt"
+        },
+        "SOV": {
+          "country_event": {
+            "id": "generic.2",
+            "hours": 4
+          }
+        },
+        "hidden_effect": {
+          "SOV": {
+            "add_opinion_modifier": {
+              "target": "ROOT",
+              "modifier": "large_increase"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "KHM_call_for_aid",
+      "name": "KHM_call_for_aid",
+      "desc": "",
+      "icon": "GFX_focus_CHI_weaponise_the_faithful",
+      "cost_turns": 2,
+      "x": 42,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [
+        "KHM_strike_the_governor"
+      ],
+      "available": {
+        "has_war_with": "SIK"
+      },
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "IF": {
+          "limit": {
+            "CHI": {
+              "exists": true,
+              "is_subject": false,
+              "NOT": {
+                "has_war_with": "ROOT"
+              }
+            }
+          },
+          "CHI": {
+            "country_event": {
+              "id": "SEA_warlords.6",
+              "hours": 6
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "KHM_strike_the_governor",
+      "name": "KHM_strike_the_governor",
+      "desc": "",
+      "icon": "GFX_focus_generic_attack_sinkiang",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [
+        "KHM_call_for_aid"
+      ],
+      "available": {
+        "has_army_manpower": {
+          "size": {
+            "_op": ">",
+            "value": 20000
+          }
+        },
+        "has_war_support": {
+          "_op": ">",
+          "value": 0.5
+        }
+      },
+      "completion_reward": {
+        "hidden_effect": {
+          "set_country_flag": "KHM_initiated_the_war_flag"
+        },
+        "declare_war_on": {
+          "target": "SIK",
+          "type": "annex_everything"
+        },
+        "SIK": {
+          "every_core_state": {
+            "limit": {
+              "NOT": {
+                "is_claimed_by": "ROOT",
+                "is_core_of": "ROOT"
+              }
+            },
+            "add_claim_by": "ROOT"
+          },
+          "country_event": {
+            "id": "SEA_warlords.4"
+          }
+        }
+      }
+    },
+    {
+      "id": "KHM_utilize_family_contacts",
+      "name": "KHM_utilize_family_contacts",
+      "desc": "",
+      "icon": "GFX_focus_generic_islamic_propaganda",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "KHM_call_for_aid",
+        "KHM_strike_the_governor"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_war_with": "SIK",
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "KHM_ma_hushan"
+        }
+      },
+      "completion_reward": {
+        "IF": [
+          {
+            "limit": {
+              "XSM": {
+                "exists": true,
+                "is_subject": false,
+                "NOT": {
+                  "has_war_with": "ROOT"
+                }
+              }
+            },
+            "XSM": {
+              "country_event": {
+                "id": "SEA_warlords.71",
+                "hours": 6
+              }
+            }
+          },
+          {
+            "limit": {
+              "GSM": {
+                "exists": true,
+                "is_subject": false,
+                "NOT": {
+                  "has_war_with": "ROOT"
+                }
+              }
+            },
+            "GSM": {
+              "country_event": {
+                "id": "SEA_warlords.71",
+                "hours": 6
+              }
+            }
+          },
+          {
+            "limit": {
+              "NXM": {
+                "exists": true,
+                "is_subject": false,
+                "NOT": {
+                  "has_war_with": "ROOT"
+                }
+              }
+            },
+            "NXM": {
+              "country_event": {
+                "id": "SEA_warlords.71",
+                "hours": 6
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "KHM_push_them_back",
+      "name": "KHM_push_them_back",
+      "desc": "",
+      "icon": "GFX_focus_CHI_decisive_battles",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "KHM_call_for_aid",
+        "KHM_strike_the_governor"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_war_with": "SIK"
+      },
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "KHM_pushing_them_back_idea",
+          "days": 180
+        }
+      }
+    },
+    {
+      "id": "KHM_the_sinkiang_ma_clique",
+      "name": "KHM_the_sinkiang_ma_clique",
+      "desc": "",
+      "icon": "GFX_focus_generic_china1",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 1,
+      "prerequisites": [
+        "KHM_push_them_back",
+        "KHM_utilize_family_contacts"
+      ],
+      "mutually_exclusive": [
+        "KHM_our_position_remains",
+        "KHM_kumul_rebellion_avenged"
+      ],
+      "available": {
+        "SIK": {
+          "exists": false
+        },
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "KHM_ma_hushan"
+        }
+      },
+      "completion_reward": {
+        "KHM_ma_hushan": {
+          "add_trait": {
+            "trait": "KHM_governor_of_sinkiang",
+            "ideology": "despotism"
+          }
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "IF": [
+          {
+            "limit": {
+              "has_idea": "SIK_battle_for_sinkiang"
+            },
+            "remove_ideas": [
+              "SIK_battle_for_sinkiang"
+            ],
+            "custom_effect_tooltip": "generic_skip_one_line_tt"
+          },
+          {
+            "limit": {
+              "KUM": {
+                "exists": true,
+                "is_subject": false,
+                "NOT": {
+                  "has_war_with": "ROOT"
+                }
+              }
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "KUM",
+              "generator": [
+                760
+              ]
+            }
+          }
+        ],
+        "add_political_power": 100,
+        "add_stability": 0.05,
+        "set_cosmetic_tag": "sinkiang_ma",
+        "SIK": {
+          "every_core_state": {
+            "add_core_of": "ROOT"
+          }
+        }
+      }
+    },
+    {
+      "id": "KHM_kumul_rebellion_avenged",
+      "name": "KHM_kumul_rebellion_avenged",
+      "desc": "",
+      "icon": "GFX_focus_GER_end_european_communism",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "KHM_push_them_back",
+        "KHM_utilize_family_contacts"
+      ],
+      "mutually_exclusive": [
+        "KHM_our_position_remains",
+        "KHM_the_sinkiang_ma_clique"
+      ],
+      "available": {
+        "SIK": {
+          "exists": false
+        },
+        "NOT": {
+          "has_country_leader": {
+            "ruling_only": true,
+            "character": "KHM_ma_hushan"
+          }
+        }
+      },
+      "completion_reward": {
+        "IF": [
+          {
+            "limit": {
+              "has_idea": "SIK_battle_for_sinkiang"
+            },
+            "remove_ideas": [
+              "SIK_battle_for_sinkiang"
+            ],
+            "custom_effect_tooltip": "generic_skip_one_line_tt"
+          },
+          {
+            "limit": {
+              "KUM": {
+                "exists": true,
+                "is_subject": false,
+                "NOT": {
+                  "has_war_with": "ROOT"
+                }
+              }
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "KUM",
+              "generator": [
+                760
+              ]
+            }
+          }
+        ],
+        "add_stability": 0.1,
+        "add_war_support": 0.15,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "SIK": {
+          "every_core_state": {
+            "add_core_of": "ROOT"
+          }
+        }
+      }
+    },
+    {
+      "id": "KHM_our_position_remains",
+      "name": "KHM_our_position_remains",
+      "desc": "",
+      "icon": "GFX_focus_generic_support_the_left_right",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "KHM_push_them_back",
+        "KHM_utilize_family_contacts"
+      ],
+      "mutually_exclusive": [
+        "KHM_the_sinkiang_ma_clique",
+        "KHM_kumul_rebellion_avenged"
+      ],
+      "available": {
+        "NOT": {
+          "has_war_with": "SIK"
+        },
+        "SIK": {
+          "exists": true
+        }
+      },
+      "completion_reward": {
+        "add_political_power": 75,
+        "add_stability": 0.05,
+        "IF": {
+          "limit": {
+            "has_idea": "SIK_battle_for_sinkiang"
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "remove_ideas": [
+            "SIK_battle_for_sinkiang"
+          ]
+        }
+      }
+    },
+    {
+      "id": "XSM_the_military_governor",
+      "name": "XSM_the_military_governor",
+      "desc": "",
+      "icon": "GFX_focus_CHI_military_mission",
+      "cost_turns": 3,
+      "x": 31,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_dynamic_modifier": {
+          "modifier": "XSM_the_military_governor_dynamic_modifier"
+        },
+        "add_to_variable": [
+          {
+            "ROOT.XSM_the_military_governor_stability_factor": -0.1,
+            "tooltip": "stability_factor_tt"
+          },
+          {
+            "ROOT.XSM_the_military_governor_war_support_factor": 0.05,
+            "tooltip": "war_support_factor_tt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "XSM_a_hui_army",
+      "name": "XSM_a_hui_army",
+      "desc": "",
+      "icon": "GFX_focus_PER_islamic_solidarity",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XSM_the_military_governor"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "modify_military_governor_tt",
+        "add_to_variable": [
+          {
+            "ROOT.XSM_the_military_governor_army_core_attack_factor": 0.025,
+            "tooltip": "army_core_attack_factor_tt"
+          },
+          {
+            "ROOT.XSM_the_military_governor_supply_combat_penalties_on_core_factor": -0.05,
+            "tooltip": "supply_combat_penalties_on_core_factor_tt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "XSM_sway_the_people",
+      "name": "XSM_sway_the_people",
+      "desc": "",
+      "icon": "GFX_focus_RAJ_seek_allies_with_the_muslim_league",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "XSM_the_military_governor"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_political_power": 50,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "modify_military_governor_tt"
+        ],
+        "add_to_variable": {
+          "ROOT.XSM_the_military_governor_stability_factor": 0.05,
+          "tooltip": "stability_factor_tt"
+        }
+      }
+    },
+    {
+      "id": "XSM_sweep_out_communists",
+      "name": "XSM_sweep_out_communists",
+      "desc": "",
+      "icon": "GFX_focus_GER_end_european_communism",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XSM_sway_the_people",
+        "XSM_a_hui_army"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_political_power": 50,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_timed_idea": {
+          "idea": "tsr_anti_communist_campaign",
+          "days": 365
+        }
+      }
+    },
+    {
+      "id": "XSM_send_ma_lin_on_hajj",
+      "name": "XSM_send_ma_lin_on_hajj",
+      "desc": "",
+      "icon": "GFX_focus_TUR_loosen_the_laws_on_secularism",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XSM_sweep_out_communists"
+      ],
+      "mutually_exclusive": [
+        "XSM_the_civilian_governor_remains"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_political_power": 25,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "modify_military_governor_tt",
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_to_variable": {
+          "ROOT.XSM_the_military_governor_stability_factor": 0.05,
+          "tooltip": "stability_factor_tt"
+        },
+        "retire_character": "QHM_ma_lin",
+        "IF": {
+          "limit": {
+            "XSM_ma_bufang": {
+              "is_field_marshal": false
+            }
+          },
+          "XSM_ma_bufang": {
+            "promote_leader": true
+          }
+        },
+        "hidden_effect": {
+          "add_country_leader_role": [
+            {
+              "character": "XSM_ma_bufang",
+              "country_leader": {
+                "expire": "1965.1.1",
+                "ideology": "anti_revisionism",
+                "traits": []
+              },
+              "promote_leader": true
+            },
+            {
+              "character": "XSM_ma_bufang",
+              "country_leader": {
+                "expire": "1965.1.1",
+                "ideology": "socialism",
+                "traits": []
+              },
+              "promote_leader": true
+            },
+            {
+              "character": "XSM_ma_bufang",
+              "country_leader": {
+                "expire": "1965.1.1",
+                "ideology": "rexism",
+                "traits": []
+              },
+              "promote_leader": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "XSM_the_civilian_governor_remains",
+      "name": "XSM_the_civilian_governor_remains",
+      "desc": "",
+      "icon": "GFX_focus_CHI_lay_the_foundation_for_a_united_china",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "XSM_sweep_out_communists"
+      ],
+      "mutually_exclusive": [
+        "XSM_send_ma_lin_on_hajj"
+      ],
+      "available": [],
+      "completion_reward": {
+        "remove_dynamic_modifier": {
+          "modifier": "XSM_the_military_governor_dynamic_modifier"
+        },
+        "add_ideas": "XSM_tsr_diarchy"
+      }
+    },
+    {
+      "id": "XSM_ma_qis_natural_successor",
+      "name": "XSM_ma_qis_natural_successor",
+      "desc": "",
+      "icon": "GFX_focus_generic_improve_the_administration",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XSM_the_civilian_governor_remains"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "QHM_ma_lin"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "XSM_wool_and_hide_bureau"
+      }
+    },
+    {
+      "id": "XSM_recruit_salar_officers",
+      "name": "XSM_recruit_salar_officers",
+      "desc": "",
+      "icon": "GFX_focus_generic_islamic_propaganda",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XSM_send_ma_lin_on_hajj"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "XSM_ma_bufang"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "XSM_salar_officers_idea",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "show_unit_leaders_tooltip": [
+          "XSM_han_youwen",
+          "XSM_han_yimu"
+        ]
+      }
+    },
+    {
+      "id": "XSM_solidifying_control",
+      "name": "XSM_solidifying_control",
+      "desc": "",
+      "icon": "GFX_focus_generic_support_the_left_right",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 2,
+      "prerequisites": [
+        "XSM_the_civilian_governor_remains",
+        "XSM_send_ma_lin_on_hajj"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "has_country_leader": {
+              "character": "QHM_ma_lin"
+            }
+          },
+          "add_country_leader_trait": "XSM_popular_governor",
+          "IF": {
+            "limit": {
+              "has_completed_focus": "CHI_sea_secure_internal_politics"
+            },
+            "hidden_effect": {
+              "IF": [
+                {
+                  "limit": {
+                    "NOT": {
+                      "has_government": "communism"
+                    }
+                  },
+                  "QHM_ma_lin": {
+                    "add_trait": {
+                      "ideology": "anti_revisionism",
+                      "trait": "XSM_popular_governor"
+                    }
+                  }
+                },
+                {
+                  "limit": {
+                    "NOT": {
+                      "has_government": "fascism"
+                    }
+                  },
+                  "QHM_ma_lin": {
+                    "add_trait": {
+                      "ideology": "rexism",
+                      "trait": "XSM_popular_governor"
+                    }
+                  }
+                },
+                {
+                  "limit": {
+                    "NOT": {
+                      "has_government": "democratic"
+                    }
+                  },
+                  "QHM_ma_lin": {
+                    "add_trait": {
+                      "ideology": "socialism",
+                      "trait": "XSM_popular_governor"
+                    }
+                  }
+                },
+                {
+                  "limit": {
+                    "NOT": {
+                      "has_government": "neutrality"
+                    }
+                  },
+                  "QHM_ma_lin": {
+                    "add_trait": {
+                      "ideology": "despotism",
+                      "trait": "XSM_popular_governor"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ELSE_IF": {
+          "limit": {
+            "has_country_leader": {
+              "character": "XSM_ma_bufang"
+            }
+          },
+          "add_country_leader_trait": "XSM_loyal_warlord",
+          "hidden_effect": {
+            "IF": [
+              {
+                "limit": {
+                  "NOT": {
+                    "has_government": "communism"
+                  }
+                },
+                "XSM_ma_bufang": {
+                  "add_trait": {
+                    "ideology": "anti_revisionism",
+                    "trait": "XSM_loyal_warlord"
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "NOT": {
+                    "has_government": "fascism"
+                  }
+                },
+                "XSM_ma_bufang": {
+                  "add_trait": {
+                    "ideology": "rexism",
+                    "trait": "XSM_loyal_warlord"
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "NOT": {
+                    "has_government": "democratic"
+                  }
+                },
+                "XSM_ma_bufang": {
+                  "add_trait": {
+                    "ideology": "socialism",
+                    "trait": "XSM_loyal_warlord"
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "NOT": {
+                    "has_government": "neutrality"
+                  }
+                },
+                "XSM_ma_bufang": {
+                  "add_trait": {
+                    "ideology": "despotism",
+                    "trait": "XSM_loyal_warlord"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "XSM_rebuild_the_ninghai_army",
+      "name": "XSM_rebuild_the_ninghai_army",
+      "desc": "",
+      "icon": "GFX_focus_CHI_meritocratic_principles",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XSM_solidifying_control"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "XSM_new_ninghai_army_idea",
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "available_political_advisor"
+        ],
+        "show_ideas_tooltip": "GSM_ma_yuanxiang",
+        "hidden_effect": {
+          "set_country_flag": "XSM_rebuilt_the_ninghai_army_flag"
+        }
+      }
+    },
+    {
+      "id": "KHM_undermine_kmt_rule",
+      "name": "KHM_undermine_kmt_rule",
+      "desc": "",
+      "icon": "GFX_focus_GER_support_the_proletarian_uprising",
+      "cost_turns": 2,
+      "x": 31,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [
+        "XSM_sideline_family_conflicts"
+      ],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_war_support": 0.05,
+        "add_political_power": 50
+      }
+    },
+    {
+      "id": "XSM_sideline_family_conflicts",
+      "name": "XSM_sideline_family_conflicts",
+      "desc": "",
+      "icon": "GFX_focus_generic_subjugation",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [
+        "KHM_undermine_kmt_rule"
+      ],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_stability": 0.05,
+        "add_political_power": 75
+      }
+    },
+    {
+      "id": "KHM_establish_the_kashgar_clique",
+      "name": "KHM_establish_the_kashgar_clique",
+      "desc": "",
+      "icon": "GFX_focus_TUR_turanist_ambition",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "KHM_undermine_kmt_rule"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_war_support": 0.05,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "available_political_advisor",
+          "available_political_advisor"
+        ],
+        "show_ideas_tooltip": [
+          "KHM_khoya_niyaz",
+          "KHM_muhammad_amin_bughra"
+        ],
+        "hidden_effect": {
+          "set_country_flag": "KHM_established_the_kashgar_clique_flag"
+        }
+      }
+    },
+    {
+      "id": "KHM_shizangs_coup",
+      "name": "KHM_shizangs_coup",
+      "desc": "",
+      "icon": "GFX_focus_IRQ_attempted_assasination_of_sidqi",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "KHM_establish_the_kashgar_clique"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_political_power": 100,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt",
+          "KHM_shizangs_coup_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_country_leader_role": {
+          "character": "KHM_mahmut_muhiti",
+          "country_leader": {
+            "expire": "1965.1.1",
+            "ideology": "despotism",
+            "traits": [
+              "KHM_emir_of_khotan"
+            ]
+          },
+          "promote_leader": true
+        },
+        "IF": [
+          {
+            "limit": {
+              "KHM_mahmut_muhiti": {
+                "is_field_marshal": false
+              }
+            },
+            "KHM_mahmut_muhiti": {
+              "promote_leader": true
+            }
+          },
+          {
+            "limit": {
+              "XSM": {
+                "exists": true
+              }
+            },
+            "XSM": {
+              "country_event": {
+                "id": "SEA_warlords.74",
+                "hours": 2,
+                "random_hours": 4
+              }
+            }
+          },
+          {
+            "limit": {
+              "has_idea": "KHM_unrest"
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "remove_ideas": "KHM_unrest"
+          }
+        ],
+        "hidden_effect": [
+          {
+            "IF": {
+              "limit": {
+                "has_completed_focus": "CHI_sea_secure_internal_politics"
+              },
+              "add_country_leader_role": [
+                {
+                  "character": "KHM_mahmut_muhiti",
+                  "country_leader": {
+                    "expire": "1965.1.1",
+                    "ideology": "anti_revisionism",
+                    "traits": [
+                      "KHM_emir_of_khotan"
+                    ]
+                  },
+                  "promote_leader": true
+                },
+                {
+                  "character": "KHM_mahmut_muhiti",
+                  "country_leader": {
+                    "expire": "1965.1.1",
+                    "ideology": "socialism",
+                    "traits": [
+                      "KHM_emir_of_khotan"
+                    ]
+                  },
+                  "promote_leader": true
+                },
+                {
+                  "character": "KHM_mahmut_muhiti",
+                  "country_leader": {
+                    "expire": "1965.1.1",
+                    "ideology": "rexism",
+                    "traits": [
+                      "KHM_emir_of_khotan"
+                    ]
+                  },
+                  "promote_leader": true
+                }
+              ]
+            }
+          },
+          {
+            "set_party_name": {
+              "ideology": "fascism",
+              "long_name": "KHM_young_kashgars_long",
+              "name": "KHM_young_kashgars"
+            }
+          },
+          {
+            "set_country_flag": "KHM_became_khotan_emirate_flag"
+          }
+        ],
+        "set_cosmetic_tag": "KHM_khotan_emirate",
+        "set_party_name": {
+          "ideology": "neutrality",
+          "long_name": "KHM_young_kashgars_long",
+          "name": "KHM_young_kashgars"
+        },
+        "ELSE_IF": [
+          {
+            "limit": {
+              "GSM": {
+                "exists": true
+              }
+            },
+            "GSM": {
+              "country_event": {
+                "id": "SEA_warlords.74",
+                "hours": 2,
+                "random_hours": 4
+              }
+            }
+          },
+          {
+            "limit": {
+              "NXM": {
+                "exists": true
+              }
+            },
+            "NXM": {
+              "country_event": {
+                "id": "SEA_warlords.74",
+                "hours": 2,
+                "random_hours": 4
+              }
+            }
+          },
+          {
+            "limit": {
+              "has_idea": "KHM_unrest_2"
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "remove_ideas": "KHM_unrest_2"
+          }
+        ],
+        "ma_clique_remove_the_collective_effect": true
+      }
+    },
+    {
+      "id": "KHM_take_control_of_zakat_and_waqf",
+      "name": "KHM_take_control_of_zakat_and_waqf",
+      "desc": "",
+      "icon": "GFX_focus_generic_monetary_union",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "KHM_shizangs_coup"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "KHM_influx_of_funds_idea",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "capital_scope": {
+          "IF": {
+            "limit": {
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "KHM_implement_jizyah",
+      "name": "KHM_implement_jizyah",
+      "desc": "",
+      "icon": "GFX_focus_RAJ_war_taxes",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "KHM_take_control_of_zakat_and_waqf"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "AFG_compulsory_jizya"
+      }
+    },
+    {
+      "id": "KHM_promote_jadidism",
+      "name": "KHM_promote_jadidism",
+      "desc": "",
+      "icon": "GFX_focus_PER_islamic_solidarity",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "KHM_shizangs_coup"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "KHM_promoting_jadidist_movements_idea"
+      }
+    },
+    {
+      "id": "KHM_revive_the_basmachi_movement",
+      "name": "KHM_revive_the_basmachi_movement",
+      "desc": "",
+      "icon": "GFX_focus_generic_befriend_basmachi",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "KHM_promote_jadidism"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "every_state": {
+          "limit": {
+            "NOT": {
+              "is_core_of": "ROOT",
+              "is_claimed_by": "ROOT",
+              "is_owned_by": "ROOT"
+            },
+            "OR": {
+              "region": [
+                267,
+                269,
+                268,
+                270,
+                136
+              ]
+            }
+          },
+          "add_claim_by": "ROOT"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_manpower": 20000
+      }
+    },
+    {
+      "id": "KHM_rally_the_faithful",
+      "name": "KHM_rally_the_faithful",
+      "desc": "",
+      "icon": "GFX_focus_TUR_loosen_the_laws_on_secularism",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "KHM_shizangs_coup"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "IRQ_command_of_the_faithful",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_country_leader_trait": "KHM_ghazi_trait",
+        "IF": {
+          "limit": {
+            "KUM": {
+              "exists": false,
+              "has_character": "KUM_yulbars_khan"
+            }
+          },
+          "KUM": {
+            "KUM_yulbars_khan": {
+              "set_nationality": "ROOT"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "KHM_indian_expeditionary_forces_plan",
+      "name": "KHM_indian_expeditionary_forces_plan",
+      "desc": "",
+      "icon": "GFX_focus_generic_commonwealth_build_infantry",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "KHM_undermine_kmt_rule",
+        "XSM_sideline_family_conflicts"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "has_idea": "KHM_peter_fleming",
+        "NOT": {
+          "has_war_with": "RAJ"
+        },
+        "RAJ": {
+          "is_subject_of": "ENG"
+        }
+      },
+      "completion_reward": {
+        "hidden_effect": [
+          {
+            "delete_unit_template_and_units": {
+              "division_template": "British Expeditionary Force",
+              "disband": true
+            },
+            "division_template": {
+              "name": "British Expeditionary Force",
+              "division_names_group": "XSM_INF_01",
+              "is_locked": false,
+              "regiments": {
+                "infantry": [
+                  {
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "x": 0,
+                    "y": 1
+                  },
+                  {
+                    "x": 0,
+                    "y": 2
+                  },
+                  {
+                    "x": 1,
+                    "y": 0
+                  },
+                  {
+                    "x": 1,
+                    "y": 1
+                  }
+                ]
+              },
+              "support": []
+            }
+          },
+          {
+            "ENG": {
+              "add_relation_rule_override": {
+                "target": "KHM",
+                "can_send_volunteers": true
+              },
+              "hidden_effect": {
+                "add_ai_strategy": [
+                  {
+                    "type": "send_volunteers_desire",
+                    "id": "KHM",
+                    "value": 250
+                  },
+                  {
+                    "type": "protect",
+                    "id": "KHM",
+                    "value": 25
+                  }
+                ]
+              }
+            },
+            "RAJ": {
+              "add_relation_rule_override": {
+                "target": "KHM",
+                "can_send_volunteers": true
+              },
+              "hidden_effect": {
+                "add_ai_strategy": [
+                  {
+                    "type": "send_volunteers_desire",
+                    "id": "KHM",
+                    "value": 250
+                  },
+                  {
+                    "type": "protect",
+                    "id": "KHM",
+                    "value": 25
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "random_owned_state": {
+          "limit": {
+            "impassable": false,
+            "is_controlled_by": "ROOT"
+          },
+          "create_unit": {
+            "division": "name = \"Tunganistan Expeditionary Force\" division_template = \"British Expeditionary Force\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+            "owner": "ROOT"
+          }
+        },
+        "custom_effect_tooltip": "KHM_indian_expeditionary_forces_plan_tt"
+      }
+    },
+    {
+      "id": "KHM_expand_the_madrasas",
+      "name": "KHM_expand_the_madrasas",
+      "desc": "",
+      "icon": "GFX_focus_PER_university_of_isfahan",
+      "cost_turns": 2,
+      "x": 4,
+      "y": 1,
+      "prerequisites": [
+        "KHM_undermine_kmt_rule",
+        "XSM_sideline_family_conflicts"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "AFG_expanded_the_madrasas_idea"
+      }
+    },
+    {
+      "id": "KHM_promote_anti_communism",
+      "name": "KHM_promote_anti_communism",
+      "desc": "",
+      "icon": "GFX_goal_anti_comintern_pact",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "KHM_expand_the_madrasas"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "add_political_power": 25,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_timed_idea": {
+          "idea": "KHM_anti_communist_campaign",
+          "days": 420
+        }
+      }
+    },
+    {
+      "id": "KHM_raise_additional_dungan_regiments",
+      "name": "KHM_raise_additional_dungan_regiments",
+      "desc": "",
+      "icon": "GFX_focus_PER_desert_training",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "KHM_promote_anti_communism"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "hidden_effect": {
+          "delete_unit_template_and_units": {
+            "division_template": "Dungan Regiment",
+            "disband": true
+          },
+          "division_template": {
+            "name": "Dungan Regiment",
+            "division_names_group": "XSM_INF_01",
+            "template_counter": 105,
+            "is_locked": false,
+            "regiments": {
+              "cavalry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                }
+              ]
+            },
+            "support": []
+          }
+        },
+        "random_owned_state": {
+          "limit": {
+            "impassable": false,
+            "is_controlled_by": "ROOT"
+          },
+          "create_unit": [
+            {
+              "division": "name = \"First Dungan Regiment\" division_template = \"Dungan Regiment\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+              "owner": "ROOT"
+            },
+            {
+              "division": "name = \"Second Dungan Regiment\" division_template = \"Dungan Regiment\" start_experience_factor = 0.5 start_equipment_factor = 0.7",
+              "owner": "ROOT"
+            },
+            {
+              "division": "name = \"Third Dungan Regiment\" division_template = \"Dungan Regiment\" start_experience_factor = 0.5 start_equipment_factor = 0.6",
+              "owner": "ROOT"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "XSM_strengthening_our_position",
+      "name": "XSM_strengthening_our_position",
+      "desc": "",
+      "icon": "GFX_focus_generic_horse_studs",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XSM_sideline_family_conflicts"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "hidden_effect": {
+          "delete_unit_template_and_units": {
+            "division_template": "Muslim Cavalry",
+            "disband": true
+          },
+          "division_template": {
+            "name": "Muslim Cavalry",
+            "division_names_group": "XSM_CAV_01",
+            "role": "garrison",
+            "template_counter": 5,
+            "is_locked": false,
+            "regiments": {
+              "cavalry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                }
+              ]
+            },
+            "support": []
+          }
+        },
+        "random_owned_state": {
+          "limit": {
+            "impassable": false,
+            "is_controlled_by": "ROOT"
+          },
+          "create_unit": [
+            {
+              "division": "name = \"First Hui Cavalry Division\" division_template = \"Muslim Cavalry\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+              "owner": "ROOT"
+            },
+            {
+              "division": "name = \"Second Hui Cavalry Division\" division_template = \"Muslim Cavalry\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+              "owner": "ROOT"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "XSM_demand_submission",
+      "name": "XSM_demand_submission",
+      "desc": "",
+      "icon": "GFX_goal_demand_sudetenland",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XSM_strengthening_our_position"
+      ],
+      "mutually_exclusive": [
+        "XSM_strike_at_the_detractors"
+      ],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "every_other_country": {
+          "limit": {
+            "OR": {
+              "tag": [
+                "XSM",
+                "NXM",
+                "GSM",
+                "KHM"
+              ]
+            },
+            "exists": true,
+            "is_subject": false
+          },
+          "country_event": {
+            "id": "SEA_warlords.26",
+            "hours": 6
+          }
+        }
+      }
+    },
+    {
+      "id": "XSM_strike_at_the_detractors",
+      "name": "XSM_strike_at_the_detractors",
+      "desc": "",
+      "icon": "GFX_focus_CHI_decisive_battles",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "XSM_strengthening_our_position"
+      ],
+      "mutually_exclusive": [
+        "XSM_demand_submission"
+      ],
+      "available": {
+        "is_subject": false,
+        "any_other_country": {
+          "OR": {
+            "original_tag": [
+              "XSM",
+              "NXM",
+              "GSM",
+              "KHM"
+            ]
+          },
+          "exists": true,
+          "NOT": {
+            "is_ally_with": "ROOT",
+            "has_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "every_other_country": {
+          "limit": {
+            "OR": {
+              "tag": [
+                "XSM",
+                "NXM",
+                "GSM",
+                "KHM"
+              ]
+            }
+          },
+          "ROOT": {
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "PREV"
+            }
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_timed_idea": {
+          "idea": "XSM_tsr_strike_the_traitors",
+          "days": 140
+        }
+      }
+    },
+    {
+      "id": "XSM_a_united_ma_state",
+      "name": "XSM_a_united_ma_state",
+      "desc": "",
+      "icon": "GFX_goal_generic_national_unity",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XSM_demand_submission",
+        "XSM_strike_at_the_detractors"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "IF": [
+          {
+            "limit": {
+              "ROOT": {
+                "NOT": {
+                  "tag": "KHM"
+                }
+              }
+            },
+            "KHM": {
+              "OR": {
+                "is_subject_of": "ROOT",
+                "exists": false
+              }
+            }
+          },
+          {
+            "limit": {
+              "ROOT": {
+                "NOT": {
+                  "tag": "XSM"
+                }
+              }
+            },
+            "XSM": {
+              "OR": {
+                "is_subject_of": "ROOT",
+                "exists": false
+              }
+            }
+          },
+          {
+            "limit": {
+              "ROOT": {
+                "NOT": {
+                  "tag": "GSM"
+                }
+              }
+            },
+            "GSM": {
+              "OR": {
+                "is_subject_of": "ROOT",
+                "exists": false
+              }
+            }
+          },
+          {
+            "limit": {
+              "ROOT": {
+                "NOT": {
+                  "tag": "NXM"
+                }
+              }
+            },
+            "NXM": {
+              "OR": {
+                "is_subject_of": "ROOT",
+                "exists": false
+              }
+            }
+          }
+        ]
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "XSM_a_united_ma_state_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "every_other_country": {
+          "limit": {
+            "OR": {
+              "tag": [
+                "XSM",
+                "NXM",
+                "GSM",
+                "KHM"
+              ]
+            },
+            "is_subject_of": "ROOT"
+          },
+          "ROOT": {
+            "annex_country": {
+              "target": "PREV",
+              "transfer_troops": true
+            },
+            "PREV": {
+              "every_army_leader": {
+                "set_nationality": "ROOT"
+              },
+              "every_core_state": {
+                "add_core_of": "ROOT"
+              }
+            }
+          }
+        },
+        "add_ideas": "tsr_united_ma_cliques"
+      }
+    },
+    {
+      "id": "KUM_victory_in_tihwa",
+      "name": "KUM_victory_in_tihwa",
+      "desc": "",
+      "icon": "GFX_focus_generic_attack_sinkiang",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "controls_state": 617
+      },
+      "completion_reward": {
+        "KUM_yulbars_khan": {
+          "add_trait": {
+            "trait": "KHM_governor_of_sinkiang",
+            "ideology": "despotism"
+          }
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "IF": [
+          {
+            "limit": {
+              "has_idea": "SIK_battle_for_sinkiang"
+            },
+            "remove_ideas": [
+              "SIK_battle_for_sinkiang"
+            ],
+            "custom_effect_tooltip": "generic_skip_one_line_tt"
+          },
+          {
+            "limit": {
+              "KHM": {
+                "exists": true,
+                "is_subject": false,
+                "NOT": {
+                  "has_war_with": "ROOT"
+                }
+              }
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "KHM",
+              "generator": [
+                1042,
+                759
+              ],
+              "expire": 0
+            }
+          }
+        ],
+        "add_political_power": 50,
+        "add_war_support": 0.1,
+        "SIK": {
+          "every_core_state": {
+            "add_core_of": "ROOT"
+          }
+        }
+      }
+    },
+    {
+      "id": "KUM_restore_yettishar",
+      "name": "KUM_restore_yettishar",
+      "desc": "",
+      "icon": "GFX_focus_generic_islamic_propaganda",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "KUM_victory_in_tihwa"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "controls_state": 1042
+      },
+      "completion_reward": {
+        "swap_ruler_traits": {
+          "remove": "KHM_governor_of_sinkiang",
+          "add": "KUM_champion_father_of_the_faithful"
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_ideas": "IRQ_command_of_the_faithful",
+        "every_state": {
+          "limit": {
+            "OR": {
+              "state": [
+                756,
+                616,
+                283,
+                753,
+                754,
+                755,
+                604,
+                759,
+                287,
+                619,
+                1042,
+                1040,
+                1044,
+                1045
+              ]
+            },
+            "NOT": {
+              "is_core_of": "ROOT"
+            }
+          },
+          "add_core_of": "ROOT"
+        },
+        "IF": {
+          "limit": {
+            "KHM": {
+              "has_character": "KHM_mahmut_muhiti"
+            }
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "KHM": {
+            "KHM_mahmut_muhiti": {
+              "set_nationality": "ROOT"
+            }
+          }
+        },
+        "ELSE_IF": {
+          "limit": {
+            "SIK": {
+              "has_character": "KHM_mahmut_muhiti"
+            }
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "SIK": {
+            "KHM_mahmut_muhiti": {
+              "set_nationality": "ROOT"
+            }
+          }
+        },
+        "set_cosmetic_tag": "KUM_yetishar_tag"
+      }
+    },
+    {
+      "id": "SIC_the_sichuan_clique",
+      "name": "SIC_the_sichuan_clique",
+      "desc": "",
+      "icon": "GFX_focus_CHI_military_mission",
+      "cost_turns": 2,
+      "x": 32,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_dynamic_modifier": {
+          "modifier": "SIC_sichuan_clique_dynamic_modifier"
+        }
+      }
+    },
+    {
+      "id": "SIC_the_domain_of_liu_wenhui",
+      "name": "SIC_the_domain_of_liu_wenhui",
+      "desc": "",
+      "icon": "GFX_focus_PRC_reorganize_divisions",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "SIC_the_sichuan_clique"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": "SIC_modify_sichuan_clique_modifier_tt",
+        "add_to_variable": [
+          {
+            "SIC_sichuan_clique_war_support_factor": 0.05,
+            "tooltip": "war_support_factor_tt"
+          },
+          {
+            "SIC_sichuan_clique_supply_combat_penalties_on_core_factor": -0.05,
+            "tooltip": "supply_combat_penalties_on_core_factor_tt"
+          },
+          {
+            "SIC_sichuan_clique_army_core_attack_factor": 0.05,
+            "tooltip": "army_core_attack_factor_tt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "SIC_develop_xikang",
+      "name": "SIC_develop_xikang",
+      "desc": "",
+      "icon": "GFX_focus_PRC_rural_region_development_two",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIC_the_domain_of_liu_wenhui"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "752": {
+          "is_owned_and_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "SIC_modify_sichuan_clique_modifier_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_to_variable": {
+          "SIC_sichuan_clique_research_speed_factor": 0.025,
+          "tooltip": "research_speed_factor_tt"
+        },
+        "752": {
+          "IF": {
+            "limit": {
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            },
+            "add_building_construction": [
+              {
+                "type": "industrial_complex",
+                "level": 1,
+                "instant_build": true
+              },
+              {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              }
+            ]
+          },
+          "add_extra_state_shared_building_slots": 1
+        }
+      }
+    },
+    {
+      "id": "SIC_push_back_the_tibetans",
+      "name": "SIC_push_back_the_tibetans",
+      "desc": "",
+      "icon": "GFX_focus_CHI_decisive_battles",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIC_develop_xikang"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": {
+          "decision": "SIC_push_into_xikang"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_timed_idea": {
+          "idea": "SIC_push_into_xikang_idea",
+          "days": 365
+        },
+        "IF": {
+          "limit": {
+            "has_character": "SIC_liu_wenhui"
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "SIC_liu_wenhui": {
+            "clr_character_flag": true,
+            "remove_trait": {
+              "trait": "SIC_dubious_loyalty"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "SIC_the_armies_of_yang_sen",
+      "name": "SIC_the_armies_of_yang_sen",
+      "desc": "",
+      "icon": "GFX_focus_CHI_popular_army",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "SIC_the_sichuan_clique"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "SIC_modify_sichuan_clique_modifier_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_to_variable": [
+          {
+            "SIC_sichuan_clique_recruitable_population_factor": 0.05,
+            "tooltip": "recruitable_population_factor_tt"
+          },
+          {
+            "SIC_sichuan_clique_army_core_defence_factor": 0.05,
+            "tooltip": "army_core_defence_factor_tt"
+          }
+        ],
+        "SIC_yang_sen": {
+          "add_attack": 1,
+          "add_logistics": 1
+        }
+      }
+    },
+    {
+      "id": "SIC_anti_communism",
+      "name": "SIC_anti_communism",
+      "desc": "",
+      "icon": "GFX_focus_GER_end_european_communism",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIC_the_armies_of_yang_sen"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_political_power": 50,
+        "add_timed_idea": {
+          "idea": "tsr_anti_communist_campaign",
+          "days": 365
+        }
+      }
+    },
+    {
+      "id": "SIC_drive_out_the_japanese",
+      "name": "SIC_drive_out_the_japanese",
+      "desc": "",
+      "icon": "GFX_focus_CHI_prepare_war_zones",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIC_anti_communism"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "has_war_with": "JAP"
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "SIC_modify_sichuan_clique_modifier_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_to_variable": [
+          {
+            "SIC_sichuan_clique_surrender_limit": 0.1,
+            "tooltip": "surrender_limit_tt"
+          },
+          {
+            "SIC_sichuan_clique_war_support_factor": 0.1,
+            "tooltip": "war_support_factor_tt"
+          },
+          {
+            "SIC_sichuan_clique_recruitable_population_factor": 0.1,
+            "tooltip": "recruitable_population_factor_tt"
+          }
+        ],
+        "add_timed_idea": {
+          "idea": "SIC_drive_out_the_japanese_idea",
+          "days": 365
+        }
+      }
+    },
+    {
+      "id": "SIC_the_governor_of_sichuan",
+      "name": "SIC_the_governor_of_sichuan",
+      "desc": "",
+      "icon": "GFX_focus_CHI_lay_the_foundation_for_a_united_china",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIC_the_sichuan_clique"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_stability": 0.05,
+        "add_political_power": 120,
+        "add_tech_bonus": {
+          "name": "SIC_the_governor_of_sichuan",
+          "bonus": 0.75,
+          "uses": 1,
+          "category": "industry"
+        }
+      }
+    },
+    {
+      "id": "SIC_develop_chongqing",
+      "name": "SIC_develop_chongqing",
+      "desc": "",
+      "icon": "GFX_focus_PRC_urbanization",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIC_the_governor_of_sichuan"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "SIC_modify_sichuan_clique_modifier_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_to_variable": [
+          {
+            "SIC_sichuan_clique_research_speed_factor": 0.05,
+            "tooltip": "research_speed_factor_tt"
+          },
+          {
+            "SIC_sichuan_clique_production_speed_buildings_factor": 0.05,
+            "tooltip": "production_speed_buildings_factor_tt"
+          }
+        ],
+        "1037": {
+          "IF": {
+            "limit": {
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 1
+                },
+                "include_locked": true
+              }
+            },
+            "add_building_construction": [
+              {
+                "type": "industrial_complex",
+                "level": 1,
+                "instant_build": true
+              },
+              {
+                "type": "arms_factory",
+                "level": 1,
+                "instant_build": true
+              }
+            ],
+            "add_extra_state_shared_building_slots": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "SIC_armor_efforts",
+      "name": "SIC_armor_efforts",
+      "desc": "",
+      "icon": "GFX_focus_CHI_200th_division",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIC_develop_chongqing"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_tech_bonus": [
+          {
+            "name": "SIC_armor_efforts",
+            "bonus": 0.75,
+            "uses": 1,
+            "category": "armor"
+          },
+          {
+            "name": "SIC_armor_efforts",
+            "bonus": 0.75,
+            "uses": 1,
+            "category": "air_equipment"
+          }
+        ],
+        "army_experience": 50,
+        "air_experience": 25
+      }
+    },
+    {
+      "id": "SIC_sichuan_still_stands",
+      "name": "SIC_sichuan_still_stands",
+      "desc": "",
+      "icon": "GFX_focus_generic_china1",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "SIC_armor_efforts"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "has_country_leader": {
+            "ruling_only": true,
+            "character": "SIC_liu_xiang"
+          }
+        },
+        "has_war": false
+      },
+      "completion_reward": {
+        "SIC_yang_sen": {
+          "add_trait": {
+            "trait": "SIC_governor_of_sichuan",
+            "ideology": "despotism"
+          }
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_political_power": 50,
+        "add_war_support": 0.05,
+        "remove_ideas": [
+          "SIC_a_loose_unity"
+        ]
+      }
+    },
+    {
+      "id": "XIC_northwest_bandit_suppression_headquarters",
+      "name": "XIC_northwest_bandit_suppression_headquarters",
+      "desc": "",
+      "icon": "GFX_focus_CHI_popular_army",
+      "cost_turns": 2,
+      "x": 34,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_command_power": 50,
+        "add_manpower": 25000
+      }
+    },
+    {
+      "id": "XIC_discussions_in_luochuan",
+      "name": "XIC_discussions_in_luochuan",
+      "desc": "",
+      "icon": "GFX_focus_generic_befriend_the_chinese_soviet",
+      "cost_turns": 2,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "XIC_northwest_bandit_suppression_headquarters"
+      ],
+      "mutually_exclusive": [
+        "XIC_sixth_encirclement_campaign"
+      ],
+      "available": {
+        "PRC": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT",
+            "has_border_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_political_power": 50,
+        "remove_opinion_modifier": {
+          "target": "PRC",
+          "modifier": "tsr_bandit_suppresion_opm"
+        },
+        "add_popularity": {
+          "ideology": "communism",
+          "popularity": 0.03
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "PRC": {
+          "country_event": {
+            "id": "SEA_warlords.51",
+            "hours": 4
+          },
+          "effect_tooltip": {
+            "add_political_power": 25,
+            "remove_opinion_modifier": {
+              "target": "ROOT",
+              "modifier": "tsr_bandit_suppresion_opm"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_send_a_representative_to_sheng_shicai",
+      "name": "XIC_send_a_representative_to_sheng_shicai",
+      "desc": "",
+      "icon": "GFX_focus_generic_befriend_sinkiang",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_discussions_in_luochuan"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SIK": {
+          "exists": true,
+          "has_country_leader": {
+            "ruling_only": true,
+            "character": "SIK_sheng_shicai"
+          },
+          "NOT": {
+            "has_war_with": "ROOT",
+            "has_border_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_political_power": 50,
+        "add_opinion_modifier": {
+          "target": "SIK",
+          "modifier": "tsr_pro_soviet_stance_opm"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "SIK": {
+          "country_event": {
+            "id": "SEA_warlords.50",
+            "hours": 4
+          },
+          "effect_tooltip": {
+            "add_political_power": 50,
+            "add_opinion_modifier": {
+              "target": "ROOT",
+              "modifier": "tsr_pro_soviet_stance_opm"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_non_agression_pact_with_the_cpc",
+      "name": "XIC_non_agression_pact_with_the_cpc",
+      "desc": "",
+      "icon": "GFX_goal_generic_dangerous_deal",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_discussions_in_luochuan"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "PRC": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT",
+            "has_non_aggression_pact_with": "ROOT",
+            "has_border_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "PRC": {
+          "country_event": {
+            "id": "SEA_warlords.52",
+            "hours": 4
+          },
+          "custom_effect_tooltip": "if_they_accept_tt",
+          "effect_tooltip": {
+            "PRC": {
+              "add_political_power": 10,
+              "diplomatic_relation": {
+                "country": "ROOT",
+                "relation": "non_aggression_pact",
+                "active": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_the_fushi_conference",
+      "name": "XIC_the_fushi_conference",
+      "desc": "",
+      "icon": "GFX_focus_CHI_registry_of_property",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_non_agression_pact_with_the_cpc",
+        "XIC_send_a_representative_to_sheng_shicai"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "PRC": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT",
+            "has_border_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_war_support": 0.05,
+        "add_political_power": 50
+      }
+    },
+    {
+      "id": "XIC_anti_japanese_national_salvation_agreement",
+      "name": "XIC_anti_japanese_national_salvation_agreement",
+      "desc": "",
+      "icon": "GFX_focus_AST_war_japan",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XIC_the_fushi_conference"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "PRC": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT",
+            "has_border_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "PRC": {
+          "country_event": {
+            "id": "SEA_warlords.53",
+            "hours": 4
+          },
+          "effect_tooltip": {
+            "PRC": {
+              "add_equipment_to_stockpile": {
+                "type": "infantry_equipment",
+                "amount": 1000,
+                "producer": "ROOT"
+              },
+              "add_timed_idea": {
+                "idea": "XIC_inlux_of_funds_for_the_communists_idea",
+                "days": 84
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_withdraw_forces_from_yanan",
+      "name": "XIC_withdraw_forces_from_yanan",
+      "desc": "",
+      "icon": "GFX_focus_PRC_usurp_control_over_yanan",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_anti_japanese_national_salvation_agreement"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "PRC": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT",
+            "has_border_war_with": "ROOT"
+          }
+        },
+        "1032": {
+          "is_owned_and_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "add_political_power": 50,
+        "CHI": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "tsr_rebellious_warlord_opm"
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "PRC": {
+          "country_event": {
+            "id": "SEA_warlords.54",
+            "hours": 6
+          },
+          "effect_tooltip": {
+            "1032": {
+              "transfer_state_to": "PRC"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_form_the_anti_japanese_comrades_association",
+      "name": "XIC_form_the_anti_japanese_comrades_association",
+      "desc": "",
+      "icon": "GFX_focus_chi_united_front",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_anti_japanese_national_salvation_agreement"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "PRC": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT",
+            "has_border_war_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_popularity": {
+          "ideology": "communism",
+          "popularity": 0.2
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "diplomatic_relation": {
+          "country": "PRC",
+          "relation": "military_access",
+          "active": true
+        },
+        "PRC": {
+          "diplomatic_relation": {
+            "country": "ROOT",
+            "relation": "military_access",
+            "active": true
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_invite_chiang_for_troop_inspections",
+      "name": "XIC_invite_chiang_for_troop_inspections",
+      "desc": "",
+      "icon": "GFX_focus_prc_remove_chiang_kai_shek",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_form_the_anti_japanese_comrades_association",
+        "XIC_withdraw_forces_from_yanan"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "CHI": {
+          "exists": true,
+          "is_subject": false,
+          "is_in_faction": false,
+          "has_country_leader": {
+            "ruling_only": true,
+            "character": "CHI_chiang_kaishek"
+          }
+        },
+        "NOT": [
+          {
+            "has_global_flag": "CHI_xian_fired"
+          },
+          {
+            "has_war_with": "CHI"
+          },
+          {
+            "has_war_with": "PRC"
+          }
+        ],
+        "PRC": [
+          {
+            "exists": true,
+            "NOT": {
+              "has_war_with": "CHI"
+            },
+            "is_subject": false,
+            "is_in_faction": false
+          },
+          {
+            "NOT": {
+              "has_border_war_with": "ROOT"
+            }
+          }
+        ]
+      },
+      "completion_reward": {
+        "set_country_flag": "CHI_xian_instigator_flag",
+        "set_global_flag": "CHI_xian_fired",
+        "CHI": {
+          "country_event": {
+            "id": "wtt_xian_incident.1",
+            "hours": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_sixth_encirclement_campaign",
+      "name": "XIC_sixth_encirclement_campaign",
+      "desc": "",
+      "icon": "GFX_focus_generic_attack_chinese_soviets",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "XIC_northwest_bandit_suppression_headquarters"
+      ],
+      "mutually_exclusive": [
+        "XIC_discussions_in_luochuan"
+      ],
+      "available": {
+        "is_subject": false,
+        "PRC": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT",
+            "is_ally_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "declare_war_on": {
+          "target": "PRC",
+          "type": "annex_everything"
+        },
+        "activate_mission": "XIC_war_halting",
+        "hidden_effect": {
+          "PRC": {
+            "activate_mission": "PRC_holding_out"
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_request_relocation_to_northeastern_command",
+      "name": "XIC_request_relocation_to_northeastern_command",
+      "desc": "",
+      "icon": "GFX_focus_generic_attack_kuomintang",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XIC_sixth_encirclement_campaign"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "NOT": {
+          "has_war_with": "PRC",
+          "has_active_mission": "XIC_war_halting"
+        },
+        "CHI": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": [
+              "ROOT",
+              "HBC"
+            ]
+          }
+        },
+        "608": {
+          "OR": {
+            "is_owned_and_controlled_by": [
+              "HBC",
+              "CHI"
+            ]
+          }
+        }
+      },
+      "completion_reward": {
+        "CHI": {
+          "country_event": {
+            "id": "SEA_warlords.56",
+            "hours": 6
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_invite_zuolin_loyalsits",
+      "name": "XIC_invite_zuolin_loyalsits",
+      "desc": "",
+      "icon": "GFX_goal_generic_major_alliance",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_request_relocation_to_northeastern_command"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "IF": {
+          "limit": {
+            "MAN": {
+              "exists": true
+            }
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "MAN": {
+            "country_event": {
+              "id": "SEA_warlords.60",
+              "hours": 6
+            }
+          },
+          "effect_tooltip": {
+            "MAN": {
+              "MAN_yu_zishan": {
+                "set_nationality": "ROOT"
+              },
+              "MAN_zhang_haipeng": {
+                "set_nationality": "ROOT"
+              },
+              "MAN_ma_zhanshan": {
+                "set_nationality": "ROOT"
+              },
+              "add_manpower": -5000
+            },
+            "add_manpower": 5000
+          }
+        },
+        "ELSE": {
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "add_manpower": 5000,
+          "MAN": {
+            "MAN_yu_zishan": {
+              "set_nationality": "ROOT"
+            },
+            "MAN_zhang_haipeng": {
+              "set_nationality": "ROOT"
+            },
+            "MAN_ma_zhanshan": {
+              "set_nationality": "ROOT"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_reestablish_the_zhili_army",
+      "name": "XIC_reestablish_the_zhili_army",
+      "desc": "",
+      "icon": "GFX_focus_MAN_the_new_fengtian_army",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_request_relocation_to_northeastern_command"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "XIC_new_fengtian_zhili_army_idea"
+      }
+    },
+    {
+      "id": "XIC_recruit_mancurian_bandits",
+      "name": "XIC_recruit_mancurian_bandits",
+      "desc": "",
+      "icon": "GFX_focus_prc_infiltration",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_reestablish_the_zhili_army"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "XIC_recruit_mancurian_bandits_tt",
+        "hidden_effect": {
+          "division_template": [
+            {
+              "name": "Fengtian Counter-Japanese Division",
+              "priority": 2,
+              "template_counter": 118,
+              "division_names_group": "MAN_INF_01",
+              "regiments": {
+                "infantry": [
+                  {
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "x": 0,
+                    "y": 1
+                  },
+                  {
+                    "x": 0,
+                    "y": 2
+                  },
+                  {
+                    "x": 1,
+                    "y": 0
+                  },
+                  {
+                    "x": 1,
+                    "y": 1
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Fengtian Bandit Division",
+              "priority": 2,
+              "template_counter": 118,
+              "division_names_group": "MAN_CAV_01",
+              "regiments": {
+                "cavalry": [
+                  {
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "x": 0,
+                    "y": 1
+                  },
+                  {
+                    "x": 0,
+                    "y": 2
+                  },
+                  {
+                    "x": 1,
+                    "y": 0
+                  },
+                  {
+                    "x": 1,
+                    "y": 1
+                  }
+                ]
+              }
+            }
+          ],
+          "random_owned_controlled_state": {
+            "limit": {
+              "ROOT": {
+                "has_full_control_of_state": "PREV"
+              }
+            },
+            "prioritize": [
+              328
+            ],
+            "create_unit": [
+              {
+                "division": "name = \"1. Fengtian Counter-Japanese Division\" division_template = \"Fengtian Counter-Japanese Division\" start_experience_factor = 0.6",
+                "owner": "ROOT"
+              },
+              {
+                "division": "name = \"2. Fengtian Counter-Japanese Division\" division_template = \"Fengtian Counter-Japanese Division\" start_experience_factor = 0.6",
+                "owner": "ROOT"
+              },
+              {
+                "division": "name = \"3. Fengtian Counter-Japanese Division\" division_template = \"Fengtian Counter-Japanese Division\" start_experience_factor = 0.6",
+                "owner": "ROOT"
+              },
+              {
+                "division": "name = \"1. Fengtian Bandit Division\" division_template = \"Fengtian Bandit Division\" start_experience_factor = 0.6",
+                "owner": "ROOT"
+              },
+              {
+                "division": "name = \"2. Fengtian Bandit Division\" division_template = \"Fengtian Bandit Division\" start_experience_factor = 0.6",
+                "owner": "ROOT"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "XIC_restore_the_glory_of_the_fengtian_army",
+      "name": "XIC_restore_the_glory_of_the_fengtian_army",
+      "desc": "",
+      "icon": "GFX_focus_MAN_restore_the_beiyang_army",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "XIC_reestablish_the_zhili_army",
+        "XIC_invite_zuolin_loyalsits"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "XIC_new_fengtian_zhili_army_idea",
+          "add_idea": "XIC_new_fengtian_zhili_army_2_idea"
+        }
+      }
+    },
+    {
+      "id": "XIC_reclaim_the_lost_birthright",
+      "name": "XIC_reclaim_the_lost_birthright",
+      "desc": "",
+      "icon": "GFX_focus_generic_attack_manchukuo",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XIC_restore_the_glory_of_the_fengtian_army"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "MAN": {
+          "exists": true,
+          "NOT": {
+            "has_war_with": "ROOT",
+            "is_ally_with": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "IF": [
+          {
+            "limit": {
+              "716": {
+                "NOT": {
+                  "is_owned_by": "ROOT"
+                }
+              }
+            },
+            "716": {
+              "owner": {
+                "ROOT": {
+                  "create_wargoal": {
+                    "type": "take_claimed_state",
+                    "target": "PREV",
+                    "generator": [
+                      716
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "limit": {
+              "609": {
+                "NOT": {
+                  "is_owned_by": "ROOT"
+                }
+              }
+            },
+            "609": {
+              "owner": {
+                "ROOT": {
+                  "create_wargoal": {
+                    "type": "take_claimed_state",
+                    "target": "PREV",
+                    "generator": [
+                      609
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "610": {
+          "add_core_of": "ROOT"
+        },
+        "716": {
+          "add_core_of": "ROOT"
+        }
+      }
+    },
+    {
+      "id": "XIC_restore_the_homeland",
+      "name": "XIC_restore_the_homeland",
+      "desc": "",
+      "icon": "GFX_focus_PRC_petition_for_freedom",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XIC_reclaim_the_lost_birthright"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "716": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "XIC_restore_the_homeland_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "every_state": {
+          "limit": {
+            "NOT": {
+              "is_core_of": "ROOT"
+            },
+            "OR": {
+              "state": [
+                761,
+                714,
+                717,
+                328,
+                716,
+                715,
+                610,
+                609,
+                612,
+                611,
+                1043,
+                621,
+                1039,
+                608,
+                614,
+                1038,
+                597,
+                743
+              ]
+            }
+          },
+          "add_core_of": "ROOT"
+        },
+        "set_capital": {
+          "state": 716,
+          "remember_old_capital": true
+        }
+      }
+    },
+    {
+      "id": "XIC_revive_the_beiyang_government",
+      "name": "XIC_revive_the_beiyang_government",
+      "desc": "",
+      "icon": "GFX_focus_CHI_restore_the_old_republic",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "XIC_restore_the_homeland"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "CHI": {
+          "every_core_state": {
+            "add_core_of": "ROOT"
+          }
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "set_cosmetic_tag": "MAN_republic_of_china",
+        "load_focus_tree": "china_nationalist_warlord_focus",
+        "CHI_no_longer_a_warlord_idea_removal": true,
+        "IF": {
+          "limit": {
+            "has_idea": "CHI_warlord_looting_idea"
+          },
+          "remove_ideas": "CHI_warlord_looting_idea"
+        },
+        "every_country": {
+          "limit": {
+            "is_literally_china": true
+          },
+          "ROOT": {
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "PREV"
+            }
+          }
+        },
+        "set_global_flag": "achievement_XIC_i_have_avenged_you_father"
+      }
+    },
+    {
+      "id": "YUN_rally_around_long_yun",
+      "name": "YUN_rally_around_long_yun",
+      "desc": "",
+      "icon": "GFX_focus_CHI_military_mission",
+      "cost_turns": 2,
+      "x": 31,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "YUN_long_yun"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "YUN_the_democratic_fortress_idea"
+      }
+    },
+    {
+      "id": "YUN_expand_local_infrastructure",
+      "name": "YUN_expand_local_infrastructure",
+      "desc": "",
+      "icon": "GFX_goal_generic_construction2",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "YUN_rally_around_long_yun"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "YUN_long_yun"
+        }
+      },
+      "completion_reward": {
+        "every_core_state": {
+          "limit": {
+            "is_controlled_by": "PREV"
+          },
+          "add_extra_state_shared_building_slots": 2
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "IF": [
+          {
+            "limit": {
+              "325": {
+                "infrastructure": {
+                  "_op": "<",
+                  "value": 5
+                }
+              }
+            },
+            "325": {
+              "add_building_construction": {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              }
+            }
+          },
+          {
+            "limit": {
+              "747": {
+                "infrastructure": {
+                  "_op": "<",
+                  "value": 5
+                }
+              }
+            },
+            "747": {
+              "add_building_construction": {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "YUN_strive_for_self_sufficiency",
+      "name": "YUN_strive_for_self_sufficiency",
+      "desc": "",
+      "icon": "GFX_focus_generic_modernize_industry",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "YUN_expand_local_infrastructure"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "YUN_long_yun"
+        }
+      },
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "impassable": false,
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 1
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 2,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 2,
+            "instant_build": true
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "IF": [
+          {
+            "limit": {
+              "325": {
+                "is_controlled_by": "ROOT"
+              }
+            },
+            "325": {
+              "add_resource": {
+                "type": "aluminium",
+                "amount": 6
+              }
+            }
+          },
+          {
+            "limit": {
+              "747": {
+                "is_controlled_by": "ROOT"
+              }
+            },
+            "747": {
+              "add_resource": {
+                "type": "coal",
+                "amount": 4
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "YUN_a_land_of_mountains",
+      "name": "YUN_a_land_of_mountains",
+      "desc": "",
+      "icon": "GFX_focus_generic_mountain_fortification",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "YUN_rally_around_long_yun"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "YUN_long_yun"
+        }
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "GRE_mountain_training_effect",
+          "generic_skip_one_line_tt",
+          "mountain_guns_tt"
+        ],
+        "hidden_effect": [
+          {
+            "set_technology": {
+              "mountain_warfare": 1,
+              "popup": false
+            }
+          },
+          {
+            "set_technology": {
+              "mountain_gun": 1,
+              "popup": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "YUN_political_reforms",
+      "name": "YUN_political_reforms",
+      "desc": "",
+      "icon": "GFX_focus_generic_self_management",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "YUN_a_land_of_mountains"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "YUN_long_yun"
+        },
+        "has_idea": "YUN_the_democratic_fortress_idea"
+      },
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "YUN_the_democratic_fortress_idea",
+          "add_idea": "YUN_the_democratic_fortress_idea_2"
+        }
+      }
+    },
+    {
+      "id": "YUN_eduational_reforms",
+      "name": "YUN_eduational_reforms",
+      "desc": "",
+      "icon": "GFX_focus_CHI_tongzi_jun",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "YUN_political_reforms",
+        "YUN_strive_for_self_sufficiency"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "YUN_long_yun"
+        },
+        "has_idea": "YUN_the_democratic_fortress_idea_2"
+      },
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "YUN_the_democratic_fortress_idea_2",
+          "add_idea": "YUN_the_democratic_fortress_idea_3"
+        }
+      }
+    },
+    {
+      "id": "YUN_the_democratic_fortress",
+      "name": "YUN_the_democratic_fortress",
+      "desc": "",
+      "icon": "GFX_focus_CHI_lay_the_foundation_for_a_united_china",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "YUN_eduational_reforms"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "YUN_long_yun"
+        },
+        "has_idea": "YUN_the_democratic_fortress_idea_3"
+      },
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "YUN_the_democratic_fortress_idea_3",
+          "add_idea": "YUN_the_democratic_fortress_idea_4"
+        }
+      }
+    },
+    {
+      "id": "YUN_strengthen_burmic_ties",
+      "name": "YUN_strengthen_burmic_ties",
+      "desc": "",
+      "icon": "GFX_focus_attack_india",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "YUN_the_democratic_fortress"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "YUN_long_yun"
+        },
+        "is_subject": false
+      },
+      "completion_reward": {
+        "BRM": {
+          "every_core_state": {
+            "add_claim_by": "ROOT",
+            "set_state_flag": "YUN_can_integrate_this_flag",
+            "ROOT": {
+              "create_wargoal": {
+                "target": "PREV.OWNER",
+                "type": "take_claimed_state"
+              }
+            }
+          }
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "AFG_proclaim_a_new_caliphate_2_tt"
+        ],
+        "hidden_effect": {
+          "set_country_flag": "YUN_did_burmic_ties_focus_flag"
+        }
+      }
+    }
+  ]
+}

@@ -282,6 +282,13 @@ func _apply_completion_effects(dir: DirectiveResource, state: CountryState) -> v
 				state.manpower_pool = maxi(state.manpower_pool + int(rew.get("value", 0)), 0)
 			"MOD_STOCKPILE":
 				state.infantry_weapons_stockpile = maxi(state.infantry_weapons_stockpile + int(rew.get("value", 0)), 0)
+			"ADD_MILITARY_FACTORIES", "MOD_MIL_FACTORIES", "ADD_MIL_FACTORY":
+				state.military_factories += int(rew.get("value", 1))
+			"ADD_CIVILIAN_FACTORIES", "MOD_CIV_FACTORIES", "ADD_CIV_FACTORY":
+				state.civilian_factories += int(rew.get("value", 1))
+			"SET_LAW", "ADD_LAW":
+				var law_k = str(rew.get("law", rew.get("value", "")))
+				state.set_flag("law_" + law_k, true)
 			"TRANSFER_STATE", "conquer_state", "annex_state":
 				var st_id = int(rew.get("state_id", -1))
 				if st_id > 0:

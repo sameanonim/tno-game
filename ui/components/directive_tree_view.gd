@@ -177,15 +177,28 @@ func load_tree_for_country(country_tag: String, preferred_tree_id: String = "") 
 			var json_man = JSON.new()
 			if json_man.parse(f_man.get_as_text()) == OK and json_man.data is Dictionary:
 				stage_manifest_data = json_man.data
-				for t in stage_manifest_data.get("trees", []):
-					if t is Dictionary:
-						available_trees.append({
-							"tree_id": str(t.get("tree_id", "")),
-							"stage_category": str(t.get("stage_category", "GENERAL")),
-							"is_starting_tree": bool(t.get("is_starting_tree", false)),
-							"total_directives": int(t.get("total_directives", 0)),
-							"path": str(t.get("file_path", ""))
-						})
+				var raw_trees = stage_manifest_data.get("trees", [])
+				if raw_trees is Array:
+					for t in raw_trees:
+						if t is Dictionary:
+							available_trees.append({
+								"tree_id": str(t.get("tree_id", t.get("id", ""))),
+								"stage_category": str(t.get("stage_category", "GENERAL")),
+								"is_starting_tree": bool(t.get("is_starting_tree", false)),
+								"total_directives": int(t.get("total_directives", t.get("count", 0))),
+								"path": str(t.get("file_path", t.get("path", t.get("file", ""))))
+							})
+				elif raw_trees is Dictionary:
+					for tid in raw_trees.keys():
+						var t = raw_trees[tid]
+						if t is Dictionary:
+							available_trees.append({
+								"tree_id": str(t.get("id", tid)),
+								"stage_category": str(t.get("stage_category", "GENERAL")),
+								"is_starting_tree": bool(t.get("is_starting_tree", false)),
+								"total_directives": int(t.get("count", t.get("total_directives", 0))),
+								"path": str(t.get("file", t.get("file_path", t.get("path", ""))))
+							})
 			f_man.close()
 
 	# 2. Фоллбэк на trees_index.json если манифест не найден
@@ -234,11 +247,18 @@ func load_tree_for_country(country_tag: String, preferred_tree_id: String = "") 
 
 ## Загружает конкретный JSON-файл древа национальных директив
 func load_tree_from_file(path: String) -> bool:
-	if not FileAccess.file_exists(path):
-		push_warning("DirectiveTreeView: Файл древа не найден: %s" % path)
+	var target_path = path
+	if not FileAccess.file_exists(target_path):
+		if "/directives/tree_" in target_path:
+			var alt_path = target_path.replace("/directives/tree_", "/directives/trees/")
+			if FileAccess.file_exists(alt_path):
+				target_path = alt_path
+
+	if not FileAccess.file_exists(target_path):
+		push_warning("DirectiveTreeView: Файл древа не найден: %s" % target_path)
 		return false
 
-	var file = FileAccess.open(path, FileAccess.READ)
+	var file = FileAccess.open(target_path, FileAccess.READ)
 	if file == null:
 		return false
 
@@ -267,6 +287,29 @@ func load_tree_from_file(path: String) -> bool:
 			if raw_node is Dictionary:
 				var res = DirectiveResource.from_dict(raw_node)
 				all_directives[res.id] = res
+
+	elif root_dict.has("directives") and root_dict["directives"] is Dictionary:
+		var d_dict: Dictionary = root_dict["directives"]
+		for k in d_dict.keys():
+			var raw_node = d_dict[k]
+			if raw_node is Dictionary:
+				var res = DirectiveResource.from_dict(raw_node)
+				all_directives[res.id] = res
+
+	elif root_dict.has("focuses") and root_dict["focuses"] is Array:
+		for raw_node in root_dict["focuses"]:
+			if raw_node is Dictionary:
+				var res = DirectiveResource.from_dict(raw_node)
+				all_directives[res.id] = res
+
+	elif root_dict.has("focus_tree") and root_dict["focus_tree"] is Dictionary:
+		var ft: Dictionary = root_dict["focus_tree"]
+		var flist = ft.get("focuses", ft.get("directives", []))
+		if flist is Array:
+			for raw_node in flist:
+				if raw_node is Dictionary:
+					var res = DirectiveResource.from_dict(raw_node)
+					all_directives[res.id] = res
 
 	if directive_manager != null:
 		directive_manager.all_directives.clear()
@@ -683,10 +726,15 @@ func refresh_tree() -> void:
 	var max_x: float = 1200.0
 	var max_y: float = 800.0
 
-	# Поиск минимальных координат сетки для нормализации
+	var has_explicit_grid := false
 	for dir in all_directives.values():
+		if dir.grid_position != Vector2.ZERO:
+			has_explicit_grid = true
 		min_gx = minf(min_gx, dir.grid_position.x)
 		min_gy = minf(min_gy, dir.grid_position.y)
+
+	var offset_x = min_gx if min_gx < 0.0 else 0.0
+	var offset_y = min_gy if min_gy < 0.0 else 0.0
 
 	# Создание интерактивных узлов графа
 	for dir_id in all_directives.keys():
@@ -695,7 +743,7 @@ func refresh_tree() -> void:
 		graph_canvas.add_child(card)
 		node_controls[dir_id] = card
 
-		var pos = _calculate_node_position(dir, min_gx, min_gy)
+		var pos = _calculate_node_position(dir, offset_x, offset_y, has_explicit_grid)
 		card.position = pos
 		max_x = maxf(max_x, pos.x + node_size.x + 120)
 		max_y = maxf(max_y, pos.y + node_size.y + 120)
@@ -723,8 +771,8 @@ func refresh_tree() -> void:
 		_update_inspector(first_pick)
 
 
-func _calculate_node_position(dir: DirectiveResource, offset_x: float = 0.0, offset_y: float = 0.0) -> Vector2:
-	if dir.grid_position != Vector2.ZERO:
+func _calculate_node_position(dir: DirectiveResource, offset_x: float = 0.0, offset_y: float = 0.0, has_explicit_grid: bool = false) -> Vector2:
+	if has_explicit_grid or dir.grid_position != Vector2.ZERO:
 		var gx = dir.grid_position.x - offset_x
 		var gy = dir.grid_position.y - offset_y
 		return origin_offset + Vector2(gx * grid_step.x, gy * grid_step.y)
@@ -749,6 +797,29 @@ func _calculate_prereq_depth(dir: DirectiveResource) -> int:
 		if all_directives.has(p_id):
 			max_d = maxi(max_d, _calculate_prereq_depth(all_directives[p_id]) + 1)
 	return max_d
+
+
+func _format_directive_title(dir: DirectiveResource) -> String:
+	if dir == null:
+		return ""
+	var loc = get_node_or_null("/root/LocalizationManager")
+	if loc != null:
+		var loc_title = loc.tr_key(dir.id, loc.tr_key(dir.id + "_name", ""))
+		if not loc_title.is_empty() and loc_title != dir.id:
+			return loc_title
+	var raw = dir.title
+	if raw.is_empty() or raw == dir.id or raw.begins_with("USA_") or raw.begins_with("GER_") or raw.begins_with("JAP_") or raw.begins_with("RUS_") or raw.contains("_"):
+		var clean = raw
+		if clean.length() > 4 and clean[3] == "_":
+			clean = clean.substr(4)
+		var words = clean.split("_")
+		var capitalized_words: Array[String] = []
+		for w in words:
+			if not w.is_empty():
+				capitalized_words.append(w.capitalize())
+		if not capitalized_words.is_empty():
+			return " ".join(capitalized_words)
+	return raw
 
 
 # ==============================================================================
@@ -780,53 +851,73 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 
 	var border_color = COLOR_PHOSPHOR_LOCKED
 	var bg_color := Color(0.02, 0.04, 0.04, 0.95)
+	var title_color := Color(0.65, 0.75, 0.72)
 
 	if is_completed:
 		border_color = COLOR_PHOSPHOR_CYAN
 		bg_color = Color(0.02, 0.12, 0.14, 0.95)
+		title_color = Color(0.70, 0.95, 1.0)
 	elif is_active:
 		border_color = COLOR_PHOSPHOR_AMBER
 		bg_color = Color(0.12, 0.09, 0.02, 0.95)
+		title_color = Color(1.0, 0.90, 0.60)
 	elif is_mutually_locked:
 		border_color = COLOR_EXCLUSION_RED
 		bg_color = Color(0.12, 0.02, 0.02, 0.95)
+		title_color = Color(0.75, 0.40, 0.40)
 	elif can_start:
 		border_color = COLOR_PHOSPHOR_GREEN
 		bg_color = Color(0.02, 0.09, 0.05, 0.92)
+		title_color = Color(0.85, 1.0, 0.90)
 
 	_apply_terminal_card_style(btn, bg_color, border_color)
 
 	var hbox := HBoxContainer.new()
 	hbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_KEEP_SIZE, 6)
 	hbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hbox.add_theme_constant_override("separation", 8)
+	hbox.add_theme_constant_override("separation", 10)
 	btn.add_child(hbox)
 
-	# 1. Иконка директивы (TNO Goal Texture)
+	# 1. Контейнер иконки директивы с неоновой рамкой
+	var icon_panel := PanelContainer.new()
+	icon_panel.custom_minimum_size = Vector2(46, 46)
+	icon_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var icon_sb = StyleBoxFlat.new()
+	icon_sb.bg_color = Color(0.01, 0.03, 0.02, 0.9)
+	icon_sb.border_color = border_color.lightened(0.15) if (can_start or is_active or is_completed) else Color(0.15, 0.25, 0.22, 0.6)
+	icon_sb.border_width_left = 1
+	icon_sb.border_width_top = 1
+	icon_sb.border_width_right = 1
+	icon_sb.border_width_bottom = 1
+	icon_sb.corner_radius_top_left = 2
+	icon_sb.corner_radius_top_right = 2
+	icon_sb.corner_radius_bottom_left = 2
+	icon_sb.corner_radius_bottom_right = 2
+	icon_panel.add_theme_stylebox_override("panel", icon_sb)
+	hbox.add_child(icon_panel)
+
 	var icon_rect := TextureRect.new()
-	icon_rect.custom_minimum_size = Vector2(40, 40)
+	icon_rect.custom_minimum_size = Vector2(42, 42)
 	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	var tex = _resolve_directive_texture(dir)
-	icon_rect.texture = tex
-	hbox.add_child(icon_rect)
+	icon_rect.texture = _resolve_directive_texture(dir)
+	icon_panel.add_child(icon_rect)
 
 	# 2. Информационный стек
 	var vbox := VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 2)
+	vbox.add_theme_constant_override("separation", 3)
 	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hbox.add_child(vbox)
 
 	var title_lbl := Label.new()
-	title_lbl.text = dir.title
+	title_lbl.text = _format_directive_title(dir)
 	title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_lbl.add_theme_font_size_override("font_size", 11)
-	title_lbl.add_theme_color_override("font_color", border_color)
+	title_lbl.add_theme_color_override("font_color", title_color)
 	vbox.add_child(title_lbl)
 
 	# Статус и псевдографический индикатор ходов
@@ -848,13 +939,12 @@ func _create_directive_node(dir: DirectiveResource) -> Control:
 	elif is_mutually_locked:
 		status_lbl.text = tr("✖ [ ЗАБЛОКИРОВАНО ВЫБОРОМ ]")
 		status_lbl.add_theme_color_override("font_color", COLOR_EXCLUSION_RED)
-		title_lbl.add_theme_color_override("font_color", Color(0.75, 0.35, 0.35))
 	elif can_start:
 		status_lbl.text = tr("► [ ГОТОВО К ПУСКУ ]")
 		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_GREEN)
 	else:
 		status_lbl.text = tr("✖ [ ЗАБЛОКИРОВАНО ]")
-		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_DIM)
+		status_lbl.add_theme_color_override("font_color", Color(0.35, 0.55, 0.48))
 
 	vbox.add_child(status_lbl)
 
@@ -1110,7 +1200,7 @@ func _on_node_clicked(dir: DirectiveResource) -> void:
 
 
 func _update_inspector(dir: DirectiveResource) -> void:
-	lbl_insp_title.text = "%s %s" % [dir.icon_symbol, dir.title.to_upper()]
+	lbl_insp_title.text = "%s %s" % [dir.icon_symbol, _format_directive_title(dir).to_upper()]
 	lbl_insp_desc.text = "[color=#b0d0c0]%s[/color]" % (dir.description if not dir.description.is_empty() else "Описание директивы засекречено или отсутствует.")
 
 	var cost_txt := "ОПЕРАТИВНЫЕ ЗАТРАТЫ:\n"
@@ -1180,21 +1270,29 @@ func _update_inspector(dir: DirectiveResource) -> void:
 		var op = str(rew.get("opcode", ""))
 		match op:
 			"MOD_PC":
-				eff_txt += "• Политический капитал: [color=#44d990]+%0.1f[/color]\n" % float(rew.get("value", 0))
+				var v = float(rew.get("value", 0))
+				var sgn = "+" if v >= 0 else ""
+				eff_txt += "• [color=#44d990][b][★] ПОЛИТИЧЕСКИЙ КАПИТАЛ:[/b] %s%0.1f PC[/color]\n" % [sgn, v]
 			"MOD_STABILITY":
-				eff_txt += "• Стабильность: [color=#44d990]+%0.2f[/color]\n" % float(rew.get("value", 0))
+				var v = float(rew.get("value", 0))
+				var sgn = "+" if v >= 0 else ""
+				eff_txt += "• [color=#44d990][b][✦] СТАБИЛЬНОСТЬ:[/b] %s%0.1f%%[/color]\n" % [sgn, v * 100.0]
 			"MOD_WAR_SUPPORT":
-				eff_txt += "• Поддержка войны: [color=#44d990]+%0.1f%%[/color]\n" % float(rew.get("value", 0))
+				var v = float(rew.get("value", 0))
+				var sgn = "+" if v >= 0 else ""
+				eff_txt += "• [color=#ffcc33][b][⚔] ВОЕННАЯ ПОДДЕРЖКА:[/b] %s%0.1f%%[/color]\n" % [sgn, v]
 			"SET_FLAG":
-				eff_txt += "• Сюжетный флаг: [color=#00e5ff]%s[/color]\n" % str(rew.get("flag", ""))
+				eff_txt += "• [color=#8caebd][b][⚑] СЮЖЕТНЫЙ ФЛАГ:[/b] %s[/color]\n" % str(rew.get("flag", ""))
 			"FIRE_EVENT":
-				eff_txt += "• Инициирует событие: [color=#ffcc33]%s[/color]\n" % str(rew.get("event_id", ""))
+				eff_txt += "• [color=#ff594d][b][⚡] ИНИЦИАЦИЯ СОБЫТИЯ:[/b] %s[/color]\n" % str(rew.get("event_id", ""))
 			"MOD_MANPOWER":
-				eff_txt += "• Людские ресурсы: [color=#44d990]+%d[/color]\n" % int(rew.get("value", 0))
+				var v = int(rew.get("value", 0))
+				var sgn = "+" if v >= 0 else ""
+				eff_txt += "• [color=#00e5ff][b][👥] ЛЮДСКИЕ РЕСУРСЫ:[/b] %s%d чел.[/color]\n" % [sgn, v]
 			"TRANSFER_STATE":
-				eff_txt += "• Контроль над регионом: [color=#00e5ff]#%d[/color]\n" % int(rew.get("state_id", 0))
+				eff_txt += "• [color=#00e5ff][b][🗺] ПЕРЕДАЧА СЕКТОРА:[/b] регион #%d[/color]\n" % int(rew.get("state_id", 0))
 			_:
-				eff_txt += "• %s: %s\n" % [op, str(rew)]
+				eff_txt += "• [color=#00e5ff][b]%s:[/b][/color] %s\n" % [op, str(rew)]
 
 	# Legacy эффекты
 	for k in dir.completion_effects.keys():
@@ -1334,18 +1432,33 @@ func _resolve_directive_texture(dir: DirectiveResource) -> Texture2D:
 				return t
 
 	# 2. Поиск по идентификатору в общей библиотеке целей TNO (assets/gfx/interface/goals/)
-	var candidates: Array[String] = [
-		dir.id,
-		dir.id.trim_prefix("dir_"),
-		"focus_" + dir.id,
-		"focus_" + dir.id.trim_prefix("dir_")
-	]
+	var candidates: Array[String] = []
+
+	var add_candidate = func(c_str: String):
+		var s = c_str.strip_edges()
+		if not s.is_empty() and not candidates.has(s):
+			candidates.append(s)
+
 	if not dir.icon_path.is_empty():
-		var file_base = dir.icon_path.get_file().get_basename()
-		if not file_base.is_empty():
-			candidates.append(file_base)
-			candidates.append(file_base.trim_prefix("focus_"))
-			candidates.append("focus_" + file_base)
+		var fb = dir.icon_path.get_file().get_basename()
+		add_candidate.call(fb)
+		var stripped_fb = fb
+		for pfx in ["GFX_focus_", "GFX_goal_", "GFX_Goal_", "GFX_", "focus_", "goal_"]:
+			if stripped_fb.begins_with(pfx):
+				stripped_fb = stripped_fb.substr(pfx.length())
+		add_candidate.call(stripped_fb)
+		add_candidate.call("focus_" + stripped_fb)
+		add_candidate.call(stripped_fb.to_lower())
+
+	var dir_clean = dir.id
+	for pfx in ["dir_", "focus_", "KOM_", "USA_", "GER_", "JAP_", "RUS_"]:
+		if dir_clean.begins_with(pfx):
+			dir_clean = dir_clean.substr(pfx.length())
+	add_candidate.call(dir.id)
+	add_candidate.call(dir.id.trim_prefix("dir_"))
+	add_candidate.call("focus_" + dir.id)
+	add_candidate.call(dir_clean)
+	add_candidate.call("focus_" + dir_clean)
 
 	for c in candidates:
 		var p1 = "res://assets/gfx/interface/goals/%s.png" % c
@@ -1363,17 +1476,20 @@ func _resolve_directive_texture(dir: DirectiveResource) -> Texture2D:
 				if t is Texture2D:
 					return t
 
-	# 4. Тематический fallback по категории директивы
-	var cat = dir.category.to_lower()
-	if cat.contains("mil") or cat.contains("war") or cat.contains("front") or cat.contains("arm"):
+	# 4. Тематический fallback по категории директивы и ключевым словам
+	var tag_str = (dir.category + " " + dir.id + " " + dir.title).to_lower()
+	if tag_str.contains("mil") or tag_str.contains("war") or tag_str.contains("army") or tag_str.contains("front") or tag_str.contains("weapon") or tag_str.contains("armor") or tag_str.contains("plan"):
 		var t_mil = load("res://assets/gfx/interface/war_support_icon.png")
 		if t_mil is Texture2D: return t_mil
-	elif cat.contains("econ") or cat.contains("ind") or cat.contains("fact"):
+	elif tag_str.contains("econ") or tag_str.contains("ind") or tag_str.contains("gold") or tag_str.contains("trade") or tag_str.contains("fact") or tag_str.contains("wpa"):
 		var t_eco = load("res://assets/gfx/interface/industrial_capacity_icon.png")
 		if t_eco is Texture2D: return t_eco
-	elif cat.contains("manpower") or cat.contains("pop") or cat.contains("recruit"):
+	elif tag_str.contains("manpower") or tag_str.contains("pop") or tag_str.contains("recruit") or tag_str.contains("union") or tag_str.contains("labor") or tag_str.contains("people"):
 		var t_man = load("res://assets/gfx/interface/manpower_icon.png")
 		if t_man is Texture2D: return t_man
+	elif tag_str.contains("pol") or tag_str.contains("deal") or tag_str.contains("act") or tag_str.contains("law") or tag_str.contains("office") or tag_str.contains("state"):
+		var t_pol = load("res://assets/gfx/interface/pol_power_icon.png")
+		if t_pol is Texture2D: return t_pol
 
 	return load("res://icon.svg")
 

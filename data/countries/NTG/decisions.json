@@ -1,0 +1,200 @@
+[
+  {
+    "id": "USA_celebrate_montgomery_convention_day",
+    "category_id": "USA_honor_the_confederacy",
+    "name": "Отмечать день Временного конгресса",
+    "desc": "",
+    "icon": "generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "add_stability": 0.05,
+      "add_popularity": {
+        "ideology": "fascism",
+        "popularity": 0.05
+      },
+      "set_cosmetic_tag": "USA_CSA",
+      "if": {
+        "limit": {
+          "not": {
+            "has_country_flag": "USA_CSA_legitimacy"
+          }
+        },
+        "set_country_flag": {
+          "flag": "USA_CSA_legitimacy",
+          "value": 1
+        }
+      },
+      "else": {
+        "modify_country_flag": {
+          "flag": "USA_CSA_legitimacy",
+          "value": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "SGV_invide_ntg",
+    "category_id": "SGV_WSB_forming_nation_category",
+    "name": "Operation 'Rotten Blister'",
+    "desc": "\"No matter how many innocent souls you give a Chekist, it's never enough\" - this saying fits Meshik to a tee. His recent collaboration with the Black League was rewarded with nothing more than a slap on the wrist, comparable to a blister or a rash on the skin.\n\nAn unexpected mistake contributed to the premature collapse of our League, so there will be no mercy for him. Our allies from Zlatoust will help us to ensure justice is done and to punish the Chekists and the local NKVD for their betrayal of the Motherland.",
+    "icon": "GFX_decision_generic_use_force_alt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_idea": "RUS_shattered_ambitions"
+      },
+      "has_war": false,
+      "command_power": {
+        "_op": ">",
+        "value": 14.99
+      },
+      "is_neighbor_of": "NTG",
+      "custom_trigger_tooltip": {
+        "tooltip": "SGV_inviding_neighbor_tt",
+        "NOT": {
+          "has_country_flag": "SGV_inviding_neighbor"
+        }
+      }
+    },
+    "visible": {
+      "country_exists": "NTG",
+      "has_country_flag": [
+        "is_warlord",
+        "SGV_begin_salvation",
+        "SGV_ready_to_conquest_flag",
+        "SGV_deal_with_bogatyr_flag"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_invide_ntg",
+      "set_country_flag": [
+        "SGV_inviding_neighbor",
+        "SGV_reintegrate_ntg"
+      ],
+      "add_war_support": 0.03,
+      "add_manpower": 7500,
+      "declare_war_on": {
+        "target": "NTG",
+        "type": "annex_everything"
+      },
+      "SVR": {
+        "add_war_support": -0.03,
+        "if": {
+          "limit": {
+            "has_idea": "RUS_shattered_ambitions"
+          },
+          "modify_timed_idea": {
+            "idea": "RUS_shattered_ambitions",
+            "days": -21
+          }
+        }
+      },
+      "add_days_mission_timeout": {
+        "mission": "SGV_countdown_to_the_ash_being_lit",
+        "days": 21
+      },
+      "hidden_effect": {
+        "add_command_power": -15,
+        "ZLT": {
+          "add_war_support": 0.06,
+          "add_manpower": 15000,
+          "declare_war_on": {
+            "target": "NTG",
+            "type": "annex_everything"
+          }
+        },
+        "NTG": {
+          "add_war_support": -0.06,
+          "division_template": {
+            "name": "Militia Brigade",
+            "regiments": {
+              "light_infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "recon": {
+                "x": 0,
+                "y": 0
+              },
+              "artillery": {
+                "x": 0,
+                "y": 1
+              }
+            }
+          },
+          "871": {
+            "create_unit": [
+              {
+                "division": "name = \"23-ya Brigada NKVD\" division_template = \"Militia Brigade\" start_experience_factor = 0.1 start_equipment_factor = 0.85",
+                "owner": "NTG"
+              },
+              {
+                "division": "name = \"66-ya Brigada Krasnoarmeytsev\" division_template = \"Militia Brigade\" start_experience_factor = 0.3 start_equipment_factor = 1",
+                "owner": "NTG"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "SGV_reintegrate_ntg",
+    "category_id": "SGV_WSB_forming_nation_category",
+    "name": "Reintegrate Nizhny Tagil",
+    "desc": "",
+    "icon": "GFX_decision_generic_infiltrate_state",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "NOT": {
+        "country_exists": "NTG"
+      },
+      "has_country_flag": [
+        "is_warlord",
+        "SGV_begin_salvation",
+        "SGV_reintegrate_ntg",
+        "SGV_inviding_neighbor"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_reintegrate_ntg",
+      "clr_country_flag": "SGV_reintegrate_ntg",
+      "NTG": {
+        "remove_state_core": 871
+      },
+      "add_state_core": 871
+    }
+  }
+]

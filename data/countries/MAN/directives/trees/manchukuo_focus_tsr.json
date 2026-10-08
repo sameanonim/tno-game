@@ -1,0 +1,4054 @@
+{
+  "tree_id": "manchukuo_focus_tsr",
+  "tag": "MAN",
+  "directives_count": 87,
+  "directives": [
+    {
+      "id": "MAN_tsr_pacify_the_countryside",
+      "name": "MAN_tsr_pacify_the_countryside",
+      "desc": "",
+      "icon": "GFX_goal_generic_major_war",
+      "cost_turns": 2,
+      "x": 9,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "unlock_decision_category_tooltip": "MAN_banditry_category",
+        "set_variable": {
+          "MAN_maintain_control_timer": 180
+        },
+        "custom_effect_tooltip": "MAN_pacify_the_countryside_effect_tooltip"
+      }
+    },
+    {
+      "id": "MAN_tsr_army_modernization",
+      "name": "MAN_tsr_army_modernization",
+      "desc": "",
+      "icon": "GFX_focus_JAP_strenghten_manchukuo_imperial_army",
+      "cost_turns": 2,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_pacify_the_countryside"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "army_experience": 30
+      }
+    },
+    {
+      "id": "MAN_tsr_mukden_military_academy",
+      "name": "MAN_tsr_mukden_military_academy",
+      "desc": "",
+      "icon": "GFX_goal_generic_position_armies",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_army_modernization"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "MAN_mukden_military_academy"
+      }
+    },
+    {
+      "id": "MAN_tsr_invite_japanese_settlers",
+      "name": "MAN_tsr_invite_japanese_settlers",
+      "desc": "",
+      "icon": "GFX_focus_JAP_promote_japanese_settlement",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_pacify_the_countryside"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": [
+          {
+            "has_idea": "MAN_banditry"
+          },
+          {
+            "has_war_with": "JAP"
+          }
+        ],
+        "JAP": {
+          "exists": true
+        },
+        "OR": {
+          "is_ally_with": "JAP",
+          "JAP": {
+            "has_opinion": {
+              "target": "ROOT",
+              "value": {
+                "_op": ">",
+                "value": 74
+              }
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "JAP": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "MAN_accepted_japanese_settlers_opm"
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "random_owned_state": [
+          {
+            "limit": {
+              "is_fully_controlled_by": "ROOT"
+            },
+            "add_manpower": 25417,
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            },
+            "set_state_flag": "MAN_invite_japanese_settlers_2IC"
+          },
+          {
+            "limit": {
+              "is_fully_controlled_by": "ROOT"
+            },
+            "add_manpower": 33846,
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            },
+            "set_state_flag": "MAN_invite_japanese_settlers_2IC"
+          }
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_collective_farms",
+      "name": "MAN_tsr_collective_farms",
+      "desc": "",
+      "icon": "GFX_goal_generic_construction",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_invite_japanese_settlers"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "every_state": {
+          "limit": {
+            "is_fully_controlled_by": "ROOT",
+            "is_core_of": "ROOT"
+          },
+          "add_extra_state_shared_building_slots": 1
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_law_university",
+      "name": "MAN_tsr_law_university",
+      "desc": "",
+      "icon": "GFX_focus_research",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_collective_farms",
+        "MAN_tsr_mukden_military_academy",
+        "MAN_tsr_expand_the_textile_industry"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "MAN_tsr_research_and_education_department",
+      "name": "MAN_tsr_research_and_education_department",
+      "desc": "",
+      "icon": "GFX_focus_research",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_law_university"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "OR": {
+          "num_of_factories": {
+            "_op": ">",
+            "value": 50
+          },
+          "all_state": {
+            "OR": {
+              "NOT": [
+                {
+                  "is_core_of": "CHI"
+                },
+                {
+                  "is_core_of": "PRC"
+                }
+              ],
+              "OR": {
+                "is_controlled_by": "ROOT",
+                "CONTROLLER": [
+                  {
+                    "is_in_faction_with": "ROOT"
+                  },
+                  {
+                    "is_subject_of": "ROOT"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "MAN_tsr_trade_delegation",
+      "name": "MAN_tsr_trade_delegation",
+      "desc": "",
+      "icon": "GFX_goal_generic_trade",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_pacify_the_countryside"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "MAN_trade_delegation",
+          "bonus": 1.0,
+          "uses": 1,
+          "category": "industry"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_expand_the_textile_industry",
+      "name": "MAN_tsr_expand_the_textile_industry",
+      "desc": "",
+      "icon": "GFX_goal_generic_consumer_goods",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_trade_delegation"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "is_fully_controlled_by": "ROOT",
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 1
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 2,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 2,
+            "instant_build": true
+          },
+          "set_state_flag": "MAN_expand_the_textile_industry_IC"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_obedience",
+      "name": "MAN_tsr_obedience",
+      "desc": "",
+      "icon": "GFX_focus_JAP_align_the_concordia_association",
+      "cost_turns": 2,
+      "x": -3,
+      "y": 4,
+      "prerequisites": [
+        "MAN_tsr_army_modernization"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_assertiveness"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_political_power": 120,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "available_industrial_concern"
+        ],
+        "show_ideas_tooltip": "MAN_manchukuo_film_association"
+      }
+    },
+    {
+      "id": "MAN_tsr_hoankyoku",
+      "name": "MAN_tsr_hoankyoku",
+      "desc": "",
+      "icon": "GFX_goal_generic_intelligence_exchange",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_obedience"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.1,
+        "if": {
+          "limit": {
+            "has_dlc": "La Resistance"
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "if": {
+            "limit": {
+              "has_intelligence_agency": false
+            },
+            "create_intelligence_agency": true
+          },
+          "add_ideas": "MAN_hoankyoku_idea"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_expand_the_navy",
+      "name": "MAN_tsr_expand_the_navy",
+      "desc": "",
+      "icon": "GFX_focus_MAN_manchurian_navy",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_obedience"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "navy_experience": 75,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "716": {
+          "IF": {
+            "limit": {
+              "free_building_slots": {
+                "building": "dockyard",
+                "size": {
+                  "_op": ">",
+                  "value": 1
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 2,
+            "add_building_construction": {
+              "type": "dockyard",
+              "level": 2,
+              "instant_build": true
+            }
+          }
+        },
+        "IF": {
+          "limit": {
+            "has_dlc": "Man the Guns"
+          },
+          "create_ship": {
+            "type": "ship_hull_light_1",
+            "equipment_variant": "Momo Class",
+            "creator": "JAP",
+            "name": "Hai Wei"
+          }
+        },
+        "ELSE": {
+          "create_ship": {
+            "type": "destroyer_1",
+            "creator": "JAP",
+            "name": "Hai Wei"
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_first_five_year_plan",
+      "name": "MAN_tsr_first_five_year_plan",
+      "desc": "",
+      "icon": "GFX_goal_generic_production",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_obedience"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "country_event": "wtt_manchukou.11"
+      }
+    },
+    {
+      "id": "MAN_tsr_trading_illicit_goods",
+      "name": "MAN_tsr_trading_illicit_goods",
+      "desc": "",
+      "icon": "GFX_focus_PRC_allow_special_goods_trade",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_first_five_year_plan"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "MAN_tsr_illicit_trade"
+      }
+    },
+    {
+      "id": "MAN_tsr_invite_japanese_investors",
+      "name": "MAN_tsr_invite_japanese_investors",
+      "desc": "",
+      "icon": "GFX_goal_generic_improve_relations",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_first_five_year_plan"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_war_with": "JAP"
+        }
+      },
+      "completion_reward": {
+        "random_core_state": {
+          "prioritize": [
+            328
+          ],
+          "limit": {
+            "is_fully_controlled_by": "ROOT"
+          },
+          "add_extra_state_shared_building_slots": 2,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 2,
+            "instant_build": true
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "JAP": {
+          "country_event": {
+            "id": "tsr_manchukuo.13",
+            "hours": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_expand_the_railways",
+      "name": "MAN_tsr_expand_the_railways",
+      "desc": "",
+      "icon": "GFX_focus_SOV_south_manchuria_railway",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_invite_japanese_investors"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "OR": {
+          "716": {
+            "is_fully_controlled_by": "ROOT"
+          },
+          "328": {
+            "is_fully_controlled_by": "ROOT"
+          },
+          "610": {
+            "is_fully_controlled_by": "ROOT"
+          },
+          "717": {
+            "is_fully_controlled_by": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "if": [
+          {
+            "limit": {
+              "controls_state": 716
+            },
+            "build_railway": [
+              {
+                "path": [
+                  11771,
+                  9885,
+                  3895,
+                  3839,
+                  3970,
+                  6981
+                ]
+              },
+              {
+                "path": [
+                  11771,
+                  987,
+                  9781,
+                  11764,
+                  964,
+                  3783
+                ]
+              }
+            ]
+          },
+          {
+            "limit": {
+              "328": {
+                "is_fully_controlled_by": "ROOT"
+              },
+              "controls_state": [
+                715,
+                716
+              ]
+            },
+            "build_railway": {
+              "path": [
+                11771,
+                11808,
+                916,
+                4642,
+                4572,
+                4503,
+                7652,
+                10433
+              ]
+            }
+          },
+          {
+            "limit": {
+              "controls_state": [
+                716,
+                610
+              ]
+            },
+            "build_railway": {
+              "path": [
+                11771,
+                6951,
+                11815,
+                9835,
+                6837,
+                11886,
+                3900
+              ]
+            }
+          },
+          {
+            "limit": {
+              "controls_state": [
+                714,
+                715
+              ]
+            },
+            "build_railway": {
+              "path": [
+                11771,
+                846,
+                9831,
+                930,
+                4633,
+                4561,
+                4506,
+                7582,
+                10433
+              ]
+            }
+          }
+        ],
+        "random_owned_state": [
+          {
+            "limit": {
+              "free_building_slots": {
+                "building": "infrastructure",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                }
+              }
+            },
+            "add_building_construction": {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          },
+          {
+            "limit": {
+              "free_building_slots": {
+                "building": "infrastructure",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                }
+              }
+            },
+            "add_building_construction": {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        ],
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "available_industrial_concern"
+        ],
+        "show_ideas_tooltip": "MAN_south_manchuria_railway_company"
+      }
+    },
+    {
+      "id": "MAN_tsr_expand_showa_steel_works",
+      "name": "MAN_tsr_expand_showa_steel_works",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_civ_factory",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_invite_japanese_investors"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "716": {
+          "is_fully_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "716": {
+          "add_extra_state_shared_building_slots": 2,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 2,
+            "instant_build": true
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "unlock_decision_tooltip": [
+          "MAN_develop_liaotung_iron_ore_deposits",
+          "MAN_establish_the_erdaojiang_special_steel_experimental_plant"
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_develop_aluminum_sources",
+      "name": "MAN_tsr_develop_aluminum_sources",
+      "desc": "",
+      "icon": "GFX_goal_generic_construction2",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_expand_showa_steel_works"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "if": {
+          "limit": {
+            "has_tech": "excavation1"
+          },
+          "add_tech_bonus": {
+            "name": "MAN_develop_aluminum_sources",
+            "bonus": 1.0,
+            "uses": 1,
+            "category": "excavation_tech"
+          }
+        },
+        "else": {
+          "set_technology": {
+            "excavation1": 1
+          }
+        },
+        "unlock_decision_tooltip": "MAN_develop_kirin_aluminium_deposits"
+      }
+    },
+    {
+      "id": "MAN_tsr_strengthen_ties_with_nissan",
+      "name": "MAN_tsr_strengthen_ties_with_nissan",
+      "desc": "",
+      "icon": "GFX_focus_generic_truck",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_invite_japanese_investors"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 0
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 1,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 1,
+            "instant_build": true
+          }
+        },
+        "IF": {
+          "limit": {
+            "has_dlc": "Arms Against Tyranny"
+          },
+          "custom_effect_tooltip": "unlock_mio_tt",
+          "show_mio_tooltip": "JAP_nissan_organization"
+        },
+        "ELSE": {
+          "custom_effect_tooltip": "available_designer",
+          "show_ideas_tooltip": "MAN_nissan"
+        },
+        "add_tech_bonus": {
+          "name": "MAN_tsr_strengthen_ties_with_nissan",
+          "bonus": 1,
+          "uses": 1,
+          "category": "motorized_equipment"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_mangyo",
+      "name": "MAN_tsr_mangyo",
+      "desc": "",
+      "icon": "GFX_focus_generic_industrialists",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_strengthen_ties_with_nissan",
+        "MAN_tsr_expand_showa_steel_works",
+        "MAN_tsr_expand_the_railways"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_political_power": 50,
+        "random_owned_controlled_state": [
+          {
+            "limit": {
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            }
+          },
+          {
+            "limit": {
+              "free_building_slots": {
+                "building": "arms_factory",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 1,
+              "instant_build": true
+            }
+          }
+        ],
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "MAN_tsr_mangyo_tt",
+          "generic_skip_one_line_tt",
+          "available_industrial_concern"
+        ],
+        "show_ideas_tooltip": "MAN_mangyo",
+        "hidden_effect": {
+          "IF": {
+            "limit": {
+              "has_idea": "MAN_showa_steel_works"
+            },
+            "swap_ideas": {
+              "remove_idea": "MAN_showa_steel_works",
+              "add_idea": "MAN_mangyo"
+            }
+          },
+          "ELSE_IF": {
+            "limit": {
+              "has_idea": "MAN_south_manchuria_railway_company"
+            },
+            "swap_ideas": {
+              "remove_idea": "MAN_south_manchuria_railway_company",
+              "add_idea": "MAN_mangyo"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_social_research_unit",
+      "name": "MAN_tsr_social_research_unit",
+      "desc": "",
+      "icon": "GFX_focus_JAP_expand_the_showa_research_association",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 2,
+      "prerequisites": [
+        "MAN_tsr_expand_the_railways"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "MAN_tsr_second_five_year_plan",
+      "name": "MAN_tsr_second_five_year_plan",
+      "desc": "",
+      "icon": "GFX_goal_generic_production",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_mangyo"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "if": [
+          {
+            "limit": {
+              "has_idea": "MAN_five_year_plan_air"
+            },
+            "NOT": {
+              "has_idea": "MAN_five_year_plan_air"
+            }
+          },
+          {
+            "limit": {
+              "has_idea": "MAN_five_year_plan_tank"
+            },
+            "NOT": {
+              "has_idea": "MAN_five_year_plan_tank"
+            }
+          },
+          {
+            "limit": {
+              "has_idea": "MAN_five_year_plan_industry"
+            },
+            "NOT": {
+              "has_idea": "MAN_five_year_plan_industry"
+            }
+          },
+          {
+            "limit": {
+              "NOT": [
+                {
+                  "has_idea": "MAN_five_year_plan_air"
+                },
+                {
+                  "has_idea": "MAN_five_year_plan_tank"
+                },
+                {
+                  "has_idea": "MAN_five_year_plan_industry"
+                }
+              ]
+            },
+            "NOT": {
+              "has_idea": "MAN_five_year_plan_air"
+            }
+          }
+        ],
+        "amount_research_slots": {
+          "_op": ">",
+          "value": 3
+        },
+        "industrial_complex": {
+          "_op": ">",
+          "value": 14
+        },
+        "arms_factory": {
+          "_op": ">",
+          "value": 14
+        }
+      },
+      "completion_reward": {
+        "country_event": "wtt_manchukou.11"
+      }
+    },
+    {
+      "id": "MAN_tsr_national_defense_state",
+      "name": "MAN_tsr_national_defense_state",
+      "desc": "",
+      "icon": "GFX_goal_generic_build_tank",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_second_five_year_plan"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "MAN_national_defense_state"
+      }
+    },
+    {
+      "id": "MAN_tsr_mukden_arsenal",
+      "name": "MAN_tsr_mukden_arsenal",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_mil_factory",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_first_five_year_plan"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "716": {
+          "is_fully_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "716": {
+          "add_extra_state_shared_building_slots": 1,
+          "add_building_construction": {
+            "type": "arms_factory",
+            "level": 1,
+            "instant_build": true
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "IF": {
+          "limit": {
+            "has_dlc": "Arms Against Tyranny"
+          },
+          "mio:CHI_mukden_arsenal_organization": {
+            "add_mio_size": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_mamc",
+      "name": "MAN_tsr_mamc",
+      "desc": "",
+      "icon": "GFX_focus_JAP_strenghten_manchukuo_imperial_airforce",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "MAN_tsr_mukden_arsenal"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_breakthrough_progress": {
+          "specialization": "specialization_air",
+          "value": 0.5
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "IF": {
+          "limit": {
+            "has_dlc": "Arms Against Tyranny"
+          },
+          "custom_effect_tooltip": [
+            "available_mio_tt",
+            "generic_skip_one_line_tt"
+          ],
+          "show_mio_tooltip": [
+            "MAN_mamc_light_organization",
+            "MAN_mamc_medium_organization",
+            "MAN_mamc_heavy_organization"
+          ],
+          "mio:MAN_mamc_light_organization": {
+            "add_mio_funds": 500
+          },
+          "mio:MAN_mamc_medium_organization": {
+            "add_mio_funds": 500
+          },
+          "mio:MAN_mamc_heavy_organization": {
+            "add_mio_funds": 500
+          }
+        },
+        "ELSE": {
+          "custom_effect_tooltip": "available_designer",
+          "show_ideas_tooltip": [
+            "MAN_mamc_light",
+            "MAN_mamc_medium",
+            "MAN_mamc_heavy"
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_alliance_with_the_kwantung_army",
+      "name": "MAN_tsr_alliance_with_the_kwantung_army",
+      "desc": "",
+      "icon": "GFX_goal_generic_occupy_states_ongoing_war",
+      "cost_turns": 3,
+      "x": 3,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_first_five_year_plan"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "remove_ideas": "MAN_kwantung_veto",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_doctrine_cost_reduction": {
+          "name": "MAN_alliance_with_the_kwantung_army",
+          "cost_reduction": 0.5,
+          "uses": 1,
+          "category": "land_doctrine"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_request_dalian",
+      "name": "MAN_tsr_request_dalian",
+      "desc": "",
+      "icon": "GFX_focus_PER_fascist_reach_out_to_japan",
+      "cost_turns": 3,
+      "x": 3,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_alliance_with_the_kwantung_army"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "JAP": {
+          "owns_state": 745,
+          "controls_state": 745
+        },
+        "ROOT": {
+          "is_subject_of": "JAP"
+        }
+      },
+      "completion_reward": {
+        "JAP": {
+          "country_event": {
+            "id": "tsr_manchukuo.2",
+            "hours": 6
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_further_mobilization",
+      "name": "MAN_tsr_further_mobilization",
+      "desc": "",
+      "icon": "GFX_focus_CHI_tongzi_jun",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_alliance_with_the_kwantung_army"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "NOT": {
+              "has_idea": "MAN_strengthen_army"
+            }
+          },
+          "add_ideas": "MAN_mobilization"
+        },
+        "ELSE": {
+          "swap_ideas": {
+            "remove_idea": "MAN_strengthen_army",
+            "add_idea": "MAN_strong_army"
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_strengthen_the_manchukuo_imperial_army",
+      "name": "MAN_tsr_strengthen_the_manchukuo_imperial_army",
+      "desc": "",
+      "icon": "GFX_focus_PRC_develop_the_army",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_alliance_with_the_kwantung_army"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "NOT": {
+              "has_idea": "MAN_mobilization"
+            }
+          },
+          "add_ideas": "MAN_strengthen_army"
+        },
+        "ELSE": {
+          "swap_ideas": {
+            "remove_idea": "MAN_mobilization",
+            "add_idea": "MAN_strong_army"
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_expand_xingan_army",
+      "name": "MAN_tsr_expand_xingan_army",
+      "desc": "",
+      "icon": "GFX_focus_secret_rearmament",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_strengthen_the_manchukuo_imperial_army"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_country_flag": "MAN_xingan_army_resigned"
+        }
+      },
+      "completion_reward": {
+        "hidden_effect": {
+          "delete_unit_template_and_units": {
+            "division_template": "Xing'an Army",
+            "disband": true
+          },
+          "division_template": {
+            "name": "Xing'an Army",
+            "division_names_group": "MON_CAV_01",
+            "role": "garrison",
+            "template_counter": 110,
+            "is_locked": false,
+            "regiments": {
+              "cavalry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                }
+              ]
+            }
+          }
+        },
+        "761": {
+          "create_unit": [
+            {
+              "division": "name = \"1. Xing'an Army\" division_template = \"Xing'an Army\" start_experience_factor = 0.3 start_equipment_factor = 0.9",
+              "owner": "ROOT",
+              "officer": {
+                "name": "MAN_kanjurjab"
+              }
+            },
+            {
+              "division": "name = \"2. Xing'an Army\" division_template = \"Xing'an Army\" start_experience_factor = 0.2 start_equipment_factor = 0.7",
+              "owner": "ROOT",
+              "officer": {
+                "name": "MON_navaanneren"
+              }
+            }
+          ]
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "MAN_urzhin_garmaev": {
+          "add_planning": 1,
+          "add_attack": 1
+        },
+        "MAN_jonjurjab": {
+          "add_planning": 1,
+          "add_attack": 1
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_the_question_of_leadership",
+      "name": "MAN_tsr_the_question_of_leadership",
+      "desc": "",
+      "icon": "GFX_focus_jap_manchurian_project",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_strengthen_the_manchukuo_imperial_army",
+        "MAN_tsr_further_mobilization"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "country_event": {
+          "id": "tsr_manchukuo.1"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "remove_ideas": [
+          "MAN_aisin_gioro_puyi"
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_chinese_leadership",
+      "name": "MAN_tsr_chinese_leadership",
+      "desc": "",
+      "icon": "GFX_focus_generic_support_the_left_right",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_the_question_of_leadership"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_empire_of_manchukuo"
+      ],
+      "available": {
+        "NOT": {
+          "has_country_leader": {
+            "ruling_only": true,
+            "character": "MAN_zhang_jinghui"
+          }
+        }
+      },
+      "completion_reward": {
+        "IF": [
+          {
+            "limit": {
+              "MAN_pujie": {
+                "is_country_leader": false
+              }
+            },
+            "add_corps_commander_role": {
+              "character": "MAN_pujie",
+              "traits": [
+                "politically_connected",
+                "infantry_leader"
+              ],
+              "skill": 3,
+              "attack_skill": 2,
+              "defense_skill": 3,
+              "planning_skill": 2,
+              "logistics_skill": 3,
+              "legacy_id": -1
+            }
+          },
+          {
+            "limit": {
+              "MAN_aisin_gioro_puyi": {
+                "is_country_leader": true
+              }
+            },
+            "add_field_marshal_role": {
+              "character": "MAN_aisin_gioro_puyi",
+              "traits": [
+                "trait_cautious"
+              ],
+              "skill": 2,
+              "attack_skill": 1,
+              "defense_skill": 2,
+              "planning_skill": 2,
+              "logistics_skill": 2,
+              "legacy_id": -1
+            }
+          }
+        ],
+        "ELSE_IF": {
+          "limit": {
+            "MAN_pujie": {
+              "is_country_leader": true
+            }
+          },
+          "add_field_marshal_role": {
+            "character": "MAN_pujie",
+            "traits": [
+              "politically_connected",
+              "infantry_leader",
+              "offensive_doctrine"
+            ],
+            "skill": 4,
+            "attack_skill": 4,
+            "defense_skill": 3,
+            "planning_skill": 2,
+            "logistics_skill": 4,
+            "legacy_id": -1
+          }
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "MAN_tsr_chinese_leadership_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "MAN_low_legitimacy_level_down": true
+      }
+    },
+    {
+      "id": "MAN_tsr_vassalize_mengukuo",
+      "name": "MAN_tsr_vassalize_mengukuo",
+      "desc": "",
+      "icon": "GFX_focus_JAP_mengjiang_united_autonomous_government",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_chinese_leadership"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject_of": "JAP",
+        "NOT": [
+          {
+            "has_war_with": "JAP"
+          },
+          {
+            "has_war_with": "MEN"
+          }
+        ],
+        "MEN": {
+          "exists": true,
+          "is_subject_of": "JAP"
+        }
+      },
+      "completion_reward": {
+        "MEN": {
+          "every_army_leader": {
+            "set_nationality": "MAN"
+          }
+        },
+        "annex_country": {
+          "target": "MEN",
+          "transfer_troops": true
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_national_cooperation_government",
+      "name": "MAN_tsr_national_cooperation_government",
+      "desc": "",
+      "icon": "GFX_goal_generic_improve_relations",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_chinese_leadership"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "every_state": {
+          "limit": {
+            "is_core_of": "CHI"
+          },
+          "add_core_of": "ROOT"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_the_two_emperors",
+      "name": "MAN_tsr_the_two_emperors",
+      "desc": "",
+      "icon": "GFX_goal_anschluss",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "MAN_tsr_vassalize_mengukuo",
+        "MAN_tsr_national_cooperation_government"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject_of": "JAP",
+        "compare_autonomy_state": {
+          "_op": ">",
+          "value": "autonomy_wtt_imperial_protectorate"
+        },
+        "MAN": {
+          "ic_ratio": {
+            "tag": "JAP",
+            "ratio": {
+              "_op": ">",
+              "value": 0.2
+            }
+          }
+        },
+        "strength_ratio": {
+          "tag": "JAP",
+          "ratio": {
+            "_op": ">",
+            "value": 0.25
+          }
+        },
+        "controls_state": 608
+      },
+      "completion_reward": {
+        "add_autonomy_ratio": {
+          "value": 0.15,
+          "localization": "MAN_the_two_emperors"
+        },
+        "MAN_low_legitimacy_level_down_twice": true,
+        "unlock_decision_tooltip": {
+          "decision": "MAN_request_full_control_over_china",
+          "show_effect_tooltip": false
+        },
+        "set_cosmetic_tag": "MAN_restored"
+      }
+    },
+    {
+      "id": "MAN_tsr_empire_of_manchukuo",
+      "name": "MAN_tsr_empire_of_manchukuo",
+      "desc": "",
+      "icon": "GFX_focus_ETH_an_empire_in_the_shade_of_the_sun",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_the_question_of_leadership"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_chinese_leadership"
+      ],
+      "available": {
+        "NOT": {
+          "has_country_leader": {
+            "ruling_only": true,
+            "character": "MAN_aisin_gioro_puyi"
+          }
+        }
+      },
+      "completion_reward": {
+        "MAN_low_legitimacy_level_down": true,
+        "set_cosmetic_tag": "MAN_empire_of_manchukuo"
+      }
+    },
+    {
+      "id": "MAN_tsr_embrace_state_shintoism",
+      "name": "MAN_tsr_embrace_state_shintoism",
+      "desc": "",
+      "icon": "GFX_focus_jap_spiritual_mobilization",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_empire_of_manchukuo"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_dynamic_modifier": {
+          "modifier": "MAN_state_shintoism_dm"
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "MAN_tsr_embrace_state_shintoism_tt"
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_work_with_the_kempeitai",
+      "name": "MAN_tsr_work_with_the_kempeitai",
+      "desc": "",
+      "icon": "GFX_focus_generic_secret_service_agency",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_embrace_state_shintoism"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "MAN_tsr_work_with_the_kempeitai",
+          "bonus": 0.75,
+          "uses": 2,
+          "category": "military_police_tech"
+        },
+        "IF": {
+          "limit": {
+            "has_dlc": "La Resistance"
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "add_ideas": "MAN_kempeitai_idea_lar",
+          "IF": {
+            "limit": {
+              "has_intelligence_agency": false
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "create_intelligence_agency": true
+          }
+        },
+        "ELSE": {
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "add_ideas": "MAN_kempeitai_idea_no_lar"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_promote_manchu_identity",
+      "name": "MAN_tsr_promote_manchu_identity",
+      "desc": "",
+      "icon": "GFX_goal_generic_national_unity",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_embrace_state_shintoism"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "MAN_add_or_modify_state_shintoism": true,
+        "add_to_variable": {
+          "MAN_state_shintoism_recruitable_population_factor": 0.05,
+          "tooltip": "recruitable_population_factor_tt"
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "MAN_tsr_promote_manchu_identity_tt"
+        ],
+        "MAN_low_legitimacy_level_down": true
+      }
+    },
+    {
+      "id": "MAN_tsr_claim_outer_manchuria",
+      "name": "MAN_tsr_claim_outer_manchuria",
+      "desc": "",
+      "icon": "GFX_focus_attack_soviet",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_promote_manchu_identity",
+        "MAN_tsr_work_with_the_kempeitai"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.05,
+        "add_political_power": 50,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt",
+          "claim_outer_manchuria_tt"
+        ],
+        "408": {
+          "add_claim_by": "ROOT"
+        },
+        "409": {
+          "add_claim_by": "ROOT"
+        },
+        "657": {
+          "add_claim_by": "ROOT"
+        },
+        "560": {
+          "add_claim_by": "ROOT"
+        },
+        "561": {
+          "add_claim_by": "ROOT"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_assertiveness",
+      "name": "MAN_tsr_assertiveness",
+      "desc": "",
+      "icon": "GFX_goal_generic_demand_territory",
+      "cost_turns": 2,
+      "x": 3,
+      "y": 4,
+      "prerequisites": [
+        "MAN_tsr_trade_delegation"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_obedience"
+      ],
+      "available": [],
+      "completion_reward": {
+        "MAN_low_legitimacy_level_down": true,
+        "set_country_flag": "MAN_assertiveness",
+        "if": {
+          "limit": {
+            "is_subject_of": "JAP"
+          },
+          "JAP": {
+            "set_autonomy": {
+              "target": "MAN",
+              "autonomy_state": "autonomy_wtt_imperial_subject"
+            }
+          }
+        },
+        "hidden_effect": {
+          "IF": {
+            "limit": {
+              "JAP": {
+                "NOT": {
+                  "has_government": "fascism"
+                }
+              }
+            },
+            "set_politics": {
+              "ruling_party": "fascism",
+              "elections_allowed": false
+            },
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.5
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_request_control_of_the_railways",
+      "name": "MAN_tsr_request_control_of_the_railways",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_infrastructure",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_assertiveness"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "OR": {
+          "716": {
+            "is_fully_controlled_by": "ROOT"
+          },
+          "328": {
+            "is_fully_controlled_by": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": "MAN_divert_machine_tools",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "if": [
+          {
+            "limit": {
+              "716": {
+                "is_fully_controlled_by": "ROOT"
+              }
+            },
+            "716": {
+              "add_building_construction": {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              },
+              "add_extra_state_shared_building_slots": 1
+            }
+          },
+          {
+            "limit": {
+              "717": {
+                "is_fully_controlled_by": "ROOT"
+              }
+            },
+            "717": {
+              "add_building_construction": {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              },
+              "add_extra_state_shared_building_slots": 1
+            }
+          },
+          {
+            "limit": {
+              "715": {
+                "is_fully_controlled_by": "ROOT"
+              }
+            },
+            "715": {
+              "add_building_construction": {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              },
+              "add_extra_state_shared_building_slots": 1
+            }
+          },
+          {
+            "limit": {
+              "328": {
+                "is_fully_controlled_by": "ROOT"
+              }
+            },
+            "328": {
+              "add_building_construction": {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              },
+              "add_extra_state_shared_building_slots": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_staff_the_court_with_manchus",
+      "name": "MAN_tsr_staff_the_court_with_manchus",
+      "desc": "",
+      "icon": "GFX_goal_generic_intelligence_exchange",
+      "cost_turns": 2,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_request_control_of_the_railways"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_five_equal_peoples"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.1
+      }
+    },
+    {
+      "id": "MAN_tsr_expand_the_imperial_guards",
+      "name": "MAN_tsr_expand_the_imperial_guards",
+      "desc": "",
+      "icon": "GFX_focus_generic_little_entente",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_staff_the_court_with_manchus"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "MAN_expand_the_imperial_guards_tt",
+        "hidden_effect": {
+          "division_template": {
+            "name": "Imperial Guards Division",
+            "priority": 2,
+            "division_names_group": "MAN_INF_01",
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 3
+                }
+              ],
+              "artillery_brigade": [
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                }
+              ]
+            }
+          },
+          "random_owned_controlled_state": {
+            "limit": {
+              "ROOT": {
+                "has_full_control_of_state": "PREV"
+              }
+            },
+            "prioritize": [
+              328
+            ],
+            "create_unit": [
+              {
+                "division": "name = \"1. Imperial Guards Division\" division_template = \"Imperial Guards Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"2. Imperial Guards Division\" division_template = \"Imperial Guards Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"3. Imperial Guards Division\" division_template = \"Imperial Guards Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"4. Imperial Guards Division\" division_template = \"Imperial Guards Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_local_arms_procurement",
+      "name": "MAN_tsr_local_arms_procurement",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_mil_factory",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_expand_the_imperial_guards"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "unlock_decision_tooltip": "MAN_fund_underground_gun_shops",
+        "random_owned_controlled_state": [
+          {
+            "limit": {
+              "is_core_of": "ROOT",
+              "is_fully_controlled_by": "ROOT",
+              "free_building_slots": {
+                "building": "arms_factory",
+                "size": {
+                  "_op": ">",
+                  "value": 1
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 2,
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 2,
+              "instant_build": true
+            },
+            "set_state_flag": "MAN_local_arms_procurement_AF"
+          },
+          {
+            "limit": {
+              "is_core_of": "ROOT",
+              "is_fully_controlled_by": "ROOT",
+              "free_building_slots": {
+                "building": "arms_factory",
+                "size": {
+                  "_op": ">",
+                  "value": 1
+                },
+                "include_locked": true
+              }
+            },
+            "add_extra_state_shared_building_slots": 2,
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 2,
+              "instant_build": true
+            },
+            "set_state_flag": "MAN_local_arms_procurement_AF"
+          }
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_bolster_nationalism",
+      "name": "MAN_tsr_bolster_nationalism",
+      "desc": "",
+      "icon": "GFX_goal_generic_political_pressure",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_staff_the_court_with_manchus",
+        "MAN_tsr_five_equal_peoples"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_question_the_emperors_authority"
+      ],
+      "available": [],
+      "completion_reward": {
+        "MAN_low_legitimacy_level_down": true,
+        "add_ideas": "MAN_bolster_nationalism",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "unlock_decision_tooltip": "MAN_recruit_bandits_generic"
+      }
+    },
+    {
+      "id": "MAN_tsr_five_equal_peoples",
+      "name": "MAN_tsr_five_equal_peoples",
+      "desc": "",
+      "icon": "GFX_goal_generic_national_unity",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_request_control_of_the_railways"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_staff_the_court_with_manchus"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_war_support": 0.1
+      }
+    },
+    {
+      "id": "MAN_tsr_white_russian_advisers",
+      "name": "MAN_tsr_white_russian_advisers",
+      "desc": "",
+      "icon": "GFX_focus_SOV_approach_semyonov",
+      "cost_turns": 3,
+      "x": 3,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_five_equal_peoples"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "MAN_white_russian_advisers"
+      }
+    },
+    {
+      "id": "MAN_tsr_empower_the_legislative_council",
+      "name": "MAN_tsr_empower_the_legislative_council",
+      "desc": "",
+      "icon": "GFX_goal_generic_dangerous_deal",
+      "cost_turns": 3,
+      "x": 5,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_five_equal_peoples"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_completed_focus": "MAN_tsr_bolster_nationalism"
+      },
+      "completion_reward": {
+        "add_political_power": 150,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "MAN_low_legitimacy_level_down": true
+      }
+    },
+    {
+      "id": "MAN_tsr_five_people_armies",
+      "name": "MAN_tsr_five_people_armies",
+      "desc": "",
+      "icon": "GFX_goal_generic_occupy_states_ongoing_war",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_white_russian_advisers"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_completed_focus": "MAN_tsr_bolster_nationalism"
+      },
+      "completion_reward": {
+        "add_ideas": "MAN_five_people_armies",
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt",
+          "MAN_five_people_armies_tt",
+          "generic_skip_one_line_tt",
+          "available_military_high_command"
+        ],
+        "unlock_decision_tooltip": "MAN_raise_manchu_banner",
+        "show_ideas_tooltip": "MAN_li_zhaolin_high_command",
+        "hidden_effect": {
+          "division_template": {
+            "name": "People's Volunteers Division",
+            "priority": 2,
+            "division_names_group": "MAN_INF_01",
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                }
+              ]
+            }
+          },
+          "random_owned_controlled_state": {
+            "limit": {
+              "ROOT": {
+                "has_full_control_of_state": "PREV"
+              }
+            },
+            "prioritize": [
+              328
+            ],
+            "create_unit": [
+              {
+                "division": "name = \"People's Volunteers Division\" division_template = \"People's Volunteers Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"People's Volunteers Division\" division_template = \"People's Volunteers Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"People's Volunteers Division\" division_template = \"People's Volunteers Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"People's Volunteers Division\" division_template = \"People's Volunteers Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"People's Volunteers Division\" division_template = \"People's Volunteers Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"People's Volunteers Division\" division_template = \"People's Volunteers Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"People's Volunteers Division\" division_template = \"People's Volunteers Division\" start_experience_factor = 1.0",
+                "owner": "MAN"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_question_the_emperors_authority",
+      "name": "MAN_tsr_question_the_emperors_authority",
+      "desc": "",
+      "icon": "GFX_focus_rom_handle_king",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_five_equal_peoples"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_bolster_nationalism"
+      ],
+      "available": [],
+      "completion_reward": {
+        "remove_ideas": [
+          "MAN_aisin_gioro_puyi"
+        ],
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_timed_idea": {
+          "idea": "MAN_rising_republican_sentiments",
+          "days": 550
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_bandit_recruitment",
+      "name": "MAN_tsr_bandit_recruitment",
+      "desc": "",
+      "icon": "GFX_focus_generic_workers",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_question_the_emperors_authority"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "MAN_tsr_bandit_recruitment_tt",
+        "add_political_power": 100
+      }
+    },
+    {
+      "id": "MAN_tsr_ally_bandit_leaders",
+      "name": "MAN_tsr_ally_bandit_leaders",
+      "desc": "",
+      "icon": "GFX_goal_generic_military_deal",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_bandit_recruitment"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "MAN_peoples_army",
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "MAN_tsr_ally_bandit_leaders_tt",
+          "MAN_kim_il_sung_tt",
+          "generic_skip_one_line_tt",
+          "available_military_high_command"
+        ],
+        "show_ideas_tooltip": "MAN_li_zhaolin_high_command",
+        "hidden_effect": {
+          "IF": {
+            "limit": {
+              "KOR": {
+                "OR": {
+                  "exists": false,
+                  "NOT": {
+                    "has_government": "communism"
+                  }
+                }
+              }
+            },
+            "KOR": {
+              "KOR_kim_il_sung": {
+                "set_nationality": "MAN",
+                "add_corps_commander_role": {
+                  "traits": [
+                    "harsh_leader"
+                  ],
+                  "skill": 3,
+                  "attack_skill": 3,
+                  "defense_skill": 2,
+                  "planning_skill": 3,
+                  "logistics_skill": 2
+                }
+              },
+              "KOR_pak_hon_yong": {
+                "add_country_leader_role": {
+                  "promote_leader": true,
+                  "country_leader": {
+                    "ideology": "stalinism",
+                    "expire": "1952.1.1.1",
+                    "traits": [
+                      "JAP_socialist_revolutionary"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "division_template": {
+            "name": "Northeast Counter-Japanese Division",
+            "priority": 2,
+            "template_counter": 118,
+            "division_names_group": "MAN_INF_01",
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                }
+              ]
+            }
+          },
+          "random_owned_controlled_state": {
+            "limit": {
+              "ROOT": {
+                "has_full_control_of_state": "PREV"
+              }
+            },
+            "prioritize": [
+              328
+            ],
+            "create_unit": [
+              {
+                "division": "name = \"Northeast Counter-Japanese Division\" division_template = \"Northeast Counter-Japanese Division\" start_experience_factor = 0.6",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"Northeast Counter-Japanese Division\" division_template = \"Northeast Counter-Japanese Division\" start_experience_factor = 0.6",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"Northeast Counter-Japanese Division\" division_template = \"Northeast Counter-Japanese Division\" start_experience_factor = 0.6",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"Northeast Counter-Japanese Division\" division_template = \"Northeast Counter-Japanese Division\" start_experience_factor = 0.6",
+                "owner": "MAN"
+              },
+              {
+                "division": "name = \"Northeast Counter-Japanese Division\" division_template = \"Northeast Counter-Japanese Division\" start_experience_factor = 0.6",
+                "owner": "MAN"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_persuade_the_IMPRP",
+      "name": "MAN_tsr_persuade_the_IMPRP",
+      "desc": "",
+      "icon": "GFX_focus_MAN_persuade_the_imprp",
+      "cost_turns": 3,
+      "x": 3,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_bandit_recruitment"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "MEN": {
+          "add_popularity": {
+            "ideology": "communism",
+            "popularity": 0.15
+          },
+          "country_event": {
+            "id": "tsr_manchukuo.12",
+            "hours": 6
+          }
+        },
+        "custom_effect_tooltip": "MAN_tsr_persuade_the_IMPRP_tt"
+      }
+    },
+    {
+      "id": "MAN_tsr_a_new_dawn_over_manchuria",
+      "name": "MAN_tsr_a_new_dawn_over_manchuria",
+      "desc": "",
+      "icon": "GFX_focus_jap_cast_the_die",
+      "cost_turns": 2,
+      "x": 6,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_bandit_recruitment"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "set_politics": {
+          "ruling_party": "democratic",
+          "elections_allowed": false
+        },
+        "add_popularity": {
+          "ideology": "democratic",
+          "popularity": 0.2
+        },
+        "remove_ideas": "MAN_kwantung_veto",
+        "IF": [
+          {
+            "limit": {
+              "KOR": {
+                "exists": true,
+                "is_ally_with": "JAP"
+              }
+            },
+            "add_timed_idea": {
+              "idea": "MAN_korean_liberation_army",
+              "days": 365
+            }
+          },
+          {
+            "limit": {
+              "has_war_with": "event_target:WTT_current_china_leader"
+            },
+            "every_country": {
+              "limit": {
+                "has_war_with": "MAN",
+                "is_in_faction_with": "event_target:WTT_current_china_leader"
+              },
+              "white_peace": {
+                "tag": "MAN"
+              }
+            }
+          },
+          {
+            "limit": {
+              "has_completed_focus": "MAN_tsr_persuade_the_IMPRP"
+            },
+            "MEN": {
+              "country_event": {
+                "id": "tsr_manchukuo.5",
+                "hours": 2
+              }
+            }
+          }
+        ],
+        "ELSE": {
+          "add_timed_idea": {
+            "idea": "MAN_korean_liberation_army_no_korea",
+            "days": 365
+          }
+        },
+        "hidden_effect": [
+          {
+            "set_variable": {
+              "MAN_independence_target": "OVERLORD"
+            }
+          },
+          {
+            "if": {
+              "limit": {
+                "is_in_faction_with": "var:MAN_independence_target"
+              },
+              "leave_faction": true
+            },
+            "declare_war_on": {
+              "target": "var:MAN_independence_target",
+              "type": "puppet_wargoal_focus"
+            }
+          },
+          {
+            "news_event": {
+              "id": "tsr_manchukuo_news.1",
+              "days": 2
+            },
+            "IF": {
+              "limit": {
+                "has_country_flag": "MAN_xingan_government"
+              },
+              "retire_character": [
+                "MAN_urzhin_garmaev",
+                "MAN_jonjurjab"
+              ]
+            }
+          }
+        ],
+        "OVERLORD": {
+          "set_autonomy": {
+            "target": "ROOT",
+            "autonomy_state": "autonomy_free"
+          }
+        },
+        "effect_tooltip": {
+          "if": {
+            "limit": {
+              "is_in_faction_with": "OVERLORD"
+            },
+            "leave_faction": true
+          },
+          "declare_war_on": {
+            "target": "OVERLORD",
+            "type": "puppet_wargoal_focus"
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_depose_puyi",
+      "name": "MAN_tsr_depose_puyi",
+      "desc": "",
+      "icon": "GFX_focus_IRQ_attempted_assasination_of_sidqi",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_a_new_dawn_over_manchuria"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_imperial_divinity",
+        "MAN_tsr_a_new_constitution"
+      ],
+      "available": {
+        "has_war": false,
+        "is_subject": false
+      },
+      "completion_reward": {
+        "remove_ideas": "MAN_the_kangde_emperor",
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "MAN_low_legitimacy_clear_all": true,
+        "add_ideas": "MAN_illegitimate_government"
+      }
+    },
+    {
+      "id": "MAN_tsr_the_new_beiyang_government",
+      "name": "MAN_tsr_the_new_beiyang_government",
+      "desc": "",
+      "icon": "GFX_focus_CHI_restore_the_old_republic",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_depose_puyi"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_zhao_shangzhis_coup"
+      ],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "set_cosmetic_tag": "MAN_beiyang",
+        "custom_effect_tooltip": [
+          "MAN_cores_beiyang_tt",
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "unlock_decision_category_tooltip": "MAN_march_on_beijing_decisions",
+        "swap_ideas": {
+          "remove_idea": "MAN_illegitimate_government",
+          "add_idea": "MAN_rival_government"
+        },
+        "IF": {
+          "limit": {
+            "MEN": {
+              "is_subject_of": "ROOT"
+            }
+          },
+          "MEN": {
+            "every_army_leader": {
+              "set_nationality": "ROOT"
+            }
+          },
+          "annex_country": {
+            "target": "MEN",
+            "transfer_troops": true
+          }
+        },
+        "hidden_effect": {
+          "614": {
+            "add_core_of": "ROOT"
+          },
+          "608": {
+            "add_core_of": "ROOT"
+          },
+          "1039": {
+            "add_core_of": "ROOT"
+          },
+          "1038": {
+            "add_core_of": "ROOT"
+          },
+          "597": {
+            "add_core_of": "ROOT"
+          },
+          "743": {
+            "add_core_of": "ROOT"
+          },
+          "612": {
+            "add_core_of": "ROOT"
+          },
+          "611": {
+            "add_core_of": "ROOT"
+          },
+          "1043": {
+            "add_core_of": "ROOT"
+          },
+          "746": {
+            "add_core_of": "ROOT"
+          },
+          "616": {
+            "add_core_of": "ROOT"
+          },
+          "621": {
+            "add_core_of": "ROOT"
+          },
+          "1040": {
+            "add_core_of": "ROOT"
+          },
+          "615": {
+            "add_core_of": "ROOT"
+          },
+          "622": {
+            "add_core_of": "ROOT"
+          },
+          "1045": {
+            "add_core_of": "ROOT"
+          },
+          "1032": {
+            "add_core_of": "ROOT"
+          },
+          "609": {
+            "add_core_of": "ROOT"
+          },
+          "set_politics": {
+            "ruling_party": "democratic",
+            "elections_allowed": true,
+            "election_frequency": 60
+          },
+          "set_party_name": {
+            "ideology": "democratic",
+            "long_name": "MAN_republican_party_long",
+            "name": "MAN_republican_party"
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_beiyang_university",
+      "name": "MAN_tsr_beiyang_university",
+      "desc": "",
+      "icon": "GFX_focus_generic_university_2",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_the_new_beiyang_government"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "MAN_tsr_reform_the_army",
+      "name": "MAN_tsr_reform_the_army",
+      "desc": "",
+      "icon": "GFX_focus_MAN_the_new_fengtian_army",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_the_new_beiyang_government"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "add_ideas": "MAN_beiyang_army"
+      }
+    },
+    {
+      "id": "MAN_tsr_the_southern_expedition",
+      "name": "MAN_tsr_the_southern_expedition",
+      "desc": "",
+      "icon": "GFX_focus_attack_china",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_the_new_beiyang_government"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "every_country": {
+          "limit": {
+            "is_literally_china": true
+          },
+          "ROOT": {
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "PREV"
+            }
+          }
+        },
+        "add_timed_idea": {
+          "idea": "MAN_southern_expedition",
+          "days": 550
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_proclaim_the_republic_of_china",
+      "name": "MAN_tsr_proclaim_the_republic_of_china",
+      "desc": "",
+      "icon": "GFX_focus_chi_one_china_policy",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_the_southern_expedition"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false,
+        "1035": {
+          "is_controlled_by": "ROOT"
+        },
+        "1037": {
+          "is_controlled_by": "ROOT"
+        },
+        "592": {
+          "is_controlled_by": "ROOT"
+        },
+        "608": {
+          "is_controlled_by": "ROOT"
+        },
+        "1041": {
+          "is_controlled_by": "ROOT"
+        },
+        "615": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "MAN_rival_government",
+          "add_idea": "MAN_the_legitimate_successor"
+        },
+        "CHI": {
+          "every_core_state": {
+            "add_core_of": "ROOT"
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "set_cosmetic_tag": "MAN_republic_of_china",
+        "set_capital": {
+          "state": 608,
+          "remember_old_capital": false
+        },
+        "set_province_name": {
+          "id": 9843,
+          "name": "PRC_beijing_capital_name"
+        },
+        "608": {
+          "set_state_name": "PRC_beijing_capital_name"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_finish_off_the_japanese_threat",
+      "name": "MAN_tsr_finish_off_the_japanese_threat",
+      "desc": "",
+      "icon": "GFX_focus_AST_war_japan",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_proclaim_the_republic_of_china"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "MAN_finish_off_japan",
+          "days": 365
+        },
+        "create_wargoal": {
+          "type": "annex_everything",
+          "target": "JAP"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_an_industrial_power",
+      "name": "MAN_tsr_an_industrial_power",
+      "desc": "",
+      "icon": "GFX_focus_generic_industrial_experts",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_proclaim_the_republic_of_china"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "MAN_an_industrial_power",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "random_owned_controlled_state": [
+          {
+            "limit": {
+              "impassable": false,
+              "free_building_slots": {
+                "building": "arms_factory",
+                "size": {
+                  "_op": ">",
+                  "value": 1
+                },
+                "include_locked": true
+              }
+            },
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 2,
+              "instant_build": true
+            },
+            "add_extra_state_shared_building_slots": 2
+          },
+          {
+            "limit": {
+              "impassable": false,
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 1
+                },
+                "include_locked": true
+              }
+            },
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 2,
+              "instant_build": true
+            },
+            "add_extra_state_shared_building_slots": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_zhao_shangzhis_coup",
+      "name": "MAN_tsr_zhao_shangzhis_coup",
+      "desc": "",
+      "icon": "GFX_focus_generic_spur_communist_revolutions",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_depose_puyi"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_the_new_beiyang_government"
+      ],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "MEN": {
+              "is_subject_of": "ROOT"
+            }
+          },
+          "MEN": {
+            "every_army_leader": {
+              "set_nationality": "ROOT"
+            }
+          },
+          "annex_country": {
+            "target": "MEN",
+            "transfer_troops": true
+          }
+        },
+        "set_politics": {
+          "ruling_party": "communism"
+        },
+        "add_popularity": {
+          "ideology": "communism",
+          "popularity": 0.2
+        },
+        "set_party_name": {
+          "ideology": "communism",
+          "long_name": "MAN_cpc_long",
+          "name": "MAN_cpc"
+        },
+        "add_ideas": "MAN_the_communist_party_triumphant"
+      }
+    },
+    {
+      "id": "MAN_tsr_ally_the_soviet_republic",
+      "name": "MAN_tsr_ally_the_soviet_republic",
+      "desc": "",
+      "icon": "GFX_focus_generic_befriend_the_chinese_soviet",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_zhao_shangzhis_coup"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "is_faction_leader": false
+          },
+          "set_rule": {
+            "can_create_factions": true
+          },
+          "create_faction_from_template": "faction_template_MAN_popular_front"
+        },
+        "add_faction_initiative": 1,
+        "every_country": {
+          "limit": {
+            "is_literally_china": true,
+            "has_government": "communism",
+            "is_subject": false,
+            "NOT": {
+              "has_idea": "SIK_battle_for_sinkiang"
+            },
+            "is_faction_leader": false
+          },
+          "country_event": {
+            "id": "tsr_manchukuo.6",
+            "hours": 5
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "swap_ideas": {
+          "remove_idea": "MAN_peoples_army",
+          "add_idea": "MAN_peoples_liberation_army"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_research_cooperation",
+      "name": "MAN_tsr_research_cooperation",
+      "desc": "",
+      "icon": "GFX_focus_PRC_form_the_yanan_university",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_ally_the_soviet_republic"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_research_slot": 1,
+        "IF": {
+          "limit": {
+            "is_in_faction_with": "PRC"
+          },
+          "add_to_tech_sharing_group": "MAN_PRC_technology_sharing_group",
+          "PRC": {
+            "add_to_tech_sharing_group": "MAN_PRC_technology_sharing_group"
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_the_long_march_south",
+      "name": "MAN_tsr_the_long_march_south",
+      "desc": "",
+      "icon": "GFX_focus_PRC_towards_one_china",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_ally_the_soviet_republic"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "every_country": {
+          "limit": {
+            "is_literally_china_not_prc": true
+          },
+          "ROOT": {
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "PREV"
+            }
+          }
+        },
+        "swap_ideas": {
+          "remove_idea": "MAN_illegitimate_government",
+          "add_idea": "MAN_battle_for_china"
+        },
+        "hidden_effect": {
+          "608": {
+            "add_core_of": "ROOT"
+          },
+          "1035": {
+            "add_core_of": "ROOT"
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_proclaim_the_peoples_republic",
+      "name": "MAN_tsr_proclaim_the_peoples_republic",
+      "desc": "",
+      "icon": "GFX_focus_PRC_revolutionary_war_of_the_masses",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_the_long_march_south"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_war": false,
+        "608": {
+          "is_owned_by": "ROOT"
+        },
+        "1035": {
+          "is_owned_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "set_cosmetic_tag": "MAN_peoples_republic_of_china",
+        "set_capital": {
+          "state": 608,
+          "remember_old_capital": false
+        },
+        "set_province_name": {
+          "id": 9843,
+          "name": "PRC_beijing_capital_name"
+        },
+        "608": {
+          "set_state_name": "PRC_beijing_capital_name"
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "swap_ideas": {
+          "remove_idea": "MAN_the_communist_party_triumphant",
+          "add_idea": "MAN_the_revolution_triumphant"
+        },
+        "every_country": {
+          "limit": {
+            "is_literally_china": true,
+            "has_government": "communism",
+            "OR": {
+              "is_subject": false,
+              "is_subject_of": "ROOT"
+            }
+          },
+          "country_event": {
+            "id": "tsr_manchukuo.7",
+            "hours": 6
+          }
+        },
+        "PRC": {
+          "every_core_state": {
+            "add_core_of": "ROOT"
+          }
+        },
+        "create_wargoal": {
+          "type": "annex_everything",
+          "target": "TIB"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_soviet_aid",
+      "name": "MAN_tsr_soviet_aid",
+      "desc": "",
+      "icon": "GFX_focus_PRC_join_comintern",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_ally_the_soviet_republic"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "has_government": "communism",
+          "has_opinion": {
+            "target": "ROOT",
+            "value": {
+              "_op": ">",
+              "value": 24
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment",
+          "amount": 5000,
+          "producer": "SOV"
+        },
+        "add_offsite_building": [
+          {
+            "type": "industrial_complex",
+            "level": 1
+          },
+          {
+            "type": "arms_factory",
+            "level": 2
+          }
+        ],
+        "custom_effect_tooltip": "MAN_soviet_volunteers_tt",
+        "add_ideas": "MAN_soviet_military_cooperation"
+      }
+    },
+    {
+      "id": "MAN_tsr_request_our_lost_territories",
+      "name": "MAN_tsr_request_our_lost_territories",
+      "desc": "",
+      "icon": "GFX_focus_PRC_petition_for_freedom",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_ally_the_soviet_republic",
+        "MAN_tsr_the_long_march_south"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "has_opinion": {
+            "target": "ROOT",
+            "value": {
+              "_op": ">",
+              "value": 49
+            }
+          },
+          "has_government": "communism"
+        }
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": "MAN_tsr_request_our_lost_territories_tt",
+        "SOV": {
+          "country_event": {
+            "id": "tsr_manchukuo.9",
+            "hours": 6
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_purge_the_general_affairs_council",
+      "name": "MAN_tsr_purge_the_general_affairs_council",
+      "desc": "",
+      "icon": "GFX_goal_generic_major_war",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_bolster_nationalism"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "remove_ideas": [
+          "MAN_aisin_gioro_puyi"
+        ],
+        "add_country_leader_role": {
+          "character": "MAN_aisin_gioro_puyi",
+          "promote_leader": true,
+          "country_leader": {
+            "ideology": "emperor_fascism",
+            "expire": "1960.1.1.1",
+            "traits": [
+              "warrior_code"
+            ]
+          }
+        },
+        "if": [
+          {
+            "limit": {
+              "is_subject_of": "JAP"
+            },
+            "unlock_decision_tooltip": "MAN_prepare_to_seize_arms",
+            "custom_effect_tooltip": "generic_skip_one_line_tt"
+          },
+          {
+            "limit": {
+              "has_idea": "MAN_kwantung_veto"
+            },
+            "custom_effect_tooltip": "generic_skip_one_line_tt",
+            "remove_ideas": "MAN_kwantung_veto"
+          }
+        ],
+        "add_stability": 0.1
+      }
+    },
+    {
+      "id": "MAN_tsr_reform_the_civil_service",
+      "name": "MAN_tsr_reform_the_civil_service",
+      "desc": "",
+      "icon": "GFX_goal_generic_intelligence_exchange",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_purge_the_general_affairs_council"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.1,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "available_industrial_concern"
+        ],
+        "show_ideas_tooltip": "MAN_manchukuo_film_association"
+      }
+    },
+    {
+      "id": "MAN_tsr_independence_war",
+      "name": "MAN_tsr_independence_war",
+      "desc": "",
+      "icon": "GFX_goal_generic_territory_or_war",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_purge_the_general_affairs_council"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "hidden_effect": [
+          {
+            "set_variable": {
+              "MAN_independence_target": "OVERLORD"
+            }
+          },
+          {
+            "if": {
+              "limit": {
+                "is_in_faction_with": "var:MAN_independence_target"
+              },
+              "leave_faction": true
+            },
+            "declare_war_on": {
+              "target": "var:MAN_independence_target",
+              "type": "puppet_wargoal_focus"
+            }
+          },
+          {
+            "news_event": {
+              "id": "wtt_news.48",
+              "days": 2
+            },
+            "IF": {
+              "limit": {
+                "has_country_flag": "MAN_xingan_government"
+              },
+              "retire_character": [
+                "MAN_urzhin_garmaev",
+                "MAN_jonjurjab"
+              ]
+            }
+          }
+        ],
+        "if": {
+          "limit": {
+            "is_subject": true
+          },
+          "add_country_leader_trait": "nationalist_symbol"
+        },
+        "OVERLORD": {
+          "set_autonomy": {
+            "target": "ROOT",
+            "autonomy_state": "autonomy_free"
+          }
+        },
+        "effect_tooltip": {
+          "if": {
+            "limit": {
+              "is_in_faction_with": "OVERLORD"
+            },
+            "leave_faction": true
+          },
+          "declare_war_on": {
+            "target": "OVERLORD",
+            "type": "puppet_wargoal_focus"
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_imperial_divinity",
+      "name": "MAN_tsr_imperial_divinity",
+      "desc": "",
+      "icon": "GFX_goal_generic_secret_weapon",
+      "cost_turns": 2,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_independence_war"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_a_new_constitution",
+        "MAN_tsr_depose_puyi"
+      ],
+      "available": {
+        "NOT": {
+          "has_war_with": "JAP"
+        }
+      },
+      "completion_reward": {
+        "MAN_low_legitimacy_level_down": true,
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_leader_with_trait": "nationalist_symbol"
+            },
+            "is_subject": false
+          },
+          "add_country_leader_trait": "nationalist_symbol"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_reclaim_our_lost_possessions",
+      "name": "MAN_tsr_reclaim_our_lost_possessions",
+      "desc": "",
+      "icon": "GFX_focus_GER_end_european_communism",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_imperial_divinity"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "MAN_tsr_reclaim_our_lost_possessions_tt",
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "330": [
+          {
+            "add_claim_by": "ROOT"
+          },
+          {
+            "owner": {
+              "IF": {
+                "limit": {
+                  "NOT": {
+                    "tag": "ROOT",
+                    "is_subject_of": "ROOT"
+                  }
+                },
+                "ROOT": {
+                  "create_wargoal": {
+                    "type": "annex_everything",
+                    "target": "PREV"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "817": {
+          "add_claim_by": "ROOT"
+        },
+        "818": {
+          "add_claim_by": "ROOT"
+        },
+        "819": {
+          "add_claim_by": "ROOT"
+        },
+        "820": {
+          "add_claim_by": "ROOT"
+        },
+        "329": [
+          {
+            "add_claim_by": "ROOT"
+          },
+          {
+            "owner": {
+              "IF": {
+                "limit": {
+                  "NOT": {
+                    "tag": "ROOT",
+                    "is_subject_of": "ROOT"
+                  }
+                },
+                "ROOT": {
+                  "create_wargoal": {
+                    "type": "annex_everything",
+                    "target": "PREV"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "561": {
+          "add_claim_by": "ROOT"
+        },
+        "560": {
+          "add_claim_by": "ROOT"
+        },
+        "657": {
+          "add_claim_by": "ROOT"
+        },
+        "409": {
+          "add_claim_by": "ROOT"
+        },
+        "408": [
+          {
+            "add_claim_by": "ROOT"
+          },
+          {
+            "owner": {
+              "IF": {
+                "limit": {
+                  "NOT": {
+                    "tag": "ROOT",
+                    "is_subject_of": "ROOT"
+                  }
+                },
+                "ROOT": {
+                  "create_wargoal": {
+                    "type": "annex_everything",
+                    "target": "PREV"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_a_new_constitution",
+      "name": "MAN_tsr_a_new_constitution",
+      "desc": "",
+      "icon": "GFX_focus_generic_treaty",
+      "cost_turns": 2,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_independence_war"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_imperial_divinity",
+        "MAN_tsr_depose_puyi"
+      ],
+      "available": {
+        "NOT": {
+          "has_war_with": "JAP"
+        }
+      },
+      "completion_reward": {
+        "set_politics": {
+          "ruling_party": "neutrality",
+          "elections_allowed": false
+        },
+        "add_popularity": [
+          {
+            "ideology": "neutrality",
+            "popularity": 0.3
+          },
+          {
+            "ideology": "democratic",
+            "popularity": 0.1
+          }
+        ],
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_political_power": 50,
+        "add_stability": 0.1,
+        "MAN_low_legitimacy_level_down": true
+      }
+    },
+    {
+      "id": "MAN_tsr_division_of_power",
+      "name": "MAN_tsr_division_of_power",
+      "desc": "",
+      "icon": "GFX_focus_BRA_reach_out_to_military_dem",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_a_new_constitution"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_popularity": {
+          "ideology": "neutrality",
+          "popularity": 0.05
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_trait": {
+          "character": "MAN_aisin_gioro_puyi",
+          "trait": "MAN_figurehead_emperor",
+          "ideology": "despotism"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_reestablish_the_qing_army",
+      "name": "MAN_tsr_reestablish_the_qing_army",
+      "desc": "",
+      "icon": "GFX_focus_MAN_reestablish_the_imperial_army",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_imperial_divinity",
+        "MAN_tsr_a_new_constitution"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "MAN_qing_army",
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_corps_commander_role": [
+          {
+            "character": "MAN_aisin_gioro_xiqia",
+            "traits": [
+              "career_officer"
+            ],
+            "skill": 3,
+            "attack_skill": 3,
+            "defense_skill": 3,
+            "planning_skill": 3,
+            "logistics_skill": 1,
+            "legacy_id": -1
+          },
+          {
+            "character": "MAN_pujie",
+            "traits": [
+              "politically_connected",
+              "infantry_leader"
+            ],
+            "skill": 3,
+            "attack_skill": 2,
+            "defense_skill": 3,
+            "planning_skill": 2,
+            "logistics_skill": 3,
+            "legacy_id": -1
+          }
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_raise_the_yong_ying",
+      "name": "MAN_tsr_raise_the_yong_ying",
+      "desc": "",
+      "icon": "GFX_focus_AUS_frontmiliz_focus",
+      "cost_turns": 2,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_reestablish_the_qing_army"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": [
+          "MAN_tsr_raise_the_yong_ying_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "add_ideas": "MAN_yong_ying_idea",
+        "hidden_effect": {
+          "delete_unit_template_and_units": {
+            "division_template": "Yong Ying",
+            "disband": true
+          },
+          "set_country_flag": "MAN_yong_ying_system_is_active",
+          "division_template": {
+            "name": "Yong Ying",
+            "division_names_group": "CHI_GAR_01",
+            "template_counter": 113,
+            "role": "infantry",
+            "priority": 0,
+            "is_locked": true,
+            "force_allow_recruiting": false,
+            "regiments": {
+              "militia": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_reclaim_the_empire",
+      "name": "MAN_tsr_reclaim_the_empire",
+      "desc": "",
+      "icon": "GFX_focus_generic_strike_at_democracy1",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_reestablish_the_qing_army"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "set_rule": {
+          "can_create_factions": true
+        },
+        "every_state": {
+          "limit": {
+            "is_core_of": "CHI"
+          },
+          "add_core_of": "ROOT"
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_imperial_university",
+      "name": "MAN_tsr_imperial_university",
+      "desc": "",
+      "icon": "GFX_focus_research",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_reclaim_the_empire"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "MAN_tsr_assert_our_authority",
+      "name": "MAN_tsr_assert_our_authority",
+      "desc": "",
+      "icon": "GFX_goal_demand_sudetenland",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_reclaim_the_empire"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_offer_vassalization"
+      ],
+      "available": [],
+      "completion_reward": {
+        "every_country": {
+          "limit": {
+            "is_independent_china_or_warlord": true
+          },
+          "ROOT": {
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "PREV"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_offer_vassalization",
+      "name": "MAN_tsr_offer_vassalization",
+      "desc": "",
+      "icon": "GFX_goal_generic_air_doctrine",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_reclaim_the_empire"
+      ],
+      "mutually_exclusive": [
+        "MAN_tsr_assert_our_authority"
+      ],
+      "available": [],
+      "completion_reward": {
+        "every_country": {
+          "limit": {
+            "is_chinese_warlord": true,
+            "NOT": {
+              "tag": "event_target:WTT_current_china_leader"
+            },
+            "is_subject": false
+          },
+          "country_event": {
+            "id": "wtt_manchukou.1",
+            "hours": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_move_capitals",
+      "name": "MAN_tsr_move_capitals",
+      "desc": "",
+      "icon": "GFX_goal_generic_propaganda",
+      "cost_turns": 2,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_assert_our_authority",
+        "MAN_tsr_offer_vassalization"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "608": {
+          "is_fully_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "set_capital": {
+          "state": 608,
+          "remember_old_capital": false
+        },
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "set_province_name": {
+          "id": 9843,
+          "name": "PRC_beijing_capital_name"
+        },
+        "608": {
+          "set_state_name": "PRC_beijing_capital_name"
+        },
+        "MAN_low_legitimacy_level_down": true
+      }
+    },
+    {
+      "id": "MAN_tsr_reestablish_the_gansu_braves",
+      "name": "MAN_tsr_reestablish_the_gansu_braves",
+      "desc": "",
+      "icon": "GFX_focus_PRC_reorganize_divisions",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_assert_our_authority",
+        "MAN_tsr_offer_vassalization"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "283": {
+          "is_fully_controlled_by": "ROOT"
+        },
+        "1045": {
+          "is_fully_controlled_by": "ROOT"
+        },
+        "1044": {
+          "is_fully_controlled_by": "ROOT"
+        },
+        "756": {
+          "is_fully_controlled_by": "ROOT"
+        },
+        "XSM": {
+          "exists": false
+        },
+        "GSM": {
+          "exists": false
+        },
+        "NXM": {
+          "exists": false
+        },
+        "KHM": {
+          "exists": false
+        }
+      },
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "KHM": {
+              "has_character": "XSM_ma_hongbin"
+            }
+          },
+          "KHM": {
+            "XSM_ma_hongbin": {
+              "set_nationality": "ROOT",
+              "clr_character_flag": true,
+              "remove_trait": {
+                "trait": "XSM_dubious_loyalty"
+              }
+            }
+          }
+        },
+        "ELSE_IF": [
+          {
+            "limit": {
+              "NXM": {
+                "has_character": "XSM_ma_hongbin"
+              }
+            },
+            "NXM": {
+              "XSM_ma_hongbin": {
+                "set_nationality": "ROOT",
+                "clr_character_flag": true,
+                "remove_trait": {
+                  "trait": "XSM_dubious_loyalty"
+                }
+              }
+            }
+          },
+          {
+            "limit": {
+              "XSM": {
+                "has_character": "XSM_ma_hongbin"
+              }
+            },
+            "XSM": {
+              "XSM_ma_hongbin": {
+                "set_nationality": "ROOT",
+                "clr_character_flag": true,
+                "remove_trait": {
+                  "trait": "XSM_dubious_loyalty"
+                }
+              }
+            }
+          },
+          {
+            "limit": {
+              "GSM": {
+                "has_character": "XSM_ma_hongbin"
+              }
+            },
+            "GSM": {
+              "XSM_ma_hongbin": {
+                "set_nationality": "ROOT",
+                "clr_character_flag": true,
+                "remove_trait": {
+                  "trait": "XSM_dubious_loyalty"
+                }
+              }
+            }
+          }
+        ],
+        "XSM": {
+          "XSM_ma_bufang": {
+            "set_nationality": "ROOT"
+          },
+          "IF": {
+            "limit": {
+              "XSM_ma_bufang": {
+                "is_corps_commander": false
+              }
+            },
+            "XSM_ma_bufang": {
+              "add_corps_commander_role": {
+                "traits": [],
+                "attack_skill": 4,
+                "defense_skill": 2,
+                "planning_skill": 2,
+                "logistics_skill": 2,
+                "skill": 3,
+                "legacy_id": -1
+              }
+            }
+          }
+        },
+        "KHM": {
+          "KHM_ma_hushan": {
+            "set_nationality": "ROOT"
+          },
+          "KHM_ma_zhancang": {
+            "set_nationality": "ROOT"
+          }
+        },
+        "NXM": {
+          "XSM_ma_hongkui": {
+            "set_nationality": "ROOT"
+          }
+        },
+        "GSM": {
+          "XSM_ma_buqing": {
+            "set_nationality": "ROOT"
+          }
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "hidden_effect": {
+          "delete_unit_template_and_units": {
+            "division_template": "Gansu Braves",
+            "disband": true
+          },
+          "division_template": {
+            "name": "Gansu Braves",
+            "division_names_group": "XSM_CAV_01",
+            "role": "garrison",
+            "template_counter": 5,
+            "is_locked": false,
+            "regiments": {
+              "cavalry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "artillery": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          }
+        },
+        "random_owned_controlled_state": {
+          "prioritize": [
+            238,
+            1045,
+            1044,
+            756
+          ],
+          "limit": {
+            "is_controlled_by": "ROOT"
+          },
+          "create_unit": [
+            {
+              "division": "name = \"First Gansu Braves\" division_template = \"Gansu Braves\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+              "owner": "ROOT"
+            },
+            {
+              "division": "name = \"Second Gansu Braves\" division_template = \"Gansu Braves\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+              "owner": "ROOT"
+            },
+            {
+              "division": "name = \"Third Gansu Braves\" division_template = \"Gansu Braves\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+              "owner": "ROOT"
+            },
+            {
+              "division": "name = \"Fourth Gansu Braves\" division_template = \"Gansu Braves\" start_experience_factor = 0.5 start_equipment_factor = 0.8",
+              "owner": "ROOT"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "MAN_tsr_a_new_self_strengthening_movement",
+      "name": "MAN_tsr_a_new_self_strengthening_movement",
+      "desc": "",
+      "icon": "GFX_focus_generic_modernize_industry",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_assert_our_authority",
+        "MAN_tsr_offer_vassalization"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": [
+          {
+            "limit": {
+              "impassable": false,
+              "free_building_slots": {
+                "building": "arms_factory",
+                "size": {
+                  "_op": ">",
+                  "value": 1
+                },
+                "include_locked": true
+              }
+            },
+            "add_building_construction": {
+              "type": "arms_factory",
+              "level": 2,
+              "instant_build": true
+            },
+            "add_extra_state_shared_building_slots": 2
+          },
+          {
+            "limit": {
+              "impassable": false,
+              "free_building_slots": {
+                "building": "industrial_complex",
+                "size": {
+                  "_op": ">",
+                  "value": 0
+                },
+                "include_locked": true
+              }
+            },
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            },
+            "add_extra_state_shared_building_slots": 1
+          }
+        ],
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "add_tech_bonus": [
+          {
+            "name": "MAN_tsr_a_new_self_strengthening_movement",
+            "bonus": 0.75,
+            "uses": 1,
+            "category": "infantry_weapons"
+          },
+          {
+            "name": "MAN_tsr_a_new_self_strengthening_movement",
+            "bonus": 0.75,
+            "uses": 2,
+            "category": "industry"
+          }
+        ]
+      }
+    },
+    {
+      "id": "MAN_tsr_claim_the_mandate_of_heaven",
+      "name": "MAN_tsr_claim_the_mandate_of_heaven",
+      "desc": "",
+      "icon": "GFX_focus_man_claim_the_mandate_of_heaven",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "MAN_tsr_move_capitals"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "all_state": {
+          "OR": {
+            "NOT": {
+              "is_core_of": "ROOT"
+            },
+            "state": [
+              729,
+              326,
+              728,
+              524
+            ],
+            "is_controlled_by": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "MAN_low_legitimacy_clear_all": true,
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "set_cosmetic_tag": "MAN_restored",
+        "add_country_leader_trait": "CHI_tsr_son_of_heaven_2",
+        "hidden_effect": {
+          "news_event": {
+            "id": "wtt_news.44",
+            "days": 2
+          },
+          "MAN_aisin_gioro_puyi": {
+            "set_portraits": {
+              "civilian": {
+                "large": "GFX_portrait_man_henry_pu_yi_emperor"
+              }
+            },
+            "set_character_name": {
+              "name": "MAN_aisin_gioro_puyi_xuantong_name"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

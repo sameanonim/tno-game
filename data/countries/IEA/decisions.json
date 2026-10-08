@@ -1,0 +1,162 @@
+[
+  {
+    "id": "debug_blow_up_IEA",
+    "category_id": "global_debug_decisions",
+    "name": "Начать распад Итал. Восточной Африки",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_global_flag": "debug_triumvirate"
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "conflict_debug_decisions"
+    },
+    "complete_effect": {
+      "IEA": {
+        "country_event": {
+          "id": "IEA.999"
+        }
+      }
+    }
+  },
+  {
+    "id": "ita_reestablish_IEA",
+    "category_id": "ITA_east_african_war_category",
+    "name": "Переоснование ИВА",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "IEA_full_collapse",
+      "has_government": "fascism",
+      "NOT": [
+        {
+          "OR": {
+            "has_country_leader": [
+              {
+                "character": "ITA_Galeazzo_Ciano",
+                "ruling_only": true
+              },
+              {
+                "character": "ITA_Junio_Valerio_Borghese",
+                "ruling_only": true
+              }
+            ]
+          }
+        },
+        {
+          "OR": {
+            "country_exists": [
+              "ERT",
+              "SML",
+              "ETB",
+              "ORM",
+              "KEN"
+            ]
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_global_flag": "IEA_full_collapse",
+      "has_government": "fascism",
+      "NOT": {
+        "OR": {
+          "has_country_leader": [
+            {
+              "character": "ITA_Galeazzo_Ciano",
+              "ruling_only": true
+            },
+            {
+              "character": "ITA_Junio_Valerio_Borghese",
+              "ruling_only": true
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ita_reestablish_IEA",
+      "every_state": {
+        "limit": {
+          "is_core_of": "IEA"
+        },
+        "IEA": {
+          "transfer_state": "PREV"
+        }
+      },
+      "set_autonomy": {
+        "target": "IEA",
+        "autonomy_state": "autonomy_colonial_government"
+      },
+      "set_variable": {
+        "var": "ITA_IEA_management",
+        "value": 1
+      },
+      "IEA": {
+        "set_politics": {
+          "ruling_party": "fascism"
+        },
+        "hidden_effect": {
+          "set_popularities": {
+            "communist": 0,
+            "ultranationalism": 0,
+            "socialist": 0,
+            "progressivism": 0,
+            "liberalism": 0,
+            "liberal_conservatism": 0,
+            "conservatism": 0,
+            "paternalism": 20,
+            "despotism": 40,
+            "fascism": 40,
+            "national_socialism": 0
+          },
+          "load_oob": "IEA_1962"
+        },
+        "IEA_Davide_Fossa": {
+          "promote_character": {
+            "ideology": "fascism_subtype"
+          }
+        },
+        "add_timed_idea": [
+          {
+            "idea": "IEA_rebuilding_east_africa",
+            "days": 730
+          },
+          {
+            "idea": "IEA_pacifying_east_africa",
+            "days": 730
+          }
+        ],
+        "if": {
+          "limit": {
+            "USA": {
+              "is_faction_leader": true
+            },
+            "ITA": {
+              "is_in_faction_with": "USA"
+            }
+          },
+          "add_ideas": "OFN_Dependent_Member"
+        },
+        "else_if": {
+          "limit": {
+            "JAP": {
+              "is_faction_leader": true
+            },
+            "ITA": {
+              "is_in_faction_with": "JAP"
+            }
+          },
+          "add_ideas": "Sphere_Economic_Dependent"
+        }
+      }
+    }
+  }
+]

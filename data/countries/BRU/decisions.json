@@ -1,0 +1,134 @@
+[
+  {
+    "id": "INS_release_puppet_brunei",
+    "category_id": "INS_borneo_puppet_cat",
+    "name": "Восстановить Брунейский султанат",
+    "desc": "Отпустить Бруней в качестве интегрированного участника Индонезийского Союза.",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "country_exists": "BRN"
+      },
+      "owns_state": 1059
+    },
+    "visible": {
+      "has_country_flag": "INS_can_release_borneo_puppets"
+    },
+    "complete_effect": {
+      "release": "BRN",
+      "set_autonomy": {
+        "target": "BRN",
+        "autonomy_state": "autonomy_taog_indonesian_union_state"
+      }
+    }
+  },
+  {
+    "id": "NATO_brussels_treaty",
+    "category_id": "nato_decisions",
+    "name": "Брюссельский договор",
+    "desc": "После того как непосредственная угроза миру была устранена, [SOV.GetNameDef] и западные державы начали менять политический курс. Отношения начали ухудшаться.",
+    "icon": "generic_formable_nations",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false,
+      "is_in_faction": true,
+      "country_exists": "SOV",
+      "NOT": {
+        "is_in_faction_with": "SOV"
+      }
+    },
+    "visible": {
+      "OR": {
+        "tag": [
+          "ENG",
+          "FRA"
+        ]
+      },
+      "date": {
+        "_op": ">",
+        "value": "1944.1.1"
+      },
+      "NOT": {
+        "custom_trigger_tooltip": {
+          "tooltip": "brussels_to_has_already_happened",
+          "has_global_flag": "brussels_to_fired"
+        }
+      }
+    },
+    "complete_effect": {
+      "set_global_flag": "brussels_to_fired",
+      "set_country_flag": "TO_joined_brussels_treaty",
+      "every_other_country": {
+        "limit": {
+          "is_subject": false,
+          "is_in_faction_with": "ROOT",
+          "NOT": {
+            "tag": "USA"
+          }
+        },
+        "hidden_effect": {
+          "country_event": "treaty_org.1"
+        },
+        "custom_effect_tooltip": "TO_will_be_invited_to_join_or_leave"
+      },
+      "hidden_effect": {
+        "news_event": {
+          "id": "treaty_org.2",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "KOM_project_brutus",
+    "category_id": "KOM_eurasian_dream_category",
+    "name": "Проект \"Брут\"",
+    "desc": "Ситуация критическая. Романо-германцы перешагнули свои границы десятки лет назад, и продолжают вышагивать до сих пор. Если безвольные атлантисты и жалкие японцы ничего не собираются с этим делать, то Евразия возьмёт это в свои руки. Террористическая атака должна быть устроена не где-нибудь, а в самом Вечном Городе. Конечно же, мы будем отрицать всякую причастность к этому.",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_doing_eurasianism"
+      }
+    },
+    "visible": {
+      "has_government": "despotism",
+      "has_country_flag": "KOM_EURASIAN_DREAM"
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_doing_eurasianism"
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_agitates_against_brutality",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам агитирует против жестокости",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  }
+]

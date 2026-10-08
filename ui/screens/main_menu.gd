@@ -47,6 +47,7 @@ signal leader_selected(leader: LeaderResource)
 
 # --- Background & Logos ---
 @onready var background_texture: TextureRect = $BackgroundTexture
+@onready var top_bar: Control = get_node_or_null("TopBar")
 @onready var logo_game: TextureRect = get_node_or_null("TopBar/LogoGame")
 @onready var logo_tno: TextureRect = get_node_or_null("TopBar/LogoTNO")
 
@@ -95,19 +96,21 @@ signal leader_selected(leader: LeaderResource)
 @onready var btn_proceed_to_setup: Button = $TheaterPanel/VBox/BottomBar/ProceedToSetupButton
 
 # --- Setup elements ---
-@onready var setup_title: Label = get_node_or_null("SetupPanel/VBox/Title")
-@onready var setup_diff_label: Label = get_node_or_null("SetupPanel/VBox/DiffLabel")
-@onready var btn_diff_observer: Button = $SetupPanel/VBox/DiffHBox/ObserverButton
-@onready var btn_diff_strategist: Button = $SetupPanel/VBox/DiffHBox/StrategistButton
-@onready var btn_diff_crisis: Button = $SetupPanel/VBox/DiffHBox/CrisisButton
-@onready var setup_rules_label: Label = get_node_or_null("SetupPanel/VBox/RulesLabel")
-@onready var chk_anarchy: CheckBox = $SetupPanel/VBox/RulesGrid/AnarchyCheck
-@onready var chk_defcon: CheckBox = $SetupPanel/VBox/RulesGrid/DefconCheck
-@onready var chk_incidents: CheckBox = $SetupPanel/VBox/RulesGrid/IncidentsCheck
-@onready var chk_ironman: CheckBox = $SetupPanel/VBox/RulesGrid/IronmanCheck
-@onready var btn_timestep: Button = $SetupPanel/VBox/RulesGrid/TimeStepButton
-@onready var btn_back_to_leaders: Button = $SetupPanel/VBox/BottomBar/BackToLeadersButton
-@onready var btn_start_game: Button = $SetupPanel/VBox/BottomBar/StartCampaignButton
+@onready var setup_card: PanelContainer = get_node_or_null("SetupPanel/SetupCard")
+@onready var setup_title: Label = get_node_or_null("SetupPanel/SetupCard/VBox/Title")
+@onready var setup_country_badge: Label = get_node_or_null("SetupPanel/SetupCard/VBox/CountryBadge")
+@onready var setup_diff_label: Label = get_node_or_null("SetupPanel/SetupCard/VBox/DiffLabel")
+@onready var btn_diff_observer: Button = $SetupPanel/SetupCard/VBox/DiffHBox/ObserverButton
+@onready var btn_diff_strategist: Button = $SetupPanel/SetupCard/VBox/DiffHBox/StrategistButton
+@onready var btn_diff_crisis: Button = $SetupPanel/SetupCard/VBox/DiffHBox/CrisisButton
+@onready var setup_rules_label: Label = get_node_or_null("SetupPanel/SetupCard/VBox/RulesLabel")
+@onready var chk_anarchy: CheckBox = $SetupPanel/SetupCard/VBox/RulesGrid/AnarchyCheck
+@onready var chk_defcon: CheckBox = $SetupPanel/SetupCard/VBox/RulesGrid/DefconCheck
+@onready var chk_incidents: CheckBox = $SetupPanel/SetupCard/VBox/RulesGrid/IncidentsCheck
+@onready var chk_ironman: CheckBox = $SetupPanel/SetupCard/VBox/RulesGrid/IronmanCheck
+@onready var btn_timestep: Button = $SetupPanel/SetupCard/VBox/RulesGrid/TimeStepButton
+@onready var btn_back_to_leaders: Button = $SetupPanel/SetupCard/VBox/BottomBar/BackToLeadersButton
+@onready var btn_start_game: Button = $SetupPanel/SetupCard/VBox/BottomBar/StartCampaignButton
 
 # --- Settings elements ---
 const SETTINGS_LANG_SCENE = preload("res://ui/screens/settings_language.tscn")
@@ -192,7 +195,9 @@ func _set_background_texture(path: String) -> void:
 func _connect_events() -> void:
 	# Titular кнопки
 	if btn_new_game != null:
-		btn_new_game.pressed.connect(func(): _switch_state(MenuState.THEATER_SELECT))
+		btn_new_game.pressed.connect(func():
+			get_tree().change_scene_to_file("res://ui/screens/country_select_screen.tscn")
+		)
 	if btn_load_game != null:
 		btn_load_game.pressed.connect(_on_load_game_pressed)
 	if btn_settings != null:
@@ -242,6 +247,18 @@ func _connect_events() -> void:
 
 
 	# Setup
+	if setup_card != null:
+		TNOTheme.apply_panel_style(setup_card, TNOTheme.COLOR_BORDER_CYAN, TNOTheme.COLOR_BG_DARK, 2, 4)
+	for chk in [chk_anarchy, chk_defcon, chk_incidents, chk_ironman]:
+		if chk != null:
+			TNOTheme.apply_checkbox_style(chk, TNOTheme.COLOR_BORDER_AMBER)
+	if btn_timestep != null:
+		TNOTheme.apply_button_style(btn_timestep, TNOTheme.COLOR_BORDER_CYAN)
+	if btn_back_to_leaders != null:
+		TNOTheme.apply_button_style(btn_back_to_leaders, TNOTheme.COLOR_BORDER_DIM)
+	if btn_start_game != null:
+		TNOTheme.apply_button_style(btn_start_game, TNOTheme.COLOR_BORDER_AMBER, Color(0.16, 0.12, 0.04, 0.95))
+
 	btn_diff_observer.pressed.connect(func(): _set_difficulty(GameSessionScript.Difficulty.OBSERVER))
 	btn_diff_strategist.pressed.connect(func(): _set_difficulty(GameSessionScript.Difficulty.STRATEGIST))
 	btn_diff_crisis.pressed.connect(func(): _set_difficulty(GameSessionScript.Difficulty.CRISIS))
@@ -367,9 +384,8 @@ func _on_menupic_hover(zone_idx: int) -> void:
 	quote_badge.text = loc.tr_key(key, fallback) if loc != null else fallback
 
 
-func _on_menupic_click(theater_id: String) -> void:
-	_select_theater_by_id(theater_id)
-	_switch_state(MenuState.THEATER_SELECT)
+func _on_menupic_click(_theater_id: String) -> void:
+	get_tree().change_scene_to_file("res://ui/screens/country_select_screen.tscn")
 
 
 func _select_theater_by_id(target_id: String) -> void:
@@ -520,6 +536,8 @@ func _switch_state(new_state: MenuState) -> void:
 	theater_panel.visible = (new_state == MenuState.THEATER_SELECT)
 	setup_panel.visible = (new_state == MenuState.CAMPAIGN_SETUP)
 	settings_panel.visible = (new_state == MenuState.SETTINGS)
+	if top_bar != null:
+		top_bar.visible = (new_state == MenuState.TITULAR)
 
 	match new_state:
 		MenuState.TITULAR:
@@ -829,9 +847,17 @@ func _toggle_timestep() -> void:
 
 
 func _refresh_setup_ui() -> void:
-	btn_diff_observer.add_theme_color_override("font_color", Color(0.4, 0.6, 0.5))
-	btn_diff_strategist.add_theme_color_override("font_color", Color(0.4, 0.6, 0.5))
-	btn_diff_crisis.add_theme_color_override("font_color", Color(0.4, 0.6, 0.5))
+	if setup_country_badge != null:
+		var d = _get_session().get_country_dossier(selected_tag)
+		var c_name = d.get("country_name", selected_tag)
+		var l_name = d.get("leader_name", "НЕИЗВЕСТНО")
+		var loc = get_node_or_null("/root/LocalizationManager")
+		var tmpl = loc.tr_key("SETUP_COUNTRY_DOSSIER_BADGE", ">> ОПЕРАТИВНОЕ ДОСЬЕ: [%s] %s | ЛИДЕР: %s <<") if loc != null else ">> ОПЕРАТИВНОЕ ДОСЬЕ: [%s] %s | ЛИДЕР: %s <<"
+		setup_country_badge.text = tmpl % [selected_tag, c_name, l_name]
+
+	TNOTheme.apply_button_style(btn_diff_observer, TNOTheme.COLOR_BORDER_CYAN if config.difficulty == GameSessionScript.Difficulty.OBSERVER else TNOTheme.COLOR_BORDER_DIM, Color(0.06, 0.14, 0.14, 0.95) if config.difficulty == GameSessionScript.Difficulty.OBSERVER else TNOTheme.COLOR_BG_CARD)
+	TNOTheme.apply_button_style(btn_diff_strategist, TNOTheme.COLOR_BORDER_AMBER if config.difficulty == GameSessionScript.Difficulty.STRATEGIST else TNOTheme.COLOR_BORDER_DIM, Color(0.14, 0.12, 0.05, 0.95) if config.difficulty == GameSessionScript.Difficulty.STRATEGIST else TNOTheme.COLOR_BG_CARD)
+	TNOTheme.apply_button_style(btn_diff_crisis, TNOTheme.COLOR_BORDER_RED if config.difficulty == GameSessionScript.Difficulty.CRISIS else TNOTheme.COLOR_BORDER_DIM, Color(0.16, 0.06, 0.06, 0.95) if config.difficulty == GameSessionScript.Difficulty.CRISIS else TNOTheme.COLOR_BG_CARD)
 
 	match config.difficulty:
 		GameSessionScript.Difficulty.OBSERVER:

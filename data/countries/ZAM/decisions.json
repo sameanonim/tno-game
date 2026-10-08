@@ -1,0 +1,395 @@
+[
+  {
+    "id": "POL_pacify_zamosc",
+    "category_id": "POL_peasant_strike_category",
+    "name": "Усмирить Замосць",
+    "desc": "",
+    "icon": "GFX_decision_oppression",
+    "cost": 90,
+    "fire_only_once": true,
+    "available": {
+      "divisions_in_state": {
+        "state": 88,
+        "size": {
+          "_op": ">",
+          "value": 9
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_active_mission": [
+          "POL_looming_peasants_strike_mission",
+          "POL_peasants_strike"
+        ]
+      },
+      "NOT": {
+        "has_completed_focus": "POL_organize_the_peasants_strike"
+      },
+      "has_country_flag": "POL_crackdown_in_lviv_flag"
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_active_mission": "POL_looming_peasants_strike_mission"
+          },
+          "add_days_mission_timeout": {
+            "mission": "POL_looming_peasants_strike_mission",
+            "days": 70
+          }
+        },
+        {
+          "limit": {
+            "has_active_mission": "POL_peasants_strike"
+          },
+          "add_days_mission_timeout": {
+            "mission": "POL_peasants_strike",
+            "days": 60
+          }
+        }
+      ],
+      "hidden_effect": {
+        "set_variable": {
+          "var": "strike_days_remove_var",
+          "value": 60
+        },
+        "random_owned_controlled_state": {
+          "limit": {
+            "OR": {
+              "is_core_of": [
+                "UKR",
+                "BLR"
+              ],
+              "state": [
+                92,
+                97
+              ]
+            }
+          },
+          "PREV": {
+            "set_variable": {
+              "var": "peasant_state_var",
+              "value": "PREV"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "POR_mozambique_overseas_territory",
+    "category_id": "POR_overseas_provinces",
+    "name": "Интегрировать Мозамбик",
+    "desc": "",
+    "icon": "infiltrate_state",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "POR_luso_tropicalism",
+      "AND": {
+        "POR": {
+          "controls_state": [
+            544,
+            896,
+            897
+          ]
+        },
+        "MZB": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POR_luso_tropicalism"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "liberate_mozambique",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освобождение Мозамбика",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": [
+            544,
+            896,
+            897
+          ]
+        },
+        "MZB": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "liberate_zambia",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [ZAM.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": [
+            771,
+            981
+          ]
+        },
+        "ZAM": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "debug_mozambique_civil_war",
+    "category_id": "global_debug_decisions",
+    "name": "Start Mozambican Civil War",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_africa_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "country_exists": "GAZ"
+          }
+        },
+        "GRO": {
+          "annex_country": [
+            {
+              "target": "COG",
+              "transfer_troops": false
+            },
+            {
+              "target": "ANG",
+              "transfer_troops": false
+            }
+          ],
+          "country_event": {
+            "id": "GRO_REICHSSTAAT.809"
+          }
+        },
+        "GAZ": {
+          "every_owned_state": {
+            "add_core_of": "GAZ"
+          }
+        }
+      },
+      "GAZ": {
+        "country_event": {
+          "id": "GAZ.1"
+        }
+      }
+    }
+  },
+  {
+    "id": "OFN_CAR_establish_free_zambia",
+    "category_id": "OFN_CAR_operation_african_freedom",
+    "name": "Провозгласить Свободную Замбию",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "USC_is_in_control_of_sambia_car": true,
+      "NOT": {
+        "has_country_flag": "OFN_CAR_WAR_establishment_in_progress"
+      }
+    },
+    "visible": {
+      "USC_is_in_control_of_sambia_car": true,
+      "NOT": {
+        "has_country_flag": "OFN_CAR_zambia_established"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "OFN_CAR_WAR_establishment_in_progress"
+    }
+  },
+  {
+    "id": "OFN_CAR_establish_free_mozambique",
+    "category_id": "OFN_CAR_operation_african_freedom",
+    "name": "Провозгласить Свободный Мозамбик",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "USC_is_in_control_of_mosambik_car": true,
+      "NOT": {
+        "has_country_flag": "OFN_CAR_WAR_establishment_in_progress"
+      }
+    },
+    "visible": {
+      "USC_is_in_control_of_mosambik_car": true,
+      "NOT": {
+        "has_country_flag": "OFN_CAR_mozambique_established"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "OFN_CAR_WAR_establishment_in_progress"
+    }
+  },
+  {
+    "id": "MAG_mozambique_civil_war_effigy",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "ГРАЖДАНСКАЯ ВОЙНА В МОЗАМБИКЕ",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "MAG_WA_mozambique_civil_war_active": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_mozambique_civil_war_effigy"
+    }
+  },
+  {
+    "id": "MAG_WA_support_mozambique_pop_republic",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Народной республике",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "GAZ": {
+        "exists": true
+      },
+      "MAG_WA_mozambique_civil_war_active": true,
+      "NOT": {
+        "OR": {
+          "GAZ": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GZO": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GZS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_mozambique_pop_republic",
+      "GAZ": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "MAG_WA_support_mozambique_pla",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Армии освобождения",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "GAZ": {
+        "exists": true
+      },
+      "MAG_WA_mozambique_civil_war_active": true,
+      "NOT": {
+        "OR": {
+          "GAZ": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GZO": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GZS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_mozambique_pla",
+      "GZO": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "MAG_WA_support_mozambique_republic",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Республике Мозамбик",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "GZS": {
+        "exists": true
+      },
+      "MAG_WA_mozambique_civil_war_active": true,
+      "NOT": {
+        "OR": {
+          "GAZ": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GZO": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GZS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_mozambique_republic",
+      "GZS": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  }
+]

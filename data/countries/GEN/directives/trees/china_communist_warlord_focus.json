@@ -1,0 +1,1243 @@
+{
+  "tree_id": "china_communist_warlord_focus",
+  "tag": "GEN",
+  "directives_count": 41,
+  "directives": [
+    {
+      "id": "PRC_sea_strengthen_the_central_secretariat",
+      "name": "PRC_sea_strengthen_the_central_secretariat",
+      "desc": "",
+      "icon": "GFX_focus_PRC_the_central_committee",
+      "cost_turns": 3,
+      "x": 3,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_political_power": 120
+      }
+    },
+    {
+      "id": "PRC_sea_inward_focus",
+      "name": "PRC_sea_inward_focus",
+      "desc": "",
+      "icon": "GFX_focus_prc_maoism",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_strengthen_the_central_secretariat"
+      ],
+      "mutually_exclusive": [
+        "PRC_sea_toe_the_soviet_line"
+      ],
+      "available": [],
+      "completion_reward": {
+        "SOV": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "tsr_anti_soviet_government_opm"
+          }
+        },
+        "add_political_power": 50,
+        "add_stability": 0.05
+      }
+    },
+    {
+      "id": "PRC_sea_rally_the_industry",
+      "name": "PRC_sea_rally_the_industry",
+      "desc": "",
+      "icon": "GFX_focus_JAP_raise_the_red_flag_high",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_inward_focus"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "impassable": false,
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 1
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 2,
+          "add_building_construction": [
+            {
+              "type": "arms_factory",
+              "level": 1,
+              "instant_build": true
+            },
+            {
+              "type": "industrial_complex",
+              "level": 1,
+              "instant_build": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_reforming_our_ranks",
+      "name": "PRC_sea_reforming_our_ranks",
+      "desc": "",
+      "icon": "GFX_focus_PRC_peoples_liberation_army",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_inward_focus"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "army_experience": 75,
+        "add_ideas": "prc_tsr_warlord_army"
+      }
+    },
+    {
+      "id": "PRC_sea_agrarian_socialism",
+      "name": "PRC_sea_agrarian_socialism",
+      "desc": "",
+      "icon": "GFX_focus_prc_agrarian_socialism",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_reforming_our_ranks",
+        "PRC_sea_rally_the_industry"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.05,
+        "add_popularity": {
+          "ideology": "communism",
+          "popularity": 0.1
+        },
+        "add_ideas": "prc_tsr_agrarian_socialism"
+      }
+    },
+    {
+      "id": "PRC_sea_forging_our_own_path",
+      "name": "PRC_sea_forging_our_own_path",
+      "desc": "",
+      "icon": "GFX_goal_generic_war_with_comintern",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_agrarian_socialism"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "set_rule": {
+          "can_create_factions": true
+        },
+        "if": {
+          "limit": {
+            "is_in_faction": false
+          },
+          "create_faction_from_template": {
+            "template": "faction_template_government_of_national_defense",
+            "name": "PRC_mao_faction"
+          }
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_toe_the_soviet_line",
+      "name": "PRC_sea_toe_the_soviet_line",
+      "desc": "",
+      "icon": "GFX_focus_PRC_embrace_stalinism",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_strengthen_the_central_secretariat"
+      ],
+      "mutually_exclusive": [
+        "PRC_sea_inward_focus"
+      ],
+      "available": {
+        "SOV": {
+          "has_government": "ROOT"
+        },
+        "NOT": {
+          "has_war_with": "SOV"
+        },
+        "OR": {
+          "is_subject": false,
+          "is_subject_of": "SOV"
+        }
+      },
+      "completion_reward": {
+        "SOV": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "tsr_pro_soviet_government_opm"
+          }
+        },
+        "add_political_power": 50,
+        "add_stability": -0.05
+      }
+    },
+    {
+      "id": "PRC_sea_aid_from_soviet_bolsheviks",
+      "name": "PRC_sea_aid_from_soviet_bolsheviks",
+      "desc": "",
+      "icon": "GFX_focus_generic_communist_industry",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_toe_the_soviet_line"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "impassable": false,
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 1
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 2,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 2,
+            "instant_build": true
+          }
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_soviet_advisors",
+      "name": "PRC_sea_soviet_advisors",
+      "desc": "",
+      "icon": "GFX_focus_PRC_invite_soviet_general",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_toe_the_soviet_line"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": [
+          {
+            "limit": {
+              "PRC": {
+                "NOT": {
+                  "has_completed_focus": "PRC_reclaim_the_grasp_of_power"
+                },
+                "has_country_flag": "PRC_pavel_mif_alive"
+              }
+            },
+            "PRC": [
+              {
+                "PRC_pavel_mif": {
+                  "set_nationality": "ROOT"
+                }
+              },
+              {
+                "show_ideas_tooltip": "PRC_pavel_mif"
+              }
+            ],
+            "custom_effect_tooltip": "available_political_advisor"
+          },
+          {
+            "limit": {
+              "PRC": {
+                "NOT": {
+                  "has_completed_focus": "PRC_reclaim_the_grasp_of_power"
+                }
+              }
+            },
+            "PRC": [
+              {
+                "PRC_otto_braun": {
+                  "set_nationality": "ROOT"
+                }
+              },
+              {
+                "show_ideas_tooltip": "PRC_otto_braun"
+              }
+            ],
+            "custom_effect_tooltip": "available_chief_of_army"
+          }
+        ],
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "army_experience": 50,
+        "add_political_power": 75
+      }
+    },
+    {
+      "id": "PRC_sea_industrialisation_of_nature",
+      "name": "PRC_sea_industrialisation_of_nature",
+      "desc": "",
+      "icon": "GFX_focus_generic_low_cost_housing",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_soviet_advisors",
+        "PRC_sea_aid_from_soviet_bolsheviks"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "limit": {
+            "impassable": false,
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 0
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 1,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 1,
+            "instant_build": true
+          }
+        },
+        "add_ideas": "prc_tsr_urbanization_efforts"
+      }
+    },
+    {
+      "id": "PRC_sea_comintern_integration",
+      "name": "PRC_sea_comintern_integration",
+      "desc": "",
+      "icon": "GFX_focus_generic_join_comintern",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_industrialisation_of_nature"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "SOV": {
+          "has_government": "ROOT"
+        },
+        "NOT": {
+          "has_war_with": "SOV"
+        },
+        "OR": {
+          "is_subject": false,
+          "is_subject_of": "SOV"
+        },
+        "is_in_faction": false
+      },
+      "completion_reward": {
+        "SOV": {
+          "country_event": "generic.2"
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_proclaim_the_peoples_republic",
+      "name": "PRC_sea_proclaim_the_peoples_republic",
+      "desc": "",
+      "icon": "GFX_focus_prc_proclaim_the_peoples_republic",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_comintern_integration",
+        "PRC_sea_forging_our_own_path"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "strength_ratio": {
+          "tag": "event_target:WTT_current_china_leader",
+          "ratio": {
+            "_op": ">",
+            "value": 0.5
+          }
+        },
+        "num_of_factories": {
+          "_op": ">",
+          "value": 49
+        },
+        "NOT": {
+          "has_idea": "PRC_the_long_march_1"
+        }
+      },
+      "completion_reward": {
+        "add_political_power": 150,
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "set_cosmetic_tag": "PRC_proclaimed",
+        "hidden_effect": {
+          "news_event": {
+            "id": "wtt_news.37",
+            "days": 3,
+            "random_days": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_new_economic_direction",
+      "name": "PRC_sea_new_economic_direction",
+      "desc": "",
+      "icon": "GFX_focus_generic_currency_reforms",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_proclaim_the_peoples_republic"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_war": false
+      },
+      "completion_reward": {
+        "add_ideas": "PRC_finalize_industrial_plan_idea"
+      }
+    },
+    {
+      "id": "PRC_sea_move_capital",
+      "name": "PRC_sea_move_capital",
+      "desc": "",
+      "icon": "GFX_focus_CHI_registry_of_property",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_proclaim_the_peoples_republic"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "608": {
+          "is_owned_and_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "set_capital": {
+          "state": 608,
+          "remember_old_capital": false
+        },
+        "608": [
+          {
+            "add_extra_state_shared_building_slots": 5,
+            "add_building_construction": {
+              "type": "industrial_complex",
+              "level": 3,
+              "instant_build": true
+            }
+          },
+          {
+            "set_state_name": "PRC_beijing_capital_name"
+          }
+        ],
+        "custom_effect_tooltip": [
+          "generic_skip_one_line_tt",
+          "generic_skip_one_line_tt"
+        ],
+        "set_province_name": {
+          "id": 9843,
+          "name": "PRC_beijing_capital_name"
+        },
+        "add_stability": 0.1
+      }
+    },
+    {
+      "id": "PRC_sea_land_redistribution",
+      "name": "PRC_sea_land_redistribution",
+      "desc": "",
+      "icon": "GFX_goal_generic_construction",
+      "cost_turns": 3,
+      "x": 10,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "PRC_low_popular_support_level_down": true
+      }
+    },
+    {
+      "id": "PRC_sea_the_yanan_base_area",
+      "name": "PRC_sea_the_yanan_base_area",
+      "desc": "",
+      "icon": "GFX_goal_generic_construct_infrastructure",
+      "cost_turns": 3,
+      "x": 6,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_land_redistribution"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "capital_scope": {
+          "is_fully_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "capital_scope": {
+          "IF": {
+            "limit": {
+              "capital_scope": {
+                "infrastructure": {
+                  "_op": "<",
+                  "value": 4
+                }
+              }
+            },
+            "add_building_construction": {
+              "type": "infrastructure",
+              "level": 2,
+              "instant_build": true
+            }
+          },
+          "ELSE_IF": {
+            "limit": {
+              "capital_scope": {
+                "infrastructure": {
+                  "_op": "<",
+                  "value": 5
+                }
+              }
+            },
+            "add_building_construction": {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 1
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_prepare_for_war_with_japan",
+      "name": "PRC_sea_prepare_for_war_with_japan",
+      "desc": "",
+      "icon": "GFX_goal_generic_major_war",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_the_yanan_base_area"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "not": {
+          "is_subject_of": "JAP"
+        }
+      },
+      "completion_reward": {
+        "add_war_support": 0.1
+      }
+    },
+    {
+      "id": "PRC_sea_government_of_national_defense",
+      "name": "PRC_sea_government_of_national_defense",
+      "desc": "",
+      "icon": "GFX_focus_chi_united_front",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_prepare_for_war_with_japan"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "has_war_with": "CHI"
+        },
+        "is_subject": false
+      },
+      "completion_reward": {
+        "if": {
+          "limit": {
+            "event_target:WTT_current_china_leader": {
+              "is_puppet": false,
+              "exists": true
+            }
+          },
+          "event_target:WTT_current_china_leader": {
+            "country_event": "wtt_prc.1"
+          }
+        },
+        "else": {
+          "set_rule": {
+            "can_create_factions": true
+          },
+          "create_faction_from_template": "faction_template_government_of_national_defense"
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_confrontation_with_the_warlords",
+      "name": "PRC_sea_confrontation_with_the_warlords",
+      "desc": "",
+      "icon": "GFX_goal_generic_more_territorial_claims",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "PRC_sea_government_of_national_defense"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "is_subject": false
+      },
+      "completion_reward": {
+        "hidden_effect": {
+          "if": {
+            "limit": {
+              "is_in_faction": false
+            },
+            "set_rule": {
+              "can_create_factions": true
+            },
+            "create_faction": "chinese_united_front"
+          }
+        },
+        "every_country": {
+          "limit": {
+            "is_literally_china": true,
+            "is_in_faction": false,
+            "NOT": {
+              "tag": "ROOT"
+            }
+          },
+          "country_event": "wtt_prc.10"
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_anti_japanese_expedition",
+      "name": "PRC_sea_anti_japanese_expedition",
+      "desc": "",
+      "icon": "GFX_focus_AST_war_japan",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_prepare_for_war_with_japan"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "OR": {
+          "MAN": {
+            "OR": {
+              "is_subject_of": "JAP",
+              "has_cosmetic_tag": "MAN_kwantung_army"
+            }
+          },
+          "AND": {
+            "MAN": {
+              "exists": false
+            },
+            "JAP": {
+              "owns_state": [
+                612,
+                611,
+                610
+              ]
+            }
+          }
+        },
+        "NOT": {
+          "is_subject_of": "JAP"
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_category_tooltip": "PRC_anti_japanese_expedition",
+        "set_country_flag": {
+          "flag": "JAP_delay_sweep_for_communists",
+          "days": 100,
+          "value": 1
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_revolutionary_military_commission",
+      "name": "PRC_sea_revolutionary_military_commission",
+      "desc": "",
+      "icon": "GFX_goal_generic_occupy_states_ongoing_war",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_confrontation_with_the_warlords",
+        "PRC_sea_infiltration"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "PRC_revolutionary_military_commission"
+      }
+    },
+    {
+      "id": "PRC_sea_provoke_japan",
+      "name": "PRC_sea_provoke_japan",
+      "desc": "",
+      "icon": "GFX_goal_generic_position_armies",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_revolutionary_military_commission",
+        "PRC_sea_anti_japanese_expedition"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "is_subject_of": "JAP"
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": {
+          "decision": "PRC_provoke_japan",
+          "show_effect_tooltip": true
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_protracted_warfare",
+      "name": "PRC_sea_protracted_warfare",
+      "desc": "",
+      "icon": "GFX_goal_generic_army_doctrines",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_provoke_japan"
+      ],
+      "mutually_exclusive": [
+        "PRC_sea_mobile_warfare"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "PRC_protracted_warfare"
+      }
+    },
+    {
+      "id": "PRC_sea_mobile_warfare",
+      "name": "PRC_sea_mobile_warfare",
+      "desc": "",
+      "icon": "GFX_goal_generic_cavalry",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_provoke_japan"
+      ],
+      "mutually_exclusive": [
+        "PRC_sea_protracted_warfare"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "PRC_mobile_warfare"
+      }
+    },
+    {
+      "id": "PRC_sea_peoples_war",
+      "name": "PRC_sea_peoples_war",
+      "desc": "",
+      "icon": "GFX_focus_generic_support_the_left_right",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 2,
+      "prerequisites": [
+        "PRC_sea_protracted_warfare"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "PRC_peoples_war"
+      }
+    },
+    {
+      "id": "PRC_sea_100_regiments_campaign",
+      "name": "PRC_sea_100_regiments_campaign",
+      "desc": "",
+      "icon": "GFX_goal_generic_territory_or_war",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 2,
+      "prerequisites": [
+        "PRC_sea_mobile_warfare"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "unlock_decision_tooltip": "PRC_launch_100_regiments_campaign"
+      }
+    },
+    {
+      "id": "PRC_sea_central_military_commission",
+      "name": "PRC_sea_central_military_commission",
+      "desc": "",
+      "icon": "GFX_goal_generic_defence",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_revolutionary_military_commission"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "PRC_revolutionary_military_commission",
+          "add_idea": "PRC_central_military_commission"
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_peoples_liberation_army",
+      "name": "PRC_sea_peoples_liberation_army",
+      "desc": "",
+      "icon": "GFX_goal_generic_attack_allies",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_central_military_commission"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "has_idea": "PRC_red_army_weakened"
+          },
+          "remove_ideas": "PRC_red_army_weakened"
+        },
+        "ELSE": {
+          "add_ideas": "PRC_tsr_warlord_peoples_liberation_army"
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_peoples_volunteer_army",
+      "name": "PRC_sea_peoples_volunteer_army",
+      "desc": "",
+      "icon": "GFX_goal_generic_special_forces",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_central_military_commission"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "PRC_peoples_volunteer_army"
+      }
+    },
+    {
+      "id": "PRC_sea_military_intelligence_department",
+      "name": "PRC_sea_military_intelligence_department",
+      "desc": "",
+      "icon": "GFX_goal_generic_intelligence_exchange",
+      "cost_turns": 3,
+      "x": 4,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_revolutionary_military_commission"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_character": "PRC_kang_sheng",
+              "PRC": {
+                "exists": true
+              }
+            }
+          },
+          "PRC": {
+            "PRC_kang_sheng": {
+              "set_nationality": "ROOT"
+            }
+          },
+          "custom_effect_tooltip": "available_political_advisor",
+          "show_ideas_tooltip": "PRC_kang_sheng"
+        },
+        "add_political_power": 50,
+        "add_stability": 0.05,
+        "random_owned_controlled_state": {
+          "limit": {
+            "impassable": false,
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 0
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 1,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 1,
+            "instant_build": true
+          }
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_central_security_bureau",
+      "name": "PRC_sea_central_security_bureau",
+      "desc": "",
+      "icon": "GFX_goal_generic_political_pressure",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_military_intelligence_department"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.1
+      }
+    },
+    {
+      "id": "PRC_sea_focus_on_china",
+      "name": "PRC_sea_focus_on_china",
+      "desc": "",
+      "icon": "GFX_goal_generic_major_war",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_the_yanan_base_area"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "not": {
+          "is_subject_of": "event_target:WTT_current_china_leader"
+        }
+      },
+      "completion_reward": {
+        "add_ideas": "PRC_focus_on_china"
+      }
+    },
+    {
+      "id": "PRC_sea_exploit_the_weak_neighbours",
+      "name": "PRC_sea_exploit_the_weak_neighbours",
+      "desc": "",
+      "icon": "GFX_goal_generic_territory_or_war",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_focus_on_china"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "any_neighbor_country": {
+          "is_chinese_warlord": true,
+          "can_ROOT_get_wargoal_on_THIS": true,
+          "strength_ratio": {
+            "tag": "ROOT",
+            "ratio": {
+              "_op": "<",
+              "value": 1
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "every_neighbor_country": {
+          "limit": {
+            "is_chinese_warlord": true,
+            "can_ROOT_get_wargoal_on_THIS": true,
+            "strength_ratio": {
+              "tag": "ROOT",
+              "ratio": {
+                "_op": "<",
+                "value": 1
+              }
+            }
+          },
+          "ROOT": {
+            "create_wargoal": {
+              "type": "annex_everything",
+              "target": "PREV"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_infiltration",
+      "name": "PRC_sea_infiltration",
+      "desc": "",
+      "icon": "GFX_focus_prc_infiltration",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "PRC_sea_focus_on_china"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "event_target:WTT_current_china_leader": {
+          "exists": true,
+          "NOT": {
+            "has_subject": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_category_tooltip": "PRC_infiltrate_nationalist_areas",
+        "set_country_flag": {
+          "flag": "CHI_delay_sweep_for_communists",
+          "days": 90,
+          "value": 1
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_enforce_the_three_rules",
+      "name": "PRC_sea_enforce_the_three_rules",
+      "desc": "",
+      "icon": "GFX_goal_generic_national_unity",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_land_redistribution"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "PRC_low_popular_support_level_down": true
+      }
+    },
+    {
+      "id": "PRC_sea_permit_opium_trade",
+      "name": "PRC_sea_permit_opium_trade",
+      "desc": "",
+      "icon": "GFX_goal_generic_forceful_treaty",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_enforce_the_three_rules"
+      ],
+      "mutually_exclusive": [
+        "PRC_sea_ban_the_opium_trade"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": [
+          "PRC_permit_opium_trade",
+          "PRC_government_corruption"
+        ]
+      }
+    },
+    {
+      "id": "PRC_sea_ban_the_opium_trade",
+      "name": "PRC_sea_ban_the_opium_trade",
+      "desc": "",
+      "icon": "GFX_goal_generic_political_pressure",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_enforce_the_three_rules"
+      ],
+      "mutually_exclusive": [
+        "PRC_sea_permit_opium_trade"
+      ],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.05
+      }
+    },
+    {
+      "id": "PRC_sea_abolish_the_land_rent",
+      "name": "PRC_sea_abolish_the_land_rent",
+      "desc": "",
+      "icon": "GFX_focus_generic_support_the_left_right",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "PRC_sea_permit_opium_trade",
+        "PRC_sea_ban_the_opium_trade"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "if": [
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_1"
+            },
+            "has_idea": "PRC_low_popular_support_1"
+          },
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_2"
+            },
+            "has_idea": "PRC_low_popular_support_2"
+          },
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_3"
+            },
+            "has_idea": "PRC_low_popular_support_3"
+          },
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_4"
+            },
+            "has_idea": "PRC_low_popular_support_4"
+          },
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_5"
+            },
+            "has_idea": "PRC_low_popular_support_5"
+          }
+        ]
+      },
+      "completion_reward": {
+        "if": {
+          "limit": {
+            "has_idea": "PRC_low_popular_support_1"
+          },
+          "remove_ideas": "PRC_low_popular_support_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_2"
+            },
+            "remove_ideas": "PRC_low_popular_support_2"
+          },
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_3"
+            },
+            "remove_ideas": "PRC_low_popular_support_3"
+          },
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_4"
+            },
+            "remove_ideas": "PRC_low_popular_support_4"
+          },
+          {
+            "limit": {
+              "has_idea": "PRC_low_popular_support_5"
+            },
+            "remove_ideas": "PRC_low_popular_support_5"
+          }
+        ],
+        "else": {
+          "add_political_power": 150,
+          "add_stability": 0.1
+        }
+      }
+    },
+    {
+      "id": "PRC_sea_literacy_programs",
+      "name": "PRC_sea_literacy_programs",
+      "desc": "",
+      "icon": "GFX_focus_generic_socialist_science",
+      "cost_turns": 3,
+      "x": -4,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_land_redistribution"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "PRC_sea_china_medical_university",
+      "name": "PRC_sea_china_medical_university",
+      "desc": "",
+      "icon": "GFX_focus_research",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "PRC_sea_literacy_programs"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "num_of_factories": {
+          "_op": ">",
+          "value": 34
+        },
+        "amount_research_slots": {
+          "_op": "<",
+          "value": 5
+        }
+      },
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    },
+    {
+      "id": "PRC_sea_form_the_academy_of_sciences",
+      "name": "PRC_sea_form_the_academy_of_sciences",
+      "desc": "",
+      "icon": "GFX_goal_generic_scientific_exchange",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "PRC_sea_china_medical_university"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "num_of_factories": {
+          "_op": ">",
+          "value": 69
+        },
+        "amount_research_slots": {
+          "_op": "<",
+          "value": 5
+        }
+      },
+      "completion_reward": {
+        "add_research_slot": 1
+      }
+    }
+  ]
+}

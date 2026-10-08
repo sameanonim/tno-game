@@ -1,0 +1,483 @@
+[
+  {
+    "id": "HOL_propose_benelux_unification",
+    "category_id": "political_actions",
+    "name": "Предложить объединение Бенилюкса",
+    "desc": "Близятся глобальные потрясения, а мы — малые народы среди великих. Чтобы выстоять в надвигающейся буре, нам нужно объединиться на всех уровнях управления, даже если при этом придется лишиться собственной независимости.",
+    "icon": "eng_trade_unions_support",
+    "cost": 300,
+    "fire_only_once": true,
+    "available": {
+      "is_in_faction_with": [
+        "BEL",
+        "LUX"
+      ],
+      "BEL": {
+        "has_government": "ROOT"
+      },
+      "LUX": {
+        "has_government": "ROOT"
+      }
+    },
+    "visible": {
+      "original_tag": "HOL",
+      "has_completed_focus": "HOL_form_the_benelux"
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "set_cosmetic_tag": "HOL_benelux_unified",
+        "BEL": {
+          "every_unit_leader": {
+            "set_nationality": "ROOT"
+          }
+        },
+        "LUX": {
+          "every_unit_leader": {
+            "set_nationality": "ROOT"
+          }
+        },
+        "every_country": [
+          {
+            "limit": {
+              "is_subject_of": "BEL"
+            },
+            "ROOT": {
+              "set_autonomy": {
+                "target": "PREV",
+                "autonomy_state": "autonomy_puppet",
+                "end_wars": false,
+                "end_civil_wars": false
+              }
+            }
+          },
+          {
+            "limit": {
+              "is_subject_of": "LUX"
+            },
+            "ROOT": {
+              "set_autonomy": {
+                "target": "PREV",
+                "autonomy_state": "autonomy_puppet",
+                "end_wars": false,
+                "end_civil_wars": false
+              }
+            }
+          }
+        ],
+        "annex_country": [
+          {
+            "target": "BEL",
+            "transfer_troops": true
+          },
+          {
+            "target": "LUX",
+            "transfer_troops": true
+          }
+        ],
+        "every_state": {
+          "limit": {
+            "OR": {
+              "is_core_of": [
+                "BEL",
+                "LUX"
+              ]
+            }
+          },
+          "add_core_of": "ROOT"
+        }
+      },
+      "custom_effect_tooltip": "HOL_propose_benelux_unification_tt",
+      "BEL": {
+        "country_event": {
+          "id": "mtg_netherlands.77",
+          "days": 5,
+          "random_days": 3
+        }
+      },
+      "LUX": {
+        "country_event": {
+          "id": "mtg_netherlands.77",
+          "days": 1,
+          "random_days": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "reintegrate_luxemburg",
+    "category_id": "germany_formable_category",
+    "name": "Повторно интегрировать Летцебург",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "8": {
+        "is_fully_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "PRE",
+          "MEK",
+          "VGE",
+          "SHL",
+          "HAN",
+          "HES",
+          "RHI",
+          "WUR",
+          "BAY",
+          "THU",
+          "SAX",
+          "LUX",
+          "DNZ",
+          "WGR",
+          "DDR",
+          "UBD"
+        ]
+      },
+      "NOT": [
+        {
+          "8": {
+            "is_core_of": "ROOT"
+          }
+        },
+        {
+          "has_global_flag": "reintegrated_lumexburg_flag"
+        }
+      ],
+      "has_global_flag": "germany_reformed_flag"
+    },
+    "complete_effect": {
+      "IF": {
+        "limit": {
+          "NOT": {
+            "8": {
+              "is_core_of": "ROOT"
+            }
+          }
+        },
+        "8": {
+          "add_core_of": "ROOT"
+        }
+      },
+      "hidden_effect": {
+        "8": {
+          "set_state_name": "8_lux_name"
+        },
+        "set_province_name": {
+          "id": 6583,
+          "name": "6583_german_unification_lux_name"
+        },
+        "set_global_flag": "reintegrated_lumexburg_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_influence_benelux_decision",
+    "category_id": "GER_influence_countries_cat",
+    "name": "$GER_influence_baltics_decision$",
+    "desc": "",
+    "icon": "GFX_decision_SWI_expand_covert_operations",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "FROM": {
+          "country_event": {
+            "id": "wuw_GER_diplomacy.10",
+            "days": 1
+          }
+        }
+      },
+      "effect_tooltip": {
+        "FROM": {
+          "add_timed_idea": {
+            "idea": "GER_fascism_influence",
+            "days": 730
+          },
+          "add_opinion_modifier": {
+            "target": "GER",
+            "modifier": "GER_german_influence"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_luxury_is_the_enemy_decision",
+    "category_id": "JAP_spiritual_mobilization_decisions",
+    "name": "Роскошь — наш враг!",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_completed_focus": [
+            "JAP_sea_national_spiritual_mobliization_movement",
+            "JAP_the_yamato_spirit"
+          ]
+        },
+        {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "IF": {
+        "limit": {
+          "has_completed_focus": "JAP_sea_purge_the_kodoha_faction"
+        },
+        "JAP_add_or_modify_showa_statism": true,
+        "add_to_variable": {
+          "JAP_showa_statism_consumer_goods_factor": -0.05,
+          "tooltip": "consumer_goods_factor_tt"
+        }
+      },
+      "ELSE": {
+        "JAP_add_or_modify_imperial_way": true,
+        "add_to_variable": {
+          "JAP_the_imperial_way_consumer_goods_factor": -0.05,
+          "tooltip": "consumer_goods_factor_tt"
+        }
+      }
+    }
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_ELS_Deluxe_Coffee",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_ELS_Deluxe_Coffee$",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_ELS_Deluxe_Coffee"
+        }
+      ],
+      "OR": {
+        "has_idea": [
+          "AAC_Diplo_Deal_CentAm_Discounted_Luxury_Coffee_Imports",
+          "AAC_Diplo_Deal_CentAm_Luxury_Coffee_Shipments_Imports"
+        ]
+      },
+      "check_variable": {
+        "AAC_Marine_Active_Category": 4
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_ELS_Deluxe_Coffee",
+      "add_to_variable": {
+        "AAC_unlocked_creature_comforts": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "has_idea": "AAC_Diplo_Deal_CentAm_Discounted_Luxury_Coffee_Imports"
+          },
+          "add_political_power": -25,
+          "set_temp_variable": {
+            "tempEq": -1
+          },
+          "Antarctica_change_equipment": true
+        },
+        "else": {
+          "add_political_power": -50,
+          "set_temp_variable": {
+            "tempEq": -5
+          },
+          "Antarctica_change_equipment": true
+        }
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_ELS_Deluxe_Coffee"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "SAM_import_luxury_goods_soldiers",
+    "category_id": "SAM_smuggling_category",
+    "name": "Завезти роскошные товары для солдат",
+    "desc": "",
+    "icon": "GFX_decision_generic_luxury_trade_increase",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_military_morale": {
+            "_op": "<",
+            "value": 100
+          }
+        },
+        {
+          "SAM_smuggling_network_size": {
+            "_op": ">",
+            "value": 1
+          }
+        }
+      ],
+      "has_country_flag": "SAM_military_smuggling_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_import_luxury_goods_soldiers",
+      "SAM_increase_corruption_small": true,
+      "SAM_increase_military_morale_medium": true,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.002
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": [
+        {
+          "SAM_change_military_spirit": true
+        },
+        {
+          "SAM_change_corruption_spirit": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "SAM_import_luxury_goods_officers",
+    "category_id": "SAM_smuggling_category",
+    "name": "Завезти роскошные товары для офицеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_luxury_trade_increase",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_military_morale": {
+            "_op": "<",
+            "value": 100
+          }
+        },
+        {
+          "SAM_smuggling_network_size": {
+            "_op": ">",
+            "value": 1
+          }
+        }
+      ],
+      "has_country_flag": "SAM_military_smuggling_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_import_luxury_goods_officers",
+      "SAM_increase_corruption_small": true,
+      "SAM_increase_military_morale_small": true,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.003
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": [
+        {
+          "SAM_change_military_spirit": true
+        },
+        {
+          "SAM_change_corruption_spirit": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "SAM_import_luxury_goods_civilians",
+    "category_id": "SAM_smuggling_category",
+    "name": "Завезти роскошные товары для гражданских",
+    "desc": "",
+    "icon": "GFX_decision_generic_luxury_trade_increase",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_civilian_morale": {
+            "_op": "<",
+            "value": 100
+          }
+        },
+        {
+          "SAM_smuggling_network_size": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      ],
+      "has_country_flag": "SAM_civilian_smuggling_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_import_luxury_goods",
+      "SAM_increase_corruption_small": true,
+      "SAM_increase_civilian_morale_medium": true,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.005
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": [
+        {
+          "SAM_change_civilian_spirit": true
+        },
+        {
+          "SAM_change_corruption_spirit": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "SAM_luxuries_for_officers",
+    "category_id": "SAM_ROA_category",
+    "name": "Роскошь для офицеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_luxury_trade_increase",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_luxuries_for_officers",
+      "SAM_increase_ROA_support_small": true,
+      "SAM_decrease_civilian_morale_small": true,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.002
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  }
+]

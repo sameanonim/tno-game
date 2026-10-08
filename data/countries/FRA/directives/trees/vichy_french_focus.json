@@ -1,0 +1,568 @@
+{
+  "tree_id": "vichy_french_focus",
+  "tag": "FRA",
+  "directives_count": 24,
+  "directives": [
+    {
+      "id": "VIC_emergency_powers_to_petain",
+      "name": "Чрезвычайные полномочия для Петена",
+      "desc": "Битва за Францию проиграна, и стало ясно, что для сохранения государства нужно предпринять радикальные меры. Нельзя ограничивать президента в его действиях.",
+      "icon": "GFX_goal_generic_demand_territory",
+      "cost_turns": 3,
+      "x": 18,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "FRA_philippe_petain"
+        }
+      },
+      "completion_reward": {
+        "add_country_leader_trait": "emergency_powers",
+        "if": {
+          "limit": {
+            "has_idea": "FRA_disjointed_government"
+          },
+          "remove_ideas": [
+            "FRA_disjointed_government"
+          ]
+        }
+      }
+    },
+    {
+      "id": "VIC_the_national_revolution",
+      "name": "Национальная революция",
+      "desc": "Наше поражение, без сомнения, вызвано фундаментальными проблемами нашей нации. На то, чтобы исправить эти проблемы, уйдёт много времени, но, возможно, потрясение от поражения позволит вернуться в бой, став сильнее.",
+      "icon": "GFX_focus_generic_strike_at_democracy1",
+      "cost_turns": 3,
+      "x": -5,
+      "y": 1,
+      "prerequisites": [
+        "VIC_emergency_powers_to_petain"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.1
+      }
+    },
+    {
+      "id": "VIC_long_term_economic_planning",
+      "name": "Долгосрочное экономическое планирование",
+      "desc": "Как бы ни было соблазнительно считать текущую ситуацию важнее всех прочих проблем, мы не должны забывать, что есть процессы, которым требуется много времени. Разработав серию экономических планов, мы сможем эффективно улучшить свою экономику.",
+      "icon": "GFX_goal_generic_construct_civilian",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "VIC_the_national_revolution"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "VIC_long_term_economic_planning",
+          "category": "industry",
+          "uses": 2,
+          "bonus": 1
+        }
+      }
+    },
+    {
+      "id": "VIC_aid_small_businesses",
+      "name": "Помочь малому бизнесу",
+      "desc": "Многочисленные небольшие компании, составляющие костяк нашей экономики, сильно пострадали от нормирования продуктов и других мер военного времени. Чтобы помочь предприятиям выжить, мы должны исправить возникшие проблемы.",
+      "icon": "GFX_goal_generic_consumer_goods",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_long_term_economic_planning"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "random_owned_state": {
+          "limit": {
+            "is_fully_controlled_by": "ROOT",
+            "is_core_of": "ROOT",
+            "free_building_slots": {
+              "building": "industrial_complex",
+              "size": {
+                "_op": ">",
+                "value": 1
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 2,
+          "add_building_construction": {
+            "type": "industrial_complex",
+            "level": 2,
+            "instant_build": true
+          }
+        }
+      }
+    },
+    {
+      "id": "VIC_venerate_the_craftsman",
+      "name": "Почитать ремесленников",
+      "desc": "Слишком долго предметом дискуссий об условиях труда был индустриальный рабочий, который трудится на большом заводе на крупную компанию. Пора подумать и о квалифицированных ремесленниках, зарабатывающих себе и своей семье на жизнь в собственных мастерских.",
+      "icon": "GFX_goal_generic_production",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_aid_small_businesses"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_venerate_the_craftsman"
+        ]
+      }
+    },
+    {
+      "id": "VIC_down_with_marianne",
+      "name": "Долой Марианну!",
+      "desc": "Псевдорелигиозное поклонение Марианне, символу Французской республики, извратило умы нашего народа. От неё не должно остаться и следа, как и от той самой бесполезной Республики, которую она олицетворяет.",
+      "icon": "GFX_focus_focus_fra_down_marianne",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "VIC_the_national_revolution"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "FRA_down_with_marianne",
+          "days": 730
+        }
+      }
+    },
+    {
+      "id": "VIC_up_with_jean_darc",
+      "name": "Вместе с Жанной д'Арк",
+      "desc": "Жанна д'Арк отважно сражалась с превосходящими силами врага, пожертвовала всем ради блага Отчизны и собрала народ под свои знамёна, чтобы изгнать захватчиков. Разве не лучше сделать символом для нашей молодёжи её, а не Марианну?",
+      "icon": "GFX_focus_up_joan_of_arc",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_down_with_marianne"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "FRA_up_with_jean_darc",
+          "days": 730
+        }
+      }
+    },
+    {
+      "id": "VIC_celebrate_motherhood",
+      "name": "Почитать материнство",
+      "desc": "Из природы вещей очевидно, что место женщины — в доме, как место мужчины — в мастерской или в поле. Надо напомнить людям, что женский труд так же важен для выживания нации, как мужской.",
+      "icon": "GFX_goal_generic_propaganda",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_up_with_jean_darc"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.05
+      }
+    },
+    {
+      "id": "VIC_prosecute_the_losers",
+      "name": "Преследовать проигравших",
+      "desc": "Франция годами сдерживала натиск армий кайзера, но в текущей войне проиграла. Этому должна быть какая-то причина, и мы не остановимся до тех пор, пока не выясним её и не привлечём виновных к ответственности.",
+      "icon": "GFX_goal_generic_neutrality_focus",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "VIC_the_national_revolution"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_war_support": 0.05
+      }
+    },
+    {
+      "id": "VIC_concessions_to_the_germans",
+      "name": "Уступки немцам",
+      "desc": "Текущие реалии требуют от нас прийти к соглашению с бывшими врагами. Должен быть способ как-то облегчить возложенное на нас бремя.",
+      "icon": "GFX_focus_chi_mission_to_germany",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_prosecute_the_losers"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "16": {
+          "is_controlled_by": "GER"
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_category_tooltip": "VIC_concessions_to_the_germans"
+      }
+    },
+    {
+      "id": "VIC_mandatory_work_service",
+      "name": "Обязательная трудовая повинность",
+      "desc": "Нам удалось заручиться обещанием немцев смягчить условия оккупации при условии, что мы будем поставлять в Германию рабочих. Похоже, однако, что среди нашего народа мало желающих помочь отчизне в час нужды. Раз не помогает поощрение, нам придется прибегнуть к принуждению.",
+      "icon": "GFX_goal_generic_construction2",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_concessions_to_the_germans"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "reduce_occupation_cost_effect": true,
+        "add_ideas": [
+          "FRA_mandatory_work_service"
+        ]
+      }
+    },
+    {
+      "id": "VIC_a_nation_reborn",
+      "name": "Возрождение нации",
+      "desc": "В конце долгого и болезненного процесса восстановления нашей униженной и побеждённой нации нас ждёт новая, возрождённая Франция, свободная от чумы республиканства и присущих ему внутренних распрей.",
+      "icon": "GFX_goal_support_fascism",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_celebrate_motherhood",
+        "VIC_venerate_the_craftsman",
+        "VIC_mandatory_work_service"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_stability": 0.1
+      }
+    },
+    {
+      "id": "VIC_end_the_occupation",
+      "name": "Прекратить оккупацию",
+      "desc": "По завершении нашей национальной революции мы готовы занять своё место среди наших бывших врагов и сражаться за новую Европу, свободную от угрозы большевизма и от чреватого расколом республиканства.",
+      "icon": "GFX_goal_generic_territory_or_war",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_a_nation_reborn"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "16": {
+          "NOT": {
+            "is_controlled_by": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "set_rule": {
+          "can_join_factions": true,
+          "can_not_declare_war": false,
+          "can_create_factions": true
+        },
+        "remove_occupation_cost_effect": true,
+        "if": {
+          "limit": {
+            "has_idea": "VIC_produce_aircraft_parts"
+          },
+          "remove_ideas": "VIC_produce_aircraft_parts"
+        },
+        "GER": {
+          "country_event": "lar_end_the_occupation.1",
+          "if": {
+            "limit": {
+              "has_idea": "VIC_aircraft_parts"
+            },
+            "remove_ideas": "VIC_aircraft_parts"
+          }
+        }
+      }
+    },
+    {
+      "id": "VIC_the_national_bureau_of_statistics",
+      "name": "Национальное бюро статистики",
+      "desc": "Если мы хотим вести свой народ в светлое будущее, нам нужные официальные данные, чтобы принимать решения. Мы должны основать новое агентство, которое будет собирать такие данные.",
+      "icon": "GFX_focus_generic_treaty",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "VIC_emergency_powers_to_petain"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_national_bureau_of_statistics"
+        ]
+      }
+    },
+    {
+      "id": "VIC_the_legionary_service_order",
+      "name": "Служба в Легионе",
+      "desc": "Наша армия по большей части расформирована и всё равно слишком растянута, чтобы защитить всю Францию. Нам нужна новая организация патриотов, которые поддержат режим.",
+      "icon": "GFX_goal_generic_small_arms",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "VIC_emergency_powers_to_petain"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_legionary_service_order"
+        ],
+        "hidden_effect": {
+          "add_named_threat": {
+            "threat": 10,
+            "name": "VIC_the_legionary_service_order"
+          }
+        }
+      }
+    },
+    {
+      "id": "VIC_form_the_milice",
+      "name": "Организовать ополчение",
+      "desc": "Сопротивление во всей Франции растёт, и нам нужны войска, которые сразятся с ним. Мы будем вербовать в эти войска лишь самых патриотичных граждан и дадим им свободу поступать с этими террористами так, как они сочтут нужным.",
+      "icon": "GFX_focus_fra_milice",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 2,
+      "prerequisites": [
+        "VIC_the_legionary_service_order"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "FRA_legionary_service_order",
+          "add_idea": "FRA_milice"
+        }
+      }
+    },
+    {
+      "id": "VIC_anti_bolshevist_volunteers",
+      "name": "Добровольцы для борьбы с большевизмом",
+      "desc": "Величайшая борьба в истории человечества происходит сейчас между силами западной цивилизации и силами коммунизма. Мы не можем бездействовать, пока идёт эта битва титанов.",
+      "icon": "GFX_focus_generic_military_mission",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 2,
+      "prerequisites": [
+        "VIC_the_legionary_service_order"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "16": {
+          "CONTROLLER": {
+            "NOT": [
+              {
+                "tag": "ROOT"
+              },
+              {
+                "has_war_with": "ROOT"
+              }
+            ],
+            "any_enemy_country": {
+              "is_major": true,
+              "has_government": "communism"
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_anti_bolshevist_volunteers"
+        ]
+      }
+    },
+    {
+      "id": "VIC_rebuild_the_military",
+      "name": "Возродить армию",
+      "desc": "Французская армия была разбита наголову и унижена. На то, чтобы полностью восстановить её, понадобится много сил.",
+      "icon": "GFX_goal_generic_construct_mil_factory",
+      "cost_turns": 3,
+      "x": 4,
+      "y": 1,
+      "prerequisites": [
+        "VIC_emergency_powers_to_petain"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_rebuild_the_military"
+        ]
+      }
+    },
+    {
+      "id": "VIC_finish_the_naval_buildup",
+      "name": "Завершить строительство флота",
+      "desc": "Ныне покойная республика заложила несколько кораблей, чтобы модернизировать флот. Работы были начаты слишком поздно и проводились слишком медленно, так что закончить их вовремя не было возможности. И всё же эти корабли могут послужить ядром нового французского флота.",
+      "icon": "GFX_goal_generic_construct_naval_dockyard",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 1,
+      "prerequisites": [
+        "VIC_rebuild_the_military"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "navy_experience": 50,
+        "random_owned_state": {
+          "limit": {
+            "is_fully_controlled_by": "ROOT",
+            "is_core_of": "ROOT",
+            "is_coastal": true,
+            "free_building_slots": {
+              "building": "dockyard",
+              "size": {
+                "_op": ">",
+                "value": 1
+              },
+              "include_locked": true
+            }
+          },
+          "add_building_construction": {
+            "type": "dockyard",
+            "level": 2,
+            "instant_build": true
+          }
+        }
+      }
+    },
+    {
+      "id": "VIC_hidden_materials",
+      "name": "Скрытые материалы",
+      "desc": "Немцам ни за что не удалось бы так быстро восстановить свою армию, не игнорируй они условия своих же соглашений. Следовательно, с нашей стороны будет только справедливо поступить так же.",
+      "icon": "GFX_focus_secret_rearmament",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "VIC_rebuild_the_military"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_hidden_materials"
+        ]
+      }
+    },
+    {
+      "id": "VIC_analyze_our_defeat",
+      "name": "Проанализировать наше поражение",
+      "desc": "Нашего поражения можно было избежать. Многие люди не выполнили свой долг и проявили непростительную халатность. Мы выявим причины неудач и сделаем всё, чтобы в будущем быть готовыми к таким испытаниям.",
+      "icon": "GFX_goal_generic_army_doctrines",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_hidden_materials"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_doctrine_cost_reduction": {
+          "name": "VIC_analyze_our_defeat",
+          "category": "land_doctrine",
+          "uses": 2,
+          "cost_reduction": 0.5
+        }
+      }
+    },
+    {
+      "id": "VIC_modernize_the_airforce",
+      "name": "Модернизировать ВВС",
+      "desc": "Возможно, самой унизительной в нашем поражении была полная неконкурентоспособность нашей авиации. Нам недоставало современных самолётов. Пока вокруг нас по-прежнему идёт война, мы стремительно разворачиваем производство новых моделей. Нельзя, чтобы такое повторилось снова.",
+      "icon": "GFX_goal_generic_air_doctrine",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 1,
+      "prerequisites": [
+        "VIC_rebuild_the_military"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "VIC_modernize_the_airforce",
+          "category": [
+            "light_fighter",
+            "cas_bomber",
+            "tactical_bomber"
+          ],
+          "bonus": 2,
+          "uses": 2
+        }
+      }
+    },
+    {
+      "id": "VIC_learn_from_the_enemy",
+      "name": "Учиться у своего врага",
+      "desc": "Самый быстрый способ понять, как и почему мы потерпели поражение, — понять, что сделали правильно наши противники.",
+      "icon": "GFX_focus_research2",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "VIC_modernize_the_airforce"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_to_tech_sharing_group": "VIC_learn_from_the_enemy",
+        "GER": {
+          "add_to_tech_sharing_group": "VIC_learn_from_the_enemy"
+        }
+      }
+    },
+    {
+      "id": "VIC_buy_from_the_enemy",
+      "name": "Приобрести у врага",
+      "desc": "Наша военная промышленность не смогла и по-прежнему не может обеспечить нас достаточным количеством современного оружия. Нам нужно получать современное вооружение из всех доступных источников.",
+      "icon": "GFX_goal_generic_air_fighter",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "VIC_learn_from_the_enemy"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_buy_from_the_enemy"
+        ]
+      }
+    }
+  ]
+}

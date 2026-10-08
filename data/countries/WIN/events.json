@@ -1,0 +1,537 @@
+[
+  {
+    "id": "AAT_finland_winter_war.01",
+    "type": "country_event",
+    "title": "Попросить шведов о помощи в войне",
+    "desc": "Финляндия и Советский Союз находятся в состоянии войны. После нескольких десятилетий независимости мы рискуем вновь оказаться в подчинении у соседней державы.\n\nОднако враг представляет угрозу не только для нас. Швеция по-прежнему сохраняет нейтралитет в отношении Советского Союза, но, возможно, ее удастся убедить в необходимости защищаться совместно.",
+    "picture": "GFX_report_event_soviet_finnish_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Они должны оказать нам поддержку в борьбе.",
+        "name_key": "finland.2.a",
+        "trigger": {},
+        "effects": {
+          "SWE": {
+            "country_event": {
+              "id": "finland.3"
+            }
+          }
+        }
+      },
+      {
+        "name": "Нам не нужна помощь в борьбе с захватчиками.",
+        "name_key": "finland.2.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "AAT_finland_winter_war.02",
+    "type": "country_event",
+    "title": "[ROOT.GetAdjective]ие мирные требования",
+    "desc": "Мы принесли хорошие новости с фронта! Наши войска выиграли блокаду города [195.GetName], и теперь он принадлежит нам. Нанеся таким образом сильный удар государству [SOV.GetNameDef], мы получили сильную позицию на мирных переговорах.\n\nОдной из декларируемых целей [SOV.GetAdjective]ого вторжения было создание буфера вокруг города [195.GetName]. В итоге же они не только не достигли цели, но утратили и сам город. Стоит ожидать, что противник захочет прекратить этот конфликт.\n\nМы теперь сами можем решать, когда начинать переговоры. Можно продолжать сражаться и попробовать добиться новых результатов, а можно заключить скорейший мир на условиях статус-кво.",
+    "picture": "GFX_report_event_soviet_invasion_map",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Возможно, пора заключить мир...",
+        "name_key": "AAT_finland_winter_war.02.a",
+        "trigger": {},
+        "effects": {
+          "unlock_decision_tooltip": "FIN_demand_peace_negotiations"
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_finland_winter_war.03",
+    "type": "country_event",
+    "title": "[FROM.GetAdjective]ие мирные требования",
+    "desc": "К нам пришли новости от врагов из [FROM.GetNameRuGen]. Они предлагают заключить мир на условиях статус-кво: наши войска должны немедленно прекратить атаковать и уйти на свою территорию. Судя по всему, [FROM.GetNameDef] удовлетворится тем, что наши границы вернутся к довоенному состоянию и ни одна из сторон не расширит свою территорию.\n\nВряд ли наше население будет радо продолжать бои, учитывая, какие потери мы понесли в последнее время. Возможно, мы сможем убедить людей, что победа близка, но если ожидания не оправдаются, народное недовольство нашим правлением возрастет.",
+    "picture": "GFX_report_event_soviet_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "У нас нет другого выбора, кроме как признать поражение...",
+        "name_key": "AAT_finland_winter_war.03.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "white_peace": "FROM",
+            "if": {
+              "limit": {
+                "FROM": {
+                  "is_faction_leader": true
+                }
+              },
+              "every_enemy_country": {
+                "limit": {
+                  "is_in_faction_with": "FROM"
+                },
+                "ROOT": {
+                  "white_peace": "PREV"
+                }
+              }
+            },
+            "else_if": {
+              "limit": {
+                "FROM": {
+                  "is_subject": true
+                }
+              },
+              "FROM": {
+                "overlord": {
+                  "ROOT": {
+                    "white_peace": "PREV"
+                  }
+                }
+              },
+              "if": {
+                "limit": {
+                  "FROM": {
+                    "any_allied_country": {
+                      "has_war_with": "ROOT"
+                    }
+                  }
+                },
+                "every_other_country": {
+                  "limit": {
+                    "is_in_faction_with": "FROM",
+                    "has_war_with": "ROOT"
+                  },
+                  "ROOT": {
+                    "white_peace": "PREV"
+                  }
+                }
+              }
+            },
+            "FROM": {
+              "every_owned_state": {
+                "limit": {
+                  "is_claimed_by": "ROOT"
+                },
+                "remove_claim_by": "ROOT"
+              }
+            }
+          },
+          "hidden_effect": {
+            "FROM": {
+              "country_event": {
+                "id": "AAT_finland_winter_war.04",
+                "hours": 1
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Мы изменим ход войны!",
+        "name_key": "AAT_finland_winter_war.03.b",
+        "trigger": {},
+        "effects": {
+          "add_stability": -0.1,
+          "add_war_support": -0.1,
+          "SOV_paranoia_medium_increase_effect": true,
+          "add_timed_idea": {
+            "idea": "FIN_public_opposition_to_the_winter_war",
+            "days": 730
+          },
+          "hidden_effect": {
+            "FROM": {
+              "country_event": {
+                "id": "AAT_finland_winter_war.05",
+                "hours": 1
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_finland_winter_war.04",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] принимает наши мирные требования",
+    "desc": "Они согласились на условия мира! Народ на улицах празднует победу. [FROM.GetAdjective]ие войска уже начали покидать нашу территорию, бесславно возвращаясь домой.\n\nЭтот день — день гордости нации, но расслабляться нельзя, ведь в траве кругом еще много змей.",
+    "picture": "GFX_report_event_soviet_finnish_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Пусть они нас больше не искушают.",
+        "name_key": "AAT_finland_winter_war.04.a",
+        "trigger": {},
+        "effects": {
+          "white_peace": "FROM",
+          "if": {
+            "limit": {
+              "is_faction_leader": true
+            },
+            "every_other_country": {
+              "limit": {
+                "is_in_faction_with": "ROOT"
+              },
+              "white_peace": "FROM"
+            }
+          },
+          "else_if": {
+            "limit": {
+              "is_subject": true
+            },
+            "overlord": {
+              "white_peace": "FROM"
+            },
+            "if": {
+              "limit": {
+                "any_allied_country": {
+                  "has_war_with": "FROM"
+                }
+              },
+              "every_other_country": {
+                "limit": {
+                  "is_in_faction_with": "ROOT",
+                  "has_war_with": "FROM"
+                },
+                "white_peace": "FROM"
+              }
+            }
+          },
+          "every_owned_state": {
+            "limit": {
+              "is_claimed_by": "FROM"
+            },
+            "remove_claim_by": "FROM"
+          },
+          "hidden_effect": {
+            "FROM": {
+              "add_ai_strategy": {
+                "type": "antagonize",
+                "id": "ROOT",
+                "value": -200
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_finland_winter_war.05",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] отвергает наши мирные требования",
+    "desc": "Эти глупцы из [FROM.GetNameRuGen] ответили отказом на наше щедрое предложение мира. Они ошибочно убеждены, что их недавние потери — лишь досадная случайность и скоро все изменится. Мы понимаем, что это абсолютная ложь, придуманная, чтобы оградить правительство от гнева народа, но скоро истина все равно станет очевидна.\n\nНаши солдаты остаются на поле боя, их дух по-прежнему высок, они знают, что сражаются за правое дело, и готовы биться дальше.",
+    "picture": "GFX_report_event_soviet_finnish_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Глупцы! Они за это заплатят!",
+        "name_key": "AAT_finland_winter_war.05.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "FROM": {
+              "add_stability": -0.1,
+              "add_war_support": -0.1,
+              "SOV_paranoia_medium_increase_effect": true,
+              "add_timed_idea": {
+                "idea": "FIN_public_opposition_to_the_winter_war",
+                "days": 730
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_finland_winter_war.06",
+    "type": "country_event",
+    "title": "[FROM.GetAdjective]ие территориальные требования мира",
+    "desc": "Мы получили требование капитулировать от своих [FROM.GetAdjective]их противников. В уплату за мир они требуют от нас передать им различные территории, в том числе Карелию и Колу. Враг настаивает, чтобы мы как можно скорее освободили эти земли.",
+    "picture": "GFX_report_event_soviet_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "У нас нет другого выбора, кроме как признать поражение...",
+        "name_key": "AAT_finland_winter_war.06.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "white_peace": "FROM",
+            "if": [
+              {
+                "limit": {
+                  "FROM": {
+                    "is_faction_leader": true
+                  }
+                },
+                "every_enemy_country": {
+                  "limit": {
+                    "is_in_faction_with": "FROM"
+                  },
+                  "ROOT": {
+                    "white_peace": "PREV"
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "213": {
+                    "has_state_flag": "FIN_demanded_by_finland_in_winter_war_flag"
+                  }
+                },
+                "FROM": {
+                  "transfer_state": 213
+                }
+              },
+              {
+                "limit": {
+                  "215": {
+                    "has_state_flag": "FIN_demanded_by_finland_in_winter_war_flag"
+                  }
+                },
+                "FROM": {
+                  "transfer_state": 215
+                }
+              },
+              {
+                "limit": {
+                  "216": {
+                    "has_state_flag": "FIN_demanded_by_finland_in_winter_war_flag"
+                  }
+                },
+                "FROM": {
+                  "transfer_state": 216
+                }
+              }
+            ],
+            "else_if": {
+              "limit": {
+                "FROM": {
+                  "is_subject": true
+                }
+              },
+              "FROM": {
+                "overlord": {
+                  "ROOT": {
+                    "white_peace": "PREV"
+                  }
+                }
+              },
+              "if": {
+                "limit": {
+                  "FROM": {
+                    "any_allied_country": {
+                      "has_war_with": "ROOT"
+                    }
+                  }
+                },
+                "every_other_country": {
+                  "limit": {
+                    "is_in_faction_with": "FROM",
+                    "has_war_with": "ROOT"
+                  },
+                  "ROOT": {
+                    "white_peace": "PREV"
+                  }
+                }
+              }
+            },
+            "FROM": {
+              "every_owned_state": {
+                "limit": {
+                  "is_claimed_by": "ROOT"
+                },
+                "remove_claim_by": "ROOT"
+              }
+            }
+          },
+          "hidden_effect": {
+            "FROM": {
+              "country_event": {
+                "id": "AAT_finland_winter_war.07",
+                "hours": 1
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Да как они смеют?!",
+        "name_key": "AAT_finland_winter_war.06.b",
+        "trigger": {},
+        "effects": {
+          "add_stability": -0.1,
+          "add_war_support": -0.1,
+          "SOV_paranoia_medium_increase_effect": true,
+          "add_timed_idea": {
+            "idea": "FIN_public_opposition_to_the_winter_war",
+            "days": 730
+          },
+          "hidden_effect": {
+            "FROM": {
+              "country_event": {
+                "id": "AAT_finland_winter_war.08",
+                "hours": 6,
+                "random_hours": 4
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_finland_winter_war.07",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] принимает наши мирные требования",
+    "desc": "Они согласились на условия мира! Народ на улицах празднует победу. [FROM.GetAdjective]ие войска уже начали покидать нашу территорию, бесславно возвращаясь домой.\n\nЭтот день — день гордости нации. Мы не просто одолели захватчиков — их поражение было настолько разгромным, что мы смогли расширить свои территории за счет вражеских земель!",
+    "picture": "GFX_report_event_soviet_finnish_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Будем надеяться, что они наконец-то сделали выводы.",
+        "name_key": "AAT_finland_winter_war.07.a",
+        "trigger": {},
+        "effects": {
+          "white_peace": "FROM",
+          "if": [
+            {
+              "limit": {
+                "is_faction_leader": true
+              },
+              "every_other_country": {
+                "limit": {
+                  "is_in_faction_with": "ROOT"
+                },
+                "white_peace": "FROM"
+              }
+            },
+            {
+              "limit": {
+                "213": {
+                  "has_state_flag": "FIN_demanded_by_finland_in_winter_war_flag"
+                }
+              },
+              "transfer_state": 213
+            },
+            {
+              "limit": {
+                "215": {
+                  "has_state_flag": "FIN_demanded_by_finland_in_winter_war_flag"
+                }
+              },
+              "transfer_state": 215
+            },
+            {
+              "limit": {
+                "216": {
+                  "has_state_flag": "FIN_demanded_by_finland_in_winter_war_flag"
+                }
+              },
+              "transfer_state": 216
+            }
+          ],
+          "else_if": {
+            "limit": {
+              "is_subject": true
+            },
+            "overlord": {
+              "white_peace": "FROM"
+            },
+            "if": {
+              "limit": {
+                "any_allied_country": {
+                  "has_war_with": "FROM"
+                }
+              },
+              "every_other_country": {
+                "limit": {
+                  "is_in_faction_with": "ROOT",
+                  "has_war_with": "FROM"
+                },
+                "white_peace": "FROM"
+              }
+            }
+          },
+          "every_owned_state": {
+            "limit": {
+              "is_claimed_by": "FROM"
+            },
+            "remove_claim_by": "FROM"
+          },
+          "hidden_effect": {
+            "FROM": {
+              "add_ai_strategy": {
+                "type": "antagonize",
+                "id": "ROOT",
+                "value": -200
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "AAT_finland_winter_war.08",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] отвергает наши мирные требования",
+    "desc": "Эти глупцы из [FROM.GetNameRuGen] ответили отказом на наше щедрое предложение мира. Их отчаявшееся правительство цепляется за абсурдную идею о том, что еще способно победить. Их верхушка осознает, что если правда об истинном положении дел станет известна, ей придется иметь дело с массовыми восстаниями и, возможно, даже с революцией.\n\nНаши солдаты остаются на поле боя, их дух по-прежнему высок, они знают, что сражаются за правое дело, и готовы биться дальше, не сомневаясь в собственной победе.",
+    "picture": "GFX_report_event_soviet_finnish_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Глупцы! Они за это заплатят!",
+        "name_key": "AAT_finland_winter_war.08.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "FROM": {
+              "add_stability": -0.1,
+              "add_war_support": -0.1,
+              "SOV_paranoia_medium_increase_effect": true,
+              "add_timed_idea": {
+                "idea": "FIN_public_opposition_to_the_winter_war",
+                "days": 730
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+]

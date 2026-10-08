@@ -1,0 +1,4362 @@
+[
+  {
+    "id": "BUL_support_imro_prepare_bulgarian_occupation",
+    "category_id": "BUL_macedonian_revolutionary_organizations",
+    "name": "Подготовить болгарскую оккупацию",
+    "desc": "ВМРО должна организовать болгарские комитеты, которые немедленно возьмут на себя местную власть в случае оккупации региона Болгарией.",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BUL_macedonian_affairs_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": {
+        "flag": "BUL_support_imro_flag",
+        "value": 2
+      },
+      "has_civil_war": false
+    },
+    "complete_effect": {
+      "set_country_flag": [
+        {
+          "flag": "BUL_support_imro_flag",
+          "value": 3
+        },
+        "BUL_macedonian_affairs_ongoing_flag"
+      ]
+    }
+  },
+  {
+    "id": "BUL_secure_occupation_in_balkan_state",
+    "category_id": "BUL_negotiate_claims_in_the_balkans",
+    "name": "Оккупировать регион [FROM.GetName]",
+    "desc": "Мы должны сыграть роль миротворцев на Балканах и предложить союзникам даровать нам право на управление их оккупированными территориями в регионе. Таким образом [ROOT.GetFactionName] сможет передислоцировать гарнизоны для укрепления позиций на других фронтах.",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_manpower": {
+        "_op": ">",
+        "value": 4999
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BUL_peaceful_development",
+      "is_in_faction": true,
+      "FROM": {
+        "NOT": {
+          "is_controlled_by": "BUL"
+        },
+        "any_neighbor_state": {
+          "is_fully_controlled_by": "BUL"
+        },
+        "controller": {
+          "PREV": {
+            "NOT": {
+              "is_core_of": "PREV"
+            },
+            "is_fully_controlled_by": "PREV"
+          },
+          "is_in_faction_with": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "controller": {
+          "country_event": {
+            "id": "bftb_bulgarian_claims.7",
+            "hours": 1
+          }
+        }
+      },
+      "custom_effect_tooltip": "BUL_secure_occupation_in_balkan_state_tt"
+    }
+  },
+  {
+    "id": "CHI_breach_the_yellow_river",
+    "category_id": "CHI_occupation_actions",
+    "name": "Подорвать дамбу Желтой реки",
+    "desc": "Желтая река питает все окрестные регионы, однако стоит на пути надвигающегося вторжения. В качестве крайней меры было предложено взорвать сложную систему дамб и плотин, чтобы замедлить наступление вражеской армии.\n\nОценить эффективность подобного действия не представляется возможным, но последствия наверняка будут тяжелыми.",
+    "icon": "GFX_decision_hol_inundate_water_lines",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "IF": {
+        "limit": {
+          "has_dlc": "No Compromise, No Surrender"
+        },
+        "controls_state": 607,
+        "has_completed_focus": "CHI_defence_in_depth",
+        "has_war_with": "JAP",
+        "OR": {
+          "608": {
+            "is_controlled_by_ROOT_or_ally": false
+          },
+          "614": {
+            "is_controlled_by_ROOT_or_ally": false
+          },
+          "615": {
+            "is_controlled_by_ROOT_or_ally": false
+          },
+          "597": {
+            "is_controlled_by_ROOT_or_ally": false
+          },
+          "598": {
+            "is_controlled_by_ROOT_or_ally": false
+          },
+          "606": {
+            "is_controlled_by_ROOT_or_ally": false
+          },
+          "749": {
+            "is_controlled_by_ROOT_or_ally": false
+          },
+          "1038": {
+            "is_controlled_by_ROOT_or_ally": false
+          },
+          "1035": {
+            "is_controlled_by_ROOT_or_ally": false
+          }
+        }
+      },
+      "ELSE": {
+        "controls_state": 607,
+        "has_war_with": "JAP",
+        "OR": {
+          "NOT": [
+            {
+              "controls_state": 608
+            },
+            {
+              "controls_state": 614
+            },
+            {
+              "controls_state": 615
+            },
+            {
+              "controls_state": 597
+            },
+            {
+              "controls_state": 598
+            },
+            {
+              "controls_state": 606
+            },
+            {
+              "controls_state": 1038
+            },
+            {
+              "controls_state": 1035
+            },
+            {
+              "controls_state": 749
+            }
+          ]
+        }
+      }
+    },
+    "visible": {
+      "controls_state": 607,
+      "is_literally_china": true,
+      "NOT": {
+        "has_global_flag": "chi_yellow_river_blown"
+      }
+    },
+    "complete_effect": {
+      "add_war_support": -0.05,
+      "add_popularity": {
+        "ideology": "communism",
+        "popularity": 0.025
+      },
+      "custom_effect_tooltip": "generic_skip_one_line_tt",
+      "every_state": {
+        "limit": {
+          "is_on_continent": "asia",
+          "OR": {
+            "state": [
+              606,
+              607,
+              598
+            ]
+          }
+        },
+        "add_dynamic_modifier": {
+          "modifier": "yellow_river_blown",
+          "days": 730
+        }
+      },
+      "hidden_effect": {
+        "news_event": {
+          "id": "news.409"
+        },
+        "set_global_flag": "chi_yellow_river_blown"
+      }
+    }
+  },
+  {
+    "id": "CHL_occupy_the_panama_canal",
+    "category_id": "CHL_nacista_decisions",
+    "name": "Оккупировать регион [685.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "CHL_undo_colonialist_occupations",
+      "NOT": {
+        "OR": {
+          "controls_state": 685,
+          "owns_state": 685
+        }
+      },
+      "any_country": {
+        "owns_state": 685,
+        "NOT": [
+          {
+            "has_war_with": "ROOT"
+          },
+          {
+            "is_in_faction_with": "ROOT"
+          },
+          {
+            "is_subject_of": "ROOT"
+          },
+          {
+            "has_non_aggression_pact_with": "ROOT"
+          }
+        ]
+      }
+    },
+    "visible": {
+      "original_tag": "CHL",
+      "has_completed_focus": "CHL_undo_colonialist_occupations",
+      "NOT": {
+        "has_country_flag": "CHL_occupied_the_canal_flag"
+      },
+      "685": {
+        "NOT": {
+          "is_core_of": "ROOT",
+          "is_owned_by": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "CHL_occupy_belize",
+    "category_id": "CHL_nacista_decisions",
+    "name": "Оккупировать регион [311.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "CHL_undo_colonialist_occupations",
+      "NOT": {
+        "OR": {
+          "controls_state": 311,
+          "owns_state": 311
+        }
+      },
+      "any_country": {
+        "owns_state": 311,
+        "NOT": [
+          {
+            "has_war_with": "ROOT"
+          },
+          {
+            "is_in_faction_with": "ROOT"
+          },
+          {
+            "is_subject_of": "ROOT"
+          },
+          {
+            "has_non_aggression_pact_with": "ROOT"
+          },
+          {
+            "original_tag": "BLZ"
+          }
+        ]
+      }
+    },
+    "visible": {
+      "original_tag": "CHL",
+      "has_completed_focus": "CHL_undo_colonialist_occupations",
+      "NOT": {
+        "has_country_flag": "CHL_occupied_belize_flag"
+      },
+      "311": {
+        "NOT": {
+          "is_core_of": "ROOT",
+          "is_owned_by": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "DEBUG_remove_bop_occupation_debug",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_remove_bop_occupation_debug",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "set_country_flag": "DEN_remove_bop_debug"
+    }
+  },
+  {
+    "id": "DEBUG_show_bop_occupation_debug",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_show_bop_occupation_debug",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "clr_country_flag": "DEN_remove_bop_debug"
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_absurdly_high_increase_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_absurdly_high_increase_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_absurdly_high_increase_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_very_high_increase_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_very_high_increase_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_high_increase_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_high_increase_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_high_increase_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_high_increase_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_medium_increase_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_medium_increase_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_medium_increase_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_low_increase_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_low_increase_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_increase_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_very_low_increase_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_very_low_increase_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_increase_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_absurdly_high_decrease_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_absurdly_high_decrease_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_absurdly_high_decrease_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_very_high_decrease_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_very_high_decrease_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_high_decrease_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_high_decrease_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_high_decrease_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_high_decrease_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_medium_decrease_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_medium_decrease_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_medium_decrease_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_low_decrease_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_low_decrease_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_decrease_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_bop_occupation_very_low_decrease_value",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_bop_occupation_very_low_decrease_value",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "DEN_remove_bop_debug"
+      },
+      "has_country_flag": "DEN_has_occupation_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_decrease_effect": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_opinion_modifier_small",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_opinion_modifier_small",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "DEN_modify_overlord_relations_small": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_opinion_modifier_big",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_opinion_modifier_big",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "DEN_modify_overlord_relations_big": true
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_strikes",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_strikes",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "DEN_sanction_sabotages",
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "DEN_cic_to_overlord_5_or_more_tt",
+          "check_variable": {
+            "DEN_occupation_laws_cic_to_overlord": {
+              "_op": ">",
+              "value": 0.04
+            }
+          }
+        },
+        {
+          "tooltip": "DEN_mic_to_overlord_5_or_more_tt",
+          "check_variable": {
+            "DEN_occupation_laws_mic_to_overlord": {
+              "_op": ">",
+              "value": 0.04
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "DEN_collaboration_government"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_increase_effect": true,
+      "DEN_modify_overlord_relations_small": true,
+      "country_event": {
+        "id": "denmark_occupation_event.10",
+        "hours": 12
+      }
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_criticize_collaboration",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_criticize_collaboration",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "DEN_sanction_sabotages",
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.6
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_collaboration_government",
+      "NOT": {
+        "has_country_flag": "DEN_censor_media_flag"
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_increase_effect": true,
+      "DEN_modify_overlord_relations_small": true
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_resistance_coordination",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_resistance_coordination",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "DEN_form_the_danish_freedom_council",
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.9
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_sanction_sabotages",
+      "NOT": {
+        "has_completed_focus": "DEN_pledge_allegiance"
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_increase_effect": true,
+      "if": {
+        "limit": {
+          "has_dynamic_modifier": {
+            "modifier": "DEN_resistance_dynamic_modifier_improved"
+          }
+        },
+        "custom_effect_tooltip": "DEN_modify_danish_resistance_dynamic_modifier"
+      },
+      "else_if": {
+        "limit": {
+          "NOT": {
+            "has_dynamic_modifier": {
+              "modifier": "DEN_resistance_dynamic_modifier"
+            }
+          }
+        },
+        "add_dynamic_modifier": {
+          "modifier": "DEN_resistance_dynamic_modifier"
+        }
+      },
+      "else": {
+        "custom_effect_tooltip": "DEN_modify_danish_resistance_dynamic_modifier"
+      },
+      "add_to_variable": [
+        {
+          "DEN_resistance_target_on_our_occupied_states": 0.05,
+          "tooltip": "resistance_target_on_our_occupied_states_tt"
+        },
+        {
+          "DEN_resistance_compliance_growth_on_our_occupied_states": -0.05,
+          "tooltip": "compliance_growth_on_our_occupied_states_tt"
+        },
+        {
+          "DEN_resistance_damage_to_garrison_on_our_occupied_states": 0.05,
+          "tooltip": "resistance_damage_to_garrison_on_our_occupied_states_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_raid_depots",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_raid_depots",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "DEN_arm_the_resistance",
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.9
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_escalate_the_sabotages"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_increase_effect": true
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_sabotage_civ_industry",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_sabotage_civ_industry",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": "DEN_decision_high_cost",
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "DEN_escalate_the_sabotages",
+      "custom_trigger_tooltip": {
+        "tooltip": "DEN_cic_to_overlord_10_or_more_tt",
+        "check_variable": {
+          "DEN_occupation_laws_cic_to_overlord": {
+            "_op": ">",
+            "value": 0.09
+          }
+        }
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.6
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_form_the_danish_freedom_council"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_increase_effect": true,
+      "custom_effect_tooltip": "DEN_deteriorating_overlord_relations"
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_sabotage_mil_industry",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_sabotage_mil_industry",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": "DEN_decision_high_cost",
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "DEN_escalate_the_sabotages",
+      "custom_trigger_tooltip": {
+        "tooltip": "DEN_mic_to_overlord_10_or_more_tt",
+        "check_variable": {
+          "DEN_occupation_laws_mic_to_overlord": {
+            "_op": ">",
+            "value": 0.09
+          }
+        }
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.6
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_form_the_danish_freedom_council"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_increase_effect": true,
+      "custom_effect_tooltip": "DEN_deteriorating_overlord_relations"
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_underground_factories",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_underground_factories",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": "DEN_decision_high_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "DEN_arm_the_resistance",
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.9
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_form_the_danish_freedom_council",
+      "check_variable": {
+        "DEN_times_mil_was_built": {
+          "_op": "<",
+          "value": 2
+        }
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_increase_effect": true
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_funnel_resources_danish_brigade",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_funnel_resources_danish_brigade",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "DEN_create_danish_brigades_flag",
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.9
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_create_danforce"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_increase_effect": true
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_switch_ideology",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_switch_ideology",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": "DEN_decision_very_high_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_stability": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "NOT": {
+        "has_completed_focus": "DEN_form_the_danish_freedom_council"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "DEN_overlord_ruling_party_tt",
+        "hidden_trigger": {
+          "OR": {
+            "AND": [
+              {
+                "var:DEN.DEN_overlord_nation": {
+                  "has_government": "fascism"
+                },
+                "fascism": {
+                  "_op": ">",
+                  "value": 0.4
+                }
+              },
+              {
+                "var:DEN.DEN_overlord_nation": {
+                  "has_government": "communism"
+                },
+                "communism": {
+                  "_op": ">",
+                  "value": 0.4
+                }
+              },
+              {
+                "var:DEN.DEN_overlord_nation": {
+                  "has_government": "neutrality"
+                },
+                "neutrality": {
+                  "_op": ">",
+                  "value": 0.4
+                }
+              },
+              {
+                "var:DEN.DEN_overlord_nation": {
+                  "has_government": "democratic"
+                },
+                "democratic": {
+                  "_op": ">",
+                  "value": 0.4
+                }
+              }
+            ]
+          }
+        }
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": 0
+        }
+      }
+    },
+    "visible": {
+      "is_subject": true,
+      "has_completed_focus": "DEN_align_with_overlord",
+      "NOT": {
+        "has_government": "var:DEN.DEN_overlord_nation"
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_high_decrease_effect": true,
+      "if": [
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "has_government": "communism"
+            }
+          },
+          "set_politics": {
+            "ruling_party": "communism"
+          },
+          "if": {
+            "limit": {
+              "communism": {
+                "_op": "<",
+                "value": 0.6
+              }
+            },
+            "add_stability": -0.1
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "has_government": "fascism"
+            }
+          },
+          "set_politics": {
+            "ruling_party": "fascism"
+          },
+          "if": {
+            "limit": {
+              "fascism": {
+                "_op": "<",
+                "value": 0.6
+              }
+            },
+            "add_stability": -0.1
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "has_government": "neutrality"
+            }
+          },
+          "set_politics": {
+            "ruling_party": "neutrality"
+          },
+          "if": {
+            "limit": {
+              "neutrality": {
+                "_op": "<",
+                "value": 0.6
+              }
+            },
+            "add_stability": -0.1
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "has_government": "democratic"
+            }
+          },
+          "set_politics": {
+            "ruling_party": "democratic"
+          },
+          "if": {
+            "limit": {
+              "democratic": {
+                "_op": "<",
+                "value": 0.6
+              }
+            },
+            "add_stability": -0.1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_ban_elections",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_ban_elections",
+    "desc": "",
+    "icon": "GFX_decision_generic_speech",
+    "cost": "DEN_decision_very_high_cost",
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_completed_focus": "DEN_form_the_danish_freedom_council",
+        "has_government": "democratic"
+      },
+      "has_government": "var:DEN.DEN_overlord_nation",
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": 0
+        }
+      }
+    },
+    "visible": {
+      "is_subject": true,
+      "has_completed_focus": "DEN_collaboration_government",
+      "has_elections": true,
+      "OVERLORD": {
+        "OR": {
+          "has_government": [
+            "fascism",
+            "communism"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_high_decrease_effect": true,
+      "add_stability": -0.1,
+      "if": [
+        {
+          "limit": {
+            "has_government": "communism"
+          },
+          "set_politics": {
+            "ruling_party": "communism",
+            "elections_allowed": false
+          }
+        },
+        {
+          "limit": {
+            "has_government": "fascism"
+          },
+          "set_politics": {
+            "ruling_party": "fascism",
+            "elections_allowed": false
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "hidden_effect": {
+        "set_country_flag": "DEN_banned_elections"
+      }
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_defend_collaboration",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_defend_collaboration",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_completed_focus": "DEN_form_the_danish_freedom_council"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_collaboration_government"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_decrease_effect": true,
+      "add_stability": 0.05,
+      "if": {
+        "limit": {
+          "is_subject": true
+        },
+        "OVERLORD": {
+          "add_opinion_modifier": {
+            "modifier": "DEN_cooperative_subject",
+            "target": "DEN"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_censor_the_media",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_censor_the_media",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "DEN_collaboration_government"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_decrease_effect": true,
+      "add_stability": -0.05,
+      "if": {
+        "limit": {
+          "is_subject": true
+        },
+        "OVERLORD": {
+          "add_opinion_modifier": {
+            "modifier": "DEN_cooperative_subject",
+            "target": "DEN"
+          }
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "DEN_censor_media_flag"
+      }
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_remove_political_agitator",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_remove_political_agitator",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": "DEN_decision_high_cost",
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "is_subject": true,
+      "has_completed_focus": "DEN_collaboration_government",
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "has_government": "communism"
+            },
+            "OVERLORD": {
+              "OR": {
+                "has_government": "fascism",
+                "any_enemy_country": {
+                  "has_government": "communism"
+                }
+              }
+            }
+          },
+          {
+            "NOT": {
+              "has_government": "fascism"
+            },
+            "OVERLORD": {
+              "OR": {
+                "has_government": "communism",
+                "any_enemy_country": {
+                  "has_government": "fascism"
+                }
+              }
+            }
+          }
+        ],
+        "OVERLORD": {
+          "has_government": "neutrality"
+        }
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_decrease_effect": true,
+      "add_stability": -0.05,
+      "if": [
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "OR": {
+                "has_government": "fascism",
+                "any_enemy_country": {
+                  "has_government": "communism"
+                }
+              }
+            }
+          },
+          "DEN_aksel_larsen": {
+            "set_character_flag": "DEN_political_agitator_flag"
+          },
+          "custom_effect_tooltip": "DEN_remove_aksel_larsen_tt"
+        },
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "OR": {
+                "has_government": "communism",
+                "any_enemy_country": {
+                  "has_government": "fascism"
+                }
+              }
+            }
+          },
+          "DEN_frits_clausen": {
+            "set_character_flag": "DEN_political_agitator_flag"
+          },
+          "DEN_cay_lembcke": {
+            "set_character_flag": "DEN_political_agitator_flag"
+          },
+          "custom_effect_tooltip": [
+            "DEN_remove_frits_clausen_tt",
+            "DEN_remove_cay_lembcke_tt"
+          ]
+        },
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "NOT": {
+                "has_government": "democratic"
+              }
+            }
+          },
+          "DEN_christmas_moller": {
+            "set_character_flag": "DEN_political_agitator_flag"
+          },
+          "custom_effect_tooltip": "DEN_remove_christmas_moller_tt"
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_ban_communism",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_ban_communism",
+    "desc": "",
+    "icon": "GFX_decision_generic_speech",
+    "cost": "DEN_decision_very_high_cost",
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "DEN_collaboration_government",
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": 0
+        }
+      }
+    },
+    "visible": {
+      "is_subject": true,
+      "OVERLORD": {
+        "OR": {
+          "has_government": "fascism",
+          "any_enemy_country": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "has_government": "communism",
+        "has_country_flag": [
+          "DEN_banned_communism_flag",
+          "banned_communism_flag"
+        ]
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_decrease_effect": true,
+      "hidden_effect": {
+        "set_temp_variable": {
+          "var": "ban_ideology_var",
+          "value": "party_popularity@communism"
+        },
+        "multiply_temp_variable": {
+          "var": "ban_ideology_var",
+          "value": -0.25
+        },
+        "set_country_flag": "DEN_banned_communism_flag"
+      },
+      "add_popularity": {
+        "ideology": "communism",
+        "popularity": "ban_ideology_var"
+      },
+      "if": [
+        {
+          "limit": {
+            "has_government": "democratic"
+          },
+          "multiply_temp_variable": {
+            "var": "ban_ideology_var",
+            "value": 2.5
+          },
+          "add_stability": "ban_ideology_var"
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "has_elections": true
+          },
+          "multiply_temp_variable": {
+            "var": "ban_ideology_var",
+            "value": 2
+          },
+          "add_stability": "ban_ideology_var"
+        },
+        {
+          "limit": {
+            "has_elections": false,
+            "has_government": "neutrality"
+          },
+          "multiply_temp_variable": {
+            "var": "ban_ideology_var",
+            "value": 1.25
+          },
+          "add_stability": "ban_ideology_var"
+        },
+        {
+          "limit": {
+            "has_government": "fascism"
+          },
+          "add_stability": "ban_ideology_var"
+        }
+      ],
+      "else": {
+        "multiply_temp_variable": {
+          "var": "ban_ideology_var",
+          "value": 1.5
+        },
+        "add_stability": "ban_ideology_var"
+      }
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_allow_communism",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_allow_communism",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "is_subject": true
+      },
+      "OVERLORD": {
+        "has_government": "communism"
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": -0.3
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "DEN_banned_communism_flag",
+          "banned_communism_flag"
+        ]
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_decrease_effect": true,
+      "if": [
+        {
+          "limit": {
+            "has_country_flag": "banned_communism_flag"
+          },
+          "set_country_flag": "DEN_allow_communism_flag",
+          "clr_country_flag": "banned_communism_flag"
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "else": {
+        "clr_country_flag": "DEN_banned_communism_flag",
+        "add_manpower": 500
+      },
+      "add_popularity": {
+        "ideology": "communism",
+        "popularity": 0.025
+      }
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_ban_fascism",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_ban_fascism",
+    "desc": "",
+    "icon": "GFX_decision_generic_speech",
+    "cost": "DEN_decision_very_high_cost",
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "DEN_collaboration_government",
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": -0.3
+        }
+      }
+    },
+    "visible": {
+      "is_subject": true,
+      "OVERLORD": {
+        "OR": {
+          "has_government": "communism",
+          "any_enemy_country": {
+            "has_government": "fascism"
+          }
+        }
+      },
+      "NOT": {
+        "has_government": "fascism",
+        "has_country_flag": "DEN_banned_fascism_flag"
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_decrease_effect": true,
+      "hidden_effect": {
+        "set_temp_variable": {
+          "var": "ban_ideology_var",
+          "value": "party_popularity@fascism"
+        },
+        "multiply_temp_variable": {
+          "var": "ban_ideology_var",
+          "value": -0.25
+        },
+        "set_country_flag": "DEN_banned_fascism_flag"
+      },
+      "add_popularity": {
+        "ideology": "fascism",
+        "popularity": "ban_ideology_var"
+      },
+      "if": [
+        {
+          "limit": {
+            "has_government": "democratic"
+          },
+          "multiply_temp_variable": {
+            "var": "ban_ideology_var",
+            "value": 2.5
+          },
+          "add_stability": "ban_ideology_var"
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "has_elections": true
+          },
+          "multiply_temp_variable": {
+            "var": "ban_ideology_var",
+            "value": 2
+          },
+          "add_stability": "ban_ideology_var"
+        },
+        {
+          "limit": {
+            "has_elections": false,
+            "has_government": "neutrality"
+          },
+          "multiply_temp_variable": {
+            "var": "ban_ideology_var",
+            "value": 1.25
+          },
+          "add_stability": "ban_ideology_var"
+        },
+        {
+          "limit": {
+            "has_government": "communism"
+          },
+          "add_stability": "ban_ideology_var"
+        }
+      ],
+      "else": {
+        "multiply_temp_variable": {
+          "var": "ban_ideology_var",
+          "value": 1.5
+        },
+        "add_stability": "ban_ideology_var"
+      }
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_allow_fascism",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_allow_fascism",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "is_subject": true
+      },
+      "OVERLORD": {
+        "has_government": "fascism"
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": -0.3
+        }
+      }
+    },
+    "visible": {
+      "is_subject": true,
+      "OR": {
+        "has_country_flag": [
+          "DEN_banned_fascism_flag",
+          "banned_fascism_flag"
+        ]
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_decrease_effect": true,
+      "if": [
+        {
+          "limit": {
+            "has_country_flag": "banned_fascism_flag"
+          },
+          "set_country_flag": "DEN_allow_fascism_flag",
+          "clr_country_flag": "banned_fascism_flag"
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "else": {
+        "clr_country_flag": "DEN_banned_fascism_flag",
+        "add_manpower": 500
+      },
+      "add_popularity": {
+        "ideology": "fascism",
+        "popularity": 0.025
+      }
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_allow_democratism",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_allow_democratism",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "is_subject": true
+      },
+      "OVERLORD": {
+        "OR": {
+          "has_government": [
+            "democratic",
+            "neutrality"
+          ]
+        }
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": -0.3
+        }
+      }
+    },
+    "visible": {
+      "is_subject": true,
+      "has_country_flag": "banned_democratic_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_decrease_effect": true,
+      "if": [
+        {
+          "limit": {
+            "has_country_flag": "banned_democratic_flag"
+          },
+          "set_country_flag": "DEN_allow_democratic_flag",
+          "clr_country_flag": "banned_democratic_flag"
+        },
+        {
+          "limit": {
+            "has_elections": false
+          },
+          "set_politics": {
+            "elections_allowed": true
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "add_popularity": {
+        "ideology": "democratic",
+        "popularity": 0.05
+      }
+    }
+  },
+  {
+    "id": "DEN_request_the_return_of_the_faroes",
+    "category_id": "DEN_return_occupied_territory_category",
+    "name": "DEN_request_the_return_of_the_faroes",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "337": {
+        "is_controlled_by": "ENG"
+      },
+      "is_subject": false,
+      "NOT": {
+        "has_war_with": "ENG",
+        "any_allied_country": {
+          "has_war_with": "ENG"
+        }
+      }
+    },
+    "visible": {
+      "tag": "DEN",
+      "337": {
+        "is_controlled_by": "ENG"
+      },
+      "has_dlc": "Arms Against Tyranny",
+      "has_global_flag": "ENG_occupied_DEN_faroes"
+    },
+    "complete_effect": {
+      "ENG": {
+        "country_event": {
+          "id": "AAT_USA_events.03",
+          "days": 2
+        }
+      }
+    }
+  },
+  {
+    "id": "DEN_request_greenland_back",
+    "category_id": "DEN_return_occupied_territory_category",
+    "name": "DEN_request_greenland_back",
+    "desc": "",
+    "icon": "generic_operation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "101": {
+        "is_owned_and_controlled_by": "USA"
+      },
+      "is_subject": false,
+      "NOT": {
+        "has_war_with": "USA",
+        "any_allied_country": {
+          "has_war_with": "USA"
+        }
+      }
+    },
+    "visible": {
+      "tag": "DEN",
+      "has_global_flag": "USA_occupied_DEN_greenland",
+      "has_dlc": "Arms Against Tyranny"
+    },
+    "complete_effect": {
+      "USA": {
+        "country_event": {
+          "id": "AAT_USA_events.05",
+          "days": 2
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "DEN": {
+          "transfer_state": 101
+        }
+      }
+    }
+  },
+  {
+    "id": "ETH_set_up_gideon_force_decision",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Отряд «Гидеон»",
+    "desc": "[?ETH.host_nation.GetAdjective]ое правительство готово выделить средства на создание небольшого экспедиционного корпуса, который вступит в бой с захватчиками. Нужно немедленно воспользоваться этой возможностью!",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 50
+      },
+      "date": {
+        "_op": "<",
+        "value": "1941.6.1"
+      },
+      "IF": {
+        "limit": {
+          "RAJ": {
+            "is_subject_of": "ENG"
+          }
+        },
+        "RAJ": {
+          "all_owned_state": {
+            "is_controlled_by": "RAJ"
+          }
+        }
+      },
+      "if": {
+        "limit": {
+          "RAJ": {
+            "is_ai": false
+          }
+        },
+        "OR": {
+          "RAJ": [
+            {
+              "NOT": {
+                "has_completed_focus": "RAJ_chindits_dlc"
+              }
+            },
+            {
+              "NOT": {
+                "has_completed_focus": "RAJ_chindits"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_the_ferengi",
+      "check_variable": {
+        "ETH.host_nation": "ENG"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_build_local_resistance_force",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Создать войска сопротивления в регионе [FROM.GetName]",
+    "desc": "Мы должны сделать все, что в наших силах, чтобы поддерживать движение сопротивления на оккупированных территориях. Это поможет ослабить [ITA.GetAdjective]ую хватку в регионе и отвлечет противника, пока мы готовимся к неизбежному освобождению [ETH.GetNameRuGen].",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 40
+      },
+      "NOT": {
+        "has_country_flag": "ETH_building_local_resistance_flag"
+      },
+      "FROM": {
+        "compliance": {
+          "_op": "<",
+          "value": 50
+        },
+        "resistance": {
+          "_op": ">",
+          "value": 40
+        }
+      }
+    },
+    "visible": {
+      "is_government_in_exile": true,
+      "NOT": {
+        "has_country_flag": "ETH_started_uprising_flag"
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -25,
+      "set_country_flag": "ETH_building_local_resistance_flag"
+    }
+  },
+  {
+    "id": "ETH_launch_large_scale_uprising",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Крупномасштабное восстание",
+    "desc": "Народ [ETH.GetNameRuGen] жаждет сбросить иго иностранной оккупации. Нужно лишь подтолкнуть его к этому.",
+    "icon": "GFX_decision_revolt",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 60
+      },
+      "NOT": {
+        "has_country_flag": "ETH_building_local_resistance_flag"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "ETH_has_readied_uprising_tt",
+        "any_owned_state": {
+          "check_variable": {
+            "ETH_resistance_force_strength": {
+              "_op": ">",
+              "value": 0
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ETH_organize_regional_revolts_flag",
+      "is_government_in_exile": true
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_started_uprising_flag"
+    }
+  },
+  {
+    "id": "ETH_italian_uprising_warning_mission",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "[ETH.GetName] ожидает неизбежного восстания",
+    "desc": "По слухам, [ETH.GetLeader] призывает местных мятежников поднять восстание и напасть на войска страны [ROOT.GetName].",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_italian_control_mission",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "[ITA.GetName] интегрирует территорию региона [?ITA.state_integrated.GetName]",
+    "desc": "[ITA.GetName] пытается установить контроль над нашей территорией с помощью грубой силы. Мы должны оттеснить врага.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "var:ITA.state_integrated": {
+        "NOT": {
+          "is_controlled_by": "ITA"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "ITA_expand_regional_control",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Установить контроль над регионом [FROM.GetName]",
+    "desc": "Мы расширим [ITA.GetAdjective]ий контроль над государством [FROM.GetName].",
+    "icon": "GFX_decision_oppression",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "expanding_regional_control_flag"
+      },
+      "FROM": {
+        "compliance": {
+          "_op": ">",
+          "value": 60
+        },
+        "any_neighbor_state": {
+          "is_owned_by": "ROOT"
+        },
+        "var:ETH.host_nation": {
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_triumph_in_africa_bba"
+    },
+    "complete_effect": {
+      "set_country_flag": "expanding_regional_control_flag",
+      "set_variable": {
+        "state_integrated": "FROM"
+      },
+      "hidden_effect": {
+        "FROM": {
+          "owner": {
+            "activate_mission": "ETH_italian_control_mission"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_discredit_haile_selassie",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Дискредитировать лидера, [ETH.GetLeader] недостоин править",
+    "desc": "Рассказав эфиопам о том, как Хайле Селассие позорно бежал и сейчас ведет роскошную жизнь в далекой стране, мы, возможно, сумеем переманить часть народа на нашу сторону и навредить репутации бывшего императора.",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "ITA_the_new_emperor_of_ethiopia"
+    },
+    "visible": {
+      "any_controlled_state": {
+        "is_owned_by": "ETH"
+      }
+    },
+    "complete_effect": {
+      "ETH": {
+        "add_legitimacy": -10
+      },
+      "hidden_effect": {
+        "ETH": {
+          "country_event": {
+            "id": "BBA_italo_ethiopian_war_events.510",
+            "hours": 1
+          }
+        }
+      },
+      "every_controlled_state": {
+        "limit": {
+          "is_owned_by": "ETH"
+        },
+        "add_compliance": 5
+      },
+      "custom_effect_tooltip": "ITA_discredit_haile_selassie_cd_tt"
+    }
+  },
+  {
+    "id": "ITA_electrify_state",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "$ETH_electrify_state$",
+    "desc": "$ETH_electrify_state_desc$",
+    "icon": "GFX_decision_generic_electricity",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ITA_develop_ethiopia"
+    },
+    "visible": {
+      "has_completed_focus": "ITA_triumph_in_africa_bba"
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_investments_in_progress_flag"
+    }
+  },
+  {
+    "id": "occupy_iberia",
+    "category_id": "form_roman_empire_category",
+    "name": "Оккупировать Иберию",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        229,
+        231,
+        826
+      ]
+    },
+    "visible": {
+      "original_tag": "ITA",
+      "NOT": {
+        "has_global_flag": "occupy_iberia_flag"
+      },
+      "has_global_flag": "form_roman_empire_flag"
+    },
+    "complete_effect": {
+      "229": {
+        "add_core_of": "ROOT"
+      },
+      "231": {
+        "add_core_of": "ROOT"
+      },
+      "826": {
+        "add_core_of": "ROOT"
+      },
+      "add_stability": -0.05,
+      "hidden_effect": {
+        "set_global_flag": "occupy_iberia_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_albania_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Албанию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "ALB": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "ALB"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "ALB": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_albanian_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "ALB": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "ALB"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_albanian_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_montenegro_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Черногорию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "MNT": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "MNT"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "MNT": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_montenegrin_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "MNT": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "MNT"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_montenegrin_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_croatia_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Хорватию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "CRO": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "CRO"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "CRO": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_croatian_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "CRO": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "CRO"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_croatian_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_serbia_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Сербию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "SER": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "SER"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "SER": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_serbian_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "SER": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "SER"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_serbian_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_bosnia_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Боснию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "BOS": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "BOS"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "BOS": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_bosnian_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "BOS": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "BOS"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_bosnian_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_herzegovina_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Герцеговину",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "HRZ": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "HRZ"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "HRZ": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_herzegovin_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "HRZ": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "HRZ"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_herzegovin_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_macedonian_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Македонию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "MAC": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "MAC"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "MAC": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_macedonian_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "MAC": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "MAC"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_macedonian_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_slovenia_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Словению",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "SLV": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "SLV"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "SLV": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_slovene_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "SLV": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "SLV"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_slovene_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_kosovo_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Косово",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "KOS": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "KOS"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "KOS": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_kosovar_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "KOS": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "KOS"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_kosovar_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "ITA_missiolini_occupy_albania",
+    "category_id": "ITA_missiolinis",
+    "name": "Оккупировать Албанию",
+    "desc": "Связь Италии и Албании прочна: ей уже несколько тысяч лет, ведь она длится со времен Римской империи. Нужно включить Албанию в состав Италии, чтобы приобрести залив в Адриатическом море.",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "44": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      },
+      "805": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      },
+      "934": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "ITA_missiolinis_system_available": true
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ITA_missiolini_occupy_albania_success_effect": true
+      },
+      "hidden_effect": {
+        "country_event": {
+          "id": "BBA_italy_missiolinis.103",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_missiolini_occupy_dalmatia",
+    "category_id": "ITA_missiolinis",
+    "name": "Оккупировать регион [103.GetName]",
+    "desc": "Нужно исправить жестокую несправедливость Великой войны и забрать то, что принадлежит нам по праву. Далмация должна стать итальянской!",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "103": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "ITA_missiolinis_system_available": true
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ITA_missiolini_occupy_dalmatia_success_effect": true
+      },
+      "hidden_effect": {
+        "country_event": {
+          "id": "BBA_italy_missiolinis.113",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_missiolini_occupy_greece",
+    "category_id": "ITA_missiolinis",
+    "name": "Оккупировать государство [GRE.GetName]",
+    "desc": "Как и легионы Древнего Рима, мы тоже можем разбить наложенные на нас оковы, завоевав Грецию и объединив наши братские народы.",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "185": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      },
+      "47": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      },
+      "186": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "ITA_missiolinis_system_available": true
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ITA_missiolini_occupy_greece_success_effect": true
+      },
+      "hidden_effect": {
+        "country_event": {
+          "id": "BBA_italy_missiolinis.123",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_missiolini_occupy_ticino",
+    "category_id": "ITA_missiolinis",
+    "name": "Оккупировать регион [846.GetName]",
+    "desc": "С тех пор как Ганнибал пересек Альпы со своими слонами, горы служили варварам дорогой в сердце Италии. Мы должны защитить свою северную границу.",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "846": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "ITA_missiolinis_system_available": true
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ITA_missiolini_occupy_ticino_success_effect": true
+      },
+      "hidden_effect": {
+        "country_event": {
+          "id": "BBA_italy_missiolinis.133",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_vallo_alpino_occidentale",
+    "category_id": "ITA_vallo_alpino_del_littorio_dec_cat",
+    "name": "Западный «Альпийский вал»",
+    "desc": "Мы можем укрепить свою западную границу, построив там серию укреплений.",
+    "icon": "GFX_decision_generic_mountain_fortification",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 158,
+      "NOT": {
+        "has_country_flag": "ITA_vallo_alpino_project_ongoing_flag"
+      }
+    },
+    "visible": {
+      "158": {
+        "any_province_building_level": {
+          "province": {
+            "id": [
+              11891,
+              11721,
+              9738,
+              6780,
+              611
+            ]
+          },
+          "building": "bunker",
+          "level": {
+            "_op": "<",
+            "value": 10
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "ITA_vallo_alpino_project_ongoing_flag",
+      "hidden_effect": {
+        "add_command_power": "ITA_vallo_alpino_cp_cost_negative",
+        "add_political_power": "ITA_vallo_alpino_pp_cost_negative"
+      }
+    }
+  },
+  {
+    "id": "liberate_morocco",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [MOR.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": [
+            290,
+            461,
+            462,
+            783
+          ]
+        },
+        "MOR": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWE_upgrade_respectful_occupier",
+    "category_id": "SWE_coalition_war_cabinet_cat",
+    "name": "SWE_upgrade_respectful_occupier",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SWE_has_picked_war_cabinet_trait"
+      },
+      "has_completed_focus": "SWE_sami_reconcilliation"
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "SWE_has_picked_war_cabinet_trait",
+      "add_country_leader_trait": "SWE_respectful_occupier",
+      "custom_effect_tooltip": "SWE_has_picked_war_cabinet_trait_tt"
+    }
+  },
+  {
+    "id": "debug_trigger_third_moroccan_war",
+    "category_id": "global_debug_decisions",
+    "name": "Начать Третью марокканскую войну",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "show_mt_proxys"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: debug_trigger_venezuelan_revolution",
+      "IBR": {
+        "country_event": {
+          "id": "MOR_moroccowar.1"
+        },
+        "leave_faction": true,
+        "end_puppet": "MOR"
+      },
+      "MOR": {
+        "leave_faction": true
+      }
+    }
+  },
+  {
+    "id": "Iberian_Wars_homefront_commodities_decisions_reorganize_occupied_assets",
+    "category_id": "iberian_wars_political_mechanic",
+    "name": "Использовать захваченные активы",
+    "desc": "Мы захватываем материалы и предприятия быстрее, чем успеваем пускать их в дело. Отправим команду чиновников, чтобы это исправить.",
+    "icon": "GFX_decision_generic_seizure",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "num_occupied_states": {
+        "_op": ">",
+        "value": 0
+      }
+    },
+    "visible": {
+      "is_iberianwar_mainland_nation": true,
+      "has_country_flag": "IBR_homefront_commodities_opened"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_homefront_commodities_decisions_reorganize_occupied_assets"
+    }
+  },
+  {
+    "id": "IBR_franco_morocco_decision",
+    "category_id": "IBR_caudillos_category",
+    "name": "Франко отправляется в Марокко",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_caudillos_show_special_f",
+      "NOT": {
+        "has_country_flag": [
+          "IBR_legislative_council_rogue",
+          "IBRDemUnion"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_occupy_the_hospitals",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Оккупировать больницы",
+    "desc": "",
+    "icon": "GFX_decision_generic_seizure",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "OR": {
+        "AND": [
+          {
+            "has_country_flag": [
+              "MEX_doctorsstrike_fourth_doctorsstrike",
+              "push_into_irrelevance"
+            ]
+          },
+          {
+            "has_country_flag": [
+              "MEX_doctorsstrike_third_doctorsstrike",
+              "harsh_action"
+            ]
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_doctor_intern_radicalism_decrease_high": true,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -250
+      },
+      "add_manpower": -25,
+      "hidden_effect": {
+        "add_political_power": -35,
+        "add_command_power": -35
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_WRS",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [WRS.GetFlag] ЗРРФ",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "WRS": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "WRS"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_WRS",
+      "set_temp_variable": {
+        "TargetTag": "WRS"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "WRS.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "WRS"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "WRS"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_WRS": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_KOM",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [KOM.GetFlag] Коми",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "KOM": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "KOM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_KOM",
+      "set_temp_variable": {
+        "TargetTag": "KOM"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "KOM.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "KOM"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "KOM"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_KOM": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_SAM",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [SAM.GetFlag] Самару",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "SAM": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "SAM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_SAM",
+      "set_temp_variable": {
+        "TargetTag": "SAM"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "SAM.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "SAM"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "SAM"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_SAM": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_GOR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [GOR.GetFlag] [GOR.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "GOR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "GOR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_GOR",
+      "set_temp_variable": {
+        "TargetTag": "GOR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "GOR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "GOR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "GOR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_GOR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_VOL",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [VOL.GetFlag] Вологду",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "VOL": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "VOL"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_VOL",
+      "set_temp_variable": {
+        "TargetTag": "VOL"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "VOL.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "VOL"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "VOL"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_VOL": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_VYT",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [VYT.GetFlag] Вятку",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "VYT": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "VYT"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_VYT",
+      "set_temp_variable": {
+        "TargetTag": "VYT"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "VYT.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "VYT"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "VYT"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_VYT": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_TAR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [TAR.GetFlag] [TAR.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "TAR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "TAR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_TAR",
+      "set_temp_variable": {
+        "TargetTag": "TAR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "TAR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "TAR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "TAR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_TAR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_PRM",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [PRM.GetFlag] [PRM.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "PRM": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "PRM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_PRM",
+      "set_temp_variable": {
+        "TargetTag": "PRM"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "PRM.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "PRM"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "PRM"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_PRM": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_GAY",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [GAY.GetFlag] [GAY.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "GAY": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_GAY",
+      "set_temp_variable": {
+        "TargetTag": "GAY"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "GAY.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "GAY"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "GAY"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_GAY": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_BKR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [BKR.GetFlag] Башкортостан",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "BKR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "BKR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_BKR",
+      "set_temp_variable": {
+        "TargetTag": "BKR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "BKR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "BKR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "BKR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_BKR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_OMS",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [OMS.GetFlag] Омск",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "OMS": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "OMS"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_OMS",
+      "set_temp_variable": {
+        "TargetTag": "OMS"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "OMS.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "OMS"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "OMS"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_OMS": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_FAV",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [FAV.GetFlag] Свободных авиаторов",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "FAV": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "FAV"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_FAV",
+      "set_temp_variable": {
+        "TargetTag": "FAV"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "FAV.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "FAV"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "FAV"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_FAV": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_ZLT",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [ZLT.GetFlag] [ZLT.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "ZLT": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "ZLT"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_ZLT",
+      "set_temp_variable": {
+        "TargetTag": "ZLT"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "ZLT.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "ZLT"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "ZLT"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_ZLT": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_SVR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [SVR.GetFlag] Сведловск",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "SVR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "SVR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_SVR",
+      "set_temp_variable": {
+        "TargetTag": "SVR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "SVR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "SVR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "SVR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_SVR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_TYM",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [TYM.GetFlag] Тюмень",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "TYM": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "TYM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_TYM",
+      "set_temp_variable": {
+        "TargetTag": "TYM"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "TYM.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "TYM"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "TYM"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_TYM": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_YGR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [YGR.GetFlag] Югру",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "YGR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "YGR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_YGR",
+      "set_temp_variable": {
+        "TargetTag": "YGR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "YGR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "YGR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "YGR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_YGR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_VOR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [VOR.GetFlag] Воркуту",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "VOR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "VOR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_VOR",
+      "set_temp_variable": {
+        "TargetTag": "VOR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "VOR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "VOR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "VOR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_VOR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_TOM",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [TOM.GetFlag] [TOM.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "TOM": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "TOM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_TOM",
+      "set_temp_variable": {
+        "TargetTag": "TOM"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "TOM.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "TOM"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "TOM"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_TOM": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_SBA",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [SBA.GetFlag] Сибирскую Черную Армию",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "SBA": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "SBA"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_SBA",
+      "set_temp_variable": {
+        "TargetTag": "SBA"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "SBA.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "SBA"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "SBA"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_SBA": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_ALT",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [ALT.GetFlag] Ойротию",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "ALT": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "ALT"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_ALT",
+      "set_temp_variable": {
+        "TargetTag": "ALT"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "ALT.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "ALT"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "ALT"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_ALT": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_KEM",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [KEM.GetFlag] [KEM.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "KEM": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "KEM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_KEM",
+      "set_temp_variable": {
+        "TargetTag": "KEM"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "KEM.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "KEM"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "KEM"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_KEM": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_NOV",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [NOV.GetFlag] [NOV.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "NOV": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "NOV"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_NOV",
+      "set_temp_variable": {
+        "TargetTag": "NOV"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "NOV.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "NOV"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "NOV"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_NOV": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_PRC",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [PRC.GetFlag] [PRC.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "PRC": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "PRC"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_PRC",
+      "set_temp_variable": {
+        "TargetTag": "PRC"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "PRC.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "PRC"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "PRC"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_PRC": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_KRS",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [KRS.GetFlag] [KRS.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "KRS": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "KRS"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_KRS",
+      "set_temp_variable": {
+        "TargetTag": "KRS"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "KRS.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "KRS"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "KRS"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_KRS": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_MAG",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [MAG.GetFlag] [MAG.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "MAG": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "MAG"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_MAG",
+      "set_temp_variable": {
+        "TargetTag": "MAG"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "MAG.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "MAG"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "MAG"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_MAG": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_KMC",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [KMC.GetFlag] Камчатку",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "KMC": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "KMC"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_KMC",
+      "set_temp_variable": {
+        "TargetTag": "KMC"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "KMC.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "KMC"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "KMC"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_KMC": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_IRK",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [IRK.GetFlag] [IRK.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "IRK": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "IRK"
+      },
+      "NOT": {
+        "original_tag": "BRY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_IRK",
+      "set_temp_variable": {
+        "TargetTag": "IRK"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "IRK.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "IRK"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "IRK"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_IRK": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_BRY",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [BRY.GetFlag] Бурятию",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "BRY": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "BRY"
+      },
+      "NOT": {
+        "original_tag": "IRK"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_BRY",
+      "set_temp_variable": {
+        "TargetTag": "BRY"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "BRY.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "BRY"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "BRY"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_BRY": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_CHT",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [CHT.GetFlag] Читу",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "CHT": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "CHT"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_CHT",
+      "set_temp_variable": {
+        "TargetTag": "CHT"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "CHT.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "CHT"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "CHT"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_CHT": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_CHT_Werbell",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Основать Читинскую учебную академию",
+    "desc": "Когда наши войска проходили по городам и селам Западной Сибири, вы не поверите, сколько молодых людей умоляли дать им шанс вступить в армию легендарного наемника Уэрбелла. Проблема в том, что все сводится к их обстоятельствам. Видите ли, эти потенциальные рекруты происходят из среды, не похожей на нашу собственную. Некоторые из них рыбаки, некоторые - торговцы. Некоторые даже не видели винтовки за всю свою жизнь. С такой слабой базой знаний они стали бы только обузой в предстоящих битвах в Сибири.\n\nК счастью, недавнее завоевание Читы предоставило Уэрбеллу возможность задействовать те немногочисленные кадры, которые может дать ему Дальний Восток. Он планирует построить новую учебную академию для всех россиян, намеревающихся присоединиться к его армии. Наши ветераны и старшие офицеры будут укомплектовывать это новое учебное заведение, гарантируя, что ни один новобранец не отправится на войну, не зная, какой конец пистолета он должен направить на врага.",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "has_country_flag": "MAG_merc",
+      "CHT": {
+        "exists": false
+      },
+      "controls_state": 563
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_CHT_Werbell",
+      "army_experience": 20,
+      "add_timed_idea": {
+        "idea": "MAG_WA_training_centers",
+        "days": 730
+      },
+      "TNO_improve_army_professionalism_low": true,
+      "TNO_improve_education_policy_effectiveness_monthly_low": true,
+      "TNO_improve_training_policy_effectiveness_monthly_med": true,
+      "563": {
+        "add_building_construction": {
+          "type": "barracks",
+          "level": 1,
+          "instant_build": true
+        },
+        "add_extra_state_shared_building_slots": 1
+      },
+      "set_temp_variable": {
+        "civilian_costs_temp": 0.045
+      },
+      "econ_civilian_costs_tooltip": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_AMR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [AMR.GetFlag] [AMR.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "AMR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "AMR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_AMR",
+      "set_temp_variable": {
+        "TargetTag": "AMR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "AMR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "AMR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "AMR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_AMR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_OMO",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [OMO.GetFlag] Божье владение",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "OMO": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "OMO"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_OMO",
+      "set_temp_variable": {
+        "TargetTag": "OMO"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "OMO.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "OMO"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "OMO"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_OMO": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_YAK",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [YAK.GetFlag] Якутию",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "YAK": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "YAK"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_YAK",
+      "set_temp_variable": {
+        "TargetTag": "YAK"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "YAK.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "YAK"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "YAK"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_YAK": true
+    }
+  }
+]

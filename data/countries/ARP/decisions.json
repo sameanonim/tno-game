@@ -1,0 +1,190 @@
+[
+  {
+    "id": "GER_sharpen_air_safety_regulations",
+    "category_id": "political_actions",
+    "name": "Усилить правила воздушной безопасности",
+    "desc": "Введя более строгие правила, мы сможем предотвратить самые частые причины катастроф, в том числе катастроф дирижаблей.",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_government": "neutrality"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_air_safety_regulations",
+        "days": 1095
+      },
+      "set_global_flag": "GER_air_safety_regulations_flag"
+    }
+  },
+  {
+    "id": "HUN_reintigrate_carpathian_ruthenia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [73.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "controls_state": 73
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_carpathia_flag"
+      },
+      "73": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_referendum_in_carpathian_ruthenia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Организовать референдум в регионе [73.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums",
+      "is_subject": false,
+      "OR": {
+        "has_government": [
+          "democratic",
+          "neutrality"
+        ]
+      },
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 65
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "WW_hungary.114",
+          "days": 2,
+          "random": 3
+        },
+        "hidden_effect": {
+          "set_country_flag": "HUN_held_carpathian_referendum"
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_curacao_uprising_ARP",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ОБСИДИАН",
+    "desc": "",
+    "icon": "GFX_decision_diplo_suriname",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_SouthAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_CIA_Curacao_ARP_unlock"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_curacao_uprising_ARP_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "SUR_forpol.11",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "SUR_forpol.12",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "FUK_transcarpatian_industry",
+    "category_id": "FUK_north_crimean_canal_category",
+    "name": "Nationalize Foreign Assets in Transcarpathia",
+    "desc": "",
+    "icon": "GFX_decision_generic_seizure",
+    "cost": 55,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 73,
+      "NOT": {
+        "has_country_flag": "FUK_north_crimean_canal_construction_phase_in_progress"
+      }
+    },
+    "visible": {
+      "controls_state": 73
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_transcarpatian_industry",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": -0.5
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  }
+]

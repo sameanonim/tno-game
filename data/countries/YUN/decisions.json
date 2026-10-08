@@ -1,0 +1,2966 @@
+[
+  {
+    "id": "YUN_core_state",
+    "category_id": "political_actions",
+    "name": "Интегрировать регион [FROM.GetName] в состав нашей провинции",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IRQ_coring_state_in_progress"
+      }
+    },
+    "visible": {
+      "has_country_flag": "YUN_did_burmic_ties_focus_flag"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "IRQ_coring_state_in_progress",
+          "value": 1,
+          "days": 31
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_develop_yunnan_aluminium_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разработка месторождений бокситов в Юньнани",
+    "desc": "",
+    "icon": "aluminium",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "325": {
+        "is_controlled_by_ROOT_or_subject": true
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "JAP_transformation_of_nature",
+          "JAP_develop_the_chinese_resources"
+        ]
+      },
+      "325": {
+        "NOT": {
+          "has_state_flag": "yunnan_aluminium_developed"
+        }
+      }
+    },
+    "complete_effect": {
+      "325": {
+        "add_resource": {
+          "type": "aluminium",
+          "amount": 12
+        },
+        "set_state_flag": "yunnan_aluminium_developed"
+      }
+    }
+  },
+  {
+    "id": "develop_yunnan_aluminium_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разработка месторождений бокситов в Юньнани",
+    "desc": "",
+    "icon": "aluminium",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation3",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "owns_state": 325,
+      "controls_state": 325
+    },
+    "visible": {
+      "owns_state": 325,
+      "controls_state": 325,
+      "325": {
+        "NOT": {
+          "has_state_flag": "yunnan_aluminium_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "WTT_build_support_in_yunnan",
+    "category_id": "CHI_political_power_struggle",
+    "name": "Укрепление поддержки в Юньнане ([?325.state_political_support_value|+0])",
+    "desc": "[325.GetStateMajorityCountryName] обладает большинством в регионе и будет получать очки политической поддержки ([?325.state_political_support_value|+0]) до тех пор, пока другая страна не заручится более активной местной поддержкой\n\nМестная поддержка:\n[325.GetLocalStateSupport_CHI][325.GetLocalStateSupport_PRC][325.GetLocalStateSupport_GXC][325.GetLocalStateSupport_YUN][325.GetLocalStateSupport_SHX][325.GetLocalStateSupport_XSM][325.GetLocalStateSupport_SIK]",
+    "icon": "generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_political_power": {
+        "_op": ">",
+        "value": 0
+      },
+      "325": {
+        "WTT_can_ROOT_select_state_support_decision_state": true
+      }
+    },
+    "visible": {
+      "325": {
+        "WTT_should_show_state_decision": true
+      },
+      "WTT_show_build_support_decisions": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "WTT_remove_opposition_in_yunnan",
+    "category_id": "CHI_political_power_struggle",
+    "name": "Устранение оппозиции в Юньнане",
+    "desc": "",
+    "icon": "oppression",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "325": {
+        "WTT_can_select_state_remove_support_state": true
+      }
+    },
+    "visible": {
+      "WTT_is_ROOT_current_leader_of_china": true,
+      "325": {
+        "WTT_can_select_state_remove_support_state": true
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "debug_load_da_yunnan_leak",
+    "category_id": "global_debug_decisions",
+    "name": "Load Yunnan WI Rework Leak",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_country_flag": "YUN_long_yun_crusade"
+        }
+      ]
+    },
+    "complete_effect": {
+      "CHI": {
+        "end_puppet": "GUZ"
+      },
+      "for_each_scope_loop": {
+        "array": "global.greater_china_states",
+        "if": {
+          "limit": {
+            "OR": {
+              "check_variable": [
+                {
+                  "china_state_ref": 15
+                },
+                {
+                  "china_state_ref": 17
+                },
+                {
+                  "china_state_ref": 18
+                }
+              ]
+            }
+          },
+          "add_core_of": "YUN",
+          "transfer_state_to": "YUN"
+        }
+      },
+      "YUN_Long_Yun_Coup_effects": true,
+      "set_variable": [
+        {
+          "global.GUI_SIC_NPA_Influence": 80
+        },
+        {
+          "global.GUI_SIC_RGOC_Influence": 50
+        },
+        {
+          "YUN_introduce_admin": 1
+        },
+        {
+          "YUN_legitimacy": 50
+        },
+        {
+          "YUN_WI_warbuff": 50
+        }
+      ],
+      "YUN_Sichuan_struggle_ends": true,
+      "WI_Start_effects": true,
+      "YUN_update_legitimacy_effects": true,
+      "YUN_update_warbuff_effects": true
+    }
+  },
+  {
+    "id": "debug_load_yun_initial",
+    "category_id": "global_debug_decisions",
+    "name": "Load Initial Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_country_flag": "YUN_long_yun_crusade"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "YUN_start_tree",
+      "clr_country_flag": "YUN_main_tree_flag",
+      "hidden_effect": {
+        "load_focus_tree": "YUN_intro"
+      }
+    }
+  },
+  {
+    "id": "debug_load_yun_post_unify",
+    "category_id": "global_debug_decisions",
+    "name": "Load Post-Unification Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_country_flag": "YUN_long_yun_crusade"
+        }
+      ]
+    },
+    "complete_effect": {
+      "CHI": {
+        "end_puppet": "GUZ"
+      },
+      "ROOT": {
+        "annex_country": {
+          "target": "GUZ",
+          "transfer_troops": true
+        },
+        "every_owned_state": {
+          "add_core_of": "YUN",
+          "remove_core_of": "GUZ"
+        },
+        "set_cosmetic_tag": "YUN_southwest_united"
+      },
+      "set_country_flag": "YUN_main_tree_flag",
+      "clr_country_flag": "YUN_start_tree",
+      "hidden_effect": {
+        "load_focus_tree": "YUN_post_xinan"
+      },
+      "add_dynamic_modifier": {
+        "modifier": "YUN_xinan_development_dynamic_modifier"
+      }
+    }
+  },
+  {
+    "id": "debug_load_long_yun",
+    "category_id": "global_debug_decisions",
+    "name": "Long Yun's Wild Ride Begins",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        {
+          "has_country_flag": "YUN_long_yun_crusade"
+        }
+      ]
+    },
+    "complete_effect": {
+      "CHI": {
+        "end_puppet": "GUZ"
+      },
+      "ROOT": {
+        "annex_country": {
+          "target": "GUZ",
+          "transfer_troops": true
+        },
+        "every_owned_state": {
+          "add_core_of": "YUN",
+          "remove_core_of": "GUZ"
+        },
+        "set_cosmetic_tag": "YUN_southwest_united"
+      },
+      "YUN_Long_Yun_Coup_effects": true,
+      "country_event": {
+        "id": "yun_wi.1",
+        "days": 1
+      }
+    }
+  },
+  {
+    "id": "debug_load_failed_yun",
+    "category_id": "global_debug_decisions",
+    "name": "Long Yun's Last Stand",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "YUN_long_yun_crusade"
+    },
+    "complete_effect": {
+      "set_global_flag": "YUN_NPA_despair_branch",
+      "YUN_NPA_reload_tree": true
+    }
+  },
+  {
+    "id": "debug_load_gaw_yun",
+    "category_id": "global_debug_decisions",
+    "name": "Arise, Ye Who Refuse to Be Slaves!",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "YUN_long_yun_crusade"
+    },
+    "complete_effect": {
+      "set_global_flag": "CHI_Western_Insurection_RoC_defeated",
+      "YUN_NPA_reload_tree": true
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_focus_on_NRA",
+    "category_id": "YUN_insurgency",
+    "name": "Фокус на борьбу с НРА",
+    "desc": "Мы сфокусируем свои силы на борьбе с Национально-революционной армией ценой ослабления борьбы с другими угрозами.",
+    "icon": "GFX_decision_generic_independence",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_can_set_insurgent_focus",
+        "NOT": {
+          "has_variable": "YUN_insurgency_focus"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_insurgency_GUI_focus_on_NRA taken",
+      "custom_effect_tooltip": "YUN_insurgency_GUI_focus_on_NRA_tt",
+      "hidden_effect": {
+        "add_command_power": -20,
+        "subtract_from_variable": {
+          "YunNRA_Power": 20
+        },
+        "random_list": {
+          "30": [
+            {
+              "add_to_variable": {
+                "YunCCP_Power": 10
+              }
+            },
+            {
+              "add_to_variable": {
+                "YunBandit_Power": 10
+              }
+            },
+            {
+              "add_to_variable": {
+                "YunNPA_Power": 10
+              }
+            }
+          ]
+        },
+        "set_variable": {
+          "YUN_insurgency_focus": 1
+        },
+        "YUN_Update_Insurgency_Modifier": true
+      }
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_improve_training",
+    "category_id": "YUN_insurgency",
+    "name": "Улучшить ситуацию в армии",
+    "desc": "Мы так долго игнорировали состояние нашей армии, что теперь она борется с остатками НРА, скрывающимися в горах вокруг наших границ. К счастью, у нас много офицеров, прошедших обучение в престижной военной академии Юньнани, и с некоторыми дополнительными выплатами и обещаниями, они будут более чем готовы вернуться и вывести наши войска из такого жалкого состояния.",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "command_power": {
+          "_op": ">",
+          "value": 14.99
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": {
+        "add_command_power": -15
+      }
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_focus_on_CCP",
+    "category_id": "YUN_insurgency",
+    "name": "Фокус на борьбе с КПК",
+    "desc": "Мы сфокусируем свои силы на борьбе с КПК ценой ослабления борьбы с другими угрозами.",
+    "icon": "GFX_decision_category_generic_communism",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_can_set_insurgent_focus",
+        "NOT": {
+          "has_variable": "YUN_insurgency_focus"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_insurgency_GUI_focus_on_CCP taken",
+      "hidden_effect": [
+        {
+          "add_command_power": -20
+        },
+        {
+          "subtract_from_variable": {
+            "YunCCP_Power": 20
+          },
+          "random_list": {
+            "30": [
+              {
+                "add_to_variable": {
+                  "YunNRA_Power": 10
+                }
+              },
+              {
+                "add_to_variable": {
+                  "YunBandit_Power": 10
+                }
+              },
+              {
+                "add_to_variable": {
+                  "YunNPA_Power": 10
+                }
+              }
+            ]
+          },
+          "set_variable": {
+            "YUN_insurgency_focus": 2
+          },
+          "YUN_Update_Insurgency_Modifier": true
+        }
+      ],
+      "custom_effect_tooltip": "YUN_insurgency_GUI_focus_on_CCP_tt"
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_improve_admin",
+    "category_id": "YUN_insurgency",
+    "name": "Улучшить управление в сельск. местности",
+    "desc": "Остатки КПК представляют собой грозную силу, с которой можно иметь дело благодаря их обширным связям в сельской местности: наша административная неэффективность ограничивает проекцию нашей власти, и мы не можем собрать достаточно информации о красной угрозе. Поэтому мы должны начать расширять наше управление в тех деревнях, которыми мы так долго пренебрегали. Хотя города останутся нашим основным источником богатства и ресурсов, большинство нашего населения проживает в сельской местности, и мы не можем рисковать тем, что они попадут в руки партизан.",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_focus_on_bandit",
+    "category_id": "YUN_insurgency",
+    "name": "Фокус на борьбу с бандитизмом",
+    "desc": "Мы сфокусируем свои силы на борьбе с бандитами ценой ослабления борьбы с другими угрозами.",
+    "icon": "GFX_decision_generic_arrest",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_can_set_insurgent_focus",
+        "NOT": {
+          "has_variable": "YUN_insurgency_focus"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_insurgency_GUI_focus_on_bandit taken",
+      "hidden_effect": [
+        {
+          "add_command_power": -20
+        },
+        {
+          "subtract_from_variable": {
+            "YunBandit_Power": 20
+          },
+          "random_list": {
+            "30": [
+              {
+                "add_to_variable": {
+                  "YunNRA_Power": 10
+                }
+              },
+              {
+                "add_to_variable": {
+                  "YunCCP_Power": 10
+                }
+              },
+              {
+                "add_to_variable": {
+                  "YunNPA_Power": 10
+                }
+              }
+            ]
+          },
+          "set_variable": {
+            "YUN_insurgency_focus": 3
+          },
+          "YUN_Update_Insurgency_Modifier": true
+        }
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.05
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "custom_effect_tooltip": "YUN_insurgency_GUI_focus_on_bandit_tt"
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_carrot_and_stick",
+    "category_id": "YUN_insurgency",
+    "name": "Метод кнута и пряника",
+    "desc": "Мы не можем отступить перед бандитами, чтобы сохранить наши важные связи с помещиками и благодетелями. Однако, возможно, мы можем дать некоторые символические обещания бедным людям с минимальными последствиями для элиты. Например, благодаря усилиям интеллигенции, мы можем позволить себе расширить образование, что поможет беднякам приобрести лучшие навыки для лучшего лечения. В то же время, мы должны ужесточить уголовную систему, чтобы суровее наказывать тех, кто совершил преступления, в качестве предупреждения для их сообщников. Вместе мы надеемся, что уровень преступности начнет снижаться.",
+    "icon": "GFX_decision_generic_forced_labor",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_focus_on_NPA",
+    "category_id": "YUN_insurgency",
+    "name": "Фокус на борьбе с АНО",
+    "desc": "Мы сфокусируем свои силы на борьбу с АНО ценой ослабления борьбы с другими угрозами.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_can_set_insurgent_focus",
+        "NOT": {
+          "has_variable": "YUN_insurgency_focus"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_insurgency_GUI_focus_on_NPA taken",
+      "hidden_effect": [
+        {
+          "add_command_power": -20
+        },
+        {
+          "subtract_from_variable": {
+            "YunNPA_Power": 20
+          },
+          "random_list": {
+            "30": [
+              {
+                "add_to_variable": {
+                  "YunNRA_Power": 10
+                }
+              },
+              {
+                "add_to_variable": {
+                  "YunCCP_Power": 10
+                }
+              },
+              {
+                "add_to_variable": {
+                  "YunBandit_Power": 10
+                }
+              }
+            ]
+          },
+          "set_variable": {
+            "YUN_insurgency_focus": 4
+          },
+          "YUN_Update_Insurgency_Modifier": true
+        }
+      ],
+      "custom_effect_tooltip": "YUN_insurgency_GUI_focus_on_NPA_tt"
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_enforce_police",
+    "category_id": "YUN_insurgency",
+    "name": "Усилить полицейскую деятельность",
+    "desc": "Так называемая АНО, возможно, самая большая угроза стабильности Юньнани, бесконечно выступающая против Нанкина и Токио, не понимая, что их безрассудный призыв к возмездию только разрушит нашу родину и наш народ. Хотя председатель Лу Хань действительно сочувствует их антияпонским выкрикам, стабильность в нашей стране превыше всего остального. Чтобы помешать людям сочувствовать АНО и присоединяться к ней, наша полиция должна быть усилена, чтобы подавлять инакомыслие, а наша армия должна находиться под более тщательным надзором, чтобы предотвратить любой риск мятежа. Чем меньше АНО может говорить, тем меньше людей присоединится к их движению.",
+    "icon": "GFX_decision_generic_military_hat_skull",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_tick",
+    "category_id": "YUN_insurgency",
+    "name": "Мятежники устраивают саботаж!",
+    "desc": "Каждые 2 недели сила внутренних и внешних угроз вырастает на величину между 0.5 - 3.0, и они попытаются атаковать наши силы безопасности, что может уменьшить их численность на 0 - 2. Помимо распределения сил обеспечения правопорядка, соответствующая корректировка наших финансов также поможет в борьбе с повстанцами.\n\nЧерез две недели угроза, исходящая от повстанцев сменится на:\n\nНРА: [?YUNNRA_Power_tick|-1]\nКПК: [?YUNCCP_Power_tick|-1]\nБандиты: [?YUNBandit_Power_tick|-1]\nАНО: [?YUNNPA_Power_tick|-1]\n\nИз-за нападения повстанцев наши силы сократятся на:\n\nРазмер гарнизона: [?YUN_garrison_size_decrease|R0]\nРазмер полиции: [?YUN_police_size_decrease|R0]",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "YUN_long_yun_crusade"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_insurgency_GUI_tick"
+    }
+  },
+  {
+    "id": "YUN_revive_burma_road_talk_with_burma",
+    "category_id": "YUN_insurgency",
+    "name": "Переговоры с Бирмой",
+    "desc": "Получение разрешения Бирмы на реализацию нашего инфраструктурного проекта имеет решающее значение для успеха наших планов. Хотя теоретически мы могли бы построить дорогу полностью своими силами, мы все равно должны получить разрешение бирманского правительства на начало строительства на бирманской территории. Более того, мы могли бы убедить Бирму взять на себя часть расходов по проекту, что уменьшило бы краткосрочные финансовые последствия этого начинания. Однако Бирма не самое богатое государство в Сфере - если мы хотим убедить их в выгодности нашего предложения, мы должны быть готовы сами предложить некоторые стимулы и инвестиции.",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_contact_burma_for_coop",
+      "NOT": [
+        {
+          "has_country_flag": "YUN_burma_road_diplo_failed"
+        },
+        {
+          "has_country_flag": "YUN_long_yun_crusade"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_revive_burma_road_talk_with_burma decision begun",
+      "country_event": {
+        "id": "yun.200"
+      }
+    }
+  },
+  {
+    "id": "YUN_revive_burma_road_lay_down_the_plans",
+    "category_id": "YUN_insurgency",
+    "name": "План Новой Бирманской дороги",
+    "desc": "Когда речь идет о реализации масштабных инфраструктурных проектов, планирование - это все. Мы должны быть уверены, что наши планы могут учесть все проблемы, которые могут возникнуть в ходе строительства, какими бы мелкими они ни были, и мы должны подготовить заказы и графики для своевременного производства и доставки всех необходимых материалов.",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_revive_burma_road_lay_down_the_plans_trigger_tt",
+        "has_country_flag": "YUN_burma_road_diplo_successful"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "YUN_contact_burma_for_coop",
+      "NOT": [
+        {
+          "has_country_flag": "YUN_burma_road_diplo_failed"
+        },
+        {
+          "has_country_flag": "YUN_long_yun_crusade"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_revive_burma_road_lay_down_the_plans decision begun",
+      "country_event": {
+        "id": "yun.205"
+      }
+    }
+  },
+  {
+    "id": "YUN_revive_burma_road_start",
+    "category_id": "YUN_insurgency",
+    "name": "Восстановить Бирманскую дорогу",
+    "desc": "Получив все необходимые разрешения от бирманского правительства и тщательно всё спланировав, мы, наконец, можем приступить к возрождению Бирманской дороги. Однако, мы не можем назвать точное время завершения строительства; а именно, угроза предателей, прячущихся в горах точно затянет сроки строительства... с другой стороны, это также показывает, что проект можно выполнять осторожнее если их их влияние распространяется только на их жалкие маленькие убежища.",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "AND": {
+        "custom_trigger_tooltip": [
+          {
+            "tooltip": "YUN_revive_burma_road_start_trigger_diplo_tt",
+            "has_country_flag": "YUN_burma_road_diplo_successful"
+          },
+          {
+            "tooltip": "YUN_revive_burma_road_start_trigger_planning_tt",
+            "has_country_flag": "YUN_burma_road_planning_prepared"
+          },
+          {
+            "tooltip": "YUN_revive_burma_road_start_trigger_failed_tt",
+            "NOT": {
+              "has_country_flag": "YUN_burma_road_diplo_failed"
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "YUN_contact_burma_for_coop",
+      "NOT": [
+        {
+          "has_country_flag": "YUN_burma_road_diplo_failed"
+        },
+        {
+          "has_country_flag": "YUN_long_yun_crusade"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_revive_burma_road_start decision begun",
+      "add_dynamic_modifier": {
+        "modifier": "YUN_burma_road_construction_dynamic_modifier"
+      },
+      "BUR": {
+        "add_dynamic_modifier": {
+          "modifier": "BUR_burma_road_construction_dynamic_modifier"
+        }
+      }
+    }
+  },
+  {
+    "id": "YUN_survey_west_yunnan",
+    "category_id": "YUN_resources_mining",
+    "name": "Исследовать Западный Юньнань",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_survey_dali decision begun"
+    }
+  },
+  {
+    "id": "YUN_survey_east_yunnan",
+    "category_id": "YUN_resources_mining",
+    "name": "Исследовать Восточный Юньнань",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_survey_yunnan decision begun"
+    }
+  },
+  {
+    "id": "YUN_survey_guizhou",
+    "category_id": "YUN_resources_mining",
+    "name": "Исследовать Гуйчжоу",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_survey_guizhou decision begun"
+    }
+  },
+  {
+    "id": "YUN_mine_wenshan_tungsten",
+    "category_id": "YUN_resources_mining",
+    "name": "Расширить вольфрамовые рудники Вэньшана",
+    "desc": "",
+    "icon": "GFX_decision_generic_expand_mines",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_open_new_mines",
+      "2379": {
+        "has_state_flag": "YUN_state_survey_complete"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_mine_wenshan_tungsten decision begun"
+    }
+  },
+  {
+    "id": "YUN_mine_yuxi_ore",
+    "category_id": "YUN_resources_mining",
+    "name": "Расширить шахты в Юйси",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_open_new_mines",
+      "325": {
+        "has_state_flag": "YUN_state_survey_complete"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_mine_yuxi_ore decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_yuxi_steel_huts",
+    "category_id": "YUN_resources_mining",
+    "name": "Расширить добычу стали в Юйси",
+    "desc": "",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_new_facilities",
+      "325": {
+        "has_state_flag": "YUN_mine_ore"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_yuxi_steel_huts decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_mine_wenshan_aluminium",
+    "category_id": "YUN_resources_mining",
+    "name": "Расширить алюминиевые рудники Вэньшана",
+    "desc": "",
+    "icon": "GFX_decision_generic_expand_mines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_open_new_mines",
+      "2379": {
+        "has_state_flag": "YUN_state_survey_complete"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_mine_wenshan_aluminium decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_mine_lijiang_ore",
+    "category_id": "YUN_resources_mining",
+    "name": "Расширить шахты в Лицзяне",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_open_new_mines",
+      "960": {
+        "has_state_flag": "YUN_state_survey_complete"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_mine_lijiang_ore decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_wenshan_aluminium_processing",
+    "category_id": "YUN_resources_mining",
+    "name": "Расширить алюминиевые заводы Вэньшаня",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 45,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_new_facilities",
+      "2379": {
+        "has_state_flag": "YUN_mine_bauxite"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_wenshan_aluminium_processing decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_lijiang_steel_huts",
+    "category_id": "YUN_resources_mining",
+    "name": "Инвестировать в металлургию Лицзяна",
+    "desc": "",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_new_facilities",
+      "960": {
+        "has_state_flag": "YUN_mine_ore"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_lijiang_steel_huts decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_mine_bijie_ore",
+    "category_id": "YUN_resources_mining",
+    "name": "Расширить шахты в Бицзе",
+    "desc": "",
+    "icon": "GFX_decision_generic_expand_mines",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_open_new_mines",
+      "2386": {
+        "has_state_flag": "YUN_state_survey_complete"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_mine_bijie_ore decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_bijie_steel_huts",
+    "category_id": "YUN_resources_mining",
+    "name": "Инвестировать в металлургию Бицзе",
+    "desc": "",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_new_facilities",
+      "2386": {
+        "has_state_flag": "YUN_mine_ore"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_bijie_steel_huts decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_mine_guiyang_bauxite",
+    "category_id": "YUN_resources_mining",
+    "name": "Начать добычу бокситов в Гуйяне",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_open_new_mines",
+      "603": {
+        "has_state_flag": "YUN_state_survey_complete"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_mine_guiyang_ore decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_guiyang_aluminium_processing",
+    "category_id": "YUN_resources_mining",
+    "name": "Расширить алюминиевые заводы Гуйяня",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_new_facilities",
+      "603": {
+        "has_state_flag": "YUN_mine_bauxite"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_guiyang_aluminium_processing decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_exploit_dali",
+    "category_id": "YUN_resources_mining",
+    "name": "Эксплуатировать Дали",
+    "desc": "",
+    "icon": "GFX_decision_generic_forced_labor",
+    "cost": 65,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_not_one_stone_left_unturned",
+      "960": {
+        "has_state_flag": "YUN_mining_state"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_exploit_dali decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_exploit_yunnan",
+    "category_id": "YUN_resources_mining",
+    "name": "Эксплуатировать Юньнань",
+    "desc": "",
+    "icon": "GFX_decision_generic_forced_labor",
+    "cost": 65,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_not_one_stone_left_unturned",
+      "325": {
+        "has_state_flag": "YUN_mining_state"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_exploit_yunnan decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_exploit_guizhou",
+    "category_id": "YUN_resources_mining",
+    "name": "Эксплуатировать Гуйчжоу",
+    "desc": "",
+    "icon": "GFX_decision_generic_forced_labor",
+    "cost": 65,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_not_one_stone_left_unturned",
+      "603": {
+        "has_state_flag": "YUN_mining_state"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_exploit_guizhou decision begun",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.15
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "YUN_prepare_west_yunnan",
+    "category_id": "YUN_infrastructure",
+    "name": "Подготовительные работы в Западной Юньнани",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_prepare_west_yunnan decision begun"
+    }
+  },
+  {
+    "id": "YUN_prepare_east_yunnan",
+    "category_id": "YUN_infrastructure",
+    "name": "Подготовительные работы в Восточной Юньнани",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_prepare_east_yunnan decision begun"
+    }
+  },
+  {
+    "id": "YUN_prepare_guizhou",
+    "category_id": "YUN_infrastructure",
+    "name": "Подготовительные работы в Гуйчжоу",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_prepare_guizhou decision begun"
+    }
+  },
+  {
+    "id": "YUN_infra_west_yunnan",
+    "category_id": "YUN_infrastructure",
+    "name": "Развивать дороги в Западной Юньнани",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_lay_down_the_roads",
+      "960": {
+        "has_state_flag": "YUN_state_construction_ready"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_infra_west_yunnan decision begun"
+    }
+  },
+  {
+    "id": "YUN_infra_east_yunnan",
+    "category_id": "YUN_infrastructure",
+    "name": "Построить дороги в Восточной Юньнани",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_lay_down_the_roads",
+      "325": {
+        "has_state_flag": "YUN_state_construction_ready"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_infra_east_yunnan decision begun"
+    }
+  },
+  {
+    "id": "YUN_infra_guizhou",
+    "category_id": "YUN_infrastructure",
+    "name": "Расширение местной инфраструктуры Гуйчжоу",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_lay_down_the_roads",
+      "603": {
+        "has_state_flag": "YUN_state_construction_ready"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_infra_guizhou decision begun"
+    }
+  },
+  {
+    "id": "YUN_civ_dali",
+    "category_id": "YUN_infrastructure",
+    "name": "Начать индустриализацию Дали",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": 45,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": [
+        "YUN_lay_down_the_roads",
+        "YUN_new_facilities"
+      ],
+      "960": {
+        "has_state_flag": "YUN_infra_ready"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_civ_dali decision begun"
+    }
+  },
+  {
+    "id": "YUN_civ_yunnan",
+    "category_id": "YUN_infrastructure",
+    "name": "Расширить производство энергии в Куньмине",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": 45,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": [
+        "YUN_lay_down_the_roads",
+        "YUN_new_facilities"
+      ],
+      "325": {
+        "has_state_flag": "YUN_infra_ready"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_civ_yunnan decision begun"
+    }
+  },
+  {
+    "id": "YUN_civ_guizhou",
+    "category_id": "YUN_infrastructure",
+    "name": "Развивать промышленность Гуйчжоу",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 45,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": [
+        "YUN_lay_down_the_roads",
+        "YUN_new_facilities"
+      ],
+      "603": {
+        "has_state_flag": "YUN_infra_ready"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_inciv_guizhou decision begun"
+    }
+  },
+  {
+    "id": "YUN_mil_guizhou",
+    "category_id": "YUN_infrastructure",
+    "name": "Создать оружейные предприятия в Гуйчжоу",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_red",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": [
+        "YUN_lay_down_the_roads",
+        "YUN_new_facilities"
+      ],
+      "603": {
+        "has_state_flag": "YUN_infra_ready"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_mil_guizhou decision begun"
+    }
+  },
+  {
+    "id": "YUN_WI_Sichuan_tick",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Столкновения в Сычуани завершены",
+    "desc": "Судьба Сычуани предрешена, это последнее затишье перед Освободительной бурей.",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_global_flag": "WI_Sichuan_Struggle_begin"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_WI_Sichuan_tick Completed"
+    }
+  },
+  {
+    "id": "YUN_WI_fund_partisans",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Спонсировать партизан",
+    "desc": "Мы проспонсируем партизан, чтобы помочь им действовать более эффективно.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_WI_fund_partisans_tooltip",
+        "NOT": {
+          "has_country_flag": "ECON_ONGOING_FISCAL_CRISIS"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_fund_partisans decision taken",
+      "custom_effect_tooltip": "YUN_WI_fund_partisans_tt",
+      "add_to_variable": [
+        {
+          "global.WI_Sichuan_NPA_support": 15
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.WI_Sichuan_NPA_support",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "YUN_WI_send_weapons_to_partisans",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Отправить партизанам пушки",
+    "desc": "Мы выделим несколько подразделений элитных войск, чтобы убедиться, что наше оружие точно попадет к партизанам.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 999
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_send_weapons_to_partisans decision taken",
+      "custom_effect_tooltip": "YUN_WI_fund_partisans_tt",
+      "add_to_variable": [
+        {
+          "global.WI_Sichuan_NPA_support": 15
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.WI_Sichuan_NPA_support",
+        "min": 0,
+        "max": 100
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -1000
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_ambush_RGOC_officials",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Засада на чиновников РПК",
+    "desc": "Благодаря холмистой местности Сычуани, мы можем направить наши горные войска против блуждающих чиновников РПК, чтобы искалечить чиновников местного правительства, препятствуя их борьбе против партизан.",
+    "icon": "GFX_decision_OMS_assassinate_batov",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "command_power": {
+          "_op": ">",
+          "value": 9
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_ambush_RGOC_officials decision taken",
+      "custom_effect_tooltip": "YUN_WI_ambush_RGOC_officials_tt",
+      "add_to_variable": [
+        {
+          "global.GUI_SIC_RGOC_Influence": -5
+        },
+        {
+          "global.YUN_WI_Sichuan_dirty": 1
+        }
+      ],
+      "clamp_variable": {
+        "var": "global.GUI_SIC_RGOC_Influence",
+        "min": 0,
+        "max": 100
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_persuade_liuwenhui",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Убедить Лю Вэньхуэя",
+    "desc": "Будучи одним из военачальников, которые никогда не сдавались режиму Ван Цзинвэя, Лю Вэньхуэй, по слухам, очень сочувствовал и поддерживал партизан Сычуани. Однако внутреннее давление со стороны его подчиненных не позволило Лю дальше вмешиваться в ситуацию. Если партизаны получат преимущество над коллаборационистами, возможно, мы сможем заставить Лю изменить свое мнение, несмотря на диссидентов...",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_WI_persuade_liuwenhui_tooltip",
+        "check_variable": {
+          "global.GUI_SIC_NPA_Influence": {
+            "_op": ">",
+            "value": 70
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_persuade_liuwenhui decision taken",
+      "custom_effect_tooltip": "YUN_WI_persuade_liuwenhui_tt",
+      "hidden_effect": {
+        "add_to_variable": [
+          {
+            "global.GUI_SIC_NPA_Influence": 25
+          },
+          {
+            "global.GUI_SIC_RGOC_Influence": -25
+          }
+        ],
+        "clamp_variable": [
+          {
+            "var": "global.GUI_SIC_NPA_Influence",
+            "min": 0,
+            "max": 100
+          },
+          {
+            "var": "global.GUI_SIC_RGOC_Influence",
+            "min": 0,
+            "max": 100
+          }
+        ],
+        "country_event": {
+          "id": "yun_wi.5"
+        },
+        "CHI": {
+          "country_event": {
+            "id": "yun_wi.5"
+          }
+        }
+      },
+      "add_command_power": -5,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_to_variable": {
+        "global.YUN_WI_Sichuan_dirty": 1
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_Sichuan_movement",
+    "category_id": "YUN_WI_Sichuan",
+    "name": "Столкновения в Сычуани!",
+    "desc": "Группы в Сычуани начнут конфликтовать, уровень поддержки и влияния фракции упадет между 5-20 и 1-2 соответственно!",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_global_flag": "WI_Sichuan_Struggle_begin"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "YUN_WI_reminder",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Наша миссия",
+    "desc": "Когда мы двинемся вперед, чтобы освободить земли Китая, нас ожидает ожесточенное сопротивление со стороны предательских ханьцзяней и японцев, а также людей, обманутых ложью \"паназиатизма\" и \"мира, антикоммунизма, нациостроительства\". Если мы не сможем защитить наши победы от врагов, мы потеряем весь прогресс, который мы пытались достичь в завоеванном государстве к настоящему времени, а также наш моральный дух и легитимность, что повлияет на войну неожиданным образом...",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_reminder decision begun"
+    }
+  },
+  {
+    "id": "YUN_WI_counter_RGOC_propanganda",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Дискредитировать правительство Хэнцзяня",
+    "desc": "Мы будем пропагандировать факты и правду - как Нанкинское правительство предало Китай и его народ, как их грязное сотрудничество помогло японским псам в безграничной эксплуатации, как Гао Цзунъу и его псы-марионетки не проявляют никакого раскаяния по отношению ко всем этим трагедиям. АНО положит этому конец, и люди должны верить в нас, чтобы мы могли привести их к победе.",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_global_flag": "WI_Warlord_Struggle_begin"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_counter_RGOC_propanganda decision begun",
+      "set_temp_variable": [
+        {
+          "temp_econ_spending_amount": 0.1
+        },
+        {
+          "tempMomentumTick": 1
+        }
+      ],
+      "econ_spend_money_once_effect_raw_money": true,
+      "WI_calc_momentum_tick_drift": true,
+      "custom_effect_tooltip": "WI_calc_momentum_tick_tt"
+    }
+  },
+  {
+    "id": "YUN_WI_more_counter_RGOC_propanganda",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Уничтожить связи Хэнцзяня",
+    "desc": "К сожалению, два десятилетия правления коллаборационистов отравили разум многих людей на этой земле, и некоторые из них даже осмеливаются тайно подрывать наши военные усилия по приказу режима предателей. Мы искореним их и подвергнем смертной казни в качестве предупреждения тем, кто сотрудничает с режимом Ханьцзяня, и без помех со стороны предателей наш крестовый поход пройдет более гладко.",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_global_flag": "WI_Warlord_Struggle_begin"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_more_counter_RGOC_propanganda decision begun",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -1000
+      },
+      "set_temp_variable": {
+        "tempMomentumTick": 1.5
+      },
+      "WI_calc_momentum_tick_drift": true,
+      "custom_effect_tooltip": "WI_calc_momentum_tick_tt",
+      "add_to_variable": {
+        "YUN_NPA_Crusade_dirty": 1
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_counter_JAP_propanganda",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Выступить против паназиатизма",
+    "desc": "Два десятилетия правления коллаборационистского режима - это уже достаточно плохо, не говоря уже о словах японских собак, которые за все это время успели распространиться по всей стране. Со времен падения династии Цин эти японские собаки обманули слишком многих китайцев своими причудливыми словами о \"паназиатизме\". Пусть люди поймут, что их паназиатизм - это не что иное, как ложь; совместное процветание - это не что иное, как эксплуатация; сотрудничество - это не что иное, как империализм. Мобилизуйте все средства пропаганды! Сообщайте обо всех сочувствующих Японии, которых вы обнаружите! Только когда нация объединится, мы сможем найти в себе силы противостоять японским собакам!",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_global_flag": "YUN_NPA_GAW_Crisis"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_counter_JAP_propanganda decision begun",
+      "set_temp_variable": [
+        {
+          "temp_econ_spending_amount": 0.2
+        },
+        {
+          "tempMomentumTick": 2.0
+        }
+      ],
+      "econ_spend_money_once_effect_raw_money": true,
+      "WI_calc_momentum_tick_drift": true,
+      "custom_effect_tooltip": "WI_calc_momentum_tick_tt"
+    }
+  },
+  {
+    "id": "YUN_WI_more_counter_JAP_propanganda",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Публичный суд над предателями",
+    "desc": "Коллаборационистское правительство, может быть, и ушло, но их слова - нет. Хотя мы не можем позволить себе перевоспитывать тех чиновников низкого ранга, которые сейчас находятся под угрозой японских собак, с этими еще худшими подонками можно разобраться довольно легко - они будут преданы публичному суду, напомнив нашему народу о последствиях для тех, кто разочаровался в силе Заходящего Солнца и, таким образом, отвернулся от своей нации. Победа не за горами, и судьба этих предателей доказывает это, так что верьте в победу! Слава Китаю!",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_global_flag": "YUN_NPA_GAW_Crisis"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_more_counter_JAP_propanganda decision begun",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -1000
+      },
+      "set_temp_variable": {
+        "tempMomentumTick": 4.0
+      },
+      "WI_calc_momentum_tick_drift": true,
+      "custom_effect_tooltip": "WI_calc_momentum_tick_tt",
+      "add_to_variable": {
+        "YUN_NPA_Crusade_dirty": 1
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_integrate_warlord",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Приглашение в объединённый фронт",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_WI_can_integrate_warlord",
+        "OR": {
+          "AND": [
+            {
+              "check_variable": [
+                {
+                  "YUN.YUN_WI_Warlord": 1
+                },
+                {
+                  "global.YUN_WI_war_momentum_check": {
+                    "_op": ">",
+                    "value": 60
+                  }
+                }
+              ]
+            },
+            {
+              "check_variable": [
+                {
+                  "YUN.YUN_WI_Warlord": 2
+                },
+                {
+                  "global.YUN_WI_war_momentum_check": {
+                    "_op": ">",
+                    "value": 70
+                  }
+                }
+              ]
+            },
+            {
+              "check_variable": [
+                {
+                  "YUN.YUN_WI_Warlord": 3
+                },
+                {
+                  "global.YUN_WI_war_momentum_check": {
+                    "_op": ">",
+                    "value": 80
+                  }
+                }
+              ]
+            },
+            {
+              "check_variable": [
+                {
+                  "YUN.YUN_WI_Warlord": 4
+                },
+                {
+                  "global.YUN_WI_war_momentum_check": {
+                    "_op": ">",
+                    "value": 90
+                  }
+                }
+              ]
+            },
+            {
+              "check_variable": [
+                {
+                  "YUN.YUN_WI_Warlord": 5
+                },
+                {
+                  "global.YUN_WI_war_momentum_check": 100
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "YUN_ROC_reborn"
+        },
+        {
+          "has_global_flag": "JAP_Western_Insurrection_Intervention"
+        },
+        {
+          "has_global_flag": "YUN_NPA_GAW_Crisis"
+        }
+      ],
+      "OR": {
+        "AND": [
+          {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 1
+            },
+            "XIK": {
+              "is_in_faction": false
+            }
+          },
+          {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 2
+            },
+            "GUX": {
+              "NOT": [
+                {
+                  "is_in_faction_with": "CHI"
+                },
+                {
+                  "is_in_faction_with": "YUN"
+                }
+              ]
+            }
+          },
+          {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 3
+            },
+            "SHX": {
+              "NOT": [
+                {
+                  "is_in_faction_with": "CHI"
+                },
+                {
+                  "is_in_faction_with": "YUN"
+                }
+              ]
+            }
+          },
+          {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 4
+            },
+            "NOT": {
+              "has_global_flag": "QIN_helps_NPA"
+            }
+          },
+          {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 5
+            },
+            "NOT": {
+              "has_global_flag": "XIN_helps_NPA"
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_WI_integrate_warlord decision begun",
+      "if": {
+        "limit": {
+          "check_variable": {
+            "YUN.YUN_WI_Warlord": 1
+          },
+          "XIK": {
+            "NOT": {
+              "has_country_flag": "WI_joins_RGOC"
+            }
+          }
+        },
+        "set_country_flag": "YUN_WI_integrating_XIK",
+        "XIK": {
+          "save_global_event_target_as": "CHI_WI_Warlord"
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 2
+            },
+            "GUX": {
+              "NOT": {
+                "has_country_flag": "WI_joins_RGOC"
+              }
+            }
+          },
+          "set_country_flag": "YUN_WI_integrating_GUX",
+          "GUX": {
+            "save_global_event_target_as": "CHI_WI_Warlord"
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 3
+            },
+            "SHX": {
+              "NOT": {
+                "has_country_flag": "WI_joins_RGOC"
+              }
+            }
+          },
+          "set_country_flag": "YUN_WI_integrating_SHX",
+          "SHX": {
+            "save_global_event_target_as": "CHI_WI_Warlord"
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 4
+            }
+          },
+          "set_country_flag": "YUN_WI_integrating_QIN"
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "YUN.YUN_WI_Warlord": 5
+            }
+          },
+          "set_country_flag": "YUN_WI_integrating_XIN"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YUN_contact_TIB",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Контактировать с Тибетом",
+    "desc": "",
+    "icon": "",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_WI_can_contact_warlord",
+        "OR": {
+          "has_global_flag": "XIK_joins_NPA",
+          "has_full_control_of_state": 964
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "YUN.YUN_WI_Warlord": 6
+      },
+      "NOT": [
+        {
+          "has_country_flag": "YUN_TIB_contacted"
+        },
+        {
+          "has_global_flag": "YUN_ROC_reborn"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_contact_TIB decision begun",
+      "set_country_flag": "YUN_TIB_contacting"
+    }
+  },
+  {
+    "id": "YUN_NPA_Attack_QIN",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Освободить коридор Хэси",
+    "desc": "Многие военачальники, ранее поддерживавшие националистическое правительство, предали свою страну и стали не более чем сторонними наблюдателями, бездушно смотря на то, как японские псы убивают их собственных сородичей. Чтобы по-настоящему освободить Китай, мы должны позаботиться об этих ханьцзянях. Коридор Хэси имеет важнейшее стратегическое значение как проход в свободный мир. Вместе с Армией национальной обороны доблестный народ этих земель уничтожит ханьцев и японских собак, как это было десятилетие назад.",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_war_with": "QIN"
+      }
+    },
+    "visible": {
+      "OR": {
+        "XIK": {
+          "is_in_faction_with": "YUN"
+        },
+        "is_neighbor_of": "QIN"
+      },
+      "country_exists": "QIN",
+      "has_global_flag": "YUN_NPA_GAW_Crisis",
+      "NOT": {
+        "has_global_flag": "QIN_helps_NPA"
+      },
+      "check_variable": {
+        "YUN.YUN_WI_Warlord": 4
+      }
+    },
+    "complete_effect": {
+      "declare_war_on": {
+        "target": "QIN",
+        "type": "annex_everything"
+      }
+    }
+  },
+  {
+    "id": "YUN_NPA_Attack_TIB",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Освободить Тибет",
+    "desc": "Еще со времен династии Юань государство Тибет занимало особое положение в составе Поднебесной империи, имея куда больше автономии, чем остальные провинции. И все же злоупотребление такой доброй волей обернулось простым предательством - воспользовавшись некомпетентностью Айсинь Гьоро, 13-й Далай Лама бессовестно провозгласил \"независимость\" Тибета в соответствии с замыслом Британской империи. Теперь, когда над Британией таки зашло солнце, настало время положить конец безумию этой феодальной теократии и развеять иллюзии этих монахов.",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_war_with": "TIB"
+      }
+    },
+    "visible": {
+      "OR": {
+        "XIK": {
+          "is_in_faction_with": "YUN"
+        },
+        "QIN": {
+          "is_in_faction_with": "YUN"
+        },
+        "is_neighbor_of": "TIB"
+      },
+      "country_exists": "TIB",
+      "has_global_flag": "YUN_NPA_GAW_Crisis",
+      "has_country_flag": "YUN_TIB_contacted",
+      "check_variable": {
+        "YUN.YUN_WI_Warlord": 6
+      }
+    },
+    "complete_effect": {
+      "declare_war_on": {
+        "target": "TIB",
+        "type": "annex_everything"
+      }
+    }
+  },
+  {
+    "id": "YUN_NPA_Attack_XIK",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Освободить Сикан",
+    "desc": "Многие военачальники, ранее поддерживавшие националистическое правительство, предали свою страну и стали не более чем сторонними наблюдателями, бездушно смотря на то, как японские псы убивают их собственных сородичей. Чтобы по-настоящему освободить Китай, мы должны позаботиться об этих ханьцзянях. Провинция Сикан - это не только черный ход в Юньнань и Сычуань, но и ворота в Тибет. Чтобы обеспечить безопасность нашего тыла, а также выполнить то, что не удалось сделать национальному правительству, Сикан должен вернуться в наше распоряжение.",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_war_with": "XIK"
+      }
+    },
+    "visible": {
+      "is_neighbor_of": "XIK",
+      "NOT": {
+        "XIK": {
+          "is_in_faction_with": "YUN"
+        }
+      },
+      "has_global_flag": "YUN_NPA_GAW_Crisis",
+      "country_exists": "XIK",
+      "check_variable": {
+        "YUN.YUN_WI_Warlord": 1
+      }
+    },
+    "complete_effect": {
+      "declare_war_on": {
+        "target": "XIK",
+        "type": "annex_everything"
+      }
+    }
+  },
+  {
+    "id": "YUN_NPA_Attack_XIN",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Освободить Синьцзян",
+    "desc": "Многие военачальники, ранее поддерживавшие националистическое правительство, предали свою страну и стали не более чем сторонними наблюдателями, бездушно смотря на то, как японские псы убивают их собственных сородичей. Чтобы по-настоящему освободить Китай, мы должны позаботиться об этих ханьцзянях. Провинция Синьцзян является последним убежищем нашей родины, свободным от оккупации и изоляции страны Заходящего Солнца. А потому это наша лучшая возможность обратиться к свободному миру за любой потенциальной помощью в борьбе с самураями. Для этого Синьцзян должен быть восстановлен.",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_war_with": "XIN"
+      }
+    },
+    "visible": {
+      "OR": {
+        "QIN": {
+          "is_in_faction_with": "YUN"
+        },
+        "is_neighbor_of": "XIN"
+      },
+      "has_global_flag": "YUN_NPA_GAW_Crisis",
+      "NOT": {
+        "has_global_flag": "XIN_helps_NPA"
+      },
+      "country_exists": "XIN",
+      "check_variable": {
+        "YUN.YUN_WI_Warlord": 5
+      }
+    },
+    "complete_effect": {
+      "declare_war_on": {
+        "target": "XIN",
+        "type": "annex_everything"
+      }
+    }
+  },
+  {
+    "id": "YUN_WI_momentum_tick",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Изменение динамики войны",
+    "desc": "Военачальники получили приглашения от обеих сторон, и теперь они внимательно следят за ходом войны, чтобы решить, на чью сторону им встать. Ход войны повлияет на их окончательный выбор, за которым также внимательно наблюдает китайский народ, что может повлиять на исход войны...",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "YUN_ROC_reborn"
+        },
+        {
+          "has_global_flag": "YUN_NPA_partial_victory"
+        },
+        {
+          "has_global_flag": "YUN_NPA_defeated"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_WI_momentum_tick"
+    }
+  },
+  {
+    "id": "YUN_WI_warbuff_tick",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Изменение морального духа",
+    "desc": "Хотя наше первоначальное восстание против Юньнаньского правительства было успешным, важно, чтобы мы не успокаивались и не сбавляли обороты. У Синаня ограниченные ресурсы, и поэтому нам нужно быстро и решительно расширяться. Мы также значительно повысим боевой дух наших войск, если сможем последовательно освобождать наши законные территории. Для этого мы не должны останавливаться в своем продвижении, иначе пламя Национального Освобождения будет погашено, не успев разгореться...",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "YUN_ROC_reborn"
+        },
+        {
+          "has_global_flag": "YUN_NPA_partial_victory"
+        },
+        {
+          "has_global_flag": "YUN_NPA_defeated"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_WI_warbuff_tick"
+    }
+  },
+  {
+    "id": "YUN_WI_legitimacy_tick",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Изменение легитимности",
+    "desc": "Режим Ван Цзинвэя долгое время выдавал себя за законного правителя Китая, хотя был не более чем пресловутой японской собакой. Вместе с остатками Национально-Революционной Армии мы восстановим славу Родины как истинный законный преемник Китайской Республики. Мы будем пропагандировать этот факт через восстановление законных регионов Китая, а также добиваться поддержки военачальников - так, чтобы каждая часть Китая признала наш законный статус. Чем больше у нас будет городов, тем более легитимным будет наше движение.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "YUN_ROC_reborn"
+        },
+        {
+          "has_global_flag": "YUN_NPA_partial_victory"
+        },
+        {
+          "has_global_flag": "YUN_NPA_defeated"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_WI_legitimacy_tick"
+    }
+  },
+  {
+    "id": "YUN_WI_reintegration_tick",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Изменение гос-показателей",
+    "desc": "Показатели интеграции, административной эффективности и милитаризации в контролируемых нами провинциях обновляются еженедельно, что позволяет соответствующим образом обновлять информацию о ходе интеграции, административной эффективности и милитаризации. Подробную информацию смотрите в ГУИ.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "YUN_complete_reintegration"
+        },
+        {
+          "has_global_flag": "YUN_NPA_defeated"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YUN_WI_reintegration_tick"
+    }
+  },
+  {
+    "id": "YUN_NPA_capture_hunan",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Захват Хунаня",
+    "desc": "Граничащая с Гуйчжоу, провинция Хунань будет нашей первой целью. Мы должны атаковать быстро, захватив ресурсы территории, а вместе с тем и освободить хунаньцев. Это будет первая цель нашего крестового похода.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_capture_hunan_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "AND": [
+              {
+                "NOT": [
+                  {
+                    "check_variable": {
+                      "china_state_ref": 27
+                    }
+                  },
+                  {
+                    "check_variable": {
+                      "china_state_ref": 28
+                    }
+                  }
+                ]
+              },
+              {
+                "OR": {
+                  "check_variable": [
+                    {
+                      "china_state_ref": 27
+                    },
+                    {
+                      "china_state_ref": 28
+                    }
+                  ]
+                },
+                "controller": {
+                  "is_in_faction_with": "YUN"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_capture_hunan Completed",
+      "set_temp_variable": {
+        "tempWarbuff": 2.5
+      },
+      "YUN_WI_morale_change": true,
+      "add_manpower": 30000
+    }
+  },
+  {
+    "id": "YUN_NPA_seize_hubei",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Осада Хубэя",
+    "desc": "Захват Уханя, арсенала старого Китая, даст нам доступ к запасам столь необходимого снаряжения для нашей армии, одновременно нанеся урон проклятым предателям. И когда регион Хугуан окажется в наших руках у нас станет достаточно людей и ресурсов, чтобы двинуться к сердцу собачьего режима.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_seize_hubei_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "AND": [
+              {
+                "NOT": [
+                  {
+                    "check_variable": {
+                      "china_state_ref": 23
+                    }
+                  },
+                  {
+                    "check_variable": {
+                      "china_state_ref": 26
+                    }
+                  },
+                  {
+                    "check_variable": {
+                      "china_state_ref": 29
+                    }
+                  }
+                ]
+              },
+              {
+                "OR": {
+                  "check_variable": [
+                    {
+                      "china_state_ref": 23
+                    },
+                    {
+                      "china_state_ref": 26
+                    },
+                    {
+                      "china_state_ref": 29
+                    }
+                  ]
+                },
+                "controller": {
+                  "is_in_faction_with": "YUN"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "all_of_scopes": {
+        "array": "global.greater_china_states",
+        "OR": {
+          "AND": [
+            {
+              "NOT": [
+                {
+                  "check_variable": {
+                    "china_state_ref": 27
+                  }
+                },
+                {
+                  "check_variable": {
+                    "china_state_ref": 28
+                  }
+                }
+              ]
+            },
+            {
+              "OR": {
+                "check_variable": [
+                  {
+                    "china_state_ref": 27
+                  },
+                  {
+                    "china_state_ref": 28
+                  }
+                ]
+              },
+              "controller": {
+                "is_in_faction_with": "YUN"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_seize_hubei Completed",
+      "add_equipment_to_stockpile": [
+        {
+          "type": "infantry_equipment",
+          "amount": 5000
+        },
+        {
+          "type": "anti_tank_equipment",
+          "amount": 2500
+        },
+        {
+          "type": "support_equipment",
+          "amount": 3000
+        }
+      ],
+      "set_temp_variable": {
+        "tempWarbuff": 2.5
+      },
+      "YUN_WI_morale_change": true,
+      "add_manpower": 50000
+    }
+  },
+  {
+    "id": "YUN_NPA_door_to_nanjing",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Ключ к Нанкину",
+    "desc": "Земли Цзянси и Фуцзянь являются естественным барьером для любого наступления. Обезопасив Хугуан, мы должны продвинуться на восток и занять реку Ганьцзян, еще больше укрепив свое присутствие в Центральном Китае, прежде чем двинуться к давно потерянной столице.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_door_to_nanjing_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "AND": [
+              {
+                "NOT": [
+                  {
+                    "check_variable": {
+                      "china_state_ref": 24
+                    }
+                  },
+                  {
+                    "check_variable": {
+                      "china_state_ref": 25
+                    }
+                  },
+                  {
+                    "check_variable": {
+                      "china_state_ref": 31
+                    }
+                  },
+                  {
+                    "check_variable": {
+                      "china_state_ref": 33
+                    }
+                  },
+                  {
+                    "check_variable": {
+                      "china_state_ref": 34
+                    }
+                  }
+                ]
+              },
+              {
+                "OR": {
+                  "check_variable": [
+                    {
+                      "china_state_ref": 24
+                    },
+                    {
+                      "china_state_ref": 25
+                    },
+                    {
+                      "china_state_ref": 31
+                    },
+                    {
+                      "china_state_ref": 33
+                    },
+                    {
+                      "china_state_ref": 34
+                    }
+                  ]
+                },
+                "controller": {
+                  "is_in_faction_with": "YUN"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "all_of_scopes": {
+        "array": "global.greater_china_states",
+        "OR": {
+          "AND": [
+            {
+              "NOT": [
+                {
+                  "check_variable": {
+                    "china_state_ref": 23
+                  }
+                },
+                {
+                  "check_variable": {
+                    "china_state_ref": 26
+                  }
+                },
+                {
+                  "check_variable": {
+                    "china_state_ref": 29
+                  }
+                }
+              ]
+            },
+            {
+              "OR": {
+                "check_variable": [
+                  {
+                    "china_state_ref": 23
+                  },
+                  {
+                    "china_state_ref": 26
+                  },
+                  {
+                    "china_state_ref": 29
+                  }
+                ]
+              },
+              "controller": {
+                "is_in_faction_with": "YUN"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_door_to_nanjing Completed",
+      "set_temp_variable": {
+        "tempWarbuff": 2.5
+      },
+      "YUN_WI_morale_change": true,
+      "add_manpower": 100000
+    }
+  },
+  {
+    "id": "YUN_NPA_to_the_yangtze_delta",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "В дельту Янцзы",
+    "desc": "Являясь самым процветающим регионом нашей родины, дельта Янцзы также является центром предательского режима, вместе с тем открывая дорогу на главная жемчужина региона - Нанкин. Богатство дельты Янцзы значительно усилит нашу военную машину, а кровь предателей обагрит каждую душу, погибшую на этих землях три десятилетия назад.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_to_the_yangtze_delta_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "check_variable": {
+              "china_state_ref": {
+                "_op": ">",
+                "value": 6
+              }
+            },
+            "AND": {
+              "check_variable": {
+                "china_state_ref": {
+                  "_op": "<",
+                  "value": 7
+                }
+              },
+              "controller": {
+                "is_in_faction_with": "YUN"
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "all_of_scopes": {
+        "array": "global.greater_china_states",
+        "OR": {
+          "AND": [
+            {
+              "NOT": [
+                {
+                  "check_variable": {
+                    "china_state_ref": 24
+                  }
+                },
+                {
+                  "check_variable": {
+                    "china_state_ref": 25
+                  }
+                },
+                {
+                  "check_variable": {
+                    "china_state_ref": 31
+                  }
+                },
+                {
+                  "check_variable": {
+                    "china_state_ref": 33
+                  }
+                },
+                {
+                  "check_variable": {
+                    "china_state_ref": 34
+                  }
+                }
+              ]
+            },
+            {
+              "OR": {
+                "check_variable": [
+                  {
+                    "china_state_ref": 24
+                  },
+                  {
+                    "china_state_ref": 25
+                  },
+                  {
+                    "china_state_ref": 31
+                  },
+                  {
+                    "china_state_ref": 33
+                  },
+                  {
+                    "china_state_ref": 34
+                  }
+                ]
+              },
+              "controller": {
+                "is_in_faction_with": "YUN"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_capture_nanjing Completed",
+      "add_political_power": 100,
+      "set_temp_variable": {
+        "tempLegitimacy": 5.0
+      },
+      "YUN_WI_legitimacy_change": true
+    }
+  },
+  {
+    "id": "YUN_NPA_the_second_capital",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Северная столица",
+    "desc": "Предатели сражаться отчаянно, но их дни сочтены. Скоро Пекин будет в наших руках, и когда последняя из четырёх столиц будет очищена, Китай станет свободным навсегда!",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_secured_huabei_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "check_variable": [
+              {
+                "china_state_ref": {
+                  "_op": "<",
+                  "value": 7
+                }
+              },
+              {
+                "china_state_ref": {
+                  "_op": ">",
+                  "value": 14
+                }
+              }
+            ],
+            "AND": {
+              "check_variable": [
+                {
+                  "china_state_ref": {
+                    "_op": ">",
+                    "value": 6
+                  }
+                },
+                {
+                  "china_state_ref": {
+                    "_op": "<",
+                    "value": 15
+                  }
+                }
+              ],
+              "controller": {
+                "is_in_faction_with": "YUN"
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "YUN_NPA_GAW_Crisis"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_the_second_capital Completed",
+      "add_political_power": 300,
+      "add_command_power": 30,
+      "set_temp_variable": {
+        "tempWarbuffTick": 3.0
+      },
+      "YUN_WI_morale_tick_change": true
+    }
+  },
+  {
+    "id": "YUN_NPA_the_paradise_of_parasites",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Паразитический рай",
+    "desc": "Государство Гуандун это, пожалуй, величайшее унижение, которое японские псы могли для нас придумать. Будучи родиной китайского национализма и самой НРА, провинция Гуандун всегда занимала особое место в сердце каждого истинного революционера. И все же теперь она превратилась в рай для этих снобистских, жаждущих власти и денег корпораций. Что ещё хуже, в попытке уничтожить нашу национальную идентичность японцы изобрели расу неких \"чжуцзинов\". Все наши солдаты в ярости, видя, во что превратилось их убежище, и они больше не будут ждать, освободив эти священные места от японских червей и паразитов.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_secured_huanan_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "check_variable": [
+              {
+                "china_state_ref": {
+                  "_op": "<",
+                  "value": 31
+                }
+              },
+              {
+                "china_state_ref": {
+                  "_op": ">",
+                  "value": 36
+                }
+              }
+            ],
+            "AND": {
+              "check_variable": [
+                {
+                  "china_state_ref": {
+                    "_op": ">",
+                    "value": 30
+                  }
+                },
+                {
+                  "china_state_ref": {
+                    "_op": "<",
+                    "value": 37
+                  }
+                }
+              ],
+              "controller": {
+                "is_in_faction_with": "YUN"
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "YUN_NPA_GAW_Crisis"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_the_paradise_of_parasites Completed",
+      "add_political_power": 400,
+      "add_command_power": 40,
+      "set_temp_variable": {
+        "tempWarbuffTick": 4.0
+      },
+      "YUN_WI_morale_tick_change": true
+    }
+  },
+  {
+    "id": "YUN_NPA_the_fake_golden_family",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Фальшивая 'Золотая Семья'",
+    "desc": "Дэмчигдонров - самозваный потомок Великого Чингисхана - является не более чем жалкой марионеткой, возглавляющей так называемое \"правительство Мэнцзяна\". Какая ирония в том, что считая себя спасителем монголов, он служит марионеткой маньжчуров, которые, в свою очередь, являются марионеткой японцев. Нам пора положить конец этой сакральной драме, а монголы должны понять, что именно АНО, а не этот позорный \"принц\", на самом деле заботятся об их свободе и достоинстве.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_secured_saibei_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "check_variable": {
+              "china_state_ref": {
+                "_op": "<",
+                "value": 54
+              }
+            },
+            "AND": {
+              "check_variable": {
+                "china_state_ref": {
+                  "_op": ">",
+                  "value": 53
+                }
+              },
+              "controller": {
+                "OR": {
+                  "is_in_faction_with": "YUN",
+                  "is_russian_nation": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "YUN_NPA_GAW_Crisis",
+      "OR": {
+        "SHX": {
+          "is_in_faction_with": "YUN"
+        },
+        "controls_state": 608
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_the_fake_golden_family Completed",
+      "add_political_power": 400,
+      "add_command_power": 40,
+      "set_temp_variable": {
+        "tempWarbuffTick": 4.0
+      },
+      "YUN_WI_morale_tick_change": true
+    }
+  },
+  {
+    "id": "YUN_NPA_cross_the_marco_polo_bridge",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Незаконченная Северная Экспедиция",
+    "desc": "Теперь, когда запретный город снова в наших руках, пришло время для величайшего вызова - Маньчжурия. Павшая к ногам японцев раньше других - после Мукденского инцидента, теперь она отравлена предателями из клана Айсинь Гьоро, которые с радостью принимают Квантунскую Армию и японских бюрократов, порабощающих наших людей. Весь этот проект под названием 'Маньчжоу-Го' - это еще одна уловка самураев, направленная на то, чтобы оторвать Маньчжурию от ее родины. Однако на этот раз удача отвернется от японских псов. Мы добьемся того, чего не удалось десятилетия назад, и никогда больше эти империалистические псы не посмеют вторгнуться на земли Маньчжурии.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_secured_dongbei_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "check_variable": [
+              {
+                "china_state_ref": {
+                  "_op": "<",
+                  "value": 44
+                }
+              },
+              {
+                "china_state_ref": {
+                  "_op": ">",
+                  "value": 52
+                }
+              }
+            ],
+            "AND": {
+              "check_variable": [
+                {
+                  "china_state_ref": {
+                    "_op": ">",
+                    "value": 43
+                  }
+                },
+                {
+                  "china_state_ref": {
+                    "_op": "<",
+                    "value": 53
+                  }
+                }
+              ],
+              "controller": {
+                "OR": {
+                  "is_in_faction_with": "YUN",
+                  "is_russian_nation": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "YUN_NPA_GAW_Crisis",
+      "controls_state": 608
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_cross_the_marco_polo_bridge Completed",
+      "add_political_power": 500,
+      "add_command_power": 50,
+      "set_temp_variable": {
+        "tempWarbuffTick": 5.0
+      },
+      "YUN_WI_morale_tick_change": true
+    }
+  },
+  {
+    "id": "YUN_NPA_Production_Boost",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Обеспечить безостановочное производство",
+    "desc": "По сравнению с Китаем и Японией, количество земли, промышленности и ресурсов, которые мы контролируем, невелико. Мы должны эффективно использовать каждую грань нашей промышленности в полной мере, обеспечивая круглосуточное производство. Только так мы можем надеяться конкурировать с Китаем.",
+    "icon": "",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_everything_for_the_war"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "YUN_NPA_Production_Boost_tt_start",
+      "log": "[GetDateText]: [Root.GetName]: YUN_NPA_Production_Boost start",
+      "set_temp_variable": {
+        "tempLegitimacyTick": 2.0
+      },
+      "YUN_WI_legitimacy_tick_change": true
+    }
+  },
+  {
+    "id": "YUN_NPA_Press_Recruitment",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Вербовка для дела",
+    "desc": "Каждый мужчина и каждая женщина должны быть готовы к борьбе за Свободный Китай. Наше движение напрямую связано со свободой народа, и поэтому нам необходимо мобилизовать массы против японцев и их марионеток в Нанкине.",
+    "icon": "",
+    "cost": 150,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_stand_up_and_fight"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "YUN_NPA_Press_Recruitment_tt_start",
+      "log": "[GetDateText]: [Root.GetName]: YUN_NPA_Press_Recruitment start",
+      "set_temp_variable": {
+        "tempWarbuffTick": 2.5
+      },
+      "YUN_WI_morale_tick_change": true
+    }
+  },
+  {
+    "id": "YUN_NPA_Force_Attack",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Приказ \"Неутомимая Атака\"",
+    "desc": "Мы не можем позволить себе стоять на месте. Враг имеет подавляющее преимущество над нами в потенциальной живой силе и материальных средствах, преимущество, которое мы можем сломить, только используя его нынешнее слабое состояние и атакуя без устали. Ни разу наши атаки не должны прекращаться - лучшая защита это нападение.",
+    "icon": "",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "YUN_not_one_step_back"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "YUN_NPA_Force_Attack_tt_start",
+      "set_temp_variable": {
+        "tempWarbuff": 10
+      },
+      "YUN_WI_morale_change": true
+    }
+  },
+  {
+    "id": "Yunnan_unifies",
+    "category_id": "TMM_Xinan",
+    "name": "Yunnan shall unify the Southwest!",
+    "desc": "",
+    "icon": "GFX_decision_category_power_struggle",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "AND": {
+        "tag": "YUN",
+        "has_war": false,
+        "owns_state": 594
+      }
+    },
+    "visible": {
+      "tag": "YUN"
+    },
+    "complete_effect": {
+      "594": {
+        "add_core_of": "YUN"
+      },
+      "599": {
+        "add_core_of": "YUN"
+      },
+      "1464": {
+        "add_core_of": "YUN"
+      },
+      "603": {
+        "add_core_of": "CHI"
+      },
+      "set_cosmetic_tag": "XINAN",
+      "CHI": [
+        {
+          "transfer_state": 603
+        },
+        {
+          "puppet": "YUN"
+        }
+      ],
+      "JAP": {
+        "add_to_faction": "YUN"
+      },
+      "set_variable": {
+        "603.china": 5
+      },
+      "QIN_update_map": true
+    }
+  }
+]

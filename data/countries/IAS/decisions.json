@@ -1,0 +1,1169 @@
+[
+  {
+    "id": "BUL_support_imro_militias",
+    "category_id": "BUL_macedonian_revolutionary_organizations",
+    "name": "Интегрировать ополчение ВМРО",
+    "desc": "Мы должны воспользоваться опытом македонских революционеров и образовать дивизии ополченцев ВМРО, которые будут служить в нашей армии.",
+    "icon": "GFX_decision_generic_military",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BUL_macedonian_affairs_ongoing_flag"
+      },
+      "has_war": true,
+      "any_controlled_state": {
+        "BUL_is_macedonian_state": true
+      }
+    },
+    "visible": {
+      "has_country_flag": {
+        "flag": "BUL_support_imro_flag",
+        "value": 3
+      },
+      "has_civil_war": false
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "BUL_support_imro_flag",
+        "value": 4
+      }
+    }
+  },
+  {
+    "id": "INS_militias_railway_pemuda_mission",
+    "category_id": "INS_militias_cat",
+    "name": "Железнодорожная молодежная организация требует войны",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_war_with": "HOL",
+        "NOT": {
+          "has_country_flag": {
+            "flag": "INS_revolution_has_started"
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "add_war_support": 0.1,
+      "add_political_power": 100
+    }
+  },
+  {
+    "id": "INS_militias_kris_repayment",
+    "category_id": "INS_militias_cat",
+    "name": "Ополчение KRIS требует инвестиций в Сулавеси",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "673": {
+        "infrastructure": {
+          "_op": ">",
+          "value": 3
+        },
+        "OR": {
+          "industrial_complex": {
+            "_op": ">",
+            "value": 2
+          },
+          "arms_factory": {
+            "_op": ">",
+            "value": 2
+          },
+          "AND": [
+            {
+              "industrial_complex": {
+                "_op": ">",
+                "value": 0
+              },
+              "arms_factory": {
+                "_op": ">",
+                "value": 1
+              }
+            },
+            {
+              "industrial_complex": {
+                "_op": ">",
+                "value": 1
+              },
+              "arms_factory": {
+                "_op": ">",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "1056": {
+        "infrastructure": {
+          "_op": ">",
+          "value": 2
+        },
+        "OR": {
+          "industrial_complex": {
+            "_op": ">",
+            "value": 1
+          },
+          "arms_factory": {
+            "_op": ">",
+            "value": 1
+          },
+          "AND": {
+            "industrial_complex": {
+              "_op": ">",
+              "value": 0
+            },
+            "arms_factory": {
+              "_op": ">",
+              "value": 0
+            }
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_to_variable": {
+          "var": "INS_missions_completed",
+          "value": 1
+        }
+      },
+      "if": [
+        {
+          "limit": {
+            "673": {
+              "NOT": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          "673": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "limit": {
+            "1056": {
+              "NOT": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          "1056": {
+            "add_core_of": "ROOT"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "INS_militias_moestopo_mission",
+    "category_id": "INS_militias_cat",
+    "name": "Мустопо требует повышения за свои усилия",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "INS_moestopo": {
+        "is_field_marshal": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_to_variable": {
+          "var": "INS_missions_completed",
+          "value": 1
+        }
+      },
+      "INS_moestopo": {
+        "add_skill_level": 2,
+        "add_attack": 1,
+        "add_logistics": 1,
+        "add_defense": 1,
+        "add_planning": 1
+      }
+    }
+  },
+  {
+    "id": "INS_militias_di_mission",
+    "category_id": "INS_militias_cat",
+    "name": "Дарул Ислам требует представительства",
+    "desc": "",
+    "icon": "GFX_decision_tur_unifying_the_country",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "INS_integrate_sarekat_islam",
+          "INS_dominion_of_atjeh"
+        ]
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_to_variable": {
+          "var": "INS_missions_completed",
+          "value": 1
+        }
+      },
+      "add_stability": 0.1
+    }
+  },
+  {
+    "id": "INS_militias_pki_uprising_mission",
+    "category_id": "INS_militias_cat",
+    "name": "Восстание коммунистов неизбежно",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": "INS_support_tan_malakas_coup",
+        "has_government": "communism",
+        "communism": {
+          "_op": "<",
+          "value": 0.02
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_to_variable": {
+          "var": "INS_missions_completed",
+          "value": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "INS_militias_jakarta_pemuda_mission",
+    "category_id": "INS_militias_cat",
+    "name": "Молодежная организация Джакарты требует улучшения образования",
+    "desc": "",
+    "icon": "GFX_decision_generic_research",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "amount_research_slots": {
+          "_op": ">",
+          "value": 3
+        },
+        "has_tech": [
+          "construction4",
+          "improved_computing_machine",
+          "atomic_research"
+        ]
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_to_variable": {
+          "var": "INS_missions_completed",
+          "value": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "INS_arm_militias",
+    "category_id": "INS_pacific_revolution_cat",
+    "name": "Вооружить местное [FROM.GetAdjRuLower]ое ополчение",
+    "desc": "Одними пламенными речами и памфлетами революцию не выиграть. В решающий момент наши товарищи в [FROM.GetNameRuPrep] должны быть готовы к восстанию. Необходимо организовать тайные поставки излишков оружия и припасов дружественным формированиям, чтобы на борьбу с реакционными силами поднялось вооруженное население, а не агнцы на заклание.",
+    "icon": "GFX_decision_POL_looming_peasants_strike",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "INS_coup_in_progress"
+    },
+    "complete_effect": {
+      "FROM": {
+        "add_to_variable": {
+          "INS_automatic_militias_var_for_target": 1
+        },
+        "add_popularity": {
+          "ideology": "communism",
+          "popularity": 0.05
+        }
+      },
+      "custom_effect_tooltip": "INS_arm_militias_tt",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500
+      }
+    }
+  },
+  {
+    "id": "NOR_generate_militias",
+    "category_id": "NOR_debug_decisions_category",
+    "name": "NOR_generate_militias",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "NOR_going_dem_historical",
+      "110": {
+        "NOR_spawn_militias_in_state": [
+          true,
+          true,
+          true
+        ]
+      }
+    }
+  },
+  {
+    "id": "NOR_dem_his_integrate_militias",
+    "category_id": "NOR_historical_deploy_prep_decisions_category",
+    "name": "NOR_dem_his_integrate_militias",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_country_division": {
+        "division_has_majority_template": "militia"
+      }
+    },
+    "visible": {
+      "any_country_division": {
+        "division_has_majority_template": "militia"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_equipment_to_stockpile": {
+          "type": "convoy_1",
+          "amount": -50,
+          "producer": "NOR"
+        },
+        "army_experience": -80
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_integrate_militias",
+    "category_id": "NOR_allied_democratic_deploy_prep_decisions_category",
+    "name": "NOR_alt_dem_integrate_militias",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_country_division": {
+        "division_has_majority_template": "militia"
+      }
+    },
+    "visible": {
+      "any_country_division": {
+        "division_has_majority_template": "militia"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_equipment_to_stockpile": {
+          "type": "convoy_1",
+          "amount": -50,
+          "producer": "NOR"
+        },
+        "army_experience": -80
+      }
+    }
+  },
+  {
+    "id": "SOV_factory_worker_militias",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Увеличить рабочее ополчение",
+    "desc": "Мы должны поставить под ружье рабочих в регионе [FROM.GetName], чтобы усилить ими размещенные там дивизии — иначе заводов, на которых можно работать, у них скоро не останется.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "SOV_civilian_labor_in_defense_mod"
+          }
+        }
+      }
+    },
+    "visible": {
+      "any_enemy_country": {
+        "SOV_is_major_not_original_sov": true
+      },
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      },
+      "FROM": {
+        "is_controlled_by": "ROOT",
+        "any_neighbor_state": {
+          "controller": {
+            "has_war_with": "ROOT"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25,
+        "add_political_power": -25,
+        "FROM": {
+          "add_dynamic_modifier": {
+            "modifier": "SOV_factory_worker_militias_raised",
+            "scope": "SOV"
+          }
+        }
+      },
+      "custom_effect_tooltip": "SOV_factory_worker_militias_state_modifier_tt"
+    }
+  },
+  {
+    "id": "SPA_expand_influence_in_the_asturias_garrison",
+    "category_id": "SPR_the_inevitable_civil_war",
+    "name": "Расширить влияние в астурийском гарнизоне",
+    "desc": "",
+    "icon": [
+      {
+        "key": "spa_garrison_control_none",
+        "trigger": {
+          "has_completed_focus": "SPA_a_great_spain",
+          "790": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 1,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spa_garrison_control_weak",
+        "trigger": {
+          "has_completed_focus": "SPA_a_great_spain",
+          "790": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 2,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spa_garrison_control_strong",
+        "trigger": {
+          "has_completed_focus": "SPA_a_great_spain",
+          "790": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 3,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spa_garrison_control_total",
+        "trigger": {
+          "has_completed_focus": "SPA_a_great_spain",
+          "790": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 4,
+              "compare": "greater_than_or_equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spr_garrison_control_none",
+        "trigger": {
+          "has_completed_focus": "SPR_the_popular_front",
+          "790": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 1,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spr_garrison_control_weak",
+        "trigger": {
+          "has_completed_focus": "SPR_the_popular_front",
+          "790": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 2,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spr_garrison_control_strong",
+        "trigger": {
+          "has_completed_focus": "SPR_the_popular_front",
+          "790": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 3,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spr_garrison_control_total",
+        "trigger": {
+          "has_completed_focus": "SPR_the_popular_front",
+          "790": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 4,
+              "compare": "greater_than_or_equals"
+            }
+          }
+        }
+      }
+    ],
+    "cost": "790.SPA_garrison_control_cost?10",
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 790,
+      "if": [
+        {
+          "limit": {
+            "has_completed_focus": "SPA_a_great_spain"
+          },
+          "custom_trigger_tooltip": {
+            "tooltip": "SPA_expand_influence_nationalists_trigger_tt",
+            "790": {
+              "check_variable": {
+                "var": "SPA_garrison_control",
+                "value": 4,
+                "compare": "less_than"
+              }
+            }
+          }
+        },
+        {
+          "limit": {
+            "has_completed_focus": "SPR_the_popular_front"
+          },
+          "custom_trigger_tooltip": {
+            "tooltip": "SPR_expand_influence_republicans_trigger_tt",
+            "790": {
+              "check_variable": {
+                "var": "SPA_garrison_control",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            }
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "SPA_already_expanding_influence_flag"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_global_flag": "spanish_civil_war"
+      },
+      "has_country_flag": "SPR_spanish_elections_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "SPA_already_expanding_influence_flag"
+    }
+  },
+  {
+    "id": "SPA_expand_influence_in_the_asturias_garrison_mission",
+    "category_id": "SPR_opposition_civil_war_preparations",
+    "name": "Возникло сопротивление влиянию в астурийском гарнизоне",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "SPR",
+      "has_country_flag": "SPR_spanish_elections_flag",
+      "NOT": {
+        "has_global_flag": "spanish_civil_war"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SPA_asturias_offensive",
+    "category_id": "SPR_civil_war_offensives",
+    "name": "Астурийское наступление",
+    "desc": "",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_full_control_of_state": 790
+        },
+        {
+          "has_active_mission": "SPR_preparing_offensive"
+        }
+      ],
+      "790": {
+        "has_state_flag": "SPR_unplanned_offensive_flag",
+        "OR": {
+          "is_controlled_by": "ROOT",
+          "any_neighbor_state": {
+            "is_controlled_by": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "SPR",
+      "has_global_flag": "spanish_civil_war",
+      "NOT": {
+        "has_global_flag": "scw_over"
+      },
+      "790": {
+        "has_state_flag": "SPR_unplanned_offensive_flag"
+      }
+    },
+    "complete_effect": {
+      "activate_mission": "SPR_preparing_offensive",
+      "set_country_flag": "SPR_preparing_offensive_in_progress_flag",
+      "every_other_country": {
+        "limit": {
+          "original_tag": "SPR"
+        },
+        "activate_mission": "SPA_asturias_offensive_mission"
+      }
+    }
+  },
+  {
+    "id": "SPA_asturias_offensive_mission",
+    "category_id": "SPR_civil_war_offensives",
+    "name": "Неминуемо астурийское наступление",
+    "desc": "",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "original_tag": "SPR",
+      "has_global_flag": "spanish_civil_war",
+      "NOT": {
+        "has_global_flag": "scw_over"
+      },
+      "790": {
+        "has_state_flag": "SPR_unplanned_offensive_flag"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SPA_activate_asturias_fifth_columnists",
+    "category_id": "SPR_civil_war_offensives",
+    "name": "Задействовать астурийскую пятую колонну",
+    "desc": "",
+    "icon": "generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "790": {
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        },
+        "any_neighbor_state": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "tag": "SPA",
+      "has_global_flag": "spanish_civil_war",
+      "NOT": {
+        "has_global_flag": "scw_over"
+      },
+      "790": {
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "has_completed_focus": "SPA_the_fifth_column"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SPA_establish_asturias_carlist_cell",
+    "category_id": "SPA_preparing_the_carlist_insurrection",
+    "name": "Основать астурийскую карлистскую ячейку",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": 790,
+      "790": [
+        {
+          "NOT": {
+            "has_state_flag": "SPA_carlist_cell_flag"
+          }
+        },
+        {
+          "NOT": {
+            "has_state_flag": "SPA_union_militar_flag"
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "SPA_already_establishing_carlist_cell_flag"
+      }
+    },
+    "visible": {
+      "has_global_flag": "spanish_civil_war",
+      "NOT": [
+        {
+          "has_global_flag": "scw_over"
+        },
+        {
+          "has_global_flag": "SPR_carlist_uprising_flag"
+        }
+      ],
+      "has_completed_focus": "SPA_prepare_the_carlist_insurrection"
+    },
+    "complete_effect": {
+      "set_country_flag": "SPA_already_establishing_carlist_cell_flag"
+    }
+  },
+  {
+    "id": "SWI_broaden_militias",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Расширить ополчение",
+    "desc": "",
+    "icon": "GFX_decision_POL_looming_peasants_strike",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "SWI_mr_max_reduction": true
+    }
+  },
+  {
+    "id": "SWI_field_hospital_for_militias",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Полевые госпитали для ополчения",
+    "desc": "[ROOT.GetNonIdeologyName] практикует давнюю традицию сострадания и готово оказывать всем медпомощь. Надо воспользоваться этим, чтобы лучше готовить ополчение нашей страны.",
+    "icon": "GFX_decision_generic_research",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": "SWI_spirit_of_saint_bernard_idea"
+    },
+    "complete_effect": {
+      "SWI_mr_lowest_reduction": true
+    }
+  },
+  {
+    "id": "SWI_support_for_militias",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Роты обеспечения для ополчения",
+    "desc": "Мы сможем усилить свое ополчение, обеспечив ему достойное снабжение. Так отряды ополчения станут крепче и универсальнее.",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": [
+        "tech_engineers",
+        "tech_recon",
+        "tech_logistics_company"
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "SWI_expanded_military_support"
+    },
+    "complete_effect": {
+      "SWI_mr_lowest_reduction": true
+    }
+  },
+  {
+    "id": "FRA_gax_militias_coup",
+    "category_id": "FRA_debug_category",
+    "name": "Переворот ополчения",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_leader": {
+        "character": "FRA_Pierre_Gaxotte",
+        "ruling_only": true
+      }
+    },
+    "visible": {
+      "has_country_flag": "FRA_gaxotte_debug_enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_gax_militias_coup",
+      "remove_ideas": "FRA_the_OAS",
+      "set_politics": {
+        "ruling_party": "despotism",
+        "name": "FRM_despotism_party",
+        "long_name": "FRM_despotism_party_long"
+      },
+      "add_country_leader_role": {
+        "character": "FRA_Raoul_Salan",
+        "promote_leader": true,
+        "country_leader": {
+          "ideology": "despotism_military_junta_subtype",
+          "expire": "1975.1.1.1",
+          "id": -1
+        }
+      },
+      "remove_all_ministers": true,
+      "every_country": {
+        "limit": {
+          "is_ai": false,
+          "HasEuropeInterest": true
+        },
+        "news_event": {
+          "id": "WORLD.228",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "GNG_Order_Militias_to_deescalate_against_GFT",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Приказать лоялистам снизить эскалацию против  ФРГ",
+    "desc": "Мы сделаем символический жест доброй воли в сторону протестующих и ослабим самые агрессивные меры, принимаемые нашими силами безопасности, в надежде успокоить наименее радикальных членов профсоюза.",
+    "icon": "GFX_decision_generic_reassurance",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_GFT",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_GFT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      },
+      "has_country_flag": "GNG_admit_it"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_Order_Militias_to_deescalate_against_CCL",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Приказать лоялистам снизить эскалацию против  ККТ",
+    "desc": "Мы сделаем символический жест доброй воли в сторону протестующих и ослабим самые агрессивные меры, принимаемые нашими силами безопасности, в надежде успокоить наименее радикальных членов профсоюза.",
+    "icon": "GFX_decision_generic_reassurance",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_CCL",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_CCL"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      },
+      "has_country_flag": "GNG_admit_it"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "iberian_wars_mission_asturias_war",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "[GetIBRWarsAsturiasWar]",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": [
+        {
+          "limit": {
+            "tag": "TBA"
+          },
+          "custom_trigger_tooltip": {
+            "tooltip": "iberian_wars_mission_TBA_asturias_war_tt",
+            "AND": {
+              "SPS": {
+                "exists": false
+              },
+              "FZL": {
+                "exists": false
+              },
+              "FSR": {
+                "exists": false
+              }
+            }
+          }
+        },
+        {
+          "limit": {
+            "OR": {
+              "tag": [
+                "SPS",
+                "FZL",
+                "FSR"
+              ]
+            }
+          },
+          "custom_trigger_tooltip": {
+            "tooltip": "iberian_wars_mission_spain_asturias_war_tt",
+            "TBA": {
+              "exists": false
+            }
+          }
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "MAG_DEC_MAT_siberias_all_russian_mic",
+    "category_id": "MAG_DECCAT_economic_development_my_man_matty",
+    "name": "Всероссийский ВПК Сибири",
+    "desc": "Оружейные корпорации нашей страны стремительно развиваются, так как угроза войны снова маячит на горизонте, и из горстки мастерских в Магадане они превратились в огромный военно-промышленный комплекс. Поскольку российское оружие быстро становится одним из лучших в мире, нам необходимо развивать промышленность Новосибирска, Кемерово и Красноярска и утвердиться в качестве передовой военно-промышленной державы Евразии. Со временем вооружение, произведённое российскими оружейными корпорациями, будет считаться одним из лучших и наиболее востребованных военных разработок в мире.",
+    "icon": "GFX_decision_generic_military_hat_skull",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_matty_econ_phase": 42
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.3
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "ore_centralize_communal_militias",
+    "category_id": "ORE_category_political_situation",
+    "name": "Централизовать Ополчения Коммун",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ore_centralize_communal_militias",
+      "ORE_centralization_med": true,
+      "TNO_improve_military_supervision_policy_effectiveness_med": true,
+      "TNO_improve_training_policy_effectiveness_med": true,
+      "add_timed_idea": {
+        "idea": "ORE_put_militias_down",
+        "days": 45
+      }
+    }
+  },
+  {
+    "id": "SBA_Expand_the_Militias_Decision",
+    "category_id": "SBA_general_assembly_category",
+    "name": "Увеличить ополчение",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_upgrade_militias",
+    "category_id": "URL_militia_system",
+    "name": "Тренировка милиции",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "URL_militias_expand_the_program_flag"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "has_country_flag": "URL_militias_expand_the_program_flag",
+      "OR": {
+        "has_idea": [
+          "URL_militia_program_1",
+          "URL_militia_program_2",
+          "URL_militia_program_3",
+          "URL_militia_program_4",
+          "URL_militia_program_5",
+          "URL_militia_program_6",
+          "URL_militia_program_7",
+          "URL_militia_program_8",
+          "URL_militia_program_9"
+        ]
+      }
+    },
+    "complete_effect": {
+      "army_experience": -15,
+      "add_political_power": -15
+    }
+  },
+  {
+    "id": "SAF_arrest_boers_militias_decision",
+    "category_id": "SAF_state_of_south_africa",
+    "name": "Арестовать бурских ополченцев",
+    "desc": "",
+    "icon": "GFX_decision_ENG_cop",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SAF_referendum_decisions"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SAF_fund_orange_militias",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Инвестировать в Оранжевое ополчение",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 275,
+      "NOT": {
+        "has_country_flag": "SAF_pro_anc"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "south_african_war_happening"
+        },
+        {
+          "has_country_flag": "SAF_pro_anc"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_fund_orange_militias",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "add_manpower": 10000,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 5000,
+        "producer": "SAF"
+      }
+    }
+  },
+  {
+    "id": "USA_HAR_fading_enthusiasm_warning",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Непостоянство толпы",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_HAR_monthly_decay"
+    }
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_sacrifice_enthusiasm",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Смягчить риторику",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_Expand_the_Militias_Decision",
+    "category_id": "VOR_mixed_economic_management_assembly_category",
+    "name": "Motion to Expand the Militias",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  }
+]

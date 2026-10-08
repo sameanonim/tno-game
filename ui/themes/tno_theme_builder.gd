@@ -187,6 +187,36 @@ static func apply_panel_style(panel: PanelContainer, border_color: Color = COLOR
 static func apply_box_style(panel: PanelContainer, border_color: Color = COLOR_BORDER_DIM, bg_color: Color = COLOR_BG_DARK, border_width: int = 1, corner_radius: int = 2) -> void:
 	apply_panel_style(panel, border_color, bg_color, border_width, corner_radius)
 
+static func apply_checkbox_style(chk: CheckBox, accent_color: Color = COLOR_BORDER_CYAN) -> void:
+	if chk == null:
+		return
+	var font = get_font_aldrich()
+	if font != null:
+		chk.add_theme_font_override("font", font)
+		chk.add_theme_font_size_override("font_size", 12)
+	chk.add_theme_color_override("font_color", COLOR_TEXT_PRIMARY)
+	chk.add_theme_color_override("font_hover_color", COLOR_BORDER_HOVER)
+	chk.add_theme_color_override("font_pressed_color", accent_color)
+	chk.add_theme_color_override("font_focus_color", COLOR_TEXT_PRIMARY)
+
+static func apply_slider_style(slider: HSlider, accent_color: Color = COLOR_BORDER_CYAN) -> void:
+	if slider == null:
+		return
+	var sb_slider = StyleBoxFlat.new()
+	sb_slider.bg_color = COLOR_BG_VOID
+	sb_slider.border_color = COLOR_BORDER_DIM
+	sb_slider.set_border_width_all(1)
+	sb_slider.content_margin_top = 4
+	sb_slider.content_margin_bottom = 4
+	slider.add_theme_stylebox_override("slider", sb_slider)
+	
+	var sb_grabber_area = StyleBoxFlat.new()
+	sb_grabber_area.bg_color = Color(accent_color.r, accent_color.g, accent_color.b, 0.4)
+	sb_grabber_area.border_color = accent_color
+	sb_grabber_area.set_border_width_all(1)
+	slider.add_theme_stylebox_override("grabber_area", sb_grabber_area)
+	slider.add_theme_stylebox_override("grabber_area_highlight", sb_grabber_area)
+
 static func create_pill_box(icon_tex: Texture2D, label_text: String, tooltip: String = "") -> PanelContainer:
 	var container := PanelContainer.new()
 	var sb = StyleBoxFlat.new()

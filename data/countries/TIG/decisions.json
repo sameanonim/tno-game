@@ -1,0 +1,5125 @@
+[
+  {
+    "id": "SIA_release_contigency_funds",
+    "category_id": "political_actions",
+    "name": "Задействовать резервный фонд",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true
+    },
+    "visible": {
+      "check_variable": {
+        "SIA_contingency_funds": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_dynamic_modifier": {
+        "modifier": "idea_SIA_contingency_funds"
+      },
+      "NOT": {
+        "has_country_flag": "has_released_contingency_funds"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "has_released_contingency_funds",
+      "custom_effect_tooltip": [
+        "SIA_release_contigency_funds_tt",
+        "SIA_release_contigency_funds_tt2"
+      ],
+      "add_to_variable": [
+        {
+          "SIA_contingency_funds_industrial_capacity_factory": 0.1,
+          "tooltip": "industrial_capacity_factory_tt"
+        },
+        {
+          "SIA_contingency_funds_industrial_capacity_dockyard": 0.1,
+          "tooltip": "industrial_capacity_dockyard_tt"
+        },
+        {
+          "SIA_contingency_funds_production_speed_buildings_factor": 0.1,
+          "tooltip": "production_speed_buildings_factor_tt"
+        },
+        {
+          "SIA_contingency_funds_local_resources_factor": 0.25,
+          "tooltip": "local_resources_factor_tt"
+        },
+        {
+          "SIA_contingency_funds_cg": -0.08,
+          "tooltip": "consumer_goods_factor_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "FRA_revoke_the_matignon_agreements",
+    "category_id": "economy_decisions",
+    "name": "Отозвать Матиньонские соглашения",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_idea": "FRA_matignon_agreements"
+    },
+    "complete_effect": {
+      "remove_ideas": "FRA_matignon_agreements",
+      "if": {
+        "limit": {
+          "communism": {
+            "_op": ">",
+            "value": 0.25
+          }
+        },
+        "country_event": "lar_france_political_violence.2"
+      }
+    }
+  },
+  {
+    "id": "CHI_flying_tigers",
+    "category_id": "foreign_support",
+    "name": "Отправить «Летающие тигры»",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_equipment": {
+          "small_plane_airframe": {
+            "_op": ">",
+            "value": 99
+          }
+        },
+        "has_tech": "improved_small_airframe"
+      }
+    },
+    "visible": {
+      "has_country_flag": "CHI_flying_tigers"
+    },
+    "complete_effect": {
+      "random_country": {
+        "limit": {
+          "OR": {
+            "has_completed_focus": [
+              "CHI_invite_the_flying_tigers",
+              "CHI_international_squadron"
+            ]
+          }
+        },
+        "custom_effect_tooltip": "flying_tigers_tt",
+        "hidden_effect": {
+          "if": {
+            "limit": {
+              "NOT": {
+                "has_dlc": "By Blood Alone"
+              }
+            },
+            "add_equipment_to_stockpile": {
+              "producer": "USA",
+              "type": "fighter_equipment_1",
+              "amount": 100
+            }
+          },
+          "else": {
+            "USA": {
+              "create_equipment_variant": {
+                "name": "P-40",
+                "type": "small_plane_airframe_2",
+                "allow_without_tech": true,
+                "modules": {
+                  "fixed_main_weapon_slot": "heavy_mg_4x",
+                  "fixed_auxiliary_weapon_slot_1": "heavy_mg_2x",
+                  "fixed_auxiliary_weapon_slot_2": "bomb_locks",
+                  "engine_type_slot": "engine_3_1x",
+                  "special_type_slot_1": "drop_tanks"
+                }
+              }
+            },
+            "add_equipment_to_stockpile": {
+              "producer": "USA",
+              "type": "small_plane_airframe_2",
+              "amount": 100,
+              "variant_name": "P-40"
+            }
+          }
+        }
+      },
+      "add_war_support": 0.05
+    }
+  },
+  {
+    "id": "CHI_instigate_xian_incident",
+    "category_id": "CHI_xian_incident",
+    "name": "Приглашение: [CHI.GetLeader]",
+    "desc": "",
+    "icon": "generic_political_discourse",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_global_flag": "CHI_xian_fired"
+        },
+        {
+          "has_war_with": "CHI"
+        },
+        {
+          "has_war_with": "PRC"
+        }
+      ],
+      "CHI": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "CHI_chiang_kaishek"
+        },
+        "NOT": [
+          {
+            "is_in_faction_with": "PRC"
+          },
+          {
+            "has_war_with": "PRC"
+          },
+          {
+            "has_completed_focus": [
+              "CHI_foreign_threats",
+              "CHI_prioritize_the_interior"
+            ]
+          }
+        ]
+      },
+      "PRC": {
+        "NOT": {
+          "has_war_with": "CHI"
+        },
+        "is_in_faction": false
+      },
+      "IF": {
+        "limit": {
+          "has_dlc": "No Compromise, No Surrender"
+        },
+        "OR": {
+          "XIC": [
+            {
+              "exists": false
+            },
+            {
+              "has_completed_focus": "XIC_sixth_encirclement_campaign"
+            }
+          ],
+          "date": {
+            "_op": ">",
+            "value": "1936.12.1"
+          }
+        }
+      }
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_dlc": "No Compromise, No Surrender"
+        },
+        "NOT": {
+          "CHI": {
+            "has_faction_template": "faction_template_chinese_united_front"
+          },
+          "PRC": {
+            "has_faction_template": "faction_template_chinese_united_front"
+          }
+        }
+      },
+      "NOT": [
+        {
+          "has_global_flag": [
+            "CHI_xian_fired",
+            "early_united_front"
+          ]
+        },
+        {
+          "OR": {
+            "original_tag": [
+              "CHI",
+              "PRC"
+            ]
+          }
+        }
+      ],
+      "CHI": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "CHI_chiang_kaishek"
+        },
+        "is_subject": false,
+        "NOT": {
+          "is_in_faction_with": "PRC"
+        }
+      },
+      "PRC": {
+        "exists": true,
+        "is_subject": false,
+        "NOT": {
+          "has_war_with": "CHI"
+        }
+      },
+      "is_literally_china": true,
+      "event_target:WTT_current_china_leader": {
+        "tag": "CHI"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "CHI_xian_instigator_flag",
+      "set_global_flag": "CHI_xian_fired",
+      "CHI": {
+        "country_event": {
+          "id": "wtt_xian_incident.1",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_build_a_carrier",
+    "category_id": "prestigious_projects",
+    "name": "Строительство авианосца",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_navy_size": {
+        "unit": "carrier",
+        "size": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "add_political_power": 100,
+      "navy_experience": 30,
+      "add_war_support": 0.05
+    }
+  },
+  {
+    "id": "CHL_open_investigations_against_the_nacistas",
+    "category_id": "CHL_nacista_insurgency_decisions",
+    "name": "Устроить расследование в отношении Хорхе Гонсалеса фон Марэеса",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_government": "fascism"
+        },
+        {
+          "OR": {
+            "has_country_flag": "CHL_fascist_and_communist_joint_civil_war_started",
+            "has_global_flag": "nacista_coup_attempt_happened"
+          }
+        },
+        {
+          "has_completed_focus": "CHL_denounce_the_anarchy"
+        }
+      ]
+    },
+    "visible": {
+      "tag": "CHL",
+      "NOT": [
+        {
+          "has_government": "fascism"
+        },
+        {
+          "OR": {
+            "has_country_flag": "CHL_fascist_and_communist_joint_civil_war_started",
+            "has_global_flag": "nacista_coup_attempt_happened"
+          }
+        },
+        {
+          "OR": {
+            "has_completed_focus": [
+              "CHL_denounce_the_anarchy",
+              "CHL_address_the_mapuche_conflict"
+            ]
+          }
+        },
+        {
+          "has_country_flag": "CHL_investigated_nacistas_flag"
+        }
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "CHL_reintigrate_tacna_fascist",
+    "category_id": "CHL_nacista_decisions",
+    "name": "Повторно интегрировать Такну",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_expand_the_department_of_provinces",
+      "controls_state": 947
+    },
+    "visible": {
+      "original_tag": "CHL",
+      "has_completed_focus": "CHL_expand_the_department_of_provinces",
+      "NOT": {
+        "has_country_flag": "CHL_reintigrated_tacna_flag"
+      },
+      "947": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "CHL_intigrate_tierra_del_fuego_fascist",
+    "category_id": "CHL_nacista_decisions",
+    "name": "Интегрировать Огненную землю",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_expand_the_department_of_provinces",
+      "controls_state": 953
+    },
+    "visible": {
+      "original_tag": "CHL",
+      "has_completed_focus": "CHL_expand_the_department_of_provinces",
+      "NOT": {
+        "has_country_flag": "CHL_intigrated_tierra_del_fuego_flag"
+      },
+      "953": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "EST_launch_vaps_investigation",
+    "category_id": "EST_fight_vaps_decisions",
+    "name": "Начать расследование дела вапсов",
+    "desc": "Нужно пустить часть ресурсов наших тайных служб на то, чтобы внедриться в ряды вапсов и не дать им подорвать работу правительства.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_active_mission": "EST_vaps_uprising"
+    },
+    "visible": {
+      "has_active_mission": "EST_vaps_uprising"
+    },
+    "complete_effect": {
+      "add_days_mission_timeout": {
+        "mission": "EST_vaps_uprising",
+        "days": 50
+      }
+    }
+  },
+  {
+    "id": "FIN_instigate_a_new_karelian_uprising",
+    "category_id": "FIN_the_last_kinship_war",
+    "name": "FIN_instigate_a_new_karelian_uprising",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "KAR": {
+        "any_core_state": {
+          "controller": {
+            "original_tag": "SOV",
+            "NOT": {
+              "is_in_faction_with": "ROOT"
+            }
+          },
+          "has_dynamic_modifier": {
+            "modifier": "FIN_anti_soviet_sentiment"
+          }
+        }
+      }
+    },
+    "visible": {
+      "KAR": {
+        "any_core_state": {
+          "has_dynamic_modifier": {
+            "modifier": "FIN_anti_soviet_sentiment"
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "reintigrate_hispania",
+    "category_id": "form_roman_empire_category",
+    "name": "Реинтегрировать Испанию",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        794,
+        166,
+        172,
+        792,
+        790,
+        171,
+        174,
+        791,
+        176,
+        793,
+        788,
+        41,
+        175,
+        170,
+        789,
+        169,
+        179,
+        795,
+        112,
+        181,
+        180
+      ]
+    },
+    "visible": {
+      "original_tag": "ITA",
+      "NOT": {
+        "has_global_flag": "reclaim_hispania_flag"
+      },
+      "has_global_flag": "form_roman_empire_flag"
+    },
+    "complete_effect": {
+      "794": {
+        "add_core_of": "ROOT"
+      },
+      "166": {
+        "add_core_of": "ROOT"
+      },
+      "172": {
+        "add_core_of": "ROOT"
+      },
+      "792": {
+        "add_core_of": "ROOT"
+      },
+      "790": {
+        "add_core_of": "ROOT"
+      },
+      "171": {
+        "add_core_of": "ROOT"
+      },
+      "174": {
+        "add_core_of": "ROOT"
+      },
+      "791": {
+        "add_core_of": "ROOT"
+      },
+      "176": {
+        "add_core_of": "ROOT"
+      },
+      "793": {
+        "add_core_of": "ROOT"
+      },
+      "788": {
+        "add_core_of": "ROOT"
+      },
+      "41": {
+        "add_core_of": "ROOT"
+      },
+      "175": {
+        "add_core_of": "ROOT"
+      },
+      "170": {
+        "add_core_of": "ROOT"
+      },
+      "789": {
+        "add_core_of": "ROOT"
+      },
+      "169": {
+        "add_core_of": "ROOT"
+      },
+      "179": {
+        "add_core_of": "ROOT"
+      },
+      "795": {
+        "add_core_of": "ROOT"
+      },
+      "112": {
+        "add_core_of": "ROOT"
+      },
+      "181": {
+        "add_core_of": "ROOT"
+      },
+      "180": {
+        "add_core_of": "ROOT"
+      },
+      "add_stability": -0.05,
+      "hidden_effect": {
+        "set_global_flag": "reclaim_hispania_flag"
+      }
+    }
+  },
+  {
+    "id": "reintigrate_dacia",
+    "category_id": "form_roman_empire_category",
+    "name": "Реинтегрировать Дакию",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        76,
+        84,
+        83,
+        81,
+        82,
+        764
+      ]
+    },
+    "visible": {
+      "original_tag": "ITA",
+      "NOT": {
+        "has_global_flag": "reclaim_dacia_flag"
+      },
+      "has_global_flag": "form_roman_empire_flag"
+    },
+    "complete_effect": {
+      "76": {
+        "add_core_of": "ROOT"
+      },
+      "84": {
+        "add_core_of": "ROOT"
+      },
+      "83": {
+        "add_core_of": "ROOT"
+      },
+      "81": {
+        "add_core_of": "ROOT"
+      },
+      "82": {
+        "add_core_of": "ROOT"
+      },
+      "764": {
+        "add_core_of": "ROOT"
+      },
+      "add_stability": -0.05,
+      "hidden_effect": {
+        "set_global_flag": "reclaim_dacia_flag"
+      }
+    }
+  },
+  {
+    "id": "reintigrate_moesia",
+    "category_id": "form_roman_empire_category",
+    "name": "Реинтегрировать Мёзию",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        766,
+        46,
+        971,
+        77,
+        211,
+        801,
+        212,
+        48,
+        803,
+        106,
+        970,
+        802,
+        108,
+        107
+      ]
+    },
+    "visible": {
+      "original_tag": "ITA",
+      "NOT": {
+        "has_global_flag": "reclaim_moesia_flag"
+      },
+      "has_global_flag": "form_roman_empire_flag"
+    },
+    "complete_effect": {
+      "766": {
+        "add_core_of": "ROOT"
+      },
+      "46": {
+        "add_core_of": "ROOT"
+      },
+      "971": {
+        "add_core_of": "ROOT"
+      },
+      "77": {
+        "add_core_of": "ROOT"
+      },
+      "211": {
+        "add_core_of": "ROOT"
+      },
+      "801": {
+        "add_core_of": "ROOT"
+      },
+      "212": {
+        "add_core_of": "ROOT"
+      },
+      "48": {
+        "add_core_of": "ROOT"
+      },
+      "803": {
+        "add_core_of": "ROOT"
+      },
+      "106": {
+        "add_core_of": "ROOT"
+      },
+      "970": {
+        "add_core_of": "ROOT"
+      },
+      "802": {
+        "add_core_of": "ROOT"
+      },
+      "108": {
+        "add_core_of": "ROOT"
+      },
+      "107": {
+        "add_core_of": "ROOT"
+      },
+      "add_stability": -0.05,
+      "hidden_effect": {
+        "set_global_flag": "reclaim_moesia_flag"
+      }
+    }
+  },
+  {
+    "id": "reintigrate_aegyptus",
+    "category_id": "form_roman_empire_category",
+    "name": "Реинтегрировать Египет",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        552,
+        456,
+        457
+      ]
+    },
+    "visible": {
+      "original_tag": "ITA",
+      "NOT": {
+        "has_global_flag": "reclaim_aegyptus_flag"
+      },
+      "has_global_flag": "form_roman_empire_flag"
+    },
+    "complete_effect": {
+      "552": {
+        "add_core_of": "ROOT"
+      },
+      "456": {
+        "add_core_of": "ROOT"
+      },
+      "457": {
+        "add_core_of": "ROOT"
+      },
+      "add_stability": -0.05,
+      "hidden_effect": {
+        "set_global_flag": "reclaim_aegyptus_flag"
+      }
+    }
+  },
+  {
+    "id": "HUN_reintigrate_southern_slovakia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [664.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "controls_state": 664
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_south_slovakia_flag"
+      },
+      "664": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_western_slovakia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [70.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "controls_state": 70
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_west_slovakia_flag"
+      },
+      "70": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_eastern_slovakia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [71.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "controls_state": 71
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_east_slovakia_flag"
+      },
+      "71": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_carpathian_ruthenia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [73.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "controls_state": 73
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_reclaim_the_slovak_possessions"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_carpathia_flag"
+      },
+      "73": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_transylvania",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [76.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_revenge_for_1919"
+        ]
+      },
+      "controls_state": 76
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_revenge_for_1919"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_north_transylvania_flag"
+      },
+      "76": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_south_transylvania",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [84.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_revenge_for_1919"
+        ]
+      },
+      "controls_state": 84
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_revenge_for_1919"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_south_transylvania_flag"
+      },
+      "84": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_crisana",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [83.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_revenge_for_1919"
+        ]
+      },
+      "controls_state": 83
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_revenge_for_1919"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_crisana_flag"
+      },
+      "83": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_banat",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [82.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_revenge_for_1919"
+        ]
+      },
+      "controls_state": 82
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_revenge_for_1919"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_banat_flag"
+      },
+      "82": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_west_banat",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [764.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_undoing_the_yugoslav_mistake"
+        ]
+      },
+      "controls_state": 764
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_undoing_the_yugoslav_mistake"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_west_banat_flag"
+      },
+      "764": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_vojvodina",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [45.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_undoing_the_yugoslav_mistake"
+        ]
+      },
+      "controls_state": 45
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_undoing_the_yugoslav_mistake"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_vojvodina_flag"
+      },
+      "45": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_burgenland",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [975.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_reaffirm_territorial_claims",
+      "controls_state": 975
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "has_completed_focus": "wuw_HUN_reaffirm_territorial_claims",
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_burgenland_flag"
+      },
+      "975": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_croatia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [109.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_undoing_the_yugoslav_mistake"
+        ]
+      },
+      "controls_state": 109
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_undoing_the_yugoslav_mistake"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_croatia_flag"
+      },
+      "109": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HUN_reintigrate_dalmatia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Повторно интегрировать регион [103.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_undoing_the_yugoslav_mistake"
+        ]
+      },
+      "controls_state": 103
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_reaffirm_territorial_claims",
+          "wuw_HUN_undoing_the_yugoslav_mistake"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "HUN_reintigrated_dalmatia_flag"
+      },
+      "103": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "INS_instigate_in_country",
+    "category_id": "INS_pacific_revolution_cat",
+    "name": "Спровоцировать революцию в регионе [FROM.GetName]",
+    "desc": "Наша революция не закончилась с изгнанием последнего колониального солдата c [ROOT.GetAdjRuLower]ой земли. Рабочие и крестьяне [FROM.GetNameRuGen] продолжают страдать под тем же гнетом, от которого нам удалось избавиться. Для них мы — живое свидетельство того, что угнетателей можно победить. Мы направим к ним наших агитаторов, займемся распространением листовок, предоставим финансовую поддержку их профсоюзам и разожжем пламя недовольства, пока не созреют условия для революции.",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "INS_coup_in_progress"
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "save_global_event_target_as": "INS_revolution_target",
+        "country_event": {
+          "id": "INS_communist_events.6",
+          "hours": 12
+        },
+        "if": {
+          "limit": {
+            "is_subject": true
+          },
+          "overlord": {
+            "country_event": {
+              "id": "INS_communist_events.7",
+              "hours": 12
+            }
+          }
+        }
+      },
+      "set_country_flag": "INS_coup_in_progress"
+    }
+  },
+  {
+    "id": "POL_tighten_control",
+    "category_id": "POL_danzig_decisions",
+    "name": "Усилить контроль",
+    "desc": "Мы набрали достаточно влияния в городе, чтобы дополнительно усилить контроль, не вызвав при этом гражданских беспорядков. Так мы получим еще больше доступа к данцигским ресурсам и приблизимся к достижению единства в городе.",
+    "icon": "infiltrate_state",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "85": {
+        "compliance": {
+          "_op": ">",
+          "value": 40
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25,
+        "add_political_power": -75
+      },
+      "85": {
+        "add_resistance": -5,
+        "POL_increase_danzig_control": true
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_nepal",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [NEP.GetNameRuPrep]",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "NEP",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "NEP",
+        "exists": true,
+        "NOT": {
+          "NEP": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "NEP",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "NEP"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_tib",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [TIB.GetNameRuPrep]",
+    "desc": "[TIB.GetName] будет $RAJ_instigate_generic_desc$",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "TIB",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "TIB",
+        "exists": true,
+        "NOT": {
+          "TIB": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "TIB",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "TIB"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_brm",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [BRM.GetNameRuPrep]",
+    "desc": "[BRM.GetName] будет $RAJ_instigate_generic_desc$",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "TIB",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "BRM",
+        "exists": true,
+        "NOT": {
+          "BRM": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "BRM",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "BRM"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_afg",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [AFG.GetNameRuPrep]",
+    "desc": "[AFG.GetName] будет $RAJ_instigate_generic_desc$",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "TIB",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "AFG",
+        "exists": true,
+        "NOT": {
+          "AFG": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "AFG",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "AFG"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_per",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [PER.GetNameRuPrep]",
+    "desc": "[PER.GetName] будет $RAJ_instigate_generic_desc$",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "PER",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "PER",
+        "exists": true,
+        "NOT": {
+          "PER": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "PER",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "PER"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_sia",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [SIA.GetNameRuPrep]",
+    "desc": "[SIA.GetName] будет $RAJ_instigate_generic_desc$",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "SIA",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "SIA",
+        "exists": true,
+        "NOT": {
+          "SIA": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "SIA",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "SIA"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_ins",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [INS.GetNameRuPrep]",
+    "desc": "[INS.GetName] будет $RAJ_instigate_generic_desc$",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "INS",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "INS",
+        "exists": true,
+        "NOT": {
+          "INS": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "INS",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "INS"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "YUG_instigate_in_bulgaria",
+    "category_id": "YUG_peasant_uprisings",
+    "name": "Разжечь крестьянские восстания в Болгарии",
+    "desc": "Наше государство освободило почти всех южнославянских рабочих, кроме болгар. Лишь побудив их восстать против своих угнетателей, мы сможем с полным правом утверждать, что освободили славянских рабочих на Балканах.",
+    "icon": "decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "BUL",
+          "OR": {
+            "has_government": "communism",
+            "has_idea": "agitated_peasants"
+          }
+        },
+        "country_exists": "event_target:YUG_communist_coup_target"
+      }
+    },
+    "visible": {
+      "original_tag": "YUG",
+      "NOT": [
+        {
+          "event_target:YUG_communist_coup_target": {
+            "OR": {
+              "exists": true,
+              "has_government": "communism"
+            }
+          }
+        },
+        {
+          "any_country": {
+            "original_tag": "BUL",
+            "OR": {
+              "has_government": "communism",
+              "has_country_flag": "banned_communism_flag"
+            }
+          }
+        }
+      ],
+      "any_country": {
+        "original_tag": "BUL",
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "BUL"
+        },
+        "save_global_event_target_as": "YUG_communist_coup_target",
+        "country_event": {
+          "id": "DOD_yugoslavia.181"
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "YUG_instigate_in_albania",
+    "category_id": "YUG_peasant_uprisings",
+    "name": "Разжечь крестьянские восстания в Албании",
+    "desc": "Хоть сами албанцы и не считают себя славянами, близость к нашей границе и культурный обмен албанцев с южными славянами делает их идеальными кандидатами на вступление в панславянский конгресс рабочих.",
+    "icon": "decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "ALB",
+          "OR": {
+            "has_government": "communism",
+            "has_idea": "agitated_peasants"
+          }
+        },
+        "country_exists": "event_target:YUG_communist_coup_target"
+      }
+    },
+    "visible": {
+      "original_tag": "YUG",
+      "NOT": [
+        {
+          "event_target:YUG_communist_coup_target": {
+            "OR": {
+              "exists": true,
+              "has_government": "communism"
+            }
+          }
+        },
+        {
+          "any_country": {
+            "original_tag": "ALB",
+            "OR": {
+              "has_government": "communism",
+              "has_country_flag": "banned_communism_flag"
+            }
+          }
+        }
+      ],
+      "any_country": {
+        "original_tag": "ALB",
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "ALB"
+        },
+        "save_global_event_target_as": "YUG_communist_coup_target",
+        "country_event": {
+          "id": "DOD_yugoslavia.181"
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "YUG_instigate_in_greece",
+    "category_id": "YUG_peasant_uprisings",
+    "name": "Разжечь крестьянские восстания в Греции",
+    "desc": "",
+    "icon": "decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "GRE",
+          "OR": {
+            "has_government": "communism",
+            "has_idea": "agitated_peasants"
+          }
+        },
+        "country_exists": "event_target:YUG_communist_coup_target"
+      }
+    },
+    "visible": {
+      "original_tag": "YUG",
+      "NOT": [
+        {
+          "event_target:YUG_communist_coup_target": {
+            "OR": {
+              "exists": true,
+              "has_government": "communism"
+            }
+          }
+        },
+        {
+          "any_country": {
+            "original_tag": "GRE",
+            "OR": {
+              "has_government": "communism",
+              "has_country_flag": "banned_communism_flag"
+            }
+          }
+        }
+      ],
+      "any_country": {
+        "original_tag": "GRE",
+        "exists": true
+      },
+      "has_completed_focus": "YUG_pan_balkan_workers_congress"
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "GRE"
+        },
+        "save_global_event_target_as": "YUG_communist_coup_target",
+        "country_event": {
+          "id": "DOD_yugoslavia.181"
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "YUG_instigate_in_romania",
+    "category_id": "YUG_peasant_uprisings",
+    "name": "Разжечь крестьянские восстания в Румынии",
+    "desc": "",
+    "icon": "decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "ROM",
+          "OR": {
+            "has_government": "communism",
+            "has_idea": "agitated_peasants"
+          }
+        },
+        "country_exists": "event_target:YUG_communist_coup_target"
+      }
+    },
+    "visible": {
+      "original_tag": "YUG",
+      "NOT": [
+        {
+          "event_target:YUG_communist_coup_target": {
+            "OR": {
+              "exists": true,
+              "has_government": "communism"
+            }
+          }
+        },
+        {
+          "any_country": {
+            "original_tag": "ROM",
+            "OR": {
+              "has_government": "communism",
+              "has_country_flag": "banned_communism_flag"
+            }
+          }
+        }
+      ],
+      "any_country": {
+        "original_tag": "ROM",
+        "exists": true
+      },
+      "has_completed_focus": "YUG_pan_balkan_workers_congress"
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "ROM"
+        },
+        "save_global_event_target_as": "YUG_communist_coup_target",
+        "country_event": {
+          "id": "DOD_yugoslavia.181"
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "YUG_instigate_in_hungary",
+    "category_id": "YUG_peasant_uprisings",
+    "name": "Разжечь крестьянские восстания в Венгрии",
+    "desc": "",
+    "icon": "decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "HUN",
+          "OR": {
+            "has_government": "communism",
+            "has_idea": "agitated_peasants"
+          }
+        },
+        "country_exists": "event_target:YUG_communist_coup_target"
+      }
+    },
+    "visible": {
+      "original_tag": "YUG",
+      "NOT": [
+        {
+          "event_target:YUG_communist_coup_target": {
+            "OR": {
+              "exists": true,
+              "has_government": "communism"
+            }
+          }
+        },
+        {
+          "any_country": {
+            "original_tag": "HUN",
+            "OR": {
+              "has_government": "communism",
+              "has_country_flag": "banned_communism_flag"
+            }
+          }
+        }
+      ],
+      "any_country": {
+        "original_tag": "HUN",
+        "exists": true
+      },
+      "has_completed_focus": "YUG_pan_balkan_workers_congress"
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "HUN"
+        },
+        "save_global_event_target_as": "YUG_communist_coup_target",
+        "country_event": {
+          "id": "DOD_yugoslavia.181"
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "YUG_instigate_in_turkey",
+    "category_id": "YUG_peasant_uprisings",
+    "name": "Разжечь крестьянские восстания в Турции",
+    "desc": "",
+    "icon": "decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "TUR",
+          "OR": {
+            "has_government": "communism",
+            "has_idea": "agitated_peasants"
+          }
+        },
+        "country_exists": "event_target:YUG_communist_coup_target"
+      }
+    },
+    "visible": {
+      "original_tag": "YUG",
+      "NOT": [
+        {
+          "event_target:YUG_communist_coup_target": {
+            "OR": {
+              "exists": true,
+              "has_government": "communism"
+            }
+          }
+        },
+        {
+          "any_country": {
+            "original_tag": "TUR",
+            "OR": {
+              "has_government": "communism",
+              "has_country_flag": "banned_communism_flag"
+            }
+          }
+        }
+      ],
+      "any_country": {
+        "original_tag": "TUR",
+        "exists": true
+      },
+      "has_completed_focus": [
+        "YUG_invite_greece",
+        "YUG_invite_hungary",
+        "YUG_invite_romania"
+      ]
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "TUR"
+        },
+        "save_global_event_target_as": "YUG_communist_coup_target",
+        "country_event": {
+          "id": "DOD_yugoslavia.181"
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "BRA_lacerda_banda_investigates_varguists",
+    "category_id": "BRA_lacerda_udn_management_category",
+    "name": "Банда расследует дело варгистов",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": "BRA_lacerda_decision_tick_cost",
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "BRA_UDN_management_GUI_visible"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_to_variable": {
+          "BRA_lacerda_decision_tick_cost": 5
+        },
+        "clamp_variable": {
+          "var": "BRA_lacerda_decision_tick_cost",
+          "min": 0
+        },
+        "clr_country_flag": "BRA_lacerda_banda_investigates_varguists_flag",
+        "if": {
+          "limit": {
+            "has_country_flag": "BRA_UDN_management_GUI_visible"
+          },
+          "random_list": {
+            "1": [
+              {
+                "set_country_flag": "BRA_lacerda_sarney_works_with_opposition_flag",
+                "activate_mission": "BRA_lacerda_sarney_works_with_opposition"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_campos_defends_udn_flag",
+                "activate_mission": "BRA_lacerda_campos_defends_udn"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_pinto_calls_for_reforms_flag",
+                "activate_mission": "BRA_lacerda_pinto_calls_for_reforms"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_tavora_talks_with_party_bosses_flag",
+                "activate_mission": "BRA_lacerda_tavora_talks_with_party_bosses"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_gomes_makes_a_speech_flag",
+                "activate_mission": "BRA_lacerda_gomes_makes_a_speech"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_baleeiro_fights_corporatism_flag",
+                "activate_mission": "BRA_lacerda_baleeiro_fights_corporatism"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_magalhaes_plots_intrigues_flag",
+                "activate_mission": "BRA_lacerda_magalhaes_plots_intrigues"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "BRG_HuttigRage",
+    "category_id": "BRG_fall_elefant",
+    "name": "Подтолкнуть Хюттига к эскалации",
+    "desc": "",
+    "icon": "",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "GRO": {
+        "has_war_with": "SAF"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRG_igniting_huttigs_rage"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "BRG_Open_GUI",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Открытые расследования",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_An_Intel_Decision"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "BRG_Investigating_DeGrelle",
+          "BRG_Post_DeGrelle_Investigations_Unlocked"
+        ]
+      }
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "NOT": {
+              "has_country_flag": [
+                "BRG_Investigating_DeGrelle",
+                "BRG_Post_DeGrelle_Investigations_Unlocked"
+              ]
+            }
+          },
+          "custom_effect_tooltip": "BRG_Investigation_Open_Button_Tooltip"
+        },
+        {
+          "limit": {
+            "AND": {
+              "has_country_flag": "BRG_Investigating_DeGrelle",
+              "NOT": {
+                "has_global_flag": "german_civil_war"
+              }
+            }
+          },
+          "if": {
+            "limit": {
+              "NOT": {
+                "has_country_flag": "BRG_Walloon_Investigation_open_flag"
+              }
+            },
+            "set_country_flag": "BRG_Walloon_Investigation_open_flag",
+            "BRG_Investigation_Setup": true
+          }
+        },
+        {
+          "limit": {
+            "has_country_flag": "BRG_Post_DeGrelle_Investigations_Unlocked"
+          },
+          "if": {
+            "limit": {
+              "NOT": {
+                "has_country_flag": "BRG_Investigation_main_open_flag"
+              }
+            },
+            "set_country_flag": "BRG_Investigation_main_open_flag"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "BRG_Lower_Charla_Sus_Little",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Контрразведка против Шарлемань",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_Post_DeGrelle_Sus_Decisions_Unlocked"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Lower_Charla_Sus_Little_tooltip",
+      "subtract_from_variable": {
+        "BRG_Charla_Sus": 4
+      },
+      "hidden_effect": {
+        "add_command_power": -5
+      }
+    }
+  },
+  {
+    "id": "BRG_Lower_Charla_Sus_High",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Предложить награды Шарлемань",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRG_a_temporary_solution"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Lower_Charla_Sus_High_tooltip",
+      "subtract_from_variable": {
+        "BRG_Charla_Sus": 12
+      },
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "BRG_Lower_Charla_Sus_Massive",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Перенаправить внимание Шарлемань",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRG_expand_concealment_operations"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Lower_Charla_Sus_Massive_tooltip",
+      "subtract_from_variable": {
+        "BRG_Charla_Sus": 20
+      },
+      "hidden_effect": {
+        "add_command_power": -15
+      }
+    }
+  },
+  {
+    "id": "BRG_Lower_Walloon_Sus_Little",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Контрразведка против Валлонии",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_Post_DeGrelle_Sus_Decisions_Unlocked"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Lower_Walloon_Sus_Little_tooltip",
+      "subtract_from_variable": {
+        "BRG_Walloon_Sus": 3
+      },
+      "hidden_effect": {
+        "add_command_power": -5
+      }
+    }
+  },
+  {
+    "id": "BRG_Lower_Walloon_Sus_Medium",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Средняя контрразведка против Валлонии",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRG_ready_the_strings"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Lower_Walloon_Sus_medium_tooltip",
+      "subtract_from_variable": {
+        "BRG_Walloon_Sus": 6
+      },
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "BRG_Lower_Walloon_Sus_Massive",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Перенаправить Валлонское внимание",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRG_expand_concealment_operations"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Lower_Walloon_Sus_Massive",
+      "subtract_from_variable": {
+        "BRG_Walloon_Sus": 20
+      },
+      "hidden_effect": {
+        "add_command_power": -15
+      }
+    }
+  },
+  {
+    "id": "BRG_Monthly_Intel_Gain_Post_Degrelle_Up_Medium",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Усиление поиска разведданых",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRG_Post_DeGrelle_Sus_Decisions_Unlocked"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_Monthly_Intel_Gain_Post_Degrelle_Up_Medium_tt",
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "BRG_Monthly_Intel_Gain_Post_Degrelle_Up_Large",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Значительно увеличит прирост разведданых",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "BRG_under_our_thumb"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_Montly_Intel_Up_Large",
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "BRG_Monthly_Intel_Gain_Post_Degrelle_Up_Massive",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Приобрести дополнительные активы",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "BRG_accelerate_the_wait"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": {
+        "add_command_power": -20
+      }
+    }
+  },
+  {
+    "id": "BRG_Increase_Monthly_Cops",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Повысить офицерские возможности",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 749
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 149
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_Loyalty_Decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRG_extend_our_logistics"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_Loyalty_Decision",
+      "custom_effect_tooltip": "BRG_Increase_Monthly_Cops_decision_tooltip",
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "BRG_Increase_Monthly_Cops_Larger",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Значительно повысить офицерские возможности",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 1249
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 249
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_Loyalty_Decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRG_in_our_palm"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_Loyalty_Decision",
+      "custom_effect_tooltip": "BRG_Increase_Monthly_Cops_decision_large_tooltip",
+      "hidden_effect": {
+        "add_command_power": -20
+      }
+    }
+  },
+  {
+    "id": "BRG_expand_lange_power_walloon_small",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Позволить надзор за Лангемарком",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_Loyalty_Decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_expand_lange_power_in_walloon_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_Loyalty_Decision",
+      "custom_effect_tooltip": "BRG_expand_lange_power_walloon_small_tooltip"
+    }
+  },
+  {
+    "id": "BRG_expand_lange_power_walloon_large",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Позволить усилить надзор за Лангемарком",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_Loyalty_Decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_expand_lange_power_in_walloon_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_Loyalty_Decision",
+      "custom_effect_tooltip": "BRG_expand_lange_power_walloon_large_tooltip"
+    }
+  },
+  {
+    "id": "BRG_hard_charla_loyalty_decision",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Увеличьте влияние на французской территории",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_Loyalty_Decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_hard_charla_loyalty_decisions_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_Loyalty_Decision",
+      "custom_effect_tooltip": "BRG_hard_charla_loyalty_decision_tooltip"
+    }
+  },
+  {
+    "id": "BRG_hard_charla_loyalty_decision_2",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Значительно увеличить влияние во Франции",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_Loyalty_Decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_hard_charla_loyalty_decisions_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_Loyalty_Decision",
+      "custom_effect_tooltip": "BRG_hard_charla_loyalty_decision_2_tooltip"
+    }
+  },
+  {
+    "id": "BRG_Get_Little_Intel",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Расширить разведывательные операции",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_An_Intel_Decision"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRG_DeGrelle_Fled"
+      },
+      "has_completed_focus": "BRG_the_troublesome_snake"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_Get_Little_Intel_tt",
+      "set_country_flag": "BRG_Already_Doing_An_Intel_Decision",
+      "add_to_variable": {
+        "BRG_Gathered_Intelligence": 10
+      }
+    }
+  },
+  {
+    "id": "BRG_Get_Lots_Intel",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Значительно расширить разведывательные операции",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_An_Intel_Decision"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRG_DeGrelle_Fled"
+      },
+      "has_completed_focus": "BRG_the_troublesome_snake"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_Get_Intel_tt",
+      "set_country_flag": "BRG_Already_Doing_An_Intel_Decision",
+      "add_to_variable": {
+        "BRG_Gathered_Intelligence": 25
+      }
+    }
+  },
+  {
+    "id": "BRG_Monthly_Intel_Gain_Up",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Улучшенные методы сбора информации",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_An_Intel_Decision"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRG_DeGrelle_Fled"
+      },
+      "has_completed_focus": "BRG_keep_our_enemies_close"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_increase_monthly_intel_a_little_DeGrelle",
+      "set_country_flag": "BRG_Already_Doing_An_Intel_Decision",
+      "add_to_variable": {
+        "BRG_Monthly_Intel_Gain": 2
+      },
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "BRG_Lower_DeGrelle_Sus_A_Little",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Небольшие обманные манёвры",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRG_DeGrelle_Fled"
+      },
+      "has_country_flag": "BRG_Investigating_DeGrelle"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Low_Sus_DeGrelle_Tooltip",
+      "add_to_variable": {
+        "BRG_Degrelle_Sus": -3
+      }
+    }
+  },
+  {
+    "id": "BRG_Lower_DeGrelle_Sus_Medium",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Обманные манёвры",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRG_DeGrelle_Fled"
+      },
+      "has_country_flag": [
+        "BRG_Investigating_DeGrelle",
+        "BRG_Unlocked_DeGrelle_Sus_Decisions"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Sus_Medium_DeGrelle_Tooltip",
+      "add_to_variable": {
+        "BRG_Degrelle_Sus": -6
+      }
+    }
+  },
+  {
+    "id": "BRG_Lower_DeGrelle_Sus_Lots",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Большие обманные манёвры",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_A_Sus_Decisions"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRG_DeGrelle_Fled"
+      },
+      "has_country_flag": [
+        "BRG_Investigating_DeGrelle",
+        "BRG_Unlocked_DeGrelle_Sus_Decisions"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_A_Sus_Decisions",
+      "custom_effect_tooltip": "BRG_Sus_Lots_DeGrelle_Tooltip",
+      "add_to_variable": {
+        "BRG_Degrelle_Sus": -12
+      }
+    }
+  },
+  {
+    "id": "BRG_Blackmail_Charlemagne",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Шантажировать Шарлемань",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRG_Cost_1_Evidence",
+        "check_variable": {
+          "BRG_Large_Evidence": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_Post_DeGrelle_Investigations_Unlocked"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_Blackmailing_Charlemagne_tt",
+      "add_to_variable": {
+        "BRG_Large_Evidence": -1
+      }
+    }
+  },
+  {
+    "id": "BRG_Blackmail_WLN",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Шантажировать Валлонию",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRG_Cost_1_Evidence_WLN",
+        "check_variable": {
+          "BRG_Evidence_On_Walloon": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_Post_DeGrelle_Investigations_Unlocked"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_Blackmailing_WLN_tt",
+      "add_to_variable": {
+        "BRG_Evidence_On_Walloon": -1
+      }
+    }
+  },
+  {
+    "id": "TNO_BRG_ActivateInvestigations",
+    "category_id": "TNO_BRG_Debug_category",
+    "name": "Бургундия - Активировать расследования",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "BRG_Investigating_DeGrelle"
+    }
+  },
+  {
+    "id": "IRE_load_IRE_FT_Investigation_Failed",
+    "category_id": "IRE_debug",
+    "name": "Загрузить дерево фокусов Провального Расследования",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "IRE_FT_Investigation_Failed"
+    }
+  },
+  {
+    "id": "ENG_DEC_AntiGovPropaganda",
+    "category_id": "ENG_DECCAT_TheKingsSpeech",
+    "name": "Антиправительственная пропаганда",
+    "desc": "",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_decision": [
+            "ENG_DEC_SendInTheAgents",
+            "ENG_DEC_InfiltrateThePalace"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_whole_state_under_there"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Paranoia_Military_Police_in_Edinburgh_Investigate",
+    "category_id": "SCO_paranoia_category",
+    "name": "Исследовать военную полицию",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Military_Police_in_Edinburgh_Mole",
+            "SCO_Paranoia_Military_Police_in_Edinburgh_Reassign_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Police_in_Edinburgh"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Military_Police_in_Edinburgh_Investigate"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Generals_Meeting_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Расследовать их деяния",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Generals_Meeting_Arrest_Them",
+            "SCO_Paranoia_Generals_Meeting_Bug_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Generals_Meeting"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Generals_Meeting_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Ships_in_FoF_Investigate",
+    "category_id": "SCO_paranoia_category",
+    "name": "Исследовать флот",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Ships_in_FoF_Break_Up",
+            "SCO_Paranoia_Ships_in_FoF_Spy"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Ships_in_FoF"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Ships_in_FoF_Investigate"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Coup_Investigate",
+    "category_id": "SCO_paranoia_category",
+    "name": "Изучить отчёты",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Coup_Arrest_Soldiers",
+            "SCO_Paranoia_Coup_Watch"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Coup"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Coup_Investigate"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Aberdeen_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Исследовать ВВС",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Aberdeen_Airport_Bug_Them",
+            "SCO_Paranoia_Aberdeen_Expose_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Aberdeen_Airport"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Aberdeen_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Clyde_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Исследовать флот",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Clyde_Arrest_Them",
+            "SCO_Paranoia_Clyde_infiltrate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Clyde"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Clyde_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Lossiemouth_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Изучить полёты",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Lossiemouth_Force_Resignations",
+            "SCO_Paranoia_Lossiemouth_Bug_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Lossiemouth"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: SCO_Paranoia_Lossiemouth_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Highlands_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Изучить армейские учения в Нагорье",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Highlands_Bug_Them",
+            "SCO_Paranoia_Highlands_Disperse_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Highlands"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Highlands_Investigate_Them"
+    }
+  },
+  {
+    "id": "USA_CIA_dominica_tight_fit",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ПЛОТНАЯ ПОСАДКА",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_CentralAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_CIA_Operation_Tight_Fit_Unlocked"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_dominica_tight_fit_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@CentralAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "Caribbean_flavor.230",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_antigua_and_barbuda_catnip",
+    "category_id": "USA_BoP_category",
+    "name": "Операция КОШАЧЬЯ МЯТА",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_CentralAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_CIA_Operation_Catnip_Unlocked"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_antigua_and_barbuda_catnip_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@CentralAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "Caribbean_flavor.201",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_French_WI_AntiGerty",
+    "category_id": "USA_BoP_category",
+    "name": "Операция СИРАКУЗЫ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_CentralAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_CIA_FWI_AntiGerty_Unlock"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_French_WI_AntiGerty_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@CentralAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "FWI_forpol.21",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_Bormann_EconMech_oil_investigation",
+    "category_id": "GER_Bormann_EconMech_category",
+    "name": "Исследование Северного моря",
+    "desc": "В холодных, глубоких водах Северного моря лежит сокровище. И всё же это не то сокровище, которое искали моряки в былые времена. Сокровище здесь - гораздо более недавнее открытие. Нефть.\n\nМы знаем, что она скрывается под этими волнами, но такой нетронутый источник должен быть разведан. Если повезёт, геологическая экспедиция в Северном море поможет Рейху в поисках новых источников нефти.",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "OR": [
+        {
+          "has_country_flag": "BOR_EconMech_domestic_show",
+          "is_ai": true
+        },
+        {
+          "has_country_flag": "BOR_EconMech_decisions_debug",
+          "date": {
+            "_op": ">",
+            "value": "1969.3.1"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_EconMech_oil_investigation",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.01
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "country_event": "bor_econ.2"
+    }
+  },
+  {
+    "id": "GNG_investigate_LegCo_member_finances",
+    "category_id": "GNG_Three_Evils_of_Guangdong_category",
+    "name": "Расследовать финансы членов  Законодательного совета",
+    "desc": "Некоторые члены Законодательного совета наверняка получают взятки ради продвижения интересов различных корпораций. Если их не остановить, они продолжат разлагать наш законодательный орган. Мы должны провести расследование в отношении участников с подобными связями и предать их публичному порицанию.",
+    "icon": "GFX_decision_GNG_legco",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_idea": "GNG_corruption_the_finest_money_can_buy_dummy",
+      "has_country_flag": "GNG_show_corruption_decisions",
+      "check_variable": {
+        "GNG_corruption_var": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_investigate_corrupt_businesses",
+    "category_id": "GNG_Three_Evils_of_Guangdong_category",
+    "name": "Расследовать коррумпированные предприятия",
+    "desc": "Коррупция в Гуандуне подпитывается не только крупнейшими корпорациями. Мелкий бизнес особенно уязвим для теневых схем, и нельзя допустить, чтобы это продолжалось. Мы должны инициировать расследования, чтобы доказать их вину.",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_idea": "GNG_corruption_corrupt_dummy",
+      "has_country_flag": "GNG_show_corruption_decisions",
+      "check_variable": {
+        "GNG_corruption_var": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_investigate_rumored_yasuda_connections",
+    "category_id": "GNG_Three_Evils_of_Guangdong_category",
+    "name": "Расследовать слухи о связях с \"Ясудой\"",
+    "desc": "Ходят дикие слухи, о которых прекрасно осведомлен исполнительный директор Судзуки, что корпорация \"Ясуда\" и её представитель Такудзи Мацудзава вовлечены в 'секретные' схемы, разлагающие их компанию. Недопустимо, чтобы одна из 'Четырех компаний' была коррумпирована, и Судзуки позаботится о том, чтобы по этому делу было проведено тщательное расследование.",
+    "icon": "GFX_decision_GNG_yasuda",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": [
+        {
+          "GNG_legco_faction_in_power": 2
+        },
+        {
+          "GNG_corruption_var": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      ],
+      "has_country_flag": "GNG_show_corruption_decisions"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_investigate_the_chinese_consulate_general",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Расследование в генеральном консульстве Китая",
+    "desc": "Мы инициируем негласное расследование, чтобы выяснить, оказывают ли китайцы поддержку бунтовщикам, и если да, то насколько глубоко они вовлечены.",
+    "icon": "GFX_decision_GNG_chinese_inspect",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_chinese_consulate_general_investigable"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "GNG_investigated_chinese_consulate_general"
+      }
+    }
+  },
+  {
+    "id": "GNG_China_Consulate_Investigation_Enable_Debug",
+    "category_id": "GNG_Riots_GUI",
+    "name": "DEBUG - Включить решение Расследование в консульстве Китая",
+    "desc": "",
+    "icon": "GFX_decision_GNG_chinese_inspect",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "guangdong_RiotsChinaInvestigation.0"
+      }
+    }
+  },
+  {
+    "id": "GNG_investigate_hitachi_accounts",
+    "category_id": "GNG_Hitachi_Coup_category",
+    "name": "Расследовать деятельность \"Хитачи\"",
+    "desc": "Рекордное число членов Законодательного совета присягнуло на верность \"Хитачи\", хотя официальные бухгалтерские книги корпорации выглядят абсолютно кристальными. Возможно, повторное и более глубокое расследование с нашей стороны выявит скрытые несоответствия?",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_country_flag": [
+          "GNG_hitachi_coup_thwarted",
+          "GNG_hitachi_coup_triggered"
+        ]
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.175
+        },
+        "econ_spend_money_once_effect_raw_money": true,
+        "add_political_power": -35
+      }
+    }
+  },
+  {
+    "id": "Iberian_Wars_political_decisions_investigate_civil_servants",
+    "category_id": "iberian_wars_political_mechanic",
+    "name": "Проверить госслужащих",
+    "desc": "Большая часть нашего бюрократического аппарата досталась нам в наследство от Иберийского союза. Нужно убедиться, что их лояльность соответствует текущим реалиям.",
+    "icon": "GFX_decision_generic_factory_inspection",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "IBR_expanded_administration_powers"
+        }
+      }
+    },
+    "visible": {
+      "is_iberianwar_mainland_nation": true,
+      "has_country_flag": "IBR_political_decisions_opened"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_political_decisions_investigate_civil_servants",
+      "set_country_flag": "IBR_investigated_civil_servants"
+    }
+  },
+  {
+    "id": "JAP_investigation_start",
+    "category_id": "JAP_debug_decisions",
+    "name": "Начать расследование",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_investigation_start",
+      "country_event": {
+        "id": "japleadup.1"
+      }
+    }
+  },
+  {
+    "id": "MEX_instigate_union_on_union_violence",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Разжигать насилие между членами профсоюза",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": [
+          "MEX_doctorsstrike_third_doctorsstrike",
+          "push_into_irrelevance"
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_doctor_intern_radicalism_decrease_med": true,
+      "add_manpower": -5,
+      "MEX_PRI_increase_corruption_workers_very_low": true,
+      "MEX_PRI_decrease_power_workers_very_low": true
+    }
+  },
+  {
+    "id": "OFN_CAR_investigate_our_native_recruits",
+    "category_id": "OFN_CAR_memento_mori_cat",
+    "name": "Проверить наших местных новобранцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_CAR_on_a_mission"
+      },
+      "OR": {
+        "check_variable": [
+          {
+            "OFN_CAR_WAR_training": 0.05
+          },
+          {
+            "OFN_CAR_WAR_training": {
+              "_op": ">",
+              "value": 0.05
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "OFN_CAR_stand_our_ground"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "OFN_CAR_WAR_training": -0.05
+      },
+      "clamp_variable": {
+        "var": "OFN_CAR_WAR_training",
+        "max": 1,
+        "min": 0
+      },
+      "custom_effect_tooltip": "OFN_CAR_WAR_training_decrease",
+      "set_country_flag": "OFN_CAR_on_a_mission"
+    }
+  },
+  {
+    "id": "GRO_monitor_funding",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Наши фонды расследований стоят [?investigation_funds] миллионов долларов",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GRO_send_the_evidence",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Отправить доказательства",
+    "desc": "Мы подготовили все доказательства, которые были собраны в ходе наших расследований в отношении рейхскомиссаров Шенка и Мюллера, в двух очень подробных отчётах. Всё, что остается, - это отправить их в Германию и надеяться, что чиновники, которым поручено заниматься такими делами, не являются достаточно дегенеративными.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_has_proof_investigation",
+        "AND": {
+          "any_of": {
+            "array": "GRO_muller_case_array",
+            "check_variable": [
+              {
+                "GRO_muller_case_array^i": {
+                  "_op": ">",
+                  "value": -1
+                }
+              },
+              {
+                "GRO_schenck_case_array^i": {
+                  "_op": ">",
+                  "value": -1
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_send_the_evidence",
+      "hidden_effect": {
+        "GRO_compile_the_case": true
+      },
+      "clr_country_flag": "GRO_the_investigation_begins"
+    }
+  },
+  {
+    "id": "GRO_secure_funding_1",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Надёжное финансирование из Германии",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GRO_secure_funding_tt",
+      "add_to_variable": {
+        "var": "investigation_funds",
+        "value": 10
+      },
+      "hidden_effect": {
+        "GER": {
+          "set_temp_variable": {
+            "temp_econ_spending_amount": 0.01
+          },
+          "econ_spend_money_once_effect_raw_money": true
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_secure_funding_2",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Обещать Германии предоставить доказательства",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GRO_secure_funding_tt",
+      "add_to_variable": {
+        "var": "investigation_funds",
+        "value": 10
+      },
+      "hidden_effect": {
+        "GER": {
+          "set_temp_variable": {
+            "temp_econ_spending_amount": 0.01
+          },
+          "econ_spend_money_once_effect_raw_money": true
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_muller_small_investigation",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Немного расследовать дела Мюллера",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "GRO_muller_investigation"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_money_cost_1_tt",
+        "check_variable": {
+          "var": "investigation_funds",
+          "value": 1,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "var": "investigation_funds",
+        "value": 1
+      },
+      "set_country_flag": "GRO_muller_investigation"
+    }
+  },
+  {
+    "id": "GRO_muller_medium_investigation",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Расследовать дела Мюллера",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "GRO_muller_investigation"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_money_cost_2_tt",
+        "check_variable": {
+          "var": "investigation_funds",
+          "value": 2,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "var": "investigation_funds",
+        "value": 2
+      },
+      "set_country_flag": "GRO_muller_investigation"
+    }
+  },
+  {
+    "id": "GRO_muller_priority_investigation",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Тщательно расследовать дела Мюллера",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "GRO_muller_investigation"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_money_cost_3_tt",
+        "check_variable": {
+          "var": "investigation_funds",
+          "value": 3,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "var": "investigation_funds",
+        "value": 3
+      },
+      "set_country_flag": "GRO_muller_investigation"
+    }
+  },
+  {
+    "id": "GRO_schenck_small_investigation",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Немного расследовать дела Шенка",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "GRO_schenck_investigation"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_money_cost_1_tt",
+        "check_variable": {
+          "var": "investigation_funds",
+          "value": 1,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "var": "investigation_funds",
+        "value": 1
+      },
+      "set_country_flag": "GRO_schenck_investigation"
+    }
+  },
+  {
+    "id": "GRO_schenck_medium_investigation",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Расследовать дела Шенка",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "GRO_schenck_investigation"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_money_cost_2_tt",
+        "check_variable": {
+          "var": "investigation_funds",
+          "value": 2,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "var": "investigation_funds",
+        "value": 2
+      },
+      "set_country_flag": "GRO_schenck_investigation"
+    }
+  },
+  {
+    "id": "GRO_schenck_priority_investigation",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Тщательно расследовать дела Шенка",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "GRO_schenck_investigation"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_money_cost_3_tt",
+        "check_variable": {
+          "var": "investigation_funds",
+          "value": 3,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "var": "investigation_funds",
+        "value": 3
+      },
+      "set_country_flag": "GRO_schenck_investigation"
+    }
+  },
+  {
+    "id": "KOM_tighten_ideological_restrictions",
+    "category_id": "KOM_communist_politics_category",
+    "name": "Усилить партийный контроль",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "MAG_investigate_the_reform_wing",
+    "category_id": "MAG_regional_factions_category",
+    "name": "Расследовать крыло реформаторов",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "MAG_sway_the_corporations",
+          "MAG_purge_the_old_guard",
+          "MAG_seek_foreign_support",
+          "MAG_meet_with_emigres",
+          "MAG_investigate_corruption"
+        ]
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "MAG_will_of_the_people"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision MAG_investigate_the_reform_wing"
+    }
+  },
+  {
+    "id": "MAG_investigate_corruption",
+    "category_id": "MAG_regional_factions_category",
+    "name": "Расследовать коррупцию в крыле трудовиков",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "MAG_sway_the_corporations",
+          "MAG_investigate_the_reform_wing",
+          "MAG_purge_the_old_guard",
+          "MAG_seek_foreign_support",
+          "MAG_meet_with_emigres"
+        ]
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "MAG_will_of_the_people"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision MAG_investigate_corruption"
+    }
+  },
+  {
+    "id": "NOV_funnel_resources_to_investigation",
+    "category_id": "NOV_narodnik_investigation_category",
+    "name": "Направить ресурсы на расследование",
+    "desc": "Устранение народнической угрозы будет нелегким делом. Наши силы безопасности будут измотаны, имея дело с ними, не говоря уже о том, что им придется справляться с другими угрозами отдельно от этих социалистических террористов. Мы можем направить дополнительные ресурсы из других отделов безопасности на расследование дела, чтобы улучшить наши оперативные возможности.",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.01
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "NOV_infiltrate_narodnik_cells",
+    "category_id": "NOV_narodnik_investigation_category",
+    "name": "Проникновение в ячейки Народников",
+    "desc": "Социалистические террористы, угрожающие нашему государству, имеют неизвестное число и хорошо скрыты. Нехватка информации об их деятельности позволяет им постоянно получать от нас все лучшее. Они настолько защищены, что единственный способ узнать об их намерениях изнутри. Отправка агентов СБ, замаскированных под впечатлительных граждан, чтобы вступить в их ряды, даст нам ценные разведданные и позволит заманить их в наши лапы, чтобы народники ничего не заподозрили.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_operation_in_progress"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_infiltrate_narodnik_cells",
+      "set_country_flag": "NOV_operation_in_progress",
+      "hidden_effect": {
+        "add_command_power": -15,
+        "country_event": {
+          "id": "NOV.31"
+        }
+      }
+    }
+  },
+  {
+    "id": "NOV_investigate_factories_in_novosibirsk",
+    "category_id": "NOV_narodnik_investigation_category",
+    "name": "Расследование на фабриках в Новосибирске",
+    "desc": "Рабочие классы Новосибирска в целом недовольны своими условиями и поэтому являются легкой мишенью для вербовщиков террористов, проповедующих чушь о перераспределения богатства. В результате распространились слухи о том, что народники уже проникли на многие фабрики города, продвигая свою пропаганду по цехам и вводя в свои ряды рабочих. Мы не можем допустить, чтобы двигатели нашего экономического прогресса стали нашей самой большой угрозой безопасности.",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_operation_in_progress"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_investigate_factories_in_novosibirsk",
+      "hidden_effect": {
+        "add_command_power": -15,
+        "country_event": {
+          "id": "NOV.34"
+        }
+      },
+      "set_country_flag": "NOV_operation_in_progress"
+    }
+  },
+  {
+    "id": "NOV_increase_patrols_in_altay",
+    "category_id": "NOV_narodnik_investigation_category",
+    "name": "Увеличение патрулей в Алтае",
+    "desc": "Алтайский край - это мечта географа, так как край наполнен высокими горами и большими лесами. Это качество также делает его повстанческим кошмаром. Народники, уклоняющиеся от правосудия, расползлись по всему региону, прячась вместе оружием в пересеченной местности. Позволить террористам пустить корни на нашей территории было бы большой ошибкой, что потребовало бы выделения большего объема ресурсов силам безопасности в этом районе.",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_operation_in_progress"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_increase_patrols_in_altay",
+      "hidden_effect": {
+        "add_command_power": -15,
+        "country_event": {
+          "id": "NOV.18"
+        }
+      },
+      "set_country_flag": "NOV_operation_in_progress"
+    }
+  },
+  {
+    "id": "NOV_conduct_an_internal_investigation",
+    "category_id": "NOV_narodnik_investigation_category",
+    "name": "Провести внутреннее расследование",
+    "desc": "Народники, казалось бы, развили свое присутствие почти везде в Новосибирске, даже в рядах своих врагов. Ведь не так давно социализм был господствующей идеологией России, и есть среди офицерского класса те, кто жалеет, что в лидерах находимся - мы, а не Красная Армия. Органы Безопасности, в которые внедрилась террористическая угроза, естественно, будут неэффективны в борьбе с ней, и мы должны доказать, что никто, даже офицер, не стоит выше закона.",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_operation_in_progress"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_conduct_an_internal_investigation",
+      "hidden_effect": {
+        "add_command_power": -15,
+        "country_event": {
+          "id": "NOV.15"
+        }
+      },
+      "set_country_flag": "NOV_operation_in_progress"
+    }
+  },
+  {
+    "id": "NOV_the_final_raid",
+    "category_id": "NOV_narodnik_investigation_category",
+    "name": "Запуск финального рейда",
+    "desc": "Наши расследования по движению народников были многочисленными и тщательными, и они дали много очень ценной информации. Сейчас мы располагаем хорошими разведданными о местонахождении их главного укрытия, где их неуловимое руководство крутит паутину террора и разрушений по всей нашей территории. Обезглавливание этого движения путем нападения на его организаторов в ходе решающего полицейского рейда расколет его, серьезно уменьшив угрозу для наших учреждений.",
+    "icon": "GFX_decision_generic_chess_knight_rook_bishop_pawn",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "NOV_the_final_raid_req_tt",
+        "check_variable": {
+          "NOV_investigation_progress": 100
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_the_final_raid",
+      "hidden_effect": {
+        "add_command_power": -15,
+        "country_event": {
+          "id": "NOV.40"
+        }
+      }
+    }
+  },
+  {
+    "id": "NOV_crush_the_agitators",
+    "category_id": "NOV_narodnik_investigation_category",
+    "name": "Раздавить агитаторов",
+    "desc": "",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "NOV_narodnik_investigation_trigger",
+        "NOT": {
+          "has_country_flag": "NOV_narodnik_investigation_active"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "NOV_narodnik_investigation_flag"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_crush_the_agitators",
+      "custom_effect_tooltip": "NOV_narodnik_investigation_success_tt",
+      "hidden_effect": {
+        "country_event": {
+          "id": "NOV.45"
+        }
+      }
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Sakharovsky_InstigateInvestigations",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Инициировать расследования",
+    "desc": "",
+    "icon": "GFX_decision_generic_arrest",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "amount": 5
+      },
+      "OMS_Gauntlet_ScriptedTrigger_EveryCityControl_MoreOrEquals": true
+    },
+    "visible": {
+      "check_variable": {
+        "OMS_Gauntlet_NewGuard_ID^2": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "OMS_Gauntlet_Sakharovsky_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Sakharovsky_InstigateInvestigations",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 2
+          },
+          {
+            "amount": -25
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true
+      }
+    }
+  },
+  {
+    "id": "WSR_increase_prestige",
+    "category_id": "WSR_peace_category",
+    "name": "Укрепление нашего дипломатического статуса",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WSR_increase_prestige",
+      "RUS_increase_prestige_5": true
+    }
+  },
+  {
+    "id": "WSB_increase_prestige",
+    "category_id": "WSB_peace_category",
+    "name": "Укрепление нашего дипломатического статуса",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WSB_increase_prestige",
+      "RUS_increase_prestige_5": true
+    }
+  },
+  {
+    "id": "CSB_increase_prestige",
+    "category_id": "CSB_peace_category",
+    "name": "Укрепление нашего дипломатического статуса",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CSB_increase_prestige",
+      "RUS_increase_prestige_5": true
+    }
+  },
+  {
+    "id": "FST_increase_prestige",
+    "category_id": "FST_peace_category",
+    "name": "Укрепление нашего дипломатического статуса",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: FST_increase_prestige",
+      "RUS_increase_prestige_5": true
+    }
+  },
+  {
+    "id": "RWS_increase_prestige",
+    "category_id": "RWS_peace_category",
+    "name": "Укрепление нашего дипломатического статуса",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RWS_increase_prestige",
+      "RUS_increase_prestige_5": true
+    }
+  },
+  {
+    "id": "SIB_increase_prestige",
+    "category_id": "SIB_peace_category",
+    "name": "Укрепление нашего дипломатического статуса",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SIB_increase_prestige",
+      "RUS_increase_prestige_5": true
+    }
+  },
+  {
+    "id": "SAM_investigate_corruption",
+    "category_id": "SAM_smuggling_category",
+    "name": "Расследовать коррупционные дела",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "SAM_smuggling_network": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "SAM_smuggling_network": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "SAM_anti_smuggling_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_investigate_corruption",
+      "SAM_decrease_corruption_large": true,
+      "hidden_effect": {
+        "SAM_change_corruption_spirit": true
+      }
+    }
+  },
+  {
+    "id": "ANG_Supplement_Huttigs_Ranks",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Восстановить резервы Хюттигу",
+    "desc": "Мы можем послать дополнительные силы к Хюттигу, чтобы помочь ему с нехваткой рабочей силы, порадовать его и снизить наши подозрения.",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 29.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -30
+      },
+      "add_manpower": -750,
+      "GRO": {
+        "add_manpower": 750
+      },
+      "subtract_from_variable": {
+        "ANG_Huttig_Sus": 3
+      },
+      "custom_effect_tooltip": "ANG_Lower_Huttig_Sus_Medium",
+      "ANG_Sus_Clamp_Check": true
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_agitates_against_brutality",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам агитирует против жестокости",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_mobilizes_dissidents_in_bureaucracy",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам мобилизует диссидентов",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_appeals_to_unc",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам обращается к УНК",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_imports_foreign_office_dissidents",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам апеллирует к умеренным",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_makes_deals_with_businesses",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам заключает сделки с бизнесом",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_spreads_pro_collab_propaganda",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам поддерживает коллаборационистов",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_leibbrandt_ai_tightens_control_over_unc",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Лейббрандт сжимает хватку над УНК",
+    "desc": "",
+    "icon": "GFX_decision_UKR_leibrandt",
+    "cost": "UKR_leib_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "country_event": {
+          "id": "UKR_pwr_struggle_hidden_mission_events.3",
+          "days": 7
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_tighten_the_unc_grip",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Усилить хватку над УНК",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "UKR_play_leibbrandt"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_investigate_funding_mismanagement",
+    "category_id": "USA_the_interstate_highway",
+    "name": "Расследовать неправильное управление финансированием",
+    "desc": "",
+    "icon": "GFX_decision_USA_congress",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_Ikes_Blessing"
+    },
+    "visible": {
+      "has_country_flag": "USA_Ikes_Blessing"
+    },
+    "complete_effect": {
+      "USA_Highway_reduce_budgetissues_recovery": true
+    }
+  },
+  {
+    "id": "USA_Investigate_Consumer_Advocates",
+    "category_id": "USA_bill_assessment",
+    "name": "Проверить рейдеров Надера",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_active_interview"
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_americar_surveying"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_Investigate_Consumer_Advocates",
+      "set_country_flag": "USA_active_interview"
+    }
+  },
+  {
+    "id": "USA_tighten_immigration",
+    "category_id": "USA_coalition_unity",
+    "name": "Ужесточить иммиграцию",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_d",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_show_NPP_screen"
+      },
+      "has_country_leader": {
+        "character": "USA_Barry_Goldwater",
+        "ruling_only": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_tighten_immigration",
+      "TNO_improve_immigration_policy_effectiveness_low": true,
+      "set_temp_variable": [
+        {
+          "inflation_temp": -0.05
+        },
+        {
+          "tempSupport": 0.1
+        }
+      ],
+      "econ_inflation_change": true,
+      "USA_change_labor_d_coalition_support": true
+    }
+  },
+  {
+    "id": "USA_RFK_CONTELPRO_Investigate_Goldwater",
+    "category_id": "USA_RFK_CONTELPRO",
+    "name": "Обратить внимание на Голдуотера",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_RFK_CONTELPRO_Currently_Investigating"
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_RFK_CONTELPRO_Active"
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_RFK_CONTELPRO_Currently_Investigating"
+    }
+  },
+  {
+    "id": "USA_HAR_fading_enthusiasm_warning",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Непостоянство толпы",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_HAR_monthly_decay"
+    }
+  },
+  {
+    "id": "USA_HAR_rich_enth",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Снискать расположение буржуазии",
+    "desc": "",
+    "icon": "",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_rich_inf_up",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Помочь буржуазии",
+    "desc": "",
+    "icon": "",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_rich_inf_down",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Уменьшить влияние буржуазии",
+    "desc": "",
+    "icon": "",
+    "cost": 90,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_middle_enth",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Убедить средний класс",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_middle_inf_up",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Помочь среднему классу",
+    "desc": "",
+    "icon": "",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_middle_inf_down",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Уменьшите влияние среднего класса",
+    "desc": "",
+    "icon": "",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_poor_enth",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Успокоить рабочий класс",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_poor_inf_up",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Воспитывать рабочий класс",
+    "desc": "",
+    "icon": "",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_poverty_enth",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Прислушаться к Другой Америке",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_poverty_inf_up",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Помочь Другой Америке",
+    "desc": "",
+    "icon": "",
+    "cost": 90,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_the_other_america"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_veterans_education_decision",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Предоставить стипендии",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_HAR_veterans_bill_limits",
+        "check_variable": {
+          "USA_HAR_veterans_stuff": {
+            "_op": "<",
+            "value": 4
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_HAR_working_on_benefits_program"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "USA_HAR_veterans_more_education",
+        "USA_HAR_veterans_more_costs"
+      ],
+      "add_to_variable": [
+        {
+          "USA_HAR_veterans_education": 1
+        },
+        {
+          "USA_HAR_veterans_stuff": 1
+        },
+        {
+          "USA_HAR_veterans_cost": 0.075
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_HAR_veterans_jobs_decision",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Финансировать программы профессиональной подготовки",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_HAR_veterans_bill_limits",
+        "check_variable": {
+          "USA_HAR_veterans_stuff": {
+            "_op": "<",
+            "value": 4
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_HAR_working_on_benefits_program"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "USA_HAR_veterans_more_jobs",
+        "USA_HAR_veterans_more_costs"
+      ],
+      "add_to_variable": [
+        {
+          "USA_HAR_veterans_jobs": 1
+        },
+        {
+          "USA_HAR_veterans_stuff": 1
+        },
+        {
+          "USA_HAR_veterans_cost": 0.075
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_HAR_veterans_taxes_middle",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Обеспечить финансирование со стороны среднего класса",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_working_on_benefits_program"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "USA_HAR_anger_the_middle_tt",
+        "USA_HAR_veterans_fewer_costs"
+      ],
+      "subtract_from_variable": [
+        {
+          "USA_HAR_veterans_cost": 0.075
+        },
+        {
+          "USA_HAR_middle_enthusiasm": 5
+        }
+      ],
+      "USA_HAR_calculate_enthusiasm": true
+    }
+  },
+  {
+    "id": "USA_HAR_veterans_taxes_rich",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Налогообложение богатых",
+    "desc": "",
+    "icon": "",
+    "cost": 9,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_working_on_benefits_program"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "USA_HAR_anger_the_rich_tt",
+        "USA_HAR_veterans_fewer_costs"
+      ],
+      "subtract_from_variable": [
+        {
+          "USA_HAR_veterans_cost": 0.075
+        },
+        {
+          "USA_HAR_rich_enthusiasm": 5
+        }
+      ],
+      "USA_HAR_calculate_enthusiasm": true
+    }
+  },
+  {
+    "id": "USA_HAR_drafting_deadline",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Доработать программу",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_veterans_vote",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Голосование проводится",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_sacrifice_enthusiasm",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Смягчить риторику",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_empower_rich",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Успокоить высший класс",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_favor_middle_class",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Благосклонность к среднему классу",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_massive_political_spending",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Увеличить усилия по убеждению",
+    "desc": "",
+    "icon": "",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_promise_restraint",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Обещать сдержанное законодательство",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_HAR_fatigue_reduction_promise_restraint",
+      "custom_effect_tooltip": [
+        "USA_HAR_fatigue_reduction_15",
+        "USA_HAR_weaker_bills"
+      ],
+      "set_country_flag": "USA_HAR_weaker_bill_support",
+      "subtract_from_variable": {
+        "USA_HAR_fatigue": 15
+      },
+      "clamp_variable": {
+        "var": "USA_HAR_fatigue",
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_tell_their_stories",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Рассказать их историю",
+    "desc": "",
+    "icon": "",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_HAR_tell_their_story_requirement",
+        "check_variable": {
+          "USA_HAR_poverty_influence": {
+            "_op": ">",
+            "value": 39
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_HAR_fatigue_reduction_tell_their_stories",
+      "custom_effect_tooltip": [
+        "USA_HAR_charm_the_poverty_tt",
+        "USA_HAR_help_the_poverty_tt",
+        "USA_HAR_fatigue_reduction_5"
+      ],
+      "subtract_from_variable": {
+        "USA_HAR_fatigue": 5
+      },
+      "add_to_variable": [
+        {
+          "USA_HAR_poverty_enthusiasm": 10
+        },
+        {
+          "USA_HAR_poverty_influence": 5
+        }
+      ],
+      "clamp_variable": {
+        "var": "USA_HAR_fatigue",
+        "min": 0
+      },
+      "USA_HAR_calculate_enthusiasm": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_investigate_executive_treason",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Investigate Executive Treason",
+    "desc": "",
+    "icon": "GFX_decision_arrest",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "dspr_dismantling": true,
+      "dspr_sibir_2": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Sibir",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_DSPR_investigate_executive_treason",
+      "set_temp_variable": [
+        {
+          "temp_loyalty": -35
+        },
+        {
+          "target": 1
+        },
+        {
+          "temp_influence": -25
+        },
+        {
+          "target": 1
+        }
+      ],
+      "NOV_VRPP_increase_specific_megacorp_loyalty": true,
+      "NOV_VRPP_increase_specific_megacorp_influence": true,
+      "add_stability": -0.075
+    }
+  },
+  {
+    "id": "OMO_investigate_members_of_the_brigade",
+    "category_id": "OMO_temptations_category",
+    "name": "Investigate Members of the Brigade",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "sudoplatov_active",
+      "check_variable": {
+        "sudoplatov_influence": {
+          "_op": ">",
+          "value": 22
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: OMO_investigate_members_of_the_brigade",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_global_flag": "RUS_national_unification"
+          }
+        },
+        "OMO_medium_temptation_decrease": true
+      },
+      "add_manpower": -652,
+      "TNO_worsen_training_policy_effectiveness_low": true,
+      "TNO_worsen_conscription_policy_effectiveness_low": true,
+      "add_command_power": -20
+    }
+  }
+]

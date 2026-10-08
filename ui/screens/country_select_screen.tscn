@@ -1,0 +1,360 @@
+[gd_scene format=3 uid="uid://c7x8v5q3n1m2k"]
+
+[ext_resource type="Script" path="res://ui/screens/country_select_screen.gd" id="1_screen"]
+[ext_resource type="PackedScene" uid="uid://df7x8h2p9k1y6" path="res://ui/components/country_select_map_widget.tscn" id="2_map"]
+[ext_resource type="Shader" path="res://shaders/crt_terminal.gdshader" id="3_crt"]
+[ext_resource type="PackedScene" uid="uid://df7x8h2p9k1y4" path="res://ui/components/leader_portrait_frame.tscn" id="4_port"]
+[ext_resource type="Texture2D" path="res://assets/gfx/interface/pol_piechart_overlay_63x63.png" id="5_pie_tex"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("3_crt")
+shader_parameter/curvature = 0.025
+shader_parameter/vignette_strength = 0.85
+shader_parameter/scanline_count = 540.0
+shader_parameter/scanline_intensity = 0.16
+shader_parameter/chromatic_aberration = 0.002
+shader_parameter/phosphor_tint = Color(0.95, 1, 0.98, 1)
+shader_parameter/brightness_boost = 1.05
+shader_parameter/flicker_speed = 8.0
+shader_parameter/flicker_strength = 0.012
+
+[node name="CountrySelectScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_screen")
+
+[node name="MapBackground" parent="." instance=ExtResource("2_map")]
+layout_mode = 1
+
+[node name="CRTPostProcess" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_crt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopBookmarkBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = 68.0
+grow_horizontal = 2
+
+[node name="HBox" type="HBoxContainer" parent="TopBookmarkBar"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="TopBookmarkBar/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "► ТЕАТР ДЕЙСТВИЙ // SECTOR:"
+vertical_alignment = 1
+
+[node name="BookmarkButtonGroup" type="HBoxContainer" parent="TopBookmarkBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="FilterFocusButton" type="Button" parent="TopBookmarkBar/HBox"]
+custom_minimum_size = Vector2(210, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "[ ★ ТОЛЬКО С ФОКУСАМИ: ВКЛ ]"
+
+[node name="ExitButton" type="Button" parent="TopBookmarkBar/HBox"]
+custom_minimum_size = Vector2(170, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "[ ◄ В ГЛАВНОЕ МЕНЮ ]"
+
+[node name="MajorNationsCarousel" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -176.0
+offset_right = -500.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+vertical_scroll_mode = 0
+
+[node name="CardsHBox" type="HBoxContainer" parent="MajorNationsCarousel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="DossierPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -484.0
+offset_top = 78.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="DossierPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="DossierPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="VBoxContainer" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="CountryNameLabel" type="Label" parent="DossierPanel/Margin/VBox/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.98, 0.88, 1)
+theme_override_font_sizes/font_size = 13
+text = "┌── [KOM] РЕСПУБЛИКА КОМИ ──"
+clip_text = true
+
+[node name="HeaderHBox" type="HBoxContainer" parent="DossierPanel/Margin/VBox/Header"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FlagBox" type="Control" parent="DossierPanel/Margin/VBox/Header/HeaderHBox"]
+custom_minimum_size = Vector2(58, 36)
+layout_mode = 2
+
+[node name="FlagRect" type="TextureRect" parent="DossierPanel/Margin/VBox/Header/HeaderHBox/FlagBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="FlagOverlay" type="TextureRect" parent="DossierPanel/Margin/VBox/Header/HeaderHBox/FlagBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MetaVBox" type="VBoxContainer" parent="DossierPanel/Margin/VBox/Header/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="IdeologyHBox" type="HBoxContainer" parent="DossierPanel/Margin/VBox/Header/HeaderHBox/MetaVBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="IdeologyIcon" type="TextureRect" parent="DossierPanel/Margin/VBox/Header/HeaderHBox/MetaVBox/IdeologyHBox"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="IdeologyLabel" type="Label" parent="DossierPanel/Margin/VBox/Header/HeaderHBox/MetaVBox/IdeologyHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.4, 0.85, 0.7, 1)
+theme_override_font_sizes/font_size = 11
+text = "│ СОЦИАЛИЗМ // ДЕМОКРАТИЯ"
+clip_text = true
+
+[node name="BlocBadge" type="Label" parent="DossierPanel/Margin/VBox/Header/HeaderHBox/MetaVBox/IdeologyHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 10
+text = "[★ ОФН]"
+
+[node name="HSeparator1" type="HSeparator" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="LeaderSection" type="HBoxContainer" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PortraitFrame" parent="DossierPanel/Margin/VBox/LeaderSection" instance=ExtResource("4_port")]
+custom_minimum_size = Vector2(156, 210)
+layout_mode = 2
+mode = 1
+
+[node name="LeaderMetaVBox" type="VBoxContainer" parent="DossierPanel/Margin/VBox/LeaderSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="LeaderNameLabel" type="Label" parent="DossierPanel/Margin/VBox/LeaderSection/LeaderMetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 12
+text = "► СВЕТЛАНА БУХАРИНА"
+
+[node name="LeaderTitleLabel" type="Label" parent="DossierPanel/Margin/VBox/LeaderSection/LeaderMetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.75, 0.8, 1)
+theme_override_font_sizes/font_size = 10
+text = "│ Председатель Президиума"
+
+[node name="TraitsLabel" type="Label" parent="DossierPanel/Margin/VBox/LeaderSection/LeaderMetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.8, 0.85, 1)
+theme_override_font_sizes/font_size = 10
+text = "ХАРАКТЕРИСТИКИ РЕЖИМА:"
+
+[node name="TraitsContainer" type="VBoxContainer" parent="DossierPanel/Margin/VBox/LeaderSection/LeaderMetaVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+
+[node name="MacroStatsLabel" type="Label" parent="DossierPanel/Margin/VBox/LeaderSection/LeaderMetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.75, 0.65, 1)
+theme_override_font_sizes/font_size = 9
+text = "ВВП: $18.5 млрд | Резерв: 65 тыс."
+
+[node name="HSeparator2" type="HSeparator" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="PoliticsSummary" type="VBoxContainer" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HBox" type="HBoxContainer" parent="DossierPanel/Margin/VBox/PoliticsSummary"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PieChartDraw" type="Control" parent="DossierPanel/Margin/VBox/PoliticsSummary/HBox"]
+custom_minimum_size = Vector2(63, 63)
+layout_mode = 2
+
+[node name="PieChartOverlay" type="TextureRect" parent="DossierPanel/Margin/VBox/PoliticsSummary/HBox/PieChartDraw"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_pie_tex")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PolMetaVBox" type="VBoxContainer" parent="DossierPanel/Margin/VBox/PoliticsSummary/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="RulingPartyLabel" type="Label" parent="DossierPanel/Margin/VBox/PoliticsSummary/HBox/PolMetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.95, 0.9, 1)
+theme_override_font_sizes/font_size = 10
+text = "ПРАВЯЩАЯ СИЛА: ДЕМОКРАТЫ"
+clip_text = true
+
+[node name="StabilityLabel" type="Label" parent="DossierPanel/Margin/VBox/PoliticsSummary/HBox/PolMetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.85, 0.7, 1)
+theme_override_font_sizes/font_size = 10
+text = "СТАБИЛЬНОСТЬ: [██████░░] 75%"
+
+[node name="WarSupportLabel" type="Label" parent="DossierPanel/Margin/VBox/PoliticsSummary/HBox/PolMetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.75, 0.35, 1)
+theme_override_font_sizes/font_size = 10
+text = "ПОДДЕРЖКА ВОЙНЫ: [██████░░░░] 60%"
+
+[node name="PolCapLabel" type="Label" parent="DossierPanel/Margin/VBox/PoliticsSummary/HBox/PolMetaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 9
+text = "ПОЛИТ. КАПИТАЛ: +1.50/ход"
+
+[node name="PartyLegendContainer" type="HFlowContainer" parent="DossierPanel/Margin/VBox/PoliticsSummary"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 3
+
+[node name="HSeparator3" type="HSeparator" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="MinistersTitle" type="Label" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.85, 0.75, 1)
+theme_override_font_sizes/font_size = 10
+text = "КАБИНЕТ МИНИСТРОВ // CABINET OF MINISTERS:"
+
+[node name="MinistersGrid" type="HBoxContainer" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HSeparator4" type="HSeparator" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="LoreScroll" type="ScrollContainer" parent="DossierPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LoreText" type="RichTextLabel" parent="DossierPanel/Margin/VBox/LoreScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+text = "[color=#77aa99]Историческая сводка положения нации на 1 января 1962 года...[/color]"
+
+[node name="NationalSpiritsTitle" type="Label" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.85, 0.75, 1)
+theme_override_font_sizes/font_size = 10
+text = "НАЦИОНАЛЬНЫЕ ДУХИ И СТАРТОВЫЕ КРИЗИСЫ:"
+
+[node name="NationalSpiritsGrid" type="GridContainer" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 4
+
+[node name="ActionHBox" type="HBoxContainer" parent="DossierPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StartCampaignButton" type="Button" parent="DossierPanel/Margin/VBox/ActionHBox"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.9, 0.35, 1)
+theme_override_font_sizes/font_size = 13
+text = "[ ► ВСТУПИТЬ В ИГРУ // INITIALIZE SCENARIO ◄ ]"
+
+[node name="ScenarioOptionsButton" type="Button" parent="DossierPanel/Margin/VBox/ActionHBox"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "⚙"
+tooltip_text = "Параметры кампании (Сложность, Правила, Ironman)"
+
+[node name="AudioController" type="Node" parent="."]

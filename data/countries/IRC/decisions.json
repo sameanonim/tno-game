@@ -1,0 +1,1539 @@
+[
+  {
+    "id": "AFG_setup_aircraft_mio",
+    "category_id": "AFG_radical_students_category",
+    "name": "Основать государственный авиазавод",
+    "desc": "",
+    "icon": "GFX_decision_SWE_set_air_budget",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AFG_construct_mio_in_progress"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AFG_state_industries"
+    },
+    "complete_effect": {
+      "set_country_flag": "AFG_construct_mio_in_progress"
+    }
+  },
+  {
+    "id": "BUL_purchase_aircraft",
+    "category_id": "BUL_purchase_equipment",
+    "name": "Закупить [FROM.GetAdjective]ую авиацию",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": "BUL_purchase_equipment_cost",
+    "fire_only_once": false,
+    "available": {
+      "FROM": [
+        {
+          "has_opinion": {
+            "target": "ROOT",
+            "value": {
+              "_op": ">",
+              "value": 0
+            }
+          },
+          "BUL_is_valid_subject": true
+        },
+        {
+          "OR": {
+            "has_tech": [
+              "early_fighter",
+              "iw_small_airframe"
+            ]
+          }
+        }
+      ],
+      "NOT": [
+        {
+          "has_country_flag": "BUL_purchasing_aircraft_flag"
+        },
+        {
+          "has_war_with": "FROM"
+        },
+        {
+          "is_justifying_wargoal_against": "FROM"
+        }
+      ],
+      "if": {
+        "limit": {
+          "FROM": {
+            "tag": "GER"
+          }
+        },
+        "OR": {
+          "is_in_faction_with": "GER",
+          "AND": {
+            "BUL_foreign_agreements_in_faction_with_eng": true,
+            "BUL_foreign_agreements_in_faction_with_sov": true,
+            "BUL_foreign_agreements_in_faction_with_ita": true
+          }
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "FROM": {
+              "tag": "ITA"
+            }
+          },
+          "OR": {
+            "is_in_faction_with": "ITA",
+            "AND": {
+              "BUL_foreign_agreements_in_faction_with_ger": true,
+              "BUL_foreign_agreements_in_faction_with_eng": true,
+              "BUL_foreign_agreements_in_faction_with_sov": true
+            }
+          }
+        },
+        {
+          "limit": {
+            "FROM": {
+              "tag": "ENG"
+            }
+          },
+          "OR": {
+            "is_in_faction_with": "ENG",
+            "AND": {
+              "BUL_foreign_agreements_in_faction_with_ger": true,
+              "BUL_foreign_agreements_in_faction_with_sov": true,
+              "BUL_foreign_agreements_in_faction_with_ita": true
+            }
+          }
+        },
+        {
+          "limit": {
+            "FROM": {
+              "tag": "SOU"
+            }
+          },
+          "OR": {
+            "is_in_faction_with": "SOU",
+            "AND": {
+              "BUL_foreign_agreements_in_faction_with_ger": true,
+              "BUL_foreign_agreements_in_faction_with_eng": true,
+              "BUL_foreign_agreements_in_faction_with_ita": true
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "country_exists": "FROM",
+      "NOT": {
+        "has_war_with": "FROM"
+      },
+      "FROM": {
+        "BUL_is_valid_subject": true
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "BUL_purchasing_aircraft_flag",
+      "hidden_effect": {
+        "set_variable": {
+          "BUL_aircraft_seller": "FROM"
+        },
+        "country_event": "bftb_bulgaria_equipment_purchases.4"
+      },
+      "FROM": {
+        "add_offsite_building": {
+          "type": "industrial_complex",
+          "level": 1
+        },
+        "add_opinion_modifier": {
+          "target": "BUL",
+          "modifier": "BUL_bought_guns"
+        }
+      },
+      "add_opinion_modifier": [
+        {
+          "target": "FROM",
+          "modifier": "BUL_sold_guns"
+        },
+        {
+          "target": "FROM",
+          "modifier": "BUL_arms_trade"
+        }
+      ],
+      "custom_effect_tooltip": "BUL_purchase_aircraft_tt"
+    }
+  },
+  {
+    "id": "BUL_aircraft_agreements",
+    "category_id": "BUL_foreign_agreements",
+    "name": "Соглашение об авиастроительном сотрудничестве с государством [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": "BUL_foreign_military_agreements_cost",
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 49
+          }
+        },
+        "BUL_is_valid_subject": true
+      },
+      "NOT": [
+        {
+          "has_country_flag": "BUL_aircraft_agreements_ongoing_flag"
+        },
+        {
+          "has_war_with": "FROM"
+        },
+        {
+          "is_justifying_wargoal_against": "FROM"
+        }
+      ],
+      "if": {
+        "limit": {
+          "FROM": {
+            "tag": "GER"
+          }
+        },
+        "OR": {
+          "is_in_faction_with": "GER",
+          "AND": {
+            "BUL_foreign_agreements_in_faction_with_eng": true,
+            "BUL_foreign_agreements_in_faction_with_sov": true
+          }
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "FROM": {
+              "tag": "ENG"
+            }
+          },
+          "OR": {
+            "is_in_faction_with": "ENG",
+            "AND": {
+              "BUL_foreign_agreements_in_faction_with_ger": true,
+              "BUL_foreign_agreements_in_faction_with_sov": true
+            }
+          }
+        },
+        {
+          "limit": {
+            "FROM": {
+              "tag": "SOV"
+            }
+          },
+          "OR": {
+            "is_in_faction_with": "SOV",
+            "AND": {
+              "BUL_foreign_agreements_in_faction_with_ger": true,
+              "BUL_foreign_agreements_in_faction_with_eng": true
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "country_exists": "FROM",
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "BUL_aircraft_agreements_ongoing_flag",
+      "FROM": {
+        "add_opinion_modifier": {
+          "target": "BUL",
+          "modifier": "BUL_industrial_investments_in_bulgaria"
+        }
+      },
+      "add_opinion_modifier": {
+        "target": "FROM",
+        "modifier": "BUL_industrial_investments_in_bulgaria"
+      }
+    }
+  },
+  {
+    "id": "ETH_recruit_aircrews_from_host",
+    "category_id": "governments_in_exile",
+    "name": "Завербовать [?ETH.host_nation.GetAdjective]их пилотов",
+    "desc": "Наверняка здесь найдутся [?ETH.host_nation.GetAdjective]ие пилоты и механики, которые готовы послужить стране [ROOT.GetName], если за это им хорошо заплатят.",
+    "icon": "GFX_decision_generic_air",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_recruiting_mercenaries_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_the_ferengi"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": "ETH_recruit_mercenaries_cost"
+      },
+      "set_country_flag": "ETH_recruiting_mercenaries_flag"
+    }
+  },
+  {
+    "id": "VIC_produce_aircraft_parts",
+    "category_id": "VIC_concessions_to_the_germans",
+    "name": "Изготовить запчасти для самолётов",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_any_occupation_cost_trigger": true
+    },
+    "complete_effect": {
+      "add_ideas": "VIC_produce_aircraft_parts",
+      "GER": {
+        "add_ideas": "VIC_aircraft_parts"
+      },
+      "reduce_occupation_cost_effect": true
+    }
+  },
+  {
+    "id": "SOV_merge_aircraft_plant_1",
+    "category_id": "SOV_merge_designers_dec_cat",
+    "name": "Объединить завод Nº 28",
+    "desc": "",
+    "icon": "GFX_decision_generic_merge_plant_aircraft",
+    "cost": "SOV_merge_designers_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 251,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      },
+      "SOV_has_active_aircraft_designer_any": true,
+      "NOT": {
+        "has_country_flag": "SOV_merge_aircraft_decision_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_merge_aircraft_plants",
+      "SOV_has_aircraft_merged_1": false
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_merge_aircraft_decision_ongoing_flag"
+    }
+  },
+  {
+    "id": "SOV_merge_aircraft_plant_2",
+    "category_id": "SOV_merge_designers_dec_cat",
+    "name": "Объединить завод Nº 150",
+    "desc": "",
+    "icon": "GFX_decision_generic_merge_plant_aircraft",
+    "cost": "SOV_merge_designers_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 219,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      },
+      "SOV_has_active_aircraft_designer_any": true,
+      "NOT": {
+        "has_country_flag": "SOV_merge_aircraft_decision_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_merge_aircraft_plants",
+      "SOV_has_aircraft_merged_2": false
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_merge_aircraft_decision_ongoing_flag"
+    }
+  },
+  {
+    "id": "SOV_merge_aircraft_plant_3",
+    "category_id": "SOV_merge_designers_dec_cat",
+    "name": "Объединить завод ВЭФ",
+    "desc": "",
+    "icon": "GFX_decision_generic_merge_plant_aircraft",
+    "cost": "SOV_merge_designers_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 808,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      },
+      "SOV_has_active_aircraft_designer_any": true,
+      "NOT": {
+        "has_country_flag": "SOV_merge_aircraft_decision_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_merge_aircraft_plants",
+      "SOV_has_aircraft_merged_3": false
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_merge_aircraft_decision_ongoing_flag"
+    }
+  },
+  {
+    "id": "SPR_purchase_aircraft",
+    "category_id": "SPR_foreign_arms_purchases",
+    "name": "Закупить авиацию",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "tag": "SPD",
+      "has_completed_focus": "SPR_foreign_arms_purchases",
+      "NOT": {
+        "has_global_flag": "scw_over"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "JUNO_purchase_aircraft",
+    "category_id": "improving_our_army_category",
+    "name": "Купить самолет",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "any_country": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        "is_major": true,
+        "OR": {
+          "has_tech": [
+            "early_fighter",
+            "iw_small_airframe"
+          ]
+        },
+        "NOT": {
+          "OR": {
+            "has_war_with": "ROOT",
+            "is_justifying_wargoal_against": "ROOT"
+          }
+        }
+      },
+      "NOT": [
+        {
+          "has_country_flag": "JUNO_purchasing_aircraft_flag"
+        },
+        {
+          "has_war_with": "FROM"
+        },
+        {
+          "is_justifying_wargoal_against": "FROM"
+        }
+      ]
+    },
+    "visible": {
+      "any_country": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        "is_major": true,
+        "OR": {
+          "has_tech": [
+            "early_fighter",
+            "iw_small_airframe"
+          ]
+        },
+        "NOT": {
+          "OR": {
+            "has_war_with": "ROOT",
+            "is_justifying_wargoal_against": "ROOT"
+          }
+        }
+      },
+      "OR": {
+        "has_completed_focus": [
+          "SMB_purchase_aircraft",
+          "AFG_purchase_aircraft"
+        ]
+      },
+      "NOT": {
+        "has_dlc": "Arms Against Tyranny"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "JUNO_purchasing_aircraft_flag",
+      "custom_effect_tooltip": "JUNO_purchase_aircraft_tt",
+      "hidden_effect": {
+        "random_list": {
+          "50": [
+            {
+              "set_country_flag": "JUNO_fighters_flag"
+            },
+            {
+              "set_country_flag": "JUNO_tactical_bomber_flag"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_sponsor_the_nuri_demirag_besiktas_aircraft_factory",
+    "category_id": "TUR_industrial_projects_category",
+    "name": "Спонсировать открытие авиазавода «Нури Демираг» в Бешикташе",
+    "desc": "Правительство оценивает каждый потенциальный индустриальный проект отдельно.",
+    "icon": "generic_factory",
+    "cost": "TUR_etatism_cost_penalty_var?50",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_completed_focus": "TUR_nationalise_all_private_industry",
+          "has_country_flag": "TUR_financing_private_enterprise_flag"
+        }
+      },
+      "797": {
+        "free_building_slots": {
+          "building": "arms_factory",
+          "size": {
+            "_op": ">",
+            "value": 1
+          },
+          "include_locked": true
+        }
+      },
+      "has_idea": "TUR_nuri_demirag"
+    },
+    "visible": {
+      "has_completed_focus": "TUR_the_sanayiciler",
+      "NOT": {
+        "OR": {
+          "has_country_leader": {
+            "character": "TUR_sefik_husnu",
+            "ruling_only": true
+          },
+          "has_completed_focus": "TUR_nationalise_all_private_industry"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "TUR_financing_private_enterprise",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_financing_private_enterprise_flag",
+          "value": 1,
+          "days": 260
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_put_new_safety_regulations_regarding_the_operation_of_aircraft_into_effect",
+    "category_id": "TUR_reforming_our_armed_forces_category",
+    "name": "Принять новые правила воздушной безопасности",
+    "desc": "Мы всегда гордились тем, что находимся на острие европейских авиационных инноваций, но при этом наши пилоты известны своим безрассудным нравом.",
+    "icon": "generic_air",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_air_experience": {
+        "_op": ">",
+        "value": 10
+      },
+      "has_completed_focus": "TUR_expand_the_air_bases"
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_idea": [
+            "TUR_disorganised_armed_forces",
+            "TUR_disorganised_armed_forces_1",
+            "TUR_disorganised_armed_forces_2",
+            "TUR_disorganised_armed_forces_3",
+            "TUR_disorganised_armed_forces_4",
+            "TUR_disorganised_armed_forces_5",
+            "TUR_disorganised_armed_forces_6",
+            "TUR_disorganised_armed_forces_7",
+            "TUR_disorganised_armed_forces_8",
+            "TUR_disorganised_armed_forces_9",
+            "TUR_disorganised_armed_forces_10",
+            "TUR_disorganised_armed_forces_11",
+            "TUR_disorganised_armed_forces_12",
+            "TUR_disorganised_armed_forces_13",
+            "TUR_disorganised_armed_forces_14",
+            "TUR_disorganised_armed_forces_27"
+          ]
+        },
+        {
+          "has_completed_focus": [
+            "TUR_learning_from_the_great_war",
+            "TUR_hava_okulu"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "air_experience": -5,
+      "if": {
+        "limit": {
+          "has_idea": "TUR_disorganised_armed_forces"
+        },
+        "swap_ideas": {
+          "remove_idea": "TUR_disorganised_armed_forces",
+          "add_idea": "TUR_disorganised_armed_forces_21"
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_1"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_1",
+            "add_idea": "TUR_disorganised_armed_forces_15"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_2"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_2",
+            "add_idea": "TUR_disorganised_armed_forces_16"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_3"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_3",
+            "add_idea": "TUR_disorganised_armed_forces_17"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_4"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_4",
+            "add_idea": "TUR_disorganised_armed_forces_18"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_5"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_5",
+            "add_idea": "TUR_disorganised_armed_forces_19"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_6"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_6",
+            "add_idea": "TUR_disorganised_armed_forces_20"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_7"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_7",
+            "add_idea": "TUR_disorganised_armed_forces_26"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_8"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_8",
+            "add_idea": "TUR_disorganised_armed_forces_28"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_9"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_9",
+            "add_idea": "TUR_disorganised_armed_forces_29"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_10"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_10",
+            "add_idea": "TUR_disorganised_armed_forces_25"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_11"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_11",
+            "add_idea": "TUR_disorganised_armed_forces_30"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_12"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_12",
+            "add_idea": "TUR_disorganised_armed_forces_24"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_13"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_13",
+            "add_idea": "TUR_disorganised_armed_forces_23"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_14"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_14",
+            "add_idea": "TUR_disorganised_armed_forces_22"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_27"
+          },
+          "remove_ideas": "TUR_disorganised_armed_forces_27"
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_IRCW_send_the_volunteers",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить добровольцев",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_IR_CW_ACTIVE"
+    },
+    "visible": {
+      "has_country_flag": "USA_IR_CW_ACTIVE",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_IRCW_send_the_volunteers",
+      "set_temp_variable": {
+        "target": "IRL"
+      },
+      "TNO_increase_volunteer_cap_1": true,
+      "set_country_flag": "USA_IRCW_volunteers_sent"
+    }
+  },
+  {
+    "id": "USA_IRCW_increase_the_volunteers",
+    "category_id": "USA_BoP_category",
+    "name": "Увеличить число добровольцев",
+    "desc": "",
+    "icon": "",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_IR_CW_ACTIVE"
+    },
+    "visible": {
+      "has_country_flag": "USA_IRCW_volunteers_sent",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_IRCW_increase_the_volunteers",
+      "set_country_flag": "USA_IRCW_volunteers_increased",
+      "if": {
+        "limit": {
+          "is_ai": false
+        },
+        "set_temp_variable": {
+          "target": "IRL"
+        },
+        "TNO_increase_volunteer_cap_1": true
+      },
+      "else": {
+        "IRL": {
+          "load_oob": "USA_Iranian_Advisors"
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_IRCW_max_volunteers",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить больше добровольцев",
+    "desc": "",
+    "icon": "",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_IR_CW_ACTIVE"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_IRCW_volunteers_increased",
+        "USA_IRCW_SOLDIERS"
+      ],
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_IRCW_max_volunteers",
+      "if": {
+        "limit": {
+          "is_ai": false
+        },
+        "set_temp_variable": {
+          "target": "IRL"
+        },
+        "TNO_increase_volunteer_cap_1": true
+      },
+      "else": {
+        "IRL": {
+          "load_oob": "USA_Iranian_Advisors"
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_IRCW_send_guns",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить оружие либералам",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "USA_IRCW_arming_IRL"
+    },
+    "visible": {
+      "has_country_flag": "USA_IRCW_arming_IRL",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_send_infantry_at",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить противотанковые пушки либералам",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "USA_IRCW_arming_IRL"
+    },
+    "visible": {
+      "has_country_flag": "USA_IRCW_arming_IRL",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_loans",
+    "category_id": "USA_BoP_category",
+    "name": "Одобрить кредиты для либералов",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "USA_IRCW_sending_loans"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_IR_CW_ACTIVE",
+        "USA_IRCW_sending_loans"
+      ],
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_support_equipment",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить вспомогательное снаряжение либералам",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "USA_IRCW_EQUIPMENT"
+    },
+    "visible": {
+      "has_country_flag": "USA_IRCW_EQUIPMENT",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_anti_air",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить ПВО либералам",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "USA_IRCW_EQUIPMENT"
+    },
+    "visible": {
+      "has_country_flag": "USA_IRCW_EQUIPMENT",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_artillery",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить артиллерию либералам",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "USA_IRCW_equipment"
+    },
+    "visible": {
+      "has_country_flag": "USA_IRCW_EQUIPMENT",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_faster_infantry_equipment",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить оружие либералам",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": [
+        "USA_IRCW_faster_equipment_shipments",
+        "USA_IR_CW_ACTIVE"
+      ]
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_IRCW_faster_equipment_shipments",
+        "USA_IR_CW_ACTIVE"
+      ],
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_faster_anti_tank_equipment",
+    "category_id": "USA_BoP_category",
+    "name": "Отправить противотанковые пушки либералам",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": [
+        "USA_IRCW_faster_equipment_shipments",
+        "USA_IR_CW_ACTIVE"
+      ]
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_IRCW_faster_equipment_shipments",
+        "USA_IR_CW_ACTIVE"
+      ],
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_IRCW_loosening_regulations",
+    "category_id": "USA_BoP_category",
+    "name": "Ослабить некоторые нормы",
+    "desc": "",
+    "icon": "",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_IRCW_new_contracts"
+    },
+    "visible": {
+      "has_country_flag": "USA_IRCW_new_contracts",
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA)IRCW_losening_regulations",
+      "custom_effect_tooltip": "USA_IRCW_loosening_regulations_tt",
+      "hidden_effect": {
+        "IRL": {
+          "set_country_flag": "IRL_no_regulations"
+        }
+      }
+    }
+  },
+  {
+    "id": "SAM_inner_circle_visible",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Открыть решения на Внутренний круг",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "SAM_inner_circle_visible"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_inner_circle_visible",
+      "set_country_flag": "SAM_inner_circle_visible"
+    }
+  },
+  {
+    "id": "SAM_inner_circle_invisible",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Скрыть решения на Внутренний круг",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "SAM_inner_circle_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_inner_circle_invisible",
+      "clr_country_flag": "SAM_inner_circle_visible"
+    }
+  },
+  {
+    "id": "SAM_political_inner_circle",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Попросить поддержки у Внутреннего круга",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "SAM_inner_circle_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_political_inner_circle",
+      "SAM_artsezo_increase_inner_circle_tension_high": true,
+      "SAM_artsezo_increase_inner_circle_influence_high": true,
+      "add_political_power": 50,
+      "add_stability": 0.05
+    }
+  },
+  {
+    "id": "SAM_bribe_inner_circle",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Подкупить Внутренний круг",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "SAM_inner_circle_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_bribe_inner_circle",
+      "SAM_artsezo_decrease_inner_circle_tension_low": true,
+      "SAM_artsezo_increase_inner_circle_influence_low": true,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "SAM_grant_inner_circle",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Уступки Внутреннему кругу",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "SAM_inner_circle_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_grant_inner_circle",
+      "SAM_artsezo_decrease_inner_circle_tension_high": true,
+      "SAM_artsezo_increase_inner_circle_influence_high": true
+    }
+  },
+  {
+    "id": "SAM_lower_inner_circle",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Понизить влияние Внутреннего круга",
+    "desc": "",
+    "icon": "GFX_decision_generic_decrease",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "SAM_inner_circle_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_lower_inner_circle",
+      "SAM_artsezo_increase_inner_circle_tension_high": true,
+      "SAM_artsezo_decrease_inner_circle_influence_high": true
+    }
+  },
+  {
+    "id": "RUS_send_aircraft_to_Germany",
+    "category_id": "RUS_German_civil_war_category",
+    "name": "Lend Russian Aircraft",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "FROM": {
+        "has_volunteers_amount_from": {
+          "tag": "ROOT",
+          "count": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "OR": {
+              "has_global_flag": [
+                "RUS_shukshin_unification",
+                "RUS_generic_democratic_unifier",
+                "RUS_generic_authoritarian_unifier"
+              ]
+            }
+          },
+          "send_equipment": [
+            {
+              "equipment": "fighter_equipment",
+              "amount": 125,
+              "target": "REG"
+            },
+            {
+              "equipment": "CAS_equipment",
+              "amount": 75,
+              "target": "REG"
+            }
+          ]
+        },
+        {
+          "limit": {
+            "has_global_flag": "RUS_generic_communist_unifier"
+          },
+          "send_equipment": [
+            {
+              "equipment": "fighter_equipment",
+              "amount": 125,
+              "target": "RPR"
+            },
+            {
+              "equipment": "CAS_equipment",
+              "amount": 75,
+              "target": "RPR"
+            }
+          ]
+        },
+        {
+          "limit": {
+            "has_global_flag": "RUS_generic_fascist_unifier"
+          },
+          "send_equipment": [
+            {
+              "equipment": "fighter_equipment",
+              "amount": 125,
+              "target": "GMA"
+            },
+            {
+              "equipment": "CAS_equipment",
+              "amount": 75,
+              "target": "GMA"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "IRC_begin_national_reconstruction",
+    "category_id": "SWRW_Iran_category",
+    "name": "IRC_begin_national_reconstruction",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "has_global_flag": "Iranian_Civil_War",
+      "owns_state": [
+        266,
+        419,
+        412,
+        421,
+        978
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRC_begin_national_reconstruction",
+      "set_capital": {
+        "state": 266,
+        "remember_old_capital": false
+      },
+      "add_state_claim": 1360,
+      "remove_ideas": "PER_The_Iranian_Civil_War",
+      "set_country_flag": [
+        "PER_New_Regime_Enemy",
+        "PER_Reconstruction_efforts"
+      ],
+      "add_timed_idea": {
+        "idea": "PER_national_reconstruction",
+        "days": 720
+      },
+      "clr_global_flag": "Iranian_Civil_War",
+      "RUS": {
+        "TNO_fopo_remove_iran_civil_war_tab": true
+      },
+      "hidden_effect": {
+        "set_temp_variable": {
+          "pus_temp": 23
+        },
+        "econ_pus_change": true,
+        "swap_ideas": [
+          {
+            "remove_idea": "tno_academic_base_mass_illiteracy",
+            "add_idea": "tno_academic_base_primary_schooling"
+          },
+          {
+            "remove_idea": "tno_conscription_broadened_conscription",
+            "add_idea": "tno_conscription_volunteer_only"
+          },
+          {
+            "remove_idea": "tno_religious_rights_state_religion",
+            "add_idea": "tno_religious_rights_pluralism"
+          }
+        ],
+        "266": {
+          "add_resource": {
+            "type": "power",
+            "amount": 5
+          },
+          "add_building_construction": [
+            {
+              "type": "barracks",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "hospitals",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "offices",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "schools",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          ]
+        },
+        "416": {
+          "add_resource": {
+            "type": "power",
+            "amount": 5
+          },
+          "add_building_construction": [
+            {
+              "type": "barracks",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "hospitals",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "offices",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "schools",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          ]
+        },
+        "421": {
+          "add_resource": {
+            "type": "power",
+            "amount": 5
+          },
+          "add_building_construction": [
+            {
+              "type": "barracks",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "hospitals",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "offices",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "schools",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          ]
+        },
+        "419": {
+          "add_resource": {
+            "type": "power",
+            "amount": 5
+          },
+          "add_building_construction": [
+            {
+              "type": "barracks",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "hospitals",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "offices",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "schools",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          ]
+        },
+        "413": {
+          "add_resource": {
+            "type": "power",
+            "amount": 5
+          },
+          "add_building_construction": [
+            {
+              "type": "barracks",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "hospitals",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "offices",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "schools",
+              "level": 2,
+              "instant_build": true
+            },
+            {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            }
+          ]
+        },
+        "every_owned_state": {
+          "add_compliance": 50,
+          "add_resistance": 30,
+          "add_core_of": "IRC",
+          "add_resource": {
+            "type": "power",
+            "amount": 1
+          },
+          "add_building_construction": {
+            "type": "infrastructure",
+            "level": 1,
+            "instant_build": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "IRC_join_the_russian_alliance",
+    "category_id": "SWRW_Iran_category",
+    "name": "Join the Russian Alliance",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "country_exists": "RUS",
+      "NOT": [
+        {
+          "has_global_flag": "Iranian_Civil_War"
+        },
+        {
+          "country_exists": "IRL"
+        },
+        {
+          "country_exists": "IRA"
+        },
+        {
+          "country_exists": "IRI"
+        },
+        {
+          "country_exists": "PER"
+        }
+      ],
+      "OR": {
+        "has_global_flag": [
+          "RUS_shukshin_unification",
+          "RUS_generic_democratic_unifier"
+        ],
+        "RUS": {
+          "has_government": "despotism"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRC_join_the_russian_alliance",
+      "remove_ideas": "PER_russian_military_advisers",
+      "RUS": {
+        "TNO_fopo_remove_iran_civil_war_tab": true,
+        "set_temp_variable": [
+          {
+            "target": "IRA"
+          },
+          {
+            "target": "IRI"
+          },
+          {
+            "target": "IRL"
+          },
+          {
+            "target": "IRC"
+          },
+          {
+            "Victory_ID": 12
+          },
+          {
+            "Victory_Outcome": 4
+          },
+          {
+            "Victory_Points": 150
+          }
+        ],
+        "TNO_clear_num_volunteers": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "Cold_War_GUI_ManipulateVictory": true,
+        "country_event": {
+          "id": "IRC_russia.1",
+          "days": 5
+        }
+      }
+    }
+  }
+]

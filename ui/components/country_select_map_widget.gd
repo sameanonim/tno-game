@@ -333,6 +333,10 @@ func _get_current_map_center() -> Vector2:
 # ОБРАБОТКА МЫШИ И ВЫБОР
 # ==============================================================================
 
+var is_panning: bool = false
+var pan_drag_start: Vector2 = Vector2.ZERO
+
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.is_pressed():
@@ -341,6 +345,37 @@ func _gui_input(event: InputEvent) -> void:
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.is_pressed():
 			_zoom_out()
 			accept_event()
+		elif (event.button_index == MOUSE_BUTTON_MIDDLE or event.button_index == MOUSE_BUTTON_RIGHT) and event.is_pressed():
+			is_panning = true
+			pan_drag_start = event.position
+			accept_event()
+		elif (event.button_index == MOUSE_BUTTON_MIDDLE or event.button_index == MOUSE_BUTTON_RIGHT) and not event.is_pressed():
+			is_panning = false
+			accept_event()
+	elif event is InputEventMouseMotion and is_panning and map_controller != null:
+		map_controller.position += event.relative
+		_update_pins_positions()
+		accept_event()
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if map_controller == null or not is_map_ready:
+		return
+	if event is InputEventKey and event.is_pressed() and not event.echo:
+		var pan_step := 50.0
+		match event.keycode:
+			KEY_W, KEY_UP:
+				map_controller.position.y += pan_step
+				_update_pins_positions()
+			KEY_S, KEY_DOWN:
+				map_controller.position.y -= pan_step
+				_update_pins_positions()
+			KEY_A, KEY_LEFT:
+				map_controller.position.x += pan_step
+				_update_pins_positions()
+			KEY_D, KEY_RIGHT:
+				map_controller.position.x -= pan_step
+				_update_pins_positions()
 
 
 func _on_province_hovered(pid: int, data: Dictionary) -> void:

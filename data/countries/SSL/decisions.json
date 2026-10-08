@@ -1,0 +1,234 @@
+[
+  {
+    "id": "HGR_incorporate_SSL",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [SSL.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_SSL_req_tt",
+        "SSL": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_SSL_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSL": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_SSL",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_SSL_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSL.GetFlag]Помочь повстанцам Шпеера",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSL"
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSL_influence_true",
+        "HGR_SSL_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSL": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSL_decision_a_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500,
+        "producer": "GER"
+      },
+      "HGR_increase_moderate_opinion_low": true,
+      "HGR_decrease_ss_hardliner_opinion_low": true,
+      "SSL": {
+        "add_popularity": {
+          "ideology": "despotism",
+          "popularity": 0.03
+        },
+        "increase_Heydrich_influence_small": true
+      }
+    }
+  },
+  {
+    "id": "HGR_SSL_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSL.GetFlag]Облегчить побег из тюрьмы",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSL"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSL_influence_true",
+        "HGR_SSL_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSL": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSL_decision_a_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "HGR_increase_moderate_opinion_med": true,
+      "HGR_decrease_ss_hardliner_opinion_med": true,
+      "SSL": {
+        "add_popularity": [
+          {
+            "ideology": "communist",
+            "popularity": 0.01
+          },
+          {
+            "ideology": "despotism",
+            "popularity": 0.02
+          }
+        ],
+        "increase_Heydrich_influence_medium": true
+      }
+    }
+  },
+  {
+    "id": "HGR_SSL_decision_b_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSL.GetFlag]Изменить сообщения Гиммлера",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSL"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSL_influence_true",
+        "HGR_SSL_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSL": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSL_decision_b_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "SSL": {
+        "increase_Heydrich_influence_tiny": true
+      }
+    }
+  },
+  {
+    "id": "HGR_SSL_decision_b_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSL.GetFlag]Обратиться к амбициям Эйке",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSL"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSL_influence_true",
+        "HGR_SSL_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSL": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSL_decision_b_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "HGR_increase_ss_hardliner_opinion_low": true,
+      "SSL": {
+        "add_political_power": 25,
+        "increase_Heydrich_influence_small": true
+      }
+    }
+  }
+]

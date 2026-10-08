@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://b5k8q7x2m4y1p"]
+
+[ext_resource type="Script" path="res://scenes/focus_tree_viewer.gd" id="1_viewer"]
+[ext_resource type="Script" path="res://ui/components/focus_tree/focus_tree_canvas.gd" id="2_canvas"]
+
+[node name="FocusTreeViewer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_viewer")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.03, 0.02, 1)
+
+[node name="FocusTreeCanvas" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_canvas")
+
+[node name="TopBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 50.0
+grow_horizontal = 2
+
+[node name="HBox" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="TopBar/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 0.5, 1)
+text = " TNO FOCUS ENGINE"
+
+[node name="TreeSelector" type="OptionButton" parent="TopBar/HBox"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+
+[node name="PPLabel" type="Label" parent="TopBar/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.8, 0.3, 1)
+text = "PC: 100"
+
+[node name="StabLabel" type="Label" parent="TopBar/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.8, 1, 1)
+text = "STAB: 60%"
+
+[node name="WSLabel" type="Label" parent="TopBar/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.4, 0.4, 1)
+text = "WS: 70%"
+
+[node name="ActiveFocusLabel" type="Label" parent="TopBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 1, 0.6, 1)
+text = "Active: [None]"
+text_overrun_behavior = 3
+
+[node name="Btn1Day" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+text = "+1 Day"
+
+[node name="Btn7Days" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+text = "+7 Days"
+
+[node name="Btn30Days" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+text = "+30 Days"
+
+[node name="BtnPlay" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+text = "Play"
+
+[node name="BtnReset" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+text = "Reset View"
+
+[connection signal="pressed" from="TopBar/HBox/Btn1Day" to="." method="_on_step_1_day_pressed"]
+[connection signal="pressed" from="TopBar/HBox/Btn7Days" to="." method="_on_step_7_days_pressed"]
+[connection signal="pressed" from="TopBar/HBox/Btn30Days" to="." method="_on_step_30_days_pressed"]
+[connection signal="pressed" from="TopBar/HBox/BtnPlay" to="." method="_on_toggle_play_pressed" binds= [NodePath("TopBar/HBox/BtnPlay")]]
+[connection signal="pressed" from="TopBar/HBox/BtnReset" to="." method="_on_reset_view_pressed"]

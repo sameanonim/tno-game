@@ -1,0 +1,75 @@
+[
+  {
+    "id": "PSR_core_state",
+    "category_id": "foreign_politics",
+    "name": "Интегрировать регион [FROM.GetName] в состав Второй республики",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "PSR_coring_state_in_progress"
+      }
+    },
+    "visible": {
+      "is_ally_with": "JAP"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "PSR_coring_state_in_progress",
+          "value": 1,
+          "days": 31
+        }
+      }
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Drozdov_FindTheGroupsResponsible",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Найти ответственных",
+    "desc": "",
+    "icon": "GFX_decision_generic_chess_knight_rook_bishop_pawn",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "amount": 2
+      },
+      "OMS_Gauntlet_ScriptedTrigger_NewGuard_More": true
+    },
+    "visible": {
+      "check_variable": {
+        "OMS_Gauntlet_NewGuard_ID^4": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "OMS_Gauntlet_Drozdov_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Drozdov_FindTheGroupsResponsible",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "guard": 4
+        },
+        "if": {
+          "limit": {
+            "has_completed_focus": "OMS_all_eyes_on_them"
+          },
+          "set_temp_variable": {
+            "amount": -20
+          }
+        },
+        "else": {
+          "set_temp_variable": {
+            "amount": -40
+          }
+        },
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true,
+        "add_command_power": -20
+      }
+    }
+  }
+]

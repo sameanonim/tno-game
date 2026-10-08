@@ -1,0 +1,105 @@
+[
+  {
+    "id": "INS_release_puppet_sabah",
+    "category_id": "INS_borneo_puppet_cat",
+    "name": "Провозгласить Республику Сабах",
+    "desc": "Отпустить Сабах в качестве интегрированного участника Индонезийского Союза.",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "country_exists": "SAB"
+      },
+      "owns_state": 1024
+    },
+    "visible": {
+      "has_country_flag": "INS_can_release_borneo_puppets"
+    },
+    "complete_effect": {
+      "release": "SAB",
+      "set_autonomy": {
+        "target": "SAB",
+        "autonomy_state": "autonomy_taog_indonesian_union_state"
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_Bahamas_chocolate_martini",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ШОКОЛАДНЫЙ МАРТИНИ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_CentralAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_CIA_BAH_ChocoMartini_Unlock"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_Bahamas_chocolate_martini_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@CentralAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "modifier": {
+            "has_game_rule": {
+              "rule": "BAH_OPERATION",
+              "option": "BAH_OPERATION_FAIL"
+            },
+            "factor": 0
+          },
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "BAH_forpol.2",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "modifier": {
+            "has_game_rule": {
+              "rule": "BAH_OPERATION",
+              "option": "BAH_OPERATION_SUCCESS"
+            },
+            "factor": 0
+          },
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  }
+]

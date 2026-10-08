@@ -1,0 +1,579 @@
+[
+  {
+    "id": "invite_GER_mauser_organization",
+    "category_id": "foreign_mio_decisions_category",
+    "name": "Invite $GER_mauser_organization$ to [ROOT.GetNameWithFlag]",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "GER": {
+        "mio_original_country_available_with_opinion_subject_and_war_requirements_fulfilled": true
+      }
+    },
+    "visible": {
+      "GER": {
+        "mio_original_country_exists_and_not_at_war_with_ROOT": true
+      },
+      "IF": {
+        "limit": {
+          "original_tag": "ETH"
+        },
+        "has_completed_focus": "ETH_invite_foreign_industrialists"
+      },
+      "ELSE": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "has_invited_GER_mauser_organization_flag"
+      },
+      "custom_effect_tooltip": "available_mio_tt",
+      "show_mio_tooltip": "GER_mauser_organization"
+    }
+  },
+  {
+    "id": "restore_order_in_mauretania",
+    "category_id": "form_roman_empire_category",
+    "name": "Восстановить порядок в Мавритании",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        513,
+        514,
+        462,
+        783
+      ]
+    },
+    "visible": {
+      "original_tag": "ITA",
+      "NOT": {
+        "has_global_flag": "integrate_mauretania_flag"
+      },
+      "has_global_flag": "form_roman_empire_flag"
+    },
+    "complete_effect": {
+      "513": {
+        "add_core_of": "ROOT"
+      },
+      "514": {
+        "add_core_of": "ROOT"
+      },
+      "462": {
+        "add_core_of": "ROOT"
+      },
+      "783": {
+        "add_core_of": "ROOT"
+      },
+      "add_stability": -0.05,
+      "hidden_effect": {
+        "set_global_flag": "integrate_mauretania_flag"
+      }
+    }
+  },
+  {
+    "id": "liberate_mauritania",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [MRT.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": [
+            557,
+            786
+          ]
+        },
+        "MRT": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_CIA_evacuate_maurice_CA",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ПАДЕНИЕ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_CentralAmerica": true,
+        "is_ai": true
+      },
+      "has_global_flag": [
+        "MAD_Maurice_Decisions",
+        "MAD_Maurice_Stage_2"
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_Maurice_To_America_tt",
+      "set_temp_variable": {
+        "RegionID": "@CentralAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "if": {
+              "limit": {
+                "NOT": {
+                  "has_global_flag": "MAD_Maurice_Stage_2_Locked"
+                }
+              },
+              "USA": {
+                "country_event": {
+                  "id": "MAD_Maurice.3",
+                  "days": 14
+                }
+              },
+              "GER": {
+                "country_event": {
+                  "id": "MAD_Maurice.3",
+                  "days": 14
+                }
+              }
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": [
+            {
+              "country_event": {
+                "id": "USA_CIA.2",
+                "days": 14
+              }
+            },
+            {
+              "if": {
+                "limit": {
+                  "NOT": {
+                    "has_global_flag": "MAD_Maurice_Stage_2_Locked"
+                  }
+                },
+                "USA": {
+                  "country_event": {
+                    "id": "MAD_Maurice.31",
+                    "days": 14
+                  }
+                },
+                "GER": {
+                  "country_event": {
+                    "id": "MAD_Maurice.31",
+                    "days": 14
+                  }
+                },
+                "hidden_effect": {
+                  "every_country": {
+                    "limit": {
+                      "is_ai": false,
+                      "HasAfricaInterest": true
+                    },
+                    "news_event": {
+                      "id": "MAD_news.5",
+                      "days": 19
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "set_global_flag": "MAD_Maurice_Stage_2_Locked",
+      "subtract_from_variable": {
+        "TNO_Espionage_Budget": 0.015
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_evacuate_maurice",
+    "category_id": "USA_BoP_category",
+    "name": "Операция УДАР",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Africa": true,
+        "is_ai": true
+      },
+      "has_global_flag": "MAD_Maurice_Decisions",
+      "NOT": {
+        "has_global_flag": "MAD_Maurice_Stage_2"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_Maurice_To_America_tt",
+      "set_temp_variable": {
+        "RegionID": "@Africa"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "if": {
+              "limit": {
+                "NOT": {
+                  "has_global_flag": "MAD_Maurice_Stage_1_Locked"
+                }
+              },
+              "USA": {
+                "country_event": {
+                  "id": "MAD_Maurice.1",
+                  "days": 14
+                }
+              },
+              "GER": {
+                "country_event": {
+                  "id": "MAD_Maurice.1",
+                  "days": 14
+                }
+              }
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "if": {
+              "limit": {
+                "NOT": {
+                  "has_global_flag": "MAD_Maurice_Stage_1_Locked"
+                }
+              },
+              "USA": {
+                "country_event": {
+                  "id": "MAD_Maurice.4",
+                  "days": 14
+                }
+              },
+              "GER": {
+                "country_event": {
+                  "id": "MAD_Maurice.4",
+                  "days": 14
+                }
+              }
+            }
+          }
+        }
+      },
+      "set_global_flag": "MAD_Maurice_Stage_1_Locked",
+      "subtract_from_variable": {
+        "TNO_Espionage_Budget": 0.015
+      }
+    }
+  },
+  {
+    "id": "GER_Bormann_Foreign_Policy_Mauritius_and_Reunion",
+    "category_id": "GER_Bormann_Foreign_Policy_category",
+    "name": "Покорение рая",
+    "desc": "С крахом континентальной Германской Африки наша власть над обширными форпостами в Индийском океане была серьёзно ослаблена, что дало японцам возможность беспрепятственно править в южных водах. Несмотря на это, мы, в конечном счёте, всё ещё сохраняем присутствие в регионе, что даёт нам возможность восстановить наши силы. Кригсмарине и связанные с ними воздушные силы готовятся к проведению крупномасштабных военно-морских учений вблизи островов Маврикий и Реюньон близ Мадагаскара.\n\nЕсли они успешно завершат учения, мы сможем лучше противостоять японской агрессии в Индийском океане и впоследствии сосредоточиться на расширении наших баз на этих ключевых островах.",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "if": {
+        "limit": {
+          "is_ai": true
+        },
+        "always": true
+      },
+      "else": {
+        "ships_in_area": {
+          "area": 85,
+          "size": {
+            "_op": ">",
+            "value": 11
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "BOR_JAP_mauritius_reunion_operation_unlocked"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_Foreign_Policy_Mauritius_and_Reunion",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "GER_Espionage_assassinate_maurice_1",
+    "category_id": "GER_BoP_category",
+    "name": "Операция Наручные часы",
+    "desc": "",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Africa": true,
+        "is_ai": true
+      },
+      "has_global_flag": "MAD_Maurice_Decisions",
+      "NOT": {
+        "has_global_flag": "MAD_Maurice_Stage_2"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_assassinate_maurice_1",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_global_flag": "MAD_Maurice_Stage_1_Locked"
+    }
+  },
+  {
+    "id": "GER_Espionage_assassinate_maurice_2",
+    "category_id": "GER_BoP_category",
+    "name": "Операция Наручные часы",
+    "desc": "",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_CentralAmerica": true,
+        "is_ai": true
+      },
+      "has_global_flag": [
+        "MAD_Maurice_Decisions",
+        "MAD_Maurice_Stage_2"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_assassinate_maurice_2",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_global_flag": "MAD_Maurice_Stage_2_Locked"
+    }
+  },
+  {
+    "id": "SGR_reinforce_mauritius_reunion",
+    "category_id": "SGR_state_of_the_reich_category",
+    "name": "Укрепить Маврикий и Реюньон",
+    "desc": "Недавние конфликты на Мадагаскаре и в Африке поставили под угрозу нашу власть над стратегическими форпостами Маврикия и Реюньона - пришло время это исправить. Фюрер дал добро на проведении серии военно-морских учений в юго-западной части Индийского океана. Подобно орлу, Кригсмарине расправит свои крылья и устремит свой взор вдаль, через далекие океаны мира.",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "if": {
+        "limit": {
+          "is_ai": true
+        },
+        "always": true
+      },
+      "else": {
+        "ships_in_area": {
+          "area": 85,
+          "size": {
+            "_op": ">",
+            "value": 19
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "SGR_retake_mauritius_reunion",
+        "SGR_pakt_open"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_reinforce_mauritius_reunion",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -25,
+        "country_event": {
+          "id": "speermilitary.11",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "SGR_place_nukes_mauritius_reunion",
+    "category_id": "SGR_state_of_the_reich_category",
+    "name": "Разместить ядерное оружие на островах",
+    "desc": "Мечи Рейха не должны просто так лежать в Европе, являясь бесполезной и дорогостоящей игрушкой. Нет, мы должны расширить сферу действия нашего ядерного оружия, чтобы не только угрожать основным землям наших соперников, но и держать в страхе их владения поблизости. Острова Маврикий и Реюньон стали первым шагом к тому, чтобы окружить наших врагов глобальным адским огнем.",
+    "icon": "GFX_decision_GER_reichskommissariats",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "if": {
+        "limit": {
+          "is_ai": true
+        },
+        "always": true
+      },
+      "else": {
+        "ships_in_area": [
+          {
+            "area": 65,
+            "size": {
+              "_op": ">",
+              "value": 14
+            }
+          },
+          {
+            "area": 85,
+            "size": {
+              "_op": ">",
+              "value": 29
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "SGR_allow_reunion_nukes",
+        "SGR_pakt_open"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_place_nukes_mauritius_reunion",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -25
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 7.5
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "SGR_started_placing_nukes"
+    }
+  },
+  {
+    "id": "RUS_lenin_mausoleum",
+    "category_id": "RUS_lenin_enbalmed_category",
+    "name": "Сохранить революционера",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_socialism",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_government": [
+          "communist",
+          "socialist"
+        ],
+        "AND": {
+          "original_tag": "KOM",
+          "has_country_leader": {
+            "character": "KOM_Ivan_Serov",
+            "ruling_only": true
+          }
+        }
+      },
+      "NOT": {
+        "original_tag": "SBA"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_HAS_LENIN_BODY",
+      "NOT": {
+        "has_global_flag": "LENIN_BODY_LOST",
+        "has_country_flag": "LENIN_DECISION_MADE"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_lenin_mausoleum",
+      "if": {
+        "limit": {
+          "has_government": "socialist"
+        },
+        "add_popularity": {
+          "ideology": "socialist",
+          "popularity": 0.05
+        }
+      },
+      "else": {
+        "add_popularity": {
+          "ideology": "communist",
+          "popularity": 0.05
+        }
+      },
+      "add_ideas": "RUS_lenin_embalmed",
+      "set_country_flag": "LENIN_DECISION_MADE"
+    }
+  }
+]

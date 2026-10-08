@@ -1,0 +1,229 @@
+[
+  {
+    "id": "SND_show_support_for_government",
+    "category_id": "SND_unclear_loyalties_cat",
+    "name": "Выразить поддержку центральному правительству",
+    "desc": "",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "jinan_has_fallen"
+        },
+        {
+          "has_country_flag": "SND_han_fuju_stays"
+        }
+      ]
+    },
+    "complete_effect": {
+      "CHI": {
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "large_increase"
+        }
+      }
+    }
+  },
+  {
+    "id": "SND_expel_japanese",
+    "category_id": "SND_unclear_loyalties_cat",
+    "name": "Изгнать японских советников",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SND_shown_support"
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "jinan_has_fallen"
+        },
+        {
+          "has_country_flag": "SND_han_fuju_stays"
+        }
+      ]
+    },
+    "complete_effect": {
+      "JAP": {
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "large_decrease"
+        }
+      }
+    }
+  },
+  {
+    "id": "SND_army_integration",
+    "category_id": "SND_unclear_loyalties_cat",
+    "name": "Интеграция армии",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SND_expelled_japanese"
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "jinan_has_fallen"
+        },
+        {
+          "has_country_flag": "SND_han_fuju_stays"
+        }
+      ]
+    },
+    "complete_effect": {
+      "army_experience": 50
+    }
+  },
+  {
+    "id": "SND_han_fuju_stays",
+    "category_id": "SND_unclear_loyalties_cat",
+    "name": "Хань Фуцзюй остается",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SND_army_integration_flag"
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "jinan_has_fallen"
+        },
+        {
+          "has_country_flag": "SND_han_fuju_stays"
+        }
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "han_will_flee_if_not_removed_tt",
+      "SND_han_fuju": {
+        "remove_trait": {
+          "trait": "SND_unreliable_opportunist",
+          "ideology": "despotism"
+        },
+        "add_trait": {
+          "trait": "SND_proven_loyalty",
+          "ideology": "despotism"
+        }
+      }
+    }
+  },
+  {
+    "id": "SND_swear_fealty_to_the_emperor",
+    "category_id": "SND_unclear_loyalties_cat",
+    "name": "Присягнуть на верность императору",
+    "desc": "",
+    "icon": "GFX_decision_JAP_army_faction",
+    "cost": 150,
+    "fire_only_once": false,
+    "available": {
+      "JAP": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "is_subject": false
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "jinan_has_fallen"
+        },
+        {
+          "has_country_flag": "SND_han_fuju_stays"
+        }
+      ]
+    },
+    "complete_effect": {
+      "CHI": {
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "large_decrease"
+        }
+      },
+      "IF": {
+        "limit": {
+          "has_war_with": "JAP"
+        },
+        "white_peace": {
+          "tag": "JAP"
+        }
+      },
+      "JAP": {
+        "set_autonomy": {
+          "target": "ROOT",
+          "autonomy_state": "autonomy_wtt_imperial_protectorate",
+          "freedom_level": 0.5
+        }
+      },
+      "SND_han_fuju": {
+        "remove_trait": {
+          "trait": "SND_unreliable_opportunist",
+          "ideology": "despotism"
+        },
+        "IF": {
+          "limit": {
+            "JAP": {
+              "has_government": "fascism"
+            }
+          },
+          "add_trait": {
+            "trait": "SND_traitor_warlord",
+            "ideology": "rexism"
+          }
+        },
+        "ELSE": {
+          "add_trait": {
+            "trait": "SND_traitor_warlord",
+            "ideology": "despotism"
+          }
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "SND_han_fuju_stays"
+      }
+    }
+  },
+  {
+    "id": "USA_modernise_amtrack_lsa_snd",
+    "category_id": "USA_the_interstate_highway",
+    "name": "Модернизировать Амтрак LSA-SND",
+    "desc": "",
+    "icon": "GFX_decision_USA_amtrak",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_flag": "USA_amtrack_is_in_business"
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "add_political_power": -25
+        },
+        {
+          "country_event": {
+            "id": "hart.106",
+            "days": 15
+          }
+        }
+      ],
+      "custom_effect_tooltip": "USA_amtrak_modernisation_begins_tt",
+      "set_variable": {
+        "USA_LA_SD_PROGRESS": 0.1
+      }
+    }
+  }
+]

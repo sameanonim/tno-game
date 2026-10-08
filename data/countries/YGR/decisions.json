@@ -1,0 +1,1067 @@
+[
+  {
+    "id": "RUS_Decision_Smuta_Occupation_YGR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [YGR.GetFlag] Югру",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "YGR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "YGR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_YGR",
+      "set_temp_variable": {
+        "TargetTag": "YGR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "YGR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "YGR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "YGR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_YGR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_YGR_Generic",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Атаковать [YGR.GetFlag] Югру",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "is_west_siberian_nation": true,
+      "is_neighbor_of": "YGR",
+      "has_war": false,
+      "NOT": {
+        "has_non_aggression_pact_with": "YGR"
+      },
+      "RUS_Smuta_ScriptedTrigger_Expansion_YGR_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_YGR_Generic",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Y": -0.7
+        },
+        "RUS_Smuta_Supplies_Add_Y": true,
+        "set_country_flag": "RUS_Smuta_preparing_expansion"
+      },
+      "if": {
+        "limit": {
+          "tag": "SVR"
+        },
+        "country_event": {
+          "id": "SVR.13",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "SGV_reintegrate_ygr",
+    "category_id": "SGV_WSB_forming_nation_category",
+    "name": "Reintegrate Yugorsk",
+    "desc": "",
+    "icon": "GFX_decision_generic_infiltrate_state",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "NOT": {
+        "country_exists": "YGR"
+      },
+      "has_country_flag": [
+        "is_warlord",
+        "SGV_begin_salvation",
+        "SGV_reintegrate_ygr",
+        "SGV_inviding_neighbor"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_reintegrate_ygr",
+      "add_stability": 0.05,
+      "set_temp_variable": {
+        "pus_temp": 1
+      },
+      "econ_pus_change": true,
+      "clr_country_flag": "SGV_reintegrate_ygr",
+      "add_state_core": [
+        845,
+        756
+      ],
+      "hidden_effect": {
+        "YGR": {
+          "remove_state_core": [
+            845,
+            756
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "YGR_Ioseliani_side",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Ioseliani's Actions",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "YGR_usoyan_influence_ticker",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Usoyan makes his move!",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "tag": "YGR",
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "YGR_meet_with_pakhans",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Meet with the Pakhans",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_meet_with_pakhans",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "YGR_raise_ioseliani_influence_low": true
+    }
+  },
+  {
+    "id": "YGR_give_speech",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Give a speech",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_give_speech",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "YGR_raise_ioseliani_influence_low": true
+    }
+  },
+  {
+    "id": "YGR_create_feuds_between_gangs",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Create disagreements in the opposition",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_create_feuds_between_gangs",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "YGR_lower_usoyan_influence_low": true
+    }
+  },
+  {
+    "id": "YGR_arrange_assassination",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Arrange an assassination",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_arrange_assassination",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "YGR_lower_usoyan_influence_mid": true,
+      "add_stability": -0.01,
+      "army_experience": 2,
+      "hidden_effect": {
+        "add_political_power": -200,
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment",
+          "amount": -150
+        }
+      }
+    }
+  },
+  {
+    "id": "YGR_destroy_opposition_gang",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Eliminate unfriendly gangs",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_destroy_opposition_gang",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "country_event": {
+        "id": "YGR_powerstruggle.3"
+      },
+      "hidden_effect": {
+        "add_command_power": -25,
+        "add_political_power": -50
+      }
+    }
+  },
+  {
+    "id": "YGR_stabilize_government",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Stabilize the government",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_stabilize_government",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "country_event": {
+        "id": "YGR_powerstruggle.6"
+      }
+    }
+  },
+  {
+    "id": "YGR_random_event_usoyan",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "An accident happens!",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": [
+            "YGR_powerstruggle",
+            "YGR_ioseliani_support"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "YGR_ioseliani_support"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "YGR_usoyan_side",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Usoyan's Actions",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "YGR_ioseliani_influence_ticker",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Ioseliani subverts our actions!",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "tag": "YGR",
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "YGR_meet_with_dissenting_pakhans",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Meet with the unloyal Pakhans",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_meet_with_dissenting_pakhans",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "YGR_raise_usoyan_influence_low": true
+    }
+  },
+  {
+    "id": "YGR_denounce_ioseliani",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Denounce Ioseliani's actions",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_denounce_ioseliani",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "YGR_lower_ioseliani_influence_low": true
+    }
+  },
+  {
+    "id": "YGR_search_support_with_the_bandits",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Make promises to the bandits",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_search_support_with_the_bandits",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "YGR_raise_usoyan_influence_mid": true,
+      "add_stability": 0.01
+    }
+  },
+  {
+    "id": "YGR_arrange_an_incident",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Arrange an accident",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_arrange_an_incident",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "country_event": {
+        "id": "YGR_flavour.27"
+      },
+      "hidden_effect": {
+        "add_command_power": -30,
+        "add_political_power": -30
+      }
+    }
+  },
+  {
+    "id": "YGR_search_help_from_outside",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Search for foreign aid",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_search_help_from_outside",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "country_event": {
+        "id": "YGR_powerstruggle.5"
+      }
+    }
+  },
+  {
+    "id": "YGR_random_event_ioseliani",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "The Government takes action!",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": [
+            "YGR_powerstruggle",
+            "YGR_usoyan_support"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "YGR_usoyan_support"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "YGR_end_struggle",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "The End of the Struggle",
+    "desc": "",
+    "icon": "GFX_decision_chess_knight_rook_bishop_pawn",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "YGR_powerstruggle"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "YGR_powerstruggle"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "YGR_steal_valuables",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Raid valuable caravans",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_steal_valuables",
+      "add_stability": -0.01
+    }
+  },
+  {
+    "id": "YGR_smuggle_zlatoust_weapons",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Smuggle weapons from Zlatoust",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "country_exists": "ZLT",
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_war_with": "ZLT"
+      },
+      "country_exists": "ZLT",
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_smuggle_zlatoust_weapons",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.004
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "ZLT": {
+        "set_temp_variable": {
+          "money_reserves_temp": 0.005
+        },
+        "econ_money_reserves_change_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "YGR_send_volunteers_to_kokshatai",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Start a Partnership with [KOK.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_diplo_aid_northern_kazakhstan",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "KOK": {
+        "has_war": true
+      },
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 1499
+          }
+        },
+        {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 249
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 299
+          }
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_war_with": "KOK"
+      },
+      "country_exists": "KOK",
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      },
+      "has_country_flag": "RUS_regional_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_send_volunteers_to_kokshatai",
+      "custom_effect_tooltip": "YGR_send_volunteers_to_kokshatai_tt",
+      "KOK": {
+        "add_war_support": 0.1,
+        "country_event": {
+          "id": "KOK_event.3",
+          "hours": 12
+        }
+      },
+      "send_equipment": [
+        {
+          "equipment": "infantry_equipment",
+          "amount": 1500,
+          "target": "KOK"
+        },
+        {
+          "equipment": "artillery_equipment",
+          "amount": 250,
+          "target": "GEO"
+        },
+        {
+          "equipment": "support_equipment",
+          "amount": 300,
+          "target": "KOK"
+        }
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.038
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": {
+        "YGR": {
+          "set_temp_variable": [
+            {
+              "target": "KOK"
+            },
+            {
+              "number": 1
+            }
+          ],
+          "TNO_set_num_volunteers": true
+        },
+        "add_command_power": -20,
+        "add_political_power": -20
+      }
+    }
+  },
+  {
+    "id": "YGR_smuggle_civilian_supplies",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Smuggle civilian supplies",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_smuggle_civilian_supplies",
+      "add_stability": 0.02
+    }
+  },
+  {
+    "id": "YGR_show_weapon_smuggling",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Show weapon trafficking decisions!",
+    "desc": "",
+    "icon": "GFX_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Weapon_smuggling_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Weapon_smuggling_enabled",
+        "NOT": {
+          "has_country_flag": "YGR_show_smuggling_weapons"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_show_weapon_smuggling",
+      "set_country_flag": "YGR_show_smuggling_weapons"
+    }
+  },
+  {
+    "id": "YGR_hide_weapon_smuggling",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Hide weapon trafficking decisions!",
+    "desc": "",
+    "icon": "GFX_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Weapon_smuggling_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_Weapon_smuggling_enabled",
+          "YGR_show_smuggling_weapons"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_hide_weapon_smuggling",
+      "clr_country_flag": "YGR_show_smuggling_weapons"
+    }
+  },
+  {
+    "id": "YGR_sell_smuggled_weapons",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Sell our weapons to [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Weapon_smuggling_enabled"
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_Smuggling_enabled",
+          "YGR_show_smuggling_weapons"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_sell_smuggled_weapons",
+      "hidden_effect": {
+        "add_command_power": -15,
+        "add_political_power": -15
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500
+      },
+      "FROM": {
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment",
+          "amount": 500,
+          "producer": "YGR"
+        },
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.04
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "YGR_sell_smuggled_atartillery",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Sell our heavy weapons to [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_mortar_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Weapon_smuggling_enabled"
+      },
+      "has_equipment": {
+        "anti_tank_equipment": {
+          "_op": ">",
+          "value": 129
+        },
+        "artillery_equipment": {
+          "_op": ">",
+          "value": 49
+        }
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_Smuggling_enabled",
+          "YGR_show_smuggling_weapons"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_sell_smuggled_weapons",
+      "hidden_effect": {
+        "add_command_power": -15,
+        "add_political_power": -15
+      },
+      "add_equipment_to_stockpile": [
+        {
+          "type": "anti_tank_equipment",
+          "amount": -130
+        },
+        {
+          "type": "artillery_equipment",
+          "amount": -50
+        }
+      ],
+      "FROM": {
+        "add_equipment_to_stockpile": [
+          {
+            "type": "anti_tank_equipment",
+            "amount": 130,
+            "producer": "YGR"
+          },
+          {
+            "type": "artillery_equipment",
+            "amount": 50,
+            "producer": "YGR"
+          }
+        ],
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.05
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "YGR_show_sabotation_decisions",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Show Sabotation decisions!",
+    "desc": "",
+    "icon": "GFX_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_Smuggling_enabled",
+          "YGR_sabotaging_enabled"
+        ],
+        "NOT": {
+          "has_country_flag": "YGR_show_sabotation_decisions"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_show_sabotation_decisions",
+      "set_country_flag": "YGR_show_sabotation_decisions"
+    }
+  },
+  {
+    "id": "YGR_hide_sabotation_decisions",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Hide Sabotation decisions!",
+    "desc": "",
+    "icon": "GFX_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_Smuggling_enabled",
+          "YGR_sabotaging_enabled",
+          "YGR_show_sabotation_decisions"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_hide_weapon_smuggling",
+      "clr_country_flag": "YGR_show_sabotation_decisions"
+    }
+  },
+  {
+    "id": "YGR_infiltrate_enemy_army",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Infiltrate [FROM.GetNameDef] army!",
+    "desc": "The Low Command of this warlord's army has been infiltrated by their enemies, making the relaying of orders unreliable.",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_sabotaging_enabled",
+          "YGR_show_sabotation_decisions"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "RUS_national_unification"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_infiltrate_enemy_army",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.05
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "YGR_disrupt_supply_lines",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Disrupt [FROM.GetNameDef] supply lines!",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_sabotaging_enabled",
+          "YGR_show_sabotation_decisions"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "RUS_national_unification"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_disrupt_supply_lines",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.033
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "YGR_sabotage_production",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Disrupt [FROM.GetNameDef] production!",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_sabotaging_enabled",
+          "YGR_show_sabotation_decisions"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "RUS_national_unification"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_disrupt_supply_lines",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.037
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  }
+]

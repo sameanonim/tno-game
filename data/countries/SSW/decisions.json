@@ -1,0 +1,243 @@
+[
+  {
+    "id": "HGR_incorporate_SSW",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [SSW.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_SSW_req_tt",
+        "SSW": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_SSW_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSW": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_SSW",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_SSW_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSW.GetFlag]Содействие строительным проектам",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSW"
+      },
+      "has_equipment": {
+        "support_equipment": {
+          "_op": ">",
+          "value": 249
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSW_influence_true",
+        "HGR_SSW_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSW": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSW_decision_a_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "send_equipment": {
+        "equipment": "support_equipment",
+        "amount": 250,
+        "target": "SSW"
+      },
+      "SSW": {
+        "increase_Heydrich_influence_small": true
+      }
+    }
+  },
+  {
+    "id": "HGR_SSW_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSW.GetFlag]Оказать промышленную помощь",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSW"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSW_influence_true",
+        "HGR_SSW_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSW": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSW_decision_a_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "SSW": {
+        "increase_Heydrich_influence_medium": true
+      }
+    }
+  },
+  {
+    "id": "HGR_SSW_decision_b_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSW.GetFlag]Начать рейды коммандос",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSW"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSW_influence_true",
+        "HGR_SSW_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSW": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSW_decision_b_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "add_manpower": -100,
+      "HGR_increase_militarist_opinion_low": true,
+      "SSW": {
+        "increase_Heydrich_influence_small": true,
+        "capital_scope": {
+          "damage_building": {
+            "type": "infrastructure",
+            "damage": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "HGR_SSW_decision_b_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSW.GetFlag]Приступить к Бомбардировкам Люфтваффе",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSW"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_aligned_OKL_req_tt",
+        "OKL": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 59
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSW_influence_true",
+        "HGR_SSW_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSW": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSW_decision_b_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "HGR_increase_moderate_opinion_low": true,
+      "SSW": {
+        "increase_Heydrich_influence_medium": true,
+        "capital_scope": {
+          "damage_building": {
+            "type": "infrastructure",
+            "damage": 2
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,253 @@
+[
+  {
+    "id": "SWE_poverty_reduction",
+    "category_id": "SWE_politics",
+    "name": "SWE_poverty_reduction",
+    "desc": "",
+    "icon": "decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_DEC_combat_poverty",
+    "category_id": "ENG_DECCAT_United_Englands_Inner_Politics",
+    "name": "Бороться с бедностью",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 125,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_leader": {
+        "character": "ENG_Harold_Macmillan",
+        "ruling_only": true
+      }
+    },
+    "complete_effect": {
+      "ENG_Macmillan_Add_Liberal_Love_3": true,
+      "TNO_improve_poverty_med": true,
+      "ENG_Macmillan_Add_Democratization_3": true
+    }
+  },
+  {
+    "id": "SGR_ZV_poverty_investment",
+    "category_id": "SGR_Zollverein_members_investment_category",
+    "name": "Инвестиции в сокращение бедности",
+    "desc": "Люди, которые едва сводят концы с концами из-за своей зарплаты, или люди, которые просто выходят на улицу и просят лишнюю мелочь, чтобы выжить, - они наиболее уязвимы, но наиболее доступны к нашему влиянию. С помощью Цольверайна мы сделаем значительную попытку очистить улицы от бедности и сделать так, чтобы все больше и больше людей могли прийти с работы в теплую, ухоженную квартиру.",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_idea": [
+          "SGR_zollverein_basic",
+          "SGR_zollverein_germany"
+        ]
+      }
+    },
+    "visible": {
+      "has_global_flag": "german_civil_war_speervic",
+      "OR": {
+        "has_idea": [
+          "SGR_zollverein_basic",
+          "SGR_zollverein_germany"
+        ]
+      },
+      "has_country_flag": "ZV_investments_special_opened"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_ZV_poverty_investment",
+      "subtract_from_variable": {
+        "MemberSpentBudget": 0.05
+      }
+    }
+  },
+  {
+    "id": "regional_instate_poverty_relief_programs",
+    "category_id": "regional_development_decision_category",
+    "name": "Борьба с бедностью",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision regional_instate_poverty_relief_programs",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.175
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "SAM_democrat_decrease_poverty",
+    "category_id": "SAM_unity_party_category",
+    "name": "Начать борьбу с нищетой",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "SAM_civ_influence_tt",
+          "check_variable": {
+            "SAM_democrat_faction_strength": {
+              "_op": ">",
+              "value": 34.99
+            }
+          }
+        },
+        {
+          "tooltip": "WRS_reform_timer_tt",
+          "has_country_flag": {
+            "flag": "WRS_reformed_flag",
+            "days": {
+              "_op": ">",
+              "value": 364
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "SAM_democrat_faction_strength": {
+          "_op": ">",
+          "value": 33.33
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_democrat_decrease_poverty",
+      "custom_effect_tooltip": "SAM_democrat_decrease_poverty_tt",
+      "SAM_zykov_increase_democrat_high": true,
+      "TNO_improve_poverty_low": true,
+      "set_country_flag": "WRS_reformed_flag"
+    }
+  },
+  {
+    "id": "USA_continue_action_against_poverty",
+    "category_id": "USA_coalition_unity",
+    "name": "Продолжать борьбу с нищетой",
+    "desc": "",
+    "icon": "GFX_decision_USA_npp_p",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_poverty_rate_change_0_2",
+        "set_temp_variable": {
+          "temp_poverty_rate_monthly": "modifier@poverty_monthly_rate"
+        },
+        "add_to_temp_variable": {
+          "temp_poverty_rate_monthly": "poverty_monthly_change"
+        },
+        "check_variable": {
+          "temp_poverty_rate_monthly": {
+            "_op": ">",
+            "value": 0.179
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_show_NPP_screen"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_continue_action_against_poverty",
+      "set_temp_variable": {
+        "tempApproval": 0.05
+      },
+      "USA_change_NPP_p_leadership_approval": true
+    }
+  },
+  {
+    "id": "USA_RFK_Poverty_Relief",
+    "category_id": "USA_RFK_No_Die",
+    "name": "Борьба против бедности",
+    "desc": "Мы можем продолжать борьбу со всеми этими бедами не только с помощью Конгресса, но и с помощью исполнительных указов, замещая должности в нашем кабинете и вообще выступая как луч надежды для американского народа. Это поможет нам сосредоточиться на борьбе с бедностью по всей Америке.",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "USA_RFK_Poverty_Relief_var": {
+          "_op": "<",
+          "value": 4
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_RFK_Poverty_Relief",
+      "add_to_variable": [
+        {
+          "USA_RFK_Poverty_Relief_var": 1
+        },
+        {
+          "Demographic_Shift_union_rep_Weeks": "USA_week_change_union_rep"
+        },
+        {
+          "Policy_Shift_union_domestic_policy_con_Weeks": "USA_week_change_union_domestic_policy_con"
+        }
+      ],
+      "add_stability": 0.05,
+      "set_temp_variable": [
+        {
+          "temp_econ_spending_amount": 0.1
+        },
+        {
+          "USA_week_change_union_rep": 1
+        },
+        {
+          "USA_week_change_union_domestic_policy_con": 1
+        }
+      ],
+      "econ_spend_money_once_effect_raw_money": true,
+      "custom_effect_tooltip": [
+        "USA_union_voters_header_tt",
+        "USA_union_rep_shift",
+        "USA_union_domestic_policy_con"
+      ]
+    }
+  },
+  {
+    "id": "USA_HAR_poverty_enth",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Прислушаться к Другой Америке",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_bring_it_into_the_open"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_poverty_inf_up",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Помочь Другой Америке",
+    "desc": "",
+    "icon": "",
+    "cost": 90,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_har_68_the_other_america"
+    },
+    "complete_effect": {}
+  }
+]

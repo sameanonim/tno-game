@@ -1,0 +1,611 @@
+[
+  {
+    "id": "rename_gjirokaster",
+    "category_id": "form_greater_greece_category",
+    "name": "Переименовать Гирокастру",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "if": {
+        "limit": {
+          "has_government": "democratic"
+        },
+        "has_completed_focus": "GRE_nenikikamen"
+      },
+      "controls_state": 805
+    },
+    "visible": {
+      "has_global_flag": "form_greater_greece_flag"
+    },
+    "complete_effect": {
+      "add_stability": 0.05,
+      "add_war_support": 0.05,
+      "set_province_name": {
+        "id": 914,
+        "name": "Argyrokastro"
+      }
+    }
+  },
+  {
+    "id": "GER_reichskommissariat_kaukasien",
+    "category_id": "GER_reichskommissariats",
+    "name": "Рейхскомиссариат Кавказ",
+    "desc": "",
+    "icon": "ger_reichskommissariats",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "231": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "230": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "229": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "826": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "232": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "821": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "828": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "827": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "233": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "234": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "235": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "237": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "236": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "238": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "RKK": {
+        "exists": false
+      }
+    },
+    "complete_effect": {
+      "GER_improve_rosenbergs_trait_effect": true,
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "GER_reichskommissariat_kaukasien_effect_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "231": {
+        "IF": {
+          "limit": {
+            "OWNER": {
+              "NOT": {
+                "original_tag": "GER"
+              }
+            }
+          },
+          "OWNER": {
+            "set_country_flag": [
+              "GER_RK_capital_state_trasferred_RKK_victim_flag",
+              "GER_reichskommissariats_puppet_flag"
+            ]
+          }
+        },
+        "transfer_state_to": "RKK",
+        "set_state_flag": "GER_RK_capital_state_trasferred_RKK_flag",
+        "add_compliance": 25
+      },
+      "set_autonomy": {
+        "target": "RKK",
+        "autonomy_state": "autonomy_integrated_puppet"
+      },
+      "hidden_effect": {
+        "every_state": [
+          {
+            "limit": {
+              "GER_is_RKK_state": true,
+              "NOT": {
+                "state": 231
+              },
+              "OR": {
+                "is_owned_by": "ROOT",
+                "owner": {
+                  "is_subject_of": "ROOT"
+                }
+              }
+            },
+            "transfer_state_to": "RKK",
+            "add_compliance": 25
+          },
+          {
+            "limit": {
+              "GER_is_RKK_state": true,
+              "NOT": [
+                {
+                  "state": 231
+                },
+                {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              ]
+            },
+            "add_contested_owner": "RKK",
+            "set_state_controller_to": "RKK",
+            "add_claim_by": "RKK",
+            "add_compliance": 25
+          }
+        ],
+        "RKK": {
+          "add_manpower": 50000,
+          "add_equipment_to_stockpile": [
+            {
+              "type": "infantry_equipment",
+              "amount": 5000,
+              "producer": "GER"
+            },
+            {
+              "type": "support_equipment",
+              "amount": 500,
+              "producer": "GER"
+            }
+          ],
+          "inherit_technology": "GER",
+          "add_offsite_building": {
+            "type": "arms_factory",
+            "level": 3
+          },
+          "load_oob": "RK_OOB"
+        }
+      },
+      "country_event": {
+        "id": "wuw_GER_reichskommissariats.6",
+        "hours": 0
+      }
+    }
+  },
+  {
+    "id": "INS_set_leader_to_INS_syarif_kasim",
+    "category_id": "INS_leaders_cat",
+    "name": "Избрать лидером: $INS_syarif_kasim$",
+    "desc": "",
+    "icon": "GFX_decision_generic_monarchy",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "INS_has_changed_leader"
+      },
+      "hidden_trigger": {
+        "has_event_target": "INS_syarif_kasim"
+      },
+      "event_target:INS_syarif_kasim": {
+        "is_country_leader": false
+      }
+    },
+    "visible": {
+      "has_completed_focus": [
+        "INSHOL_democracy",
+        "INSHOL_princely_authority"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "INS_has_changed_leader",
+        "days": 120,
+        "value": 1
+      },
+      "if": {
+        "limit": {
+          "event_target:INS_syarif_kasim": {
+            "can_be_country_leader": true,
+            "has_ideology": "conservatism"
+          }
+        },
+        "event_target:INS_syarif_kasim": {
+          "promote_character": {
+            "character": "event_target:INS_syarif_kasim",
+            "ideology": "conservatism"
+          }
+        }
+      },
+      "else": {
+        "event_target:INS_syarif_kasim": {
+          "add_country_leader_role": {
+            "promote_leader": true,
+            "country_leader": {
+              "ideology": "conservatism",
+              "expire": "1965.1.1.1",
+              "traits": [
+                "INS_the_sultan_schoolmaster_of_siak"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_Bormann_Foreign_Policy_Kaukasien",
+    "category_id": "GER_Bormann_Foreign_Policy_category",
+    "name": "Страна тумана",
+    "desc": "Кавказия... странное место. Ещё до печальной кончины покойного Гитлера оттуда поступало мало новостей, но много нефти. Теперь, с твёрдой рукой Бормана, пришло время изменить это. Давайте посмотрим, что на самом деле происходит на Кавказе.",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_country_flag": [
+          "BOR_speidel_okw",
+          "BOR_schorner_okw"
+        ]
+      },
+      "MCW": {
+        "is_in_faction_with": "GER"
+      },
+      "UKR": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_Foreign_Policy_Kaukasien",
+      "set_country_flag": "GER_Bormann_Kaukasien_Tree",
+      "if": {
+        "limit": {
+          "CAU": {
+            "has_country_leader": {
+              "character": "CAU_paul_pleiger",
+              "ruling_only": true
+            },
+            "NOT": {
+              "has_country_flag": [
+                "CAU_caucasian_revolt",
+                "CAU_caucasian_anarchy"
+              ]
+            }
+          }
+        },
+        "if": {
+          "limit": {
+            "CAU": {
+              "has_country_flag": "CAU_policy_business_bormann"
+            }
+          },
+          "set_country_flag": "GER_BOR_KAU_business_plot_bormann"
+        },
+        "else": {
+          "set_country_flag": "GER_BOR_KAU_business_plot_goering"
+        }
+      },
+      "else_if": {
+        "limit": {
+          "CAU": {
+            "NOT": {
+              "has_country_flag": [
+                "CAU_caucasian_revolt",
+                "CAU_caucasian_anarchy"
+              ]
+            }
+          }
+        },
+        "set_country_flag": "GER_BOR_KAU_josias"
+      },
+      "else": {
+        "set_country_flag": "GER_BOR_KAU_revolt"
+      },
+      "hidden_effect": {
+        "reload_GER_bormann_post_cw_tree": true
+      },
+      "custom_effect_tooltip": "GER_new_options_focus_tree_linebreak"
+    }
+  },
+  {
+    "id": "SGR_Kaukasien_investment",
+    "category_id": "SGR_Zollverein_members_investment_category",
+    "name": "Инвестиции в Кавказию",
+    "desc": "Богатые природные ресурсы и дешевая рабочая сила в кавказском регионе привели к довольно нездоровым отношениям между Кавказией и Германией. Условия труда в РК Кавказии, как известно, зверские - немецкая админинстрация с самого захвата региона начала эксплуатацию местного населения по-полной. Мы должны решить эту проблему ужасных условий труда, если мы хотим способствовать какому-либо конкретному экономическому росту региона.",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SGR_phase2",
+      "NOT": {
+        "has_global_flag": "SGR_natsoc_collapse"
+      },
+      "has_completed_focus": "GER_sapientia"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_Kaukasien_investment",
+      "custom_effect_tooltip": "SGR_eastern_investment_cost",
+      "set_country_flag": "SGR_kaukasien_active",
+      "CAU": {
+        "TNO_improve_poverty_med": true,
+        "TNO_improve_academic_base_low": true,
+        "TNO_improve_industrial_equipment_med": true,
+        "TNO_improve_industrial_expertise_med": true,
+        "TNO_improve_agriculture_low": true
+      }
+    }
+  },
+  {
+    "id": "SGR_Kaukasien_Question",
+    "category_id": "SGR_state_of_the_reich_category",
+    "name": "Кавказский Вопрос",
+    "desc": "В клубящемся темном тумане Кавказа лежит наш самый разрозненный и таинственный Рейхскомиссариат. Как ключевой производитель нефти, эта территория должна быть полностью стабилизирована, если мы хотим, чтобы она продолжала служить интересам Рейха.",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "AND": {
+        "POL": {
+          "is_in_faction_with": "GER"
+        },
+        "OSL": {
+          "is_in_faction_with": "GER"
+        },
+        "NOR": {
+          "is_in_faction_with": "GER"
+        },
+        "UKR": {
+          "is_in_faction_with": "GER"
+        }
+      }
+    },
+    "visible": {
+      "CAU": {
+        "NOT": {
+          "is_in_faction_with": "GER"
+        }
+      },
+      "has_country_flag": "SGR_pakt_open"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_Kaukasien_Question",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_global_flag": "SGR_natsoc_collapse"
+          },
+          "CAU": {
+            "has_country_leader": {
+              "character": "CAU_paul_pleiger",
+              "ruling_only": true
+            }
+          }
+        },
+        "set_country_flag": "SGR_CAU_tree1",
+        "reload_GER_speer_post_cw_tree": true
+      },
+      "else_if": [
+        {
+          "limit": {
+            "NOT": {
+              "has_global_flag": "SGR_natsoc_collapse"
+            }
+          },
+          "set_country_flag": "SGR_CAU_tree2",
+          "reload_GER_speer_post_cw_tree": true
+        },
+        {
+          "limit": {
+            "has_global_flag": "SGR_natsoc_collapse"
+          },
+          "declare_war_on": {
+            "target": "CAU",
+            "type": "puppet_wargoal_focus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "collab_regime_in_kaukasien",
+    "category_id": "SGR_collab_regimes_category",
+    "name": "Создание Кавказской Федерации",
+    "desc": "",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision collab_regime_in_kaukasien"
+    }
+  },
+  {
+    "id": "reichsprotektorat_in_kaukasia",
+    "category_id": "SGR_reichslander_category",
+    "name": "Создать Рейхспротекторат на Кавказе",
+    "desc": "",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision reichsprotektorat_in_kaukasia"
+    }
+  },
+  {
+    "id": "IBR_invest_kaukasien_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в РК Кавказия",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "CAU": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_kaukasien_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.023
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "MAG_WA_support_congo_kasai",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт государству Южное Касаи",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "KSI": {
+        "exists": true
+      },
+      "has_global_flag": "CONGO_PW_HAPPENING",
+      "NOT": {
+        "OR": {
+          "AZD": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "CFS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "CPR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "KTG": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "KSI": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GRO": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "COG": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_congo_kasai",
+      "KSI": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "COG_vacation_kaselowsky",
+    "category_id": "COG_welcome_in_the_heart_of_afrika",
+    "name": "Пригласить Рихарда Казеловски",
+    "desc": "Рихард Казеловски - очевидно, наследник Рихарда Казеловски старшего, выдающегося промышленника и гордого члена партии НСДАП. Он не очень хорошо известен широкой публике, но является одним из наших главных инвесторов.",
+    "icon": "GFX_decision_generic_invitation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false,
+      "check_variable": {
+        "cog_vip_id": 0
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_vacation_schenck",
+      "country_event": {
+        "id": "COG_misc.5",
+        "days": 7
+      },
+      "set_variable": {
+        "cog_vip_id": 3
+      },
+      "custom_effect_tooltip": "COG_celebrity_brings_investors_tt"
+    }
+  },
+  {
+    "id": "RUS_partisan_kaukasia_decision",
+    "category_id": "RUS_partisans_decisions_category",
+    "name": "Support Caucasian Partisans",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "country_exists": "CAU"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Moskowien Partisans be Trolling",
+      "CAU": {
+        "random_list": {
+          "33": [
+            {
+              "random_owned_controlled_state": {
+                "damage_building": {
+                  "type": "infrastructure",
+                  "damage": 1
+                }
+              }
+            },
+            {
+              "random_owned_controlled_state": {
+                "damage_building": {
+                  "type": "industrial_complex",
+                  "damage": 1
+                }
+              }
+            },
+            {
+              "random_owned_controlled_state": {
+                "damage_building": {
+                  "type": "arms_factory",
+                  "damage": 1
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+]

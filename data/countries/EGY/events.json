@@ -1,0 +1,2085 @@
+[
+  {
+    "id": "empiremanagement_egypt.1",
+    "type": "country_event",
+    "title": "Помощь колониям",
+    "desc": "Беспорядки в Египте! Во время очередной пышной вечеринки король Фарук умер от сердечного приступа из-за непомерного количества мяса, которое он съел за время своего правления. Хотя смерть Фарука празднуется по всему Египту, она, тем не менее, стала катализатором для ещё более масштабных беспорядков, чем во времена его правления. Таким образом, новое правительство Египта обратилось к Италии за помощью помочь стабилизировать ситуацию в стране.\n\nВ настоящее время у итальянского правительства есть несколько вариантов оказания помощи Египту. Во-первых, Италия может направить Египту некоторую экономическую помощь, убедившись, что у Египта появятся деньги, необходимые для принятия некоторых временных мер. Хотя это и не сильно улучшит ситуацию в Египте, нам будет легко разорвать связи с Египтом, если ситуация выйдет из-под контроля.\n\nПомимо этого, итальянская армия может быть направлена в Египет. Эти военные силы помогут поддерживать порядок в наиболее важных частях королевства, в то время как египетское правительство сосредоточится на восстановлении. Однако будет трудно отозвать эти войска, если всё пойдёт наперекосяк.\n\nВ-третьих, мы могли бы полностью взять на себя обязательства по стабилизации Египта, направив и экономическую, и военную помощь. Хотя это в значительной степени поможет египетскому правительству и стабилизирует ситуацию в стране, в принципе будет невозможно выйти из кризиса, если страна каким-то образом выйдет из-под контроля.\nКонечно, есть и последний вариант - вообще ничего не делать. По сути, мы покинем нашу колонию, но если беспорядки прямо сейчас - это признак грядущих событий, то, возможно, было бы даже предпочтительнее убраться к чёрту оттуда, пока не поздно. Теперь, когда варианты чётко прописаны и показаны, пришло время принять решение. Итальянское правительство в конце концов решилось...",
+    "picture": "GFX_report_event_ITA_right_rally",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.1"
+    },
+    "options": [
+      {
+        "name": "Ничего не предпринимать. Египет - гиблое дело.",
+        "name_key": "empiremanagement_egypt.1.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true
+        }
+      },
+      {
+        "name": "Направить им временную экономическую поддержку.",
+        "name_key": "empiremanagement_egypt.1.b",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "ITA_egypt_points_1": true,
+          "set_temp_variable": {
+            "temp_econ_spending_amount": 0.05
+          },
+          "econ_spend_money_once_effect_raw_money": true,
+          "EGY": {
+            "TNO_improve_admin_efficiency_low": true
+          }
+        }
+      },
+      {
+        "name": "Отправить армию. Мы их научим, как поддерживать порядок.",
+        "name_key": "empiremanagement_egypt.1.c",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 2,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "ITA_egypt_points_2": true,
+          "set_temp_variable": {
+            "temp_econ_spending_amount": 0.05
+          },
+          "econ_spend_money_once_effect_raw_money": true,
+          "add_manpower": -2000,
+          "EGY": {
+            "add_manpower": 2000,
+            "TNO_improve_admin_efficiency_med": true
+          }
+        }
+      },
+      {
+        "name": "Полностью сосредоточится на стабилизации. Мы не можем потерять Египет.",
+        "name_key": "empiremanagement_egypt.1.d",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 3,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "ITA_egypt_points_3": true,
+          "set_temp_variable": {
+            "temp_econ_spending_amount": 0.1
+          },
+          "econ_spend_money_once_effect_raw_money": true,
+          "add_manpower": -2000,
+          "EGY": {
+            "add_manpower": 2000,
+            "TNO_improve_admin_efficiency_med": true,
+            "add_stability": 0.05
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.2",
+    "type": "country_event",
+    "title": "Разрешение конфликта?",
+    "desc": "Регентский совет обнаружил, что он полностью разделён на тех, кто должен сменить его правление; впоследствии мы получили телеграмму с просьбой об участии в голосовании, которое решит всё. У нас есть эта возможность благодаря нашим инвестициям и обязательствам в Египте. Теперь у нас есть шанс выступить в роли того, кто выбирает самих королей, и это - беспрецедентная возможность. Наши варианты таковы:\n\nПринц Адальберто, который будет продвигать наши интересы за счет возмущения населения: в последнее время появились сообщения о вспыхивающих анти-итальянских настроениях, и выбор его не принесёт нам никакой пользы в этом отношении. Тем не менее, Рим, похоже, больше всего одобряет этот вариант.\n\nБолее умеренным вариантом является принц Монейм: он считается довольно таки легитимным монархом в глазах местного населения как двоюродный брат уже покойного Фарука. Однако, это неизбежно вызвало бы гнев многих египетских республиканцев, а также недовольство Рима, поскольку они не считают Монейма благоприятным для своих интересов.\n\nМы также могли бы выступить за создание Египетской республики. Хотя внешне это кажется неблагоприятным для интересов Италии, создание республики, несомненно, спасёт нашу репутацию среди народа Египта. Более того, независимый союзник вполне в наших интересах. Но даже в этом случае выбор в пользу образования республики может вызвать гнев Рима.\n\nВ конце концов, это все ещё наш выбор...",
+    "picture": "GFX_report_event_generic_sign_treaty1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.2"
+    },
+    "options": [
+      {
+        "name": "Италия поддерживает принца Монейма.",
+        "name_key": "empiremanagement_egypt.2.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": [
+            {
+              "EGY": {
+                "add_country_leader_role": {
+                  "character": "EGY_Muhammad_Abdel_Moneim",
+                  "promote_leader": true,
+                  "country_leader": {
+                    "expire": "2018.01.01",
+                    "ideology": "despotism_aristocratic_conservatism_subtype",
+                    "id": -1
+                  }
+                }
+              }
+            },
+            {
+              "every_country": {
+                "limit": {
+                  "is_ai": false,
+                  "HasAfricaInterest": true
+                },
+                "news_event": {
+                  "id": "WORLD.912",
+                  "days": 1
+                }
+              },
+              "ITA": {
+                "country_event": {
+                  "id": "empiremanagement_egypt.4",
+                  "days": 365
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Италия поддерживает создание Египетской Республики.",
+        "name_key": "empiremanagement_egypt.2.b",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": [
+            {
+              "EGY": {
+                "add_country_leader_role": {
+                  "character": "EGY_Anwar_Sadat",
+                  "promote_leader": true,
+                  "country_leader": {
+                    "expire": "2018.01.01",
+                    "ideology": "paternalism_provisional_government_subtype",
+                    "id": -1
+                  }
+                },
+                "set_politics": {
+                  "ruling_party": "paternalism"
+                },
+                "set_popularities": {
+                  "progressivism": 9,
+                  "liberalism": 7,
+                  "conservatism": 11,
+                  "paternalism": 43,
+                  "communist": 21,
+                  "socialist": 9
+                }
+              }
+            },
+            {
+              "every_country": {
+                "limit": {
+                  "is_ai": false,
+                  "HasAfricaInterest": true
+                },
+                "news_event": {
+                  "id": "WORLD.911",
+                  "days": 1
+                }
+              },
+              "ITA": {
+                "country_event": {
+                  "id": "empiremanagement_egypt.5",
+                  "days": 365
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Италия отдаёт свой голос за принца Адальберто.",
+        "name_key": "empiremanagement_egypt.2.c",
+        "trigger": {},
+        "effects": {
+          "EGY": {
+            "add_country_leader_role": {
+              "character": "EGY_Adalberto_Genova",
+              "promote_leader": true,
+              "country_leader": {
+                "expire": "2018.01.01",
+                "ideology": "despotism_colonial_government_subtype",
+                "id": -1
+              }
+            }
+          },
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasAfricaInterest": true
+              },
+              "news_event": {
+                "id": "WORLD.913",
+                "days": 1
+              }
+            },
+            "ITA": {
+              "country_event": {
+                "id": "empiremanagement_egypt.3",
+                "days": 365
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.3",
+    "type": "country_event",
+    "title": "Бич Ислама",
+    "desc": "В последние дни регент Египта принц Адальберто начал кампанию в попытке заручиться поддержкой многочисленного мусульманского населения Египта. Прислушиваясь к собственным попыткам Дуче Муссолини изменить сердца ливийского народа, принц Адальберто решил провозгласить себя Защитником ислама, титул, фактически не существующий с момента его создания в 1937 году. Копируя методы Муссолини, были разосланы заказы на строительство новых коранических школ, содержание мечетей и подготовку объектов обслуживания для тех, кто отправляется в паломничество в Святую Мекку.\n\nНаряду с этим титулом, ключевой предмет, связанный с должностью, Меч ислама, был доверен принцу Адальберто Хасаном Мамуном, великим имамом Каира. Меч был доставлен из старого летнего дома Муссолини в Рокка-делле-Каминате и представлен регенту на широко разрекламированном мероприятии в Каирской цитадели.\n\nНа момент написания настоящего доклада считалось, что это действие успешно повлияло на часть населения Египта в их убеждениях относительно нынешнего правления. Автор настоящего доклада рекомендует рассмотреть вопрос о текущем состоянии помощи Египту.",
+    "picture": "GFX_report_event_ITA_right_rally",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.3"
+    },
+    "options": [
+      {
+        "name": "Сильно сократите нашу помощь, Египет пока будет терпеть его.",
+        "name_key": "empiremanagement_egypt.3.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true,
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          }
+        }
+      },
+      {
+        "name": "Сохраняйте часть нашей помощи, лучше быть в безопасности, чем сожалеть.",
+        "name_key": "empiremanagement_egypt.3.b",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 1
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_1": true
+        }
+      },
+      {
+        "name": "Ничего не меняйте, общественное мнение, конечно, не может быть изменено так просто.",
+        "name_key": "empiremanagement_egypt.3.c",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 2,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 2
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_2": true
+        }
+      },
+      {
+        "name": "empiremanagement_egypt.3.d",
+        "name_key": "empiremanagement_egypt.3.d",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 3,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 3
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_3": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.4",
+    "type": "country_event",
+    "title": "Сделки авиатора",
+    "desc": "Регент Египта Мухаммад Абдель Монейм организовал встречу с известным итальянским авиатором, комендантом и советником Египта Итало Бальбо. Обстоятельства встречи были несколько туманны, но имеющаяся в настоящее время информация предполагает, что Бальбо займет более заметную позицию в правительстве, что будет иметь экспоненциальный характер, поскольку он уже обладает большим влиянием в процессе принятия решений в Каире и печально известен широко распространенным убеждением, что он нанят Римом, чтобы следить за изменениями в правительстве Египта.\n\nВ настоящее время в этом докладе предлагается дальнейшее расширение полномочий Бальбо итальянскими властями, что позволит ему принять меры по стабилизации в стране и возложить на него большую часть обязанностей по выполнению обязательств. Автор этого документа также хотел бы заявить, что такие действия могут позволить Бальбо получить беспрецедентный контроль над египетской комиссией, но это может быть необходимо в такие трудные времена. Как всегда, решение остается на усмотрение итальянской комиссии по колониальным делам.",
+    "picture": "GFX_report_event_ITA_x_mas",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.4"
+    },
+    "options": [
+      {
+        "name": "Не давайте ему ничего больше, он обладает достаточной властью.",
+        "name_key": "empiremanagement_egypt.4.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true,
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          }
+        }
+      },
+      {
+        "name": "Оставьте часть бремени ему, он может быть полезен.",
+        "name_key": "empiremanagement_egypt.4.b",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 1
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_1": true
+        }
+      },
+      {
+        "name": "Свалите ответственность на него, Бальбо все исправит!",
+        "name_key": "empiremanagement_egypt.4.c",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 2,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 2
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_2": true
+        }
+      },
+      {
+        "name": "Бальбо будет править всем под солнцем!",
+        "name_key": "empiremanagement_egypt.4.d",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 3,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 3
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_3": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.5",
+    "type": "country_event",
+    "title": "Президентское коммюнике",
+    "desc": "\"...В то время как создание Египетской Республики сумело предотвратить восстание, эта ситуация не может быть сохранена без дополнительной итальянской помощи. Поэтому мы просим помощи в виде оружия и капитала...\", - говорится в письме президента Садата.\n\nКогда мы голосовали за создание республики, мы не ожидали, что ситуация разрешится немедленно. Однако мы ожидали, что ситуация станет более стабильной без дополнительной помощи. Кроме того, наши бюджетные ограничения ограничивают нас, и отправка помощи египетскому правительству отвлекла бы нас от других необходимых программ. Кроме того, это может быть уловкой для получения средств в коррупционных целях.\n\nХотя эти опасения справедливы, президент Садат знает о ситуации гораздо больше, чем мы, и ситуация, вероятно, так же плоха, как описано. Если эта помощь не будет направлена, египетское правительство в будущем может в результате рухнуть, забрав с собой наши активы и интересы. Хотя есть вероятность, что часть денег может пойти на... менее необходимые программы, иногда лучше ошибиться в сторону осторожности.",
+    "picture": "GFX_report_event_ITA_right_rally",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.5"
+    },
+    "options": [
+      {
+        "name": "Мы просто не можем помочь прямо сейчас.",
+        "name_key": "empiremanagement_egypt.5.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true,
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          }
+        }
+      },
+      {
+        "name": "Пришлите немного оружия, наш бюджет больше не выдержит.",
+        "name_key": "empiremanagement_egypt.5.b",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 1
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_1": true
+        }
+      },
+      {
+        "name": "Пришлите немного оружия и немного капитала.",
+        "name_key": "empiremanagement_egypt.5.c",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 2,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 2
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_2": true
+        }
+      },
+      {
+        "name": "Ситуация должна быть исправлена, и Италия внесет в это свою лепту.",
+        "name_key": "empiremanagement_egypt.5.d",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 3,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 3
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "empiremanagement_egypt.6",
+              "days": 250
+            }
+          },
+          "ITA_egypt_points_3": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.6",
+    "type": "country_event",
+    "title": "След разрушения",
+    "desc": "Партизаны, очевидно, являются серьезной проблемой в Египте, и даже в центральных районах дельты Нила подпольные группы почти обезумели, нанося ущерб промышленным центрам, складам ресурсов и вовлекая гарнизонные подразделения в регионе в регулярные перестрелки. Одной из основных групп среди этих террористов являются социалисты-революционеры Гамаля Абдель Насера, которые совершают обход в Александрии. Ночью местная ячейка, похоже, подключила взрывчатку к крупной текстильной фабрике в регионе. К счастью для стабильности региона, в то время завод был пуст, и никто не погиб и не пострадал.\n\nОднако, к сожалению, это нанесло серьезный ущерб промышленному производству региона и лишило работы сотни людей, ухудшив и без того хрупкую экономическую ситуацию в Египте. В этом отчете предлагается, чтобы власти Италии увеличили денежную поддержку египетскому правительству, а также разместили больше мужчин в регионе, хотя это, конечно, на усмотрение тех, кто получает это.",
+    "picture": "GFX_report_event_generic_sign_treaty1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.6"
+    },
+    "options": [
+      {
+        "name": "Больше ничего не присылайте, Египет может справиться с этими маленькими партизанами в одиночку.",
+        "name_key": "empiremanagement_egypt.6.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true,
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 5,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.7",
+                "days": 120
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Пришлите им ещё немного наличных, но больше ничего.",
+        "name_key": "empiremanagement_egypt.6.b",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 1
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 5,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.7",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_1": true
+        }
+      },
+      {
+        "name": "Отправляйте им деньги и людей, они им понадобятся.",
+        "name_key": "empiremanagement_egypt.6.c",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 2,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 2
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 5,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.7",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_2": true
+        }
+      },
+      {
+        "name": "Пошлите им танки и бронемашины.",
+        "name_key": "empiremanagement_egypt.6.d",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 3,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 3
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 5,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.7",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_3": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.7",
+    "type": "country_event",
+    "title": "Разумная инвестиция",
+    "desc": "Кипы египетского хлопка проходят через фабрики, чтобы быть превращенными в изысканные костюмы, платья и брюки.\n\nЖенщина замешивает тесто, чтобы испечь хлеб, посыпая свой прилавок мукой из египетской пшеницы.\n\nБраслеты, часы и серьги представлены в ювелирном магазине в Венеции. Все они сделаны из золота, добытого в Судане.\n\nТо, что мы вложили в Египет, мы вернули в десятикратном размере. Повсюду, где вы можете видеть, богатства Египта перетекают в Италию в виде денег, товаров и ресурсов. До тех пор, пока мы будем продолжать поддерживать Египет во всех его начинаниях, это благоприятное положение дел будет сохраняться так же хорошо, как и всегда.",
+    "picture": "GFX_report_event_ITA_x_mas",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.7"
+    },
+    "options": [
+      {
+        "name": "Текущего уровня инвестиций вполне достаточно.",
+        "name_key": "empiremanagement_egypt.7.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true,
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 7,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.8",
+                "days": 120
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Возможно, Египту не помешают небольшие денежные вливания.",
+        "name_key": "empiremanagement_egypt.7.b",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 1
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 7,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.8",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_1": true
+        }
+      },
+      {
+        "name": "Больше денег и вливаний - вот что нужно Египту.",
+        "name_key": "empiremanagement_egypt.7.c",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 2,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 2
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 7,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.8",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_2": true
+        }
+      },
+      {
+        "name": "Египет слишком важен для нашей экономики, ему нужны все деньги, которые мы можем выделить.",
+        "name_key": "empiremanagement_egypt.7.d",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 3,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 3
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 7,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.8",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_3": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.8",
+    "type": "country_event",
+    "title": "Отчет о состоянии дел: Братья-мусульмане",
+    "desc": "Активность \"Братьев-мусульман\" сократилась на 75% по сравнению с прошлым годом. Благодаря нашим усилиям по вооружению египетской армии и полиции, а также нашим собственным усилиям с ВИС было уничтожено более 250 ячеек по всему Египту. Расследования все ещё продолжаются с целью установления местонахождения важных лидеров, а также оставшихся ячеек. Рекомендуется продолжить снабжение египетских войск и начать вывод наших агентов из Египта. На сегодняшний день тратить такие ресурсы для поиска все меньших и меньших ячеек \"Братьев-мусульман\" просто непрактично. Лучше всего просто наблюдать за тем, как развивается эта новая ситуация, а затем принимать решения.",
+    "picture": "GFX_report_event_ITA_right_wing_students2",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.8"
+    },
+    "options": [
+      {
+        "name": "Выведите наших людей, с Египтом все будет в порядке.",
+        "name_key": "empiremanagement_egypt.8.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true,
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 9,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.9",
+                "days": 120
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Сохраняйте символическое присутствие. На всякий случай.",
+        "name_key": "empiremanagement_egypt.8.b",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 1
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 9,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.9",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_1": true
+        }
+      },
+      {
+        "name": "Никто не вернется домой, пока Братья-мусульмане не будут уничтожены.",
+        "name_key": "empiremanagement_egypt.8.c",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 2,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 2
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 9,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.9",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_2": true
+        }
+      },
+      {
+        "name": "На самом деле, нам нужно увеличить количество наших солдат.",
+        "name_key": "empiremanagement_egypt.8.d",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 3,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 3
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "var": "EGY_oil_crisis_defense_int",
+                "value": 9,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "hidden_effect": {
+              "country_event": {
+                "id": "empiremanagement_egypt.9",
+                "days": 120
+              }
+            }
+          },
+          "ITA_egypt_points_3": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.9",
+    "type": "country_event",
+    "title": "В зелёном",
+    "desc": "С тех пор, как умер король Фарук, последние несколько месяцев для Египта были довольно бурными. В то время как новое правительство прилагало огромные усилия, чтобы вернуть ситуацию в нужное русло, это было нелегко. Фарук оставил экономику страны в таком плачевном состоянии, в немалой степени из-за его щедрых расходов и экстравагантных вечеринок, что простое сокращение этих ненужных расходов не сбалансировало бюджет.\n\nВдобавок ко всему, сама страна находится в настолько ужасном состоянии, что нам потребуется множество дополнительных расходов, чтобы просто обеспечить нашим гражданам какое-то подобие нормальной жизни. Улицы должны быть восстановлены, предприятиям необходимо получать гранты, чтобы помочь им удержаться на плаву, а гражданам нужны налоговые льготы, чтобы они могли восстановить покупательную способность.\n\nВ связи с надвигающимся кризисом Италия сочла нужным предоставить своей колонии денежную помощь, которая позволит Египту быстрее восстановиться. Теперь мы, наконец, можем видеть, как египетская казна начинает работать в полную силу, в немалой степени благодаря помощи, оказанной Италией. Вред Фарука наконец-то начинает исчезать.",
+    "picture": "GFX_report_event_ITA_right_wing_students1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.9"
+    },
+    "options": [
+      {
+        "name": "Мы не даем денег тем, кто так небрежно их тратит.",
+        "name_key": "empiremanagement_egypt.9.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true
+        }
+      },
+      {
+        "name": "Простить им долги, если они перейдут на жесткую экономию.",
+        "name_key": "empiremanagement_egypt.9.b",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 1
+          },
+          "ITA_egypt_points_1": true
+        }
+      },
+      {
+        "name": "Несколько миллионов на восстановление Египта не сильно нам повредят.",
+        "name_key": "empiremanagement_egypt.9.c",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 2,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 2
+          },
+          "ITA_egypt_points_2": true
+        }
+      },
+      {
+        "name": "Всеобъемлющая поддержка Египта до тех пор, пока страна полностью не восстановится.",
+        "name_key": "empiremanagement_egypt.9.d",
+        "trigger": {
+          "check_variable": {
+            "var": "ITA_empire_management_coins",
+            "value": 3,
+            "compare": "greater_than_or_equals"
+          }
+        },
+        "effects": {
+          "add_to_variable": {
+            "var": "EGY_oil_crisis_defense_int",
+            "value": 3
+          },
+          "ITA_egypt_points_3": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.10",
+    "type": "country_event",
+    "title": "Нил становится красным",
+    "desc": "На момент написания этого документа правительственные силы в Египте практически потерпели крах. Повстанческие и партизанские силы захватывают все большие и большие участки территории, а те гарнизонные силы, которые остались, в настоящее время отступают или сражаются до полного уничтожения. Считается, что основные правительственные чиновники либо мертвы, либо захвачены в плен, поскольку ранние восстания в Каире предотвратили упреждающий побег. Те, кого поймали в другом месте или кому удалось сбежать, считаются слишком незначительными, чтобы поддерживать национальную администрацию, и в результате любой шанс восстановить контроль теперь считается невозможным.\n\nВ этом докладе предлагается перевести подразделения в регионе и вокруг него на пограничные заставы в надежде, что конфликт не распространится. К сожалению, справедливо утверждать, что попытки предотвратить коллапс в Египте в конечном итоге привели к его гибели, и что единственное, что нужно сделать сейчас, - это чтобы итальянская администрация извлекла уроки из своих ошибок и выжидала, пока у них есть немного времени.\n\nЯ слышу, как мои коллеги паникуют вокруг меня сейчас, пытаясь спасти остатки порядка, которые рассыпаются, как песок в их руках. Телефонные линии плачут с утра, но скоро все они будут перерезаны. Если это сообщение не достигнет своих получателей, что ж, пусть будет известно, что я пытался.",
+    "picture": "GFX_report_event_generic_sign_treaty1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.10"
+    },
+    "options": [
+      {
+        "name": "Нил станет красным, и выжившие будут пить из его отравленных берегов.",
+        "name_key": "empiremanagement_egypt.10.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.11",
+    "type": "country_event",
+    "title": "Грядущая египетская гражданская война",
+    "desc": "Это невозможно выразить словами: Египет охвачен пламенем. Повсюду центральное правительство потеряло контроль, удерживая лишь небольшую территорию вдоль Нила. Мятежников предостаточно, так как Египет раскалывается, как хрупкий. Беженцы уже пересекают Средиземное море в поисках места, куда можно было бы отправиться. В Суэцкой зоне экипажи судов могут слышать слабые звуки стрельбы и артиллерии, когда они проходят в Европу.\n\nИ все же эту ситуацию ещё можно спасти. Наши усилия укрепили египетскую армию, и с дополнительной помощью эта война может закончиться в короткие сроки. На данный момент египетское правительство пообещало защищать итальянские активы везде, где это возможно, поскольку оно начинает свою кампанию по возвращению. Мы не можем позволить себе сидеть сложа руки и ждать сейчас; мы должны играть активную роль в египетских делах.",
+    "picture": "GFX_report_event_ITA_right_wing_students1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.11"
+    },
+    "options": [
+      {
+        "name": "По крайней мере, мы все ещё можем что-то спасти.",
+        "name_key": "empiremanagement_egypt.11.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.12",
+    "type": "country_event",
+    "title": "Гражданская война в Египте",
+    "desc": "Несмотря на все наши усилия, Египет погрузился в гражданскую войну, и власть правительства пошатнулась по всей стране. Несмотря на это, мы уверены, что наши интересы в Египте останутся таковыми, и с помощью правительства порядок будет восстановлен в кратчайшие сроки. Наша приверженность Египту проявится, когда мы отправим врачей, гуманитарных работников и предметы снабжения для гражданского населения, а также все инструменты войны для правительства. Хотя эта война прискорбна для всех, кто в ней участвует, наша приверженность Египту свела к минимуму такие риски. На данный момент мы можем позволить себе просто сидеть сложа руки и позволить костру догореть самому.",
+    "picture": "GFX_report_event_generic_sign_treaty1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.12"
+    },
+    "options": [
+      {
+        "name": "Египет подождёт.",
+        "name_key": "empiremanagement_egypt.12.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "empiremanagement_egypt.13",
+    "type": "country_event",
+    "title": "Король воздуха",
+    "desc": "В Египте произошел беспрецедентный обмен контролем. Итало Бальбо, ключевой советник его правительства и знаменитый авиатор, захватил контроль над его правительством для себя. Первоначально сотрудничая с регентом Монеймом, он решил, что нынешние обстоятельства требуют столь радикального изменения курса. Монейм был свергнут в результате мягкого переворота в Каире ранним утром. Вскоре после этого Бальбо сделал телевизионное объявление об изменениях, что вызвало смешанные чувства по всему Королевству.\n\nВ настоящее время считается, что Бальбо усилит процесс принятия решений в попытках обеспечить стабильность. В своем телевизионном заявлении ранее сегодня он объявил широкой общественности, что цитата: \"порядок и стабильность будут восстановлены при его правлении\". В отдельном заявлении он также заявил о неизменной лояльности Италии и колониальному совету и о том, что он просто принимает необходимые меры. В этом докладе говорится, что Рим должен терпеть и поддерживать администрацию Бальбо в ее нынешнем виде. Тщательное изучение последующих событий будет продолжено.",
+    "picture": "GFX_report_event_ITA_left_wing_students",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event empiremanagement_egypt.13"
+    },
+    "options": [
+      {
+        "name": "Так и быть, Бальбо будет поддерживать стабильность.",
+        "name_key": "empiremanagement_egypt.13.a",
+        "trigger": {},
+        "effects": {
+          "ITA_egypt_points_0": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "EGY.1",
+    "type": "country_event",
+    "title": "EGY.1.t",
+    "desc": "",
+    "picture": "GFX_report_event_EGY_party_farouk",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event EGY.1"
+    },
+    "options": [
+      {
+        "name": "EGY.1.a",
+        "name_key": "EGY.1.a",
+        "trigger": {},
+        "effects": {
+          "kill_country_leader": true,
+          "remove_ideas": "EGY_farouks_hedonism",
+          "add_country_leader_role": {
+            "character": "EGY_Regency_Council",
+            "promote_leader": true,
+            "country_leader": {
+              "expire": "2018.01.01",
+              "ideology": "despotism_interim_government_subtype",
+              "id": -1
+            }
+          },
+          "set_global_flag": "EGY_Farouk_Killed",
+          "hidden_effect": {
+            "country_event": {
+              "id": "EGY.2",
+              "days": 120
+            },
+            "ITA": {
+              "country_event": {
+                "id": "empiremanagement_egypt.1",
+                "days": 60
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "EGY.2",
+    "type": "country_event",
+    "title": "EGY.2.t",
+    "desc": "",
+    "picture": "GFX_report_event_EGY_party_farouk",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event EGY.2"
+    },
+    "options": [
+      {
+        "name": "EGY.2.a",
+        "name_key": "EGY.2.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "check_variable": {
+                "ITA.ITA_EGY_management": {
+                  "_op": ">",
+                  "value": 2
+                }
+              }
+            },
+            "ITA": {
+              "country_event": {
+                "id": "empiremanagement_egypt.2",
+                "days": 3
+              }
+            }
+          },
+          "else": {
+            "random_list": {
+              "1": [
+                {
+                  "modifier": [
+                    {
+                      "factor": 2,
+                      "check_variable": {
+                        "ITA.ITA_EGY_management": {
+                          "_op": ">",
+                          "value": 1
+                        }
+                      }
+                    },
+                    {
+                      "factor": 0,
+                      "has_game_rule": {
+                        "rule": "EGY_PATH",
+                        "option": "EGY_PATH_COLONIAL"
+                      }
+                    },
+                    {
+                      "factor": 0,
+                      "has_game_rule": {
+                        "rule": "EGY_PATH",
+                        "option": "EGY_PATH_AD"
+                      }
+                    }
+                  ],
+                  "retire_country_leader": true,
+                  "add_country_leader_role": {
+                    "character": "EGY_Muhammad_Abdel_Moneim",
+                    "promote_leader": true,
+                    "country_leader": {
+                      "expire": "2018.01.01",
+                      "ideology": "despotism_aristocratic_conservatism_subtype",
+                      "id": -1
+                    }
+                  },
+                  "hidden_effect": {
+                    "every_country": {
+                      "limit": {
+                        "is_ai": false,
+                        "HasAfricaInterest": true
+                      },
+                      "news_event": {
+                        "id": "WORLD.912",
+                        "days": 1
+                      }
+                    },
+                    "ITA": {
+                      "country_event": {
+                        "id": "empiremanagement_egypt.4",
+                        "days": 365
+                      }
+                    }
+                  }
+                },
+                {
+                  "modifier": [
+                    {
+                      "factor": 2,
+                      "check_variable": {
+                        "ITA.ITA_EGY_management": {
+                          "_op": ">",
+                          "value": 0
+                        }
+                      }
+                    },
+                    {
+                      "factor": 0,
+                      "has_game_rule": {
+                        "rule": "EGY_PATH",
+                        "option": "EGY_PATH_DESPOTISM"
+                      }
+                    },
+                    {
+                      "factor": 0,
+                      "has_game_rule": {
+                        "rule": "EGY_PATH",
+                        "option": "EGY_PATH_AD"
+                      }
+                    }
+                  ],
+                  "retire_country_leader": true,
+                  "add_country_leader_role": {
+                    "character": "EGY_Adalberto_Genova",
+                    "promote_leader": true,
+                    "country_leader": {
+                      "expire": "2018.01.01",
+                      "ideology": "despotism_colonial_government_subtype",
+                      "id": -1
+                    }
+                  },
+                  "hidden_effect": {
+                    "every_country": {
+                      "limit": {
+                        "is_ai": false,
+                        "HasAfricaInterest": true
+                      },
+                      "news_event": {
+                        "id": "WORLD.913",
+                        "days": 1
+                      }
+                    },
+                    "ITA": {
+                      "country_event": {
+                        "id": "empiremanagement_egypt.3",
+                        "days": 365
+                      }
+                    }
+                  }
+                },
+                {
+                  "modifier": [
+                    {
+                      "factor": 0,
+                      "has_game_rule": {
+                        "rule": "EGY_PATH",
+                        "option": "EGY_PATH_DESPOTISM"
+                      }
+                    },
+                    {
+                      "factor": 0,
+                      "has_game_rule": {
+                        "rule": "EGY_PATH",
+                        "option": "EGY_PATH_COLONIAL"
+                      }
+                    }
+                  ],
+                  "retire_country_leader": true,
+                  "add_country_leader_role": {
+                    "character": "EGY_Anwar_Sadat",
+                    "promote_leader": true,
+                    "country_leader": {
+                      "expire": "2018.01.01",
+                      "ideology": "paternalism_provisional_government_subtype",
+                      "id": -1
+                    }
+                  },
+                  "set_politics": {
+                    "ruling_party": "paternalism"
+                  },
+                  "set_popularities": {
+                    "progressivism": 9,
+                    "liberalism": 7,
+                    "conservatism": 11,
+                    "paternalism": 43,
+                    "communist": 21,
+                    "socialist": 9
+                  },
+                  "hidden_effect": {
+                    "every_country": {
+                      "limit": {
+                        "is_ai": false,
+                        "HasAfricaInterest": true
+                      },
+                      "news_event": {
+                        "id": "WORLD.911",
+                        "days": 1
+                      }
+                    },
+                    "ITA": {
+                      "country_event": {
+                        "id": "empiremanagement_egypt.5",
+                        "days": 365
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "EGY.3",
+    "type": "country_event",
+    "title": "EGY.3.t",
+    "desc": "",
+    "picture": "GFX_report_event_generic_islamist_rally",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [
+      {
+        "log": "[GetDateText]: [Root.GetName]: event EGY.3"
+      },
+      {
+        "hidden_effect": {
+          "ITA": {
+            "end_puppet": "EGY",
+            "country_event": {
+              "id": "empiremanagement_egypt.11"
+            }
+          },
+          "EGY": {
+            "leave_faction": true
+          },
+          "ZZZ": {
+            "country_event": {
+              "id": "sudan.1",
+              "days": 7
+            }
+          }
+        }
+      }
+    ],
+    "options": [
+      {
+        "name": "EGY.3",
+        "name_key": "EGY.3",
+        "trigger": {},
+        "effects": {
+          "country_event": {
+            "id": "EGY.4",
+            "days": 3
+          },
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false
+              },
+              "news_event": {
+                "id": "WORLD.935",
+                "days": 1
+              }
+            }
+          },
+          "EGB": {
+            "inherit_technology": "EGY",
+            "add_state_core": [
+              452,
+              1115,
+              447,
+              1782,
+              965,
+              453,
+              1160,
+              1783,
+              1784,
+              446,
+              1787,
+              1788,
+              457,
+              1119,
+              456,
+              1116,
+              552
+            ],
+            "transfer_state": [
+              452,
+              1115,
+              1787,
+              1788,
+              456,
+              1116,
+              552
+            ],
+            "set_country_flag": "BaathistCountry",
+            "add_ideas": "OIL_surrender_modifier_weak",
+            "load_oob": "EGB_civil_war_strong",
+            "452": {
+              "add_building_construction": {
+                "type": "naval_base",
+                "level": 1,
+                "instant_build": true,
+                "province": 11967
+              }
+            },
+            "declare_war_on": {
+              "target": "EGY",
+              "type": "civil_war"
+            }
+          },
+          "EGY": {
+            "delete_unit": [],
+            "load_oob": "EGY_oil_crisis",
+            "remove_ideas": "EGY_arab_socialist_union"
+          },
+          "set_global_flag": [
+            "egyptian_civil_war_begun",
+            "egyptian_civil_war_begun"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "EGY.4",
+    "type": "country_event",
+    "title": "EGY.4.t",
+    "desc": "",
+    "picture": "GFX_unknown",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event EGY.4"
+    },
+    "options": [
+      {
+        "name": "EGY.4.a",
+        "name_key": "EGY.4.a",
+        "trigger": {},
+        "effects": {
+          "EGQ": {
+            "set_country_flag": "EGQ_has_spawned",
+            "inherit_technology": "EGY",
+            "add_state_core": [
+              452,
+              1115,
+              447,
+              1782,
+              965,
+              453,
+              1160,
+              1783,
+              1784,
+              446,
+              1787,
+              1788,
+              457,
+              1119,
+              456,
+              1116,
+              552
+            ],
+            "transfer_state": [
+              457,
+              1119,
+              1782
+            ],
+            "add_ideas": "OIL_surrender_modifier_weak",
+            "declare_war_on": [
+              {
+                "target": "EGY",
+                "type": "civil_war"
+              },
+              {
+                "target": "EGB",
+                "type": "civil_war"
+              }
+            ],
+            "load_oob": "EGQ_oil_crisis"
+          },
+          "EGY": {
+            "remove_ideas": "EGY_muslim_brotherhood"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "EGY.11",
+    "type": "country_event",
+    "title": "EGY.11.t",
+    "desc": "",
+    "picture": "GFX_unknown",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event EGY.11"
+    },
+    "options": [
+      {
+        "name": "EGY.11.a",
+        "name_key": "EGY.11.a",
+        "trigger": {},
+        "effects": {
+          "news_event": {
+            "id": "WORLD.18008",
+            "days": 1
+          },
+          "EGY": {
+            "if": {
+              "limit": {
+                "has_country_leader": {
+                  "character": "EGY_Anwar_Sadat",
+                  "ruling_only": true
+                }
+              },
+              "set_cosmetic_tag": "EGY_postwar",
+              "set_country_leader_ideology": "paternalism_social_nationalism_subtype",
+              "EGY": [
+                {
+                  "get_current_government_type": true,
+                  "save_party_popularities": true
+                },
+                {
+                  "restore_previous_government_type": true,
+                  "apply_party_popularities": true
+                }
+              ],
+              "ITA": {
+                "set_autonomy": {
+                  "target": "EGY",
+                  "autonomy_state": "autonomy_associated"
+                }
+              }
+            },
+            "else_if": [
+              {
+                "limit": {
+                  "has_country_leader": {
+                    "character": "EGY_Muhammad_Abdel_Moneim",
+                    "ruling_only": true
+                  }
+                },
+                "set_cosmetic_tag": "EGY_postwar_kingdom",
+                "EGY": [
+                  {
+                    "get_current_government_type": true,
+                    "save_party_popularities": true
+                  },
+                  {
+                    "restore_previous_government_type": true,
+                    "apply_party_popularities": true
+                  }
+                ],
+                "ITA": {
+                  "set_autonomy": {
+                    "target": "EGY",
+                    "autonomy_state": "autonomy_heavily_associated"
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "has_country_leader": {
+                    "character": "EGY_Adalberto_Genova",
+                    "ruling_only": true
+                  }
+                },
+                "set_cosmetic_tag": "EGY_postwar_kingdom",
+                "EGY": [
+                  {
+                    "get_current_government_type": true,
+                    "save_party_popularities": true
+                  },
+                  {
+                    "restore_previous_government_type": true,
+                    "apply_party_popularities": true
+                  }
+                ],
+                "ITA": {
+                  "set_autonomy": {
+                    "target": "EGY",
+                    "autonomy_state": "autonomy_reliant"
+                  }
+                }
+              }
+            ],
+            "every_state": {
+              "limit": {
+                "is_core_of": "EGY"
+              },
+              "remove_core_of": [
+                "EGB",
+                "EGQ"
+              ]
+            }
+          },
+          "if": {
+            "limit": {
+              "ITA": {
+                "is_in_faction_with": "USA"
+              }
+            },
+            "USA": {
+              "add_to_faction": "EGY"
+            },
+            "EGY": {
+              "add_ideas": "OFN_Dependent_Member"
+            }
+          },
+          "else_if": [
+            {
+              "limit": {
+                "ITA": {
+                  "is_in_faction_with": "JAP"
+                }
+              },
+              "JAP": {
+                "add_to_faction": "EGY"
+              },
+              "EGY": {
+                "add_ideas": "Sphere_Economic_Dependent"
+              }
+            },
+            {
+              "limit": {
+                "ITA": {
+                  "is_in_faction": true
+                }
+              },
+              "ITA": {
+                "add_to_faction": "EGY"
+              },
+              "EGY": {
+                "if": [
+                  {
+                    "limit": {
+                      "ITA": {
+                        "has_idea": "ITA_Mediterranean_Bloc_Leader"
+                      }
+                    },
+                    "add_ideas": "ITA_Mediterranean_Bloc_Member"
+                  },
+                  {
+                    "limit": {
+                      "ITA": {
+                        "has_idea": "ITA_Imperial_Alliance_Leader"
+                      }
+                    },
+                    "add_ideas": "ITA_Imperial_Alliance_Member"
+                  },
+                  {
+                    "limit": {
+                      "ITA": {
+                        "has_idea": "ITA_Rome_Pact_Leader"
+                      }
+                    },
+                    "add_ideas": "ITA_Rome_Pact_Member"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "EGY.12",
+    "type": "country_event",
+    "title": "EGY.12.t",
+    "desc": "",
+    "picture": "GFX_unknown",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event EGY.12"
+    },
+    "options": [
+      {
+        "name": "EGY.12.a",
+        "name_key": "EGY.12.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "NOT": {
+                "has_country_flag": "ITA_nasser_isolated"
+              }
+            },
+            "set_country_flag": [
+              "UAR_can_form",
+              "UAR_can_join"
+            ]
+          },
+          "news_event": {
+            "id": "WORLD.18007",
+            "days": 1
+          },
+          "set_cosmetic_tag": "EGB_postwar",
+          "every_state": {
+            "limit": {
+              "is_core_of": "EGY"
+            },
+            "remove_core_of": [
+              "EGQ",
+              "EGY"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "EGY.13",
+    "type": "country_event",
+    "title": "EGY.13.t",
+    "desc": "",
+    "picture": "GFX_unknown",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event EGY.13"
+    },
+    "options": [
+      {
+        "name": "EGY.13.a",
+        "name_key": "EGY.13.a",
+        "trigger": {},
+        "effects": {
+          "news_event": {
+            "id": "WORLD.18026",
+            "days": 1
+          },
+          "set_cosmetic_tag": "EGQ_postwar",
+          "every_state": {
+            "limit": {
+              "is_core_of": "EGY"
+            },
+            "remove_core_of": [
+              "EGB",
+              "EGY"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "sudan.1",
+    "type": "country_event",
+    "title": "sudan.1.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [
+      {
+        "log": "[GetDateText]: [Root.GetName]: event sudan.1"
+      },
+      {
+        "set_global_flag": [
+          "OC_Sudan_CW",
+          "South_Sudan_CW"
+        ],
+        "RPS": {
+          "inherit_technology": "EGY",
+          "add_state_core": [
+            551,
+            1120,
+            1121,
+            549,
+            1122
+          ],
+          "transfer_state": [
+            551,
+            1120,
+            1121,
+            549,
+            1122
+          ],
+          "every_owned_state": {
+            "remove_core_of": "EGY"
+          },
+          "load_oob": "RPS_civil_war"
+        },
+        "SDS": {
+          "inherit_technology": "EGY",
+          "add_state_core": [
+            1123,
+            1125,
+            1136,
+            1135
+          ],
+          "transfer_state": [
+            1123,
+            1125,
+            1136,
+            1135
+          ],
+          "every_owned_state": {
+            "remove_core_of": "EGY"
+          },
+          "load_oob": "SDS_civil_war",
+          "add_ideas": "OIL_surrender_modifier_weak",
+          "declare_war_on": {
+            "target": "RPS",
+            "type": "civil_war"
+          }
+        },
+        "SDF": {
+          "inherit_technology": "EGY",
+          "add_state_core": [
+            1128,
+            1127,
+            1130
+          ],
+          "transfer_state": [
+            1128,
+            1127,
+            1130
+          ],
+          "every_owned_state": {
+            "remove_core_of": "EGY"
+          },
+          "load_oob": "SDF_civil_war",
+          "declare_war_on": [
+            {
+              "target": "SDS",
+              "type": "civil_war"
+            },
+            {
+              "target": "RPS",
+              "type": "civil_war"
+            }
+          ]
+        },
+        "AZA": {
+          "inherit_technology": "EGY",
+          "add_state_core": [
+            1133,
+            1134,
+            1129
+          ],
+          "transfer_state": [
+            1133,
+            1134,
+            1129
+          ],
+          "every_owned_state": {
+            "remove_core_of": "EGY"
+          },
+          "load_oob": "AZA_civil_war"
+        },
+        "AYA": {
+          "inherit_technology": "EGY",
+          "add_state_core": [
+            1179,
+            1132,
+            1131
+          ],
+          "transfer_state": [
+            1179,
+            1132,
+            1131
+          ],
+          "every_owned_state": {
+            "remove_core_of": "EGY"
+          },
+          "load_oob": "AYA_civil_war",
+          "declare_war_on": {
+            "target": "AZA",
+            "type": "civil_war"
+          }
+        }
+      }
+    ],
+    "options": []
+  },
+  {
+    "id": "sudan.2",
+    "type": "country_event",
+    "title": "sudan.2.t",
+    "desc": "",
+    "picture": "GFX_unknown",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event sudan.2"
+    },
+    "options": [
+      {
+        "name": "sudan.2.a",
+        "name_key": "sudan.2.a",
+        "trigger": {},
+        "effects": {
+          "every_owned_state": {
+            "add_core_of": "RPS",
+            "remove_core_of": [
+              "SDF",
+              "SDS"
+            ]
+          },
+          "set_politics": {
+            "ruling_party": "liberal_conservatism",
+            "elections_allowed": true
+          },
+          "set_capital": {
+            "state": 1122
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "sudan.3",
+    "type": "country_event",
+    "title": "sudan.3.t",
+    "desc": "",
+    "picture": "GFX_unknown",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event sudan.3"
+    },
+    "options": [
+      {
+        "name": "sudan.3.a",
+        "name_key": "sudan.3.a",
+        "trigger": {},
+        "effects": {
+          "every_owned_state": {
+            "add_core_of": "SDS",
+            "remove_core_of": [
+              "RPS",
+              "SDF"
+            ]
+          },
+          "set_capital": {
+            "state": 1122
+          },
+          "set_cosmetic_tag": "SDS_postwar",
+          "set_country_flag": "UAR_can_join"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sudan.4",
+    "type": "country_event",
+    "title": "sudan.4.t",
+    "desc": "",
+    "picture": "GFX_unknown",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event sudan.4"
+    },
+    "options": [
+      {
+        "name": "sudan.4.a",
+        "name_key": "sudan.4.a",
+        "trigger": {},
+        "effects": {
+          "set_cosmetic_tag": "SDF_postwar",
+          "every_owned_state": {
+            "add_core_of": "SDF",
+            "remove_core_of": [
+              "RPS",
+              "SDS"
+            ]
+          },
+          "every_state": {
+            "limit": {
+              "is_core_of": "SDF"
+            },
+            "remove_core_of": [
+              "RPS",
+              "SDS"
+            ]
+          },
+          "set_capital": {
+            "state": 1122
+          }
+        }
+      }
+    ]
+  }
+]

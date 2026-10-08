@@ -1,0 +1,173 @@
+[
+  {
+    "id": "CHL_mapuche_liberate_tahiti",
+    "category_id": "CHL_mapuche_nationalism_decisions",
+    "name": "Освободить [TAH.GetAdjective]ий народ",
+    "desc": "",
+    "icon": "GFX_decision_CHL_mapuche_liberate_tahiti",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "OR": {
+        "AND": [
+          {
+            "controls_state": 641,
+            "TAH": {
+              "exists": false
+            }
+          },
+          {
+            "TAH": {
+              "exists": false
+            },
+            "any_country": {
+              "is_subject_of": "ROOT",
+              "controls_state": 641
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "NOT": {
+        "has_country_flag": "CHL_released_tahiti_flag"
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "is_core_of": "TAH",
+          "OR": {
+            "is_controlled_by": "ROOT",
+            "any_country": {
+              "is_subject_of": "ROOT",
+              "controls_state": "PREV"
+            }
+          }
+        },
+        "transfer_state_to": "TAH"
+      },
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_subject": "TAH"
+          }
+        },
+        "puppet": "TAH"
+      },
+      "TAH": {
+        "add_stability": 0.15,
+        "add_war_support": 0.1,
+        "add_political_power": 150,
+        "add_manpower": 10000,
+        "hidden_effect": {
+          "division_template": {
+            "name": "Tahitian Warriors",
+            "is_locked": false,
+            "division_names_group": "FRA_INF_01",
+            "priority": 1,
+            "template_counter": 86,
+            "override_model": "CHL_infantry_alt_1_entity",
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "recon": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          }
+        },
+        "random_state": {
+          "limit": {
+            "is_controlled_by": "TAH"
+          },
+          "create_unit": [
+            {
+              "division": "name = \"1a Tahitian Warriors\" division_template = \"Tahitian Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "TAH"
+            },
+            {
+              "division": "name = \"2a Tahitian Warriors\" division_template = \"Tahitian Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "TAH"
+            },
+            {
+              "division": "name = \"3a Tahitian Warriors\" division_template = \"Tahitian Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "TAH"
+            },
+            {
+              "division": "name = \"4a Tahitian Warriors\" division_template = \"Tahitian Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "TAH"
+            }
+          ]
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "CHL_released_tahiti_flag"
+      }
+    }
+  },
+  {
+    "id": "COG_retry_cheetah_hunt",
+    "category_id": "COG_hunting_season",
+    "name": "Повторить охоту на Гепарда",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "COG_hunt_cheetah_failed",
+      "check_variable": {
+        "cog_hunting_id": 0
+      }
+    },
+    "visible": {
+      "has_country_flag": "COG_hunt_cheetah_failed"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_retry_cheetah_hunt",
+      "clr_country_flag": "COG_hunt_cheetah_failed",
+      "country_event": "COG_hunt.270"
+    }
+  }
+]

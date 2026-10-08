@@ -1,0 +1,1086 @@
+[
+  {
+    "id": "GNG_debug_riots_underworld",
+    "category_id": "GNG_Map_GUI",
+    "name": "Бунты в Гуандуне: Отладка теневого мира",
+    "desc": "",
+    "icon": "GFX_decision_GNG_regions",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "GNG_Riots_Active"
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "check_variable": {
+            "GNG_legco_faction_in_power": {
+              "_op": "<",
+              "value": 3
+            }
+          }
+        },
+        "set_variable": {
+          "GNG_legco_faction_in_power": 3
+        }
+      },
+      "GNG_initialize_riots_underworld": true
+    }
+  },
+  {
+    "id": "GNG_hide_riots_underworld",
+    "category_id": "GNG_Map_GUI",
+    "name": "Перезагрузить теневой мир во время бунтов",
+    "desc": "",
+    "icon": "GFX_decision_GNG_regions",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_country_flag": "GNG_Riots_Active"
+    },
+    "complete_effect": {
+      "GNG_unload_underworld_stats": true
+    }
+  },
+  {
+    "id": "GNG_use_underworld_contacts",
+    "category_id": "GNG_Product_Decisions_GUI",
+    "name": "Задействовать связи в теневом мире",
+    "desc": "На публике мы не имеем ничего общего с сомнительными дельцами из Триад или Якудза. Однако неофициально мы всегда должны быть готовы к сделке. У нас есть множество скрытых контактов с этими организациями и несколько должников за оказанные ранее услуги. При желании мы могли бы использовать эти связи, чтобы подогреть интерес к нашему будущему продукту среди более злачных слоев Гуандуна.",
+    "icon": "GFX_decision_GNG_crime_brighter_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GNG_has_not_reached_product_interest_cap": true,
+      "GNG_is_not_fully_corrupt": true
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_show_advertisement_decisions"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -15,
+        "set_temp_variable": {
+          "GNG_corruption_temp_var": 3
+        },
+        "GNG_Corruption_Change": true
+      },
+      "random_owned_state": [
+        {
+          "set_temp_variable": {
+            "yak_spt_temp": 1.5
+          },
+          "GNG_yakuza_control_change": true
+        },
+        {
+          "set_temp_variable": {
+            "tri_spt_temp": 1.5
+          },
+          "GNG_triad_control_change": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "GNG_crack_down_on_underworld_connections",
+    "category_id": "GNG_Three_Evils_of_Guangdong_category",
+    "name": "Удар по связям с теневым миром",
+    "desc": "Мы получили сообщения о том, что у госслужащих есть негласные связи с преступным миром, что развращает нашу систему. Эти связи необходимо пресечь, чтобы искоренить коррупцию в Гуандуне на корню.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_idea": "GNG_corruption_corrupt_dummy",
+      "has_country_flag": "GNG_show_corruption_decisions",
+      "check_variable": {
+        "GNG_corruption_var": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_strike_at_the_underworld",
+    "category_id": "GNG_Three_Evils_of_Guangdong_category",
+    "name": "Удар по теневому миру",
+    "desc": "Пользуясь хаосом продолжающегося кризиса \"Ясуды\", группировки преступного мира свирепствуют в наших системах, коррумпируют государственную службу и стремительно захватывают территории в своей бесконечной войне банд. Мы должны нанести им быстрый и сокрушительный удар.",
+    "icon": "GFX_decision_GNG_crime",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": [
+        {
+          "GNG_legco_faction_in_power": 1
+        },
+        {
+          "GNG_corruption_var": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      ],
+      "has_country_flag": "GNG_show_corruption_decisions"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_pay_the_underworld_to_attack_the_GFT",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Заплатить теневым синдикатам за нападение на  ФРГ",
+    "desc": "Дать Триадам и Якудза конкретную цель, щедро оплатив их 'услуги' - это самый надежный и грязный способ решить проблему в Гуандуне.",
+    "icon": "GFX_decision_generic_corruption_yen",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_GFT",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_GFT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_not_as_i_do",
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "temp_econ_spending_amount": 0.15
+          },
+          {
+            "GNG_corruption_temp_var": 5
+          }
+        ],
+        "econ_spend_money_once_effect_raw_money": true,
+        "GNG_Corruption_Change": true
+      }
+    }
+  },
+  {
+    "id": "GNG_pay_the_underworld_to_attack_the_CCL",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Заплатить теневым синдикатам за нападение на  ККТ",
+    "desc": "Дать Триадам и Якудза конкретную цель, щедро оплатив их 'услуги' - это самый надежный и грязный способ решить проблему в Гуандуне.",
+    "icon": "GFX_decision_generic_corruption_yen",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_CCL",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_CCL"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_not_as_i_do",
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "temp_econ_spending_amount": 0.15
+          },
+          {
+            "GNG_corruption_temp_var": 5
+          }
+        ],
+        "econ_spend_money_once_effect_raw_money": true,
+        "GNG_Corruption_Change": true
+      }
+    }
+  },
+  {
+    "id": "GNG_enable_harder_underworld",
+    "category_id": "GNG_difficulty_category",
+    "name": "Включить Жестче МеньшеМир",
+    "desc": "",
+    "icon": "GFX_decision_GNG_crime",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "GNG_show_higher_difficulty_decisions",
+      "NOT": {
+        "has_country_flag": [
+          "GNG_enabled_margin_call_mode",
+          "GNG_enable_harder_underworld"
+        ]
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GNG_harder_underworld_mode_tt",
+      "set_country_flag": "GNG_enable_harder_underworld"
+    }
+  },
+  {
+    "id": "GNG_disable_harder_underworld",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Жестче МеньшеМир",
+    "desc": "",
+    "icon": "GFX_decision_GNG_crime",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_higher_difficulty_decisions",
+        "GNG_enable_harder_underworld"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enabled_margin_call_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enable_harder_underworld"
+    }
+  },
+  {
+    "id": "MEX_kabuki_make_introductions_in_the_underworld",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Познакомиться с криминальным миром",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_corruption",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_the_technocratic_counter",
+        "OR": {
+          "check_variable": {
+            "MEX_PRI_selected_group": 2
+          },
+          "is_ai": true
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IRK_trade_with_the_developing_world",
+    "category_id": "IRK_five_year_plans",
+    "name": "Торговать с развивающимися странами",
+    "desc": "Хотя наша экономика никогда не была официально закрыта, она, по понятным причинам, испытывала трудности из-за анархии, поставившей развитие в состояние крайнего застоя. Несмотря на многие разногласия, которые есть у Ягоды и партийных фракций, это одна из областей, где они видят точки соприкосновения, поскольку торговля с дружественными и нейтральными государствами в Азии и по всему Тихому океану может работать в гармонии как со старой бухаринской системой, так и с сосуществованием марксизма и капитализма, которое предусматривают некоторые из наших новых экономистов. Имея товары, которые можно предложить миру, и испытывая глубокую потребность в товарах для укрепления нашей экономики, мы начнём претворять планы по восстановлению торговых связей с бывшими партнёрами в развивающемся мире, а также будем искать новые рынки для торговли.",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "IRK_five_year_plans_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRK_trade_with_the_developing_world"
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Pitovranov_CutOffTheWorldFromThem",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Отрезать их от внешнего мира",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply_red",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_completed_focus": "OMS_minimize_future_liabilities"
+        },
+        "set_temp_variable": {
+          "amount": 15
+        },
+        "OMS_Gauntlet_ScriptedTrigger_EveryCityHealth_MoreOrEquals": true
+      },
+      "else": {
+        "set_temp_variable": {
+          "amount": 20
+        },
+        "OMS_Gauntlet_ScriptedTrigger_EveryCityHealth_MoreOrEquals": true
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "OMS_Gauntlet_NewGuard_ID^3": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "OMS_Gauntlet_Pitovranov_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Pitovranov_CutOffTheWorldFromThem",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 3
+          },
+          {
+            "amount": -25
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true
+      }
+    }
+  },
+  {
+    "id": "NOV_RSLP_tour_free_world",
+    "category_id": "NOV_RSLP_russia_ofn",
+    "name": "Tour the Free World",
+    "desc": "Throughout history, very few Russian rulers chose to venture beyond the borders of our motherland. Indeed, there are too many works at hand, but let us not forget that before Shukshin, another great leader of the Russian people embraced his western allies and together with them vanquished their shared foes. Koryagin will follow the footsteps of Peter the Great towards the bastions of freedom in the West!",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "add_political_power": 100,
+      "add_opinion_modifier": [
+        {
+          "target": "USA",
+          "modifier": "large_increase"
+        },
+        {
+          "target": "QIN",
+          "modifier": "large_increase"
+        },
+        {
+          "target": "IND",
+          "modifier": "large_increase"
+        }
+      ],
+      "USA": {
+        "add_opinion_modifier": {
+          "target": "NOV",
+          "modifier": "large_increase"
+        }
+      },
+      "QIN": {
+        "add_opinion_modifier": {
+          "target": "NOV",
+          "modifier": "large_increase"
+        }
+      },
+      "IND": {
+        "add_opinion_modifier": {
+          "target": "NOV",
+          "modifier": "large_increase"
+        }
+      },
+      "set_temp_variable": [
+        {
+          "RSLP_Opinion_Target": 1
+        },
+        {
+          "Temp_Opinion": 7.5
+        }
+      ],
+      "NOV_RSLP_Opinion_Change": true,
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RSLP_tour_free_world",
+      "hidden_effect": {
+        "set_country_flag": "NOV_RSLP_Tour"
+      }
+    }
+  },
+  {
+    "id": "OMS_cap_the_ORL",
+    "category_id": "OMS_2WRWCE_PostApoc_category",
+    "name": "Retake Gorno-Altaysk",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "Postnuke_Legitimacy_Gain_Med": true,
+      "custom_trigger_tooltip": [
+        {
+          "check_variable": [
+            {
+              "Antarctica_Militarization": {
+                "_op": ">",
+                "value": 20
+              }
+            },
+            {
+              "Antarctica_Legitimacy": {
+                "_op": ">",
+                "value": 20
+              }
+            },
+            {
+              "Antarctica_Equipment": {
+                "_op": ">",
+                "value": 10
+              }
+            }
+          ],
+          "tooltip": "PostApoc_capture_tt"
+        },
+        {
+          "check_variable": {
+            "OMS_team_doing": {
+              "_op": "<",
+              "value": "OMS_team_doing_max"
+            }
+          },
+          "tooltip": "OMS_team_doing_tt"
+        }
+      ],
+      "has_global_flag": "SWRW_postnuke_out_bunker_NOW"
+    },
+    "visible": {
+      "OR": {
+        "owns_state": [
+          569,
+          40
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "OMS_team_doing": 1
+      },
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "Antarctica_Militarization": 20
+          },
+          {
+            "Antarctica_Legitimacy": 20
+          },
+          {
+            "Antarctica_Equipment": 10
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "RUS_trade_with_the_developing_world",
+    "category_id": "RUS_five_year_plans",
+    "name": "Trade with the Developing World",
+    "desc": "While our economy was never officially closed, it has understandably been struggling due to the anarchy putting development into a state of abject stasis. Despite the many disagreements that [RUS.GetLeader] and the Party factions have, this is one area where they see common ground as trade with friendly and neutral states in Asia and across the Pacific can work in harmony both with the old Bukharinite system and the coexistence between Marxism and capitalism envisioned by some of our newer economists. With products to offer the world and a profound need for goods to bolster our economy, we'll initiate efforts to restore trade ties with former partners in the developing world and seek out new trade ties as well.",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "RUS_five_year_plans_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_trade_with_the_developing_world"
+    }
+  },
+  {
+    "id": "SWRW_Increase_Speer_Division_Limit",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_Increase_Speer_Division_Limit",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_global_flag": [
+        "RUS_national_unification",
+        "german_civil_war_speervic"
+      ],
+      "RUS": {
+        "is_ai": false
+      },
+      "GER": {
+        "has_idea": "GER_econ_unfucker"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_Increase_Speer_Division_Limit",
+      "GER": {
+        "set_variable": {
+          "sgr_wehrmacht_div_limit": 125
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_MRI_Invented",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_MRI_Invented",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1972.4.16"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_MRI_Invented",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41039"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_USA_JAP_SALT_Agreement",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_USA_JAP_SALT_Agreement",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1972.7.12"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_USA_JAP_SALT_Agreement",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41040"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_World_Trade_Center_Opened",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_World_Trade_Center_Opened",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1973.4.4"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_World_Trade_Center_Opened",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41041"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_Sydney_Opera_House_Opened",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_Sydney_Opera_House_Opened",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1973.10.23"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_Sydney_Opera_House_Opened",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41042"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_Argentina_Wins_World_Cup",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_Argentina_Wins_World_Cup",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": [
+        {
+          "_op": ">",
+          "value": "1974.7.7"
+        },
+        {
+          "_op": "<",
+          "value": "1974.7.8"
+        }
+      ],
+      "OR": {
+        "has_global_flag": [
+          "SWRW_2GCW_RPR_winner",
+          "SWRW_2GCW_REG_winner",
+          "SWRW_2GCW_GMA_winner",
+          "SWRW_2GCW_GER_winner",
+          "SWRW_2GCW_SFK_winner"
+        ],
+        "NOT": {
+          "has_global_flag": "SWRW_2GCW_happened"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_Argentina_Wins_World_Cup",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41036"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_Tangshan_Earthquake",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_Tangshan_Earthquake",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1976.7.28"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_Tangshan_Earthquake",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41037"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_Rocky_Releases",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_Rocky_Releases",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1976.11.20"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_Rocky_Releases",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41044"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_Star_Wars_Releases",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_Star_Wars_Releases",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1977.5.25"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_Star_Wars_Releases",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "star_wars.1"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_Ted_Bundy_Caught",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_Ted_Bundy_Caught",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1978.7.23"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_Ted_Bundy_Caught",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41038"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_Grey_Dusk",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_Grey_Dusk",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1980.8.10"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_Grey_Dusk",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.41045"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_1970_1",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_1970_1",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1970.1.11"
+      }
+    },
+    "complete_effect": {
+      "SWRW_next_ten_years": true
+    }
+  },
+  {
+    "id": "SWRW_1980_1",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_1980_1",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1980.1.11"
+      }
+    },
+    "complete_effect": {
+      "SWRW_next_ten_years_eighty": true
+    }
+  },
+  {
+    "id": "SWRW_1990_1",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_1990_1",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1990.1.11"
+      }
+    },
+    "complete_effect": {
+      "SWRW_next_ten_years_ninth": true
+    }
+  },
+  {
+    "id": "SWRW_fujitsu_",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_fujitsu_",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1973.3.1"
+      },
+      "GNG": {
+        "has_country_leader": {
+          "character": "GNG_ibuka_masaru",
+          "ruling_only": true
+        },
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "GNG": {
+        "country_event": "SWRW_fopo.2"
+      }
+    }
+  },
+  {
+    "id": "SWRW_1976_1",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_1976_1",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1976.2.15"
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.114500"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_play_nixon_intermmision",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_play_nixon_intermmision",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "USA": {
+        "NOT": {
+          "has_country_leader": {
+            "character": "USA_Richard_Nixon",
+            "ruling_only": true
+          }
+        },
+        "is_ai": false
+      }
+    },
+    "visible": {
+      "USA": {
+        "is_ai": false
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_play_nixon_intermmision",
+      "play_song": "radio_novosibirsk_intermission_nixon"
+    }
+  },
+  {
+    "id": "SWRW_1966_4_26",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_1966_4_26",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1966.4.26"
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.114503"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_1967_6_13_1",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_1967_6_13_1",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1967.6.13"
+      },
+      "KAZ": {
+        "has_country_leader": "KAZ_Pavel_Fitin"
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.114504"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_1967_6_13_2",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_1967_6_13_2",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1967.6.13"
+      },
+      "KAZ": {
+        "has_country_leader": "KAZ_Stanislaw_Skrzeszewski"
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.114505"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_1967_6_13_3",
+    "category_id": "SWRW_Load_World_Events",
+    "name": "SWRW_1967_6_13_3",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "date": {
+        "_op": ">",
+        "value": "1967.6.13"
+      },
+      "KAZ": {
+        "has_country_leader": "KAZ_Dinmukhamed_Kunaev"
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": {
+          "id": "WORLD.114506"
+        }
+      }
+    }
+  }
+]

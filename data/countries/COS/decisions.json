@@ -1,0 +1,531 @@
+[
+  {
+    "id": "BRA_invite_to_mercosul",
+    "category_id": "BRA_mercosul_decisions",
+    "name": "Пригласить государство [FROM.GetNameDef] в МЕРКОСУР",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "BRA_form_mercosul",
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 24
+          }
+        }
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRA_form_mercosul"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "MEX_decision_integrate_costa_rica",
+    "category_id": "MEX_category_territorial_integration",
+    "name": "Интегрировать государство [COS.GetNameDef]",
+    "desc": "",
+    "icon": "generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "controls_state": 316,
+        "COS": {
+          "is_subject_of": "ROOT"
+        }
+      },
+      "has_completed_focus": "MEX_focus_integrate_the_south"
+    },
+    "visible": {
+      "has_completed_focus": "MEX_focus_unify_centroamerica",
+      "OR": {
+        "NOT": {
+          "316": {
+            "is_core_of": "ROOT"
+          }
+        },
+        "COS": {
+          "is_subject_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "POL_restore_don_cossacks",
+    "category_id": "POL_cossack_republic_decisions",
+    "name": "Восстановить Донскую республику",
+    "desc": "Донские казаки, ярые противники большевизма, сражались на стороне белых в русской гражданской войне. Теперь, когда все их территории находятся под нашим контролем, мы можем пригласить ссыльных с Дона заново заселить эти земли и сражаться бок о бок с товарищами.",
+    "icon": "generic_form_nation",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        218,
+        245,
+        238,
+        217,
+        265
+      ]
+    },
+    "visible": {
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "POL_pavel_bermondt_avalov",
+            "ruling_only": true
+          },
+          {
+            "character": "POL_rudinger_von_der_goltz",
+            "ruling_only": true
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "pavel_events.1"
+      }
+    }
+  },
+  {
+    "id": "POL_restore_kuban_cossacks",
+    "category_id": "POL_cossack_republic_decisions",
+    "name": "Восстановить Кубанскую республику",
+    "desc": "Предательство кубанских казаков стало поворотным моментом в русской гражданской войне, приведшим к поражению Белой армии. На этот раз мы проследим, чтобы Кубань возглавляло лояльное правительство.",
+    "icon": "generic_form_nation",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        234,
+        235,
+        233,
+        232
+      ]
+    },
+    "visible": {
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "POL_pavel_bermondt_avalov",
+            "ruling_only": true
+          },
+          {
+            "character": "POL_rudinger_von_der_goltz",
+            "ruling_only": true
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "pavel_events.2"
+      }
+    }
+  },
+  {
+    "id": "BRG_lower_political_costs",
+    "category_id": "BRG_operations_category",
+    "name": "Использование базы для облегчения организации операций",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRG_groundwork_cost_5",
+        "check_variable": {
+          "BRG_Operations_Groundwork": {
+            "_op": ">",
+            "value": 4
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRG_charlemagne_dead"
+      },
+      "has_completed_focus": "BRG_the_final_moves",
+      "has_country_flag": "BRG_selected_operation",
+      "check_variable": {
+        "BRG_operation_political_cost_medium": {
+          "_op": ">",
+          "value": 10
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_reduce_political_costs",
+      "subtract_from_variable": [
+        {
+          "BRG_Operations_Groundwork": 5
+        },
+        {
+          "BRG_operation_political_cost_small": 10
+        },
+        {
+          "BRG_operation_political_cost_medium": 20
+        },
+        {
+          "BRG_operation_political_cost_large": 30
+        }
+      ]
+    }
+  },
+  {
+    "id": "BRG_lower_equipment_costs",
+    "category_id": "BRG_operations_category",
+    "name": "Использовать базы для логистики операций",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRG_groundwork_cost_5",
+        "check_variable": {
+          "BRG_Operations_Groundwork": {
+            "_op": ">",
+            "value": 4
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRG_charlemagne_dead"
+      },
+      "has_completed_focus": "BRG_the_final_moves",
+      "has_country_flag": "BRG_selected_operation",
+      "check_variable": {
+        "BRG_operation_equipment_cost": {
+          "_op": ">",
+          "value": 1000
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_reduce_equipment_costs",
+      "subtract_from_variable": [
+        {
+          "BRG_Operations_Groundwork": 5
+        },
+        {
+          "BRG_operation_equipment_cost": 1000
+        }
+      ]
+    }
+  },
+  {
+    "id": "IBR_advisory_council_deliberation_mission_cosmetic",
+    "category_id": "IBR_Iberian_Advisory_Council_category",
+    "name": "Обсуждения в Иберийском Совете",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_legislative_council_deliberation_mission_cosmetic",
+    "category_id": "IBR_Iberian_Legislative_Council_category",
+    "name": "Обсуждения в Иберийском Совете",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_deliberation_mission_cosmetic",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Заседание Иберийского парламента.",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "FUK_OBT_program",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Tank improvement Program",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank_upgrade",
+    "cost": 55,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_OBT_program",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_1_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "FUK_Poltava_experimental_constructor",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Poltava Experimental-Arms Constructor",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_guns_blue",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_Poltava_experimental_constructor",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_2_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.05
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "FUK_project_vasylina",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Project VASYLINA",
+    "desc": "",
+    "icon": "GFX_decision_market_towed_artillery",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_vasylina",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_3_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.25
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "FUK_project_neptune",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Project NEPTUNE",
+    "desc": "",
+    "icon": "GFX_decision_generic_rockets",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_neptune",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_4_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.3
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "FUK_project_chaika",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Project CHAIKA",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      },
+      "OR": {
+        "has_completed_focus": [
+          "FUK_the_new_navy_ruler_of_the_black_sea",
+          "FUK_use_the_fleet_to_import_oil"
+        ]
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_chaika",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_5_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.275
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "FUK_project_marichka",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Project MARICHKA",
+    "desc": "{SECRET DATA}",
+    "icon": "GFX_decision_generic_bioweapons",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_marichka",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_6_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.35
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "FUK_project_sagaydachnyi",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Project SAGAYDACHNYI!",
+    "desc": "",
+    "icon": "GFX_decision_UKR_unra",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_sagaydachnyi",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_7_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "FUK_project_cossack_blitz",
+    "category_id": "FUK_replace_wehrmacht_category",
+    "name": "Project TANKOVIY BLITZ",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 165,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_afh_upgrades_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_afh_upgrades"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_cossack_blitz",
+      "set_country_flag": [
+        "FUK_doing_afh_upgrades",
+        "FUK_AFH_UPGRATING_5_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "debt_temp": 0.369
+      },
+      "econ_national_debt_change": true
+    }
+  }
+]

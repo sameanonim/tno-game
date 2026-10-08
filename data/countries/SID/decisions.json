@@ -1,0 +1,6594 @@
+[
+  {
+    "id": "develop_sidamo_rubber_plantations",
+    "category_id": "prospect_for_resources",
+    "name": "Развитие каучуковых плантаций в Сидамо",
+    "desc": "",
+    "icon": "rubber",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 837,
+      "controls_state": 837,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "owns_state": 837,
+      "controls_state": 837,
+      "837": {
+        "NOT": {
+          "has_state_flag": "sidamo_rubber_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "BEL_intervene_on_side_of_SPR",
+    "category_id": "BEL_intervention_in_spain_cat",
+    "name": "Вмешаться на стороне [FROM.GetNameRuGen]",
+    "desc": "",
+    "icon": "",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      }
+    },
+    "visible": {
+      "has_war": false
+    },
+    "complete_effect": {
+      "set_country_flag": "supports_SPD_flag",
+      "if": [
+        {
+          "limit": {
+            "country_exists": "SPA"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPD",
+            "enemy": "SPA",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "SPC"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPD",
+            "enemy": "SPC",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "SPB"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPD",
+            "enemy": "SPB",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "is_faction_leader": true
+          },
+          "add_to_faction": "FROM"
+        }
+      ],
+      "effect_tooltip": [
+        {
+          "give_military_access": "FROM",
+          "FROM": {
+            "give_military_access": "ROOT"
+          }
+        },
+        {
+          "create_faction_from_template": {
+            "template": "faction_template_anti_fascist",
+            "name": "BEL_SPR_alliance",
+            "icon": "GFX_faction_logo_generic_11"
+          },
+          "add_to_faction": [
+            "ROOT",
+            "FROM"
+          ]
+        }
+      ],
+      "hidden_effect": {
+        "diplomatic_relation": {
+          "country": "FROM",
+          "relation": "military_access",
+          "active": true
+        },
+        "FROM": {
+          "diplomatic_relation": {
+            "country": "ROOT",
+            "relation": "military_access",
+            "active": true
+          }
+        }
+      },
+      "clr_country_flag": "BEL_currently_undertaking_intervention_decision_flag",
+      "FROM": {
+        "country_event": {
+          "id": "ww_BEL_event_spanish_interaction.6",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "if_they_accept"
+      ]
+    }
+  },
+  {
+    "id": "BUL_fight_alongside_country_comrades",
+    "category_id": "BUL_the_balkan_federation_dream",
+    "name": "Сражаться бок о бок с нашими [FROM.GetAdjective]ими товарищами",
+    "desc": "Мы должны поддержать наших товарищей из державы [FROM.GetNameDef] и выступить на их стороне в [FROM.GetAdjective]ой гражданской войне.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      }
+    },
+    "visible": {
+      "country_exists": "FROM",
+      "has_government": "communism",
+      "OR": {
+        "AND": [
+          {
+            "FROM": {
+              "original_tag": "YUG"
+            },
+            "has_completed_focus": "BUL_treaty_of_perpetual_friendship"
+          },
+          {
+            "FROM": {
+              "BUL_is_balkan_nation": true,
+              "NOT": [
+                {
+                  "original_tag": "YUG"
+                },
+                {
+                  "original_tag": "ROOT"
+                }
+              ]
+            },
+            "has_completed_focus": "BUL_balkan_federation_of_socialist_republics"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "communism"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_improving_neglected_countryside_mission",
+    "category_id": "CHI_internal_politics_cat",
+    "name": "Инвестиции в запущенные сёла",
+    "desc": "",
+    "icon": "GFX_decision_generic_research",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "FIN_request_to_switch_sides_in_the_war",
+    "category_id": "FIN_foreign_politics_decision_category",
+    "name": "FIN_request_to_switch_sides_in_the_war",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "SOV",
+      "GER": {
+        "has_war_with": "SOV"
+      },
+      "any_country": {
+        "has_government": "democratic",
+        "is_faction_leader": true,
+        "has_war_with": "GER"
+      },
+      "722": {
+        "is_owned_and_controlled_by": "ROOT"
+      },
+      "OR": {
+        "surrender_progress": {
+          "_op": ">",
+          "value": 0.05
+        },
+        "SOV": [
+          {
+            "has_idea": "SOV_the_rush_for_berlin"
+          },
+          {
+            "has_active_mission": "SOV_operation_iskra_ongoing"
+          }
+        ],
+        "any_owned_state": {
+          "NOT": [
+            {
+              "state": 145
+            },
+            {
+              "is_controlled_by": "ROOT"
+            }
+          ],
+          "is_core_of": "ROOT"
+        }
+      },
+      "has_civil_war": false,
+      "is_in_faction": false,
+      "has_completed_focus": "FIN_cooperation_with_germany"
+    },
+    "visible": {
+      "has_war_with": "SOV",
+      "GER": {
+        "has_war_with": "SOV"
+      },
+      "SOV": {
+        "has_country_flag": "SOV_great_patriotic_war_flag"
+      },
+      "has_completed_focus": "FIN_cooperation_with_germany",
+      "has_civil_war": false,
+      "is_in_faction": false,
+      "NOT": [
+        {
+          "has_country_flag": "FIN_already_attempted_to_switch_sides"
+        },
+        {
+          "has_country_flag": "FIN_negotiating_armistice_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "set_country_flag": "FIN_negotiating_switching_sides_flag"
+        },
+        {
+          "set_country_flag": "FIN_already_attempted_to_switch_sides"
+        }
+      ],
+      "add_war_support": -0.03,
+      "add_popularity": [
+        {
+          "ideology": "democratic",
+          "popularity": 0.05
+        },
+        {
+          "ideology": "communism",
+          "popularity": 0.05
+        }
+      ],
+      "random_country": {
+        "limit": {
+          "has_government": "democratic",
+          "is_faction_leader": true,
+          "has_war_with": "GER"
+        },
+        "set_country_flag": "FIN_major_democratic_leader_flag",
+        "country_event": {
+          "id": "AAT_finland_continuation_war.12",
+          "days": 3,
+          "random_days": 5
+        }
+      },
+      "SOV": {
+        "country_event": {
+          "id": "AAT_finland_continuation_war.13",
+          "days": 1
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "every_country": {
+          "limit": {
+            "has_war_with": "ROOT"
+          },
+          "white_peace": "ROOT"
+        },
+        "IF": [
+          {
+            "limit": {
+              "GER": {
+                "has_military_access_to": "ROOT"
+              }
+            },
+            "ROOT": {
+              "diplomatic_relation": [
+                {
+                  "country": "GER",
+                  "relation": "military_access",
+                  "active": false
+                },
+                {
+                  "country": "GER",
+                  "relation": "docking_rights",
+                  "active": false
+                },
+                {
+                  "country": "GER",
+                  "relation": "non_aggression_pact",
+                  "active": false
+                }
+              ]
+            },
+            "GER": {
+              "diplomatic_relation": {
+                "country": "ROOT",
+                "relation": "guarantee",
+                "active": false
+              }
+            }
+          },
+          {
+            "limit": {
+              "ROOT": {
+                "has_idea": "FIN_the_lone_wolf"
+              }
+            },
+            "ROOT": {
+              "remove_ideas": "FIN_the_lone_wolf"
+            }
+          }
+        ],
+        "SOV": {
+          "add_timed_idea": {
+            "idea": "FIN_compensation_for_side_switch_good",
+            "days": 365
+          }
+        },
+        "ROOT": [
+          {
+            "add_timed_idea": {
+              "idea": "FIN_compensation_for_side_switch_bad",
+              "days": 365
+            }
+          },
+          {
+            "add_to_war": {
+              "targeted_alliance": "ENG",
+              "enemy": "GER",
+              "hostility_reason": "asked_to_join"
+            }
+          },
+          {
+            "add_popularity": {
+              "ideology": "democratic",
+              "popularity": 0.1
+            }
+          }
+        ],
+        "random_country": {
+          "limit": {
+            "has_country_flag": "FIN_major_democratic_leader_flag"
+          },
+          "add_to_faction": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "FIN_fight_alongside_country_comrades_baltic",
+    "category_id": "FIN_foreign_politics_decision_category",
+    "name": "FIN_fight_alongside_country_comrades_baltic",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "FIN_fight_alongside_country_comrades_nordic",
+    "category_id": "FIN_foreign_politics_decision_category",
+    "name": "FIN_fight_alongside_country_comrades_nordic",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_appoint_nihal_atziz_as_president",
+    "category_id": "form_turan_category",
+    "name": "Назначить Нихаля Атсыза президентом",
+    "desc": "Без Нихаля Атсыза наши мечты о торжестве туранизма так и остались бы мечтами. Он пользуется поддержкой народа, и будет разумно назначить его на более высокую должность.",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "AND": {
+        "has_government": "fascism",
+        "has_completed_focus": "TUR_turanist_ambition",
+        "has_idea": "TUR_nihal_atsiz"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "TUR_turanist_ambition"
+    },
+    "complete_effect": {
+      "remove_ideas": "TUR_nihal_atsiz",
+      "custom_effect_tooltip": "generic_skip_one_line_tt",
+      "add_country_leader_role": {
+        "character": "TUR_nihal_atsiz",
+        "country_leader": {
+          "expire": "1975.1.1",
+          "ideology": "gen_nazism",
+          "traits": [
+            "grey_wolf_trait"
+          ]
+        },
+        "promote_leader": true
+      }
+    }
+  },
+  {
+    "id": "liberate_sidamo",
+    "category_id": "form_east_africa_category",
+    "name": "Освободить Сидаму",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 837
+    },
+    "visible": {
+      "has_global_flag": "form_east_africa_flag"
+    },
+    "complete_effect": {
+      "837": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "FRA_intervene_on_side_of_FROM",
+    "category_id": "FRA_spanish_intervention_category",
+    "name": "Вмешаться на стороне [From.GetNameRuGen]",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.25
+      }
+    },
+    "visible": {
+      "has_war": false
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "FROM": {
+              "tag": "SPD"
+            }
+          },
+          "set_country_flag": "supports_SPD_flag",
+          "if": [
+            {
+              "limit": {
+                "country_exists": "SPA"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPD",
+                "enemy": "SPA",
+                "hostility_reason": "asked_to_join"
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "SPC"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPD",
+                "enemy": "SPC",
+                "hostility_reason": "asked_to_join"
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "SPB"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPD",
+                "enemy": "SPB",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          ]
+        },
+        {
+          "limit": {
+            "is_faction_leader": true
+          },
+          "add_to_faction": "FROM"
+        },
+        {
+          "limit": {
+            "has_country_flag": "FRA_covert_intervention_allowed"
+          },
+          "clr_country_flag": "FRA_covert_intervention_allowed"
+        },
+        {
+          "limit": {
+            "has_country_flag": "FRA_volunteer_work_allowed"
+          },
+          "clr_country_flag": "FRA_volunteer_work_allowed"
+        },
+        {
+          "limit": {
+            "has_country_flag": "FRA_sending_weapons_allowed"
+          },
+          "clr_country_flag": "FRA_sending_weapons_allowed"
+        },
+        {
+          "limit": {
+            "has_country_flag": "FRA_non_military_aid_allowed"
+          },
+          "clr_country_flag": "FRA_non_military_aid_allowed"
+        },
+        {
+          "limit": {
+            "has_country_flag": "FRA_arms_purchases_allowed"
+          },
+          "clr_country_flag": "FRA_arms_purchases_allowed"
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "FROM": {
+              "tag": "SPA"
+            }
+          },
+          "set_country_flag": "supports_SPA_flag",
+          "if": [
+            {
+              "limit": {
+                "country_exists": "SPD"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPA",
+                "enemy": "SPD",
+                "hostility_reason": "asked_to_join"
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "SPC"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPA",
+                "enemy": "SPC",
+                "hostility_reason": "asked_to_join"
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "SPB"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPA",
+                "enemy": "SPB",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          ]
+        },
+        {
+          "limit": {
+            "FROM": {
+              "tag": "SPB"
+            }
+          },
+          "set_country_flag": "supports_SPB_flag",
+          "if": [
+            {
+              "limit": {
+                "country_exists": "SPD"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPB",
+                "enemy": "SPD",
+                "hostility_reason": "asked_to_join"
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "SPC"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPB",
+                "enemy": "SPC",
+                "hostility_reason": "asked_to_join"
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "SPA"
+              },
+              "add_to_war": {
+                "targeted_alliance": "SPB",
+                "enemy": "SPA",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          ]
+        }
+      ],
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      },
+      "hidden_effect": {
+        "diplomatic_relation": {
+          "country": "FROM",
+          "relation": "military_access",
+          "active": true
+        },
+        "FROM": {
+          "diplomatic_relation": {
+            "country": "ROOT",
+            "relation": "military_access",
+            "active": true
+          }
+        }
+      },
+      "clr_country_flag": "FRA_non_intervention"
+    }
+  },
+  {
+    "id": "GRE_attend_talks_with_the_presidium",
+    "category_id": "GRE_investment_decisions_category",
+    "name": "Посетить переговоры с президиумом",
+    "desc": "Мы отправим представителей в президиум [FROM.GetNameRuGen], чтобы обсудить возможности их скромных инвестиций в нашу военную промышленность.",
+    "icon": "generic_factory",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "date": {
+        "_op": "<",
+        "value": "1943.1.1"
+      },
+      "NOT": {
+        "has_war_with": "SOU",
+        "has_country_flag": "GRE_soviets_rebuffed",
+        "SOU": {
+          "has_capitulated": true,
+          "is_puppet": true,
+          "NOT": {
+            "has_government": "communism"
+          },
+          "has_completed_focus": "SOV_demand_balkan_submission"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GRE_appeal_to_the_soviet_union",
+      "NOT": {
+        "has_country_flag": "GRE_soviets_rebuffed"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GRE_soviet_influence_tt"
+    }
+  },
+  {
+    "id": "INS_volksraad_education_subsidies_for_indonesians",
+    "category_id": "INS_volksraad_cat",
+    "name": "Предоставлять образовательные субсидии независимо от происхождения",
+    "desc": "В фольксрааде продолжаются дебаты о субсидиях и стипендиях для нидерландских студентов в Ост-Индии. Некоторые представители коренных народов предлагают расширить эту систему на всех студентов независимо от происхождения. Это существенно улучшит наши отношения с населением, но обойдется недешево.",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_autonomy_state": [
+          "autonomy_puppet",
+          "autonomy_colony",
+          "autonomy_dominion"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": {
+          "flag": "INS_is_taking_volksraad"
+        }
+      }
+    },
+    "visible": {
+      "has_idea": "idea_INS_volksraad",
+      "NOT": {
+        "has_country_flag": {
+          "flag": "indonesia_volksraad_passed_10"
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "INS_is_taking_volksraad",
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "ITA_fight_alongside_country_comrades_balkan",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "$SOV_fight_alongside_country_comrades_balkan$",
+    "desc": "$SOV_fight_alongside_country_comrades_balkan_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_arm_anti_communist_mongol_dissidents_decision",
+    "category_id": "JAP_the_propaganda_department_decisions",
+    "name": "Вооружить антикоммунистических диссидентов в Монголии",
+    "desc": "",
+    "icon": "GFX_decision_CHL_carabineros",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "JAP_infiltrated_the_setsen_khanate_flag"
+    },
+    "visible": {
+      "has_completed_focus": "JAP_a_mongol_volunteer_army",
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      },
+      "MON": {
+        "exists": true,
+        "is_subject": false,
+        "NOT": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "MON": {
+        "country_event": {
+          "id": "SEA_japan_foreign_policy.54",
+          "hours": 12,
+          "random_hours": 24
+        }
+      },
+      "effect_tooltip": {
+        "MON": {
+          "add_stability": -0.05,
+          "add_popularity": {
+            "ideology": "MON",
+            "popularity": -0.1
+          },
+          "add_political_power": -50
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "JAP_armed_mongol_dissidents_flag_flag"
+      }
+    }
+  },
+  {
+    "id": "JAP_tokko_arresting_anti_army_disidents_mission",
+    "category_id": "JAP_the_peoples_state_decisions",
+    "name": "Токко арестовывает выступающих против армии диссидентов",
+    "desc": "",
+    "icon": "GFX_decision_generic_arrest",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "JAP",
+      "NOT": {
+        "has_completed_focus": "JAP_revoke_the_peace_preservation_law"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MAN_pacify_bandits_in_the_northern_countryside",
+    "category_id": "MAN_banditry_category",
+    "name": "Ликвидация бандитов в северных землях",
+    "desc": "",
+    "icon": "GFX_decision_oppression",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "OR": {
+          "has_completed_focus": [
+            "MAN_pacify_the_countryside",
+            "MAN_tsr_pacify_the_countryside"
+          ]
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "MAN_pacify_the_countryside_tt",
+        "OR": {
+          "has_completed_focus": [
+            "MAN_pacify_the_countryside",
+            "MAN_tsr_pacify_the_countryside"
+          ]
+        }
+      },
+      "has_country_flag": "MAN_northern_bandits",
+      "divisions_in_state": {
+        "state": 714,
+        "size": {
+          "_op": ">",
+          "value": 5
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_active_mission": "MAN_maintain_northern_control"
+      },
+      "has_country_flag": "MAN_northern_bandits"
+    },
+    "complete_effect": {
+      "activate_mission": "MAN_maintain_northern_control",
+      "custom_effect_tooltip": "MAN_pacify_bandits_mission_explanation"
+    }
+  },
+  {
+    "id": "MAN_pacify_bandits_in_the_eastern_countryside",
+    "category_id": "MAN_banditry_category",
+    "name": "Ликвидация бандитов в восточных землях",
+    "desc": "",
+    "icon": "GFX_decision_oppression",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "OR": {
+          "has_completed_focus": [
+            "MAN_pacify_the_countryside",
+            "MAN_tsr_pacify_the_countryside"
+          ]
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "MAN_pacify_the_countryside_tt",
+        "OR": {
+          "has_completed_focus": [
+            "MAN_pacify_the_countryside",
+            "MAN_tsr_pacify_the_countryside"
+          ]
+        }
+      },
+      "has_country_flag": "MAN_eastern_bandits",
+      "divisions_in_state": {
+        "state": 717,
+        "size": {
+          "_op": ">",
+          "value": 5
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_active_mission": "MAN_maintain_eastern_control"
+      },
+      "has_country_flag": "MAN_eastern_bandits"
+    },
+    "complete_effect": {
+      "activate_mission": "MAN_maintain_eastern_control",
+      "custom_effect_tooltip": "MAN_pacify_bandits_mission_explanation"
+    }
+  },
+  {
+    "id": "MAN_pacify_bandits_in_the_western_countryside",
+    "category_id": "MAN_banditry_category",
+    "name": "Ликвидация бандитов в западных землях",
+    "desc": "",
+    "icon": "GFX_decision_oppression",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "OR": {
+          "has_completed_focus": [
+            "MAN_pacify_the_countryside",
+            "MAN_tsr_pacify_the_countryside"
+          ]
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "MAN_pacify_the_countryside_tt",
+        "OR": {
+          "has_completed_focus": [
+            "MAN_pacify_the_countryside",
+            "MAN_tsr_pacify_the_countryside"
+          ]
+        }
+      },
+      "has_country_flag": "MAN_western_bandits",
+      "divisions_in_state": {
+        "state": 610,
+        "size": {
+          "_op": ">",
+          "value": 5
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_active_mission": "MAN_maintain_western_control"
+      },
+      "has_country_flag": "MAN_western_bandits"
+    },
+    "complete_effect": {
+      "activate_mission": "MAN_maintain_western_control",
+      "custom_effect_tooltip": "MAN_pacify_bandits_mission_explanation"
+    }
+  },
+  {
+    "id": "USA_pay_farm_subsidies",
+    "category_id": "USA_congress",
+    "name": "Выплатить субсидии фермерам",
+    "desc": "",
+    "icon": "ger_mefo_bills",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "democratic",
+      "OR": {
+        "check_variable": [
+          {
+            "senators_support": {
+              "_op": "<",
+              "value": "senators_total"
+            }
+          },
+          {
+            "representatives_support": {
+              "_op": "<",
+              "value": "representatives_total"
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "USA_agricultural_adjustment_act"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "POL_sideline_the_left",
+    "category_id": "POL_sanation_decisions",
+    "name": "Оттеснить левых",
+    "desc": "С помощью правых мы, возможно, сумеем сильнее оттеснить левых на политические задворки общества.",
+    "icon": "infiltrate_state",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_idea": "POL_sanation_left_opposition_1",
+        "has_completed_focus": "POL_the_left_chairman"
+      }
+    },
+    "visible": {
+      "has_active_mission": "POL_sanation_left_irritation"
+    },
+    "complete_effect": {
+      "POL_sanation_left_opposition_down": true,
+      "POL_sanation_right_opposition_up": true
+    }
+  },
+  {
+    "id": "POL_sideline_the_right",
+    "category_id": "POL_sanation_decisions",
+    "name": "Оттеснить правых",
+    "desc": "Как бы сильны ни были правые, совместными усилиями левых и Замка их можно будет вытеснить с политической арены.",
+    "icon": "infiltrate_state",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_idea": "POL_sanation_right_opposition_1",
+        "has_completed_focus": "POL_second_man_of_the_state"
+      }
+    },
+    "visible": {
+      "has_active_mission": "POL_sanation_right_irritation"
+    },
+    "complete_effect": {
+      "POL_sanation_left_opposition_up": true,
+      "POL_sanation_right_opposition_down": true
+    }
+  },
+  {
+    "id": "POR_fight_alongside_the_republic",
+    "category_id": "POR_the_spanish_civil_war",
+    "name": "Сражаться за Республику",
+    "desc": "Мы будем сражаться за Республику в Испанской гражданской войне.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_manpower": {
+        "_op": ">",
+        "value": 10000
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "OR": {
+        "AND": [
+          {
+            "country_exists": "SPA",
+            "NOT": {
+              "has_war_with": "SPA"
+            }
+          },
+          {
+            "country_exists": "SPC",
+            "NOT": {
+              "has_war_with": "SPC"
+            }
+          },
+          {
+            "country_exists": "SPB",
+            "NOT": {
+              "has_war_with": "SPB"
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "SPR_scw_in_progress": true,
+      "country_exists": "SPD",
+      "NOT": {
+        "has_war_with": "SPD"
+      },
+      "has_completed_focus": "POR_they_need_our_help"
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "set_country_flag": "supports_SPD_flag"
+        },
+        {
+          "diplomatic_relation": {
+            "country": "SPD",
+            "relation": "military_access",
+            "active": true
+          },
+          "SPD": {
+            "diplomatic_relation": {
+              "country": "POR",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "if": [
+        {
+          "limit": {
+            "country_exists": "SPA"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPD",
+            "enemy": "SPA",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "SPC"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPD",
+            "enemy": "SPC",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "SPB"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPD",
+            "enemy": "SPB",
+            "hostility_reason": "asked_to_join"
+          }
+        }
+      ],
+      "effect_tooltip": {
+        "give_military_access": "SPD",
+        "SPD": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "POR_fight_alongside_the_nationalists",
+    "category_id": "POR_the_spanish_civil_war",
+    "name": "Сражаться за националистов",
+    "desc": "Мы будем сражаться за националистов в Испанской гражданской войне.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_manpower": {
+        "_op": ">",
+        "value": 10000
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "OR": {
+        "AND": [
+          {
+            "country_exists": "SPD",
+            "NOT": {
+              "has_war_with": "SPD"
+            }
+          },
+          {
+            "country_exists": "SPC",
+            "NOT": {
+              "has_war_with": "SPC"
+            }
+          },
+          {
+            "country_exists": "SPB",
+            "NOT": {
+              "has_war_with": "SPB"
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "SPR_scw_in_progress": true,
+      "country_exists": "SPA",
+      "NOT": {
+        "has_war_with": "SPA"
+      },
+      "has_completed_focus": "POR_send_assistance"
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "set_country_flag": "supports_SPA_flag"
+        },
+        {
+          "diplomatic_relation": {
+            "country": "SPA",
+            "relation": "military_access",
+            "active": true
+          },
+          "SPA": {
+            "diplomatic_relation": {
+              "country": "POR",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "if": [
+        {
+          "limit": {
+            "country_exists": "SPD"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPA",
+            "enemy": "SPD",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "SPC"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPA",
+            "enemy": "SPC",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "SPB"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPA",
+            "enemy": "SPB",
+            "hostility_reason": "asked_to_join"
+          }
+        }
+      ],
+      "effect_tooltip": {
+        "give_military_access": "SPA",
+        "SPA": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "POR_fight_alongside_the_carlists",
+    "category_id": "POR_the_spanish_civil_war",
+    "name": "Сражаться за карлистов",
+    "desc": "Мы будем сражаться за карлистов в Испанской гражданской войне.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_manpower": {
+        "_op": ">",
+        "value": 10000
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "OR": {
+        "AND": [
+          {
+            "country_exists": "SPD",
+            "NOT": {
+              "has_war_with": "SPD"
+            }
+          },
+          {
+            "country_exists": "SPC",
+            "NOT": {
+              "has_war_with": "SPC"
+            }
+          },
+          {
+            "country_exists": "SPA",
+            "NOT": {
+              "has_war_with": "SPA"
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "SPR_scw_in_progress": true,
+      "country_exists": "SPB",
+      "NOT": {
+        "has_war_with": "SPB"
+      },
+      "has_completed_focus": "POR_join_the_carlist_fight"
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "set_country_flag": "supports_SPB_flag"
+        },
+        {
+          "diplomatic_relation": {
+            "country": "SPB",
+            "relation": "military_access",
+            "active": true
+          },
+          "SPB": {
+            "diplomatic_relation": {
+              "country": "POR",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "if": [
+        {
+          "limit": {
+            "country_exists": "SPD"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPB",
+            "enemy": "SPD",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "SPC"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPB",
+            "enemy": "SPC",
+            "hostility_reason": "asked_to_join"
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "SPA"
+          },
+          "add_to_war": {
+            "targeted_alliance": "SPB",
+            "enemy": "SPA",
+            "hostility_reason": "asked_to_join"
+          }
+        }
+      ],
+      "effect_tooltip": {
+        "give_military_access": "SPB",
+        "SPB": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "ROM_change_sides_to_allies",
+    "category_id": "ROM_change_sides",
+    "name": "Примкнуть к Союзникам",
+    "desc": "Изменения в нашем правительстве потребовали изменений в нашем отношении к войне. Присоединившись к Союзникам, наши сегодняшние «товарищи» в глобальном конфликте будут немало удивлены, когда румынские пули найдут новую цель.",
+    "icon": "decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_faction_leader": false,
+      "has_capitulated": false,
+      "any_country": {
+        "is_faction_leader": true,
+        "has_war_with": "ROM",
+        "OR": {
+          "has_government": "democratic",
+          "original_tag": [
+            "ENG",
+            "USA"
+          ]
+        }
+      },
+      "OR": {
+        "has_country_leader": {
+          "character": "ROM_king_michael",
+          "ruling_only": true
+        },
+        "has_government": [
+          "neutrality",
+          "democratic"
+        ]
+      },
+      "NOT": {
+        "FACTION_LEADER": {
+          "has_government": "democratic"
+        }
+      },
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "romania_has_flipped_sides"
+        }
+      }
+    },
+    "visible": {
+      "is_faction_leader": false,
+      "original_tag": "ROM",
+      "NOT": {
+        "has_country_flag": "romania_has_flipped_sides"
+      },
+      "hidden_trigger": {
+        "has_country_flag": "can_change_sides_dem"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "is_in_faction_with": "ROOT",
+              "is_faction_leader": true
+            },
+            "save_global_event_target_as": "romania_former_ally_target"
+          }
+        },
+        {
+          "set_country_flag": "romania_has_flipped_sides"
+        }
+      ],
+      "if": {
+        "limit": {
+          "any_country": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "democratic",
+            "OR": {
+              "original_tag": "ENG",
+              "is_in_faction_with": "ENG"
+            }
+          }
+        },
+        "random_enemy_country": {
+          "limit": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "democratic",
+            "OR": {
+              "original_tag": "ENG",
+              "is_in_faction_with": "ENG"
+            }
+          },
+          "save_event_target_as": "romania_new_ally_target"
+        }
+      },
+      "else_if": {
+        "limit": {
+          "any_country": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "democratic",
+            "OR": {
+              "original_tag": "USA",
+              "is_in_faction_with": "USA"
+            }
+          }
+        },
+        "random_enemy_country": {
+          "limit": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "democratic",
+            "OR": {
+              "original_tag": "USA",
+              "is_in_faction_with": "USA"
+            }
+          },
+          "save_event_target_as": "romania_new_ally_target"
+        }
+      },
+      "else": {
+        "random_enemy_country": {
+          "limit": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "democratic"
+          },
+          "save_event_target_as": "romania_new_ally_target"
+        }
+      },
+      "event_target:romania_new_ally_target": {
+        "country_event": {
+          "id": "DOD_romania.16"
+        }
+      }
+    }
+  },
+  {
+    "id": "ROM_change_sides_to_commintern",
+    "category_id": "ROM_change_sides",
+    "name": "Вступить в Коминтерн",
+    "desc": "Изменения в нашем правительстве потребовали изменений в нашем отношении к войне. Присоединившись к Коммунистическому интернационалу, наши сегодняшние «товарищи» в глобальном конфликте будут немало удивлены, когда румынские пули найдут новую цель.",
+    "icon": "decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_faction_leader": false,
+      "has_capitulated": false,
+      "any_country": {
+        "is_faction_leader": true,
+        "has_war_with": "ROM",
+        "OR": {
+          "has_government": "communism",
+          "original_tag": "SOV"
+        }
+      },
+      "OR": {
+        "has_country_leader": {
+          "character": "ROM_king_michael",
+          "ruling_only": true
+        },
+        "has_government": "communism"
+      },
+      "NOT": {
+        "FACTION_LEADER": {
+          "has_government": "communism"
+        }
+      },
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "romania_has_flipped_sides"
+        }
+      }
+    },
+    "visible": {
+      "is_faction_leader": false,
+      "original_tag": "ROM",
+      "NOT": {
+        "has_country_flag": "romania_has_flipped_sides"
+      },
+      "hidden_trigger": {
+        "has_country_flag": "can_change_sides_com"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "is_in_faction_with": "ROOT",
+              "is_faction_leader": true
+            },
+            "save_global_event_target_as": "romania_former_ally_target"
+          }
+        },
+        {
+          "set_country_flag": "romania_has_flipped_sides"
+        }
+      ],
+      "if": {
+        "limit": {
+          "any_country": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "communism",
+            "OR": {
+              "original_tag": "SOV",
+              "is_in_faction_with": "SOV"
+            }
+          }
+        },
+        "random_enemy_country": {
+          "limit": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "communism",
+            "OR": {
+              "original_tag": "SOV",
+              "is_in_faction_with": "SOV"
+            }
+          },
+          "save_event_target_as": "romania_new_ally_target"
+        }
+      },
+      "else": {
+        "random_enemy_country": {
+          "limit": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "communism"
+          },
+          "save_event_target_as": "romania_new_ally_target"
+        }
+      },
+      "event_target:romania_new_ally_target": {
+        "country_event": {
+          "id": "DOD_romania.16"
+        }
+      }
+    }
+  },
+  {
+    "id": "ROM_change_sides_to_axis",
+    "category_id": "ROM_change_sides",
+    "name": "Примкнуть к странам Оси",
+    "desc": "Изменения в нашем правительстве потребовали изменений в нашем отношении к войне. Присоединившись к странам Оси, наши сегодняшние «товарищи» в глобальном конфликте будут немало удивлены, когда румынские пули найдут новую цель.",
+    "icon": "decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_faction_leader": false,
+      "has_capitulated": false,
+      "any_country": {
+        "is_faction_leader": true,
+        "has_war_with": "ROM",
+        "OR": {
+          "has_government": "fascism",
+          "original_tag": [
+            "GER",
+            "ITA"
+          ]
+        }
+      },
+      "OR": {
+        "has_country_leader": {
+          "character": "ROM_king_michael",
+          "ruling_only": true
+        },
+        "has_government": "fascism"
+      },
+      "NOT": {
+        "FACTION_LEADER": {
+          "has_government": "fascism"
+        }
+      },
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "romania_has_flipped_sides"
+        }
+      }
+    },
+    "visible": {
+      "is_faction_leader": false,
+      "original_tag": "ROM",
+      "NOT": {
+        "has_country_flag": "romania_has_flipped_sides"
+      },
+      "hidden_trigger": {
+        "has_country_flag": "can_change_sides_fas"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "is_in_faction_with": "ROOT",
+              "is_faction_leader": true
+            },
+            "save_global_event_target_as": "romania_former_ally_target"
+          }
+        },
+        {
+          "set_country_flag": "romania_has_flipped_sides"
+        }
+      ],
+      "if": {
+        "limit": {
+          "any_country": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "fascism",
+            "OR": {
+              "original_tag": "GER",
+              "is_in_faction_with": "GER"
+            }
+          }
+        },
+        "random_enemy_country": {
+          "limit": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "fascism",
+            "OR": {
+              "original_tag": "GER",
+              "is_in_faction_with": "GER"
+            }
+          },
+          "save_event_target_as": "romania_new_ally_target"
+        }
+      },
+      "else_if": {
+        "limit": {
+          "any_country": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "fascism",
+            "OR": {
+              "original_tag": "ITA",
+              "is_in_faction_with": "ITA"
+            }
+          }
+        },
+        "random_enemy_country": {
+          "limit": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "fascism",
+            "OR": {
+              "original_tag": "ITA",
+              "is_in_faction_with": "ITA"
+            }
+          },
+          "save_event_target_as": "romania_new_ally_target"
+        }
+      },
+      "else": {
+        "random_enemy_country": {
+          "limit": {
+            "is_faction_leader": true,
+            "has_war_with": "ROM",
+            "has_government": "fascism"
+          },
+          "save_event_target_as": "romania_new_ally_target"
+        }
+      },
+      "event_target:romania_new_ally_target": {
+        "country_event": {
+          "id": "DOD_romania.16"
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_fight_alongside_country_comrades_baltic",
+    "category_id": "SOV_diplomacy_baltic_decision_category",
+    "name": "Сражаться бок о бок с нашими [FROM.GetAdjective]ими товарищами",
+    "desc": "$BUL_fight_alongside_country_comrades_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_fight_alongside_country_comrades_nordic",
+    "category_id": "SOV_diplomacy_nordic_decision_category",
+    "name": "$SOV_fight_alongside_country_comrades_baltic$",
+    "desc": "$SOV_fight_alongside_country_comrades_baltic_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_fight_alongside_country_comrades_balkan",
+    "category_id": "SOV_diplomacy_balkan_decision_category",
+    "name": "$SOV_fight_alongside_country_comrades_baltic$",
+    "desc": "$SOV_fight_alongside_country_comrades_baltic_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_fight_alongside_country_comrades_middle_east",
+    "category_id": "SOV_diplomacy_middle_east_decision_category",
+    "name": "$SOV_fight_alongside_country_comrades_baltic$",
+    "desc": "$SOV_fight_alongside_country_comrades_baltic_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_test_making_president",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_test_making_president",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "var:SWI_confederation_president": {
+        "SWI_make_centralized_president": true
+      },
+      "remove_power_balance": {
+        "id": "SWI_centralization_bop"
+      },
+      "set_country_flag": "SWI_elected_centralized_president"
+    }
+  },
+  {
+    "id": "SWI_oust_confederation_president",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Изгнать президента конфедерации",
+    "desc": "",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 300,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SWI_ongoing_president_initiative",
+        "hidden_trigger": {
+          "has_country_flag": "SWI_elected_centralized_president"
+        }
+      }
+    },
+    "visible": {
+      "has_variable": "SWI_confederation_president",
+      "NOT": {
+        "has_country_flag": "SWI_elected_centralized_president"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "SWI_oust_the_conferedation_president",
+      "hidden_effect": {
+        "set_variable": {
+          "SWI_ousted_president": "SWI_confederation_president"
+        },
+        "clear_variable": "SWI_confederation_president",
+        "set_country_flag": "SWI_vacant_confederation_president_position",
+        "SWI_outgoing_president_cleanup": true,
+        "SWI_update_councilors": true
+      },
+      "add_power_balance_value": {
+        "id": "SWI_centralization_bop",
+        "value": 0.2
+      },
+      "add_ideas": [
+        "SWI_no_confederation_president_idea"
+      ]
+    }
+  },
+  {
+    "id": "SWI_no_elected_president",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Без президента конфедерации",
+    "desc": "",
+    "icon": "GFX_decision_SWI_no_elected_president",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SWI_vacant_confederation_president_position"
+      },
+      "has_completed_focus": "SWI_swiss_guiding_principles"
+    },
+    "visible": {
+      "has_country_flag": "SWI_vacant_confederation_president_position"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_elect_a_new_confederation_president",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Избрать нового президента конфедерации",
+    "desc": "",
+    "icon": "GFX_decision_SWI_elect_confederation_president",
+    "cost": 250,
+    "fire_only_once": false,
+    "available": {
+      "has_active_mission": "SWI_no_elected_president",
+      "NOT": {
+        "has_variable": "SWI_confederation_president"
+      }
+    },
+    "visible": {
+      "has_active_mission": "SWI_no_elected_president"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_recently_finished_president_initiative_mission",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Президентская инициатива недавно выполнена",
+    "desc": "",
+    "icon": "GFX_decision_SWI_elect_confederation_president",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SWI_recently_finished_president_initiative"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "SWI_ongoing_president_initiative"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_confederation_president_speech",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Речь президента совета",
+    "desc": "",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_active_mission": "SWI_militia_active",
+        "has_country_flag": "SWI_president_gave_MR_speech"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "TUR_subsidise_the_karabuk_iron_steel_factory",
+    "category_id": "TUR_industrial_projects_category",
+    "name": "Субсидировать сталелитейный завод в Карабюке",
+    "desc": "Правительство оценивает каждый потенциальный индустриальный проект отдельно.",
+    "icon": "generic_factory",
+    "cost": "TUR_etatism_cost_penalty_var?50",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "TUR_financing_private_enterprise_flag"
+      },
+      "347": {
+        "free_building_slots": {
+          "building": "industrial_complex",
+          "size": {
+            "_op": ">",
+            "value": 1
+          },
+          "include_locked": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "TUR_the_sanayiciler"
+    },
+    "complete_effect": {
+      "add_ideas": "TUR_financing_private_enterprise",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_financing_private_enterprise_flag",
+          "value": 1,
+          "days": 300
+        }
+      }
+    }
+  },
+  {
+    "id": "OFN_AFRICA_MANDATE_restore_order_in_the_countryside",
+    "category_id": "OFN_AFRICA_MANDATE_temporary_command",
+    "name": "Восстановить порядок в сельской местности",
+    "desc": "",
+    "icon": "GFX_decision_generic_helicopter",
+    "cost": 110,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "OFN_AFRICA_MANDATE_subsidize_local_plantation_owners",
+    "category_id": "OFN_AFRICA_MANDATE_temporary_command",
+    "name": "Субсидировать местных владельцев плантаций",
+    "desc": "",
+    "icon": "GFX_decision_generic_farm",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "hidden_trigger": {
+        "OR": {
+          "has_cosmetic_tag": [
+            "COG_USA",
+            "USA_CAR"
+          ]
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "OFN_AFRICA_MANDATE_CAR_restore_order_in_the_countryside",
+    "category_id": "OFN_AFRICA_MANDATE_temporary_command_CAR",
+    "name": "Восстановить порядок в селськой местности",
+    "desc": "",
+    "icon": "GFX_decision_generic_helicopter",
+    "cost": 90,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "OFN_AFRICA_MANDATE_CAR_subsidize_local_plantation_owners",
+    "category_id": "OFN_AFRICA_MANDATE_temporary_command_CAR",
+    "name": "Субсидировать местных владельцев плантаций",
+    "desc": "",
+    "icon": "GFX_decision_generic_farm",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_cosmetic_tag": [
+          "COG_USA",
+          "USA_CAR"
+        ]
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Survival_Conduct_Patrols_Outside",
+    "category_id": "Antarctica_GUI_AAG_Survival",
+    "name": "Провеcти патрулирования периметра базы",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "Antarctica_GUI_AAG_Survival_Mech_Enabled",
+        "Antarctica_GUI_AAG_Survival_On_Half_Rations"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Survival_Conduct_Patrols_Outside",
+      "set_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess",
+      "hidden_effect": {
+        "add_political_power": -25
+      }
+    }
+  },
+  {
+    "id": "BRA_show_lott_presidency_options",
+    "category_id": "BRA_debug_decisions",
+    "name": "Show Lott Presidency Debug Decisions",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "BRA_show_lott_presidency_options"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_show_lott_presidency_options",
+      "set_country_flag": "BRA_show_lott_presidency_options"
+    }
+  },
+  {
+    "id": "BRA_hide_lott_presidency_options",
+    "category_id": "BRA_debug_decisions",
+    "name": "Hide Lott Presidency Debug Decisions",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRA_show_lott_presidency_options"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_hide_lott_presidency_options",
+      "clr_country_flag": "BRA_show_lott_presidency_options"
+    }
+  },
+  {
+    "id": "BRA_debug_start_65_presidential_elections",
+    "category_id": "BRA_debug_decisions",
+    "name": "Начать президентские выборы 1965 года",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "BRA_show_election_options"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_debug_start_65_presidential_elections",
+      "country_event": {
+        "id": "brazil.237"
+      }
+    }
+  },
+  {
+    "id": "BRA_debug_conclude_65_presidential_elections",
+    "category_id": "BRA_debug_decisions",
+    "name": "Закончить президентские выборы 1965 года",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRA_pres_election_active"
+    },
+    "visible": {
+      "has_country_flag": "BRA_show_election_options"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_debug_conclude_65_presidential_elections",
+      "country_event": {
+        "id": "brazil.231"
+      }
+    }
+  },
+  {
+    "id": "BRA_arrest_dissidents_timer",
+    "category_id": "BRA_military_category",
+    "name": "Арестовать диссидентов",
+    "desc": "Миссия военных состоит в том, чтобы восстановить порядок в Бразилии... и очищение от диссидентства является неотъемлемой частью этой работы.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRA_military_elections_happening"
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_DEC_promise_change_in_the_countryside",
+    "category_id": "ENG_DECCAT_Maggie",
+    "name": "Пообещать изменения в глубинке",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_leader": {
+        "character": "ENG_Margaret_Thatcher",
+        "ruling_only": true
+      }
+    },
+    "complete_effect": {
+      "ENG_Thatcher_Add_Pop_Love_5": true
+    }
+  },
+  {
+    "id": "SCO_Election_The_Presidents_Campaign",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания президента",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Campaign_UP_Fuckery"
+        ]
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "president_campaign_already_done"
+      },
+      "if": [
+        {
+          "limit": {
+            "has_country_flag": "SCO_SNP_Campaign"
+          },
+          "has_country_flag": "SCO_SNP_President"
+        },
+        {
+          "limit": {
+            "has_country_flag": "SCO_ILP_Campaign"
+          },
+          "has_country_flag": "SCO_ILP_President"
+        },
+        {
+          "limit": {
+            "has_country_flag": "SCO_UP_Campaign"
+          },
+          "has_country_flag": "SCO_UP_President"
+        }
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Election_Countdown_Presidential_1965",
+    "category_id": "SCO_Elections_Category",
+    "name": "Президентские выборы",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Election_Countdown_Presidential_1969",
+    "category_id": "SCO_Elections_Category",
+    "name": "Президентские выборы",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": {
+      "country_event": {
+        "id": "SCO.4016"
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_boost_lacerda_in_presidential_election",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ПАРЯЩИЙ ВОРОН",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_SouthAmerica": true,
+          "is_ai": true
+        },
+        "BRA": {
+          "AND": {
+            "has_country_flag": [
+              "BRA_65_lacerda_candidate",
+              "BRA_pres_election_active"
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_BRA_boost_lacerda_in_presidential_election",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_CIA_boosting_lacerda_in_presidential_election"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_boost_kubitschek_in_presidential_election",
+    "category_id": "USA_BoP_category",
+    "name": "Операция СТАРЫЙ СОЮЗНИК",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_SouthAmerica": true,
+          "is_ai": true
+        },
+        "BRA": {
+          "AND": {
+            "NOT": {
+              "has_country_flag": "BRA_65_lacerda_candidate"
+            },
+            "has_country_flag": [
+              "BRA_pres_election_active",
+              "BRA_65_kubitschek_candidate"
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_BRA_boost_kubitschek_in_presidential_election",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_CIA_boosting_kubitschek_in_presidential_election"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_boost_adhemar_in_presidential_election",
+    "category_id": "USA_BoP_category",
+    "name": "Операция КОРЫСТНЫЙ ГАМБИТ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_SouthAmerica": true,
+          "is_ai": true
+        },
+        "BRA": {
+          "AND": {
+            "NOT": {
+              "has_country_flag": "BRA_65_lacerda_candidate"
+            },
+            "has_country_flag": "BRA_pres_election_active"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_BRA_boost_adhemar_in_presidential_election",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_CIA_boosting_adhemar_in_presidential_election"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "FRA_sidos_debug",
+    "category_id": "FRA_debug_category",
+    "name": "Дебаг Сидоса",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_leader": {
+        "character": "FRA_Conseil_des_Ministres",
+        "ruling_only": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_sidos_debug",
+      "set_country_flag": [
+        "FRA_sidos_debug_enabled",
+        "FRA_sidos_elected"
+      ],
+      "remove_ideas": "FRA_les_annees_noires",
+      "set_politics": {
+        "ruling_party": "national_socialism"
+      },
+      "add_popularity": {
+        "ideology": "national_socialism",
+        "popularity": 0.1
+      },
+      "remove_all_ministers": true,
+      "add_ideas": [
+        "FRA_Pierre_Drieu_la_Rochelle_hog",
+        "FRA_Louis_Darquier_de_Pellepoix_for",
+        "FRA_Jacques_Benoist_Mechin_eco",
+        "FRA_Jean_Marie_le_Pen_sec"
+      ],
+      "every_country": {
+        "limit": {
+          "is_ai": false,
+          "HasEuropeInterest": true
+        },
+        "news_event": {
+          "id": "WORLD.2071",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "FRA_sid_civil_war",
+    "category_id": "FRA_debug_category",
+    "name": "Гражданская война у Сидоса",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "FRA_sidos_debug_enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_sid_civil_war",
+      "FRA_civil_war_sidos_start": true
+    }
+  },
+  {
+    "id": "FRA_sid_join_german_sphere",
+    "category_id": "FRA_debug_category",
+    "name": "Присоединится к немецкой сфере",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "FRA_sidos_debug_enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_sid_join_german_sphere",
+      "add_ideas": [
+        "Pakt_Bundnispartner",
+        "FRA_back_in_the_pakt",
+        "FRA_learning_from_the_reich"
+      ],
+      "add_opinion_modifier": {
+        "target": "GER",
+        "modifier": "FRA_europeanist_foreign_policy"
+      },
+      "GER": {
+        "add_to_faction": "FRA",
+        "add_opinion_modifier": {
+          "target": "FRA",
+          "modifier": "FRA_europeanist_foreign_policy"
+        },
+        "set_temp_variable": {
+          "SeaZone_ID": 3
+        },
+        "Cold_War_GUI_PowerProjection_AddSeaZone": true
+      },
+      "if": {
+        "limit": {
+          "has_global_flag": "german_civil_war_speervic"
+        },
+        "join_zollverein": true
+      },
+      "else": {
+        "econ_join_sphere_GER": true
+      }
+    }
+  },
+  {
+    "id": "FRA_sid_join_italian_sphere",
+    "category_id": "FRA_debug_category",
+    "name": "Присоединится к итальянской сфере",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "FRA_sidos_debug_enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_sid_join_italian_sphere",
+      "set_country_flag": "FRA_Italy_Aligned",
+      "add_ideas": [
+        "FRA_mediterranean_brotherhood",
+        "FRA_learning_from_the_empire"
+      ],
+      "add_opinion_modifier": {
+        "target": "ITA",
+        "modifier": "FRA_europeanist_foreign_policy"
+      },
+      "ITA": {
+        "add_opinion_modifier": {
+          "target": "FRA",
+          "modifier": "FRA_europeanist_foreign_policy"
+        },
+        "add_to_faction": "FRA"
+      },
+      "econ_join_sphere_ITA": true
+    }
+  },
+  {
+    "id": "FRA_sid_join_iberian_sphere",
+    "category_id": "FRA_debug_category",
+    "name": "Присоединится к иберийской сфере",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "FRA_sidos_debug_enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_sid_join_iberian_sphere",
+      "set_country_flag": "FRA_Iberia_Aligned",
+      "add_ideas": [
+        "FRA_latin_bloc",
+        "FRA_across_the_pyrenees"
+      ],
+      "add_opinion_modifier": {
+        "target": "IBR",
+        "modifier": "FRA_europeanist_foreign_policy"
+      },
+      "IBR": {
+        "add_ideas": "FRA_latin_bloc",
+        "add_opinion_modifier": {
+          "target": "FRA",
+          "modifier": "FRA_europeanist_foreign_policy"
+        }
+      },
+      "econ_join_sphere_IBR": true
+    }
+  },
+  {
+    "id": "SGR_OC_subsidise_recreation",
+    "category_id": "SGR_reich_in_crisis_category",
+    "name": "Субсидировать программы отдыха",
+    "desc": "Гениальность покойного Адольфа Гитлера неизмерима - человек, что сумел вытащить Рейх из экономических руин, превратив его в мирового гегемона. Мы последуем его примеру, воссоздав программу \"Сила через радость\" по субсидированию отдыха и туризма для каждого гражданина Рейха, чтобы преодолеть разрыв между классовыми различиями и предоставить каждому гражданину Рейха право наслаждаться жизнью по заветам национал-социалистической доктрины.\n\nИдеальному арийскому гражданину должны быть предоставлены безграничные удобства и роскошь!",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SGR_OC_the_true_ideology"
+    },
+    "visible": {
+      "has_country_flag": "SGR_OC_the_true_ideology"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_OC_subsidise_recreation",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.5
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "GNG_unplug_GFT_dissidents_from_society",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Отключить диссидентов  ФРГ от связи",
+    "desc": "Как выясняется, координировать 'мирный протест' становится крайне сложно, когда ни один стационарный телефон в вашем районе больше не работает.",
+    "icon": "GFX_decision_generic_document_cancel",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_GFT",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_GFT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      },
+      "has_country_flag": "GNG_rapture"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.65
+        },
+        "econ_spend_money_once_effect_raw_money": true,
+        "add_political_power": -15
+      }
+    }
+  },
+  {
+    "id": "GNG_unplug_CCL_dissidents_from_society",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Отключить диссидентов  ККТ от связи",
+    "desc": "Как выясняется, координировать 'мирный протест' становится крайне сложно, когда ни один стационарный телефон в вашем районе больше не работает.",
+    "icon": "GFX_decision_generic_document_cancel",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_CCL",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_CCL"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      },
+      "has_country_flag": "GNG_rapture"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.65
+        },
+        "econ_spend_money_once_effect_raw_money": true,
+        "add_political_power": -15
+      }
+    }
+  },
+  {
+    "id": "IBR_subsidise_colonial_growth",
+    "category_id": "IBR_emergency_reforms",
+    "name": "Субсидировать колониальный рост",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_passing_reform"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_subsidise_sphere_growth",
+      "set_country_flag": "IBR_passing_reform"
+    }
+  },
+  {
+    "id": "JAP_subsidise_sphere_growth",
+    "category_id": "JAP_emergency_reforms",
+    "name": "Субсидировать экономику Сферы",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "GDP_growth_real": {
+          "_op": "<",
+          "value": 3
+        }
+      },
+      "NOT": {
+        "has_country_flag": "JAP_reforms_next_stage"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_subsidise_sphere_growth",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -35,
+        "JAP_PM_decrease_power_small": true
+      }
+    }
+  },
+  {
+    "id": "JAP_increase_unemployment_subsidies",
+    "category_id": "JAP_political_favors",
+    "name": "Увеличить субсидии по безработице",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "has_country_flag": "JAP_reforms_next_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_increase_unemployment_subsidies",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -100,
+        "JAP_PM_decrease_power_avg": true
+      }
+    }
+  },
+  {
+    "id": "JAP_sideline_hardline_MPS",
+    "category_id": "JAP_faction_relations",
+    "name": "Убрать  депутатов-радикалов",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_cancel",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "JAP_prime_minister": 5
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_sideline_hardline_MPS",
+      "set_temp_variable": [
+        {
+          "temp_hl_inf_change": -0.05
+        },
+        {
+          "temp_hl_approval_change": -0.025
+        }
+      ],
+      "JAP_change_hardliner_influence": true,
+      "JAP_change_hardliner_approval": true
+    }
+  },
+  {
+    "id": "MEX_debug_load_ordaz_presidency",
+    "category_id": "MEX_debug_category",
+    "name": "Load Ordaz Presidency",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ordaz_debug_content"
+    },
+    "complete_effect": {
+      "set_country_flag": "TNO_MEX_ORD_SUC",
+      "load_focus_tree": {
+        "tree": "MEX_ordaz_first_tree"
+      },
+      "MEX": {
+        "country_event": {
+          "id": "MEX_Ordaz.74",
+          "days": 75
+        },
+        "set_country_flag": "Uruchurtu_dealt_with",
+        "promote_character": "MEX_Gustavo_Ordaz",
+        "remove_all_ministers": true,
+        "remove_ideas_with_trait": [
+          "army_chief",
+          "navy_chief"
+        ],
+        "add_ideas": [
+          "MEX_Luis_Echeverria_hog",
+          "MEX_Marcelino_Barragan_sec",
+          "MEX_Antonio_Flores_for",
+          "MEX_Octaviano_Salas_eco",
+          "MEX_Marcelino_Barragan_army_chief",
+          "MEX_Antonio_Vazquez_del_Mercado_navy_chief"
+        ]
+      }
+    }
+  },
+  {
+    "id": "MEX_debug_load_lozano_presidency",
+    "category_id": "MEX_debug_category",
+    "name": "Load Salinas Presidency",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "lozano_debug_content"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "load_lozano_presidency_tt",
+        "Uruchurtu_inauguration_dealt_tt"
+      ],
+      "set_country_flag": "TNO_MEX_LOZ_SUC",
+      "MEX": {
+        "set_country_flag": [
+          "lozano_first_tree_flag",
+          "Uruchurtu_dealt_with"
+        ],
+        "promote_character": "MEX_Raul_Lozano",
+        "remove_all_ministers": true,
+        "remove_ideas_with_trait": [
+          "army_chief",
+          "navy_chief"
+        ],
+        "add_ideas": [
+          "MEX_Luis_Echeverria_hog",
+          "MEX_Antonio_Mena_eco",
+          "MEX_Hugo_B_Margain_for",
+          "MEX_Del_Rosal_sec",
+          "MEX_Del_Rosal_army_chief",
+          "MEX_Antonio_Vazquez_del_Mercado_navy_chief"
+        ],
+        "hidden_effect": {
+          "load_focus_tree": {
+            "tree": "MEX_lozano_first_tree"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "MEX_debug_load_madrazo_presidency",
+    "category_id": "MEX_debug_category",
+    "name": "Load Madrazo Presidency",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "madrazo_debug_content"
+    },
+    "complete_effect": {
+      "set_country_flag": "TNO_MEX_MAD_SUC",
+      "custom_effect_tooltip": "load_madrazo_presidency_tt",
+      "MEX": {
+        "set_country_flag": [
+          "madrazo_first_tree_flag",
+          "Uruchurtu_dealt_with"
+        ],
+        "promote_character": "MEX_Carlos_Madrazo",
+        "remove_all_ministers": true,
+        "remove_ideas_with_trait": [
+          "army_chief",
+          "navy_chief"
+        ],
+        "add_ideas": [
+          "MEX_Luis_Echeverria_hog",
+          "MEX_Javier_Sierra_eco",
+          "MEX_Lazaro_Cardenas_sec",
+          "MEX_Alfonoso_Robles_for",
+          "MEX_Lazaro_Cardenas_army_chief",
+          "MEX_Antonio_Vazquez_del_Mercado_navy_chief"
+        ],
+        "hidden_effect": {
+          "load_focus_tree": {
+            "tree": "MEX_madrazo_first_tree"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "MEX_debug_load_del_rosal_presidency",
+    "category_id": "MEX_debug_category",
+    "name": "Load Del Rosal Presidency",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "assorted_debug_content"
+    },
+    "complete_effect": {
+      "MEX": {
+        "promote_character": "MEX_Del_Rosal",
+        "remove_all_ministers": true
+      }
+    }
+  },
+  {
+    "id": "MEX_debug_load_antonio_mena_presidency",
+    "category_id": "MEX_debug_category",
+    "name": "Load Ortiz Mena Presidency",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "assorted_debug_content"
+    },
+    "complete_effect": {
+      "MEX": {
+        "promote_character": "MEX_Antonio_Mena",
+        "remove_all_ministers": true
+      }
+    }
+  },
+  {
+    "id": "MEX_debug_load_octavio_paz_presidency",
+    "category_id": "MEX_debug_category",
+    "name": "Octavio Paz Becomes President",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "assorted_debug_content"
+    },
+    "complete_effect": {
+      "MEX": {
+        "set_politics": {
+          "ruling_party": "socialist"
+        },
+        "promote_character": "MEX_Octavio_Paz",
+        "remove_all_ministers": true,
+        "set_popularities": {
+          "socialist": 40,
+          "liberalism": 30,
+          "conservatism": 30
+        }
+      }
+    }
+  },
+  {
+    "id": "MEX_kabuki_bureaucracy_pick_sides",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Партийные бюрократы выбирают свою сторону",
+    "desc": "",
+    "icon": "GFX_decision_generic_point",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "MEX_blank_tooltip",
+        "has_country_flag": [
+          "MEX_kabuki_bureaucracy_pick_ordaz",
+          "MEX_kabuki_bureaucracy_pick_lozano",
+          "MEX_kabuki_bureaucracy_pick_madrazo"
+        ]
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_kabuki_industrialists_pick_sides",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Промышленники выбирают свою сторону",
+    "desc": "",
+    "icon": "GFX_decision_generic_point",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "MEX_blank_tooltip",
+        "has_country_flag": [
+          "MEX_kabuki_industrialists_pick_ordaz",
+          "MEX_kabuki_industrialists_pick_lozano",
+          "MEX_kabuki_industrialists_pick_madrazo"
+        ]
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_kabuki_dfs_pick_sides",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "УФБ выбирают свою сторону",
+    "desc": "",
+    "icon": "GFX_decision_generic_point",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "MEX_blank_tooltip",
+        "has_country_flag": [
+          "MEX_kabuki_dfs_pick_ordaz",
+          "MEX_kabuki_dfs_pick_lozano",
+          "MEX_kabuki_dfs_pick_madrazo"
+        ],
+        "NOT": {
+          "check_variable": {
+            "MEX_PRI_crisis_number": 1
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_kabuki_promise_oil_subsidy_deal",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Обещать субсидии на нефть",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_refinery",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_rallying_the_party",
+        "check_variable": {
+          "MEX_PRI_selected_group": 4
+        },
+        "NOT": {
+          "OR": {
+            "has_country_flag": [
+              "MEX_kabuki_industrialists_pick_ordaz",
+              "MEX_kabuki_industrialists_pick_madrazo",
+              "MEX_kabuki_industrialists_pick_lozano"
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "MEX_PRI_increase_ordaz_pop_businessmen_low": true,
+      "MEX_PRI_increase_madrazo_pop_businessmen_low": true,
+      "custom_effect_tooltip": "MEX_kabuki_promise_oil_subsidy_deal_tt"
+    }
+  },
+  {
+    "id": "MEX_kabuki_disclose_presidential_ambitions",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Раскрыть президентские амбиции",
+    "desc": "",
+    "icon": "GFX_decision_generic_podium",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_the_technocratic_counter",
+        "OR": {
+          "check_variable": {
+            "MEX_PRI_selected_group": 4
+          },
+          "is_ai": true
+        },
+        "NOT": {
+          "OR": {
+            "has_country_flag": [
+              "MEX_kabuki_industrialists_pick_ordaz",
+              "MEX_kabuki_industrialists_pick_madrazo",
+              "MEX_kabuki_industrialists_pick_lozano"
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "MEX_PRI_increase_lozano_pop_businessmen_med": true,
+      "set_country_flag": "MEX_kabuki_disclose_presidential_ambitions_completed"
+    }
+  },
+  {
+    "id": "MEX_sign_agreements_of_the_president_of_the_republic",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Подписание соглашений Президентом Республики",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": [
+          "MEX_doctorsstrike_second_strike_break",
+          "push_into_irrelevance"
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_doctor_intern_radicalism_decrease_low": true,
+      "country_event": "MEX_Ordaz_DS.10"
+    }
+  },
+  {
+    "id": "MEX_release_confusing_presidential_statements",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Выпустить заявление президента",
+    "desc": "",
+    "icon": "GFX_decision_generic_podium",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": [
+          "MEX_doctorsstrike_second_doctorsstrike",
+          "coopt_the_movement"
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_doctor_intern_radicalism_decrease_med": true,
+      "MEX_PRI_decrease_loyalty_officials_very_low": true,
+      "MEX_PRI_decrease_power_officials_low": true,
+      "country_event": {
+        "id": "MEX_Lozano_DS.9"
+      }
+    }
+  },
+  {
+    "id": "MEX_subsidize_mechanization",
+    "category_id": "MEX_Economy_category",
+    "name": "Субсидировать механизацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MEX_econ_tab_selected": 2
+      },
+      "NOT": {
+        "has_country_leader": {
+          "character": "MEX_Carlos_Madrazo",
+          "ruling_only": true
+        }
+      }
+    },
+    "complete_effect": {
+      "decision_region_decider": true,
+      "set_temp_variable": [
+        {
+          "temp_value": 3
+        },
+        {
+          "temp_value": 3
+        },
+        {
+          "MEX_econ_decision_debt": 10
+        }
+      ],
+      "MEX_econ_region_stimulation_percent_change": true,
+      "MEX_econ_region_agronomics_productivity_percent_change": true,
+      "MEX_econ_region_debt_change": true,
+      "MEX_econ_reload": true,
+      "MEX_econ_region_map_value_change": true
+    }
+  },
+  {
+    "id": "OFN_CAR_destroy_countryside_roads",
+    "category_id": "OFN_CAR_memento_mori_cat",
+    "name": "Уничтожить деревенские дороги",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_CAR_on_a_mission"
+      },
+      "OR": {
+        "check_variable": [
+          {
+            "OFN_CAR_WAR_logistics": 0.05
+          },
+          {
+            "OFN_CAR_WAR_logistics": {
+              "_op": ">",
+              "value": 0.05
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "OFN_CAR_stand_our_ground"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "OFN_CAR_WAR_logistics": -0.05
+      },
+      "clamp_variable": {
+        "var": "OFN_CAR_WAR_logistics",
+        "max": 1,
+        "min": 0
+      },
+      "custom_effect_tooltip": "OFN_CAR_WAR_logistics_decrease",
+      "set_country_flag": "OFN_CAR_on_a_mission"
+    }
+  },
+  {
+    "id": "PRU_president_belaunde_debug",
+    "category_id": "PRU_debug_category",
+    "name": "Белаунде побеждает на выборах 1962",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision PRU_president_belaunde_debug",
+      "set_politics": {
+        "ruling_party": "liberalism"
+      },
+      "add_country_leader_trait": "presidente_peru_latin",
+      "set_country_flag": "PRU_belaunde_president",
+      "every_country": {
+        "limit": {
+          "is_ai": false,
+          "HasAmericasInterest": true
+        },
+        "news_event": {
+          "id": "LATAM_news.52"
+        }
+      },
+      "set_party_name": {
+        "ideology": "liberalism",
+        "name": "PRU_ap_party",
+        "long_name": "PRU_ap_party_long"
+      }
+    }
+  },
+  {
+    "id": "PRU_president_odria_debug",
+    "category_id": "PRU_debug_category",
+    "name": "Одриа побеждает на выборах 1962",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision PRU_president_odria_debug",
+      "set_politics": {
+        "ruling_party": "paternalism"
+      },
+      "add_country_leader_trait": "presidente_peru_latin",
+      "set_country_flag": "PRU_odria_president",
+      "every_country": {
+        "limit": {
+          "is_ai": false,
+          "HasAmericasInterest": true
+        },
+        "news_event": {
+          "id": "LATAM_news.53"
+        }
+      }
+    }
+  },
+  {
+    "id": "regional_democratic_advance_developmental_subsidies",
+    "category_id": "regional_development_decision_category",
+    "name": "Субсидирование развития",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "has_development_program_ongoing_tt",
+        "NOT": {
+          "has_country_flag": "TNO_RUS_development_program_ongoing"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "paternalism",
+          "progressivism",
+          "liberalism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision regional_democratic_advance_developmental_subsidies",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.35
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "TNO_RUS_development_program_ongoing"
+    }
+  },
+  {
+    "id": "KOM_request_insider_information",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Запросить инсайдерскую информацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_target",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_CHOSE_CENTER"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_CHOSE_CENTER"
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 10
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "RUS_RFTU_farming_subsidies_magnitogorsk",
+    "category_id": "RUS_race_for_the_urals_gui",
+    "name": "Предложить сельхоз субсидии",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false,
+      "NOT": {
+        "has_country_flag": "RUS_building_in_magnitogorsk"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_RFTU_must_be_receptive",
+        "check_variable": {
+          "RUS_urals_receptiveness^RUS_urals_magnitogorsk_owner": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "RUS_selected_ural_region": 3
+        },
+        "is_ai": true
+      },
+      "NOT": {
+        "has_country_flag": "RUS_RFTU_preparing_invasion"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_building_in_magnitogorsk",
+      "set_temp_variable": [
+        {
+          "temp_econ_spending_amount": 0.02
+        },
+        {
+          "temp_tick_change": 0.1
+        }
+      ],
+      "econ_spend_money_once_effect_raw_money": true,
+      "RUS_add_influence_tick_magnitogorsk": true
+    }
+  },
+  {
+    "id": "TOM_electrify_the_countryside",
+    "category_id": "TOM_Modernist_SibPlan_Category",
+    "name": "Электрифицировать сельскую местность",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_electrify_the_countryside",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.075
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "TOM_The_Outsiders_Act",
+    "category_id": "TOM_Political_Situation",
+    "name": "Закон о несистемных",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "if": {
+        "limit": {
+          "is_ai": false,
+          "has_country_flag": "Modernist_Constitution"
+        },
+        "TOM_Mod_check_political_approval": true
+      },
+      "else_if": {
+        "limit": {
+          "is_ai": false
+        },
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_The_Outsiders_Act"
+    }
+  },
+  {
+    "id": "TOM_Recruit_the_Best_Outsiders",
+    "category_id": "TOM_Political_Situation",
+    "name": "Нанять лучших несистемных",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Recruit_the_Best_Outsiders",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "SAF_subsidize_transvaal_farms",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Субсидировать фермы в Трансваале",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 940
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_subsidize_transvaal_farms",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "hidden_effect": {
+        "940": {
+          "add_state_modifier": {
+            "modifier": {
+              "state_GDP_growth_factor_modifier": 0.05
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "SAF_increase_state_gdp_growth_tt_transvaal"
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_mobilizes_dissidents_in_bureaucracy",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам мобилизует диссидентов",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_imports_foreign_office_dissidents",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам апеллирует к умеренным",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_welcome_foreign_office_dissidents",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Поприветствовать диссидентов",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "UKR_play_brautigam"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "FUK_countryside_campaign",
+    "category_id": "FUK_election_category",
+    "name": "[FUK_election_GetCampaignIcon]  Вести кампанию в деревнях",
+    "desc": "",
+    "icon": "GFX_decision_generic_protest",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_variable": "FUK_election_protagonist",
+      "var:active_region": {
+        "is_in_array": {
+          "possible_actions": 2
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_countryside_campaign",
+      "subtract_from_variable": {
+        "FUK_political_capital": 75
+      },
+      "set_temp_variable": [
+        {
+          "t_region": "active_region"
+        },
+        {
+          "t_target": "FUK_election_protagonist"
+        }
+      ],
+      "set_temp_variable_to_random": {
+        "var": "t_val",
+        "min": 0.02,
+        "max": 0.07
+      },
+      "FUK_election_change_pop": true,
+      "custom_effect_tooltip": "FUK_election_actions_shuffle_tt"
+    }
+  },
+  {
+    "id": "BOV_restrict_dissident_movement",
+    "category_id": "UKR_BOV_three_heads_of_the_dragon_category",
+    "name": "Ограничить диссидентов",
+    "desc": "",
+    "icon": "GFX_decision_generic_checkpoints",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_global_flag": "UKR_UCW_ongoing"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "USA_Hart_Bill_Countdown",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Конгресс голосует за законопроект",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_bill_timer_pass_criteria",
+        "NOT": {
+          "has_country_flag": "bill_enable_mission_hart"
+        },
+        "always": false
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_review_policy_agenda",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Пересмотр политической программы",
+    "desc": "",
+    "icon": "GFX_decision_USA_congress",
+    "cost": 85,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "USA_hart_presidency",
+      "NOT": {
+        "has_country_flag": "bill_enable_mission_hart"
+      }
+    },
+    "complete_effect": {
+      "USA_HART_increase_senate_relations": true,
+      "custom_effect_tooltip": "USA_explain_relation_tt"
+    }
+  },
+  {
+    "id": "USA_utilize_the_coalition",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Использовать коалицию",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "USA_hart_presidency",
+      "NOT": {
+        "has_country_flag": "bill_enable_mission_hart"
+      }
+    },
+    "complete_effect": {
+      "USA_HART_increase_rep_stockpile_support": true,
+      "USA_HART_decrease_nat_stockpile_support": true,
+      "custom_effect_tooltip": "USA_explain_relation_tt"
+    }
+  },
+  {
+    "id": "USA_cross_the_asile",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Пересечь проход",
+    "desc": "",
+    "icon": "GFX_decision_USA_npp_p",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "USA_hart_presidency",
+      "NOT": {
+        "has_country_flag": "bill_enable_mission_hart"
+      }
+    },
+    "complete_effect": {
+      "USA_HART_increase_pro_stockpile_support": true,
+      "USA_HART_decrease_nat_stockpile_support": true,
+      "custom_effect_tooltip": "USA_explain_relation_tt"
+    }
+  },
+  {
+    "id": "USA_chop_and_pray",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Рубить и молиться",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "AND": {
+          "check_variable": [
+            {
+              "NPP_FR_senators": "NPP_FR_supporting_senators"
+            },
+            {
+              "RD_R_senators": "RD_R_supporting_senators"
+            }
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "bill_enable_mission_hart"
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_rep_support_exchange_tt",
+      "set_temp_variable": [
+        {
+          "additional_pro_votes": "NPP_C_senators"
+        },
+        {
+          "additional_nat_votes": "NPP_FR_senators"
+        },
+        {
+          "additional_rep_votes": "RD_R_senators"
+        },
+        {
+          "USA_temp_management_efficiency_var": -0.04
+        },
+        {
+          "USA_temp_equality_var": -0.04
+        },
+        {
+          "USA_temp_var_civilrights_num": -0.04
+        }
+      ],
+      "multiply_temp_variable": [
+        {
+          "additional_pro_votes": 0.3
+        },
+        {
+          "additional_nat_votes": 0.2
+        },
+        {
+          "additional_rep_votes": 0.2
+        }
+      ],
+      "subtract_from_variable": {
+        "NPP_C_supporting_senators": "additional_pro_votes"
+      },
+      "clamp_variable": [
+        {
+          "var": "NPP_C_supporting_senators",
+          "min": 0,
+          "max": "NPP_C_senators"
+        },
+        {
+          "var": "NPP_FR_supporting_senators",
+          "min": 0,
+          "max": "NPP_FR_senators"
+        },
+        {
+          "var": "RD_R_supporting_senators",
+          "min": 0,
+          "max": "RD_R_senators"
+        }
+      ],
+      "add_to_variable": [
+        {
+          "NPP_FR_supporting_senators": "additional_nat_votes"
+        },
+        {
+          "RD_R_supporting_senators": "additional_rep_votes"
+        }
+      ],
+      "USA_initialize_bill_support_hart_dec": true,
+      "USA_management_efficiency_adjust": true,
+      "USA_equality_adjust": true,
+      "USA_civil_rights_relations_adjust": true
+    }
+  },
+  {
+    "id": "USA_pay_the_price",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Заплатить цену",
+    "desc": "",
+    "icon": "GFX_decision_USA_npp_p",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "check_variable": {
+          "NPP_C_senators": "NPP_C_supporting_senators"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "bill_enable_mission_hart"
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_pro_support_exchange_tt",
+      "set_temp_variable": [
+        {
+          "additional_pro_votes": "NPP_C_senators"
+        },
+        {
+          "additional_nat_votes": "NPP_FR_senators"
+        },
+        {
+          "additional_rep_votes": "RD_R_senators"
+        },
+        {
+          "USA_temp_var_nimby_num": 0.04
+        },
+        {
+          "USA_temp_upkeep_cost_var": 0.04
+        },
+        {
+          "USA_temp_spending_power_var": -0.04
+        }
+      ],
+      "multiply_temp_variable": [
+        {
+          "additional_pro_votes": 0.2
+        },
+        {
+          "additional_nat_votes": 0.3
+        },
+        {
+          "additional_rep_votes": 0.3
+        }
+      ],
+      "add_to_variable": {
+        "NPP_C_supporting_senators": "additional_pro_votes"
+      },
+      "clamp_variable": [
+        {
+          "var": "NPP_C_supporting_senators",
+          "min": 0,
+          "max": "NPP_C_senators"
+        },
+        {
+          "var": "NPP_FR_supporting_senators",
+          "min": 0,
+          "max": "NPP_FR_senators"
+        },
+        {
+          "var": "RD_R_supporting_senators",
+          "min": 0,
+          "max": "RD_R_senators"
+        }
+      ],
+      "subtract_from_variable": [
+        {
+          "NPP_FR_supporting_senators": "additional_nat_votes"
+        },
+        {
+          "RD_R_supporting_senators": "additional_rep_votes"
+        }
+      ],
+      "USA_initialize_bill_support_hart_dec": true,
+      "USA_NIMBY_relation_adjust": true,
+      "USA_upkeep_cost_adjust": true,
+      "USA_spending_power_adjust": true
+    }
+  },
+  {
+    "id": "USA_HART_BANKRUPTCY_CRISIS_CAT",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "-- ОТВЕТНЫЕ МЕРЫ НА КРИЗИС БАНКРОТСТВА",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bankruptcy_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_bankruptcy_prevention_flag"
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_toggle_visibility_tt",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "USA_crisis_visible_bankruptcy"
+          }
+        },
+        "set_country_flag": "USA_crisis_visible_bankruptcy"
+      },
+      "else": {
+        "clr_country_flag": "USA_crisis_visible_bankruptcy"
+      }
+    }
+  },
+  {
+    "id": "USA_emergency_budget_stimulus",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Стимулировать чрезвычайный бюджет",
+    "desc": "",
+    "icon": "GFX_decision_generic_economy_graph",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bankruptcy_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_bankruptcy_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_bankruptcy"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_bankruptcy_response",
+      "add_to_variable": {
+        "USA_bankruptcy_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_var_budgethawk_num": 0.12
+        },
+        {
+          "USA_temp_upkeep_cost_var": -0.09
+        },
+        {
+          "USA_temp_spending_power_var": -0.11
+        }
+      ],
+      "USA_budget_hawk_adjust": true,
+      "USA_upkeep_cost_adjust": true,
+      "USA_spending_power_adjust": true
+    }
+  },
+  {
+    "id": "USA_URI_budget_austerity",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Бюджетная экономия ИОГ",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bankruptcy_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_bankruptcy_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_bankruptcy"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_bankruptcy_response",
+      "add_to_variable": {
+        "USA_bankruptcy_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_management_efficiency_var": -0.12
+        },
+        {
+          "USA_temp_upkeep_cost_var": -0.05
+        }
+      ],
+      "USA_management_efficiency_adjust": true,
+      "USA_upkeep_cost_adjust": true,
+      "research_funding_maximal_decrease_low": true,
+      "social_funding_maximal_decrease_med": true,
+      "admin_funding_maximal_decrease_low": true
+    }
+  },
+  {
+    "id": "USA_unify_failing_municipalities",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Объединить разваливающиеся муниципалитеты",
+    "desc": "",
+    "icon": "GFX_decision_terrain_urban",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bankruptcy_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_bankruptcy_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_bankruptcy"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_bankruptcy_response",
+      "add_to_variable": {
+        "USA_bankruptcy_Response_var": 1
+      },
+      "TNO_worsen_poverty_low": true,
+      "set_temp_variable": [
+        {
+          "USA_temp_crime_rate_var": 0.08
+        },
+        {
+          "USA_temp_management_efficiency_var": -0.09
+        },
+        {
+          "USA_temp_upkeep_cost_var": -0.07
+        }
+      ],
+      "USA_crime_rate_adjust": true,
+      "USA_management_efficiency_adjust": true,
+      "USA_upkeep_cost_adjust": true
+    }
+  },
+  {
+    "id": "USA_National_Guard_Auxiliary_for_Public_Services",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Использовать подразделение Национальной гвардии для общественных служб",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bankruptcy_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_bankruptcy_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_bankruptcy"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_bankruptcy_response",
+      "add_to_variable": {
+        "USA_bankruptcy_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_upkeep_cost_var": -0.07
+        },
+        {
+          "USA_temp_poverty_rate_var": 0.11
+        },
+        {
+          "USA_temp_equality_var": -0.08
+        },
+        {
+          "USA_temp_var_civilrights_num": -0.08
+        }
+      ],
+      "USA_upkeep_cost_adjust": true,
+      "USA_poverty_rate_adjust": true,
+      "USA_equality_adjust": true,
+      "USA_civil_rights_relations_adjust": true
+    }
+  },
+  {
+    "id": "USA_declare_end_to_bankruptcy_crisis",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Волокита бюджетов ИОГ",
+    "desc": "",
+    "icon": "GFX_decision_generic_point",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bankruptcy_response"
+      },
+      "check_variable": {
+        "USA_bankruptcy_Response_var": 4
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_bankruptcy_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_bankruptcy"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_bankruptcy_response",
+      "custom_effect_tooltip": "USA_rural_crisis_averted_tt",
+      "country_event": {
+        "id": "hart.bankrupcycrisis.6"
+      }
+    }
+  },
+  {
+    "id": "USA_HART_RURAL_CRISIS_CAT",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "-- ОТВЕТНЫЕ МЕРЫ НА КРИЗИС В СЕЛЬСКОЙ МЕСТНОСТИ",
+    "desc": "Фокусируясь только на городском населении Соединенных Штатов, мы игнорируем более половины страны, все еще живущей за пределами большого города.\nЭкономический кризис в сельской местности будет продолжать прогрессировать, если мы не создадим меры предосторожности для городских регионов или не прислушаемся к нуждам маленькой Америки.",
+    "icon": "GFX_decision_generic_farm",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_rural_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_rural_prevention_flag"
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_toggle_visibility_tt",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "USA_crisis_visible_rural"
+          }
+        },
+        "set_country_flag": "USA_crisis_visible_rural"
+      },
+      "else": {
+        "clr_country_flag": "USA_crisis_visible_rural"
+      }
+    }
+  },
+  {
+    "id": "USA_purchase_excess_crops",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Очистка избыточного урожая",
+    "desc": "",
+    "icon": "GFX_decision_terrain_hills",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_rural_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_rural_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_rural"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_rural_response",
+      "add_to_variable": {
+        "USA_rural_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_happiness_var": -0.05
+        },
+        {
+          "USA_temp_upkeep_cost_var": 0.07
+        },
+        {
+          "USA_temp_var_budgethawk_num": 0.07
+        },
+        {
+          "USA_temp_var_nimby_num": 0.05
+        },
+        {
+          "USA_HART_TEMP_WEEK_ADD": 3
+        },
+        {
+          "USA_HART_TEMP_RURAL_TRUST": 0.05
+        }
+      ],
+      "USA_happiness_adjust": true,
+      "USA_upkeep_cost_adjust": true,
+      "USA_budget_hawk_adjust": true,
+      "USA_NIMBY_relation_adjust": true,
+      "USA_Hart_rural_deed": true
+    }
+  },
+  {
+    "id": "USA_institute_price_controls",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Институт контроля над ценами",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_rural_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_rural_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_rural"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_rural_response",
+      "add_to_variable": {
+        "USA_rural_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_poverty_rate_var": 0.04
+        },
+        {
+          "USA_temp_management_efficiency_var": -0.09
+        },
+        {
+          "USA_temp_happiness_var": -0.11
+        },
+        {
+          "USA_temp_var_budgethawk_num": 0.13
+        },
+        {
+          "USA_HART_TEMP_WEEK_ADD": 4
+        },
+        {
+          "USA_HART_TEMP_RURAL_TRUST": 0.07
+        }
+      ],
+      "USA_poverty_rate_adjust": true,
+      "USA_management_efficiency_adjust": true,
+      "USA_happiness_adjust": true,
+      "USA_budget_hawk_adjust": true,
+      "USA_Hart_rural_deed": true
+    }
+  },
+  {
+    "id": "USA_restrict_fertilizer_abuse",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Ограничить злоупотребление удобрениями",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_rural_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_rural_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_rural"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_rural_response",
+      "add_to_variable": {
+        "USA_rural_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_management_efficiency_var": -0.04
+        },
+        {
+          "USA_temp_happiness_var": -0.04
+        },
+        {
+          "USA_HART_TEMP_RURAL_TRUST": 0.06
+        }
+      ],
+      "USA_management_efficiency_adjust": true,
+      "USA_happiness_adjust": true,
+      "USA_Hart_rural_deed": true
+    }
+  },
+  {
+    "id": "USA_extend_URI_to_rural_communities",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Распространить ИОГ на сельские сообщества",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_rural_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_rural_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_rural"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_rural_response",
+      "add_to_variable": {
+        "USA_rural_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_upkeep_cost_var": 0.21
+        },
+        {
+          "USA_temp_var_budgethawk_num": 0.15
+        },
+        {
+          "USA_HART_TEMP_WEEK_ADD": 12
+        },
+        {
+          "USA_HART_TEMP_RURAL_TRUST": 0.11
+        }
+      ],
+      "USA_upkeep_cost_adjust": true,
+      "USA_budget_hawk_adjust": true,
+      "USA_Hart_rural_deed": true
+    }
+  },
+  {
+    "id": "USA_declare_end_to_rural_crisis",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Спасти фермы",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_rural_response"
+      },
+      "check_variable": {
+        "USA_rural_Response_var": 4
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_rural_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_rural"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_rural_response",
+      "custom_effect_tooltip": "USA_rural_crisis_averted_tt",
+      "country_event": {
+        "id": "hart.ruralrevolt.7"
+      }
+    }
+  },
+  {
+    "id": "USA_HART_WHITE_FLIGHT_CRISIS_CAT",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "-- ОТВЕТНЫЕ МЕРЫ НА КРИЗИС БЕГСТВА БЕЛЫХ",
+    "desc": "Наша политика заставляет тех прекрасных людей, покидать свои дома и уезжать в джунгли пригородов.\nБегство городского богатства оставит наши бюджеты несбалансированными, а население - на дне нищеты. Городские сообщества требуют участия каждого, и если мы вытесняем тех, кто нам больше всего нужен, то, возможно, нам придется склониться перед силами зла",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_white_flight_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_urban_wealth_prevention_flag"
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_toggle_visibility_tt",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "USA_crisis_visible_white"
+          }
+        },
+        "set_country_flag": "USA_crisis_visible_white"
+      },
+      "else": {
+        "clr_country_flag": "USA_crisis_visible_white"
+      }
+    }
+  },
+  {
+    "id": "USA_bring_URI_to_the_suburbs",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Распространить ИОГ на пригороды",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_white_flight_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_urban_wealth_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_white"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_white_flight_response",
+      "set_temp_variable": [
+        {
+          "USA_temp_upkeep_cost_var": 0.09
+        },
+        {
+          "USA_temp_management_efficiency_var": -0.07
+        },
+        {
+          "USA_temp_var_civilrights_num": -0.04
+        },
+        {
+          "USA_temp_var_nimby_num": -0.04
+        }
+      ],
+      "USA_upkeep_cost_adjust": true,
+      "USA_management_efficiency_adjust": true,
+      "USA_civil_rights_relations_adjust": true,
+      "USA_NIMBY_relation_adjust": true
+    }
+  },
+  {
+    "id": "USA_increase_appartment_construction",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Увеличить объемы строительства квартир",
+    "desc": "",
+    "icon": "GFX_decision_generic_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_white_flight_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_urban_wealth_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_white"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_white_flight_response",
+      "set_temp_variable": [
+        {
+          "USA_temp_upkeep_cost_var": 0.05
+        },
+        {
+          "USA_temp_management_efficiency_var": -0.02
+        },
+        {
+          "USA_temp_homeless_rate_var": -0.011
+        },
+        {
+          "USA_temp_equality_var": -0.03
+        },
+        {
+          "USA_temp_var_nimby_num": -0.06
+        }
+      ],
+      "USA_upkeep_cost_adjust": true,
+      "USA_management_efficiency_adjust": true,
+      "USA_homeless_rate_adjust": true,
+      "USA_equality_adjust": true,
+      "USA_NIMBY_relation_adjust": true
+    }
+  },
+  {
+    "id": "USA_abolish_URI_equity_provisions",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Отменить положения о долевом участии ИОГ",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_white_flight_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_urban_wealth_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_white"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_white_flight_response",
+      "set_temp_variable": [
+        {
+          "USA_temp_poverty_rate_var": 0.09
+        },
+        {
+          "USA_temp_equality_var": -0.12
+        },
+        {
+          "USA_temp_var_civilrights_num": -0.13
+        },
+        {
+          "USA_temp_var_nimby_num": -0.09
+        }
+      ],
+      "USA_poverty_rate_adjust": true,
+      "USA_equality_adjust": true,
+      "USA_civil_rights_relations_adjust": true,
+      "USA_NIMBY_relation_adjust": true
+    }
+  },
+  {
+    "id": "USA_sad_future_of_redlining",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Печальное будущее красной черты",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_white_flight_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_urban_wealth_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_white"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_white_flight_response",
+      "set_temp_variable": [
+        {
+          "USA_temp_poverty_rate_var": 0.09
+        },
+        {
+          "USA_temp_equality_var": -0.25
+        },
+        {
+          "USA_temp_var_civilrights_num": -0.25
+        },
+        {
+          "USA_temp_var_nimby_num": -0.15
+        }
+      ],
+      "USA_poverty_rate_adjust": true,
+      "USA_equality_adjust": true,
+      "USA_civil_rights_relations_adjust": true,
+      "USA_NIMBY_relation_adjust": true
+    }
+  },
+  {
+    "id": "USA_HART_RACE_RIOT_CRISIS_CAT",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "-- ОТВЕТНЫЕ МЕРЫ НА РАСОВЫЕ БЕСПОРЯДКИ",
+    "desc": "Как социальный кризис, единственный способ предотвратить окончательную кульминацию кризиса расовых беспорядков это умиротворить активистов Гражданских прав и добиваться равенства внутри страны.",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_race_riot_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_race_riots_prevention_flag"
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_toggle_visibility_tt",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "USA_crisis_visible_riots"
+          }
+        },
+        "set_country_flag": "USA_crisis_visible_riots"
+      },
+      "else": {
+        "clr_country_flag": "USA_crisis_visible_riots"
+      }
+    }
+  },
+  {
+    "id": "USA_meet_community_leaders",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Познакомится с лидерами сообществ",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_race_riot_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_race_riots_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_riots"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_race_riot_response",
+      "USA_increase_nativists_turnout": true,
+      "custom_effect_tooltip": [
+        "USA_urban_voters_header_tt",
+        "USA_urban_nat_shift",
+        "USA_bonus_tooltip"
+      ],
+      "set_temp_variable": [
+        {
+          "USA_week_change_urban_nat": 6
+        },
+        {
+          "USA_temp_equality_var": 0.03
+        },
+        {
+          "USA_temp_var_civilrights_num": 0.04
+        }
+      ],
+      "add_to_variable": [
+        {
+          "Demographic_Shift_urban_nat_Weeks": "USA_week_change_urban_nat"
+        },
+        {
+          "USA_BONUS_urban_nat_val": 0.01
+        }
+      ],
+      "USA_equality_adjust": true,
+      "USA_civil_rights_relations_adjust": true
+    }
+  },
+  {
+    "id": "USA_form_structural_reform_commissions",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Сформировать комитеты по структурной реформе",
+    "desc": "",
+    "icon": "GFX_decision_generic_education",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_race_riot_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_race_riots_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_riots"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_race_riot_response",
+      "USA_increase_nativists_turnout": true,
+      "custom_effect_tooltip": [
+        "USA_urban_voters_header_tt",
+        "USA_urban_domestic_policy_con",
+        "USA_urban_voters_header_tt",
+        "USA_urban_nat_shift",
+        "USA_bonus_tooltip"
+      ],
+      "set_temp_variable": [
+        {
+          "USA_week_change_urban_domestic_policy_con": 8
+        },
+        {
+          "USA_week_change_urban_nat": 6
+        },
+        {
+          "USA_temp_equality_var": 0.05
+        },
+        {
+          "USA_temp_var_civilrights_num": 0.09
+        }
+      ],
+      "add_to_variable": [
+        {
+          "Policy_Shift_urban_domestic_policy_con_Weeks": "USA_week_change_urban_domestic_policy_con"
+        },
+        {
+          "Demographic_Shift_urban_nat_Weeks": "USA_week_change_urban_nat"
+        },
+        {
+          "USA_BONUS_urban_nat_val": 0.03
+        }
+      ],
+      "USA_equality_adjust": true,
+      "USA_civil_rights_relations_adjust": true
+    }
+  },
+  {
+    "id": "USA_support_the_police",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Поддержать полицию",
+    "desc": "",
+    "icon": "GFX_decision_BRA_pull_quadros",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_race_riot_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_race_riots_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_riots"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_race_riot_response",
+      "USA_increase_rural_turnout": true,
+      "USA_decrease_urban_turnout": true,
+      "set_temp_variable": [
+        {
+          "USA_temp_crime_rate_var": -0.04
+        },
+        {
+          "USA_temp_happiness_var": -0.05
+        },
+        {
+          "USA_temp_equality_var": 0.03
+        },
+        {
+          "USA_temp_var_civilrights_num": 0.04
+        }
+      ],
+      "USA_crime_rate_adjust": true,
+      "USA_happiness_adjust": true,
+      "USA_equality_adjust": true,
+      "USA_civil_rights_relations_adjust": true
+    }
+  },
+  {
+    "id": "USA_diversify_URI_investments",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Диверсифицировать инвестиции ИОГ",
+    "desc": "",
+    "icon": "GFX_decision_generic_education",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_race_riot_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_race_riots_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_riots"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_race_riot_response",
+      "USA_decrease_black_turnout": true,
+      "USA_decrease_hispanic_turnout": true,
+      "USA_decrease_minority_turnout": true,
+      "set_temp_variable": [
+        {
+          "USA_temp_equality_var": 0.17
+        },
+        {
+          "USA_temp_upkeep_cost_var": 0.09
+        },
+        {
+          "USA_temp_var_budgethawk_num": 0.11
+        },
+        {
+          "USA_temp_var_civilrights_num": 0.15
+        },
+        {
+          "USA_temp_var_nimby_num": 0.15
+        }
+      ],
+      "USA_equality_adjust": true,
+      "USA_upkeep_cost_adjust": true,
+      "USA_budget_hawk_adjust": true,
+      "USA_civil_rights_relations_adjust": true,
+      "USA_NIMBY_relation_adjust": true
+    }
+  },
+  {
+    "id": "USA_HART_OIL_CRISIS_CAT",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "-- ОТВЕТНЫЕ МЕРЫ НА ЭНЕРГЕТИЧЕСКИЙ КРИЗИС",
+    "desc": "Энергетический кризис - это внутренние последствия глобального нефтяного кризиса.\nПолностью преодолеть этот кризис невозможно, но у администрации Харта есть инструменты, необходимые для смягчения наихудших внутренних последствий.",
+    "icon": "GFX_decision_generic_power",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Hart_Crisis_Energy_Costs"
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_convert_roads_to_parks",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Преобразовать заброшенные дороги в парки",
+    "desc": "",
+    "icon": "GFX_decision_terrain_plains",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_energy_crisis_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Hart_Crisis_Energy_Costs"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_energy_crisis_response",
+      "USA_Highway_Funding_decrease": true,
+      "set_temp_variable": [
+        {
+          "USA_temp_upkeep_cost_var": 0.04
+        },
+        {
+          "USA_temp_management_efficiency_var": -0.01
+        }
+      ],
+      "USA_upkeep_cost_adjust": true,
+      "USA_management_efficiency_adjust": true
+    }
+  },
+  {
+    "id": "USA_commission_nuclear_power_plants",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Комиссия по атомным электростанциям",
+    "desc": "",
+    "icon": "GFX_decision_generic_reactor",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_energy_crisis_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Hart_Crisis_Energy_Costs"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_energy_crisis_response",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 1.3
+        },
+        {
+          "temp_econ_spending_amount": 3.1
+        }
+      ],
+      "econ_inflation_change": true,
+      "econ_spend_money_once_effect_raw_money": true,
+      "custom_effect_tooltip": "USA_construct_nuclear_plants_faster",
+      "add_dynamic_modifier": {
+        "modifier": "USA_Hart_EC_Nuclear_Energyu_Commission"
+      }
+    }
+  },
+  {
+    "id": "USA_lower_speed_limits",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Снизить ограничения скорости",
+    "desc": "",
+    "icon": "GFX_decision_generic_point",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_energy_crisis_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Hart_Crisis_Energy_Costs"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_energy_crisis_response",
+      "USA_Highway_Funding_decrease": true,
+      "USA_HART_decrease_transportation_reform": true,
+      "set_temp_variable": [
+        {
+          "USA_temp_management_efficiency_var": -0.02
+        },
+        {
+          "USA_temp_trucker_love": -0.02
+        },
+        {
+          "USA_temp_transport_reform": -0.02
+        }
+      ],
+      "USA_management_efficiency_adjust": true,
+      "USA_trucker_support_adjust": true,
+      "USA_city_transport_reform_adjust": true
+    }
+  },
+  {
+    "id": "USA_construct_monorails",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Построить монорельсы в городах ИОГ",
+    "desc": "",
+    "icon": "GFX_decision_generic_train",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_energy_crisis_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Hart_Crisis_Energy_Costs"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_energy_crisis_response",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.7
+        },
+        {
+          "USA_temp_transport_reform": 0.04
+        },
+        {
+          "temp_econ_spending_amount": 1.2
+        },
+        {
+          "USA_temp_upkeep_cost_var": 0.06
+        }
+      ],
+      "econ_inflation_change": true,
+      "USA_city_transport_reform_adjust": true,
+      "econ_spend_money_once_effect_raw_money": true,
+      "USA_upkeep_cost_adjust": true,
+      "add_to_variable": {
+        "USA_AMTRACK_SPEED": 0.2
+      },
+      "custom_effect_tooltip": "US_amtrack_speed_20boost"
+    }
+  },
+  {
+    "id": "USA_train_oil_workers",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Обучить рабочим специальностям для нефтяников",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_energy_crisis_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Hart_Crisis_Energy_Costs"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_energy_crisis_response",
+      "TNO_worsen_trade_unions_policy_effectiveness_monthly_med": true,
+      "set_temp_variable": [
+        {
+          "temp_econ_spending_amount": 0.6
+        },
+        {
+          "USA_temp_management_efficiency_var": -0.02
+        },
+        {
+          "inflation_temp": 0.4
+        },
+        {
+          "USA_week_change_union_pro": 5
+        }
+      ],
+      "econ_spend_money_once_effect_raw_money": true,
+      "USA_management_efficiency_adjust": true,
+      "TNO_improve_poverty_low": true,
+      "econ_inflation_change": true,
+      "custom_effect_tooltip": [
+        "USA_union_voters_header_tt",
+        "USA_union_pro_shift"
+      ],
+      "add_to_variable": [
+        {
+          "Demographic_Shift_union_pro_Weeks": "USA_week_change_union_pro"
+        },
+        {
+          "USA_BONUS_union_pro_val": 0.03
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_introduce_kissinger_treaty_1",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Провести голосование по договору о транзите через Тихий океан",
+    "desc": "",
+    "icon": "GFX_decision_USA_congress",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "bill_enable_mission_hart"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Hart_kissinger_treaty_1_decision"
+      ]
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_country_flag": "USA_kissinger_popular_treaty_decision_lol"
+        },
+        "hidden_effect": {
+          "set_country_flag": [
+            "USA_chain_bill",
+            "bill_enable_mission_hart"
+          ],
+          "kissinger_popular_treaty": true,
+          "set_variable": {
+            "USA_bill_mission_deadline_hart": 13
+          },
+          "clr_country_flag": "USA_Hart_kissinger_treaty_1_decision"
+        },
+        "activate_mission": "USA_Hart_Bill_Countdown"
+      },
+      "else_if": {
+        "limit": {
+          "has_country_flag": "USA_kissinger_unpopular_treaty_decision_lol"
+        },
+        "hidden_effect": {
+          "set_country_flag": [
+            "USA_chain_bill",
+            "USA_kissinger_unpopular_treaty",
+            "bill_enable_mission_hart"
+          ],
+          "kissinger_unpopular_treaty": true,
+          "set_variable": {
+            "USA_bill_mission_deadline_hart": 13
+          },
+          "clr_country_flag": "USA_Hart_kissinger_treaty_1_decision"
+        },
+        "activate_mission": "USA_Hart_Bill_Countdown"
+      }
+    }
+  },
+  {
+    "id": "USA_introduce_kissinger_PAST",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Провести голосование по договору о безопасности в Тихоокеанском регионе",
+    "desc": "",
+    "icon": "GFX_decision_USA_congress",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "bill_enable_mission_hart"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Hart_kissinger_past_decision"
+      ]
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": [
+          "USA_chain_bill",
+          "USA_kissinger_PAST",
+          "bill_enable_mission_hart"
+        ],
+        "kissinger_PAST_treaty": true,
+        "set_variable": {
+          "USA_bill_mission_deadline_hart": 13
+        },
+        "clr_country_flag": "USA_Hart_kissinger_past_decision"
+      },
+      "activate_mission": "USA_Hart_Bill_Countdown"
+    }
+  },
+  {
+    "id": "USA_introduce_kissinger_embargo_sunset",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Ввести Акт об эмбарго Германии",
+    "desc": "",
+    "icon": "GFX_decision_USA_congress",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "bill_enable_mission_hart"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "kissinger_german_embargo_decision"
+      ]
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": [
+          "USA_chain_bill",
+          "USA_kissinger_pakt_embargo",
+          "bill_enable_mission_hart"
+        ],
+        "embargo_act": true,
+        "set_variable": {
+          "USA_bill_mission_deadline_hart": 13
+        },
+        "clr_country_flag": "kissinger_german_embargo_decision"
+      },
+      "activate_mission": "USA_Hart_Bill_Countdown"
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Рак Харта прогрессирует",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_hospital",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_hart_cancer_tt",
+        "NOT": {
+          "has_country_flag": "USA_Hart_Crisis_Hart_Cancer"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_Hart_Crisis_Hart_Cancer"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HART_CANCER_CAT",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "-- ПОДГОТОВКА К ОТСТАВКЕ",
+    "desc": "Президент Харт умрет. Эти решения касаются того, что он должен сделать, чтобы подготовить кабинет к своему неизбежному уходу.\nЕсли администрация столкнется с кризисом, Харт не сможет уйти в отставку.",
+    "icon": "GFX_decision_USA_hart_heart",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions"
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_Hart_Cancer_Jane_Jacobs_1",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Утешить Джейкобс",
+    "desc": "",
+    "icon": "GFX_decision_USA_jane_jacobs_discussion",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_hart_working_on_cancer_focus"
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer_Jane_Jacobs_2",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Обсудить проблемы Чепа с Джейкобс",
+    "desc": "",
+    "icon": "GFX_decision_USA_jane_jacobs_discussion",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions",
+        "Hart_JJ_Step_1"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_hart_working_on_cancer_focus"
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer_Jane_Jacobs_3",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Осмыслить работу Джейкобс",
+    "desc": "",
+    "icon": "GFX_decision_USA_jane_jacobs_discussion",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions",
+        "Hart_JJ_Step_2"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_hart_working_on_cancer_focus"
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer_Chep_Morrison_1",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Осмыслить карьеру Чепа",
+    "desc": "",
+    "icon": "GFX_decision_USA_chep_morrison_discussion",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_hart_working_on_cancer_focus"
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer_Chep_Morrison_2",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Напомнить Чепу о его помощи",
+    "desc": "",
+    "icon": "GFX_decision_USA_chep_morrison_discussion",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions",
+        "Hart_CM_Step_1"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_hart_working_on_cancer_focus"
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer_Chep_Morrison_3",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Обсудить президентство с Чепом",
+    "desc": "",
+    "icon": "GFX_decision_USA_chep_morrison_discussion",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions",
+        "Hart_CM_Step_2"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_hart_working_on_cancer_focus"
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer_Hubert_Humphrey_1",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Обсудить переход с Хамфри",
+    "desc": "",
+    "icon": "GFX_decision_USA_hubert_humphrey_discussion",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_hart_working_on_cancer_focus"
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer_Prepare_Resignation_Resign",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Подготовить заявление об отставке",
+    "desc": "",
+    "icon": "GFX_decision_USA_supreme_court",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      },
+      "has_country_flag": [
+        "Hart_JJ_Step_3",
+        "Hart_CM_Step_3",
+        "Hart_HH_Step_1"
+      ],
+      "date": {
+        "_op": ">",
+        "value": "1973.01.20"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions"
+      ],
+      "NOT": {
+        "count_triggers": {
+          "amount": 3,
+          "has_country_flag": [
+            "USA_bankruptcy_fucked",
+            "USA_rural_revolt_fucked",
+            "USA_failed_Race_riots",
+            "USA_whiteflight_fucked"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_HART_prepare_resign_presidency_tt",
+      "clr_country_flag": "USA_chain_bill",
+      "set_country_flag": "USA_resignation_prepared",
+      "hidden_effect": {
+        "country_event": {
+          "id": "hart.cancertalks.8",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_Hart_Cancer_Resign",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Уйти в отставку с поста президента",
+    "desc": "",
+    "icon": "GFX_decision_USA_supreme_court",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "bill_enable_mission_hart"
+      },
+      "date": {
+        "_op": ">",
+        "value": "1973.01.20"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_resignation_prepared",
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions"
+      ],
+      "NOT": {
+        "count_triggers": {
+          "amount": 3,
+          "has_country_flag": [
+            "USA_bankruptcy_fucked",
+            "USA_rural_revolt_fucked",
+            "USA_failed_Race_riots",
+            "USA_whiteflight_fucked"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "USA_Hart_Crisis_Hart_Cancer",
+      "custom_effect_tooltip": "USA_HART_resign_presidency_tt",
+      "set_country_flag": [
+        "USA_hart_working_on_cancer_focus",
+        "USA_chain_bill"
+      ],
+      "hidden_effect": {
+        "country_event": {
+          "id": "hart.cancer.5",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_Hart_Call_up_ted",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Позвонить мистеру Кеннеди",
+    "desc": "",
+    "icon": "GFX_decision_USA_hart_call_up_ted",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "bill_enable_mission_hart",
+          "USA_chain_bill"
+        ]
+      },
+      "has_country_flag": "USA_Hart_flag_completed_first_section"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Tkennedy_introduced"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_hart_working_on_cancer_focus"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_Hart_Call_up_ted",
+      "set_country_flag": "bill_enable_mission_hart",
+      "custom_effect_tooltip": "USA_calling_ted_kennedy_bills_disabled_tt",
+      "country_event": {
+        "id": "hart.kennedy.2",
+        "days": 1
+      }
+    }
+  },
+  {
+    "id": "USA_Hart_Call_up_reuther",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Встретиться с Уолтером",
+    "desc": "",
+    "icon": "GFX_decision_USA_hart_call_up_reuther",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "bill_enable_mission_hart",
+          "USA_chain_bill"
+        ]
+      },
+      "has_country_flag": "USA_Hart_flag_completed_first_section"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_Reuther_introduced"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_hart_working_on_cancer_focus"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_Hart_Call_up_reuther",
+      "set_country_flag": "bill_enable_mission_hart",
+      "custom_effect_tooltip": "USA_calling_walter_reuther_bills_disabled_tt",
+      "country_event": {
+        "id": "hart.reuther.2",
+        "days": 1
+      }
+    }
+  },
+  {
+    "id": "USA_plan_our_final_endeavors",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Наши финальные усилия",
+    "desc": "",
+    "icon": "GFX_decision_USA_hart_heart",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_flag": "USA_return_to_Desk"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_plan_our_final_endeavors",
+      "custom_effect_tooltip": "USA_the_hart_admin_tt",
+      "country_event": {
+        "id": "chep.chepgoodending.1",
+        "days": 1
+      }
+    }
+  },
+  {
+    "id": "USA_IND_subsidize_businesses",
+    "category_id": "USA_Help_India_decisions_category",
+    "name": "Субсидирование бизнеса в Индии",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "USA_IND_subsidize_businesses_misc_costs",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "USA_LBJ_sideline_anti_nuclear_activists",
+    "category_id": "USA_LBJ_great_society_category",
+    "name": "Поддержка антиядерного активизма",
+    "desc": "",
+    "icon": "GFX_decision_generic_reactor",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_Muskie_movement"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_LBJ_sideline_anti_nuclear_activists",
+      "USA_lbj_strengthen_enviroment_small": true,
+      "custom_effect_tooltip": [
+        "LBJ_polarize",
+        "USA_all_voters_header_tt",
+        "USA_rural_dem_shift",
+        "USA_rural_rep_shift"
+      ],
+      "set_temp_variable": [
+        {
+          "USA_week_change_rural_rep": 1
+        },
+        {
+          "USA_week_change_rural_dem": 1
+        }
+      ],
+      "add_to_variable": [
+        {
+          "Demographic_Shift_rural_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_urban_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_black_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_hispanic_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_minority_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_union_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_nativists_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_rural_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_urban_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_black_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_hispanic_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_minority_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_union_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_nativists_dem_Weeks": "USA_week_change_rural_dem"
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_WAL_get_center_on_side",
+    "category_id": "USA_WAL_new_deal",
+    "name": "Требовать лояльности от  прогрессивистов",
+    "desc": "",
+    "icon": "",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_wal64_partys_plan"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_WAL_get_center_on_side_tt",
+      "add_to_variable": [
+        {
+          "WAL_New_Deal_C_NPP_Support_SS": 5
+        },
+        {
+          "WAL_New_Deal_C_NPP_Support_healthcare": 5
+        }
+      ],
+      "USA_WAL_clamp_senator_vars": true
+    }
+  },
+  {
+    "id": "USA_WAL_get_northern_on_side",
+    "category_id": "USA_WAL_new_deal",
+    "name": "Подкупить северных  националистов",
+    "desc": "",
+    "icon": "",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_wal64_partys_plan"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_WAL_get_nfr_on_side_tt",
+      "add_to_variable": [
+        {
+          "WAL_New_Deal_North_FR_Support_healthcare": 5
+        },
+        {
+          "WAL_New_Deal_North_FR_Support_SS": 5
+        }
+      ],
+      "USA_WAL_clamp_senator_vars": true
+    }
+  },
+  {
+    "id": "USA_WAL_get_republicans_on_side",
+    "category_id": "USA_WAL_new_deal",
+    "name": "Умолять  республиканцев",
+    "desc": "",
+    "icon": "",
+    "cost": 110,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_wal64_partys_plan"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_WAL_get_reps_on_side_tt",
+      "add_to_variable": [
+        {
+          "WAL_New_Deal_R_RD_Support_healthcare": 5
+        },
+        {
+          "WAL_New_Deal_R_RD_Support_SS": 5
+        }
+      ],
+      "USA_WAL_clamp_senator_vars": true
+    }
+  },
+  {
+    "id": "USA_WAL_get_dixie_on_side",
+    "category_id": "USA_WAL_new_deal",
+    "name": "Сплотить дикси",
+    "desc": "",
+    "icon": "",
+    "cost": 125,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_wal64_WALLACE_SHALL_LEAD_THE_WAY"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_WAL_get_sfr_on_side_tt",
+      "add_to_variable": [
+        {
+          "WAL_New_Deal_Dixie_FR_Support_healthcare": 10
+        },
+        {
+          "WAL_New_Deal_Dixie_FR_Support_SS": 10
+        }
+      ],
+      "USA_WAL_clamp_senator_vars": true
+    }
+  },
+  {
+    "id": "USA_WAL_get_democrats_on_side",
+    "category_id": "USA_WAL_new_deal",
+    "name": "Убедить  демократов",
+    "desc": "",
+    "icon": "",
+    "cost": 95,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_wal64_WALLACE_SHALL_LEAD_THE_WAY"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_WAL_get_democrats_on_side_tt",
+      "add_to_variable": [
+        {
+          "WAL_New_Deal_D_RD_Support_healthcare": 5
+        },
+        {
+          "WAL_New_Deal_D_RD_Support_SS": 5
+        }
+      ],
+      "USA_WAL_clamp_senator_vars": true
+    }
+  },
+  {
+    "id": "VOR_consider_the_plan",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Consider Maltsev Plans",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "VOR_maltsevs_plan_flag"
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "lifayuan_president_luo_longji_test",
+    "category_id": "QIN_Debug",
+    "name": "lifayuan_president_luo_longji_test",
+    "desc": "",
+    "icon": "GFX_decision_category_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_ai": false
+    },
+    "visible": {
+      "ROOT": {
+        "is_ai": false
+      },
+      "is_debug": true
+    },
+    "complete_effect": {
+      "set_country_flag": "president_luo_longji",
+      "clr_country_flag": [
+        "president_ni_wenya",
+        "president_hang_liwu",
+        "president_dong_biwu",
+        "president_zhang_lisheng"
+      ]
+    }
+  },
+  {
+    "id": "lifayuan_president_hang_liwu_test",
+    "category_id": "QIN_Debug",
+    "name": "lifayuan_president_hang_liwu_test",
+    "desc": "",
+    "icon": "GFX_decision_category_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_ai": false
+    },
+    "visible": {
+      "ROOT": {
+        "is_ai": false
+      },
+      "is_debug": true
+    },
+    "complete_effect": {
+      "clr_country_flag": [
+        "president_luo_longji",
+        "president_ni_wenya",
+        "president_dong_biwu",
+        "president_zhang_lisheng"
+      ],
+      "set_country_flag": "president_hang_liwu"
+    }
+  },
+  {
+    "id": "sun_fo_presidency_test",
+    "category_id": "QIN_Debug",
+    "name": "sun_fo_presidency_test",
+    "desc": "",
+    "icon": "GFX_decision_category_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_ai": false
+    },
+    "visible": {
+      "ROOT": {
+        "is_ai": false
+      },
+      "is_debug": true
+    },
+    "complete_effect": {
+      "complete_national_focus": [
+        "a_century_of_legacy",
+        "ended_with_a_whimper",
+        "sun_fo_presidency"
+      ]
+    }
+  },
+  {
+    "id": "GAY_Pavlov_side",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Go With the Lord",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GAY_candidate_mechanic"
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": "GAY_candidate_mechanic",
+          "NOT": {
+            "OR": {
+              "has_country_flag": [
+                "GAY_izvekov_selected",
+                "GAY_antipin_selected",
+                "GAY_pavlov_selected"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": [
+        "GAY_pavlov_selected",
+        "GAY_selected_candidate"
+      ],
+      "custom_effect_tooltip": "GAY_pavlov_route_tt"
+    }
+  },
+  {
+    "id": "GAY_Antipin_sides",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Go With the Army",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GAY_candidate_mechanic"
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": "GAY_candidate_mechanic",
+          "NOT": {
+            "OR": {
+              "has_country_flag": [
+                "GAY_izvekov_selected",
+                "GAY_antipin_selected",
+                "GAY_pavlov_selected"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": [
+        "GAY_antipin_selected",
+        "GAY_selected_candidate"
+      ],
+      "custom_effect_tooltip": "GAY_antipin_route_tt"
+    }
+  },
+  {
+    "id": "GAY_izvekov_side",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Go With the People",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GAY_candidate_mechanic"
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": "GAY_candidate_mechanic",
+          "NOT": {
+            "OR": {
+              "has_country_flag": [
+                "GAY_izvekov_selected",
+                "GAY_antipin_selected",
+                "GAY_pavlov_selected"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": [
+        "GAY_izvekov_selected",
+        "GAY_selected_candidate"
+      ],
+      "custom_effect_tooltip": "GAY_izvekov_route_tt"
+    }
+  },
+  {
+    "id": "YGR_Ioseliani_side",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Ioseliani's Actions",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_ioseliani_support"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "YGR_usoyan_side",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Usoyan's Actions",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "YGR_search_help_from_outside",
+    "category_id": "YGR_PowerStruggle_category",
+    "name": "Search for foreign aid",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "YGR_influence_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_usoyan_support"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_search_help_from_outside",
+      "set_country_flag": "YGR_influence_action_in_progress",
+      "country_event": {
+        "id": "YGR_powerstruggle.5"
+      }
+    }
+  }
+]

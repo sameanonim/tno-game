@@ -1,0 +1,5795 @@
+[
+  {
+    "id": "BBA_italo_ethiopian_war_events.02",
+    "type": "country_event",
+    "title": "Крупное наступление итальянцев",
+    "desc": "Итальянцы пытаются перехватить инициативу. Они начинают крупномасштабное наступление, чтобы прорвать фронт и одним ударом разгромить [ROOT.GetAdjective]ую империю.\nНаши войска должны остановить врага. Крайне важно, чтобы они выстояли под бомбежками и не дрогнули в ходе артиллерийских обстрелов и танковых атак. Тогда у нас будет время убедить мировое сообщество в том, что оно должно выступить на нашей стороне.",
+    "picture": "GFX_report_event_gre_italian_troops",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {
+      "has_war_with": "ETH"
+    },
+    "immediate": [],
+    "options": [
+      {
+        "name": "Уничтожить захватчиков!",
+        "name_key": "BBA_italo_ethiopian_war_events.02.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "BBA_italo_ethiopian_war_events.03",
+    "type": "country_event",
+    "title": "Итальянцы накапливают силы",
+    "desc": "Мы отбросили итальянцев, но не сумели достичь поставленных целей. Наше наступление захлебнулось, и теперь итальянцы сумели отчасти оправиться от удара.\nРазведка сообщает, что они собираются начать новую атаку, и на этот раз враг подготовится гораздо лучше. Наши войска должны выстоять. Чем дольше мы задержим противника, тем легче нам будет убедить Лигу Наций в том, что это не «стычка в колониях», но нападение одной страны на другую.",
+    "picture": "GFX_report_event_military_planning",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {
+      "has_war_with": "ETH"
+    },
+    "immediate": [],
+    "options": [
+      {
+        "name": "Ставки повышаются.",
+        "name_key": "BBA_italo_ethiopian_war_events.03.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "BBA_italo_ethiopian_war_events.10",
+    "type": "country_event",
+    "title": "Резолюция Лиги Наций о введении эмбарго",
+    "desc": "Совет Лиги Наций решил ввести торговое эмбарго против [ITA.GetNameRuGen] в ответ на нападение на страну [ETH.GetNameDef]. Под санкции подпадают все ресурсы, которые могут быть использованы для производства вооружений. Санкции вступают в действие немедленно и будут осуществляться до тех пор, пока агрессор не прекратит нападать на державу [ETH.GetNameDef].",
+    "picture": "GFX_report_event_merchant_ship_01",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "is_league_of_nations_member": true
+    },
+    "immediate": [],
+    "options": [
+      {
+        "name": "Так и нужно поступить.",
+        "name_key": "BBA_italo_ethiopian_war_events.10.a",
+        "trigger": {
+          "NOT": {
+            "is_in_faction_with": "ITA"
+          }
+        },
+        "effects": {
+          "send_embargo": "ITA",
+          "custom_effect_tooltip": "embargo_relation_tt",
+          "add_stability": 0.02
+        }
+      },
+      {
+        "name": "Мы не должны ставить под удар нашу экономику.",
+        "name_key": "BBA_italo_ethiopian_war_events.10.b",
+        "trigger": {
+          "NOT": {
+            "is_in_faction_with": "ITA"
+          }
+        },
+        "effects": {
+          "add_political_power": -25,
+          "IF": {
+            "limit": {
+              "NOT": [
+                {
+                  "has_idea": "SWI_swiss_neutrality"
+                },
+                {
+                  "has_idea": "neutrality_idea"
+                }
+              ]
+            },
+            "leave_the_league_of_nations": true
+          }
+        }
+      },
+      {
+        "name": "Нет, [ITA.GetName] — наш друг.",
+        "name_key": "BBA_italo_ethiopian_war_events.10.c",
+        "trigger": {
+          "OR": {
+            "is_in_faction_with": "ITA",
+            "has_opinion": {
+              "target": "ITA",
+              "value": {
+                "_op": ">",
+                "value": 49
+              }
+            }
+          }
+        },
+        "effects": {
+          "ITA": {
+            "add_opinion_modifier": {
+              "target": "ROOT",
+              "modifier": "refused_sanctions_modifier"
+            }
+          },
+          "add_stability": -0.02,
+          "leave_the_league_of_nations": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_italo_ethiopian_war_events.11",
+    "type": "country_event",
+    "title": "Лига Наций потребовала закрыть Суэцкий канал.",
+    "desc": "Делегаты [ETH.GetNameRuGen] в Лиге Наций потребовали закрыть Суэцкий канал для кораблей [ITA.GetNameRuGen], чтобы тем самым усилить санкции против нее. После долгих дебатов Совет решил выполнить это требование. Поэтому стране [ROOT.GetNameDef] поручено останавливать все [ITA.GetAdjective]ие суда, которые пытаются пройти через канал.",
+    "picture": "GFX_report_event_merchant_ship_01",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {
+      "is_league_of_nations_member": true
+    },
+    "immediate": [],
+    "options": [
+      {
+        "name": "Это помешает им вести войну",
+        "name_key": "BBA_italo_ethiopian_war_events.11.a",
+        "trigger": [],
+        "effects": {
+          "add_popularity": {
+            "ideology": "ROOT",
+            "popularity": 0.05
+          },
+          "custom_effect_tooltip": "suez_blocked_sanctions_tt",
+          "ITA": {
+            "set_country_flag": "SUEZ_SANCTIONS_FLAG"
+          },
+          "ETH": {
+            "country_event": {
+              "id": "BBA_italo_ethiopian_war_events.13",
+              "hours": 4
+            }
+          }
+        }
+      },
+      {
+        "name": "Мы этого не сделаем",
+        "name_key": "BBA_italo_ethiopian_war_events.11.b",
+        "trigger": [],
+        "effects": {
+          "add_political_power": -100,
+          "add_popularity": {
+            "ideology": "ITA",
+            "popularity": 0.05
+          },
+          "leave_the_league_of_nations": true,
+          "ETH": {
+            "country_event": {
+              "id": "BBA_italo_ethiopian_war_events.12",
+              "hours": 4
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_italo_ethiopian_war_events.12",
+    "type": "country_event",
+    "title": "[FROM.GetName] отказывается закрыть Суэц",
+    "desc": "[FROM.GetLeader] сообщает совету Лиги Наций, что [FROM.GetNameDef] не будет закрывать Суэцкий канал для страны [ITA.GetName]. Это явное нарушение международных соглашений, но [FROM.GetName] просто объявляет, что страна выходит из Лиги Наций в ответ на призывы подчиниться решению совета.",
+    "picture": "GFX_report_event_merchant_ship_01",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [],
+    "options": [
+      {
+        "name": "Неужто никому нельзя доверять?",
+        "name_key": "BBA_italo_ethiopian_war_events.12.a",
+        "trigger": [],
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "BBA_italo_ethiopian_war_events.13",
+    "type": "country_event",
+    "title": "[FROM.GetName] закрывает Суэц для кораблей страны [ITA.GetName]",
+    "desc": "После того как Лига Наций приняла резолюцию, лидер [FROM.GetLeader] заявил о том, что [ITA.GetAdjective]им кораблям отныне запрещено проходить по Суэцкому каналу. Все [ITA.GetAdjective]ие суда, которые попытаются войти в него, будут задержаны, а их груз конфискован. Блокада будет снята лишь после того, как [ITA.GetName] прекратит агрессию против державы [ETH.GetNameDef].",
+    "picture": "GFX_report_event_merchant_ship_01",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": [],
+    "options": [
+      {
+        "name": "Это станет для них настоящим ударом!",
+        "name_key": "BBA_italo_ethiopian_war_events.13.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "BBA_italo_ethiopian_war_events.14",
+    "type": "country_event",
+    "title": "Резолюция Лиги Наций в поддержку державы [ETH.GetName]",
+    "desc": "Совет Лиги Наций обсудил просьбу [ETH.GetNameRuGen] о военном вмешательстве в войну с Италией. В итоге совет не призвал к полномасштабной интервенции, но в своем заявлении рекомендовал государствам — членам Лиги любыми средствами поддержать державу [ETH.GetName] и в том числе разрешить добровольцам сражаться на ее стороне.",
+    "picture": "GFX_report_event_generic_rally2",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "is_league_of_nations_member": true,
+      "NOT": {
+        "has_war_with": "ETH"
+      }
+    },
+    "immediate": [],
+    "options": [
+      {
+        "name": "Нам нужно организовать этот процесс",
+        "name_key": "BBA_italo_ethiopian_war_events.14.a",
+        "trigger": {
+          "NOT": {
+            "is_in_faction_with": "ITA"
+          },
+          "has_opinion": {
+            "target": "ITA",
+            "value": {
+              "_op": "<",
+              "value": 0
+            }
+          },
+          "has_war": false
+        },
+        "effects": {
+          "add_relation_modifier": {
+            "target": "ETH",
+            "modifier": "ETH_league_of_nations_volunteer_resolution"
+          },
+          "add_relation_rule_override": {
+            "target": "ETH",
+            "can_send_volunteers": true
+          },
+          "set_country_flag": "ETH_support_for_ethiopia_flag",
+          "ITA": {
+            "add_opinion_modifier": {
+              "target": "ROOT",
+              "modifier": "supporting_ethiopia_modifier_ITA"
+            }
+          },
+          "ETH": {
+            "add_opinion_modifier": {
+              "target": "ROOT",
+              "modifier": "supporting_ethiopia_modifier_ETH"
+            }
+          },
+          "hidden_effect": {
+            "IF": {
+              "limit": {
+                "ROOT": {
+                  "is_major": true
+                }
+              },
+              "ETH": {
+                "country_event": {
+                  "id": "BBA_italo_ethiopian_war_events.16",
+                  "hours": 4,
+                  "random_hours": 4
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Если люди хотят поехать...",
+        "name_key": "BBA_italo_ethiopian_war_events.14.b",
+        "trigger": {
+          "NOT": {
+            "is_in_faction_with": "ITA"
+          },
+          "has_war": false
+        },
+        "effects": {
+          "custom_effect_tooltip": "ETH_volunteers_leave_2000",
+          "add_manpower": -2000,
+          "add_to_variable": {
+            "ETH.number_of_volunteers": 1
+          },
+          "ITA": {
+            "add_opinion_modifier": {
+              "target": "ROOT",
+              "modifier": "supporting_ethiopia_modifier_ITA"
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет смысла отправлять наших граждан на смерть в чужую страну",
+        "name_key": "BBA_italo_ethiopian_war_events.14.c",
+        "trigger": {
+          "has_war": false
+        },
+        "effects": {
+          "custom_effect_tooltip": "ETH_volunteers_leave_200",
+          "add_manpower": -200,
+          "add_to_variable": {
+            "ETH.number_of_volunteers": 0.2
+          }
+        }
+      },
+      {
+        "name": "У нас есть свои проблемы",
+        "name_key": "BBA_italo_ethiopian_war_events.14.d",
+        "trigger": {
+          "has_war": true
+        },
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "BBA_italy_second_italo_ethiopian_war.1",
+    "type": "country_event",
+    "title": "[FROM.GetAdjective]ое государство предлагает мир",
+    "desc": "Мы обратили войска [FROM.GetNameRuGen] в бегство! Наша могучая армия нанесла им такой урон, что [FROM.GetAdjRuLower]ое правительство теперь ползает на коленях, умоляя о мире. Наша страна сильно пострадала от войны, и мир был бы очень кстати, но еще мы получили шанс воспользоваться победой и сделать так, чтобы ни одно неразумное европейское государство больше не пыталось покорить непокорную Эфиопию!",
+    "picture": "GFX_report_event_african_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мир так мир!",
+        "name_key": "BBA_italy_second_italo_ethiopian_war.1.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "if": [
+              {
+                "limit": {
+                  "has_full_control_of_state": 550
+                },
+                "transfer_state": 550,
+                "550": {
+                  "add_compliance": 50
+                }
+              },
+              {
+                "limit": {
+                  "has_full_control_of_state": 559
+                },
+                "transfer_state": 559,
+                "559": {
+                  "add_compliance": 50
+                }
+              },
+              {
+                "limit": {
+                  "has_full_control_of_state": 844
+                },
+                "transfer_state": 844,
+                "844": {
+                  "add_compliance": 50
+                }
+              },
+              {
+                "limit": {
+                  "908": {
+                    "is_owned_by": "FROM"
+                  }
+                },
+                "transfer_state": 908,
+                "908": {
+                  "add_compliance": 50
+                }
+              }
+            ],
+            "white_peace": "FROM"
+          },
+          "hidden_effect": {
+            "FROM": {
+              "country_event": {
+                "id": "BBA_italy_second_italo_ethiopian_war.2",
+                "days": 1
+              }
+            },
+            "if": {
+              "limit": {
+                "is_in_faction": false
+              },
+              "set_country_flag": "ETH_forced_ITA_peace_achievement"
+            }
+          }
+        }
+      },
+      {
+        "name": "Ни за что! Продолжаем напор!",
+        "name_key": "BBA_italy_second_italo_ethiopian_war.1.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "BBA_italy_second_italo_ethiopian_war.3",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_italy_second_italo_ethiopian_war.2",
+    "type": "country_event",
+    "title": "[FROM.GetName] принимает [ROOT.GetAdjective]ое предложение мира",
+    "desc": "Наше щедрое предложение мира принято абиссинцами. Это далеко от той славной победы, что мы представляли себе в начале войны, но, возможно, нас утешит сам факт, что она теперь окончена. Мы преодолеем это унижение, как делали уже не раз, и станем еще сильнее!",
+    "picture": "GFX_report_event_african_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "ITA_end_the_italo_ethiopian_war": true
+      }
+    },
+    "options": [
+      {
+        "name": "Как неловко получилось...",
+        "name_key": "BBA_italy_second_italo_ethiopian_war.2.a",
+        "trigger": {
+          "OR": {
+            "has_completed_focus": [
+              "ITA_solid_progress",
+              "ITA_the_abyssinian_fiasco",
+              "ITA_struggle_in_ethiopia"
+            ]
+          }
+        },
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 550
+                }
+              },
+              "FROM": {
+                "transfer_state": 550,
+                "550": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 559
+                }
+              },
+              "FROM": {
+                "transfer_state": 559,
+                "559": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 844
+                }
+              },
+              "FROM": {
+                "transfer_state": 844,
+                "844": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "owns_state": 908
+              },
+              "FROM": {
+                "transfer_state": 908,
+                "908": {
+                  "add_compliance": 50
+                }
+              }
+            }
+          ],
+          "white_peace": "FROM",
+          "hidden_effect": [
+            {
+              "if": {
+                "limit": {
+                  "any_country": {
+                    "is_in_faction_with": "ROOT",
+                    "has_war_with": "FROM"
+                  }
+                },
+                "every_other_country": {
+                  "limit": {
+                    "is_in_faction_with": "ROOT",
+                    "has_war_with": "FROM"
+                  },
+                  "white_peace": "FROM"
+                }
+              }
+            },
+            {
+              "news_event": {
+                "id": "news.337",
+                "days": 1
+              }
+            }
+          ],
+          "ITA_manage_italian_defeat_in_ethiopia_effect": true
+        }
+      },
+      {
+        "name": "Нам нужно другое командование!",
+        "name_key": "BBA_italy_missiolinis.02_north.b",
+        "trigger": {
+          "has_dlc": "By Blood Alone",
+          "NOT": {
+            "has_completed_focus": [
+              "ITA_solid_progress",
+              "ITA_the_abyssinian_fiasco",
+              "ITA_struggle_in_ethiopia"
+            ]
+          }
+        },
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 550
+                }
+              },
+              "FROM": {
+                "transfer_state": 550,
+                "550": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 559
+                }
+              },
+              "FROM": {
+                "transfer_state": 559,
+                "559": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 844
+                }
+              },
+              "FROM": {
+                "transfer_state": 844,
+                "844": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "owns_state": 908
+              },
+              "FROM": {
+                "transfer_state": 908,
+                "908": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "NOT": [
+                  {
+                    "has_completed_focus": "ITA_struggle_in_ethiopia"
+                  },
+                  {
+                    "has_completed_focus": "ITA_solid_progress"
+                  }
+                ]
+              },
+              "complete_national_focus": "ITA_the_abyssinian_fiasco"
+            }
+          ],
+          "white_peace": "FROM",
+          "ITA_manage_italian_defeat_in_ethiopia_effect": true,
+          "hidden_effect": {
+            "news_event": {
+              "id": "news.337",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "Полный провал!",
+        "name_key": "BBA_italy_missiolinis.02_north.c",
+        "trigger": {
+          "NOT": {
+            "has_completed_focus": [
+              "ITA_solid_progress",
+              "ITA_the_abyssinian_fiasco",
+              "ITA_struggle_in_ethiopia"
+            ]
+          }
+        },
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 550
+                }
+              },
+              "FROM": {
+                "transfer_state": 550,
+                "550": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 559
+                }
+              },
+              "FROM": {
+                "transfer_state": 559,
+                "559": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "has_full_control_of_state": 844
+                }
+              },
+              "FROM": {
+                "transfer_state": 844,
+                "844": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "owns_state": 908
+              },
+              "FROM": {
+                "transfer_state": 908,
+                "908": {
+                  "add_compliance": 50
+                }
+              }
+            },
+            {
+              "limit": {
+                "NOT": [
+                  {
+                    "has_completed_focus": "ITA_the_abyssinian_fiasco"
+                  },
+                  {
+                    "has_completed_focus": "ITA_solid_progress"
+                  }
+                ]
+              },
+              "complete_national_focus": "ITA_struggle_in_ethiopia"
+            }
+          ],
+          "white_peace": "FROM",
+          "ITA_manage_italian_defeat_in_ethiopia_effect": true,
+          "hidden_effect": {
+            "news_event": {
+              "id": "news.337",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_italy_second_italo_ethiopian_war.3",
+    "type": "country_event",
+    "title": "[FROM.GetName] отвергает [ROOT.GetAdjective]ое предложение мира",
+    "desc": "Если они хотят войны, будет им война! Абиссинцы ответили отказом на наше щедрое предложение мира и твердо намерены сражаться дальше. Мы покажем этим неблагодарным глупцам, что такое истинное итальянское упорство! Нас не задержат надолго. Мы оттесним их в горы, где полностью разгромим.",
+    "picture": "GFX_report_event_african_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы изменим ход войны!",
+        "name_key": "BBA_italy_second_italo_ethiopian_war.3.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "ETH_events.1",
+    "type": "country_event",
+    "title": "Эфиопия предлагает мир на условиях статус-кво",
+    "desc": "Контроль над Сомалилендом и Эритреей практически утрачен, и недалек тот час, когда сопротивление будет окончательно подавлено. Эфиопское правительство предлагает прекратить вражду, но Италия должна остановить вторжение и сдать оккупированные территории Восточной Африки Эфиопии. Как мы ответим?",
+    "picture": "GFX_report_event_african_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Подписать договор.",
+        "name_key": "ETH_events.1.a",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "transfer_state": [
+              550,
+              559,
+              844
+            ],
+            "white_peace": "ITA"
+          },
+          "if": {
+            "limit": {
+              "NOT": [
+                {
+                  "has_completed_focus": "ITA_solid_progress"
+                },
+                {
+                  "has_completed_focus": "ITA_struggle_in_ethiopia"
+                }
+              ]
+            },
+            "complete_national_focus": "ITA_struggle_in_ethiopia"
+          },
+          "ITA_manage_italian_defeat_in_ethiopia_effect": true,
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": -0.25
+          },
+          "add_stability": -0.1,
+          "hidden_effect": {
+            "news_event": {
+              "id": "news.337",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "Довольно с нас унижений!",
+        "name_key": "ETH_events.1.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "ETH_events.101",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "ETH_events.101",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отказывается от мира",
+    "desc": "Несмотря на потерю контроля над всеми территориями Восточной Африки, [From.GetLeader] отвергает наше предложение мира на условиях статус-кво. Видимо, без полной капитуляции война не закончится.",
+    "picture": "GFX_report_event_african_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Печально.",
+        "name_key": "ETH_events.101.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.1",
+    "type": "country_event",
+    "title": "Венесуэла предлагает «защиту» островам Эй-Би-Си",
+    "desc": "Воспользовавшись тем, что после вторжения на нашу основную территорию наше военное присутствие ослаблено, [VEN.GetAdjective]ое правительство выступило с предложением «помощь защитить» острова Эй-Би-Си от вражеского нападения. Вряд ли они захотят покинуть эти острова, когда их помощь больше не потребуется...",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Не идеально, но у нас нет выбора.",
+        "name_key": "mtg_netherlands.1.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "VEN": {
+              "transfer_state": 695
+            }
+          },
+          "VEN": {
+            "country_event": {
+              "id": "mtg_netherlands.2",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет! Они хотят сами получить эти острова.",
+        "name_key": "mtg_netherlands.1.b",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "VEN": {
+              "add_state_claim": 695
+            }
+          },
+          "VEN": {
+            "country_event": {
+              "id": "mtg_netherlands.3",
+              "days": 1,
+              "random_days": 3
+            }
+          },
+          "set_global_flag": "ven_claims_abc_islands"
+        }
+      },
+      {
+        "name": "Передать контроль британцам — пусть ситуация осложняется.",
+        "name_key": "mtg_netherlands.1.c",
+        "trigger": {
+          "AND": {
+            "is_in_faction_with": "ENG",
+            "NOT": {
+              "is_in_faction_with": "USA"
+            }
+          }
+        },
+        "effects": {
+          "effect_tooltip": {
+            "ENG": {
+              "transfer_state": 695
+            }
+          },
+          "ENG": {
+            "country_event": {
+              "id": "mtg_netherlands.4",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      },
+      {
+        "name": "Передать контроль американцам — пусть ситуация осложняется.",
+        "name_key": "mtg_netherlands.1.e",
+        "trigger": {
+          "is_in_faction_with": "USA"
+        },
+        "effects": {
+          "effect_tooltip": {
+            "USA": {
+              "transfer_state": 695
+            }
+          },
+          "USA": {
+            "country_event": {
+              "id": "mtg_netherlands.4",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.2",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] принимает наше предложение",
+    "desc": "[HOL.GetAdjective]ое правительство приняло наше предложение предоставить «защиту» островам Эй-Би-Си.",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Наш замысел сработал.",
+        "name_key": "mtg_netherlands.2.a",
+        "trigger": {},
+        "effects": {
+          "transfer_state": 695
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.3",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отвергает наше предложение",
+    "desc": "[HOL.GetAdjective]ое правительство отказалось от нашего предложения предоставить «защиту» островам Эй-Би-Си.",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы этого так не оставим!",
+        "name_key": "mtg_netherlands.3.a",
+        "trigger": {},
+        "effects": {
+          "add_state_claim": 695
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.4",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] требует от нас защитить острова Эй-Би-Си",
+    "desc": "[HOL.GetAdjective]ое правительство попросило нас взять под свою защиту Кюрасао. До этого к ним под предлогом «защиты» обратились венесуэльцы, и теперь они беспокоятся по поводу возможных враждебных действий в случае, если они отклонят такое [VEN.GetAdjective]ое «предложение».",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы возложим на себя это бремя.",
+        "name_key": "mtg_netherlands.4.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "transfer_state": 695
+          },
+          "HOL": {
+            "country_event": {
+              "id": "mtg_netherlands.5",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      },
+      {
+        "name": "Нам не следует вмешиваться в местные территориальные споры.",
+        "name_key": "mtg_netherlands.4.b",
+        "trigger": {},
+        "effects": {
+          "HOL": {
+            "country_event": {
+              "id": "mtg_netherlands.6",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.5",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] соглашается защищать острова Эй-Би-Си",
+    "desc": "Государство [From.GetNameDefCap] согласилось принять на себя ответственность за острова Эй-Би-Си.",
+    "picture": "GFX_report_event_generic_sign_treaty2",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Всё лучше, чем другой вариант.",
+        "name_key": "mtg_netherlands.5.a",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "transfer_state": 695
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.6",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отказывается защищать острова Эй-Би-Си",
+    "desc": "Государство [From.GetNameDefCap] отказалось принять на себя ответственность за острова Эй-Би-Си. Его представители утверждают, что не могут позволить себе вмешиваться в то, что называют «местными территориальными спорами».",
+    "picture": "GFX_report_event_generic_sign_treaty2",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "У нас нет иного выбора, кроме как согласиться с [VEN.GetAdjective]им предложением.",
+        "name_key": "mtg_netherlands.6.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "VEN": {
+              "transfer_state": 695
+            }
+          },
+          "VEN": {
+            "country_event": {
+              "id": "mtg_netherlands.2",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      },
+      {
+        "name": "Что ж, в любом случае они не достанутся венесуэльцам!",
+        "name_key": "mtg_netherlands.6.b",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "VEN": {
+              "add_state_claim": 695
+            }
+          },
+          "VEN": {
+            "country_event": {
+              "id": "mtg_netherlands.3",
+              "days": 1,
+              "random_days": 3
+            }
+          },
+          "set_global_flag": "ven_claims_abc_islands"
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.7",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] требует чертежи линейного крейсера",
+    "desc": "Государство [From.GetNameDefCap] попросило, чтобы мы поделились чертежами линейного крейсера класса «Шарнхорст». Они хотят создать свой «линейный крейсер проекта 1047» для защиты колоний в Вест-Индии.",
+    "picture": "GFX_report_event_physics_lab_02",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Почему бы и нет.",
+        "name_key": "mtg_netherlands.7.a",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.8",
+              "days": 1,
+              "random_days": 3
+            }
+          },
+          "effect_tooltip": {
+            "HOL": {
+              "set_technology": {
+                "basic_ship_hull_heavy": 1,
+                "antiair2": 1,
+                "improved_fire_control_system": 1,
+                "improved_dp_light_battery": 1
+              },
+              "create_equipment_variant": {
+                "name": "Design 1047 Battlecruiser",
+                "type": "ship_hull_heavy_2",
+                "parent_version": 0,
+                "allow_without_tech": true,
+                "modules": {
+                  "fixed_ship_battery_slot": "ship_heavy_battery_1",
+                  "fixed_ship_anti_air_slot": "ship_anti_air_2",
+                  "fixed_ship_fire_control_system_slot": "ship_fire_control_system_2",
+                  "fixed_ship_radar_slot": "empty",
+                  "fixed_ship_engine_slot": "heavy_ship_engine_2",
+                  "fixed_ship_secondaries_slot": "dp_ship_secondaries_2",
+                  "fixed_ship_armor_slot": "ship_armor_bb_1",
+                  "front_1_custom_slot": "ship_heavy_battery_1",
+                  "mid_1_custom_slot": "ship_anti_air_2",
+                  "mid_2_custom_slot": "dp_ship_secondaries_2",
+                  "rear_1_custom_slot": "ship_heavy_battery_1"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет. Они и сами могут разработать свои корабли.",
+        "name_key": "mtg_netherlands.7.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.9",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.8",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] делится чертежами линейного крейсера",
+    "desc": "[From.GetNameDefCap] решает поделиться с нами своими чертежами линейного крейсера класса «Шарнхорст».",
+    "picture": "GFX_report_event_physics_lab_02",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Прекрасная новость!",
+        "name_key": "mtg_netherlands.8.a",
+        "trigger": {},
+        "effects": {
+          "set_technology": {
+            "basic_ship_hull_heavy": 1,
+            "antiair2": 1,
+            "improved_fire_control_system": 1,
+            "improved_dp_light_battery": 1
+          },
+          "create_equipment_variant": {
+            "name": "Design 1047 Battlecruiser",
+            "type": "ship_hull_heavy_2",
+            "parent_version": 0,
+            "allow_without_tech": true,
+            "modules": {
+              "fixed_ship_battery_slot": "ship_heavy_battery_1",
+              "fixed_ship_anti_air_slot": "ship_anti_air_2",
+              "fixed_ship_fire_control_system_slot": "ship_fire_control_system_2",
+              "fixed_ship_radar_slot": "empty",
+              "fixed_ship_engine_slot": "heavy_ship_engine_2",
+              "fixed_ship_secondaries_slot": "dp_ship_secondaries_2",
+              "fixed_ship_armor_slot": "ship_armor_bb_1",
+              "front_1_custom_slot": "ship_heavy_battery_1",
+              "mid_1_custom_slot": "ship_anti_air_2",
+              "mid_2_custom_slot": "dp_ship_secondaries_2",
+              "rear_1_custom_slot": "ship_heavy_battery_1"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.9",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отказывается поделиться чертежами линейного крейсера.",
+    "desc": "[From.GetNameDefCap] решает не делиться с нами своими чертежами линейного крейсера класса «Шарнхорст».",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Как некстати...",
+        "name_key": "mtg_netherlands.9.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.10",
+    "type": "country_event",
+    "title": "Сформировано новое правительство",
+    "desc": "Пятый кабинет Колейна, как и его предшественники, потерпел крах, и государственному министру Дирку Ян де Гееру предложили взять на себя формирование нового правительства. В последний раз он занимал официальную должность в 1933 году и доказал, что способен руководить страной в мирное время. Но сейчас, в условиях нарастающей напряженности, неясно, как новый министр-президент будет руководить государством во время войны, которая представляется все более вероятной.",
+    "picture": "GFX_report_event_hol_cabinet_de_geer",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Будем надеяться, что оно окажется более стабильным, чем прежние.",
+        "name_key": "mtg_netherlands.10.a",
+        "trigger": {},
+        "effects": {
+          "set_party_name": {
+            "ideology": "democratic",
+            "long_name": "HOL_CHU_party_long",
+            "name": "HOL_CHU_party"
+          },
+          "promote_character": {
+            "character": "HOL_dirk_jan_de_geer",
+            "ideology": "conservatism"
+          },
+          "remove_ideas": "HOL_weak_government"
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.11",
+    "type": "country_event",
+    "title": "Японские интересы в Вест-Индии",
+    "desc": "Не секрет, что японцы проявляют огромный интерес к ресурсам нашей Вест-Индии. У нас два варианта: либо предоставить японцам эксклюзивные права на ресурсы наших колоний, либо полностью передать им контроль над колониями. Если мы желаем сохранить мирные отношения с государством [JAP.GetNameDef], то необходимо сделать выбор.",
+    "picture": "GFX_report_event_japan_europe_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Передать им контроль над островами.",
+        "name_key": "mtg_netherlands.11.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "JAP": {
+              "transfer_state": [
+                672,
+                335,
+                334,
+                673,
+                667
+              ]
+            },
+            "add_offsite_building": {
+              "type": "arms_factory",
+              "level": 8
+            }
+          },
+          "JAP": {
+            "country_event": {
+              "id": "mtg_netherlands.12",
+              "hours": 6
+            }
+          }
+        }
+      },
+      {
+        "name": "Пообещать им массовый импорт важных ресурсов.",
+        "name_key": "mtg_netherlands.11.b",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": [
+            {
+              "if": {
+                "limit": {
+                  "country_exists": "INS",
+                  "INS": {
+                    "is_subject_of": "HOL"
+                  },
+                  "672": {
+                    "is_owned_and_controlled_by": "INS"
+                  },
+                  "335": {
+                    "is_owned_and_controlled_by": "INS"
+                  },
+                  "334": {
+                    "is_owned_and_controlled_by": "INS"
+                  },
+                  "673": {
+                    "is_owned_and_controlled_by": "INS"
+                  },
+                  "667": {
+                    "is_owned_and_controlled_by": "INS"
+                  }
+                },
+                "INS": {
+                  "give_resource_rights": [
+                    {
+                      "receiver": "JAP",
+                      "state": 672
+                    },
+                    {
+                      "receiver": "JAP",
+                      "state": 335
+                    },
+                    {
+                      "receiver": "JAP",
+                      "state": 334
+                    },
+                    {
+                      "receiver": "JAP",
+                      "state": 673
+                    },
+                    {
+                      "receiver": "JAP",
+                      "state": 667
+                    }
+                  ]
+                }
+              },
+              "else_if": {
+                "limit": {
+                  "672": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "335": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "334": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "673": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "667": {
+                    "is_owned_and_controlled_by": "HOL"
+                  }
+                },
+                "give_resource_rights": [
+                  {
+                    "receiver": "JAP",
+                    "state": 672
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 335
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 334
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 673
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 667
+                  }
+                ]
+              }
+            },
+            {
+              "add_offsite_building": {
+                "type": "arms_factory",
+                "level": 4
+              }
+            }
+          ],
+          "JAP": {
+            "country_event": {
+              "id": "mtg_netherlands.13",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.12",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] предлагает контроль над Вест-Индией",
+    "desc": "В целях сохранения мира и признавая наши интересы в богатом ресурсами регионе, государство [From.GetNameDefCap] предложило передать под наш контроль всю Вест-Индию.",
+    "picture": "GFX_report_event_japan_europe_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Приемлемое решение для нашего затруднительного положения.",
+        "name_key": "mtg_netherlands.12.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "transfer_state": [
+              672,
+              335,
+              334,
+              673,
+              667
+            ],
+            "FROM": {
+              "add_offsite_building": {
+                "type": "arms_factory",
+                "level": 6
+              }
+            }
+          },
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.23"
+            }
+          }
+        }
+      },
+      {
+        "name": "Пусть сохранят колонии за собой — у нас есть альтернативные решения.",
+        "name_key": "mtg_netherlands.12.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "set_country_flag": "HOL_jap_rejected_control",
+            "country_event": {
+              "id": "mtg_netherlands.25"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.13",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] предлагает расширить импорт из Вест-Индии",
+    "desc": "В целях сохранения мира и признавая наши интересы в богатом ресурсами регионе, государство [From.GetNameDefCap] предложило свое решение. Вместо передачи нам контроля над регионом они могут дать исключительные права на добываемые там ресурсы.",
+    "picture": "GFX_report_event_japan_europe_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это приемлемый компромисс.",
+        "name_key": "mtg_netherlands.13.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "if": {
+              "limit": {
+                "country_exists": "INS",
+                "INS": {
+                  "is_subject_of": "HOL"
+                },
+                "672": {
+                  "is_owned_and_controlled_by": "INS"
+                },
+                "335": {
+                  "is_owned_and_controlled_by": "INS"
+                },
+                "334": {
+                  "is_owned_and_controlled_by": "INS"
+                },
+                "673": {
+                  "is_owned_and_controlled_by": "INS"
+                },
+                "667": {
+                  "is_owned_and_controlled_by": "INS"
+                }
+              },
+              "INS": {
+                "give_resource_rights": [
+                  {
+                    "receiver": "JAP",
+                    "state": 672
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 335
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 334
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 673
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 667
+                  }
+                ]
+              }
+            },
+            "else_if": {
+              "limit": {
+                "FROM": {
+                  "672": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "335": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "334": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "673": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "667": {
+                    "is_owned_and_controlled_by": "HOL"
+                  }
+                }
+              },
+              "FROM": {
+                "give_resource_rights": [
+                  {
+                    "receiver": "JAP",
+                    "state": 672
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 335
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 334
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 673
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 667
+                  }
+                ]
+              }
+            },
+            "FROM": {
+              "add_offsite_building": {
+                "type": "arms_factory",
+                "level": 4
+              }
+            }
+          },
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.24"
+            }
+          }
+        }
+      },
+      {
+        "name": "Такого «компромисса» недостаточно.",
+        "name_key": "mtg_netherlands.13.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "set_country_flag": "HOL_jap_rejected_resources",
+            "country_event": {
+              "id": "mtg_netherlands.25"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.14",
+    "type": "country_event",
+    "title": "Королева заставляет уйти в отставку министров-пораженцев",
+    "desc": "Устав от пораженческих настроений, пропитавших правительство, королева Вильгельмина настояла на отставке виновных в их распространении министров. Министру-президенту де Гееру, чтобы он сохранил свою репутацию, позволили уйти «по состоянию здоровья». Остается надеяться, что больше он не доставит нам неприятностей в будущем...\n\nСменивший его Питер Шурдс Гербранди уже отличился тем, что отказался от пораженческой тактики де Геера. Если он сохранит такой настрой и во время войны, то послужит прекрасным примером для остальных членов кабинета.",
+    "picture": "GFX_report_event_hol_cabinet_gerbrandy",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Если бы больше людей разделяло ее решимость...",
+        "name_key": "mtg_netherlands.14.a",
+        "trigger": {},
+        "effects": {
+          "add_popularity": {
+            "ideology": "democratic",
+            "popularity": -0.05
+          },
+          "retire_country_leader": true,
+          "promote_character": {
+            "character": "HOL_pieter_sjoerds_gerbrandy",
+            "ideology": "conservatism"
+          },
+          "if": {
+            "limit": {
+              "has_idea": "HOL_weak_government"
+            },
+            "remove_ideas": "HOL_weak_government"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.15",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] предлагает создать Объединенные Нидерланды",
+    "desc": "Представители [From.GetNameRuGen] предложили воссоздать буферное государство Объединенные Нидерланды, существовавшее после наполеоновских войн. Они ссылаются на свой вклад в военные кампании по сравнению с почти полной бесполезностью бельгийцев и люксембуржцев, и на основании этого утверждают, что их план поможет сохранить мир в континентальной Европе.",
+    "picture": "GFX_report_event_generic_conference",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Отличная мысль.",
+        "name_key": "mtg_netherlands.15.a",
+        "trigger": {},
+        "effects": {
+          "BEL": {
+            "country_event": {
+              "id": "mtg_netherlands.18"
+            }
+          },
+          "LUX": {
+            "country_event": {
+              "id": "mtg_netherlands.18"
+            }
+          },
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.16",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      },
+      {
+        "name": "Мы так не думаем.",
+        "name_key": "mtg_netherlands.15.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.17",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.16",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] поддерживает предложение создать Объединенные Нидерланды",
+    "desc": "Британцы отнеслись благосклонно к нашему предложению объединить все «Нижние земли». Мы можем начинать подготовку к реинтеграции по мере их освобождения.",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Отличнейшие новости.",
+        "name_key": "mtg_netherlands.16.a",
+        "trigger": {},
+        "effects": {
+          "BEL": {
+            "every_unit_leader": {
+              "set_nationality": "ROOT"
+            }
+          },
+          "annex_country": [
+            {
+              "target": "BEL",
+              "transfer_troops": true
+            },
+            {
+              "target": "LUX",
+              "transfer_troops": true
+            }
+          ],
+          "LUX": {
+            "every_unit_leader": {
+              "set_nationality": "ROOT"
+            }
+          },
+          "hidden_effect": {
+            "news_event": {
+              "id": "mtg_news.51",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.17",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отвергает предложение создать Объединенные Нидерланды",
+    "desc": "Британцы дали четко понять, что невысокого мнения о нашем предложении создать Объединенные Нидерланды.",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Их неблагодарность не знает границ...",
+        "name_key": "mtg_netherlands.17.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.18",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] поддерживает предложение создать Объединенные Нидерланды",
+    "desc": "До нашего сведения дошло, что британцы приняли предложение голландцев создать Объединенные Нидерланды под общим нидерландским флагом. С представителями нашего правительства не посовещались...",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это так задувают пламя свободы?",
+        "name_key": "mtg_netherlands.18.a",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "GAME_OVER_TT"
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.19",
+    "type": "country_event",
+    "title": "Государство [From.GetNameDefCap] приглашает нас вступить в Бенилюкс",
+    "desc": "[HOL.GetAdjective]ие представители связались с нами и предложили тесное сотрудничество между так называемыми «Нижними землями». Теперь они желают получить наше официальное одобрение этого проекта.",
+    "picture": "GFX_report_event_generic_conference",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это превосходная идея!",
+        "name_key": "mtg_netherlands.19.a",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "add_to_faction": "ROOT",
+            "country_event": {
+              "id": "generic.6",
+              "hours": 6
+            }
+          }
+        }
+      },
+      {
+        "name": "Нам это не интересно.",
+        "name_key": "mtg_netherlands.19.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "generic.7",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.20",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] приглашает нас в Европейский союз",
+    "desc": "[HOL.GetAdjective]ие представители связались с нами и предложили тесное сотрудничество с малыми демократическими странами Европы. Теперь они желают получить наше официальное одобрение этого проекта.",
+    "picture": "GFX_report_event_generic_conference",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это превосходная идея!",
+        "name_key": "mtg_netherlands.19.a",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "add_to_faction": "ROOT",
+            "country_event": {
+              "id": "generic.6",
+              "hours": 6
+            }
+          }
+        }
+      },
+      {
+        "name": "Нам это не интересно.",
+        "name_key": "mtg_netherlands.19.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "generic.7",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.21",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] стремится к интеграции колоний",
+    "desc": "В процессе общения с представителями [From.GetNameRuGen] выяснилось, что они стремятся установить контроль над нашими делами... Некоторые второстепенные комитеты правительства уже сочтены «необязательными», и потому этими вопросами заведует непосредственно Амстердам.",
+    "picture": "GFX_report_event_generic_sign_treaty1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Если они считают, что так лучше...",
+        "name_key": "mtg_netherlands.21.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "add_timed_idea": {
+              "idea": "HOL_curtail_colonial_autonomy_subject",
+              "days": 545
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.22",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] переносит столицу в Батавию",
+    "desc": "Представители правительства в изгнании сообщили нам, что оно переезжает в Батавию и отныне руководит колониями непосредственно оттуда. В наших услугах больше не нуждаются.",
+    "picture": "GFX_report_event_generic_sign_treaty2",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Возможно, мы сможем послужить новому правительству как-то иначе...",
+        "name_key": "mtg_netherlands.22.a",
+        "trigger": {},
+        "effects": {
+          "custom_effect_tooltip": "GAME_OVER_TT"
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.23",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] принимает передачу Вест-Индии",
+    "desc": "[From.GetNameDefCap] принимает наше предложение передать всю Вест-Индию.",
+    "picture": "GFX_report_event_japan_europe_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мир сохранен.",
+        "name_key": "mtg_netherlands.23.a",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "transfer_state": [
+              672,
+              335,
+              334,
+              673,
+              667
+            ]
+          },
+          "add_offsite_building": {
+            "type": "arms_factory",
+            "level": 6
+          },
+          "hidden_effect": {
+            "news_event": {
+              "id": "mtg_news.48",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.24",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] принимает ресурсы Вест-Индии",
+    "desc": "[From.GetNameDefCap] принимает наше предложение предоставить эксклюзивные права на ресурсы Вест-Индии",
+    "picture": "GFX_report_event_japan_europe_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мир сохранен.",
+        "name_key": "mtg_netherlands.23.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "country_exists": "INS",
+              "INS": {
+                "is_subject_of": "HOL"
+              },
+              "672": {
+                "is_owned_and_controlled_by": "INS"
+              },
+              "335": {
+                "is_owned_and_controlled_by": "INS"
+              },
+              "334": {
+                "is_owned_and_controlled_by": "INS"
+              },
+              "673": {
+                "is_owned_and_controlled_by": "INS"
+              },
+              "667": {
+                "is_owned_and_controlled_by": "INS"
+              }
+            },
+            "INS": {
+              "give_resource_rights": [
+                {
+                  "receiver": "JAP",
+                  "state": 672
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 335
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 334
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 673
+                },
+                {
+                  "receiver": "JAP",
+                  "state": 667
+                }
+              ]
+            }
+          },
+          "else_if": {
+            "limit": {
+              "672": {
+                "is_owned_and_controlled_by": "HOL"
+              },
+              "335": {
+                "is_owned_and_controlled_by": "HOL"
+              },
+              "334": {
+                "is_owned_and_controlled_by": "HOL"
+              },
+              "673": {
+                "is_owned_and_controlled_by": "HOL"
+              },
+              "667": {
+                "is_owned_and_controlled_by": "HOL"
+              }
+            },
+            "give_resource_rights": [
+              {
+                "receiver": "JAP",
+                "state": 672
+              },
+              {
+                "receiver": "JAP",
+                "state": 335
+              },
+              {
+                "receiver": "JAP",
+                "state": 334
+              },
+              {
+                "receiver": "JAP",
+                "state": 673
+              },
+              {
+                "receiver": "JAP",
+                "state": 667
+              }
+            ]
+          },
+          "add_offsite_building": {
+            "type": "arms_factory",
+            "level": 4
+          },
+          "hidden_effect": {
+            "news_event": {
+              "id": "mtg_news.49",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.25",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отвергает наше предложение",
+    "desc": "Представители [From.GetNameRuGen] сообщили, что наше предложение их не интересует.",
+    "picture": "GFX_report_event_japanese_reply",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Странно... и тревожно...",
+        "name_key": "mtg_netherlands.25.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "JAP": {
+              "set_country_flag": "HOL_declare_war_indies_allowed"
+            }
+          }
+        }
+      },
+      {
+        "name": "Передать им контроль над островами.",
+        "name_key": "mtg_netherlands.11.a",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "HOL_jap_rejected_control"
+          }
+        },
+        "effects": {
+          "effect_tooltip": {
+            "JAP": {
+              "transfer_state": [
+                672,
+                335,
+                334,
+                673,
+                667
+              ]
+            },
+            "add_offsite_building": {
+              "type": "arms_factory",
+              "level": 8
+            }
+          },
+          "JAP": {
+            "country_event": {
+              "id": "mtg_netherlands.12",
+              "hours": 6
+            }
+          }
+        }
+      },
+      {
+        "name": "Пообещать им массовый импорт важных ресурсов.",
+        "name_key": "mtg_netherlands.11.b",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "HOL_jap_rejected_resources"
+          }
+        },
+        "effects": {
+          "effect_tooltip": [
+            {
+              "if": {
+                "limit": {
+                  "country_exists": "INS",
+                  "INS": {
+                    "is_subject_of": "HOL"
+                  },
+                  "672": {
+                    "is_owned_and_controlled_by": "INS"
+                  },
+                  "335": {
+                    "is_owned_and_controlled_by": "INS"
+                  },
+                  "334": {
+                    "is_owned_and_controlled_by": "INS"
+                  },
+                  "673": {
+                    "is_owned_and_controlled_by": "INS"
+                  },
+                  "667": {
+                    "is_owned_and_controlled_by": "INS"
+                  }
+                },
+                "INS": {
+                  "give_resource_rights": [
+                    {
+                      "receiver": "JAP",
+                      "state": 672
+                    },
+                    {
+                      "receiver": "JAP",
+                      "state": 335
+                    },
+                    {
+                      "receiver": "JAP",
+                      "state": 334
+                    },
+                    {
+                      "receiver": "JAP",
+                      "state": 673
+                    },
+                    {
+                      "receiver": "JAP",
+                      "state": 667
+                    }
+                  ]
+                }
+              },
+              "else_if": {
+                "limit": {
+                  "672": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "335": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "334": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "673": {
+                    "is_owned_and_controlled_by": "HOL"
+                  },
+                  "667": {
+                    "is_owned_and_controlled_by": "HOL"
+                  }
+                },
+                "give_resource_rights": [
+                  {
+                    "receiver": "JAP",
+                    "state": 672
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 335
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 334
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 673
+                  },
+                  {
+                    "receiver": "JAP",
+                    "state": 667
+                  }
+                ]
+              }
+            },
+            {
+              "add_offsite_building": {
+                "type": "arms_factory",
+                "level": 4
+              }
+            }
+          ],
+          "JAP": {
+            "country_event": {
+              "id": "mtg_netherlands.13",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.26",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] просит, чтобы США защищали Вест-Индию",
+    "desc": "[HOL.GetAdjective]ое правительство попросило, чтобы мы предоставили защиту Вест-Индии. В настоящее время, когда их военная мощь ослаблена, они опасаются нападения и утверждают, что конфликты в их сфере интересов противоречат также и нашим интересам.",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы не можем позволить иноземным силам вмешиваться в дела Карибского региона.",
+        "name_key": "mtg_netherlands.26.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "add_war_support": 0.1,
+            "give_guarantee": "HOL"
+          },
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.27"
+            }
+          }
+        }
+      },
+      {
+        "name": "Не им указывать, что в наших интересах.",
+        "name_key": "mtg_netherlands.26.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.28"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.27",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] принимает просьбу защитить Вест-Индию",
+    "desc": "Государство [From.GetNameDefCap] решило оказать защиту Вест-Индии. Наши колонии могут не бояться нападения.",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Теперь, когда США на нашей стороне, вряд ли кто-то посмеет им угрожать.",
+        "name_key": "mtg_netherlands.27.a",
+        "trigger": {},
+        "effects": {
+          "USA": {
+            "add_war_support": 0.1,
+            "give_guarantee": "HOL"
+          },
+          "hidden_effect": {
+            "news_event": {
+              "id": "mtg_news.52",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.28",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отклоняет просьбу защитить Вест-Индию",
+    "desc": "Представители [From.GetNameRuGen] сообщили, что Вест-Индия их не интересует и что они не желают давать никаких обещаний насчет защиты наших колоний.",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это разочаровывает...",
+        "name_key": "mtg_netherlands.28.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.29",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] просит предоставить снаряжение",
+    "desc": "Представители [HOL.GetAdjective]ого правительства обратились к нам с просьбой предоставить им снаряжение. Они утверждают, что без нашей помощи не смогут укомплектовать армию к началу вторжения.",
+    "picture": "GFX_report_event_generic_rifles",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Передать им пехотное снаряжение.",
+        "name_key": "mtg_netherlands.29.a",
+        "trigger": {
+          "has_equipment": {
+            "infantry_equipment": {
+              "_op": ">",
+              "value": 2000
+            }
+          }
+        },
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.30",
+              "hours": 6
+            }
+          },
+          "set_country_flag": "secret_staff_talks_infantry_equipment",
+          "effect_tooltip": {
+            "send_equipment": {
+              "equipment": "artillery_equipment",
+              "amount": 2000,
+              "target": "FROM"
+            }
+          }
+        }
+      },
+      {
+        "name": "Передать им дополнительное снаряжение.",
+        "name_key": "mtg_netherlands.29.b",
+        "trigger": {
+          "has_equipment": {
+            "support_equipment": {
+              "_op": ">",
+              "value": 250
+            }
+          }
+        },
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.30",
+              "hours": 6
+            }
+          },
+          "set_country_flag": "secret_staff_talks_support_equipment",
+          "effect_tooltip": {
+            "send_equipment": {
+              "equipment": "support_equipment",
+              "amount": 250,
+              "target": "FROM"
+            }
+          }
+        }
+      },
+      {
+        "name": "Передать им артиллерийское снаряжение.",
+        "name_key": "mtg_netherlands.29.c",
+        "trigger": {
+          "has_equipment": {
+            "artillery_equipment": {
+              "_op": ">",
+              "value": 200
+            }
+          }
+        },
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.30",
+              "hours": 6
+            }
+          },
+          "set_country_flag": "secret_staff_talks_artillery_equipment",
+          "effect_tooltip": {
+            "send_equipment": {
+              "equipment": "artillery_equipment",
+              "amount": 200,
+              "target": "FROM"
+            }
+          }
+        }
+      },
+      {
+        "name": "Придется им решать этот вопрос самим.",
+        "name_key": "mtg_netherlands.29.e",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.31",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.30",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] предоставляет снаряжение",
+    "desc": "Государство [From.GetNameDefCap] выслало нам партию снаряжения для переоснащения наших войск.",
+    "picture": "GFX_report_event_generic_rifles",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Их помощь не будет забыта.",
+        "name_key": "mtg_netherlands.30.a",
+        "trigger": {},
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "FROM": {
+                  "has_country_flag": "secret_staff_talks_infantry_equipment"
+                }
+              },
+              "FROM": {
+                "send_equipment": {
+                  "equipment": "infantry_equipment",
+                  "amount": 2000,
+                  "target": "ROOT"
+                },
+                "clr_country_flag": "secret_staff_talks_infantry_equipment"
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "has_country_flag": "secret_staff_talks_support_equipment"
+                }
+              },
+              "FROM": {
+                "send_equipment": {
+                  "equipment": "support_equipment",
+                  "amount": 250,
+                  "target": "ROOT"
+                },
+                "clr_country_flag": "secret_staff_talks_support_equipment"
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "has_country_flag": "secret_staff_talks_artillery_equipment"
+                }
+              },
+              "FROM": {
+                "send_equipment": {
+                  "equipment": "artillery_equipment",
+                  "amount": 200,
+                  "target": "ROOT"
+                },
+                "clr_country_flag": "secret_staff_talks_artillery_equipment"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.31",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отказывается предоставлять снаряжение",
+    "desc": "Представители [From.GetNameRuGen] отказались предоставлять нам снаряжение. Они утверждают, что если оно нам так необходимо, то наша промышленность сможет произвести больше.",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Они переоценивают наш промышленный потенциал...",
+        "name_key": "mtg_netherlands.31.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.32",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] предлагает составить совместный план обороны",
+    "desc": "[HOL.GetAdjective]ие представители предложили составить секретный план по координации обороны в случае нападения на них. Они сообщили, что крайне важно не разглашать его, поскольку опасаются, что любое нарушение их нейтралитета приведет к войне.",
+    "picture": "GFX_report_event_military_planning",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Великолепная идея!",
+        "name_key": "mtg_netherlands.32.a",
+        "trigger": {},
+        "effects": {
+          "army_experience": -5,
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.33",
+              "hours": 6
+            }
+          },
+          "custom_effect_tooltip": "mtg_netherlands.32_tt"
+        }
+      },
+      {
+        "name": "Если они хотят, чтобы мы их защищали, то должны присоединиться к нам формально.",
+        "name_key": "mtg_netherlands.32.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.34",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.33",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] соглашается составить совместный план обороны",
+    "desc": "[From.GetNameDefCap] принимает наше предложение составить совместный план обороны",
+    "picture": "GFX_report_event_military_planning",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Чудесно!",
+        "name_key": "mtg_netherlands.33.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "FROM": {
+              "army_experience": -5
+            }
+          },
+          "custom_effect_tooltip": "mtg_netherlands.33_tt",
+          "if": [
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "ENG"
+                }
+              },
+              "set_country_flag": "secret_staff_talks_british_staff_plan"
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "FRA"
+                }
+              },
+              "set_country_flag": "secret_staff_talks_french_staff_plan"
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "GER"
+                }
+              },
+              "set_country_flag": "secret_staff_talks_german_staff_plan"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.34",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отклоняет предложение составить совместный план обороны",
+    "desc": "[From.GetNameDefCap] отклоняет наше предложение составить совместный план обороны. Если нам так нужна помощь, мы должны обратиться за ней формально.",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это невозможно.",
+        "name_key": "mtg_netherlands.34.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.35",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] просит обменяться разведданными",
+    "desc": "[From.GetNameDefCap] предлагает обменяться разведывательными данными о возможных врагах, с которыми мы можем вместе столкнуться в бою.",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это великолепная идея!",
+        "name_key": "mtg_netherlands.35.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -25,
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.36",
+              "hours": 6
+            }
+          },
+          "custom_effect_tooltip": "mtg_netherlands.35_tt",
+          "if": [
+            {
+              "limit": {
+                "has_war_with": "GER"
+              },
+              "add_timed_idea": {
+                "idea": "HOL_shared_intelligence_hol_ger",
+                "days": 180
+              }
+            },
+            {
+              "limit": {
+                "has_war_with": "FRA"
+              },
+              "add_timed_idea": {
+                "idea": "HOL_shared_intelligence_hol_fra",
+                "days": 180
+              }
+            },
+            {
+              "limit": {
+                "has_war_with": "ENG"
+              },
+              "add_timed_idea": {
+                "idea": "HOL_shared_intelligence_hol_eng",
+                "days": 180
+              }
+            },
+            {
+              "limit": {
+                "NOT": [
+                  {
+                    "has_war_with": "GER"
+                  },
+                  {
+                    "has_war_with": "FRA"
+                  },
+                  {
+                    "has_war_with": "ENG"
+                  }
+                ]
+              },
+              "custom_effect_tooltip": "mtg_netherlands.35_tt_2",
+              "set_country_flag": "secret_staff_talks_dutch_intelligence"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Мы не можем предоставить собранные нами разведывательные данные.",
+        "name_key": "mtg_netherlands.35.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.37",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.36",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] соглашается обменяться разведданными",
+    "desc": "[From.GetNameDefCap] соглашается обменяться разведывательными данными о возможных врагах, с которыми мы можем вместе столкнуться в бою.",
+    "picture": "GFX_report_event_generic_sign_treaty3",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это многократно усилит нашу общую оборону.",
+        "name_key": "mtg_netherlands.36.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "FROM": {
+              "add_political_power": -25,
+              "custom_effect_tooltip": "mtg_netherlands.35_tt"
+            }
+          },
+          "custom_effect_tooltip": "mtg_netherlands.35_tt_2",
+          "if": [
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "ENG"
+                }
+              },
+              "set_country_flag": "secret_staff_talks_british_intelligence"
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "FRA"
+                }
+              },
+              "set_country_flag": "secret_staff_talks_french_intelligence"
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "GER"
+                }
+              },
+              "set_country_flag": "secret_staff_talks_german_intelligence"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.37",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отказывается обмениваться разведданными",
+    "desc": "[From.GetNameDefCap] отказывается поделиться своими разведывательными данными.",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Похоже, мы не внушаем особого доверия...",
+        "name_key": "mtg_netherlands.37.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.41",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] просит обменяться военными знаниями",
+    "desc": "[From.GetNameDefCap] просит, чтобы мы поделились некоторыми нашими военными знаниями, что позволит им добиться значительного развития военной доктрины.",
+    "picture": "GFX_report_event_generic_conference",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Сильное государство [From.GetName] — полезный союзник.",
+        "name_key": "mtg_netherlands.41.a",
+        "trigger": {},
+        "effects": {
+          "army_experience": -5,
+          "effect_tooltip": {
+            "FROM": {
+              "add_doctrine_cost_reduction": {
+                "name": "HOL_secret_staff_talks",
+                "cost_reduction": 0.35,
+                "uses": 1,
+                "category": "land_doctrine"
+              }
+            }
+          },
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.42",
+              "hours": 6
+            }
+          }
+        }
+      },
+      {
+        "name": "Слабое государство [From.GetName] — хорошее государство [From.GetName].",
+        "name_key": "mtg_netherlands.41.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.43",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.42",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] делится военными знаниями",
+    "desc": "[From.GetNameDefCap] делится с нами некоторыми положениями своей военной доктрины и военными знаниями.",
+    "picture": "GFX_report_event_generic_conference",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это позволит нам значительно модернизировать наши военные силы.",
+        "name_key": "mtg_netherlands.42.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "FROM": {
+              "army_experience": -5
+            }
+          },
+          "add_doctrine_cost_reduction": {
+            "name": "HOL_secret_staff_talks",
+            "cost_reduction": 0.35,
+            "uses": 1,
+            "category": "land_doctrine"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.43",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] отказывается делиться военными знаниями",
+    "desc": "[From.GetNameDefCap] отказывается делиться с нами своими военными знаниями.",
+    "picture": "GFX_report_event_generic_sign_treaty1",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Они хотят, чтобы мы оставались слабыми?",
+        "name_key": "mtg_netherlands.43.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.44",
+    "type": "country_event",
+    "title": "mtg_netherlands.44.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "NOT": {
+        "has_government": "communism"
+      },
+      "is_ai": false
+    },
+    "immediate": {
+      "random_list": {
+        "10": [
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": false
+            },
+            "country_event": {
+              "id": "mtg_netherlands.45"
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": false
+            },
+            "country_event": {
+              "id": "mtg_netherlands.48"
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": false
+            },
+            "country_event": {
+              "id": "mtg_netherlands.50"
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": false
+            },
+            "country_event": {
+              "id": "mtg_netherlands.51"
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": false
+            },
+            "country_event": {
+              "id": "mtg_netherlands.54"
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": true
+            },
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        ],
+        "15": [
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": false
+            },
+            "country_event": {
+              "id": "mtg_netherlands.46"
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": false
+            },
+            "country_event": {
+              "id": "mtg_netherlands.47"
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0,
+              "has_war": false
+            },
+            "country_event": {
+              "id": "mtg_netherlands.49"
+            }
+          }
+        ],
+        "5": {
+          "modifier": [
+            {
+              "factor": 0,
+              "NOT": {
+                "has_idea": "HOL_prince_bernhard"
+              }
+            },
+            {
+              "factor": 0,
+              "has_war": false
+            },
+            {
+              "factor": 0.2,
+              "has_capitulated": false
+            }
+          ],
+          "country_event": {
+            "id": "mtg_netherlands.57"
+          }
+        }
+      }
+    },
+    "options": []
+  },
+  {
+    "id": "mtg_netherlands.45",
+    "type": "country_event",
+    "title": "Принц Бернард замешан в скандале",
+    "desc": "Похоже, принц Бернард оказался замешанным в одном малоприятном скандале. Его свободолюбивый характер, который иногда оказывается настоящим благословением, может и доставлять беспокойство... Правительство теперь вынуждено потратить ценные ресурсы, чтобы спасти репутацию принца в обществе.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Какая досада.",
+        "name_key": "mtg_netherlands.45.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -25,
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.46",
+    "type": "country_event",
+    "title": "Принц Бернард производит хорошее впечатление",
+    "desc": "Принц Бернард недавно произвел необычайное впечатление на публику, подняв дух и вселив в сердца подданных надежду на окончательную победу. Хотя формально он не является представителем правительства, это не помешает нам воспользоваться плодами такого неожиданного успеха.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Достойный представитель своей страны.",
+        "name_key": "mtg_netherlands.46.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 25,
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.47",
+    "type": "country_event",
+    "title": "Принц Бернард подает хороший пример",
+    "desc": "Общаясь со своими товарищами-пилотами, принц Бернард подает хороший пример поведения в боевых условиях. Командиры уже отметили небольшое, но заметное улучшение действий наших пилотов в воздушном бою.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Он неплохо летает.",
+        "name_key": "mtg_netherlands.47.a",
+        "trigger": {},
+        "effects": {
+          "add_timed_idea": {
+            "idea": "HOL_bernhard_good_air_example",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.48",
+    "type": "country_event",
+    "title": "Принц Бернард подает плохой пример",
+    "desc": "В своей откровенно самоуверенной манере принц Бернард, похоже, дал своим товарищам-пилотам ряд «ценных указаний», совершенно непродуктивных с тактической точки зрения, а порой даже опасных. Бравада в его духе уже увеличила потери.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Какое безрассудство...",
+        "name_key": "mtg_netherlands.48.a",
+        "trigger": {},
+        "effects": {
+          "add_timed_idea": {
+            "idea": "HOL_bernhard_bad_air_example",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      },
+      {
+        "name": "Мы должны разоблачить «указания» принца, чтобы улучшить ситуацию.",
+        "name_key": "mtg_netherlands.48.b",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -50,
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.49",
+    "type": "country_event",
+    "title": "Принц Бернард помогает выработать стратегию",
+    "desc": "Похоже, принц Бернард в последнее время принимает довольно активное участие в разработке планов боевых операций. К счастью, все его советы отличаются разумностью, а планы дают превосходные результаты.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "У него великолепный ум.",
+        "name_key": "mtg_netherlands.49.a",
+        "trigger": {},
+        "effects": {
+          "add_timed_idea": {
+            "idea": "HOL_bernhard_good_strategy_meddling",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.50",
+    "type": "country_event",
+    "title": "Принц Бернард мешает выработать стратегию",
+    "desc": "Похоже, принц Бернард в последнее время принимает довольно активное участие в разработке планов боевых операций. Пользуясь своим положением и отличаясь излишней самоуверенностью, он затыкает рот несогласным с его предложениями. При реализации ряда планов проявились заложенные в них фундаментальные недостатки.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Уже поздно что-то менять...",
+        "name_key": "mtg_netherlands.50.a",
+        "trigger": {},
+        "effects": {
+          "add_timed_idea": {
+            "idea": "HOL_bernhard_bad_strategy_meddling",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      },
+      {
+        "name": "Наши генералы должны отклонять его «советы», даже если это запятнает репутацию принца.",
+        "name_key": "mtg_netherlands.50.b",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -25,
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.51",
+    "type": "country_event",
+    "title": "Принц Бернард хочет добывать разведданные",
+    "desc": "В последние недели наблюдается недостаток разведданных для разработки подходящего плана боевых операций. Узнав об этом на недавнем совещании штаба, принц Бернард настоял на том, чтобы использовать свои личные связи в государстве [GER.GetNameDef] для предоставления нам столь необходимых сведений.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Великолепная идея!",
+        "name_key": "mtg_netherlands.51.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "random_list": {
+              "15": {
+                "country_event": {
+                  "id": "mtg_netherlands.52",
+                  "days": 7,
+                  "random_days": 7
+                }
+              },
+              "10": {
+                "country_event": {
+                  "id": "mtg_netherlands.53",
+                  "days": 7,
+                  "random_days": 7
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Мы не можем полагаться на его данные!",
+        "name_key": "mtg_netherlands.51.b",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -50,
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.52",
+    "type": "country_event",
+    "title": "Принц Бернард добывает отличные разведданные",
+    "desc": "Похоже, что предоставленные принцем Бернардом сведения очень пригодились нам в боях. Многочисленными успешными операциями мы обязаны именно информации, добытой по его каналам.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это настоящая находка для разведки.",
+        "name_key": "mtg_netherlands.52.a",
+        "trigger": {},
+        "effects": {
+          "add_timed_idea": {
+            "idea": "HOL_bernhard_good_intelligence",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.53",
+    "type": "country_event",
+    "title": "Принц Бернард добывает плохие разведданные",
+    "desc": "Похоже, сведения, предоставленные принцем Бернардом, не отличаются особой точностью... Враг постоянно ударяет по слабым участкам, откуда мы отводим подкрепление в районы предполагаемой атаки.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы знали, что идем на риск...",
+        "name_key": "mtg_netherlands.53.a",
+        "trigger": {},
+        "effects": {
+          "add_timed_idea": {
+            "idea": "HOL_bernhard_bad_intelligence",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.54",
+    "type": "country_event",
+    "title": "Принц Бернард намерен организовать сопротивление",
+    "desc": "Когда речь на недавнем совещании штаба зашла о недостаточном сопротивлении на нашей оккупированной центральной территории, принц Бернард, похоже, счел это вопросом личного характера. Он уже готовится к парашютной высадке за линией фронта.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Он должен поступать так, как считает правильным.",
+        "name_key": "mtg_netherlands.54.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "random_list": {
+              "15": {
+                "country_event": {
+                  "id": "mtg_netherlands.55",
+                  "days": 7,
+                  "random_days": 7
+                }
+              },
+              "10": {
+                "country_event": {
+                  "id": "mtg_netherlands.56",
+                  "days": 7,
+                  "random_days": 7
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Это слишком опасно, нужно ему это запретить!",
+        "name_key": "mtg_netherlands.54.b",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -50,
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.55",
+    "type": "country_event",
+    "title": "Принц Бернард организовывает сопротивление",
+    "desc": "Вклад принца Бернарда, эвакуированного на подводной лодке, уже ощущается. Сопротивление в настоящее время гораздо эффективнее и активнее.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Поразительное достижение.",
+        "name_key": "mtg_netherlands.55.a",
+        "trigger": {},
+        "effects": {
+          "add_timed_idea": {
+            "idea": "HOL_bernhard_organized_resistance",
+            "days": 30
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.56",
+    "type": "country_event",
+    "title": "Принц Бернард ранен во время организации сопротивления",
+    "desc": "Пытаясь организовать сопротивление, принц Бернард получил ранение. Его удалось эвакуировать на подводной лодке, но должно пройти некоторое время, чтобы он полностью восстановил свои силы.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Его отважные поступки на этот раз не увенчались успехом.",
+        "name_key": "mtg_netherlands.56.a",
+        "trigger": {},
+        "effects": {
+          "random_unit_leader": {
+            "limit": {
+              "has_id": 982
+            },
+            "add_timed_unit_leader_trait": {
+              "trait": "wounded",
+              "days": 90
+            }
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.57",
+    "type": "country_event",
+    "title": "mtg_netherlands.57.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "random_other_country": {
+          "limit": {
+            "NOT": [
+              {
+                "is_in_faction_with": "ROOT"
+              },
+              {
+                "has_war_with": "ROOT"
+              },
+              {
+                "any_country": {
+                  "has_war_with": [
+                    "PREV",
+                    "ROOT"
+                  ]
+                }
+              }
+            ],
+            "is_major": false,
+            "any_owned_state": {
+              "OR": {
+                "is_coastal": true,
+                "any_neighbor_state": {
+                  "is_fully_controlled_by": "HOL"
+                }
+              }
+            }
+          },
+          "save_event_target_as": "HOL_bernhard_row_target"
+        },
+        "country_event": {
+          "id": "mtg_netherlands.58"
+        }
+      }
+    },
+    "options": []
+  },
+  {
+    "id": "mtg_netherlands.58",
+    "type": "country_event",
+    "title": "Принц Бернард вызывает дипломатический скандал",
+    "desc": "Похоже, на недавней встрече с видными иностранными деятелями принц Бернард устроил нечто вроде дипломатического скандала. [HOL_bernhard_row_target.GetAdjective]ие представители обвинили его во вмешательстве в их внутренние дела, причем в самых резких выражениях.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это крайне неприятно...",
+        "name_key": "mtg_netherlands.58.a",
+        "trigger": {},
+        "effects": {
+          "event_target:HOL_bernhard_row_target": {
+            "country_event": {
+              "id": "mtg_netherlands.59"
+            },
+            "set_country_flag": {
+              "flag": "HOL_bernhard_row_target",
+              "value": 1,
+              "days": 60
+            }
+          },
+          "hidden_effect": {
+            "country_event": {
+              "id": "mtg_netherlands.44",
+              "days": 60,
+              "random_days": 60
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.59",
+    "type": "country_event",
+    "title": "Дипломатический скандал с государством [From.GetName]",
+    "desc": "Во время недавней встречи с некоторыми из наших видных деятелей произошел дипломатический скандал с участием принца Бернарда. Похоже, один из наших представителей обвинил принца в том, что он «сует нос не в свои дела».",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это тревожит... Будем надеяться, что скандал не получит продолжения.",
+        "name_key": "mtg_netherlands.59.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.60",
+    "type": "country_event",
+    "title": "[From.GetNameDef] обостряет дипломатический скандал",
+    "desc": "[HOL.Adjective] власти пошли на обострение дипломатического скандала, в довольно резких выражениях потребовав от нас извинений.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Посмотрим, что будет дальше.",
+        "name_key": "mtg_netherlands.60.a",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.61",
+              "days": 1,
+              "random_days": 3
+            },
+            "effect_tooltip": {
+              "create_wargoal": {
+                "type": "puppet_wargoal_focus",
+                "target": "ROOT"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Нужно снять напряженность.",
+        "name_key": "mtg_netherlands.60.b",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -100,
+          "FROM": {
+            "country_event": {
+              "id": "mtg_netherlands.62",
+              "days": 1,
+              "random_days": 3
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.61",
+    "type": "country_event",
+    "title": "[From.GetNameDef] еще больше обостряет скандал",
+    "desc": "Представители [From.GetNameRuGen] не пошли на попятную и отказались извиниться за оскорбления и клевету в отношении принца Бернарда. Правы ли они и действительно ли принц Бернард вмешивался в их внутренние дела — сейчас неважно; мы достигли переломного момента в международных отношениях.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Ну, значит, быть войне.",
+        "name_key": "mtg_netherlands.61.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "puppet_wargoal_focus",
+            "target": "FROM"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.62",
+    "type": "country_event",
+    "title": "[From.GetNameDef] снимает напряженность",
+    "desc": "[From.GetAdjective]ое правительство пошло на попятную и полностью сняло с принца Бернарда все обвинения. Пока еще неизвестно, действительно он вмешивался в их внутренние дела или нет, но по крайней мере сейчас ему лучше не привлекать к себе лишнего внимания на этом фронте.",
+    "picture": "GFX_report_event_hol_prins_bernhard",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Превосходно.",
+        "name_key": "mtg_netherlands.62.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.63",
+    "type": "country_event",
+    "title": "Золотой запас эвакуирован",
+    "desc": "Перед самой капитуляцией, когда стало ясно, что сражение проиграно, нам удалось эвакуировать свой золотой запас к нашим новым союзникам. Золото, хранившееся на кораблях, готовых к отплытию в любой момент, успешно прибыло по назначению и очень пригодится нашему правительству в изгнании.",
+    "picture": "GFX_report_event_merchant_ship_01",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Хорошо, что мы предвидели такой исход и были готовы к нему.",
+        "name_key": "mtg_netherlands.63.a",
+        "trigger": {},
+        "effects": {
+          "remove_ideas": "HOL_preparing_evacuation_of_gold_reserves",
+          "add_legitimacy": 20,
+          "add_political_power": 100
+        }
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.64",
+    "type": "country_event",
+    "title": "Проект «Зёйдерзе» стимулирует развитие инфраструктуры",
+    "desc": "Работа над Флевопольдером началась успешно, и хотя до полного завершения проекта еще несколько лет, мы уже можем пожинать плоды своего упорного труда.\n\nПолучив практический опыт в столь масштабном проекте по освоению земель, инженеры разработали новые методы строительства дорог, железных дорог и водных путей. Инвестировав в эти изыскания, мы можем достичь значительного улучшения в данных областях в обозримом будущем.",
+    "picture": "GFX_report_event_hol_polderen",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "original_tag": "HOL",
+      "NOT": {
+        "has_completed_focus": "HOL_the_zuiderzee_works"
+      },
+      "focus_progress": {
+        "focus": "HOL_the_zuiderzee_works",
+        "progress": {
+          "_op": ">",
+          "value": 0.33
+        }
+      }
+    },
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это превосходная идея!",
+        "name_key": "mtg_netherlands.64.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -50,
+          "add_timed_idea": {
+            "idea": "HOL_zuiderzee_infrastructure_advancements",
+            "days": 365
+          }
+        }
+      },
+      {
+        "name": "Сейчас у нас нет на это средств.",
+        "name_key": "mtg_netherlands.64.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "mtg_netherlands.65",
+    "type": "country_event",
+    "title": "Проект «Зёйдерзе» стимулирует развитие индустрии",
+    "desc": "Работа над Флевопольдером продолжается, и индустрия, снабжающая этот масштабный проект, развивается вместе с ним. Инженеры, работающие над поставками строительных материалов, разработали новые методы строительства заводов и верфей. Инвестировав в них, мы можем достичь значительного улучшения в данных областях в обозримом будущем.",
+    "picture": "GFX_report_event_hol_polderen",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "original_tag": "HOL",
+      "NOT": {
+        "has_completed_focus": "HOL_the_zuiderzee_works"
+      },
+      "focus_progress": {
+        "focus": "HOL_the_zuiderzee_works",
+        "progress": {
+          "_op": ">",
+          "value": 0.67
+        }
+      }
+    },
+    "immediate": {},
+    "options": [
+      {
+        "name": "Это превосходная идея!",
+        "name_key": "mtg_netherlands.64.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -50,
+          "add_timed_idea": {
+            "idea": "HOL_zuiderzee_industrial_advancements",
+            "days": 365
+          }
+        }
+      },
+      {
+        "name": "Сейчас у нас нет на это средств.",
+        "name_key": "mtg_netherlands.64.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "hol.11",
+    "type": "country_event",
+    "title": "hol.11.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.11"
+    },
+    "options": [
+      {
+        "name": "hol.11.a",
+        "name_key": "hol.11.a",
+        "trigger": {},
+        "effects": {
+          "add_stability": -0.15,
+          "add_political_power": -100,
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.12",
+              "days": 7
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.12",
+    "type": "country_event",
+    "title": "hol.12.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.12"
+    },
+    "options": [
+      {
+        "name": "hol.12.a",
+        "name_key": "hol.12.a",
+        "trigger": {},
+        "effects": {
+          "add_stability": -0.05,
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.13",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.13",
+    "type": "country_event",
+    "title": "hol.13.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.13"
+    },
+    "options": [
+      {
+        "name": "hol.13.a",
+        "name_key": "hol.13.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.14",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "hol.13.b",
+        "name_key": "hol.13.b",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.19",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.14",
+    "type": "country_event",
+    "title": "hol.14.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.14"
+    },
+    "options": [
+      {
+        "name": "hol.14.a",
+        "name_key": "hol.14.a",
+        "trigger": {
+          "GER": {
+            "has_country_flag": "heydrich_for_germany",
+            "is_ai": false
+          }
+        },
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.15",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "hol.14.b",
+        "name_key": "hol.14.b",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.16",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.15",
+    "type": "country_event",
+    "title": "hol.15.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.15"
+    },
+    "options": [
+      {
+        "name": "hol.15.a",
+        "name_key": "hol.15.a",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "HOL_SS_in_power"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.16",
+    "type": "country_event",
+    "title": "hol.16.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.16"
+    },
+    "options": [
+      {
+        "name": "hol.16.a",
+        "name_key": "hol.16.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.17",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "hol.16.b",
+        "name_key": "hol.16.b",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.18",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.17",
+    "type": "country_event",
+    "title": "hol.17.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.17"
+    },
+    "options": [
+      {
+        "name": "hol.17.a",
+        "name_key": "hol.17.a",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "HOL_volkisch_power"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.18",
+    "type": "country_event",
+    "title": "hol.18.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.18"
+    },
+    "options": [
+      {
+        "name": "hol.18.a",
+        "name_key": "hol.18.a",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "HOL_musserist_rk"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.19",
+    "type": "country_event",
+    "title": "hol.19.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.19"
+    },
+    "options": [
+      {
+        "name": "hol.19.a",
+        "name_key": "hol.19.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.20",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "hol.19.b",
+        "name_key": "hol.19.b",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.21",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.20",
+    "type": "country_event",
+    "title": "hol.20.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.20"
+    },
+    "options": [
+      {
+        "name": "hol.20.a",
+        "name_key": "hol.20.a",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "HOL_fascist_independence"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.21",
+    "type": "country_event",
+    "title": "hol.21.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.21"
+    },
+    "options": [
+      {
+        "name": "hol.21.a",
+        "name_key": "hol.21.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.22",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "hol.21.a",
+        "name_key": "hol.21.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.23",
+              "days": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.22",
+    "type": "country_event",
+    "title": "hol.22.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.22"
+    },
+    "options": [
+      {
+        "name": "hol.22.a",
+        "name_key": "hol.22.a",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "HOL_biesheuvel_government"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.23",
+    "type": "country_event",
+    "title": "hol.23.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.23"
+    },
+    "options": [
+      {
+        "name": "hol.23.a",
+        "name_key": "hol.23.a",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "HOL_towards_democracy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.24",
+    "type": "country_event",
+    "title": "hol.24.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.24"
+    },
+    "options": [
+      {
+        "name": "hol.24.a",
+        "name_key": "hol.24.a",
+        "trigger": {},
+        "effects": {
+          "kill_country_leader": true,
+          "promote_character": "HOL_occupational_authorities",
+          "hidden_effect": {
+            "country_event": {
+              "id": "hol.25",
+              "days": 5
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.25",
+    "type": "country_event",
+    "title": "hol.25.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.25"
+    },
+    "options": [
+      {
+        "name": "hol.25.a",
+        "name_key": "hol.25.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "has_country_flag": "HOL_SS_in_power"
+            },
+            "country_event": {
+              "id": "hol.26"
+            }
+          },
+          "else_if": [
+            {
+              "limit": {
+                "has_country_flag": "HOL_volkisch_power"
+              },
+              "country_event": {
+                "id": "hol.27"
+              }
+            },
+            {
+              "limit": {
+                "has_country_flag": "HOL_musserist_rk"
+              },
+              "country_event": {
+                "id": "hol.28"
+              }
+            },
+            {
+              "limit": {
+                "has_country_flag": "HOL_fascist_independence"
+              },
+              "country_event": {
+                "id": "hol.29"
+              }
+            },
+            {
+              "limit": {
+                "has_country_flag": "HOL_biesheuvel_government"
+              },
+              "country_event": {
+                "id": "hol.30"
+              }
+            },
+            {
+              "limit": {
+                "has_country_flag": "HOL_towards_democracy"
+              },
+              "country_event": {
+                "id": "hol.31"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.26",
+    "type": "country_event",
+    "title": "hol.26.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.26"
+    },
+    "options": [
+      {
+        "name": "hol.26.a",
+        "name_key": "hol.26.a",
+        "trigger": {},
+        "effects": {
+          "retire_character": "HOL_occupational_authorities",
+          "add_country_leader_role": {
+            "character": "HOL_henk_feldmeijer",
+            "promote_leader": true,
+            "country_leader": {
+              "desc": "POLITICS_HENK_FELDMEIJER_DESC",
+              "ideology": "national_socialism_burgundian_system_subtype",
+              "traits": [],
+              "expire": "1999.1.1",
+              "id": -1
+            }
+          },
+          "hidden_effect": {
+            "set_party_name": {
+              "ideology": "national_socialism",
+              "long_name": "HOL_national_socialism_party_ss_long",
+              "name": "HOL_national_socialism_party_ss"
+            }
+          },
+          "add_popularity": {
+            "ideology": "national_socialism",
+            "popularity": 0.3
+          },
+          "remove_all_ministers": true,
+          "add_ideas": [
+            "HOL_minister_Ernst_Herman_van_Rappard_eco",
+            "HOL_minister_George_Kettmann_sec",
+            "HOL_minister_Hanns_Albin_Rauter_hog",
+            "HOL_minister_Klaas_Carel_Faber_for"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.27",
+    "type": "country_event",
+    "title": "hol.27.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.27"
+    },
+    "options": [
+      {
+        "name": "hol.27.a",
+        "name_key": "hol.27.a",
+        "trigger": {},
+        "effects": {
+          "set_party_name": {
+            "ideology": "national_socialism",
+            "long_name": "HOL_national_socialism_party_2_long",
+            "name": "HOL_national_socialism_party_2"
+          },
+          "promote_character": "HOL_sinclair_de_rochemont",
+          "remove_all_ministers": true,
+          "add_ideas": [
+            "HOL_Hendrik_Koot_hog",
+            "HOL_Maarten_Meuldijk_eco",
+            "HOL_Robert_van_Genechten_sec",
+            "HOL_Meinoud_Rost_van_Tonningen_for"
+          ],
+          "set_country_flag": "HOL_Rochemont",
+          "add_popularity": {
+            "ideology": "national_socialism",
+            "popularity": 0.3
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.28",
+    "type": "country_event",
+    "title": "hol.28.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.28"
+    },
+    "options": [
+      {
+        "name": "hol.28.a",
+        "name_key": "hol.28.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "fascism",
+            "last_election": "1937.11.8",
+            "election_frequency": 48,
+            "elections_allowed": false
+          },
+          "hidden_effect": {
+            "set_party_name": {
+              "ideology": "national_socialism",
+              "long_name": "HOL_national_socialism_party_2_long",
+              "name": "HOL_national_socialism_party_2"
+            },
+            "promote_character": "HOL_sinclair_de_rochemont"
+          },
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": 0.3
+          },
+          "remove_all_ministers": true,
+          "add_ideas": [
+            "HOL_Ernst_von_Bonninghausen_for",
+            "HOL_Daniel_de_Blocq_van_Scheltinga_sec",
+            "HOL_minister_Alfred_Haighton_eco"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.29",
+    "type": "country_event",
+    "title": "hol.29.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.29"
+    },
+    "options": [
+      {
+        "name": "hol.29.a",
+        "name_key": "hol.29.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "fascism",
+            "last_election": "1937.11.8",
+            "election_frequency": 48,
+            "elections_allowed": false
+          },
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": 0.3
+          },
+          "hidden_effect": {
+            "set_party_name": {
+              "ideology": "national_socialism",
+              "long_name": "HOL_national_socialism_party_2_long",
+              "name": "HOL_national_socialism_party_2"
+            },
+            "promote_character": "HOL_sinclair_de_rochemont"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.30",
+    "type": "country_event",
+    "title": "hol.30.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.30"
+    },
+    "options": [
+      {
+        "name": "hol.30.a",
+        "name_key": "hol.30.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "despotism",
+            "last_election": "1937.11.8",
+            "election_frequency": 48,
+            "elections_allowed": false
+          },
+          "add_popularity": {
+            "ideology": "despotism",
+            "popularity": 0.3
+          },
+          "hidden_effect": {
+            "set_party_name": {
+              "ideology": "national_socialism",
+              "long_name": "HOL_national_socialism_party_2_long",
+              "name": "HOL_national_socialism_party_2"
+            },
+            "promote_character": "HOL_sinclair_de_rochemont"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.31",
+    "type": "country_event",
+    "title": "hol.31.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.31"
+    },
+    "options": [
+      {
+        "name": "hol.31.a",
+        "name_key": "hol.31.a",
+        "trigger": {},
+        "effects": {
+          "hidden_effect": {
+            "set_party_name": {
+              "ideology": "national_socialism",
+              "long_name": "HOL_national_socialism_party_2_long",
+              "name": "HOL_national_socialism_party_2"
+            },
+            "promote_character": "HOL_sinclair_de_rochemont"
+          },
+          "country_event": {
+            "id": "hol.32"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.32",
+    "type": "country_event",
+    "title": "hol.32.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.32"
+    },
+    "options": [
+      {
+        "name": "hol.32.a",
+        "name_key": "hol.32.a",
+        "trigger": {},
+        "effects": {
+          "country_event": {
+            "id": "hol.33"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.33",
+    "type": "country_event",
+    "title": "hol.33.t",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.33"
+    },
+    "options": [
+      {
+        "name": "hol.33.a",
+        "name_key": "hol.33.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "paternalism",
+            "last_election": "1937.11.8",
+            "election_frequency": 48,
+            "elections_allowed": false
+          },
+          "add_popularity": {
+            "ideology": "paternalism",
+            "popularity": 0.3
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.38",
+    "type": "country_event",
+    "title": "Письмо от фюрера",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.38"
+    },
+    "options": [
+      {
+        "name": "gez. Мартин Борман, Фюрер Великогерманского Рейха",
+        "name_key": "hol.38.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -25,
+          "set_country_flag": "dem_netherlands_submission_bor",
+          "GER": {
+            "country_event": {
+              "id": "bormann.50000",
+              "days": 2,
+              "random_hours": 0
+            }
+          }
+        }
+      },
+      {
+        "name": "hol.38.b",
+        "name_key": "hol.38.b",
+        "trigger": {},
+        "effects": {
+          "add_war_support": 0.025,
+          "set_country_flag": "dem_netherlands_defiance_bor",
+          "GER": {
+            "country_event": {
+              "id": "bormann.50001",
+              "days": 2,
+              "random_hours": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.39",
+    "type": "country_event",
+    "title": "Письмо от фюрера",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.39"
+    },
+    "options": [
+      {
+        "name": "gez. Мартин Борман, Фюрер Великогерманского Рейха",
+        "name_key": "hol.39.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -30,
+          "add_stability": -0.03,
+          "add_popularity": {
+            "ideology": "despotism",
+            "popularity": -0.03
+          },
+          "set_country_flag": "desp_netherlands_submission_bor"
+        }
+      },
+      {
+        "name": "Сжечь письмо, мы будем сражаться",
+        "name_key": "hol.39.b",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 25,
+          "set_country_flag": "desp_netherlands_defiance_bor"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.40",
+    "type": "country_event",
+    "title": "Вопросы реформ",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.40"
+    },
+    "options": [
+      {
+        "name": "Мы займемся тем, что осилим.",
+        "name_key": "hol.40.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "swap_ideas": [
+              {
+                "remove_idea": "tno_trade_unions_illegal",
+                "add_idea": "tno_trade_unions_state_controlled"
+              },
+              {
+                "remove_idea": "tno_slavery_chattel",
+                "add_idea": "tno_slavery_corvee"
+              },
+              {
+                "remove_idea": "tno_public_meetings_outlawed",
+                "add_idea": "tno_public_meetings_regulated"
+              },
+              {
+                "remove_idea": "tno_press_rights_state_press_only",
+                "add_idea": "tno_press_rights_censored_press"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.41",
+    "type": "country_event",
+    "title": "Рейхскомиссариат Великих Нидерландов",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.41"
+    },
+    "options": [
+      {
+        "name": "Давайте поможем Борману сохранить иллюзию стабильности.",
+        "name_key": "hol.41.a",
+        "trigger": {},
+        "effects": {
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": -0.01
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.42",
+    "type": "country_event",
+    "title": "Голландский переговорщик",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.42"
+    },
+    "options": [
+      {
+        "name": "Пусть переговоры продолжатся.",
+        "name_key": "hol.42.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "hol.43",
+    "type": "country_event",
+    "title": "Письмо от фюрера",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.43"
+    },
+    "options": [
+      {
+        "name": "gez. Мартин Борман, Фюрер Великогерманского Рейха",
+        "name_key": "hol.43.a",
+        "trigger": {},
+        "effects": {
+          "tno_slavery_improve": true,
+          "tno_draft_exemptions_improve": true
+        }
+      },
+      {
+        "name": "hol.43.b",
+        "name_key": "hol.43.b",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "fasc_netherlands_defiance_bor"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.44",
+    "type": "country_event",
+    "title": "Обед с Хайтоном",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.44"
+    },
+    "options": [
+      {
+        "name": "Поводок затягивается сильнее.",
+        "name_key": "hol.44.a",
+        "trigger": {},
+        "effects": {
+          "give_resource_rights": {
+            "receiver": "GER",
+            "state": 7,
+            "resources": [
+              "oil",
+              "aluminium",
+              "rubber",
+              "tungsten",
+              "steel",
+              "chromium",
+              "uranium"
+            ]
+          }
+        }
+      },
+      {
+        "name": "hol.44.b",
+        "name_key": "hol.44.b",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "fasc_netherlands_defiance_bor"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.45",
+    "type": "country_event",
+    "title": "Расширение Орпо",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.45"
+    },
+    "options": [
+      {
+        "name": "\"Смелые члены чернорубашечников, у меня есть новости ...\"",
+        "name_key": "hol.45.a",
+        "trigger": {},
+        "effects": {
+          "GER": {
+            "puppet": "HOL"
+          }
+        }
+      },
+      {
+        "name": "hol.45.b",
+        "name_key": "hol.45.b",
+        "trigger": {},
+        "effects": {
+          "set_country_flag": "fasc_netherlands_defiance_bor"
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.46",
+    "type": "country_event",
+    "title": "Самый сильный человек Европы",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.46"
+    },
+    "options": [
+      {
+        "name": "Переговоры начинаются...",
+        "name_key": "hol.46.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 50
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.47",
+    "type": "country_event",
+    "title": "Новости в Десять",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.47"
+    },
+    "options": [
+      {
+        "name": "... А теперь о погоде.",
+        "name_key": "hol.47.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 50
+        }
+      }
+    ]
+  },
+  {
+    "id": "hol.48",
+    "type": "country_event",
+    "title": "Прибытие Фюрера",
+    "desc": "",
+    "picture": "GFX_report_event_GER_nazi_moon",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event hol.48"
+    },
+    "options": [
+      {
+        "name": "Камеры ждут...",
+        "name_key": "hol.48.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 50
+        }
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands.1",
+    "type": "country_event",
+    "title": "Revolutionaries form government",
+    "desc": ">De- Democracy!? At this time of year, at this time of day, in this part of the Pakt, localized entirely within your country!?\n>Yes\n>May I see it?",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands.1",
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "USA": {
+              "has_fascist_government": false
+            }
+          },
+          "USA": {
+            "diplomatic_relation": {
+              "country": "HOL",
+              "relation": "guarantee",
+              "active": true
+            }
+          }
+        },
+        "74": {
+          "set_demilitarized_zone": false
+        },
+        "drop_cosmetic_tag": true,
+        "XXX": {
+          "HOL_Nico_Berghuijs": {
+            "set_nationality": "HOL"
+          },
+          "HOL_Joop_Glimmerveen": {
+            "set_nationality": "HOL"
+          }
+        },
+        "set_politics": {
+          "ruling_party": "paternalism",
+          "elections_allowed": false
+        },
+        "promote_character": [
+          "HOL_Nico_Berghuijs",
+          "HOL_Joop_Glimmerveen"
+        ],
+        "set_popularities": {
+          "paternalism": 70,
+          "national_socialism": 30
+        },
+        "every_country": {
+          "limit": {
+            "is_ai": false
+          },
+          "news_event": {
+            "id": "gc_netherlands_news.2",
+            "days": 1
+          }
+        },
+        "set_party_name": {
+          "ideology": "national_socialism",
+          "long_name": "HOL_free_national_socialism_party_long",
+          "name": "HOL_free_national_socialism_party"
+        },
+        "remove_faction_status": true,
+        "remove_ideas": [
+          "HOL_german_economy",
+          "HOL_apathetic_populace",
+          "HOL_decaying_verzuiling",
+          "HOL_busy_ports"
+        ],
+        "add_ideas": [
+          "HOL_fractured_national_identity",
+          "HOL_without_a_master"
+        ],
+        "leave_GER_sphere": true,
+        "GER": {
+          "set_autonomy": {
+            "target": "HOL",
+            "autonomy_state": "autonomy_free"
+          }
+        },
+        "leave_faction": true,
+        "set_variable": {
+          "TNO_economy_type": "token:Econ_Type_Capitalism"
+        },
+        "set_temp_variable": {
+          "TNO_economy_subtype_temp": 0
+        },
+        "econ_subtype_change": true
+      }
+    },
+    "options": [
+      {
+        "name": "Yes",
+        "name_key": "gc_netherlands.1.a",
+        "trigger": {},
+        "effects": {
+          "country_event": {
+            "id": "gc_netherlands.2",
+            "days": 77
+          },
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false
+              },
+              "news_event": {
+                "id": "gc_netherlands_news.3",
+                "days": 47
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "No",
+        "name_key": "gc_netherlands.1.b",
+        "trigger": {},
+        "effects": {
+          "country_event": {
+            "id": "gc_netherlands.4",
+            "days": 47
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands.2",
+    "type": "country_event",
+    "title": "Monarchy referendum",
+    "desc": "Who wins?",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands.2"
+    },
+    "options": [
+      {
+        "name": "Monarchy",
+        "name_key": "gc_netherlands.2.a",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "HOL_cancel_event_chain"
+          }
+        },
+        "effects": {
+          "if": {
+            "limit": {
+              "NOT": {
+                "country_exists": "CUR"
+              }
+            },
+            "SUR": {
+              "annex_country": {
+                "target": "HOL",
+                "transfer_troops": false
+              },
+              "set_capital": {
+                "state": 7,
+                "remember_old_capital": false
+              },
+              "set_cosmetic_tag": "HOL_Kingdom_real",
+              "add_ideas": "HOL_fractured_national_identity"
+            },
+            "HOL": {
+              "every_core_state": {
+                "add_core_of": "SUR",
+                "remove_core_of": "HOL"
+              }
+            }
+          },
+          "else": {
+            "CUR": {
+              "annex_country": {
+                "target": "HOL",
+                "transfer_troops": false
+              },
+              "set_capital": {
+                "state": 7,
+                "remember_old_capital": false
+              },
+              "set_cosmetic_tag": "HOL_Kingdom_real",
+              "add_ideas": "HOL_fractured_national_identity",
+              "remove_ideas": "CUR_Exiles_in_the_Antilles"
+            },
+            "HOL": {
+              "every_core_state": {
+                "add_core_of": "CUR",
+                "remove_core_of": "HOL"
+              }
+            }
+          },
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false
+              },
+              "news_event": {
+                "id": "gc_netherlands_news.4",
+                "days": 1
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Republic",
+        "name_key": "gc_netherlands.2.b",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "HOL_cancel_event_chain"
+          }
+        },
+        "effects": {
+          "set_cosmetic_tag": "HOL_Republic",
+          "country_event": {
+            "id": "gc_netherlands.3",
+            "days": 30
+          },
+          "hidden_effect": {
+            "USA": {
+              "diplomatic_relation": {
+                "country": "HOL",
+                "relation": "guarantee",
+                "active": false
+              }
+            },
+            "every_country": {
+              "limit": {
+                "is_ai": false
+              },
+              "news_event": {
+                "id": "gc_netherlands_news.5",
+                "days": 1
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "gc_netherlands.2.d",
+        "name_key": "gc_netherlands.2.d",
+        "trigger": {
+          "has_country_flag": "HOL_cancel_event_chain"
+        },
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands.3",
+    "type": "country_event",
+    "title": "Elections",
+    "desc": "Who wins?",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands.3",
+      "hidden_effect": {
+        "XXX": {
+          "HOL_Bastiaan_Fortman": {
+            "set_nationality": "ROOT"
+          },
+          "HOL_Frans_Andriseen": {
+            "set_nationality": "ROOT"
+          },
+          "HOL_Hans_Janmaat": {
+            "set_nationality": "ROOT"
+          }
+        },
+        "remove_ideas": "HOL_without_a_master",
+        "promote_character": [
+          "HOL_Bastiaan_Fortman",
+          "HOL_Frans_Andriseen",
+          "HOL_Hans_Janmaat"
+        ],
+        "set_party_name": [
+          {
+            "ideology": "paternalism",
+            "long_name": "HOL_free_paternalism_party_long",
+            "name": "HOL_free_paternalism_party"
+          },
+          {
+            "ideology": "liberal_conservatism",
+            "long_name": "HOL_free_liberal_conservatism_party_long",
+            "name": "HOL_free_liberal_conservatism_party"
+          },
+          {
+            "ideology": "fascism",
+            "long_name": "HOL_free_fascism_party_long",
+            "name": "HOL_free_fascism_party"
+          },
+          {
+            "ideology": "progressivism",
+            "long_name": "HOL_free_progresivism_party_long",
+            "name": "HOL_free_progresivism_party"
+          }
+        ]
+      }
+    },
+    "options": [
+      {
+        "name": "Christian Democrats",
+        "name_key": "gc_netherlands.3.a",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "HOL_cancel_event_chain"
+          }
+        },
+        "effects": {
+          "set_politics": {
+            "ruling_party": "liberal_conservatism",
+            "elections_allowed": true,
+            "last_election": "1937.5.26"
+          },
+          "set_popularities": {
+            "liberal_conservatism": 35,
+            "progressivism": 20,
+            "paternalism": 14,
+            "communist": 10,
+            "socialist": 5,
+            "liberalism": 6,
+            "conservatism": 8,
+            "fascism": 2
+          }
+        }
+      },
+      {
+        "name": "Social Democrats",
+        "name_key": "gc_netherlands.3.b",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "HOL_cancel_event_chain"
+          }
+        },
+        "effects": {
+          "set_politics": {
+            "ruling_party": "progressivism",
+            "elections_allowed": true,
+            "last_election": "1937.5.26"
+          },
+          "set_popularities": {
+            "progressivism": 36,
+            "liberal_conservatism": 20,
+            "paternalism": 14,
+            "communist": 9,
+            "socialist": 5,
+            "liberalism": 6,
+            "conservatism": 8,
+            "fascism": 2
+          }
+        }
+      },
+      {
+        "name": "Populists",
+        "name_key": "gc_netherlands.3.c",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "HOL_cancel_event_chain"
+          }
+        },
+        "effects": {
+          "set_politics": {
+            "ruling_party": "paternalism",
+            "elections_allowed": true,
+            "last_election": "1937.5.26"
+          },
+          "set_popularities": {
+            "paternalism": 33,
+            "liberal_conservatism": 18,
+            "progressivism": 20,
+            "communist": 10,
+            "socialist": 5,
+            "liberalism": 6,
+            "conservatism": 6,
+            "fascism": 2
+          }
+        }
+      },
+      {
+        "name": "gc_netherlands.3.d",
+        "name_key": "gc_netherlands.3.d",
+        "trigger": {
+          "has_country_flag": "HOL_cancel_event_chain"
+        },
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands.4",
+    "type": "country_event",
+    "title": "Collab counter-coup",
+    "desc": "It's over",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands.4"
+    },
+    "options": [
+      {
+        "name": "It's so over",
+        "name_key": "gc_netherlands.4.a",
+        "trigger": {},
+        "effects": {
+          "set_politics": {
+            "ruling_party": "national_socialism",
+            "elections_allowed": false
+          },
+          "add_popularity": {
+            "ideology": "national_socialism",
+            "popularity": 1
+          },
+          "USA": {
+            "diplomatic_relation": {
+              "country": "HOL",
+              "relation": "guarantee",
+              "active": false
+            }
+          },
+          "set_cosmetic_tag": "HOL_State_natsoc",
+          "set_variable": [
+            {
+              "TNO_economy_type": "token:Econ_Type_Corporatism"
+            },
+            {
+              "TNO_economy_subtype": "token:Econ_Subtype_Gelenkte_Wirtschaft"
+            }
+          ],
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false
+              },
+              "news_event": {
+                "id": "gc_netherlands_news.6",
+                "days": 1
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.1",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]The Battle of Rotterdam",
+    "desc": "What was once considered the Reich's most calm and stable colonial territory has devolved into chaos as Reichskommissariat Niederlande has been set with a massive uptick in revolutionary activity, which culminated in an open clash between collaborationist authorities and local dissident protestors in Rotterdam. The city has been all but entirely liberated as pro-Reich forces retreat from their holdouts and desperately attempt to regroup.\n\nWith the Wehrmacht's hands tied down in the east, Kommissariat garrisons are struggling to hold any semblance of order. Riots and protests only continue to grow in the colony as Germania's inability to act has emboldened a new wave of agitation. A powder keg has been lit in the Low Countries, with the coming explosion showing no signs of being stopped.",
+    "picture": "GFX_news_HOL_rotterdam",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.1"
+    },
+    "options": [
+      {
+        "name": "The eve of something greater?",
+        "name_key": "gc_netherlands_news.1.a",
+        "trigger": {
+          "NOT": {
+            "original_tag": "GER"
+          }
+        },
+        "effects": {
+          "if": {
+            "limit": {
+              "is_ai": false
+            },
+            "every_country": {
+              "limit": {
+                "has_war_with": "HOL"
+              },
+              "white_peace": "HOL",
+              "set_truce": {
+                "target": "HOL",
+                "days": 365
+              }
+            },
+            "74": {
+              "set_demilitarized_zone": true
+            }
+          }
+        }
+      },
+      {
+        "name": "Hold the line!",
+        "name_key": "gc_netherlands_news.1.b",
+        "trigger": {
+          "original_tag": "GER"
+        },
+        "effects": {
+          "if": {
+            "limit": {
+              "is_ai": false
+            },
+            "every_country": {
+              "limit": {
+                "has_war_with": "HOL"
+              },
+              "white_peace": "HOL",
+              "set_truce": {
+                "target": "HOL",
+                "days": 365
+              }
+            },
+            "74": {
+              "set_demilitarized_zone": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.2",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]The Dutch Revolution",
+    "desc": "The surge of revolution which has swept through the Netherlands saw its climax today as the Reich's administrative headquarters within the Hague was stormed early this morning by revolutionary forces. Rebel militia groups seized control of the building and drove Wehrmacht garrisons from the surrounding city, routing one of the last remaining German strongholds in the country.\n\nFrom their new seat of power in the capitol, the revolutionaries have proclaimed unilateral Dutch independence from the Reich. Authorities in Germania have sworn swift retaliation, but with the bulk of their forces thousands of miles away and any local troops being steadily beaten back beyond Dutch borders, it looks as though the fire of independence which burns once more in the Netherlands won't soon be stamped out.",
+    "picture": "GFX_news_HOL_liberated",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.2"
+    },
+    "options": [
+      {
+        "name": "Je Maintiendrai!",
+        "name_key": "gc_netherlands_news.2.a",
+        "trigger": {
+          "NOT": {
+            "original_tag": "GER"
+          }
+        },
+        "effects": {}
+      },
+      {
+        "name": "This cannot stand!",
+        "name_key": "gc_netherlands_news.2.b",
+        "trigger": {
+          "original_tag": "GER"
+        },
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.3",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]The Exile Referendum",
+    "desc": "A rush of enthusiasm has swept the newly independent Netherlands as its provisional government prepares to hold a referendum on the future of the nation and its old monarchy.\n\nThe Dutch government in exile, based in Suriname, has persisted since the conquest of the Low Countries by the Third Reich and has extended gestures of goodwill towards the revolutionary government since its creation, hoping to reclaim their 'birthright,'\n\nReception in the newly liberated nation has been mixed, as some see the reunion with their countrymen as a necessary and foregone conclusion, while others question associating with the colonial regime that has dominated its host region with an iron fist. The future of the Netherlands hangs in the balance, and only its own people can decide its fate.",
+    "picture": "GFX_news_HOL_referendum",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.3"
+    },
+    "options": [
+      {
+        "name": "The Dutch do love their referendums.",
+        "name_key": "gc_netherlands_news.3.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.4",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]Exiles Return to the Netherlands",
+    "desc": "Following the success of a nation-wide referendum on the future of the Dutch government, the Kingdom of the Netherlands, previously in exile in Suriname, has returned to power in its home country once again. Queen Juliana has been greeted to a royal welcome in Amsterdam as the Dutch exiles return en masse to Europe.\n\nInternational response has been overall congratulatory, particularly by the OFN who propped up the Suriname regime since the end of the Second World War. Reception within the country has been fairly positive with many seeing the result as a return to normalcy, however some question the absolute dominance of the ruling monarchist party. In any case, the Netherlands has returned to the arms of its rightful administration, and it looks as if the fate of the nation has been decided.",
+    "picture": "GFX_news_event_SUR_suriname_remains_dutch",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.4"
+    },
+    "options": [
+      {
+        "name": "The Orange-Nassau's endure.",
+        "name_key": "gc_netherlands_news.4.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "is_ai": false
+            },
+            "set_temp_variable": {
+              "TNO_temp_super_event": "token:SE_DUTCH_EXILES_RETURN"
+            },
+            "TNO_fire_super_event": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.5",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]Dutch Referendum Fails, Republic Declared",
+    "desc": "In a shocking upset, the referendum within the newly liberated Netherlands to determine the future of its government has resulted in the declaration of a republic, the first of the low countries in nearly two centuries. The Provisional Government has made clear its intentions to step down as preparations are made for snap elections to be held in the near future, marking a clear and firm step into a free and democratic future.\n\nWhile celebration and optimism sweeps the nation, the monarchist regime in exile within Suriname continues on in defeated limbo. Representatives from Queen Juliana's cabinet refused to comment on the result, as the monarchist government remains shut out from its home country and its subjects sit in somber uncertainty as to the future of their state.",
+    "picture": "GFX_news_HOL_republic",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.5"
+    },
+    "options": [
+      {
+        "name": "As the monarchy fades into the pages of history, the republic returns to living memory.",
+        "name_key": "gc_netherlands_news.5.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.6",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]Collaborator Counter-Coup in the Netherlands!",
+    "desc": "The Dutch Revolution and the internationally perceived hope and optimism which accompanied it were entirely squashed earlier today, as a resurgent force of local Pro-German military groups and remaining Wehrmacht garrisons, under command of Dutch collaborator Joop Glimmerveen, were able to successfully rally together and retake the nation's capital from Provisional Government forces, with revolutionary leaders being executed or imprisoned.\n\nThe newly restored collaborationist administration has already begun to quash local resistance, with any coordinated opposition rendered impossible in the wake of the massacre of resistance leaders. Onlookers from across the globe watch in terror as Dutch calls for freedom are silenced, and Germania no doubt breathes a sigh of relief.",
+    "picture": "GFX_news_HOL_coup",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.6"
+    },
+    "options": [
+      {
+        "name": "A travesty.",
+        "name_key": "gc_netherlands_news.6.a",
+        "trigger": {
+          "NOT": {
+            "original_tag": "GER"
+          }
+        },
+        "effects": {}
+      },
+      {
+        "name": "Some semblance of order restored.",
+        "name_key": "gc_netherlands_news.6.b",
+        "trigger": {
+          "original_tag": "GER"
+        },
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.7",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]Germany Invades the Netherlands",
+    "desc": "Like other natively Germanic territories, Reichskommissariat Niederlande has had a very unique relationship with Germany. The Dutch were viewed as Germans in all but name by the Nazis, making for a close relationship with Germany and being all but considered as a core piece of the Reich.\n\nThat was emphasized today when German troops crossed the Dutch border. Like the infamous Rotterdam Blitz, the Luftwaffe has begun flying over the country conducting “strategic” bombing campaigns. While the Netherlands have expected and prepared for an invasion, only so much can be done against the Wehrmacht. With no defensive terrain, the Dutch government has been painstakingly attempting to mount a defense, but seldom few international observers expect them to succeed. For many, it is not a question of if the Dutch will surrender, but when.",
+    "picture": "GFX_news_HOL_invasion",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.7"
+    },
+    "options": [
+      {
+        "name": "Will the Dutch people remain shackled?",
+        "name_key": "gc_netherlands_news.7.a",
+        "trigger": {
+          "NOT": {
+            "original_tag": "GER"
+          }
+        },
+        "effects": {}
+      },
+      {
+        "name": "They will see the futility in their resistance.",
+        "name_key": "gc_netherlands_news.7.b",
+        "trigger": {
+          "original_tag": "GER"
+        },
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.8",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]Christian democrats win the Dutch elections",
+    "desc": "The first Dutch election in three decades have ended in a rather predictable way, with the newly formed Christelijke Volkspartij under Frans Andriessen securing a majority in parliament. The CVP being a direct descendant of the old Christian Democratic parties that ruled the Netherlands before the German invasion.\n\nIn his first speech as Prime Minister of the Netherlands, Andriessen vowed to restore the Dutch way of life that the Germans had tried so hard to eradicate. He also stressed the need to join the OFN quickly in order to protect the nation.",
+    "picture": "GFX_news_HOL_elections_chrisdems",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.8"
+    },
+    "options": [
+      {
+        "name": "Same old, same old.",
+        "name_key": "gc_netherlands_news.8.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.9",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]Progressives win the Dutch elections",
+    "desc": "The newly proclaimed Dutch Republic has held its first elections, with Bastiaan Fortman's Progressive Partij securing a majority. After years of occupation by the far right, the swing to the moderate left was widely expected by most observers. Speaking to a crowd in Amsterdam, Fortman proclaimed that they could now begin to rebuild a nation that would be equally free and fair, and promised to quickly join the OFN to secure the freedom and independence of the Dutch Republic.",
+    "picture": "GFX_news_HOL_elections_socdems",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.9"
+    },
+    "options": [
+      {
+        "name": "Social democracy wins the day",
+        "name_key": "gc_netherlands_news.9.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "gc_netherlands_news.10",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]The populists win the Dutch election",
+    "desc": "In a shocking result, the populist Veiligheid Voor Democratie party led by Hans Janmaat has won the Dutch election. Initially predicted to be an outsider, Janmaat's unorthodox policies have apparently proved popular.\n\nPromising that the Netherlands would never again be a victim of occupation, de VVD has proposed to follow the example of Swiss neutrality by heavily fortifying the Dutch borders and building up the military. In his opening speech, Janmaat vowed that the nation would never again serve the Germans, nor would it become an American puppet. With open trade and closed borders, [FROM.GetNameDef] openes a new chapter in its history.",
+    "picture": "GFX_news_HOL_elections_populists",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event gc_netherlands_news.10"
+    },
+    "options": [
+      {
+        "name": "Dutch neutrality has returned in force",
+        "name_key": "gc_netherlands_news.10.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  }
+]

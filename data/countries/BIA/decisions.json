@@ -1,0 +1,1945 @@
+[
+  {
+    "id": "develop_transdanubia_aluminium_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разработка месторождений бокситов в Трансданубии",
+    "desc": "",
+    "icon": "aluminium",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation2",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 5
+      },
+      "owns_state": 155,
+      "controls_state": 155
+    },
+    "visible": {
+      "owns_state": 155,
+      "controls_state": 155,
+      "155": {
+        "NOT": {
+          "has_state_flag": "transdanubia_aluminium_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "expand_north_transdanubia_coal_mines",
+    "category_id": "prospect_for_resources",
+    "name": "Расширить угольные шахты в регионе [155.GetName]",
+    "desc": "",
+    "icon": "coal",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 155,
+      "controls_state": 155,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "owns_state": 155,
+      "controls_state": 155,
+      "155": {
+        "NOT": {
+          "has_state_flag": "north_transdanubia_coal_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AUS_the_danubian_federation_decision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Пригласить государство [FROM.GetNameDef] в альянс «[ROOT.GetFactionName]»",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "NOT": {
+          "OR": {
+            "is_subject": true,
+            "has_war_with": "ROOT"
+          }
+        },
+        "is_in_faction": false
+      },
+      "NOT": {
+        "has_country_flag": "AUS_sending_invite_to_danubian_federation_flag"
+      },
+      "IF": {
+        "limit": {
+          "has_country_flag": {
+            "flag": "AUS_has_started_inviting_faction_members_flag"
+          }
+        },
+        "has_country_flag": {
+          "flag": "AUS_recently_sent_invite_to_danubian_federation_flag",
+          "days": {
+            "_op": ">",
+            "value": 30
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_invite_danubian_countries"
+    },
+    "complete_effect": {
+      "FROM": {
+        "save_event_target_as": "alliance_applicant"
+      },
+      "set_country_flag": "AUS_sending_invite_to_danubian_federation_flag",
+      "clr_country_flag": "AUS_recently_sent_invite_to_danubian_federation_flag",
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": {
+              "flag": "AUS_has_started_inviting_faction_members_flag"
+            }
+          }
+        },
+        "set_country_flag": "AUS_has_started_inviting_faction_members_flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_the_danubian_federation_observers_decision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Пригласить государство [FROM.GetNameDef] в альянс «[ROOT.GetFactionName]»",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "NOT": {
+          "OR": {
+            "is_subject": true,
+            "has_war_with": "ROOT"
+          }
+        },
+        "is_in_faction": false
+      },
+      "NOT": {
+        "has_country_flag": "AUS_sending_invite_to_danubian_federation_flag"
+      },
+      "IF": {
+        "limit": {
+          "has_country_flag": {
+            "flag": "AUS_has_started_inviting_faction_members_flag"
+          }
+        },
+        "has_country_flag": {
+          "flag": "AUS_recently_sent_invite_to_danubian_federation_flag",
+          "days": {
+            "_op": ">",
+            "value": 30
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_inviting_the_observers"
+    },
+    "complete_effect": {
+      "FROM": {
+        "save_event_target_as": "alliance_applicant"
+      },
+      "set_country_flag": "AUS_sending_invite_to_danubian_federation_flag",
+      "clr_country_flag": "AUS_recently_sent_invite_to_danubian_federation_flag",
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": {
+              "flag": "AUS_has_started_inviting_faction_members_flag"
+            }
+          }
+        },
+        "set_country_flag": "AUS_has_started_inviting_faction_members_flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_industrial_coaxing_decision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Поддержать промышленность [FROM.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "is_faction_leader": true,
+      "NOT": {
+        "has_country_flag": "AUS_currently_industrially_coaxing_faction_member_flag"
+      },
+      "FROM": {
+        "is_subject": false,
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_protector_of_the_danube",
+      "FROM": {
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_industrially_coaxing_faction_member_flag"
+    }
+  },
+  {
+    "id": "AUS_trade_coaxing_descision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Отправить оборудование государству [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "is_faction_leader": true,
+      "NOT": {
+        "has_country_flag": "AUS_currently_sending_a_subsidy_flag"
+      },
+      "FROM": {
+        "is_subject": false,
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_protector_of_the_danube",
+      "FROM": {
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_sending_a_subsidy_flag"
+    }
+  },
+  {
+    "id": "AUS_propose_a_federative_union_decision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Предложить государству [FROM.GetNameDef] вступить в федеральный союз.",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "is_faction_leader": true,
+      "FROM": {
+        "is_subject": false,
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_protector_of_the_danube",
+      "FROM": {
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "AUS_spur_danubian_communism_decision",
+    "category_id": "AUS_danubian_communism_category",
+    "name": "Поддержать коммунистические настроения в государстве [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "NOT": {
+          "OR": {
+            "is_subject": true,
+            "has_war_with": "ROOT",
+            "has_government": "communism"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_spur_the_communist_resistance"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "AUS_demand_liberation_of_workers_decision",
+    "category_id": "AUS_danubian_communism_category",
+    "name": "Потребовать освобождения [FROM.GetAdjective]их рабочих",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_rally",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "is_subject": false,
+        "NOT": {
+          "OR": {
+            "has_war_with": "ROOT",
+            "has_government": "communism"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_demand_liberation_of_workers"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "form_gran_colombia",
+    "category_id": "form_gran_colombia_category",
+    "name": "Возродить наследие Боливара",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "controls_state": [
+        490,
+        491,
+        304
+      ],
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "form_country_ecuador_required_states_tt",
+          "controls_state": [
+            305,
+            649
+          ]
+        },
+        {
+          "tooltip": "form_country_colombia_required_states_tt",
+          "controls_state": [
+            486,
+            306,
+            493
+          ]
+        },
+        {
+          "tooltip": "form_country_venezuela_required_states_tt",
+          "controls_state": [
+            489,
+            307,
+            488
+          ]
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_global_flag": "form_gran_colombia_flag"
+      }
+    },
+    "complete_effect": {
+      "set_cosmetic_tag": "GCO_UNIFIED",
+      "490": {
+        "add_core_of": "ROOT"
+      },
+      "491": {
+        "add_core_of": "ROOT"
+      },
+      "304": {
+        "add_core_of": "ROOT"
+      },
+      "685": {
+        "add_core_of": "ROOT"
+      },
+      "695": {
+        "add_core_of": "ROOT"
+      },
+      "687": {
+        "add_core_of": "ROOT"
+      },
+      "custom_effect_tooltip": [
+        "form_country_ecuador_coring_states_tt",
+        "form_country_colombia_coring_states_tt",
+        "form_country_venezuela_coring_states_tt"
+      ],
+      "hidden_effect": [
+        {
+          "305": {
+            "add_core_of": "ROOT"
+          },
+          "649": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "486": {
+            "add_core_of": "ROOT"
+          },
+          "306": {
+            "add_core_of": "ROOT"
+          },
+          "493": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "489": {
+            "add_core_of": "ROOT"
+          },
+          "307": {
+            "add_core_of": "ROOT"
+          },
+          "488": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "news_event": {
+            "id": "wtt_news.55",
+            "hours": 6
+          },
+          "set_global_flag": "form_gran_colombia_flag"
+        }
+      ]
+    }
+  },
+  {
+    "id": "integrate_northern_gran_colombia",
+    "category_id": "form_united_central_america_category",
+    "name": "Включить Панаму",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": 304
+    },
+    "visible": {
+      "has_global_flag": "form_united_central_america_flag",
+      "NOT": {
+        "has_global_flag": "integrated_panama_flag"
+      }
+    },
+    "complete_effect": {
+      "304": {
+        "add_core_of": "ROOT"
+      },
+      "685": {
+        "add_core_of": "ROOT"
+      },
+      "hidden_effect": {
+        "set_global_flag": "integrated_panama_flag"
+      }
+    }
+  },
+  {
+    "id": "restore_order_in_arabia_petra",
+    "category_id": "form_roman_empire_category",
+    "name": "Восстановить порядок в Аравии Петрейской",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        554,
+        455,
+        854,
+        855
+      ]
+    },
+    "visible": {
+      "original_tag": "ITA",
+      "NOT": {
+        "has_global_flag": "integrate_petra_flag"
+      },
+      "has_global_flag": "form_roman_empire_flag"
+    },
+    "complete_effect": {
+      "554": {
+        "add_core_of": "ROOT"
+      },
+      "455": {
+        "add_core_of": "ROOT"
+      },
+      "854": {
+        "add_core_of": "ROOT"
+      },
+      "855": {
+        "add_core_of": "ROOT"
+      },
+      "add_stability": -0.05,
+      "hidden_effect": {
+        "set_global_flag": "integrate_petra_flag"
+      }
+    }
+  },
+  {
+    "id": "form_arabia",
+    "category_id": "form_arabia_category",
+    "name": "Объединить Аравийский полуостров",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        292,
+        679,
+        678,
+        857,
+        858,
+        854,
+        855,
+        856,
+        859,
+        293,
+        1013,
+        1015,
+        1016,
+        294
+      ]
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "IRQ",
+          "SAU",
+          "YEM",
+          "OMA",
+          "EGY",
+          "LBA",
+          "JOR",
+          "PAL",
+          "LEB",
+          "SYR",
+          "KUW",
+          "UAE",
+          "QAT",
+          "TUN",
+          "ALG",
+          "MOR",
+          "WES",
+          "MRT",
+          "SUD",
+          "BHR",
+          "FSA",
+          "IMO",
+          "RIF"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "form_arabia_flag"
+      }
+    },
+    "complete_effect": {
+      "set_cosmetic_tag": "ARA_UNIFIED",
+      "custom_effect_tooltip": "form_country_saudi_coring_states_tt",
+      "hidden_effect": [
+        {
+          "292": {
+            "add_core_of": "ROOT"
+          },
+          "679": {
+            "add_core_of": "ROOT"
+          },
+          "678": {
+            "add_core_of": "ROOT"
+          },
+          "857": {
+            "add_core_of": "ROOT"
+          },
+          "858": {
+            "add_core_of": "ROOT"
+          },
+          "854": {
+            "add_core_of": "ROOT"
+          },
+          "855": {
+            "add_core_of": "ROOT"
+          },
+          "856": {
+            "add_core_of": "ROOT"
+          },
+          "859": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "news_event": {
+            "id": "wtt_news.67",
+            "hours": 6
+          },
+          "set_global_flag": "form_arabia_flag",
+          "set_country_flag": "is_arabia_flag"
+        }
+      ],
+      "293": {
+        "add_core_of": "ROOT"
+      },
+      "992": {
+        "add_core_of": "ROOT"
+      },
+      "659": {
+        "add_core_of": "ROOT"
+      },
+      "906": {
+        "add_core_of": "ROOT"
+      },
+      "658": {
+        "add_core_of": "ROOT"
+      },
+      "765": {
+        "add_core_of": "ROOT"
+      },
+      "294": {
+        "add_core_of": "ROOT"
+      },
+      "1014": {
+        "add_core_of": "ROOT"
+      },
+      "1013": {
+        "add_core_of": "ROOT"
+      },
+      "1015": {
+        "add_core_of": "ROOT"
+      },
+      "1016": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "integrate_the_fertile_crescent",
+    "category_id": "form_arabia_category",
+    "name": "Интегрировать Плодородный полумесяц",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        676,
+        675,
+        291,
+        1011,
+        1010
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_arabia_flag",
+      "has_country_flag": "is_arabia_flag"
+    },
+    "complete_effect": {
+      "676": {
+        "add_core_of": "ROOT"
+      },
+      "675": {
+        "add_core_of": "ROOT"
+      },
+      "291": {
+        "add_core_of": "ROOT"
+      },
+      "413": {
+        "add_core_of": "ROOT"
+      },
+      "656": {
+        "add_core_of": "ROOT"
+      },
+      "1011": {
+        "add_core_of": "ROOT"
+      },
+      "1010": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "integrate_the_levantine_states",
+    "category_id": "form_arabia_category",
+    "name": "Интегрировать государства Ливана",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        677,
+        680,
+        553,
+        554,
+        455,
+        454
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_arabia_flag",
+      "has_country_flag": "is_arabia_flag"
+    },
+    "complete_effect": {
+      "677": {
+        "add_core_of": "ROOT"
+      },
+      "680": {
+        "add_core_of": "ROOT"
+      },
+      "553": {
+        "add_core_of": "ROOT"
+      },
+      "554": {
+        "add_core_of": "ROOT"
+      },
+      "455": {
+        "add_core_of": "ROOT"
+      },
+      "454": {
+        "add_core_of": "ROOT"
+      },
+      "799": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "integrate_the_western_mashriq",
+    "category_id": "form_arabia_category",
+    "name": "Интегрировать Западный Машрик",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        907,
+        452,
+        447,
+        446,
+        456,
+        457,
+        453,
+        551,
+        883,
+        886,
+        549,
+        887
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_arabia_flag",
+      "has_country_flag": "is_arabia_flag"
+    },
+    "complete_effect": {
+      "907": {
+        "add_core_of": "ROOT"
+      },
+      "552": {
+        "add_core_of": "ROOT"
+      },
+      "452": {
+        "add_core_of": "ROOT"
+      },
+      "447": {
+        "add_core_of": "ROOT"
+      },
+      "446": {
+        "add_core_of": "ROOT"
+      },
+      "456": {
+        "add_core_of": "ROOT"
+      },
+      "457": {
+        "add_core_of": "ROOT"
+      },
+      "453": {
+        "add_core_of": "ROOT"
+      },
+      "551": {
+        "add_core_of": "ROOT"
+      },
+      "883": {
+        "add_core_of": "ROOT"
+      },
+      "767": {
+        "add_core_of": "ROOT"
+      },
+      "886": {
+        "add_core_of": "ROOT"
+      },
+      "549": {
+        "add_core_of": "ROOT"
+      },
+      "887": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "integrate_the_eastern_maghreb",
+    "category_id": "form_arabia_category",
+    "name": "Интегрировать Восточный Магриб",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        448,
+        661,
+        449,
+        662,
+        450,
+        451,
+        663,
+        458,
+        665
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_arabia_flag",
+      "has_country_flag": "is_arabia_flag"
+    },
+    "complete_effect": {
+      "458": {
+        "add_core_of": "ROOT"
+      },
+      "665": {
+        "add_core_of": "ROOT"
+      },
+      "448": {
+        "add_core_of": "ROOT"
+      },
+      "661": {
+        "add_core_of": "ROOT"
+      },
+      "449": {
+        "add_core_of": "ROOT"
+      },
+      "662": {
+        "add_core_of": "ROOT"
+      },
+      "450": {
+        "add_core_of": "ROOT"
+      },
+      "451": {
+        "add_core_of": "ROOT"
+      },
+      "663": {
+        "add_core_of": "ROOT"
+      },
+      "273": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "integrate_the_al_maghribiyah_and_al_jazair",
+    "category_id": "form_arabia_category",
+    "name": "Интегрировать аль-Магрибию и аль-Джазаир",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        290,
+        783,
+        460,
+        513,
+        459,
+        461,
+        462
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_arabia_flag",
+      "has_country_flag": "is_arabia_flag"
+    },
+    "complete_effect": {
+      "290": {
+        "add_core_of": "ROOT"
+      },
+      "783": {
+        "add_core_of": "ROOT"
+      },
+      "460": {
+        "add_core_of": "ROOT"
+      },
+      "513": {
+        "add_core_of": "ROOT"
+      },
+      "459": {
+        "add_core_of": "ROOT"
+      },
+      "461": {
+        "add_core_of": "ROOT"
+      },
+      "462": {
+        "add_core_of": "ROOT"
+      },
+      "514": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "integrate_the_west_sahara",
+    "category_id": "form_arabia_category",
+    "name": "Интегрировать государства Западной Сахары",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        699,
+        557
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_arabia_flag",
+      "has_country_flag": "is_arabia_flag"
+    },
+    "complete_effect": {
+      "699": {
+        "add_core_of": "ROOT"
+      },
+      "786": {
+        "add_core_of": "ROOT"
+      },
+      "557": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_serbia_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Сербию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "SER": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "SER"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "SER": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_serbian_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "SER": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "SER"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_serbian_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "HUN_the_danubian_federation_decision",
+    "category_id": "HUN_the_danubian_federation_category",
+    "name": "Пригласить государство [FROM.GetNameDef] в альянс «[ROOT.GetFactionName]»",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "NOT": {
+          "OR": {
+            "is_subject": true,
+            "has_war_with": "ROOT"
+          }
+        },
+        "is_in_faction": false
+      }
+    },
+    "visible": {
+      "has_completed_focus": "wuw_HUN_a_danubian_federation"
+    },
+    "complete_effect": {
+      "FROM": {
+        "save_event_target_as": "alliance_applicant"
+      }
+    }
+  },
+  {
+    "id": "POL_purchase_gambia",
+    "category_id": "POL_reopen_the_maritime_and_colonial_league",
+    "name": "[701.GetName] — приобрести",
+    "desc": "Несколько веков назад Герцогство Курляндское пыталось колонизировать государство [701.GetName] в пользу Польско-литовской унии. Несмотря на добрые отношения с местными жителями, колонизаторов изгнали иностранцы. Пора исправить эту несправедливость.",
+    "icon": "decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "701": {
+        "owner": {
+          "is_in_faction_with": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "owns_state": 701
+        },
+        {
+          "701": {
+            "has_state_flag": "rejected_purchase_flag"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "701": {
+        "save_event_target_as": "POL_colony_purchase",
+        "owner": {
+          "country_event": {
+            "id": "NSB_poland_events.5"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ROM_claim_serbia",
+    "category_id": "ROM_dividing_yugo",
+    "name": "Заявить претензии: [107.GetName]",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_ROM_claim_yugo_4",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_3",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_2",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_1",
+        "trigger": {
+          "107": {
+            "NOT": {
+              "has_state_flag": [
+                "strongest_claimant_GER",
+                "strongest_claimant_ROM",
+                "strongest_claimant_ITA",
+                "strongest_claimant_HUN"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_4",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_3",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_2",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_4",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_3",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_2",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_4",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_3",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_2",
+        "trigger": {
+          "107": {
+            "107": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      }
+    ],
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "107": {
+        "has_anyone_else_claimed_ROM": true
+      },
+      "OR": {
+        "GER": {
+          "has_country_flag": "invited_to_split_yugo"
+        },
+        "ITA": {
+          "has_country_flag": "invited_to_split_yugo"
+        },
+        "HUN": {
+          "has_country_flag": "invited_to_split_yugo"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "invited_to_split_yugo",
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "claiming_a_yugoslav_state_flag"
+        }
+      },
+      "107": {
+        "owner": {
+          "OR": {
+            "tag": "YUG",
+            "is_subject_of": "YUG"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "claiming_a_yugoslav_state_flag"
+      }
+    }
+  },
+  {
+    "id": "ROM_claim_south_serbia",
+    "category_id": "ROM_dividing_yugo",
+    "name": "Заявить претензии: [803.GetName]",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_ROM_claim_yugo_4",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_3",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_2",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_1",
+        "trigger": {
+          "803": {
+            "NOT": {
+              "has_state_flag": [
+                "strongest_claimant_GER",
+                "strongest_claimant_ROM",
+                "strongest_claimant_ITA",
+                "strongest_claimant_HUN"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_4",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_3",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_2",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_4",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_3",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_2",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_4",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_3",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_2",
+        "trigger": {
+          "803": {
+            "803": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      }
+    ],
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "803": {
+        "has_anyone_else_claimed_ROM": true
+      },
+      "OR": {
+        "GER": {
+          "has_country_flag": "invited_to_split_yugo"
+        },
+        "ITA": {
+          "has_country_flag": "invited_to_split_yugo"
+        },
+        "HUN": {
+          "has_country_flag": "invited_to_split_yugo"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "invited_to_split_yugo",
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "claiming_a_yugoslav_state_flag"
+        }
+      },
+      "803": {
+        "owner": {
+          "OR": {
+            "tag": "YUG",
+            "is_subject_of": "YUG"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "claiming_a_yugoslav_state_flag"
+      }
+    }
+  },
+  {
+    "id": "liberate_zambia",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [ZAM.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": [
+            771,
+            981
+          ]
+        },
+        "ZAM": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "liberate_the_gambia",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [GAM.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": 701
+        },
+        "GAM": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_sambia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Замбии",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_sambia": true,
+      "GRO_stabilized_sambia": true,
+      "GRO_has_stationed_troops_sambia": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_sambia",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.34"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_namibia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Намбии",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_namibia": true,
+      "GRO_stabilized_namibia": true,
+      "GRO_has_stationed_troops_namibia": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_namibia",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.42"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_sambia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Замбийскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^4": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^4",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_namibia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Намбийскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^12": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^12",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_sambia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Замбии",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^4": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^4",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_namibia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Намбии",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^12": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^12",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_soe_conscript_in_sambia",
+    "category_id": "GRO_REICHSSTAAT_system_of_efficiency",
+    "name": "Призвать рабочих в Замбии",
+    "desc": "",
+    "icon": "GFX_decision_generic_forced_labor",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_sambia": true,
+      "NOT": {
+        "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+      }
+    },
+    "visible": {
+      "GRO_is_in_control_of_sambia": true
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^4": -0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^4",
+        "max": 1,
+        "min": 0
+      },
+      "custom_effect_tooltip": "GRO_REICHSSTAAT_native_situation_worsened_effect_tt"
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_soe_conscript_in_namibia",
+    "category_id": "GRO_REICHSSTAAT_system_of_efficiency",
+    "name": "Призвать рабочих в Намбии",
+    "desc": "",
+    "icon": "GFX_decision_generic_forced_labor",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_namibia": true,
+      "NOT": {
+        "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+      }
+    },
+    "visible": {
+      "GRO_is_in_control_of_namibia": true
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^12": -0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^12",
+        "max": 1,
+        "min": 0
+      },
+      "custom_effect_tooltip": "GRO_REICHSSTAAT_native_situation_worsened_effect_tt"
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_wwlf_destroy_sambia_leadership",
+    "category_id": "GRO_REICHSSTAAT_die_organisation_werwolf",
+    "name": "Уничтожить главнокомандование Замбии",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_REICHSSTAAT_ss_weapon_supply_enough_for_mission_tt",
+        "check_variable": {
+          "GRO_REICHSSTAAT_wwlf_weapon_supply": {
+            "_op": ">",
+            "value": 100
+          }
+        }
+      }
+    },
+    "visible": {
+      "GRO_is_in_control_of_sambia": true,
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag",
+      "has_completed_focus": "GRO_spark_the_uprisings"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "GRO_REICHSSTAAT_wwlf_destroy_namibia_leadership",
+    "category_id": "GRO_REICHSSTAAT_die_organisation_werwolf",
+    "name": "Уничтожить главнокомандование Намбии",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_REICHSSTAAT_ss_weapon_supply_enough_for_mission_tt",
+        "check_variable": {
+          "GRO_REICHSSTAAT_wwlf_weapon_supply": {
+            "_op": ">",
+            "value": 100
+          }
+        }
+      }
+    },
+    "visible": {
+      "GRO_is_in_control_of_namibia": true,
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag",
+      "has_completed_focus": "GRO_spark_the_uprisings"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "GNG_Colombia_Withdraw",
+    "category_id": "GNG_Research_Team_category",
+    "name": "Завершить тестирование продукта в Колумбии",
+    "desc": "Мы выполнили достаточно задач и вполне удовлетворены результатами испытаний в Колумбии. Пора отзывать группу, чтобы не тратить лишние ресурсы.",
+    "icon": "GFX_decision_GNG_PTRG",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_flag": "GNG_PTRG_Colombia"
+    },
+    "complete_effect": {
+      "GNG": {
+        "GNG_PTRG_Colombia_END": true
+      }
+    }
+  },
+  {
+    "id": "ITA_marches_in_libia",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Марши в Ливии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_marches_in_libia",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "450": {
+        "add_manpower": 600
+      },
+      "448": {
+        "add_manpower": 600
+      }
+    }
+  },
+  {
+    "id": "OFN_CAR_establish_free_zambia",
+    "category_id": "OFN_CAR_operation_african_freedom",
+    "name": "Провозгласить Свободную Замбию",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "USC_is_in_control_of_sambia_car": true,
+      "NOT": {
+        "has_country_flag": "OFN_CAR_WAR_establishment_in_progress"
+      }
+    },
+    "visible": {
+      "USC_is_in_control_of_sambia_car": true,
+      "NOT": {
+        "has_country_flag": "OFN_CAR_zambia_established"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "OFN_CAR_WAR_establishment_in_progress"
+    }
+  },
+  {
+    "id": "MAG_WA_support_collapse_biafra",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Беафриканской республике",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "MAG_WA_cameroon_collapse_active": true,
+      "NOT": {
+        "OR": {
+          "CAO": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "BFR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "NNG": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "NGA": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "YOR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_collapse_biafra",
+      "BFR": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "BRA_invite_to_mercosul",
+    "category_id": "BRA_mercosul_decisions",
+    "name": "Пригласить государство [FROM.GetNameDef] в МЕРКОСУР",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "BRA_form_mercosul",
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 24
+          }
+        }
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRA_form_mercosul"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "BRI_Mann_DeliverCovertCrates",
+    "category_id": "BRI_Mann_Shall_Stand_category",
+    "name": "Доставить тайники",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRI_Mann_WeaponryShown"
+    },
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "WeaponryChange": 15
+        },
+        {
+          "IntelChange": -15
+        }
+      ],
+      "BRI_Mann_Modify_Weaponry": true,
+      "BRI_Mann_Modify_Intel_FEN": true,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -400
+      }
+    }
+  },
+  {
+    "id": "KOM_load_countercoup_coup_tree",
+    "category_id": "KOM_debug_category",
+    "name": "Загрузить древо контрпереворота",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision remove KOM_load_countercoup_coup_tree",
+      "load_focus_tree": "KOM_ccoup"
+    }
+  },
+  {
+    "id": "YUN_NPA_cross_the_marco_polo_bridge",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Незаконченная Северная Экспедиция",
+    "desc": "Теперь, когда запретный город снова в наших руках, пришло время для величайшего вызова - Маньчжурия. Павшая к ногам японцев раньше других - после Мукденского инцидента, теперь она отравлена предателями из клана Айсинь Гьоро, которые с радостью принимают Квантунскую Армию и японских бюрократов, порабощающих наших людей. Весь этот проект под названием 'Маньчжоу-Го' - это еще одна уловка самураев, направленная на то, чтобы оторвать Маньчжурию от ее родины. Однако на этот раз удача отвернется от японских псов. Мы добьемся того, чего не удалось десятилетия назад, и никогда больше эти империалистические псы не посмеют вторгнуться на земли Маньчжурии.",
+    "icon": "GFX_decision_category_YUN_red_kmt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_secured_dongbei_tt",
+        "all_of_scopes": {
+          "array": "global.greater_china_states",
+          "OR": {
+            "check_variable": [
+              {
+                "china_state_ref": {
+                  "_op": "<",
+                  "value": 44
+                }
+              },
+              {
+                "china_state_ref": {
+                  "_op": ">",
+                  "value": 52
+                }
+              }
+            ],
+            "AND": {
+              "check_variable": [
+                {
+                  "china_state_ref": {
+                    "_op": ">",
+                    "value": 43
+                  }
+                },
+                {
+                  "china_state_ref": {
+                    "_op": "<",
+                    "value": 53
+                  }
+                }
+              ],
+              "controller": {
+                "OR": {
+                  "is_in_faction_with": "YUN",
+                  "is_russian_nation": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "YUN_NPA_GAW_Crisis",
+      "controls_state": 608
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission YUN_NPA_cross_the_marco_polo_bridge Completed",
+      "add_political_power": 500,
+      "add_command_power": 50,
+      "set_temp_variable": {
+        "tempWarbuffTick": 5.0
+      },
+      "YUN_WI_morale_tick_change": true
+    }
+  }
+]

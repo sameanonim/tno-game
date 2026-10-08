@@ -1,0 +1,226 @@
+[
+  {
+    "id": "HGR_incorporate_KHP",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [KHP.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_KHP_req_tt",
+        "KHP": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_KHP_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "KHP": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_KHP",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_KHP_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KHP.GetFlag]Перекрыть поставки из Бургундии",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_KHP"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KHP_influence_true",
+        "HGR_KHP_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "KHP": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KHP_decision_a_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "KHP": {
+        "increase_Heydrich_influence_small": true,
+        "add_equipment_to_stockpile": [
+          {
+            "type": "infantry_equipment",
+            "amount": -500,
+            "producer": "BRG"
+          },
+          {
+            "type": "support_equipment",
+            "amount": -100,
+            "producer": "BRG"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "HGR_KHP_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KHP.GetFlag]Монополизировать наземный транспорт",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_KHP"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KHP_influence_true",
+        "HGR_KHP_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "KHP": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KHP_decision_a_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "KHP": {
+        "increase_Heydrich_influence_medium": true,
+        "random_owned_controlled_state": {
+          "damage_building": {
+            "type": "infrastructure",
+            "damage": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "HGR_KHP_decision_b_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KHP.GetFlag]Провести переговоры с Пайпером",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_KHP"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KHP_influence_true",
+        "HGR_KHP_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "KHP": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KHP_decision_b_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "KHP": {
+        "increase_Heydrich_influence_small": true
+      }
+    }
+  },
+  {
+    "id": "HGR_KHP_decision_b_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KHP.GetFlag]Поделиться информацией",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_KHP"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KHP_influence_true",
+        "HGR_KHP_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "KHP": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KHP_decision_b_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "HGR_increase_ss_hardliner_opinion_low": true,
+      "KHP": {
+        "increase_Heydrich_influence_medium": true,
+        "add_stability": 0.025
+      }
+    }
+  }
+]

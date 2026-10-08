@@ -1,518 +1,803 @@
 [
   {
+    "id": "TYM_load_starting_tree",
+    "category_id": "TYM_debug_category",
+    "name": "Откроет начальное древо фокусов",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_load_starting_tree",
+      "load_focus_tree": {
+        "tree": "tyumen_start"
+      }
+    }
+  },
+  {
+    "id": "TYM_load_smuta_tree",
+    "category_id": "TYM_debug_category",
+    "name": "Откроет древо Смуты",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_load_smuta_tree",
+      "load_focus_tree": {
+        "tree": "tyumen_smuta"
+      }
+    }
+  },
+  {
+    "id": "TYM_load_regional_tree",
+    "category_id": "TYM_debug_category",
+    "name": "Откроет региональное древо фокусов",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_load_regional_tree",
+      "load_focus_tree": {
+        "tree": "tyumen_regional"
+      }
+    }
+  },
+  {
+    "id": "TYM_load_superregional_tree_kaganovich",
+    "category_id": "TYM_debug_category",
+    "name": "Откроет древо фокусов суперрегиона Кагановича",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_load_superregional_tree_kaganovich",
+      "load_focus_tree": {
+        "tree": "TYM_superregional_kaganovich"
+      }
+    }
+  },
+  {
+    "id": "TYM_load_superregional_tree_khrushchev",
+    "category_id": "TYM_debug_category",
+    "name": "Откроет древо фокусов суперрегиона Хрущёва",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_load_superregional_tree_khrushchev",
+      "load_focus_tree": {
+        "tree": "TYM_superregional_khrushchev"
+      }
+    }
+  },
+  {
+    "id": "TYM_the_clock_ticks",
+    "category_id": "RUS_reunification_category",
+    "name": "Часы тикают",
+    "desc": "И когда они пробьют, мы вырвемся на свободу.",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
     "id": "RUS_Decision_Smuta_Occupation_TYM",
-    "category": "smuta",
     "category_id": "RUS_DecisionCategory_Smuta",
-    "category_name": "Смута",
-    "title": "Оккупировать  Тюмень",
-    "title_en": "Occupy",
-    "description": "$RUS_Decision_Smuta_Occupation_desc$",
-    "description_en": "$RUS_Decision_Smuta_Occupation_desc$",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "name": "Оккупировать [TYM.GetFlag] Тюмень",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
     "fire_only_once": true,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Оккупировать  Тюмень»"
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "TYM": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "TYM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_TYM",
+      "set_temp_variable": {
+        "TargetTag": "TYM"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "TYM.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "TYM"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "TYM"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_TYM": true
     }
   },
   {
     "id": "RUS_Decision_Smuta_Expansion_TYM_Generic",
-    "category": "smuta",
     "category_id": "RUS_DecisionCategory_Smuta",
-    "category_name": "Смута",
-    "title": "Атаковать  Тюмень",
-    "title_en": "Attack",
-    "description": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
-    "description_en": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 2,
+    "name": "Атаковать [TYM.GetFlag] Тюмень",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
     "fire_only_once": true,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Атаковать  Тюмень»"
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "is_west_siberian_nation": true,
+      "is_neighbor_of": "TYM",
+      "has_war": false,
+      "NOT": {
+        "has_non_aggression_pact_with": "TYM"
+      },
+      "RUS_Smuta_ScriptedTrigger_Expansion_TYM_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_TYM_Generic",
+      "set_temp_variable": {
+        "TargetTag": "TYM"
+      },
+      "RUS_Smuta_Expansion_TargetTag_Generic_Complete": true,
+      "set_country_flag": "RUS_Smuta_preparing_expansion",
+      "if": {
+        "limit": {
+          "tag": "SVR"
+        },
+        "country_event": {
+          "id": "SVR.14",
+          "hours": 6
+        }
+      }
     }
   },
   {
     "id": "RUS_Decision_Smuta_Expansion_FAV_TYM_LetsBeFriends",
-    "category": "smuta",
     "category_id": "RUS_DecisionCategory_Smuta",
-    "category_name": "Смута",
-    "title": "Отправить предложение  Свободным Авиаторам",
-    "title_en": "Send a Proposal to the",
-    "description": "Свободные авиаторы, как теперь называют себя остатки Ночных Ведьм, уютно устроились на севере. Хотя их доблестные усилия по отражению бомбардировок Люфтваффе заслуживают похвалы, их средства самообеспечения иссякают. Мы можем направить им предложение и предоставить им доступ ко всему, что им нужно, при условии, что они согласятся интегрироваться на нашу территорию.",
-    "description_en": "The Free Aviators, or what the remnants of the Night Witches call themselves now, sit snuggly up north. While their valiant efforts at thrawing the Luftwaffe bombing raids is commendable, their means of supplying themselves runs low. We can send a proposal to them and give them access to whatever they need, provided they agree to be integrated into our territory.",
-    "cost_pc": 30.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 1,
+    "name": "Отправить предложение [FAV.GetFlag] Свободным Авиаторам",
+    "desc": "Свободные авиаторы, как теперь называют себя остатки Ночных Ведьм, уютно устроились на севере. Хотя их доблестные усилия по отражению бомбардировок Люфтваффе заслуживают похвалы, их средства самообеспечения иссякают. Мы можем направить им предложение и предоставить им доступ ко всему, что им нужно, при условии, что они согласятся интегрироваться на нашу территорию.",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 30,
     "fire_only_once": true,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Отправить предложение  Свободным Авиаторам»"
-    }
+    "available": {
+      "is_neighbor_of": "FAV",
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "tag": "TYM",
+      "FAV": {
+        "exists": true
+      }
+    },
+    "complete_effect": {}
   },
   {
     "id": "TYM_fyp_the_first_five_year_plan_mission",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Первая Пятилетка",
-    "title_en": "The First Five Year Plan",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "name": "Первая Пятилетка",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
     "fire_only_once": true,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Первая Пятилетка»"
+    "available": {
+      "NOT": {
+        "TYM": {
+          "has_country_flag": "TYM_fyp_ongoing"
+        }
+      }
+    },
+    "visible": {
+      "TYM": {
+        "has_country_flag": "TYM_fyp_ongoing"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_the_first_five_year_plan_mission"
     }
   },
   {
     "id": "TYM_fyp_expand_heavy_armaments_industry",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Расширение военной промышленности",
-    "title_en": "Expand Heavy Armaments Industry",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 11,
+    "name": "Расширение военной промышленности",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": "TYM_heavy_arms_cost?55",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Расширение военной промышленности»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_heavy_armaments_industry",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_high_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 55
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.015
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_expand_civilian_industry",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Расширение гражданской промышленности",
-    "title_en": "Expand Civilian Industry",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 11,
+    "name": "Расширение гражданской промышленности",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": "TYM_civ_ind_cost?45",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Расширение гражданской промышленности»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_civilian_industry",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 40
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.01
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_expand_electric",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Восстановить энергетическую сеть",
-    "title_en": "Reconnect the Power Grid",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 11,
+    "name": "Восстановить энергетическую сеть",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": "TYM_power_cost?55",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Восстановить энергетическую сеть»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_electric",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 40
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.01
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_new_production_methods",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Модернизирнизация методов производства",
-    "title_en": "Modernize Production Methods",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 11,
+    "name": "Модернизирнизация методов производства",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": "TYM_prod_methods_cost?65",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Модернизирнизация методов производства»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_new_production_methods",
+      "custom_effect_tooltip": [
+        "TYM_increase_agricultural_strain_low_tt",
+        "TYM_new_production_methods_tt"
+      ],
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "subtract_from_variable": {
+        "industrial_expertise_counter": 10
+      },
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_expand_healthcare_infrastructure",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Расширение системы здравоохранения для рабочих",
-    "title_en": "Expand Medical Care for Workers",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 9,
+    "name": "Расширение системы здравоохранения для рабочих",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_hospital",
+    "cost": "TYM_health_cost?20",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Расширение системы здравоохранения для рабочих»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_healthcare_infrastructure",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_low_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_expand_administrative_infrastructure",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Восстановить инфраструктуру промышленного планирования",
-    "title_en": "Rebuild Industrial Planning Infrastructure",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 9,
+    "name": "Восстановить инфраструктуру промышленного планирования",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": "TYM_admin_cost?20",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Восстановить инфраструктуру промышленного планирования»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_administrative_infrastructure",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_low_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_expand_school_infrastructure",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Восстановить пролетарское образование",
-    "title_en": "Restore Proletarian Education",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 9,
+    "name": "Восстановить пролетарское образование",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_school",
+    "cost": "TYM_school_cost?20",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Восстановить пролетарское образование»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_school_infrastructure",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_low_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_expand_civil_defense_infrastructure",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Расширение гражданской инфраструктуры",
-    "title_en": "Expand Civil Infrastructure",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 7,
+    "name": "Расширение гражданской инфраструктуры",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": "TYM_defense_cost?25",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Расширение гражданской инфраструктуры»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_civil_defense_infrastructure",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_low_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_resettle_rural_population",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Переселение сельского населения",
-    "title_en": "Resettle Rural Populations",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 11,
+    "name": "Переселение сельского населения",
+    "desc": "",
+    "icon": "GFX_decision_generic_destroy_city",
+    "cost": "TYM_settle_cost?30",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Переселение сельского населения»",
-      "modify_manpower": 5000,
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_resettle_rural_population",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_high_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 55
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.02
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_develop_urban_centers",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Развитие городов",
-    "title_en": "Develop Urban Centers",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 9,
+    "name": "Развитие городов",
+    "desc": "",
+    "icon": "GFX_decision_generic_building",
+    "cost": "TYM_urban_cost?30",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Развитие городов»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_develop_urban_centers",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 40
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.01
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_collectivize_farms",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Коллективизация кулацких ферм",
-    "title_en": "Collectivize Kulak Farms",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 11,
+    "name": "Коллективизация кулацких ферм",
+    "desc": "",
+    "icon": "GFX_decision_generic_farm",
+    "cost": "TYM_collectivize_cost?45",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Коллективизация кулацких ферм»",
-      "modify_weapons": 2500,
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_collectivize_farms",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_high_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 55
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_encourage_agricultural_mechanization",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Стимулировать механизацию сельского хозяйства",
-    "title_en": "Encourage Agricultural Mechanization",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 11,
+    "name": "Стимулировать механизацию сельского хозяйства",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": "TYM_mechanization_cost?45",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Стимулировать механизацию сельского хозяйства»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_encourage_agricultural_mechanization",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_low_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_expand_resource_exploitation",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Расширение добычи ресурсов",
-    "title_en": "Expand Resource Exploitation",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 7,
+    "name": "Расширение добычи ресурсов",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": "TYM_resource_cost?45",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Расширение добычи ресурсов»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_resource_exploitation",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 40
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_invest_in_r_and_d",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Инвестировать в исследования и разработки",
-    "title_en": "Invest in Research and Development",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 7,
+    "name": "Инвестировать в исследования и разработки",
+    "desc": "",
+    "icon": "GFX_decision_generic_research",
+    "cost": "TYM_rnd_cost?45",
     "fire_only_once": false,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Инвестировать в исследования и разработки»",
-      "modify_gdp": 0.3
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_invest_in_r_and_d",
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
     }
   },
   {
     "id": "TYM_fyp_the_third_five_year_plan_mission",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Вторая Пятилетка",
-    "title_en": "The Second Five Year Plan",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "name": "Вторая Пятилетка",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
     "fire_only_once": true,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Вторая Пятилетка»"
+    "available": {
+      "NOT": {
+        "TYM": {
+          "has_country_flag": "TYM_3rd_fyp_ongoing"
+        }
+      }
+    },
+    "visible": {
+      "TYM": {
+        "has_country_flag": "TYM_3rd_fyp_ongoing"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_the_third_five_year_plan_mission"
     }
   },
   {
     "id": "TYM_fyp_another_five_year_plan_mission",
-    "category": "smuta",
     "category_id": "TYM_five_year_plan_category",
-    "category_name": "Пятилетний план",
-    "title": "Вторая Пятилетка",
-    "title_en": "The Second Five Year Plan",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "name": "Вторая Пятилетка",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
     "fire_only_once": true,
-    "requires_tags": [
-      "TYM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Вторая Пятилетка»"
+    "available": {
+      "NOT": {
+        "TYM": {
+          "has_country_flag": "TYM_another_fyp_ongoing"
+        }
+      }
+    },
+    "visible": {
+      "TYM": {
+        "has_country_flag": "TYM_another_fyp_ongoing"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_another_five_year_plan_mission"
+    }
+  },
+  {
+    "id": "OMS_cap_the_TYM",
+    "category_id": "OMS_2WRWCE_PostApoc_category",
+    "name": "Retake Tyumen",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "check_variable": [
+            {
+              "Antarctica_Militarization": {
+                "_op": ">",
+                "value": 20
+              }
+            },
+            {
+              "Antarctica_Legitimacy": {
+                "_op": ">",
+                "value": 20
+              }
+            },
+            {
+              "Antarctica_Equipment": {
+                "_op": ">",
+                "value": 10
+              }
+            }
+          ],
+          "tooltip": "PostApoc_capture_tt"
+        },
+        {
+          "check_variable": {
+            "OMS_team_doing": {
+              "_op": "<",
+              "value": "OMS_team_doing_max"
+            }
+          },
+          "tooltip": "OMS_team_doing_tt"
+        }
+      ],
+      "has_global_flag": "SWRW_postnuke_out_bunker_NOW"
+    },
+    "visible": {},
+    "complete_effect": {
+      "add_to_variable": {
+        "OMS_team_doing": 1
+      },
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "Antarctica_Militarization": 20
+          },
+          {
+            "Antarctica_Legitimacy": 20
+          },
+          {
+            "Antarctica_Equipment": 10
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "OMS_cap_the_TYM2",
+    "category_id": "OMS_2WRWCE_PostApoc_category",
+    "name": "Retake Kurgan",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "check_variable": [
+            {
+              "Antarctica_Militarization": {
+                "_op": ">",
+                "value": 20
+              }
+            },
+            {
+              "Antarctica_Legitimacy": {
+                "_op": ">",
+                "value": 20
+              }
+            },
+            {
+              "Antarctica_Equipment": {
+                "_op": ">",
+                "value": 10
+              }
+            }
+          ],
+          "tooltip": "PostApoc_capture_tt"
+        },
+        {
+          "check_variable": {
+            "OMS_team_doing": {
+              "_op": "<",
+              "value": "OMS_team_doing_max"
+            }
+          },
+          "tooltip": "OMS_team_doing_tt"
+        }
+      ],
+      "has_global_flag": "SWRW_postnuke_out_bunker_NOW"
+    },
+    "visible": {
+      "owns_state": 403
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "OMS_team_doing": 1
+      },
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "Antarctica_Militarization": 20
+          },
+          {
+            "Antarctica_Legitimacy": 20
+          },
+          {
+            "Antarctica_Equipment": 10
+          }
+        ]
+      }
     }
   }
 ]

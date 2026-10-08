@@ -1,0 +1,234 @@
+[
+  {
+    "id": "RAJ_akhand_bharat_claim_nep",
+    "category_id": "RAJ_akhand_bharat_cat",
+    "name": "Заявить претензии на [NEP.GetAdjective]ие регионы",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "NEP": {
+          "all_core_state": {
+            "is_controlled_by": "ROOT"
+          }
+        },
+        "all_of_scopes": {
+          "array": "claimed_by_akhand_bharat",
+          "is_controlled_by": "ROOT",
+          "tooltip": "RAJ_akhand_bharat_availability_tt"
+        }
+      }
+    },
+    "visible": {
+      "NEP": {
+        "any_core_state": {
+          "NOT": {
+            "is_core_of": "ROOT"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "is_core_of": "NEP"
+        },
+        "ROOT": {
+          "add_to_array": {
+            "array": "claimed_by_akhand_bharat",
+            "value": "PREV"
+          }
+        },
+        "add_core_of": "ROOT"
+      },
+      "for_each_scope_loop": {
+        "array": "claimed_by_akhand_bharat",
+        "if": {
+          "limit": {
+            "is_core_of": "NEP",
+            "owner": {
+              "is_subject_of": "ROOT"
+            }
+          },
+          "ROOT": {
+            "transfer_state": "PREV"
+          }
+        }
+      },
+      "NEP": {
+        "custom_effect_tooltip": "RAJ_akhand_bharat_annex_subject"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_nepal",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [NEP.GetNameRuPrep]",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "NEP",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "NEP",
+        "exists": true,
+        "NOT": {
+          "NEP": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "NEP",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "NEP"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "USA_LBJ_NEPA_act",
+    "category_id": "USA_LBJ_great_society_category",
+    "name": "Поощрять движения по защите окружающей среды",
+    "desc": "",
+    "icon": "",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_Muskie_movement"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_LBJ_NEPA_act",
+      "add_to_variable": [
+        {
+          "LBJ_environment_strength": 1
+        },
+        {
+          "Demographic_Shift_rural_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_urban_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_black_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_hispanic_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_minority_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_union_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_nativists_rep_Weeks": "USA_week_change_rural_rep"
+        },
+        {
+          "Demographic_Shift_rural_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_urban_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_black_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_hispanic_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_minority_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_union_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_nativists_dem_Weeks": "USA_week_change_rural_dem"
+        }
+      ],
+      "USA_lbj_strengthen_enviroment_small": true,
+      "custom_effect_tooltip": [
+        "LBJ_polarize",
+        "USA_all_voters_header_tt",
+        "USA_rural_dem_shift",
+        "USA_rural_rep_shift"
+      ],
+      "set_temp_variable": [
+        {
+          "USA_week_change_rural_rep": 1
+        },
+        {
+          "USA_week_change_rural_dem": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": "FUK_project_neptune",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Project NEPTUNE",
+    "desc": "",
+    "icon": "GFX_decision_generic_rockets",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_neptune",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_4_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.3
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  }
+]

@@ -712,13 +712,27 @@ static func get_reunification_super_event_id(tag: String, country: CountryState)
 # ПОШАГОВАЯ ОБРАБОТКА ХОДА
 # ==============================================================================
 
-func process_turn(_current_turn: int, country_state: CountryState = null) -> void:
+func process_turn(_current_turn: int, country_state: CountryState = null, turn_mgr: TurnManager = null) -> void:
 	turns_in_current_stage += 1
 	if warlord_mechanics != null and is_russian_tag(player_tag):
 		var rep = warlord_mechanics.process_turn(player_tag, country_state)
 		if rep.get("collapsed", false):
 			_log("ПОЛНОЧЬ НАСТУПИЛА: Священная Российская Империя рухнула!")
 			super_event_requested.emit("SE_POST_MIDNIGHT_COLLAPSE")
+
+	# Автоматическая проверка эволюции стадий воссоединения России
+	if is_russian_tag(player_tag) and country_state != null:
+		if current_stage == SmutaStage.STAGE_1_WARLORD and can_advance_to_regional(country_state):
+			advance_to_regional(country_state, turn_mgr)
+		elif current_stage == SmutaStage.STAGE_2_REGIONAL and turn_mgr != null:
+			if check_regional_victory(player_tag, turn_mgr.regions_world_state, turn_mgr.countries_world_state):
+				proclaim_regional_unification(country_state, turn_mgr)
+		elif current_stage == SmutaStage.STAGE_3_SUPERREGIONAL and turn_mgr != null:
+			if check_superregional_victory(player_tag, turn_mgr.regions_world_state, turn_mgr.countries_world_state):
+				proclaim_superregional_unification(country_state, turn_mgr)
+		elif current_stage == SmutaStage.STAGE_4_FINAL and turn_mgr != null:
+			if check_final_unification(player_tag, turn_mgr.regions_world_state, turn_mgr.countries_world_state):
+				proclaim_final_unification(country_state)
 
 
 func _switch_directives_tree(turn_manager: TurnManager, stage_suffix: String) -> void:

@@ -1,0 +1,4545 @@
+[
+  {
+    "id": "invite_GER_mauser_organization",
+    "category_id": "foreign_mio_decisions_category",
+    "name": "Invite $GER_mauser_organization$ to [ROOT.GetNameWithFlag]",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "GER": {
+        "mio_original_country_available_with_opinion_subject_and_war_requirements_fulfilled": true
+      }
+    },
+    "visible": {
+      "GER": {
+        "mio_original_country_exists_and_not_at_war_with_ROOT": true
+      },
+      "IF": {
+        "limit": {
+          "original_tag": "ETH"
+        },
+        "has_completed_focus": "ETH_invite_foreign_industrialists"
+      },
+      "ELSE": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "has_invited_GER_mauser_organization_flag"
+      },
+      "custom_effect_tooltip": "available_mio_tt",
+      "show_mio_tooltip": "GER_mauser_organization"
+    }
+  },
+  {
+    "id": "AUS_develop_bleiberger_mines",
+    "category_id": "prospect_for_resources",
+    "name": "Модернизировать Блайбергские шахты",
+    "desc": "",
+    "icon": "steel",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation2",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "owns_state": 976,
+      "controls_state": 976
+    },
+    "visible": {
+      "owns_state": 976,
+      "controls_state": 976,
+      "976": {
+        "NOT": {
+          "has_state_flag": "AUS_bleiberger_mines_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AST_australian_comforts_fund",
+    "category_id": "AST_cabinet_trust_cat",
+    "name": "Австралийский фонд помощи военнослужащим",
+    "desc": "Правительство почтит память одной из жертв авиакатастрофы в Канберре, направив средства в Австралийский фонд помощи военнослужащим, в работе которого активно участвует его вдова.\n\nЦель фонда — облегчить тяготы полевой службы австралийским военнослужащим. Он доставляет солдатам продовольствие и предметы первой необходимости в дополнение к имеющимся армейским пайкам и личному снаряжению, так что пожертвования фонду укрепят австралийские вооруженные силы.",
+    "icon": "GFX_decision_generic_welfare",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "AST_aid_australian_military_construction",
+    "category_id": "AST_australian_demands_cat",
+    "name": "Оказать Австралии содействие в военном строительстве",
+    "desc": "Британия не готова к войне. Оказав Австралии содействие в военном строительстве, мы сможем умерить ее нетерпение.",
+    "icon": "GFX_generic_industry",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "add_days_mission_timeout": {
+        "mission": "AST_japanese_war_mission",
+        "days": 180
+      },
+      "custom_effect_tooltip": "generic_skip_one_line_tt",
+      "AST": {
+        "country_event": {
+          "id": "AST_diplomatic_events.29",
+          "hours": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "AST_japanese_war_mission",
+    "category_id": "AST_australian_demands_cat",
+    "name": "Японская война",
+    "desc": "Австралия не желает оставаться один на один с превосходящими силами [JAP.GetNameRuGen]. Они призывают нас сделать первый шаг и урегулировать назревающий конфликт в кратчайшие сроки.",
+    "icon": "GFX_decision_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "declare_war_on": {
+        "target": "JAP",
+        "type": "puppet_wargoal_focus"
+      }
+    }
+  },
+  {
+    "id": "AST_summons_to_australian_hall",
+    "category_id": "AST_australia_first_movement_cat",
+    "name": "Приглашение в Австралийский зал",
+    "desc": "Если мы хотим, чтобы [AST.GetFascistParty] расширило численность своих рядов, необходимо объединить и мобилизовать наших сторонников — Австралийский зал ждет нас.",
+    "icon": "GFX_decision_eng_blackshirt_march",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_active_mission": "AST_insufficient_funds_mission"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_completed_focus": "AST_australia_first_party_focus"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AST_insufficient_funds",
+      "IF": {
+        "limit": {
+          "has_completed_focus": "AST_refuse_british_wars"
+        },
+        "add_autonomy_ratio": {
+          "value": 0.05,
+          "localization": "AST_australia_first_movement_cat"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt"
+      },
+      "custom_effect_tooltip": "AST_for_100_days",
+      "hidden_effect": {
+        "activate_mission": "AST_insufficient_funds_mission",
+        "set_country_flag": {
+          "flag": "AST_afm_summons",
+          "days": 90,
+          "value": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "AST_summons_to_australian_hall_upgrade",
+    "category_id": "AST_australia_first_movement_cat",
+    "name": "$AST_summons_to_australian_hall$",
+    "desc": "$AST_summons_to_australian_hall_desc$",
+    "icon": "GFX_decision_eng_blackshirt_march",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_active_mission": "AST_insufficient_funds_mission"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AST_australia_first_party_focus",
+      "NOT": {
+        "has_country_flag": "AST_afm_summons"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AST_insufficient_funds",
+      "IF": {
+        "limit": {
+          "has_completed_focus": "AST_refuse_british_wars"
+        },
+        "add_autonomy_ratio": {
+          "value": 0.05,
+          "localization": "AST_australia_first_movement_cat"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt"
+      },
+      "custom_effect_tooltip": "AST_for_50_days",
+      "hidden_effect": {
+        "activate_mission": "AST_insufficient_funds_mission",
+        "add_days_mission_timeout": {
+          "mission": "AST_insufficient_funds_mission",
+          "days": -50
+        }
+      }
+    }
+  },
+  {
+    "id": "AST_print_the_publicist",
+    "category_id": "AST_australia_first_movement_cat",
+    "name": "Печать «Публициста»",
+    "desc": "Газета «Публицист» (англ. The Publicist) — вестник движения «Австралия превыше всего». Она играет важную роль в привлечении новых сторонников. Очередной номер позволит усилить пропаганду наших идей.",
+    "icon": "GFX_decision_eng_propagande_campaigns",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_active_mission": "AST_insufficient_funds_mission"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_completed_focus": "AST_australia_first_party_focus"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AST_insufficient_funds",
+      "IF": {
+        "limit": {
+          "has_completed_focus": "AST_refuse_british_wars"
+        },
+        "add_autonomy_ratio": {
+          "value": 0.05,
+          "localization": "AST_australia_first_movement_cat"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt"
+      },
+      "custom_effect_tooltip": "AST_for_100_days",
+      "hidden_effect": {
+        "activate_mission": "AST_insufficient_funds_mission",
+        "set_country_flag": {
+          "flag": "AST_afm_print",
+          "days": 90,
+          "value": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "AST_print_the_publicist_upgrade",
+    "category_id": "AST_australia_first_movement_cat",
+    "name": "$AST_print_the_publicist$",
+    "desc": "$AST_print_the_publicist_desc$",
+    "icon": "GFX_decision_eng_propagande_campaigns",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_active_mission": "AST_insufficient_funds_mission"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AST_australia_first_party_focus",
+      "NOT": {
+        "has_country_flag": "AST_afm_print"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AST_insufficient_funds",
+      "IF": {
+        "limit": {
+          "has_completed_focus": "AST_refuse_british_wars"
+        },
+        "add_autonomy_ratio": {
+          "value": 0.05,
+          "localization": "AST_australia_first_movement_cat"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt"
+      },
+      "custom_effect_tooltip": "AST_for_50_days",
+      "hidden_effect": {
+        "activate_mission": "AST_insufficient_funds_mission",
+        "add_days_mission_timeout": {
+          "mission": "AST_insufficient_funds_mission",
+          "days": -50
+        }
+      }
+    }
+  },
+  {
+    "id": "AST_call_on_fascists",
+    "category_id": "AST_australia_first_movement_cat",
+    "name": "[GET_AST_CALL_ON_FASCISTS]",
+    "desc": "«Австралия превыше всего» — небольшое движение всего лишь с горсткой сторонников и потому нередко испытывает финансовые трудности. Однако зарубежная группа единомышленников выразила желание поддержать наши устремления материально, чтобы обеспечить дальнейшее развитие движения.",
+    "icon": "GFX_decision_generic_fundraising",
+    "cost": "var:AST_call_on_fascists_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_active_mission": "AST_insufficient_funds_mission"
+    },
+    "visible": [],
+    "complete_effect": {
+      "effect_tooltip": {
+        "remove_mission": "AST_insufficient_funds_mission"
+      },
+      "set_country_flag": "AST_call_on_fascists_flag",
+      "hidden_effect": {
+        "add_to_variable": {
+          "AST_call_on_fascists_cost": 10
+        }
+      }
+    }
+  },
+  {
+    "id": "AST_a_convenient_disaster",
+    "category_id": "AST_australia_first_movement_cat",
+    "name": "Своевременная катастрофа",
+    "desc": "Насколько бы ни выросла поддержка движения «Австралия прежде всего», консерваторы по-прежнему пытаются ей противостоять. Чтобы привести националистов к власти, простых выборов недостаточно. Нужно посеять смуту в правительстве.\n\nНаше движение не может самостоятельно вызвать подобное развитие событий, а наш иностранный фашистский союзник вполне в состоянии. Поддержав наш приход к власти, иностранные фашисты обретут в лице [AST.GetNameRuGen] союзника.",
+    "icon": "GFX_decision_generic_air",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "AST_australia_first_party_focus",
+      "fascism": {
+        "_op": ">",
+        "value": 0.3
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "country_event": {
+        "id": "AST_canberra_air_disaster_events.1",
+        "days": 1
+      },
+      "custom_effect_tooltip": "AST_a_convenient_disaster_tt"
+    }
+  },
+  {
+    "id": "AST_insufficient_funds_mission",
+    "category_id": "AST_australia_first_movement_cat",
+    "name": "Сбор необходимых средств",
+    "desc": "",
+    "icon": "GFX_decision_generic_welfare",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "AST_call_on_fascists",
+        "has_country_flag": "AST_call_on_fascists_flag"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "clr_country_flag": [
+        "AST_insufficient_funds",
+        "AST_call_on_fascists_flag"
+      ],
+      "custom_effect_tooltip": "AST_insufficient_funds_mission_tt"
+    }
+  },
+  {
+    "id": "AST_new_zealand_and_clause_6",
+    "category_id": "AST_kingdom_expansions_cat",
+    "name": "Новая Зеландия и шестая поправка",
+    "desc": "Хотя Новая Зеландия отказалась участвовать в процессе объединения бывших австралийских колоний, в нашей конституции она по-прежнему значится как потенциальный штат, который в любое время может вступить в состав Австралии.\n\nПоскольку вопрос национальной безопасности Новой Зеландии сегодня стоит особенно остро, возможно, мы впервые со времён принятия шестой поправки сможем убедить её правительство присоединиться к нашему королевству.",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NZL": [
+        {
+          "NOT": {
+            "has_war_with": "ROOT"
+          },
+          "OR": {
+            "threat": {
+              "_op": ">",
+              "value": 0.75
+            },
+            "has_war": true,
+            "has_capitulated": true
+          }
+        },
+        {
+          "naval_strength_ratio": {
+            "tag": "AST",
+            "ratio": {
+              "_op": "<",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "NZL": {
+        "is_ai": true,
+        "exists": true
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AUS_german_animosity_towards_high_command",
+    "category_id": "AUS_antischluss_category",
+    "name": "[GER.GetAdjective]ая враждебность к верховному командованию",
+    "desc": "",
+    "icon": "GFX_decision_generic_assassination",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "AUS_up_security_around_high_command",
+    "category_id": "AUS_antischluss_category",
+    "name": "Усилить охрану генералов верховного командования",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "is_subject_of": "GER"
+      },
+      "has_active_mission": "AUS_german_animosity_towards_high_command"
+    },
+    "visible": {
+      "NOT": {
+        "is_subject_of": "GER"
+      },
+      "has_active_mission": "AUS_german_animosity_towards_high_command"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AUS_state_garrison",
+    "category_id": "AUS_antischluss_category",
+    "name": "Гарнизоны в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_antischluss_measures_flag"
+      },
+      "is_subject": false,
+      "has_civil_war": false
+    },
+    "visible": {
+      "is_subject": false
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_antischluss_measures_flag"
+    }
+  },
+  {
+    "id": "AUS_fortification_effort",
+    "category_id": "AUS_antischluss_category",
+    "name": "Экстренное строительство укреплений",
+    "desc": "",
+    "icon": "GFX_decision_generic_fortification",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_antischluss_measures_flag",
+        "has_idea": "AUS_fortification_effort_idea"
+      },
+      "OR": {
+        "AUS_anschluss_risk_medium": true,
+        "AUS_anschluss_risk_high": true,
+        "AUS_anschluss_risk_critical": true
+      },
+      "is_subject": false,
+      "has_civil_war": false
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "AUS_fortification_effort_idea",
+        "AUS_anschluss_risk_low": true
+      },
+      "OR": {
+        "AUS_anschluss_risk_medium": true,
+        "AUS_anschluss_risk_high": true,
+        "AUS_anschluss_risk_critical": true
+      },
+      "is_subject": false
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_antischluss_measures_flag",
+      "add_timed_idea": {
+        "idea": "AUS_fortification_effort_idea",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "AUS_civ_industry_effort_effort",
+    "category_id": "AUS_antischluss_category",
+    "name": "Экстренное строительство гражданских фабрик",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_antischluss_measures_flag",
+        "has_idea": "AUS_civ_industry_effort_idea"
+      },
+      "is_subject": false,
+      "has_civil_war": false
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "AUS_civ_industry_effort_idea"
+      },
+      "is_subject": false
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_antischluss_measures_flag",
+      "add_timed_idea": {
+        "idea": "AUS_civ_industry_effort_idea",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "AUS_arms_industry_effort_effort",
+    "category_id": "AUS_antischluss_category",
+    "name": "Экстренное строительство военных заводов",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_antischluss_measures_flag",
+        "has_idea": "AUS_arms_industry_effort_idea"
+      },
+      "OR": {
+        "AUS_anschluss_risk_medium": true,
+        "AUS_anschluss_risk_high": true,
+        "AUS_anschluss_risk_critical": true
+      },
+      "is_subject": false,
+      "has_civil_war": false
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "AUS_arms_industry_effort_idea"
+      },
+      "AUS_anschluss_risk_low": false,
+      "OR": {
+        "AUS_anschluss_risk_medium": true,
+        "AUS_anschluss_risk_high": true,
+        "AUS_anschluss_risk_critical": true
+      },
+      "is_subject": false
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_antischluss_measures_flag",
+      "add_timed_idea": {
+        "idea": "AUS_arms_industry_effort_idea",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "AUS_extended_workshifts",
+    "category_id": "AUS_antischluss_category",
+    "name": "Продленные смены",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_antischluss_measures_flag",
+        "has_idea": "AUS_extended_workshifts_idea"
+      },
+      "OR": {
+        "AUS_anschluss_risk_high": true,
+        "AUS_anschluss_risk_critical": true
+      },
+      "is_subject": false,
+      "has_civil_war": false
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "AUS_extended_workshifts_idea"
+      },
+      "OR": [
+        {
+          "AUS_anschluss_risk_low": false,
+          "AUS_anschluss_risk_medium": false
+        },
+        {
+          "AUS_anschluss_risk_high": true,
+          "AUS_anschluss_risk_critical": true
+        }
+      ],
+      "is_subject": false
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_antischluss_measures_flag",
+      "add_timed_idea": {
+        "idea": "AUS_extended_workshifts_idea",
+        "days": 90
+      },
+      "add_stability": -0.1
+    }
+  },
+  {
+    "id": "AUS_recruitment_push",
+    "category_id": "AUS_antischluss_category",
+    "name": "Кампания по вербовке",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_idea": "AUS_treaty_of_saint_germain_en_laye",
+        "has_country_flag": "AUS_antischluss_measures_flag"
+      },
+      "OR": {
+        "AUS_anschluss_risk_high": true,
+        "AUS_anschluss_risk_critical": true
+      },
+      "is_subject": false,
+      "has_civil_war": false
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "AUS_treaty_of_saint_germain_en_laye"
+      },
+      "OR": [
+        {
+          "AUS_anschluss_risk_low": false,
+          "AUS_anschluss_risk_medium": false
+        },
+        {
+          "AUS_anschluss_risk_high": true,
+          "AUS_anschluss_risk_critical": true
+        }
+      ],
+      "is_subject": false
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_antischluss_measures_flag"
+    }
+  },
+  {
+    "id": "AUS_send_volunteers_to_italy",
+    "category_id": "AUS_supporting_italy_in_ethiopia_category",
+    "name": "Отправить [ITA.GetNameDef] добровольцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "add_relation_rule_override": {
+        "target": "ITA",
+        "can_send_volunteers": true
+      },
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_idea": "AUS_volunteer_effort"
+          }
+        },
+        "add_ideas": "AUS_volunteer_effort"
+      }
+    }
+  },
+  {
+    "id": "AUS_send_infantry_equipment_to_italy",
+    "category_id": "AUS_supporting_italy_in_ethiopia_category",
+    "name": "Отправить [ITA.GetNameDef] пехотное снаряжение",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "ITA": {
+        "country_event": {
+          "id": "AUS_political_events.12",
+          "hours": 12
+        }
+      },
+      "event_option_tooltip": "AUS_political_events.12.a",
+      "set_country_flag": "AUS_provided_infantry_equipment_for_italy_flag"
+    }
+  },
+  {
+    "id": "AUS_speak_out_against_embargo",
+    "category_id": "AUS_supporting_italy_in_ethiopia_category",
+    "name": "Выразить протест в связи с эмбарго против [ITA.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "any_country": {
+        "is_embargoing": "ITA"
+      },
+      "ROOT": {
+        "NOT": {
+          "is_embargoing": "ITA"
+        }
+      }
+    },
+    "visible": {
+      "any_country": {
+        "is_embargoing": "ITA"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AUS_integrating_german_cores_decision",
+    "category_id": "AUS_becoming_grossosterreich_category",
+    "name": "[FROM.GetName] проходит процесс интеграции",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "is_fully_controlled_by": "AUS"
+      }
+    },
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "AUS_becoming_grossosterreich_decision",
+    "category_id": "AUS_becoming_grossosterreich_category",
+    "name": "Провозгласить идеологию «[GetGrossosterreichCosmeticIdeology]»",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "GER": {
+        "all_core_state": {
+          "is_core_of": "AUS"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "AUS_subjugating_the_lands_of_old_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Подчинить государство [FROM.OWNER.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_demand_hungarian_submission",
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -25
+      },
+      "FROM": {
+        "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+        "OWNER": {
+          "set_country_flag": "AUS_sent_ultimatum_flag"
+        }
+      }
+    }
+  },
+  {
+    "id": "AUS_annexing_the_lands_of_old_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "[GetAnnexOrIntegrateDecision] [FROM.OWNER.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_bring_hungary_back_into_the_fold",
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -25
+      },
+      "FROM": {
+        "clr_state_flag": "AUS_currently_targets_this_landd_of_old_flag",
+        "OWNER": {
+          "set_country_flag": "AUS_sent_ultimatum_flag"
+        }
+      }
+    }
+  },
+  {
+    "id": "AUS_anti_FROM_speech_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Устроить митинг против [FROM.OWNER.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_eng_blackshirt_speech",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      },
+      "FROM": {
+        "OWNER": {
+          "is_neighbor_of": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        },
+        "OWNER": {
+          "NOT": {
+            "has_country_flag": "AUS_sent_ultimatum_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "FROM": {
+        "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+        "OWNER": {
+          "set_country_flag": "AUS_went_militarist_with_FROM_OWNER_flag"
+        }
+      }
+    }
+  },
+  {
+    "id": "AUS_military_exercises_on_border_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Военные учения на [FROM.OWNER.GetAdjective]ой границе",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "AUS_military_exercises_on_border_decision_tt",
+        "FROM": {
+          "OWNER": {
+            "is_neighbor_of": "ROOT",
+            "ROOT": {
+              "any_controlled_state": {
+                "ROOT": {
+                  "divisions_in_state": {
+                    "state": "PREV",
+                    "size": {
+                      "_op": ">",
+                      "value": 2
+                    }
+                  }
+                },
+                "any_neighbor_state": {
+                  "is_fully_controlled_by": "FROM.OWNER"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        },
+        "OWNER": {
+          "NOT": {
+            "has_country_flag": "AUS_sent_ultimatum_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "FROM": {
+        "set_state_flag": "AUS_currently_targets_this_landd_of_old_flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_arm_border_guards_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Вооружить пограничников на [FROM.OWNER.GetAdjective]ской границе",
+    "desc": "",
+    "icon": "GFX_decision_generic_reorganize_irregulars",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      },
+      "FROM": {
+        "OWNER": {
+          "is_neighbor_of": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        },
+        "OWNER": {
+          "NOT": {
+            "has_country_flag": "AUS_sent_ultimatum_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "FROM": {
+        "set_state_flag": "AUS_currently_targets_this_landd_of_old_flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_offer_nap_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Предложить государству [FROM.OWNER.GetNameDef] пакт о ненападении",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      }
+    },
+    "visible": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        },
+        "OWNER": {
+          "NOT": [
+            {
+              "has_country_flag": [
+                "AUS_went_militarist_with_FROM_OWNER_flag",
+                "AUS_sent_ultimatum_flag"
+              ]
+            },
+            {
+              "has_non_aggression_pact_with": "ROOT"
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "FROM": {
+        "set_state_flag": "AUS_currently_targets_this_landd_of_old_flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_industrial_bribery_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Попытаться подкупить промышленников [FROM.OWNER.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 1
+      }
+    },
+    "visible": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        },
+        "OWNER": {
+          "NOT": {
+            "has_country_flag": "AUS_sent_ultimatum_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "FROM": {
+        "set_state_flag": "AUS_currently_targets_this_landd_of_old_Flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_joint_military_exercises_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Провести [ROOT.GetAdjective]о-[FROM.OWNER.GetAdjective]ие военные учения",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      }
+    },
+    "visible": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        },
+        "OWNER": {
+          "NOT": {
+            "has_country_flag": "AUS_sent_ultimatum_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "FROM": {
+        "set_state_flag": "AUS_currently_targets_this_landd_of_old_Flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_further_balkan_demands",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Дополнительные балканские требования в государстве [FROM.OWNER.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      }
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "has_completed_focus": [
+            "AUS_reclaiming_yugoslavian_territories",
+            "AUS_subjugate_lands_of_old"
+          ]
+        },
+        "controls_state": [
+          102,
+          109,
+          853
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "AUS_installing_a_habsburg_ruler_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Посадить Габсбурга на престол [FROM.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_generic_monarchy",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "is_subject_of": "ROOT"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "AUS_tighten_control_of_subjects",
+          "AUS_bring_hungary_back_into_the_fold"
+        ]
+      },
+      "has_country_leader": {
+        "ruling_only": true,
+        "character": "HUN_otto_von_habsburg"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "AUS_hand_bosnia_to_our_cro_puppet",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Передать регионы [104.GetName] и [804.GetName] государству [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "AUS_the_danubian_federation_decision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Пригласить государство [FROM.GetNameDef] в альянс «[ROOT.GetFactionName]»",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "NOT": {
+          "OR": {
+            "is_subject": true,
+            "has_war_with": "ROOT"
+          }
+        },
+        "is_in_faction": false
+      },
+      "NOT": {
+        "has_country_flag": "AUS_sending_invite_to_danubian_federation_flag"
+      },
+      "IF": {
+        "limit": {
+          "has_country_flag": {
+            "flag": "AUS_has_started_inviting_faction_members_flag"
+          }
+        },
+        "has_country_flag": {
+          "flag": "AUS_recently_sent_invite_to_danubian_federation_flag",
+          "days": {
+            "_op": ">",
+            "value": 30
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_invite_danubian_countries"
+    },
+    "complete_effect": {
+      "FROM": {
+        "save_event_target_as": "alliance_applicant"
+      },
+      "set_country_flag": "AUS_sending_invite_to_danubian_federation_flag",
+      "clr_country_flag": "AUS_recently_sent_invite_to_danubian_federation_flag",
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": {
+              "flag": "AUS_has_started_inviting_faction_members_flag"
+            }
+          }
+        },
+        "set_country_flag": "AUS_has_started_inviting_faction_members_flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_the_danubian_federation_observers_decision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Пригласить государство [FROM.GetNameDef] в альянс «[ROOT.GetFactionName]»",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "NOT": {
+          "OR": {
+            "is_subject": true,
+            "has_war_with": "ROOT"
+          }
+        },
+        "is_in_faction": false
+      },
+      "NOT": {
+        "has_country_flag": "AUS_sending_invite_to_danubian_federation_flag"
+      },
+      "IF": {
+        "limit": {
+          "has_country_flag": {
+            "flag": "AUS_has_started_inviting_faction_members_flag"
+          }
+        },
+        "has_country_flag": {
+          "flag": "AUS_recently_sent_invite_to_danubian_federation_flag",
+          "days": {
+            "_op": ">",
+            "value": 30
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_inviting_the_observers"
+    },
+    "complete_effect": {
+      "FROM": {
+        "save_event_target_as": "alliance_applicant"
+      },
+      "set_country_flag": "AUS_sending_invite_to_danubian_federation_flag",
+      "clr_country_flag": "AUS_recently_sent_invite_to_danubian_federation_flag",
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": {
+              "flag": "AUS_has_started_inviting_faction_members_flag"
+            }
+          }
+        },
+        "set_country_flag": "AUS_has_started_inviting_faction_members_flag"
+      }
+    }
+  },
+  {
+    "id": "AUS_industrial_coaxing_decision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Поддержать промышленность [FROM.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "is_faction_leader": true,
+      "NOT": {
+        "has_country_flag": "AUS_currently_industrially_coaxing_faction_member_flag"
+      },
+      "FROM": {
+        "is_subject": false,
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_protector_of_the_danube",
+      "FROM": {
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_industrially_coaxing_faction_member_flag"
+    }
+  },
+  {
+    "id": "AUS_trade_coaxing_descision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Отправить оборудование государству [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "is_faction_leader": true,
+      "NOT": {
+        "has_country_flag": "AUS_currently_sending_a_subsidy_flag"
+      },
+      "FROM": {
+        "is_subject": false,
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_protector_of_the_danube",
+      "FROM": {
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_sending_a_subsidy_flag"
+    }
+  },
+  {
+    "id": "AUS_propose_a_federative_union_decision",
+    "category_id": "AUS_the_danubian_federation_category",
+    "name": "Предложить государству [FROM.GetNameDef] вступить в федеральный союз.",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "is_faction_leader": true,
+      "FROM": {
+        "is_subject": false,
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_protector_of_the_danube",
+      "FROM": {
+        "is_in_faction_with": "ROOT"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "AUS_spur_danubian_communism_decision",
+    "category_id": "AUS_danubian_communism_category",
+    "name": "Поддержать коммунистические настроения в государстве [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "NOT": {
+          "OR": {
+            "is_subject": true,
+            "has_war_with": "ROOT",
+            "has_government": "communism"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_spur_the_communist_resistance"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "AUS_demand_liberation_of_workers_decision",
+    "category_id": "AUS_danubian_communism_category",
+    "name": "Потребовать освобождения [FROM.GetAdjective]их рабочих",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_rally",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "FROM": {
+        "is_subject": false,
+        "NOT": {
+          "OR": {
+            "has_war_with": "ROOT",
+            "has_government": "communism"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_demand_liberation_of_workers"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "AUS_reintegrate_FROM_italy_decision",
+    "category_id": "AUS_reintegrating_the_empire_category",
+    "name": "Заново интегрировать территорию [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_propaganda",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_reintegrating_state_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_extend_italian_claims"
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_reintegrating_state_flag"
+    }
+  },
+  {
+    "id": "AUS_reintegrate_FROM_switzerland_decision",
+    "category_id": "AUS_reintegrating_the_empire_category",
+    "name": "Заново интегрировать территорию [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_propaganda",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_reintegrating_state_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_reclaim_habsburg"
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_reintegrating_state_flag"
+    }
+  },
+  {
+    "id": "CZE_demands_aus_joins_us",
+    "category_id": "CZE_central_european_federation",
+    "name": "Потребовать, чтобы [AUS.GetName] вступил[AUS.GetNameRuEndPast] в нашу федерацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "is_in_faction_with": "AUS",
+        "has_war_with": "AUS"
+      },
+      "is_neighbor_of": "AUS",
+      "AUS": {
+        "any_core_state": {
+          "is_controlled_by": "AUS"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CZE_form_a_federation",
+      "is_subject": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_support_imperialist_coup_in_australia",
+    "category_id": "ENG_appeal_to_imperial_loyalists",
+    "name": "Устроить империалистическое восстание в Австралии",
+    "desc": "Пора поддержать лоялистов в Австралии, которые готовятся разжечь полномасштабную гражданскую войну.",
+    "icon": "eng_support_imperialist_coup",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 4999
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 99
+          }
+        },
+        {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 249
+          }
+        }
+      ],
+      "OR": {
+        "AND": [
+          {
+            "has_government": "neutrality",
+            "FROM": {
+              "NOT": {
+                "has_government": "neutrality"
+              }
+            }
+          },
+          {
+            "has_government": "fascism",
+            "FROM": {
+              "NOT": {
+                "has_government": "fascism"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_appeal_to_imperial_loyalists",
+      "FROM": {
+        "NOT": [
+          {
+            "is_in_faction_with": "ROOT"
+          },
+          {
+            "is_subject_of": "ROOT"
+          },
+          {
+            "has_country_flag": "ENG_imperialist_civil_war"
+          }
+        ],
+        "has_civil_war": false,
+        "exists": true
+      },
+      "NOT": {
+        "has_country_flag": "ENG_AST_suppressed_coup"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ENG_renew_support_for_imperialist_coup_in_australia_tt",
+      "hidden_effect": {
+        "set_country_flag": "ENG_prepare_coup_in_AST"
+      },
+      "FROM": {
+        "activate_mission": "ENG_support_imperialist_coup_in_australia_mission_1",
+        "country_event": {
+          "id": "mtg_britain.61",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "ENG_support_imperialist_coup_in_australia_mission_1",
+    "category_id": "ENG_appeal_to_imperial_loyalists",
+    "name": "Назревает империалистическое восстание",
+    "desc": "Имперские лоялисты подстрекают к мятежу! Если им это удастся, они повергнут всю страну в пучину гражданской войны!",
+    "icon": "eng_support_imperialist_coup",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "ENG": {
+        "has_country_flag": "ENG_AST_suppressed_coup"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "tag": "AST",
+        "ENG": {
+          "has_country_flag": "ENG_prepare_coup_in_AST"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ENG_suppress_imperialist_coup_in_australia",
+    "category_id": "ENG_appeal_to_imperial_loyalists",
+    "name": "Подавить империалистическое восстание",
+    "desc": "Мы будем бороться с мятежом всюду, где он только посмеет поднять свою уродливую голову.",
+    "icon": "eng_support_imperialist_coup",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_army_experience": {
+        "_op": ">",
+        "value": 5
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "OR": {
+          "FROM": {
+            "has_country_flag": "ENG_prepare_coup_in_AST"
+          },
+          "has_country_flag": "AST_suppressing_coup"
+        },
+        "NOT": {
+          "has_country_flag": "ENG_prepare_coup_in_AST_reset_flag"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_stability": -0.05,
+      "army_experience": -5,
+      "hidden_effect": {
+        "FROM": {
+          "set_country_flag": [
+            "ENG_AST_suppressed_coup",
+            {
+              "flag": "ENG_prepare_coup_in_AST_reset_flag",
+              "value": 1,
+              "days": 2
+            }
+          ],
+          "clr_country_flag": [
+            "ENG_prepare_coup_in_AST",
+            "ENG_renewing_support_for_coup_AST"
+          ]
+        },
+        "set_country_flag": "AST_suppressing_coup"
+      },
+      "custom_effect_tooltip": "ENG_suppress_imperialist_coup_tt",
+      "FROM": {
+        "activate_mission": "ENG_support_imperialist_coup_in_australia_mission_2"
+      }
+    }
+  },
+  {
+    "id": "ENG_support_imperialist_coup_in_australia_mission_2",
+    "category_id": "ENG_appeal_to_imperial_loyalists",
+    "name": "Восстание в Австралии подавлено",
+    "desc": "Канадское правительство подавило движение наших лоялистов. Нужно срочно ответить на это, иначе вся надежда на восстание будет потеряна.",
+    "icon": "eng_support_imperialist_coup",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ENG_support_imperialist_coup_in_australia_mission_2_tt"
+      },
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "ENG_AST_suppressed_coup"
+        }
+      }
+    },
+    "visible": {
+      "tag": "ENG",
+      "has_country_flag": "ENG_AST_suppressed_coup"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ENG_renew_support_for_imperialist_coup_in_australia",
+    "category_id": "ENG_appeal_to_imperial_loyalists",
+    "name": "Усилить поддержку восстания в Австралии",
+    "desc": "Лоялисты могут рассчитывать на нашу поддержку!",
+    "icon": "eng_support_imperialist_coup",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 2499
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 49
+          }
+        },
+        {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 124
+          }
+        }
+      ],
+      "OR": {
+        "AND": [
+          {
+            "has_government": "neutrality",
+            "FROM": {
+              "NOT": {
+                "has_government": "neutrality"
+              }
+            }
+          },
+          {
+            "has_government": "fascism",
+            "FROM": {
+              "NOT": {
+                "has_government": "fascism"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_appeal_to_imperial_loyalists",
+      "OR": {
+        "has_country_flag": [
+          "ENG_AST_suppressed_coup",
+          "ENG_renewing_support_for_coup_AST"
+        ]
+      },
+      "NOT": {
+        "has_country_flag": "ENG_prepare_coup_in_AST_reset_flag"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ENG_renew_support_for_imperialist_coup_in_australia_tt",
+      "hidden_effect": {
+        "FROM": {
+          "clr_country_flag": "AST_suppressing_coup",
+          "set_country_flag": {
+            "flag": "ENG_prepare_coup_in_AST_reset_flag",
+            "value": 1,
+            "days": 2
+          }
+        },
+        "clr_country_flag": "ENG_AST_suppressed_coup",
+        "set_country_flag": [
+          "ENG_prepare_coup_in_AST",
+          "ENG_renewing_support_for_coup_AST"
+        ]
+      },
+      "FROM": {
+        "activate_mission": "ENG_support_imperialist_coup_in_australia_mission_1"
+      }
+    }
+  },
+  {
+    "id": "ENG_ally_the_australian_imperialist_uprising",
+    "category_id": "ENG_appeal_to_imperial_loyalists",
+    "name": "Встать на сторону австралийских мятежников",
+    "desc": "Мы не бросим наших австралийских лоялистов на произвол судьбы. Они получат от нас военную помощь, а после победы в войне — нашу защиту и покровительство.",
+    "icon": "eng_ally_imperialist_coup",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "AST": {
+        "has_civil_war": true
+      },
+      "NOT": {
+        "is_in_faction_with": "AST"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_bring_the_dominions_back_into_the_fold",
+      "FROM": {
+        "if": [
+          {
+            "limit": {
+              "ROOT": {
+                "has_government": "neutrality"
+              }
+            },
+            "has_government": "neutrality"
+          },
+          {
+            "limit": {
+              "ROOT": {
+                "has_government": "fascism"
+              }
+            },
+            "has_government": "fascism"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "set_country_flag": "britain_enforced_our_loyalty",
+        "ROOT": {
+          "add_to_war": {
+            "targeted_alliance": "PREV",
+            "enemy": "AST",
+            "hostility_reason": "asked_to_join"
+          },
+          "add_to_faction": "PREV",
+          "if": {
+            "limit": {
+              "has_dlc": "Death or Dishonor",
+              "has_government": "fascism"
+            },
+            "set_autonomy": {
+              "target": "PREV",
+              "autonomy_state": "autonomy_reichskommissariat"
+            }
+          },
+          "else_if": {
+            "limit": {
+              "has_dlc": "Together for Victory"
+            },
+            "set_autonomy": {
+              "target": "PREV",
+              "autonomy_state": "autonomy_integrated_puppet"
+            }
+          },
+          "else": {
+            "puppet": "PREV"
+          }
+        },
+        "hidden_effect": [
+          {
+            "if": {
+              "limit": {
+                "has_dlc": "Together for Victory"
+              },
+              "load_focus_tree": {
+                "tree": "australian_focus",
+                "keep_completed": true
+              },
+              "AST_enforce_loyalty": true
+            }
+          },
+          {
+            "country_event": {
+              "id": "mtg_britain.112",
+              "days": 1
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ENG_impose_martial_law_on_australia",
+    "category_id": "ENG_move_to_secure_the_dominions",
+    "name": "Ввести военное положение в Австралии",
+    "desc": "Народ Австралии введен в заблуждение, и его нужно защитить от самого себя. Мы откроем ему глаза и возьмем власть в свои руки.",
+    "icon": "generic_civil_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "army_manpower_in_state": {
+            "state": 522,
+            "amount": {
+              "_op": "<",
+              "value": 9600
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 521,
+            "amount": {
+              "_op": "<",
+              "value": 19200
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 517,
+            "amount": {
+              "_op": "<",
+              "value": 38400
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 285,
+            "amount": {
+              "_op": "<",
+              "value": 48000
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "communism",
+          "fascism"
+        ]
+      },
+      "has_completed_focus": "ENG_move_to_secure_the_dominions",
+      "if": [
+        {
+          "limit": {
+            "has_government": "communism"
+          },
+          "NOT": {
+            "FROM": {
+              "has_government": "communism"
+            }
+          }
+        },
+        {
+          "limit": {
+            "has_government": "fascism"
+          },
+          "NOT": {
+            "FROM": {
+              "has_government": "fascism"
+            }
+          }
+        }
+      ],
+      "FROM": {
+        "is_subject_of": "ROOT",
+        "NOT": [
+          {
+            "has_country_flag": "ENG_imperialist_civil_war"
+          },
+          {
+            "has_government": "ROOT"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "hidden_effect": {
+          "set_country_flag": {
+            "flag": "ENG_cannot_leave_faction",
+            "value": 1,
+            "days": 180
+          }
+        },
+        "custom_effect_tooltip": "ENG_impose_martial_law_tt",
+        "country_event": {
+          "id": "mtg_britain.63"
+        }
+      }
+    }
+  },
+  {
+    "id": "ENG_propaganda_campaigns_in_australia",
+    "category_id": "ENG_move_to_secure_the_dominions",
+    "name": "Пропагандистские кампании в Австралии",
+    "desc": "Мы запустим мощную пропагандистскую кампанию, чтобы рассказать народу Австралии о некомпетентности его правительства и необходимости руководящей роли Британии.",
+    "icon": "eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "army_manpower_in_state": {
+            "state": 522,
+            "amount": {
+              "_op": "<",
+              "value": 9600
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 521,
+            "amount": {
+              "_op": "<",
+              "value": 19200
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 517,
+            "amount": {
+              "_op": "<",
+              "value": 38400
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 285,
+            "amount": {
+              "_op": "<",
+              "value": 48000
+            }
+          }
+        }
+      ],
+      "FROM": {
+        "has_country_flag": "ENG_cannot_leave_faction"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "communism",
+          "fascism"
+        ]
+      },
+      "has_completed_focus": "ENG_move_to_secure_the_dominions",
+      "FROM": {
+        "is_subject_of": "ROOT",
+        "NOT": [
+          {
+            "has_country_flag": "ENG_imperialist_civil_war"
+          },
+          {
+            "has_government": "ROOT"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_government": "fascism"
+        },
+        "FROM": {
+          "add_timed_idea": {
+            "idea": "ENG_dominion_fascist_propaganda",
+            "days": 90
+          }
+        }
+      },
+      "else_if": {
+        "limit": {
+          "has_government": "communism"
+        },
+        "FROM": {
+          "add_timed_idea": {
+            "idea": "ENG_dominion_communist_propaganda",
+            "days": 90
+          }
+        }
+      },
+      "FROM": {
+        "country_event": {
+          "id": "mtg_britain.64"
+        }
+      }
+    }
+  },
+  {
+    "id": "ENG_replace_government_in_australia_fascism",
+    "category_id": "ENG_move_to_secure_the_dominions",
+    "name": "Привести к власти фашистов в Австралии",
+    "desc": "Народ Австралии готов сменить правительство на... более благосклонное к нашему фашистскому правлению.",
+    "icon": "eng_install_government",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "army_manpower_in_state": {
+            "state": 522,
+            "amount": {
+              "_op": "<",
+              "value": 9600
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 521,
+            "amount": {
+              "_op": "<",
+              "value": 19200
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 517,
+            "amount": {
+              "_op": "<",
+              "value": 38400
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 285,
+            "amount": {
+              "_op": "<",
+              "value": 48000
+            }
+          }
+        }
+      ],
+      "FROM": {
+        "has_country_flag": "ENG_cannot_leave_faction",
+        "fascism": {
+          "_op": ">",
+          "value": 0.2
+        }
+      }
+    },
+    "visible": {
+      "has_government": "fascism",
+      "has_completed_focus": "ENG_move_to_secure_the_dominions",
+      "FROM": {
+        "is_subject_of": "ROOT",
+        "NOT": [
+          {
+            "has_country_flag": "ENG_imperialist_civil_war"
+          },
+          {
+            "has_government": "ROOT"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "mtg_britain.200",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ENG_replace_government_in_australia_communism",
+    "category_id": "ENG_move_to_secure_the_dominions",
+    "name": "Привести к власти коммунистов в Австралии",
+    "desc": "Народ Австралии готов сменить правительство на... более благосклонное к нашему коммунистическому правлению.",
+    "icon": "eng_install_government",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "army_manpower_in_state": {
+            "state": 522,
+            "amount": {
+              "_op": "<",
+              "value": 9600
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 521,
+            "amount": {
+              "_op": "<",
+              "value": 19200
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 517,
+            "amount": {
+              "_op": "<",
+              "value": 38400
+            }
+          }
+        },
+        {
+          "army_manpower_in_state": {
+            "state": 285,
+            "amount": {
+              "_op": "<",
+              "value": 48000
+            }
+          }
+        }
+      ],
+      "FROM": {
+        "has_country_flag": "ENG_cannot_leave_faction",
+        "communism": {
+          "_op": ">",
+          "value": 0.2
+        }
+      }
+    },
+    "visible": {
+      "has_government": "communism",
+      "has_completed_focus": "ENG_move_to_secure_the_dominions",
+      "FROM": {
+        "is_subject_of": "ROOT",
+        "NOT": [
+          {
+            "has_country_flag": "ENG_imperialist_civil_war"
+          },
+          {
+            "has_government": "ROOT"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "mtg_britain.200",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "form_austria_hungary",
+    "category_id": "form_austria_hungary_category",
+    "name": "Восстановить Австро-Венгерскую империю",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "custom_trigger_tooltip": {
+        "tooltip": "has_control_over_all_highlighted_states_tt",
+        "controls_state": [
+          102,
+          853,
+          103,
+          104,
+          804,
+          109,
+          45,
+          83,
+          76,
+          84,
+          764,
+          82,
+          848,
+          153,
+          152,
+          4,
+          975,
+          976,
+          69,
+          9,
+          75,
+          74,
+          72,
+          70,
+          664,
+          71,
+          73,
+          972,
+          155,
+          43,
+          973,
+          974,
+          154
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "AUS",
+          "CZE",
+          "CRO",
+          "SLO",
+          "SLV",
+          "TRA",
+          "LBV",
+          "BOS",
+          "SIL"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "form_austria_hungary_flag"
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "original_tag": "CZE"
+          }
+        },
+        "set_cosmetic_tag": "HUN_EMPIRE",
+        "else": {
+          "set_cosmetic_tag": "CZE_great_moravia"
+        }
+      },
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "gain_cores_on_the_highlighted_states_tt"
+      ],
+      "hidden_effect": {
+        "IF": {
+          "limit": {
+            "NOT": {
+              "tag": "AUS",
+              "CZE": {
+                "has_cosmetic_tag": "CZE_great_moravia"
+              }
+            }
+          },
+          "AUS": {
+            "set_cosmetic_tag": "AUS_NOT_WHITE"
+          }
+        },
+        "102": {
+          "add_core_of": "ROOT"
+        },
+        "853": {
+          "add_core_of": "ROOT"
+        },
+        "103": {
+          "add_core_of": "ROOT"
+        },
+        "104": {
+          "add_core_of": "ROOT"
+        },
+        "804": {
+          "add_core_of": "ROOT"
+        },
+        "109": {
+          "add_core_of": "ROOT"
+        },
+        "45": {
+          "add_core_of": "ROOT"
+        },
+        "83": {
+          "add_core_of": "ROOT"
+        },
+        "76": {
+          "add_core_of": "ROOT"
+        },
+        "84": {
+          "add_core_of": "ROOT"
+        },
+        "39": {
+          "add_core_of": "ROOT"
+        },
+        "163": {
+          "add_core_of": "ROOT"
+        },
+        "736": {
+          "add_core_of": "ROOT"
+        },
+        "852": {
+          "add_core_of": "ROOT"
+        },
+        "850": {
+          "add_core_of": "ROOT"
+        },
+        "764": {
+          "add_core_of": "ROOT"
+        },
+        "82": {
+          "add_core_of": "ROOT"
+        },
+        "custom_effect_tooltip": [
+          "form_country_austria_coring_states_tt",
+          "form_country_czechoslovakia_coring_states_tt",
+          "form_country_hungary_coring_states_tt"
+        ],
+        "hidden_effect": [
+          {
+            "848": {
+              "add_core_of": "ROOT"
+            },
+            "153": {
+              "add_core_of": "ROOT"
+            },
+            "152": {
+              "add_core_of": "ROOT"
+            },
+            "4": {
+              "add_core_of": "ROOT"
+            },
+            "975": {
+              "add_core_of": "ROOT"
+            },
+            "976": {
+              "add_core_of": "ROOT"
+            }
+          },
+          {
+            "69": {
+              "add_core_of": "ROOT"
+            },
+            "9": {
+              "add_core_of": "ROOT"
+            },
+            "75": {
+              "add_core_of": "ROOT"
+            },
+            "74": {
+              "add_core_of": "ROOT"
+            },
+            "72": {
+              "add_core_of": "ROOT"
+            },
+            "70": {
+              "add_core_of": "ROOT"
+            },
+            "664": {
+              "add_core_of": "ROOT"
+            },
+            "71": {
+              "add_core_of": "ROOT"
+            },
+            "73": {
+              "add_core_of": "ROOT"
+            },
+            "972": {
+              "add_core_of": "ROOT"
+            }
+          },
+          {
+            "155": {
+              "add_core_of": "ROOT"
+            },
+            "43": {
+              "add_core_of": "ROOT"
+            },
+            "973": {
+              "add_core_of": "ROOT"
+            },
+            "974": {
+              "add_core_of": "ROOT"
+            },
+            "154": {
+              "add_core_of": "ROOT"
+            }
+          },
+          {
+            "news_event": {
+              "id": "wtt_news.56",
+              "hours": 6
+            },
+            "set_global_flag": "form_austria_hungary_flag"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "reintegrate_austro_hungarian_empire",
+    "category_id": "form_austria_hungary_category",
+    "name": "Включить империю в состав",
+    "desc": "Мы достаточно завоевали, чтобы включить имперские австро-венгерские земли в нашу империю. Сделаем это немедленно!",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "controls_state": [
+        155,
+        43,
+        973,
+        974,
+        154,
+        102,
+        853,
+        103,
+        104,
+        804,
+        109,
+        45,
+        83,
+        76,
+        84,
+        764,
+        82,
+        975,
+        976,
+        4,
+        152,
+        153,
+        848,
+        73,
+        664,
+        71,
+        70,
+        75,
+        972,
+        9,
+        69,
+        74,
+        72,
+        852,
+        736,
+        39,
+        850,
+        160,
+        159,
+        163
+      ]
+    },
+    "visible": {
+      "tag": "HUN",
+      "OR": {
+        "has_completed_focus": [
+          "HUN_proclaim_the_restoration_of_austria_hungary",
+          "wuw_HUN_renovato_imperii"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "reintegrate_the_empire_flag"
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "NOT": {
+            "is_core_of": "ROOT"
+          },
+          "OR": {
+            "state": [
+              155,
+              43,
+              973,
+              974,
+              154,
+              102,
+              853,
+              103,
+              104,
+              804,
+              109,
+              45,
+              83,
+              76,
+              84,
+              39,
+              163,
+              736,
+              852,
+              850,
+              764,
+              82,
+              975,
+              976,
+              4,
+              152,
+              153,
+              848,
+              73,
+              664,
+              71,
+              70,
+              75,
+              972,
+              9,
+              69,
+              74,
+              72,
+              852,
+              736,
+              39,
+              850,
+              160,
+              159,
+              163
+            ]
+          }
+        },
+        "add_core_of": "ROOT"
+      },
+      "set_global_flag": "reintegrate_the_empire_flag"
+    }
+  },
+  {
+    "id": "AST_form_australasia",
+    "category_id": "AST_australia_formables_category",
+    "name": "Сформировать Австралазию",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "AST_form_australasia_australia_required_states_tt",
+          "controls_state": [
+            518,
+            517,
+            285,
+            521,
+            873,
+            519,
+            674,
+            871,
+            522,
+            870,
+            520,
+            872
+          ]
+        },
+        {
+          "tooltip": "AST_form_australasia_melanesia_required_states_tt",
+          "controls_state": [
+            669,
+            1057,
+            979,
+            523,
+            737,
+            1070,
+            634,
+            734,
+            1071,
+            635,
+            636
+          ]
+        },
+        {
+          "tooltip": "AST_form_australasia_new_zealand_required_states_tt",
+          "controls_state": [
+            1079,
+            284,
+            1080,
+            723,
+            1081
+          ]
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_cosmetic_tag": "AST_australasia",
+      "set_global_flag": "AST_australasia_flag",
+      "custom_effect_tooltip": "AST_form_australasia_melanesia_core_states_tt",
+      "hidden_effect": {
+        "669": {
+          "add_core_of": "ROOT"
+        },
+        "1057": {
+          "add_core_of": "ROOT"
+        },
+        "979": {
+          "add_core_of": "ROOT"
+        },
+        "523": {
+          "add_core_of": "ROOT"
+        },
+        "737": {
+          "add_core_of": "ROOT"
+        },
+        "1070": {
+          "add_core_of": "ROOT"
+        },
+        "1073": {
+          "add_core_of": "ROOT"
+        },
+        "634": {
+          "add_core_of": "ROOT"
+        },
+        "734": {
+          "add_core_of": "ROOT"
+        },
+        "1071": {
+          "add_core_of": "ROOT"
+        },
+        "635": {
+          "add_core_of": "ROOT"
+        },
+        "636": {
+          "add_core_of": "ROOT"
+        }
+      },
+      "IF": [
+        {
+          "limit": {
+            "any_state": {
+              "NOT": {
+                "is_core_of": "ROOT"
+              },
+              "OR": {
+                "state": [
+                  518,
+                  517,
+                  285,
+                  521,
+                  873,
+                  1075,
+                  519,
+                  674,
+                  1074,
+                  871,
+                  522,
+                  870,
+                  520,
+                  872
+                ]
+              }
+            }
+          },
+          "custom_effect_tooltip": "AST_form_australasia_australia_core_states_tt",
+          "hidden_effect": {
+            "518": {
+              "add_core_of": "ROOT"
+            },
+            "517": {
+              "add_core_of": "ROOT"
+            },
+            "285": {
+              "add_core_of": "ROOT"
+            },
+            "521": {
+              "add_core_of": "ROOT"
+            },
+            "873": {
+              "add_core_of": "ROOT"
+            },
+            "519": {
+              "add_core_of": "ROOT"
+            },
+            "674": {
+              "add_core_of": "ROOT"
+            },
+            "871": {
+              "add_core_of": "ROOT"
+            },
+            "522": {
+              "add_core_of": "ROOT"
+            },
+            "870": {
+              "add_core_of": "ROOT"
+            },
+            "520": {
+              "add_core_of": "ROOT"
+            },
+            "872": {
+              "add_core_of": "ROOT"
+            },
+            "1074": {
+              "add_core_of": "ROOT"
+            },
+            "1075": {
+              "add_core_of": "ROOT"
+            }
+          }
+        },
+        {
+          "limit": {
+            "any_state": {
+              "NOT": {
+                "is_core_of": "ROOT"
+              },
+              "OR": {
+                "state": [
+                  1079,
+                  284,
+                  1080,
+                  723,
+                  1081
+                ]
+              }
+            }
+          },
+          "custom_effect_tooltip": "AST_form_australasia_new_zealand_core_states_tt",
+          "hidden_effect": {
+            "1079": {
+              "add_core_of": "ROOT"
+            },
+            "284": {
+              "add_core_of": "ROOT"
+            },
+            "1080": {
+              "add_core_of": "ROOT"
+            },
+            "723": {
+              "add_core_of": "ROOT"
+            },
+            "1081": {
+              "add_core_of": "ROOT"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "AST_integrate_indonesia",
+    "category_id": "AST_australia_formables_category",
+    "name": "Интегрировать [INS.GetNameRuAcc]",
+    "desc": "",
+    "icon": "GFX_decision_INS_core_state",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "AST_australasia_flag",
+      "is_subject": false,
+      "custom_trigger_tooltip": {
+        "tooltip": "AST_integrate_indonesia_indonesia_required_states_tt",
+        "controls_state": [
+          1022,
+          1047,
+          1048,
+          1049,
+          1050,
+          1051,
+          1052,
+          1053,
+          1054,
+          1055,
+          1056,
+          1058,
+          334,
+          335,
+          667,
+          668,
+          672,
+          673,
+          738
+        ]
+      }
+    },
+    "visible": {
+      "has_global_flag": "AST_australasia_flag"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "AST_integrate_indonesia_indonesia_core_states_tt",
+      "hidden_effect": {
+        "1022": {
+          "add_core_of": "ROOT"
+        },
+        "1047": {
+          "add_core_of": "ROOT"
+        },
+        "1048": {
+          "add_core_of": "ROOT"
+        },
+        "1049": {
+          "add_core_of": "ROOT"
+        },
+        "1050": {
+          "add_core_of": "ROOT"
+        },
+        "1051": {
+          "add_core_of": "ROOT"
+        },
+        "1052": {
+          "add_core_of": "ROOT"
+        },
+        "1053": {
+          "add_core_of": "ROOT"
+        },
+        "1054": {
+          "add_core_of": "ROOT"
+        },
+        "1055": {
+          "add_core_of": "ROOT"
+        },
+        "1056": {
+          "add_core_of": "ROOT"
+        },
+        "1058": {
+          "add_core_of": "ROOT"
+        },
+        "334": {
+          "add_core_of": "ROOT"
+        },
+        "335": {
+          "add_core_of": "ROOT"
+        },
+        "667": {
+          "add_core_of": "ROOT"
+        },
+        "668": {
+          "add_core_of": "ROOT"
+        },
+        "672": {
+          "add_core_of": "ROOT"
+        },
+        "673": {
+          "add_core_of": "ROOT"
+        },
+        "738": {
+          "add_core_of": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_reichskommissariat_australasien",
+    "category_id": "GER_reichskommissariats",
+    "name": "Рейхскомиссариат Австралазия",
+    "desc": "",
+    "icon": "ger_reichskommissariats",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "979": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1024": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1023": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1021": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "523": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "737": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1070": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1071": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "634": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "669": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "668": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "738": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "721": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "667": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "673": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "334": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "333": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "335": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "672": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "336": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1059": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1060": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1061": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1062": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1063": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1064": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1065": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "724": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "711": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "712": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "684": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "725": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "639": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "643": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "633": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "642": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "734": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "635": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1072": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "636": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "726": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "641": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "284": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "723": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1079": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1080": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1081": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "872": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "520": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "870": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "522": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "871": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "519": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "517": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "518": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "285": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "521": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "674": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "873": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1047": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1048": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1049": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1050": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1051": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1052": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1053": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1054": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1055": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1056": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1057": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_create_asian_reichskommissariat",
+      "RAA": {
+        "exists": false
+      }
+    },
+    "complete_effect": {
+      "GER_improve_rosenbergs_trait_effect": true,
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "GER_reichskommissariat_australasien_effect_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "979": {
+        "IF": {
+          "limit": {
+            "OWNER": {
+              "NOT": {
+                "original_tag": "GER"
+              }
+            }
+          },
+          "OWNER": {
+            "set_country_flag": [
+              "GER_RK_capital_state_trasferred_RAA_victim_flag",
+              "GER_reichskommissariats_puppet_flag"
+            ]
+          }
+        },
+        "transfer_state_to": "RAA",
+        "set_state_flag": "GER_RK_capital_state_trasferred_RAA_flag",
+        "add_compliance": 25
+      },
+      "set_autonomy": {
+        "target": "RAA",
+        "autonomy_state": "autonomy_integrated_puppet"
+      },
+      "hidden_effect": {
+        "every_state": [
+          {
+            "limit": {
+              "GER_is_RAA_state": true,
+              "NOT": {
+                "state": 979
+              },
+              "OR": {
+                "is_owned_by": "ROOT",
+                "owner": {
+                  "is_subject_of": "ROOT"
+                }
+              }
+            },
+            "transfer_state_to": "RAA",
+            "add_compliance": 25
+          },
+          {
+            "limit": {
+              "GER_is_RAA_state": true,
+              "NOT": [
+                {
+                  "state": 979
+                },
+                {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              ]
+            },
+            "add_contested_owner": "RAA",
+            "set_state_controller_to": "RAA",
+            "add_claim_by": "RAA",
+            "add_compliance": 25
+          }
+        ],
+        "RAA": {
+          "add_manpower": 70000,
+          "add_equipment_to_stockpile": [
+            {
+              "type": "infantry_equipment",
+              "amount": 7000,
+              "producer": "GER"
+            },
+            {
+              "type": "support_equipment",
+              "amount": 700,
+              "producer": "GER"
+            }
+          ],
+          "inherit_technology": "GER",
+          "add_offsite_building": {
+            "type": "arms_factory",
+            "level": 3
+          },
+          "load_oob": "RK_OOB"
+        }
+      },
+      "country_event": {
+        "id": "wuw_GER_reichskommissariats.27",
+        "hours": 0
+      }
+    }
+  },
+  {
+    "id": "GER_reform_austro_hungarian_empire",
+    "category_id": "GER_austro_hungarian_empire",
+    "name": "Возрождение Австро-Венгерской империи",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "AUS": {
+        "OR": {
+          "has_government": "neutrality",
+          "neutrality": {
+            "_op": ">",
+            "value": 0.4
+          }
+        }
+      },
+      "HUN": {
+        "OR": {
+          "has_government": "neutrality",
+          "neutrality": {
+            "_op": ">",
+            "value": 0.4
+          }
+        }
+      },
+      "CZE": {
+        "OR": {
+          "has_government": "neutrality",
+          "neutrality": {
+            "_op": ">",
+            "value": 0.4
+          },
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "GER": {
+          "OR": {
+            "has_completed_focus": [
+              "GER_rekindle_imperial_sentiment_ww",
+              "GER_rekindle_imperial_sentiment"
+            ]
+          },
+          "has_government": "neutrality"
+        },
+        "TUR": {
+          "has_government": "neutrality",
+          "has_completed_focus": "TUR_press_the_austro_hungarian_claim"
+        }
+      },
+      "AUS": {
+        "exists": true
+      },
+      "HUN": {
+        "exists": true
+      },
+      "NOT": {
+        "has_global_flag": "GER_reformed_austro_hungarian_empire"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_reform_austro_hungarian_empire_tt",
+      "hidden_effect": {
+        "set_global_flag": "GER_reformed_austro_hungarian_empire"
+      },
+      "if": [
+        {
+          "limit": {
+            "original_tag": "AUS"
+          },
+          "HUN": {
+            "country_event": {
+              "id": "wtt_germany.68",
+              "hours": 1
+            }
+          },
+          "IF": {
+            "limit": {
+              "CZE": {
+                "exists": true
+              }
+            },
+            "CZE": {
+              "country_event": {
+                "id": "wtt_germany.68",
+                "hours": 3
+              }
+            }
+          }
+        },
+        {
+          "limit": {
+            "original_tag": "HUN"
+          },
+          "AUS": {
+            "country_event": {
+              "id": "wtt_germany.68",
+              "hours": 1
+            }
+          },
+          "IF": {
+            "limit": {
+              "CZE": {
+                "exists": true
+              }
+            },
+            "CZE": {
+              "country_event": {
+                "id": "wtt_germany.68",
+                "hours": 3
+              }
+            }
+          }
+        },
+        {
+          "limit": {
+            "original_tag": "CZE"
+          },
+          "HUN": {
+            "country_event": {
+              "id": "wtt_germany.68",
+              "hours": 1
+            }
+          },
+          "AUS": {
+            "country_event": {
+              "id": "wtt_germany.68",
+              "hours": 3
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_sway_the_austrians_decision",
+    "category_id": "GER_realpolitik_cat",
+    "name": "Склонить общественное мнение в государстве [AUS.GetNameDef] в нашу пользу",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "democratic"
+        ]
+      },
+      "AUS": {
+        "NOT": {
+          "has_government": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GER_has_attempted_to_sway_public_opinion_in_austria_flag",
+        "is_in_faction_with": "AUS",
+        "has_subject": "AUS"
+      },
+      "has_completed_focus": "GER_mitteleuropa"
+    },
+    "complete_effect": {
+      "AUS": {
+        "country_event": {
+          "id": "wuw_GER_diplomacy.70",
+          "hours": 12
+        }
+      },
+      "effect_tooltip": {
+        "AUS": {
+          "add_popularity": {
+            "ideology": "ROOT",
+            "popularity": 0.1
+          },
+          "IF": {
+            "limit": {
+              "ROOT": {
+                "has_government": "democratic"
+              }
+            },
+            "add_timed_idea": {
+              "idea": "GER_propagandists_swaying_public_opinion_dem",
+              "days": 180
+            }
+          },
+          "ELSE_IF": {
+            "limit": {
+              "ROOT": {
+                "has_government": "neutrality"
+              }
+            },
+            "add_timed_idea": {
+              "idea": "GER_propagandists_swaying_public_opinion_neu",
+              "days": 180
+            }
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt",
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "GER_public_opinion_in_favour_of_an_alliance_opm"
+          }
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_has_attempted_to_sway_public_opinion_in_austria_flag"
+      }
+    }
+  },
+  {
+    "id": "GRE_anti_austro_hungarian_stratagems",
+    "category_id": "GRE_hellenic_academy_category",
+    "name": "Стратагемы против [FROM.GetAdjective]ого государства",
+    "desc": "",
+    "icon": "generic_operation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "AND": {
+        "has_war_with": "FROM",
+        "has_completed_focus": [
+          "GRE_the_hellenic_air_force",
+          "GRE_the_hellenic_army",
+          "GRE_the_hellenic_navy"
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GRE_hellenic_armed_forces",
+      "has_global_flag": "form_austria_hungary_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "HUN_place_a_habsburg_on_the_austrian_throne",
+    "category_id": "HUN_the_empire_category",
+    "name": "Посадить Габсбурга на австрийский престол",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_demand_austrian_restoration",
+      "is_subject": false,
+      "OR": {
+        "AUS": {
+          "is_subject_of": "ROOT"
+        },
+        "AND": {
+          "AUS": {
+            "exists": false
+          },
+          "4": {
+            "is_owned_by": "ROOT"
+          },
+          "152": {
+            "is_owned_by": "ROOT"
+          },
+          "153": {
+            "is_owned_by": "ROOT"
+          },
+          "848": {
+            "is_owned_by": "ROOT"
+          },
+          "976": {
+            "is_owned_by": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "has_completed_focus": "wuw_HUN_demand_austrian_restoration",
+      "NOT": {
+        "has_country_flag": "HUN_created_austrian_monarchy"
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "is_controlled_by": "ROOT",
+          "NOT": {
+            "is_core_of": "ROOT"
+          },
+          "is_core_of": "AUS"
+        },
+        "transfer_state_to": "AUS"
+      },
+      "ROOT": {
+        "HUN_joseph_august_von_habsburg": {
+          "set_nationality": "AUS"
+        }
+      },
+      "puppet": "AUS",
+      "AUS": {
+        "add_political_power": 75,
+        "drop_cosmetic_tag": true,
+        "set_cosmetic_tag": "AUS_cisleithania",
+        "mark_focus_tree_layout_dirty": true
+      },
+      "hidden_effect": {
+        "set_country_flag": "HUN_created_austrian_monarchy",
+        "AUS": {
+          "country_event": {
+            "id": "WW_hungary.31",
+            "days": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "recruit_in_australia",
+    "category_id": "lar_local_recruitment",
+    "name": "Создать тихоокеанское отделение",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "capital_scope": {
+        "NOT": {
+          "is_on_continent": "australia"
+        }
+      },
+      "OR": {
+        "any_owned_state": {
+          "is_on_continent": "australia"
+        },
+        "any_allied_country": {
+          "any_owned_state": {
+            "is_on_continent": "australia"
+          }
+        },
+        "any_of_scopes": {
+          "array": "subjects",
+          "any_owned_state": {
+            "is_on_continent": "australia"
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "recruit_in_australia_state",
+    "category_id": "lar_local_recruitment",
+    "name": "Завербовать в государство [From.Owner.GetNameDef]",
+    "desc": "",
+    "icon": "onmap_recruit_operative",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "OR": {
+        "has_country_flag": "australia_recruitment_unlocked",
+        "capital_scope": {
+          "is_on_continent": "australia"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "australia_recruitment_in_process"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "australia_recruitment_in_process",
+        "days": 180,
+        "value": 1
+      },
+      "if": {
+        "limit": {
+          "num_of_operatives": {
+            "_op": "<",
+            "value": "num_operative_slots"
+          }
+        },
+        "custom_effect_tooltip": "recruit_in_state_tt"
+      },
+      "else": {
+        "custom_effect_tooltip": "recruit_in_state_to_pool_tt"
+      },
+      "hidden_effect": {
+        "create_operative_leader": {
+          "bypass_recruitment": true,
+          "nationalities": [
+            "FROM.OWNER"
+          ],
+          "portrait_tag_override": "FROM.OWNER"
+        }
+      }
+    }
+  },
+  {
+    "id": "MEX_decision_operation_just_cause",
+    "category_id": "MEX_category_military_issues",
+    "name": "Операция «Правое дело»",
+    "desc": "",
+    "icon": "generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_non_aggression_pact_with": "USA"
+        },
+        {
+          "has_war_with": "USA"
+        },
+        {
+          "is_in_faction_with": "USA"
+        }
+      ],
+      "controls_state": 304,
+      "OR": {
+        "owns_state": 304,
+        "PAN": {
+          "owns_state": 304,
+          "has_war_with": "MEX"
+        }
+      },
+      "USA": {
+        "owns_state": 685
+      }
+    },
+    "visible": {
+      "has_completed_focus": "MEX_focus_seize_the_panama_canal",
+      "NOT": [
+        {
+          "has_war_with": "USA"
+        },
+        {
+          "is_in_faction_with": "USA"
+        },
+        {
+          "controls_state": 685
+        }
+      ],
+      "USA": {
+        "owns_state": 685
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "304": {
+            "is_owned_by": "PAN",
+            "is_controlled_by": "ROOT"
+          },
+          "ROOT": {
+            "has_war_with": "PAN"
+          }
+        },
+        "annex_country": {
+          "target": "PAN"
+        }
+      },
+      "add_named_threat": {
+        "threat": 5,
+        "name": "threat_mexico_attacks_panama_canal"
+      },
+      "start_border_war": {
+        "change_state_after_war": false,
+        "attacker": {
+          "state": 304,
+          "num_provinces": 2,
+          "on_win": "mexico.40",
+          "on_lose": "mexico.42"
+        },
+        "defender": {
+          "state": 685,
+          "num_provinces": 1,
+          "on_win": "mexico.41",
+          "on_lose": "mexico.43"
+        }
+      },
+      "add_opinion_modifier": {
+        "target": "USA",
+        "modifier": "mexico_attack_on_panama_canal"
+      },
+      "USA": {
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "mexico_attack_on_panama_canal"
+        }
+      }
+    }
+  },
+  {
+    "id": "MTG_escalator_clause_invocation_mission",
+    "category_id": "MTG_naval_treaties",
+    "name": "Задействована особая оговорка",
+    "desc": "Одно из государств, подписавших соглашение, решило больше не соблюдать его условия и, наверное, уже строит новые, более мощные корабли. К счастью, условия соглашения позволяют нам автоматически задействовать в таком случае особую оговорку, ослабляющую ограничения на размер кораблей и вооружения для нас.",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_naval_treaty_trigger": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "POL_diplomatic_mission_to_AUS",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [AUS.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_coerce_czechoslovakia",
+      "AUS": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POR_stir_monarchist_sentiment_in_brazil",
+    "category_id": "POR_monarchist_cause",
+    "name": "Подстрекать монархические настроения в Бразилии",
+    "desc": "Мы будем подстрекать монархистов в Бразилии взять дело в свои руки и распространим среди местного населения монархические настроения.",
+    "icon": "generic_political_discourse",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "BRA": {
+        "has_war": false,
+        "IF": {
+          "limit": {
+            "has_dlc": "Trial of Allegiance"
+          },
+          "NOT": {
+            "has_country_flag": "BRA_rejected_monarchism",
+            "has_completed_focus": "BRA_romanticize_the_old_empire"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POR_a_royal_wedding",
+      "NOT": {
+        "has_completed_focus": "POR_the_empire_of_brazil"
+      },
+      "country_exists": "BRA"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "POR_stir_monarchist_sentiment_in_brazil_tt",
+      "BRA": {
+        "activate_decision": "POR_portugal_promoting_monarchist_cause_in_brazil",
+        "set_country_flag": "POR_portugal_stirring_brazilian_monarchists_flag",
+        "country_event": {
+          "id": "lar_portugal_promote_monarchist_cause.1"
+        }
+      }
+    }
+  },
+  {
+    "id": "POR_portugal_promoting_monarchist_cause_in_brazil",
+    "category_id": "POR_monarchist_cause",
+    "name": "Португалия подстрекает монархистов",
+    "desc": "Португальское правительство подстрекает наше население обратиться к монархизму и принять принца Педру Энрике как легитимного правителя Бразилии.",
+    "icon": "generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "POR_portugal_stirring_brazilian_monarchists_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "POR_repress_brazilian_monarchists",
+    "category_id": "POR_monarchist_cause",
+    "name": "Подавить монархистов",
+    "desc": "Мы должны противостоять движению монархистов, которое набирает силу среди нашего населения. Мы должны найти тех, кто отвечает за распространение монархических настроений, и публично их наказать.",
+    "icon": "oppression",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "neutrality": {
+        "_op": "<",
+        "value": 1
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "POR_portugal_stirring_brazilian_monarchists_flag",
+          "POR_brazilian_monarchists_stirred_flag"
+        ]
+      },
+      "country_exists": "POR",
+      "POR": {
+        "NOT": {
+          "has_completed_focus": "POR_the_empire_of_brazil"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "POR_stir_monarchist_sentiment_in_portugal",
+    "category_id": "POR_monarchist_cause",
+    "name": "Подстрекать монархические настроения в Португалии",
+    "desc": "Мы должны побудить народ принять дома Дуарте как легитимного правителя Португалии.",
+    "icon": "generic_political_discourse",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "neutrality": {
+        "_op": "<",
+        "value": 1
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POR_a_royal_wedding",
+      "NOT": {
+        "has_completed_focus": "POR_restoration_of_the_monarchy"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "Antarctica_GUI_AAO_Decision_Promote_Australian_Officers",
+    "category_id": "Antarctica_GUI_AAO",
+    "name": "Продвигать австралийских офицеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Decision_Promote_Australian_Officers",
+      "add_to_variable": {
+        "Antarctica_Legitimacy": -4
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_Decision_Construct_Australian_Outposts",
+    "category_id": "Antarctica_GUI_AAO",
+    "name": "Построить австралийские форпосты",
+    "desc": "",
+    "icon": "GFX_decision_generic_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Decision_Construct_Australian_Outposts",
+      "add_to_variable": {
+        "Antarctica_Legitimacy": -6
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_Decision_Reinforce_Australian_Supply_Lines",
+    "category_id": "Antarctica_GUI_AAO",
+    "name": "Усилить австралийские линии снабжения",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "Antarctica_GUI_AAO_Decision_Reinforce_Australian_Supply_Lines_Available"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Decision_Reinforce_Australian_Supply_Lines",
+      "add_to_variable": {
+        "Antarctica_Legitimacy": -8
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_train_with_australians",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ГОСТЬ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "USA_CIA_Mission_Cost_25_Million",
+          "check_variable": {
+            "TNO_Espionage_Budget": {
+              "_op": ">",
+              "value": 0.024
+            }
+          }
+        },
+        {
+          "tooltip": "USA_CIA_training_with_australians_cooldown",
+          "NOT": {
+            "has_country_flag": "USA_CIA_australian_trading_cooldown"
+          }
+        }
+      ],
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Oceania": true,
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_train_with_australians_tt",
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.025
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ],
+      "set_country_flag": {
+        "flag": "USA_CIA_australian_trading_cooldown",
+        "days": 365,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "GER_Espionage_disrupt_ofn_unity_australia",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Острые ощущения\"",
+    "desc": "Австралия и Америка - союзники по обстановке, и не более того. Если бы Австралия не была связана с Великобританией, вряд ли Америка задумалась бы о них. Чтобы усилить раскол между государствами-членами ОСН, нам нужно только напомнить об этом австралийцам. Чтобы еще больше усугубить обиду, мы могли бы подделать документы, показывающие, что Америка рассматривает Австралию как приемлемую уступку японцам, если до этого дойдет. А насколько правдивы такие заявления решать уже не нам.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Oceania": true,
+        "is_ai": true
+      },
+      "if": {
+        "limit": {
+          "has_global_flag": "german_civil_war_bormannvic"
+        },
+        "OR": {
+          "has_country_flag": [
+            "BOR_HVA_ofn_unlock",
+            "BOR_HVA_decisions_debug"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_disrupt_ofn_unity_australia",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "HGR_incorporate_AUS",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [AUS.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_AUS_req_tt",
+        "AUS": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_AUS_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "AUS": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_AUS",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_AUS_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[AUS.GetFlag]Сделать практические обоснования",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_AUS"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_AUS_influence_true",
+        "HGR_AUS_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "AUS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_AUS_decision_a_1",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "AUS": {
+        "increase_Heydrich_influence_medium": true,
+        "add_political_power": 25,
+        "add_stability": 0.025
+      }
+    }
+  },
+  {
+    "id": "HGR_AUS_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[AUS.GetFlag]Похвалить достижения Скорцени",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_AUS"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_AUS_influence_true",
+        "HGR_AUS_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "AUS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_AUS_decision_a_2",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "HGR_increase_ss_moderate_opinion_med": true,
+      "AUS": {
+        "increase_Heydrich_influence_small": true
+      }
+    }
+  },
+  {
+    "id": "HGR_AUS_decision_b_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[AUS.GetFlag]Поощрять сотрудничество",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_AUS"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_AUS_influence_true",
+        "HGR_AUS_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "AUS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_AUS_decision_b_1",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "HGR_increase_ss_moderate_opinion_low": true,
+      "HGR_increase_ss_hardliner_opinion_low": true,
+      "AUS": {
+        "increase_Heydrich_influence_small": true
+      }
+    }
+  },
+  {
+    "id": "HGR_AUS_decision_b_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[AUS.GetFlag]Помощь в операциях по взлому кодов",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_pragmatist_action",
+        "has_decision": "HGR_incorporate_AUS"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_AUS_influence_true",
+        "HGR_AUS_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "AUS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_AUS_decision_b_2",
+      "set_country_flag": "HGR_took_pragmatist_action",
+      "AUS": {
+        "increase_Heydrich_influence_medium": true,
+        "add_political_power": 25,
+        "add_stability": 0.025
+      }
+    }
+  },
+  {
+    "id": "IBR_implement_austerity_measures",
+    "category_id": "IBR_emergency_reforms",
+    "name": "Меры жесткой экономии",
+    "desc": "",
+    "icon": "GFX_decision_generic_lockdown",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_passing_reform"
+      }
+    },
+    "visible": {
+      "tag": "IBR",
+      "has_country_flag": "IBR_TR_E"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_implement_austerity_measures",
+      "set_country_flag": "IBR_passing_reform"
+    }
+  },
+  {
+    "id": "JAP_implement_austerity_measures",
+    "category_id": "JAP_emergency_reforms",
+    "name": "Принять меры жёсткой экономии",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_cancel",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "GDP_growth_real": {
+            "_op": "<",
+            "value": 3
+          }
+        },
+        {
+          "clamped_inflation_rate": {
+            "_op": ">",
+            "value": 2.5
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "JAP_reforms_next_stage"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_implement_austerity_measures",
+      "JAP_PA_support_decrease_med": true,
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -35,
+        "JAP_PM_decrease_power_small": true
+      }
+    }
+  },
+  {
+    "id": "RUS_lenin_mausoleum",
+    "category_id": "RUS_lenin_enbalmed_category",
+    "name": "Сохранить революционера",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_socialism",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_government": [
+          "communist",
+          "socialist"
+        ],
+        "AND": {
+          "original_tag": "KOM",
+          "has_country_leader": {
+            "character": "KOM_Ivan_Serov",
+            "ruling_only": true
+          }
+        }
+      },
+      "NOT": {
+        "original_tag": "SBA"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_HAS_LENIN_BODY",
+      "NOT": {
+        "has_global_flag": "LENIN_BODY_LOST",
+        "has_country_flag": "LENIN_DECISION_MADE"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_lenin_mausoleum",
+      "if": {
+        "limit": {
+          "has_government": "socialist"
+        },
+        "add_popularity": {
+          "ideology": "socialist",
+          "popularity": 0.05
+        }
+      },
+      "else": {
+        "add_popularity": {
+          "ideology": "communist",
+          "popularity": 0.05
+        }
+      },
+      "add_ideas": "RUS_lenin_embalmed",
+      "set_country_flag": "LENIN_DECISION_MADE"
+    }
+  },
+  {
+    "id": "NOV_USA_build_ports_in_aus",
+    "category_id": "NOV_USA_vs_Japan_category",
+    "name": "Построить порты в Австралии",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_USA_build_ports_in_aus",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.05
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "USA_URI_budget_austerity",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Бюджетная экономия ИОГ",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bankruptcy_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_bankruptcy_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_bankruptcy"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_bankruptcy_response",
+      "add_to_variable": {
+        "USA_bankruptcy_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_management_efficiency_var": -0.12
+        },
+        {
+          "USA_temp_upkeep_cost_var": -0.05
+        }
+      ],
+      "USA_management_efficiency_adjust": true,
+      "USA_upkeep_cost_adjust": true,
+      "research_funding_maximal_decrease_low": true,
+      "social_funding_maximal_decrease_med": true,
+      "admin_funding_maximal_decrease_low": true
+    }
+  },
+  {
+    "id": "NPP_FP_AUS_Investments",
+    "category_id": "NPP_FP_invest_in_allies_category",
+    "name": "Инвестиции в австралийский бизнес",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_Brothers_In_Arms"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "NPP_FP_AUS_Arms",
+    "category_id": "NPP_FP_invest_in_allies_category",
+    "name": "Поставки пехотного снаряжения в Австралию",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_Brothers_In_Arms"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "NPP_FP_AUS_Armor",
+    "category_id": "NPP_FP_invest_in_allies_category",
+    "name": "Поставки бронетехники в Австралию",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_Brothers_In_Arms"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_war_add_exhaustion",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "RUS_war_add_exhaustion",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "ROOT": {
+            "original_tag": "GER"
+          }
+        },
+        "RUS": {
+          "set_temp_variable": {
+            "temp_exhaustion": 75
+          },
+          "WRW_add_war_exhaustion": true
+        },
+        "GER": {
+          "set_temp_variable": {
+            "temp_exhaustion": 55
+          },
+          "WRW_add_war_exhaustion": true
+        }
+      },
+      "else": {
+        "RUS": {
+          "set_temp_variable": {
+            "temp_exhaustion": 55
+          },
+          "WRW_add_war_exhaustion": true
+        },
+        "GER": {
+          "set_temp_variable": {
+            "temp_exhaustion": 75
+          },
+          "WRW_add_war_exhaustion": true
+        }
+      }
+    }
+  },
+  {
+    "id": "GAY_righteous_cause",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Show Them Our Righteousness",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 22,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_antipin_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_antipin_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_righteous_cause",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_antipin_power_temp": 3.5
+      },
+      "GAY_add_antipin_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  }
+]

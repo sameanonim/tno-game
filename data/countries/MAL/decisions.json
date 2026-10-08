@@ -1,0 +1,5484 @@
+[
+  {
+    "id": "MAL_loosen_societal_restrictions_decision",
+    "category_id": "political_actions",
+    "name": "MAL_loosen_societal_restrictions_decision",
+    "desc": "",
+    "icon": "GFX_decision_SWI_support_humanitarian_efforts",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "is_subject": false,
+        "compare_autonomy_state": {
+          "_op": ">",
+          "value": "autonomy_puppet"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_idea": [
+          "MAL_ketuanan_melayu",
+          "MAL_ketuanan_melayu_2",
+          "MAL_ketuanan_melayu_3"
+        ]
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "PHI_mineral_prospecting_chromium_small_decision",
+    "category_id": "prospect_for_resources",
+    "name": "Разведка хрома",
+    "desc": "",
+    "icon": "chromium",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation1",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 1
+      },
+      "owns_state": 623,
+      "controls_state": 623
+    },
+    "visible": {
+      "623": {
+        "is_owned_and_controlled_by": "ROOT"
+      },
+      "has_completed_focus": "PHI_mineral_prospecting"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "develop_malatya_chromium_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разработать месторождения хрома в Малатье",
+    "desc": "",
+    "icon": "chromium",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation2",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "owns_state": 344,
+      "controls_state": 344
+    },
+    "visible": {
+      "owns_state": 344,
+      "controls_state": 344,
+      "344": {
+        "NOT": {
+          "has_state_flag": "malatya_chromium_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AST_request_resource_rights_in_malaya",
+    "category_id": "AST_resource_acquisition_cat",
+    "name": "Попросить права на ресурсы у [MAL.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_rubber",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AST_resource_request_ongoing_flag"
+      },
+      "1064": {
+        "controller": {
+          "NOT": {
+            "has_war_with": "AST"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AST_demand_resources"
+    },
+    "complete_effect": {
+      "every_country": [
+        {
+          "limit": {
+            "controls_state": 1064,
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "country_event": {
+              "id": "AST_diplomatic_events.30",
+              "hours": 3
+            }
+          }
+        },
+        {
+          "limit": {
+            "controls_state": 1064,
+            "is_subject": false
+          },
+          "country_event": {
+            "id": "AST_diplomatic_events.30",
+            "hours": 3
+          }
+        }
+      ],
+      "set_country_flag": [
+        "AST_mal_resources_flag",
+        "AST_resource_request_ongoing_flag"
+      ]
+    }
+  },
+  {
+    "id": "formalize_the_entente",
+    "category_id": "BALTIC_entente",
+    "name": "Объявить о создании Балтийской Антанты",
+    "desc": "Мы не сразу решились объявить о создании такого союза, как Балтийская Антанта, но теперь уверены, что у нас достаточно участников, чтобы мы могли выступить против растущего на наших границах империализма.",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "any_other_country": {
+        "has_country_flag": "baltic_entente_flag"
+      }
+    },
+    "visible": {
+      "is_in_faction": false
+    },
+    "complete_effect": {
+      "IF": {
+        "limit": {
+          "has_dlc": "No Compromise, No Surrender"
+        },
+        "set_rule": {
+          "can_create_factions": true
+        },
+        "create_faction_from_template": "faction_template_BALTIC_ENTENTE_FACTION",
+        "add_faction_initiative": 1
+      },
+      "ELSE": {
+        "set_rule": {
+          "can_create_factions": true
+        },
+        "create_faction": "BALTIC_ENTENTE_FACTION"
+      },
+      "every_country": {
+        "limit": {
+          "has_country_flag": "baltic_entente_flag"
+        },
+        "ROOT": {
+          "add_to_faction": "PREV"
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_Danne_small_army_faction_increase_debugging",
+    "category_id": "debug_decisions",
+    "name": "JAP_Danne_small_army_faction_increase_debugging",
+    "desc": "",
+    "icon": "generic_military",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_dynamic_modifier": {
+        "modifier": "JAP_imperial_influence_dm"
+      }
+    },
+    "complete_effect": {
+      "JAP_small_army_faction_gain": true
+    }
+  },
+  {
+    "id": "JAP_Danne_small_army_faction_decrease_debugging",
+    "category_id": "debug_decisions",
+    "name": "JAP_Danne_small_army_faction_decrease_debugging",
+    "desc": "",
+    "icon": "generic_military",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_dynamic_modifier": {
+        "modifier": "JAP_imperial_influence_dm"
+      }
+    },
+    "complete_effect": {
+      "JAP_small_army_faction_loss": true
+    }
+  },
+  {
+    "id": "JAP_Danne_small_navy_faction_increase_debugging",
+    "category_id": "debug_decisions",
+    "name": "JAP_Danne_small_navy_faction_increase_debugging",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_dynamic_modifier": {
+        "modifier": "JAP_imperial_influence_dm"
+      }
+    },
+    "complete_effect": {
+      "JAP_small_naval_faction_gain": true
+    }
+  },
+  {
+    "id": "JAP_Danne_small_navy_faction_decrease_debugging",
+    "category_id": "debug_decisions",
+    "name": "JAP_Danne_small_navy_faction_decrease_debugging",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_dynamic_modifier": {
+        "modifier": "JAP_imperial_influence_dm"
+      }
+    },
+    "complete_effect": {
+      "JAP_small_naval_faction_loss": true
+    }
+  },
+  {
+    "id": "JAP_Danne_small_zaibatsu_faction_increase_debugging",
+    "category_id": "debug_decisions",
+    "name": "JAP_Danne_small_zaibatsu_faction_increase_debugging",
+    "desc": "",
+    "icon": "generic_factory",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_dynamic_modifier": {
+        "modifier": "JAP_imperial_influence_dm"
+      }
+    },
+    "complete_effect": {
+      "JAP_small_zaibatsu_faction_gain": true
+    }
+  },
+  {
+    "id": "JAP_Danne_small_zaibatsu_faction_decrease_debugging",
+    "category_id": "debug_decisions",
+    "name": "JAP_Danne_small_zaibatsu_faction_decrease_debugging",
+    "desc": "",
+    "icon": "generic_factory",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_dynamic_modifier": {
+        "modifier": "JAP_imperial_influence_dm"
+      }
+    },
+    "complete_effect": {
+      "JAP_small_zaibatsu_faction_loss": true
+    }
+  },
+  {
+    "id": "JAP_Danne_small_government_faction_increase_debugging",
+    "category_id": "debug_decisions",
+    "name": "JAP_Danne_small_government_faction_increase_debugging",
+    "desc": "",
+    "icon": "generic_political_address",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_dynamic_modifier": {
+        "modifier": "JAP_imperial_influence_dm"
+      }
+    },
+    "complete_effect": {
+      "JAP_small_government_faction_gain": true
+    }
+  },
+  {
+    "id": "JAP_Danne_small_government_faction_decrease_debugging",
+    "category_id": "debug_decisions",
+    "name": "JAP_Danne_small_government_faction_decrease_debugging",
+    "desc": "",
+    "icon": "generic_political_address",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_dynamic_modifier": {
+        "modifier": "JAP_imperial_influence_dm"
+      }
+    },
+    "complete_effect": {
+      "JAP_small_government_faction_loss": true
+    }
+  },
+  {
+    "id": "DEBUG_DEN_opinion_modifier_small",
+    "category_id": "DEN_occupation_category",
+    "name": "DEBUG_DEN_opinion_modifier_small",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "DEN_modify_overlord_relations_small": true
+    }
+  },
+  {
+    "id": "ETH_formal_request_to_host",
+    "category_id": "governments_in_exile",
+    "name": "Составить официальный запрос [?ETH.host_nation.GetAdjective]ому правительству.",
+    "desc": "Нужно обратиться к [?ETH.host_nation.GetAdjective]ому правительству и попросить его поддержать правителя [ROOT.GetLeader] в войне против [ITA.GetNameRuGen]. Так начнется последний этап возрождения нашей нации.",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ETH_reclaiming_ethiopia",
+      "IF": {
+        "limit": {
+          "check_variable": {
+            "ETH.host_nation": "GER"
+          }
+        },
+        "var:ETH.host_nation": {
+          "has_opinion": {
+            "target": "ITA",
+            "value": {
+              "_op": "<",
+              "value": 1
+            }
+          }
+        }
+      },
+      "ITA": {
+        "has_civil_war": false
+      }
+    },
+    "visible": {
+      "is_government_in_exile": true,
+      "NOT": {
+        "has_global_flag": "ethiopia_recognized_flag"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "integrate_the_northern_malays",
+    "category_id": "form_majapahit_empire_category",
+    "name": "Интегрировать Северный Малайский архипелаг",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 724
+    },
+    "visible": {
+      "has_global_flag": "form_majapahit_empire_flag"
+    },
+    "complete_effect": {
+      "724": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "dominate_malawi",
+    "category_id": "form_east_africa_category",
+    "name": "Доминировать над озером Малави",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        770,
+        897
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_east_africa_flag"
+    },
+    "complete_effect": {
+      "770": {
+        "add_core_of": "ROOT"
+      },
+      "897": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "unite_the_somalis",
+    "category_id": "form_east_africa_category",
+    "name": "Объединить сомалийцев",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        844,
+        559,
+        269,
+        836,
+        835,
+        268,
+        903
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_east_africa_flag"
+    },
+    "complete_effect": {
+      "844": {
+        "add_core_of": "ROOT"
+      },
+      "903": {
+        "add_core_of": "ROOT"
+      },
+      "559": {
+        "add_core_of": "ROOT"
+      },
+      "269": {
+        "add_core_of": "ROOT"
+      },
+      "836": {
+        "add_core_of": "ROOT"
+      },
+      "835": {
+        "add_core_of": "ROOT"
+      },
+      "268": {
+        "add_core_of": "ROOT"
+      },
+      "906": {
+        "add_claim_by": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "GRE_small_installment_payment_ENG",
+    "category_id": "GRE_pay_back_debt_to_the_ifc_category",
+    "name": "Выплата небольшой части долга [FROM.GetAdjective]ому государству",
+    "desc": "",
+    "icon": "hol_attract_foreign_investors",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "GRE_completely_debt_free",
+            "GRE_defaulted_on_debt_flag"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GRE_reevaluating_the_drachma",
+      "OR": {
+        "has_idea": [
+          "GRE_debt_to_the_ifc",
+          "GRE_debt_to_the_ifc_2",
+          "GRE_debt_to_the_ifc_3"
+        ]
+      },
+      "NOT": {
+        "OR": {
+          "has_completed_focus": [
+            "GRE_horror_and_fear",
+            "GRE_depose_the_reactionaries",
+            "GRE_realign_ourselves_with_the_central_powers",
+            "GRE_the_modern_movement"
+          ],
+          "has_country_flag": [
+            "GRE_small_installment_payment_flag",
+            "GRE_large_installment_payment_flag"
+          ],
+          "check_variable": {
+            "var": "GRE_debt_to_the_ifc_britain_var",
+            "value": 0,
+            "compare": "equals"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "GRE_paying_off_debt_small",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "GRE_small_installment_payment_flag",
+          "value": 1,
+          "days": 60
+        }
+      }
+    }
+  },
+  {
+    "id": "GRE_small_installment_payment_FRA",
+    "category_id": "GRE_pay_back_debt_to_the_ifc_category",
+    "name": "Выплата небольшой части долга [FROM.GetAdjective]ому государству",
+    "desc": "",
+    "icon": "hol_attract_foreign_investors",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "GRE_completely_debt_free",
+            "GRE_defaulted_on_debt_flag"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GRE_reevaluating_the_drachma",
+      "OR": {
+        "has_idea": [
+          "GRE_debt_to_the_ifc",
+          "GRE_debt_to_the_ifc_2",
+          "GRE_debt_to_the_ifc_3"
+        ]
+      },
+      "NOT": {
+        "OR": {
+          "has_completed_focus": [
+            "GRE_horror_and_fear",
+            "GRE_depose_the_reactionaries",
+            "GRE_realign_ourselves_with_the_central_powers",
+            "GRE_the_modern_movement"
+          ],
+          "has_country_flag": [
+            "GRE_small_installment_payment_flag",
+            "GRE_large_installment_payment_flag"
+          ],
+          "check_variable": {
+            "var": "GRE_debt_to_the_ifc_france_var",
+            "value": 0,
+            "compare": "equals"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "GRE_paying_off_debt_small",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "GRE_small_installment_payment_flag",
+          "value": 1,
+          "days": 60
+        }
+      }
+    }
+  },
+  {
+    "id": "GRE_small_installment_payment_ITA",
+    "category_id": "GRE_pay_back_debt_to_the_ifc_category",
+    "name": "Выплата небольшой части долга [FROM.GetAdjective]ому государству",
+    "desc": "",
+    "icon": "hol_attract_foreign_investors",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "GRE_completely_debt_free",
+            "GRE_defaulted_on_debt_flag"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GRE_reevaluating_the_drachma",
+      "OR": {
+        "has_idea": [
+          "GRE_debt_to_the_ifc",
+          "GRE_debt_to_the_ifc_2",
+          "GRE_debt_to_the_ifc_3"
+        ]
+      },
+      "NOT": {
+        "OR": {
+          "has_completed_focus": [
+            "GRE_horror_and_fear",
+            "GRE_depose_the_reactionaries",
+            "GRE_realign_ourselves_with_the_central_powers",
+            "GRE_restoring_our_home",
+            "GRE_the_right_to_rule"
+          ],
+          "has_country_flag": [
+            "GRE_small_installment_payment_flag",
+            "GRE_large_installment_payment_flag"
+          ],
+          "check_variable": {
+            "var": "GRE_debt_to_the_ifc_italy_var",
+            "value": 0,
+            "compare": "equals"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "GRE_paying_off_debt_small",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "GRE_small_installment_payment_flag",
+          "value": 1,
+          "days": 60
+        }
+      }
+    }
+  },
+  {
+    "id": "INS_propose_malay_unification_decision",
+    "category_id": "INS_malay_unification_cat",
+    "name": "$INSHOL_propose_malay_unification$",
+    "desc": "$INSHOL_propose_malay_unification_desc$",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "original_tag": "INS",
+      "is_subject": false,
+      "334": {
+        "is_core_of": "INS"
+      },
+      "1055": {
+        "is_core_of": "INS"
+      },
+      "1049": {
+        "is_core_of": "INS"
+      },
+      "MAL": {
+        "controls_state": [
+          1060,
+          1063,
+          336,
+          1064,
+          1062,
+          1061,
+          333,
+          1059,
+          1024,
+          1023
+        ],
+        "OR": {
+          "is_subject": false,
+          "is_in_faction_with": "ROOT"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "INS_invite_phillipines_decision",
+    "category_id": "INS_malay_unification_cat",
+    "name": "$INSHOL_invite_phillipines$",
+    "desc": "$INSHOL_invite_phillipines_desc$",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        333,
+        1059,
+        1024,
+        1023,
+        1060,
+        1063,
+        336
+      ],
+      "PHI": {
+        "exists": true,
+        "NOT": {
+          "is_subject_of": "ROOT"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "INS_singapore_compromise_decision",
+    "category_id": "INS_malay_unification_cat",
+    "name": "$INSHOL_singapore_compromise$",
+    "desc": "$INSHOL_singapore_compromise_desc$",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "1021": {
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "INS_request_ceylon_decision",
+    "category_id": "INS_malay_unification_cat",
+    "name": "$INSHOL_request_ceylon$",
+    "desc": "$INSHOL_request_ceylon_desc$",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "422": {
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "controls_state": 327
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "INS_papua_referendum_decision",
+    "category_id": "INS_malay_unification_cat",
+    "name": "$INSHOL_papua_referendum$",
+    "desc": "$INSHOL_papua_referendum_desc$",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "original_tag": "INS",
+      "is_subject": false,
+      "669": {
+        "is_core_of": "INS"
+      },
+      "1057": {
+        "is_core_of": "INS"
+      },
+      "AST": {
+        "controls_state": [
+          523,
+          979,
+          1073,
+          737,
+          1070
+        ],
+        "OR": {
+          "is_subject": false,
+          "has_autonomy_state": "autonomy_dominion"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "INS_start_limited_war_malaya",
+    "category_id": "INS_limited_wars_cat",
+    "name": "Начало ограниченной войны в Малайе",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "is_ally_with": "FROM",
+        "has_war_with": "FROM",
+        "has_non_aggression_pact_with": "FROM",
+        "FROM": {
+          "is_guaranteed_by": "ROOT"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "is_not_engaged_in_a_limited_war",
+        "NOT": {
+          "has_variable": "limited_war_target"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "INS_destroy_pacific_colonialism"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "SIA_start_limited_war_indochina_tt_main",
+        "newline_tt",
+        "SIA_start_limited_war_can_join_faction"
+      ],
+      "clear_variable": [
+        "pre_limited_war_faction_leader",
+        "limited_war_target"
+      ],
+      "if": [
+        {
+          "limit": {
+            "is_in_faction": true,
+            "is_faction_leader": false
+          },
+          "faction_leader": {
+            "set_variable": {
+              "ROOT.pre_limited_war_faction_leader": "THIS"
+            }
+          },
+          "leave_faction": true,
+          "custom_effect_tooltip": [
+            "SIA_start_limited_war_rejoin_faction",
+            "newline_tt"
+          ]
+        },
+        {
+          "limit": {
+            "var:limited_war_target": {
+              "is_subject": true
+            }
+          },
+          "var:limited_war_target": {
+            "overlord": {
+              "add_to_array": {
+                "array": "ROOT.limited_war_target_allies",
+                "value": "THIS"
+              }
+            }
+          }
+        }
+      ],
+      "set_rule": {
+        "can_join_factions": false
+      },
+      "clear_array": [
+        "limited_war_states",
+        "limited_war_target_allies"
+      ],
+      "for_each_scope_loop": {
+        "array": "malaya_states",
+        "if": {
+          "limit": {
+            "is_controlled_by": "FROM"
+          },
+          "add_to_array": {
+            "array": "ROOT.limited_war_states",
+            "value": "THIS"
+          }
+        }
+      },
+      "set_variable": {
+        "limited_war_target": "FROM"
+      },
+      "declare_war_on": {
+        "target": "FROM",
+        "type": "annex_everything"
+      },
+      "activate_mission": "INS_limited_war_malaya",
+      "add_to_array": {
+        "previous_limited_war_targets": "FROM"
+      }
+    }
+  },
+  {
+    "id": "INS_limited_war_malaya",
+    "category_id": "INS_limited_wars_cat",
+    "name": "Конфронтация!",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "all_of_scopes": {
+        "array": "ROOT.limited_war_states",
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "INS_limited_war_events.1",
+        "hours": 2
+      }
+    }
+  },
+  {
+    "id": "DEBUG_MISSIOLINIS_BACK_TO_NORMAL",
+    "category_id": "ITA_missiolinis",
+    "name": "DEBUG_MISSIOLINIS_BACK_TO_NORMAL",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_country_flag": "ITA_missiolinis_faster_missions_flag"
+    },
+    "complete_effect": {
+      "clr_country_flag": "ITA_missiolinis_faster_missions_flag",
+      "set_variable": [
+        {
+          "ITA_missiolinis_conquer_ethiopia_days": 170
+        },
+        {
+          "ITA_missiolinis_pacify_ethiopia_days": 720
+        },
+        {
+          "ITA_missiolinis_default_days": 350
+        }
+      ]
+    }
+  },
+  {
+    "id": "DEBUG_bop_make_decisions_go_back_to_normal",
+    "category_id": "ITA_balance_of_power_category",
+    "name": "DEBUG_bop_make_decisions_go_back_to_normal",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "has_country_flag": "ITA_debug_bop_decisions_faster_and_free_flag"
+    },
+    "complete_effect": {
+      "clr_country_flag": "ITA_debug_bop_decisions_faster_and_free_flag",
+      "set_variable": [
+        {
+          "ITA_bop_take_over_ministry_cost": 50
+        },
+        {
+          "ITA_bop_resign_ministry_cost": 15
+        }
+      ]
+    }
+  },
+  {
+    "id": "give_somaliland_to_the_aoi",
+    "category_id": "ITA_colonial_management_dec_cat",
+    "name": "Передать Сомалиленд ИВА",
+    "desc": "",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "AOI": {
+        "exists": true
+      },
+      "OR": {
+        "ITA": {
+          "controls_state": 269
+        },
+        "any_country": {
+          "is_subject_of": "ITA",
+          "controls_state": 269
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_ministry_of_italian_africa",
+      "original_tag": "ITA",
+      "has_global_flag": "italian_east_africa_flag",
+      "NOT": {
+        "has_global_flag": "italian_east_africa_has_somaliland_flag"
+      }
+    },
+    "complete_effect": {
+      "AOI": {
+        "transfer_state": 269
+      },
+      "hidden_effect": {
+        "set_global_flag": "italian_east_africa_has_somaliland_flag"
+      }
+    }
+  },
+  {
+    "id": "JAP_guardian_of_MAL",
+    "category_id": "JAP_pacific_guardian",
+    "name": "Принять руководство Малайей",
+    "desc": "",
+    "icon": "jap_pacific_guardian",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "ENG": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "MAL": {
+        "is_puppet_of": "ENG"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "JAP_pacific_guardian"
+    },
+    "complete_effect": {
+      "ENG": {
+        "country_event": {
+          "id": "wtt_japan.1",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "MEX_decision_integrate_guatamala",
+    "category_id": "MEX_category_territorial_integration",
+    "name": "Интегрировать государство [GUA.GetNameDef]",
+    "desc": "",
+    "icon": "generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "controls_state": 313,
+        "GUA": {
+          "is_subject_of": "ROOT"
+        }
+      },
+      "has_completed_focus": "MEX_focus_integrate_the_south"
+    },
+    "visible": {
+      "has_completed_focus": "MEX_focus_unify_centroamerica",
+      "OR": {
+        "NOT": {
+          "313": {
+            "is_core_of": "ROOT"
+          }
+        },
+        "GUA": {
+          "is_subject_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_small_lobby_effort",
+    "category_id": "USA_congress",
+    "name": "Слабые усилия по лоббированию",
+    "desc": "Нам стоит следить за тем, что происходит в Капитолии, и стараться сделать так, чтобы влиятельные люди знали о планах администрации.",
+    "icon": "generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": [
+        {
+          "check_variable": [
+            {
+              "senators_support": {
+                "_op": "<",
+                "value": "senators_total"
+              }
+            },
+            {
+              "representatives_support": {
+                "_op": "<",
+                "value": "representatives_total"
+              }
+            }
+          ]
+        },
+        {
+          "political_power_daily": {
+            "_op": ">",
+            "value": 0.3
+          },
+          "has_political_power": {
+            "_op": ">",
+            "value": 10
+          }
+        }
+      ],
+      "not": {
+        "has_decision": "USA_medium_lobby_effort"
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "DEBUG_small_mao",
+    "category_id": "PRC_the_communist_power_struggle_balance_of_power_category",
+    "name": "DEBUG_small_mao",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "add_power_balance_value": {
+        "id": "PRC_communist_power_struggle",
+        "value": -0.1
+      }
+    }
+  },
+  {
+    "id": "DEBUG_small_28",
+    "category_id": "PRC_the_communist_power_struggle_balance_of_power_category",
+    "name": "DEBUG_small_28",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "add_power_balance_value": {
+        "id": "PRC_communist_power_struggle",
+        "value": 0.1
+      }
+    }
+  },
+  {
+    "id": "RAJ_GOE_pay_out_dividends_small",
+    "category_id": "RAJ_GOE_eic_cat",
+    "name": "Выплатить уменьшенные дивиденды инвесторам",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "actually_controlled_civs": {
+          "_op": ">",
+          "value": 1
+        },
+        "tooltip": "more_than_1_controlled_factories"
+      },
+      "NOT": {
+        "has_country_flag": "has_payed_dividends"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": [
+        "has_payed_dividends",
+        "has_payed_small_dividends"
+      ],
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "has_paid_initial_funding"
+          }
+        },
+        "set_country_flag": "has_paid_initial_funding",
+        "custom_effect_tooltip": "RAJ_seek_intial_funding_unlock_tt"
+      },
+      "custom_effect_tooltip": "RAJ_GOE_pay_out_dividends_small_tt",
+      "effect_tooltip": {
+        "eic_low_investments": true
+      },
+      "hidden_effect": {
+        "calc_expected_consumer_goods_for_taxes": true
+      }
+    }
+  },
+  {
+    "id": "RAJ_GOE_pay_out_dividends_normal",
+    "category_id": "RAJ_GOE_eic_cat",
+    "name": "Выплатить обычные дивиденды инвесторам",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "actually_controlled_civs": {
+          "_op": ">",
+          "value": 2
+        },
+        "tooltip": "more_than_2_controlled_factories"
+      },
+      "NOT": {
+        "has_country_flag": "has_payed_dividends"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": [
+        "has_payed_dividends",
+        "has_payed_normal_dividends"
+      ],
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "has_paid_initial_funding"
+          }
+        },
+        "set_country_flag": "has_paid_initial_funding",
+        "custom_effect_tooltip": "RAJ_seek_intial_funding_unlock_tt"
+      },
+      "custom_effect_tooltip": "RAJ_GOE_pay_out_dividends_normal_tt",
+      "effect_tooltip": {
+        "eic_normal_investments": true
+      },
+      "hidden_effect": {
+        "calc_expected_consumer_goods_for_taxes": true
+      }
+    }
+  },
+  {
+    "id": "liberate_malawi",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [MLW.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": 770
+        },
+        "MLW": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "liberate_somalia",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [SOM.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": [
+            269,
+            559
+          ]
+        },
+        "SOM": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "liberate_mali",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [MLI.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": [
+            556,
+            782
+          ]
+        },
+        "MLI": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SIA_start_limited_war_malaysia_burma",
+    "category_id": "SIA_limited_war_cat",
+    "name": "Начать ограниченный конфликт с [FROM.GetNameRuInst]",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "is_ally_with": "FROM",
+        "has_war_with": "FROM",
+        "has_non_aggression_pact_with": "FROM",
+        "FROM": {
+          "is_guaranteed_by": "ROOT"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "is_not_engaged_in_a_limited_war",
+        "NOT": {
+          "has_variable": "limited_war_target"
+        }
+      },
+      "FROM": {
+        "is_neighbor_of": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SIA_retake_lost_british_states"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "SIA_start_limited_war_indochina_tt_main",
+        "newline_tt",
+        "SIA_start_limited_war_can_join_faction"
+      ],
+      "clear_variable": [
+        "pre_limited_war_faction_leader",
+        "limited_war_target"
+      ],
+      "if": [
+        {
+          "limit": {
+            "is_in_faction": true,
+            "is_faction_leader": false
+          },
+          "faction_leader": {
+            "set_variable": {
+              "ROOT.pre_limited_war_faction_leader": "THIS"
+            }
+          },
+          "leave_faction": true,
+          "custom_effect_tooltip": [
+            "SIA_start_limited_war_rejoin_faction",
+            "newline_tt"
+          ]
+        },
+        {
+          "limit": {
+            "var:limited_war_target": {
+              "is_subject": true
+            }
+          },
+          "var:limited_war_target": {
+            "overlord": {
+              "add_to_array": {
+                "array": "ROOT.limited_war_target_allies",
+                "value": "THIS"
+              }
+            }
+          }
+        }
+      ],
+      "set_rule": {
+        "can_join_factions": false
+      },
+      "clear_array": [
+        "limited_war_states",
+        "limited_war_target_allies"
+      ],
+      "for_each_scope_loop": {
+        "array": "malaysia_burma_states",
+        "if": {
+          "limit": {
+            "is_controlled_by": "FROM"
+          },
+          "add_to_array": {
+            "array": "ROOT.limited_war_states",
+            "value": "THIS"
+          }
+        }
+      },
+      "set_variable": {
+        "limited_war_target": "FROM"
+      },
+      "hidden_effect": {
+        "var:limited_war_target": {
+          "if": {
+            "limit": {
+              "is_in_faction": true
+            },
+            "every_allied_country": {
+              "limit": {
+                "NOT": {
+                  "is_in_array": {
+                    "array": "ROOT.limited_war_target_allies",
+                    "value": "THIS"
+                  }
+                }
+              },
+              "add_to_array": {
+                "array": "ROOT.limited_war_target_allies",
+                "value": "THIS"
+              }
+            }
+          }
+        }
+      },
+      "every_country": {
+        "limit": {
+          "has_guaranteed": "FROM"
+        },
+        "FROM": {
+          "clear_array": "countries_that_guaranteed_me_pre_limited_war"
+        },
+        "add_to_array": {
+          "array": "FROM.countries_that_guaranteed_me_pre_limited_war",
+          "value": "THIS"
+        },
+        "diplomatic_relation": {
+          "country": "FROM",
+          "relation": "guarantee",
+          "active": false
+        }
+      },
+      "FROM": [
+        {
+          "if": {
+            "limit": {
+              "is_in_faction": false
+            },
+            "if": {
+              "limit": {
+                "has_rule": "can_join_factions"
+              },
+              "set_country_flag": "SIA_limited_war_could_join_factions"
+            }
+          }
+        },
+        {
+          "if": {
+            "limit": {
+              "is_in_faction": false
+            },
+            "set_rule": {
+              "can_join_factions": false
+            }
+          }
+        }
+      ],
+      "declare_war_on": {
+        "target": "FROM",
+        "type": "annex_everything"
+      },
+      "activate_mission": "SIA_limited_war_indochina",
+      "add_to_array": {
+        "previous_limited_war_targets": "FROM"
+      }
+    }
+  },
+  {
+    "id": "SIA_develop_northern_malaya",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Развитие Си Рат Малай",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        1062,
+        1064,
+        1061,
+        1065
+      ],
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 3
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "1062": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1064": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1061": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1065": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_formalize_of_the_soviet_republic_of_sinkiang",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Официально закрепить Советскую республику Синьцзян",
+    "desc": "Пора потребовать интеграции [SIK.GetNameRuGen] в качестве независимой Советской социалистической республикой, подчиненной правительству [FROM.GetNameRuGen].",
+    "icon": "generic_nationalism",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": [
+        "SOV_sinkiang_prospection_flag",
+        "SOV_sinkiang_oil_prospection_flag",
+        "SOV_sinkiang_military_aid_flag",
+        {
+          "flag": "SOV_sinkiang_joined_comintern_counter_flag",
+          "days": {
+            "_op": ">",
+            "value": 730
+          }
+        }
+      ],
+      "SIK": {
+        "is_in_faction_with": "ROOT",
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 80
+          }
+        },
+        "has_government": "ROOT"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "SOV_sinkiang_joined_comintern_days_tt",
+        "has_country_flag": {
+          "flag": "SOV_sinkiang_joined_comintern_counter_flag",
+          "days": {
+            "_op": ">",
+            "value": 730
+          }
+        }
+      },
+      "strength_ratio": {
+        "tag": "SIK",
+        "ratio": {
+          "_op": ">",
+          "value": 2
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "country_exists": "SIK",
+      "SIK": {
+        "is_subject": false
+      },
+      "NOT": {
+        "has_war_with": "SIK"
+      }
+    },
+    "complete_effect": {
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.282",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt",
+        "SOV_formalize_of_the_soviet_republic_of_sinkiang_only_once_tt"
+      ],
+      "effect_tooltip": {
+        "puppet": "SIK",
+        "add_opinion_modifier": {
+          "target": "SIK",
+          "modifier": "SOV_complied_with_our_demands"
+        },
+        "SIK": {
+          "set_cosmetic_tag": "SIK_ssr",
+          "set_party_name": {
+            "ideology": "communism",
+            "long_name": "SIK_CPSU_communism_party_long",
+            "name": "SIK_CPSU_communism_party"
+          }
+        }
+      },
+      "add_opinion_modifier": {
+        "target": "ROOT",
+        "modifier": "SOV_rejected_our_demands"
+      }
+    }
+  },
+  {
+    "id": "TUR_invest_in_malatya_cigarette_factory",
+    "category_id": "TUR_industrial_projects_category",
+    "name": "Инвестировать в сигаретную фабрику в Малатье",
+    "desc": "Правительство оценивает каждый потенциальный индустриальный проект отдельно.",
+    "icon": "generic_factory",
+    "cost": "TUR_etatism_cost_penalty_var?50",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_completed_focus": "TUR_nationalise_all_private_industry",
+          "has_country_flag": "TUR_financing_private_enterprise_flag"
+        }
+      },
+      "344": {
+        "free_building_slots": {
+          "building": "industrial_complex",
+          "size": {
+            "_op": ">",
+            "value": 1
+          },
+          "include_locked": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "TUR_the_sanayiciler",
+      "NOT": {
+        "OR": {
+          "has_country_leader": {
+            "character": "TUR_sefik_husnu",
+            "ruling_only": true
+          },
+          "has_completed_focus": "TUR_nationalise_all_private_industry"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "TUR_financing_private_enterprise",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_financing_private_enterprise_flag",
+          "value": 1,
+          "days": 200
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_bankroll_the_malatya_clothing_factory",
+    "category_id": "TUR_industrial_projects_category",
+    "name": "Финансировать фабрику одежды в Малатье",
+    "desc": "Правительство оценивает каждый потенциальный индустриальный проект отдельно.",
+    "icon": "generic_factory",
+    "cost": "TUR_etatism_cost_penalty_var?50",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_completed_focus": "TUR_nationalise_all_private_industry",
+          "has_country_flag": "TUR_financing_private_enterprise_flag"
+        }
+      },
+      "344": {
+        "free_building_slots": {
+          "building": "industrial_complex",
+          "size": {
+            "_op": ">",
+            "value": 1
+          },
+          "include_locked": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "TUR_the_sanayiciler",
+      "NOT": {
+        "OR": {
+          "has_country_leader": {
+            "character": "TUR_sefik_husnu",
+            "ruling_only": true
+          },
+          "has_completed_focus": "TUR_nationalise_all_private_industry"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "TUR_financing_private_enterprise",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_financing_private_enterprise_flag",
+          "value": 1,
+          "days": 200
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_root_out_kemalists_in_state",
+    "category_id": "TUR_kemalist_state_management_category",
+    "name": "Искоренить кемализм в регионе",
+    "desc": "Мы должны вселить страх в сердца безбожников-кемалистов, что продолжают отравлять нашу страну.",
+    "icon": "generic_arrest",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_dynamic_modifier": {
+          "modifier": "kemalist_schemers"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "AND": {
+          "has_country_leader": {
+            "character": "TUR_adnan_menderes",
+            "ruling_only": true
+          },
+          "has_completed_focus": "TUR_democratic_transition_focus"
+        },
+        "has_completed_focus": "TUR_pivot_to_the_past"
+      },
+      "NOT": {
+        "has_country_flag": "TUR_acted_against_kemalists_recently_flag"
+      }
+    },
+    "complete_effect": {
+      "random_owned_controlled_state": {
+        "limit": {
+          "has_dynamic_modifier": {
+            "modifier": "kemalist_schemers"
+          }
+        },
+        "remove_dynamic_modifier": {
+          "modifier": "kemalist_schemers"
+        }
+      },
+      "if": {
+        "limit": {
+          "TUR_has_kemalist_officers": true
+        },
+        "subtract_from_variable": [
+          {
+            "var": "TUR_kemalist_officers_loyalty",
+            "value": 1
+          },
+          {
+            "var": "TUR_kemalist_power_variable",
+            "value": 1
+          }
+        ],
+        "TUR_kemalist_loyalty_and_power_update_effect": true
+      },
+      "set_country_flag": {
+        "flag": "TUR_acted_against_kemalists_recently_flag",
+        "value": 1,
+        "days": 75
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_infiltration_mission",
+    "category_id": "TUR_the_enemy_within",
+    "name": "Кризис внедрения кемалистов",
+    "desc": "Кемалисты, недовольные отвержением общества, взялись за старое. Они желают монополизировать власть на западе, и их надо остановить.",
+    "icon": "tur_unifying_the_country",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "OR": {
+          "any_owned_state": [
+            {
+              "has_state_flag": "TUR_ideological_battleground_state"
+            },
+            {
+              "has_dynamic_modifier": {
+                "modifier": "kemalist_schemers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "TUR_thwarting_kemalist_infiltration",
+    "category_id": "TUR_the_enemy_within",
+    "name": "Отражение попыток внедрения кемалистов",
+    "desc": "Не дать кемалистам распространять свою отраву и дальше — не просто гражданский, но божественный долг.",
+    "icon": "tur_unifying_the_country",
+    "cost": "TUR_counter_infiltration_cost?25",
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "visible": {
+      "has_active_mission": "TUR_kemalist_infiltration_mission"
+    },
+    "complete_effect": {
+      "add_days_mission_timeout": {
+        "mission": "TUR_kemalist_infiltration_mission",
+        "days": 30
+      },
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_variable": "TUR_counter_infiltration_cost"
+            }
+          },
+          "set_variable": {
+            "TUR_counter_infiltration_cost": 50
+          }
+        },
+        "else": {
+          "add_to_variable": {
+            "var": "TUR_counter_infiltration_cost",
+            "value": 25
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_entrench_kemalism_in_state",
+    "category_id": "TUR_the_enemy_within",
+    "name": "Укрепить позиции кемализма в регионе",
+    "desc": "Ради своего выживания мы должны приложить все усилия, чтобы идеология кемализма поселилась в сердцах как можно большего числа людей.",
+    "icon": "hol_radio_oranje",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "TUR_spread_kemalism_recently_flag"
+      },
+      "OR": {
+        "has_completed_focus": [
+          "TUR_the_guardians_of_kemalism",
+          "TUR_hunt_down_fifth_columnist_islamists",
+          "TUR_fatherland_first"
+        ]
+      },
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "has_state_flag": "TUR_ideological_battleground_state"
+        },
+        "save_event_target_as": "TUR_kemalist_state_event_target"
+      },
+      "TUR_kemalist_influenced_state_effect": true,
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_spread_kemalism_recently_flag",
+          "value": 1,
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_ideological_entrenchment_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_ideological_entrenchment_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "has_state_flag": "TUR_ideological_battleground_state"
+        },
+        "save_event_target_as": "TUR_kemalist_state_event_target"
+      },
+      "random_list": {
+        "50": [
+          {
+            "event_target:TUR_kemalist_state_event_target": {
+              "TUR_kemalist_influenced_state_effect": true
+            }
+          },
+          {
+            "event_target:TUR_kemalist_state_event_target": {
+              "TUR_kemalist_influenced_state_effect": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_make_angry_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_make_angry_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_dynamic_modifier": {
+          "modifier": "kemalist_loyalties"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_list": {
+        "50": [
+          {
+            "TUR_kemalist_turn_hostile_effect": true
+          },
+          {
+            "TUR_kemalist_turn_hostile_effect": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_make_happy_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_make_happy_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_dynamic_modifier": {
+          "modifier": "kemalist_schemers"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_list": {
+        "50": [
+          {
+            "TUR_kemalist_turn_ally_effect": true
+          },
+          {
+            "TUR_kemalist_turn_ally_effect": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_loyal_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_loyal_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_minimal_power_loyal",
+            "TUR_kemalist_army_officers_decreased_power_loyal",
+            "TUR_kemalist_army_officers_limited_power_loyal",
+            "TUR_kemalist_army_officers_extended_power_loyal",
+            "TUR_kemalist_army_officers_powerful_loyal"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "OR": {
+            "has_idea": [
+              "TUR_kemalist_army_officers_minimal_power_neutral",
+              "TUR_kemalist_army_officers_minimal_power_disloyal"
+            ]
+          }
+        },
+        "remove_ideas": [
+          "TUR_kemalist_army_officers_minimal_power_neutral",
+          "TUR_kemalist_army_officers_minimal_power_disloyal"
+        ],
+        "add_ideas": "TUR_kemalist_army_officers_minimal_power_loyal"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_decreased_power_neutral",
+                "TUR_kemalist_army_officers_decreased_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_decreased_power_neutral",
+            "TUR_kemalist_army_officers_decreased_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_loyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_limited_power_neutral",
+                "TUR_kemalist_army_officers_limited_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_limited_power_neutral",
+            "TUR_kemalist_army_officers_limited_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_loyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_extended_power_neutral",
+                "TUR_kemalist_army_officers_extended_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_extended_power_neutral",
+            "TUR_kemalist_army_officers_extended_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_loyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_powerful_neutral",
+                "TUR_kemalist_army_officers_powerful_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_powerful_neutral",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_powerful_loyal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_neutral_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_neutral_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_minimal_power_neutral",
+            "TUR_kemalist_army_officers_decreased_power_neutral",
+            "TUR_kemalist_army_officers_limited_power_neutral",
+            "TUR_kemalist_army_officers_extended_power_neutral",
+            "TUR_kemalist_army_officers_powerful_neutral"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "OR": {
+            "has_idea": [
+              "TUR_kemalist_army_officers_minimal_power_loyal",
+              "TUR_kemalist_army_officers_minimal_power_disloyal"
+            ]
+          }
+        },
+        "remove_ideas": [
+          "TUR_kemalist_army_officers_minimal_power_loyal",
+          "TUR_kemalist_army_officers_minimal_power_disloyal"
+        ],
+        "add_ideas": "TUR_kemalist_army_officers_minimal_power_neutral"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_decreased_power_loyal",
+                "TUR_kemalist_army_officers_decreased_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_decreased_power_loyal",
+            "TUR_kemalist_army_officers_decreased_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_neutral"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_limited_power_loyal",
+                "TUR_kemalist_army_officers_limited_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_limited_power_loyal",
+            "TUR_kemalist_army_officers_limited_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_neutral"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_extended_power_loyal",
+                "TUR_kemalist_army_officers_extended_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_extended_power_loyal",
+            "TUR_kemalist_army_officers_extended_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_neutral"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_powerful_loyal",
+                "TUR_kemalist_army_officers_powerful_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_powerful_loyal",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_powerful_neutral"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_disloyal_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_disloyal_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_minimal_power_disloyal",
+            "TUR_kemalist_army_officers_decreased_power_disloyal",
+            "TUR_kemalist_army_officers_limited_power_disloyal",
+            "TUR_kemalist_army_officers_extended_power_disloyal",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "OR": {
+            "has_idea": [
+              "TUR_kemalist_army_officers_minimal_power_loyal",
+              "TUR_kemalist_army_officers_minimal_power_neutral"
+            ]
+          }
+        },
+        "remove_ideas": [
+          "TUR_kemalist_army_officers_minimal_power_loyal",
+          "TUR_kemalist_army_officers_minimal_power_neutral"
+        ],
+        "add_ideas": "TUR_kemalist_army_officers_minimal_power_disloyal"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_decreased_power_loyal",
+                "TUR_kemalist_army_officers_decreased_power_neutral"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_decreased_power_loyal",
+            "TUR_kemalist_army_officers_decreased_power_neutral"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_limited_power_loyal",
+                "TUR_kemalist_army_officers_limited_power_neutral"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_limited_power_loyal",
+            "TUR_kemalist_army_officers_limited_power_neutral"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_disloyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_extended_power_loyal",
+                "TUR_kemalist_army_officers_extended_power_neutral"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_extended_power_loyal",
+            "TUR_kemalist_army_officers_extended_power_neutral"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_disloyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_powerful_loyal",
+                "TUR_kemalist_army_officers_powerful_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_powerful_loyal",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_powerful_disloyal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_empower_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_empower_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_powerful_loyal",
+            "TUR_kemalist_army_officers_powerful_neutral",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_powerful_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_minimal_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_minimal_power_loyal"
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_powerful_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_powerful_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_minimal_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_minimal_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_minimal_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_minimal_power_disloyal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_depower_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_depower_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_minimal_power_loyal",
+            "TUR_kemalist_army_officers_minimal_power_neutral",
+            "TUR_kemalist_army_officers_minimal_power_disloyal"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_powerful_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_powerful_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_minimal_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_loyal"
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_powerful_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_powerful_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_powerful_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_powerful_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_minimal_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_minimal_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_CIA_Execution_Phase_3_Malaya_Decision",
+    "category_id": "Antarctica_GUI_AAO_CIA",
+    "name": "Отправить припасы с воздуха",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "Antarctica_GUI_AAO_CIA_War_Array^Antarctica_GUI_AAO_CIA_Selected_War": 0
+        },
+        {
+          "Antarctica_GUI_AAO_CIA_Phase_Array^Antarctica_GUI_AAO_CIA_Selected_War": 1
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_CIA_Execution_Phase_3_Malaya_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_CIA_Execution_Phase_3_Malaya_Decision",
+      "add_command_power": -30
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_1_Malaya_Decision",
+    "category_id": "Antarctica_GUI_AAO_CIA",
+    "name": "Спасти военнопленных",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "Antarctica_GUI_AAO_CIA_War_Array^Antarctica_GUI_AAO_CIA_Selected_War": 0
+        },
+        {
+          "Antarctica_GUI_AAO_CIA_Phase_Array^Antarctica_GUI_AAO_CIA_Selected_War": 2
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_1_Malaya_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_CIA_Conclusion_Phase_1_Malaya_Decision",
+      "add_command_power": -40
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_2_Malaya_Decision",
+    "category_id": "Antarctica_GUI_AAO_CIA",
+    "name": "Фальсификация бюллетеней",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "Antarctica_GUI_AAO_CIA_War_Array^Antarctica_GUI_AAO_CIA_Selected_War": 0
+        },
+        {
+          "Antarctica_GUI_AAO_CIA_Phase_Array^Antarctica_GUI_AAO_CIA_Selected_War": 2
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_2_Malaya_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_CIA_Conclusion_Phase_2_Malaya_Decision",
+      "add_command_power": -40
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_3_Malaya_Decision",
+    "category_id": "Antarctica_GUI_AAO_CIA",
+    "name": "Приобрести плантацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "Antarctica_GUI_AAO_CIA_War_Array^Antarctica_GUI_AAO_CIA_Selected_War": 0
+        },
+        {
+          "Antarctica_GUI_AAO_CIA_Phase_Array^Antarctica_GUI_AAO_CIA_Selected_War": 2
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_CIA_Conclusion_Phase_3_Malaya_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_CIA_Conclusion_Phase_3_Malaya_Decision",
+      "add_command_power": -40
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_Invasion_Decision_Smallest",
+    "category_id": "Antarctica_GUI_AAO_Invasion",
+    "name": "Провести пограничные патрули",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "Antarctica_GUI_AAO_Invasion_Enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Invasion_Decision_Smallest",
+      "add_to_variable": [
+        {
+          "Antarctica_Militarization": -8
+        },
+        {
+          "Antarctica_Equipment": -8
+        }
+      ]
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_Invasion_Decision_Small",
+    "category_id": "Antarctica_GUI_AAO_Invasion",
+    "name": "Обмен данными с Бразилией",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "Antarctica_GUI_AAO_Invasion_Enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Invasion_Decision_Small",
+      "add_to_variable": [
+        {
+          "Antarctica_Intel_on_AAG_Value": -8
+        },
+        {
+          "Antarctica_Militarization": -8
+        }
+      ]
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAA_Decision_Secrecy_AAO_Small",
+    "category_id": "Antarctica_GUI_AAA",
+    "name": "Распространить фальшивые документы",
+    "desc": "Американцы любят читать почту как врагов, так и друзей. Бригадный генерал Пухато и капитан Хиро разработали план, как вывести из себя этих проныр, отправив в Ушуаю телеграммы с обсуждением фиктивной программы колонизации побережья.",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "Antarctica_GUI_AAA_Mission_Secrecy_AAO": {
+          "_op": "<",
+          "value": 24
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAA_Decision_Secrecy_AAO_Small",
+      "add_to_variable": {
+        "Antarctica_Intel_on_AAO_Value": -2
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAA_Decision_Secrecy_AAG_Small",
+    "category_id": "Antarctica_GUI_AAA",
+    "name": "Укрепить восточную границу",
+    "desc": "Иногда слишком дружеские отношения с соседями могут навредить, пьяная утечка разведданных немцам за дружеской игрой в покер уже давно стала головной болью. Вице-коммодор Олецца полетит к нашей границе, чтобы напомнить ребятам об их долге.",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "Antarctica_GUI_AAA_Mission_Secrecy_AAG": {
+          "_op": "<",
+          "value": 24
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAA_Decision_Secrecy_AAG_Small",
+      "add_to_variable": {
+        "Antarctica_Intel_on_AAG_Value": -1
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAA_Decision_Secrecy_AAJ_Small",
+    "category_id": "Antarctica_GUI_AAA",
+    "name": "Провести бесцельные переговоры",
+    "desc": "Известно, что японцы используют своих дипломатов для получения разведданных из, казалось бы, безобидных разговоров. Бельтрамино предложил обратить эту склонность против них, чтобы наш следующий разговор был чрезвычайно безобидным... и монотонным.",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "Antarctica_GUI_AAA_Mission_Secrecy_AAJ": {
+          "_op": "<",
+          "value": 24
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAA_Decision_Secrecy_AAJ_Small",
+      "add_to_variable": {
+        "Antarctica_Intel_on_AAJ_Value": -1
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAA_Decision_Secrecy_AAC_Small",
+    "category_id": "Antarctica_GUI_AAA",
+    "name": "Окружить базу О'Хиггинс",
+    "desc": "Эксклав базы О'Хиггинс упорно продолжает существовать на полуострове Тринити, служа базой для чилийской разведки. Бригадный генерал Пухато рекомендует отсечь их разведывательные патрули и окружить базу сушей, чтобы помешать этим усилиям.",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "Antarctica_GUI_AAA_Mission_Secrecy_AAC": {
+          "_op": "<",
+          "value": 24
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAA_Decision_Secrecy_AAC_Small",
+      "add_to_variable": {
+        "Antarctica_Intel_on_AAC_Value": -2
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Ho_229_Generic_Improve_Small",
+    "category_id": "Antarctica_GUI_AAG",
+    "name": "Horten Ho 229 - Испытание скрытности",
+    "desc": "",
+    "icon": "GFX_decision_AAG_ho_229",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "is_in_array": {
+        "array": "Antarctica_GUI_AAG_Research_Array",
+        "value": 1
+      },
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAG_Research_1_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAG_Ho_229_Generic_Improve_Small",
+      "hidden_effect": {
+        "add_to_variable": {
+          "Antarctica_Equipment": -4
+        }
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Me_P1110_Generic_Improve_Small",
+    "category_id": "Antarctica_GUI_AAG",
+    "name": "Messerschmitt P.1110 - Испытание пневматической пушки",
+    "desc": "",
+    "icon": "GFX_decision_AAG_me_p1110",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "is_in_array": {
+        "array": "Antarctica_GUI_AAG_Research_Array",
+        "value": 2
+      },
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAG_Research_2_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAG_Me_P1110_Generic_Improve_Small",
+      "hidden_effect": {
+        "add_to_variable": {
+          "Antarctica_Equipment": -4
+        }
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Bo_115_Generic_Improve_Small",
+    "category_id": "Antarctica_GUI_AAG",
+    "name": "MBB Bo 115 - Испытание на уклон при взлете/посадке",
+    "desc": "",
+    "icon": "GFX_decision_AAG_bo_115",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "is_in_array": {
+        "array": "Antarctica_GUI_AAG_Research_Array",
+        "value": 3
+      },
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAG_Research_3_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAG_Bo_115_Generic_Improve_Small",
+      "hidden_effect": {
+        "add_to_variable": {
+          "Antarctica_Equipment": -4
+        }
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Ho_18_Generic_Improve_Small",
+    "category_id": "Antarctica_GUI_AAG",
+    "name": "Horten Ho XVIII - Испытание одиночного двигателя",
+    "desc": "",
+    "icon": "GFX_decision_AAG_ho_18",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "is_in_array": {
+        "array": "Antarctica_GUI_AAG_Research_Array",
+        "value": 4
+      },
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAG_Research_4_Completed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAG_Ho_18_Generic_Improve_Small",
+      "hidden_effect": {
+        "add_to_variable": {
+          "Antarctica_Equipment": -4
+        }
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Nuclear_Request_Fissible_Material_Small",
+    "category_id": "Antarctica_GUI_AAG_Nuclear",
+    "name": "Запрос расщепляемых матер. (малый)",
+    "desc": "",
+    "icon": "GFX_decision_generic_nuclear_radiation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "Antarctica_GUI_AAG_Nuclear_Mechanic_Stage_3",
+      "check_variable": {
+        "Antarctica_GUI_AAG_Nuclear_Material": {
+          "_op": "<",
+          "value": 100
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Nuclear_Request_Fissible_Material_Small",
+      "hidden_effect": {
+        "add_to_variable": {
+          "Antarctica_Legitimacy": -10
+        }
+      }
+    }
+  },
+  {
+    "id": "BRA_adhemar_example_get_legacy_small",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "BRA_adhemar_example_get_legacy_small",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "BRA_adhemar_add_legacy_minor": true
+    }
+  },
+  {
+    "id": "BRA_adhemar_example_harm_legacy_small",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "BRA_adhemar_example_harm_legacy_small",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "BRA_adhemar_subtract_legacy_minor": true
+    }
+  },
+  {
+    "id": "BRG_expand_lange_power_walloon_small",
+    "category_id": "BRG_Investigations_Decisions_Category",
+    "name": "Позволить надзор за Лангемарком",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRG_Already_Doing_Loyalty_Decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRG_expand_lange_power_in_walloon_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRG_Already_Doing_Loyalty_Decision",
+      "custom_effect_tooltip": "BRG_expand_lange_power_walloon_small_tooltip"
+    }
+  },
+  {
+    "id": "ENG_Ideo_Peers_Small_Boost",
+    "category_id": "BRI_Party_of_Contrasts_category",
+    "name": "Обеспечить патрулирование территории",
+    "desc": "",
+    "icon": "GFX_decision_generic_farm",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "BRI_Party_CategorySelection": 0
+        },
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ENG_Ideo_Peers_Small_Boost",
+      "set_temp_variable": {
+        "CandidateChange": 0
+      },
+      "BRI_Party_Choice_Update": true
+    }
+  },
+  {
+    "id": "ENG_Prag_Peers_Small_Boost",
+    "category_id": "BRI_Party_of_Contrasts_category",
+    "name": "Налоговые льготы по гербовым сборам",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "BRI_Party_CategorySelection": 0
+        },
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ENG_Prag_Peers_Small_Boost",
+      "set_temp_variable": {
+        "CandidateChange": 1
+      },
+      "BRI_Party_Choice_Update": true
+    }
+  },
+  {
+    "id": "IRE_adwil_thermal_energy_dec",
+    "category_id": "IRE_DECCAT_AdWil",
+    "name": "Начать проект - Термогенератор",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "AdWilStart_tt",
+          "NOT": {
+            "check_variable": {
+              "IRE_GUI_AdWilstate": 0
+            }
+          }
+        },
+        {
+          "tooltip": "AdWil_GerTrust_20_tt",
+          "check_variable": {
+            "AdWilGerTrust": {
+              "_op": ">",
+              "value": 0.199
+            }
+          }
+        },
+        {
+          "tooltip": "Adwil_started_tt",
+          "check_variable": {
+            "project_stage": 0
+          }
+        }
+      ],
+      "IRE_Adwil_has_thermoelectric_slots": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "set_variable": [
+          {
+            "project_stage": 1
+          },
+          {
+            "Adwil_project_type": 7
+          }
+        ],
+        "IRE_AdWilGoal": true
+      },
+      "activate_mission": "IRE_adwil_thermal_energy_missions",
+      "IRE_SE_AdWil_AvFund_minus_5": true,
+      "IRE_Investor_Presence_plus_5": true
+    }
+  },
+  {
+    "id": "IRE_adwil_thermal_energy_missions",
+    "category_id": "IRE_DECCAT_AdWil",
+    "name": "Термоэль. Проект строит. термогенератора",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IRE_adwil_thermoelectric_plant_missions_completed",
+        "var:AdWilGoal_State": {
+          "OR": {
+            "check_variable": [
+              {
+                "IRE.AdWilgoal": "building_level@thermoelectric_plant"
+              },
+              {
+                "IRE.AdWilgoal": {
+                  "_op": "<",
+                  "value": "building_level@thermoelectric_plant"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "IRE_SE_AdWil_GerTrust_plus_10": true,
+      "var:AdWilGoal_State": {
+        "set_temp_variable": {
+          "state_value_multiplier_temp": 1.015
+        },
+        "econ_state_value_change_multiply": true
+      },
+      "set_temp_variable": {
+        "inflation_temp": -0.05
+      },
+      "econ_inflation_change": true,
+      "TNO_improve_regulations_policy_effectiveness_low": true,
+      "IRE_Investor_Presence_plus_5": true,
+      "AdWilEnd": true
+    }
+  },
+  {
+    "id": "ENG_DEC_CollabGunsSmall",
+    "category_id": "ENG_DECCAT_PreEcwCollabGuns",
+    "name": "Небольшая поставка оружия",
+    "desc": "Мы свяжемся с гарнизоном Корнуолла, чтобы получить небольшую партию оружия для нашего правительства.\n\nКоличество контрабандного оружия будет варьироваться в зависимости от провинций Южной Англии с самой высокой стабильностью; максимально возможное количество получяемого оружия - 100.",
+    "icon": "GFX_decision_generic_arms_crate",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ENG_DEC_CollabRelationLow_tt",
+        "check_variable": {
+          "ENG_Cornwall_Relations": {
+            "_op": ">",
+            "value": 24
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "Hmmlr_guns_shipment_ongoing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "Hmmlr_guns_shipment_ongoing"
+    }
+  },
+  {
+    "id": "ENG_DEC_HmmlrGunsSmall",
+    "category_id": "ENG_DECCAT_PreEcwHmmlrGuns",
+    "name": "Небольшая поставка оружия",
+    "desc": "Оружие - это то, что заставляет мир вращаться, или, по крайней мере, так кажется революционной организации. К счастью, у нас есть Организация Свободных Наций, сидящая на настоящей горе оружия, которое только и ждет, чтобы его переправили контрабандой. Отправная точка будет где-то на севере, где мы можем гарантировать конфиденциальность от всевидящих глаз предателей, также мы должны позаботиться о том, чтобы коллаборационистская активность в этом районе была минимальной.\n\nКоличество контрабандного оружия будет варьироваться в зависимости от одной провинции Северной Англии с наименьшей стабильностью; максимально возможное количество приобретённого оружия - 100.",
+    "icon": "GFX_decision_generic_arms_crate",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ENG_DEC_HmmlrRelationLow_tt",
+        "check_variable": {
+          "ENG_OFN_Relations": {
+            "_op": ">",
+            "value": 24
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "Hmmlr_guns_shipment_ongoing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "Hmmlr_guns_shipment_ongoing"
+    }
+  },
+  {
+    "id": "ENG_DEC_make_thatcher_normal_lose",
+    "category_id": "ENG_DECCAT_Maggie",
+    "name": "Инициировать проигрыш",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "set_variable": [
+        {
+          "var": "ENG_Maggie_Party_Lead",
+          "value": 0.52
+        },
+        {
+          "var": "ENG_OG_Party_Lead",
+          "value": 0.48
+        },
+        {
+          "var": "ENG_Elite_Lovers",
+          "value": 0.52
+        },
+        {
+          "var": "ENG_Populist_Lovers",
+          "value": 0.48
+        }
+      ],
+      "ENG_something_bad_maggie": true
+    }
+  },
+  {
+    "id": "ENG_DEC_make_thatcher_normal_gain",
+    "category_id": "ENG_DECCAT_Maggie",
+    "name": "Инициировать выигрыш",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "set_variable": [
+        {
+          "var": "ENG_Maggie_Party_Lead",
+          "value": 0.48
+        },
+        {
+          "var": "ENG_OG_Party_Lead",
+          "value": 0.52
+        },
+        {
+          "var": "ENG_Elite_Lovers",
+          "value": 0.48
+        },
+        {
+          "var": "ENG_Populist_Lovers",
+          "value": 0.52
+        }
+      ],
+      "ENG_something_bad_maggie": true
+    }
+  },
+  {
+    "id": "CHI_source_small_arms",
+    "category_id": "CHI_Secret_Army",
+    "name": "Исходное оружие",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_crate",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "CHI_sa_decision_active"
+      },
+      "set_temp_variable": {
+        "tempReqWeaponry": 10
+      },
+      "CHI_has_set_weaponry_level": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHI_source_small_arms taken",
+      "set_country_flag": "CHI_sa_decision_active",
+      "set_temp_variable": {
+        "tempSAWeaponry": -10
+      },
+      "CHI_change_sa_weaponry": true
+    }
+  },
+  {
+    "id": "GNG_Malaya_Withdraw",
+    "category_id": "GNG_Research_Team_category",
+    "name": "Завершить тестирование продукта в Малайе",
+    "desc": "Мы выполнили достаточно задач и вполне удовлетворены результатами испытаний в Малайе. Пора отзывать группу, чтобы не тратить лишние ресурсы.",
+    "icon": "GFX_decision_GNG_PTRG",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_flag": "GNG_PTRG_Malaya"
+    },
+    "complete_effect": {
+      "GNG": {
+        "GNG_PTRG_Malaya_END": true
+      }
+    }
+  },
+  {
+    "id": "Iberian_Wars_AI_Request_Guns_Small",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Iberian_Wars_AI_Request_Guns_Small",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "OR": {
+        "AND": [
+          {
+            "is_in_array": {
+              "USA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_USA"
+            },
+            "USA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "GER.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_GER"
+            },
+            "GER": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "ITA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_ITA"
+            },
+            "ITA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "BRA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_BRA"
+            },
+            "BRA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "IBR_Wars_AI_mechanic_compatibility",
+      "is_ai": true,
+      "OR": {
+        "is_in_array": [
+          {
+            "GER.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "ITA.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "USA.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "BRA.Iberian_Wars_supported_factions": "PREV.id"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_AI_Request_Guns_Small",
+      "random_list": {
+        "30": [
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "USA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_USA",
+                  "USA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 100,
+                "USA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "USA"
+            },
+            "set_country_flag": "sent_request_USA"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "GER.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_GER",
+                  "GER": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 200,
+                "GER": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "GER"
+            },
+            "set_country_flag": "sent_request_GER"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "ITA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_ITA",
+                  "ITA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 200,
+                "ITA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "ITA"
+            },
+            "set_country_flag": "sent_request_ITA"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "BRA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_BRA",
+                  "BRA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 20,
+                "BRA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "BRA"
+            },
+            "set_country_flag": "sent_request_BRA"
+          }
+        ]
+      },
+      "var:IBR_Wars_currently_selected_supporter_var": {
+        "set_variable": [
+          {
+            "IBR_Wars_current_request_type": 4
+          },
+          {
+            "IBR_Wars_current_request_quantity": 750
+          },
+          {
+            "IBR_Wars_current_request_days": 30
+          },
+          {
+            "IBR_Wars_current_requester_influence_change": 2
+          }
+        ]
+      },
+      "IBR_Wars_Initiate_Request_Mission_New": true
+    }
+  },
+  {
+    "id": "Iberian_Wars_AI_Request_Support_Small",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Iberian_Wars_AI_Request_Support_Small",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "OR": {
+        "AND": [
+          {
+            "is_in_array": {
+              "USA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_USA"
+            },
+            "USA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "GER.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_GER"
+            },
+            "GER": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "ITA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_ITA"
+            },
+            "ITA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "BRA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_BRA"
+            },
+            "BRA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "IBR_Wars_AI_mechanic_compatibility",
+      "is_ai": true,
+      "OR": {
+        "is_in_array": [
+          {
+            "GER.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "ITA.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "USA.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "BRA.Iberian_Wars_supported_factions": "PREV.id"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_AI_Request_Support_Small",
+      "random_list": {
+        "30": [
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "USA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_USA",
+                  "USA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 100,
+                "USA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "USA"
+            },
+            "set_country_flag": "sent_request_USA"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "GER.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_GER",
+                  "GER": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 200,
+                "GER": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "GER"
+            },
+            "set_country_flag": "sent_request_GER"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "ITA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_ITA",
+                  "ITA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 200,
+                "ITA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "ITA"
+            },
+            "set_country_flag": "sent_request_ITA"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "BRA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_BRA",
+                  "BRA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 20,
+                "BRA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "BRA"
+            },
+            "set_country_flag": "sent_request_BRA"
+          }
+        ]
+      },
+      "var:IBR_Wars_currently_selected_supporter_var": {
+        "set_variable": [
+          {
+            "IBR_Wars_current_request_type": 5
+          },
+          {
+            "IBR_Wars_current_request_quantity": 150
+          },
+          {
+            "IBR_Wars_current_request_days": 30
+          },
+          {
+            "IBR_Wars_current_requester_influence_change": 2
+          }
+        ]
+      },
+      "IBR_Wars_Initiate_Request_Mission_New": true
+    }
+  },
+  {
+    "id": "Iberian_Wars_AI_Request_Artillery_Small",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Iberian_Wars_AI_Request_Artillery_Small",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "OR": {
+        "AND": [
+          {
+            "is_in_array": {
+              "USA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_USA"
+            },
+            "USA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "GER.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_GER"
+            },
+            "GER": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "ITA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_ITA"
+            },
+            "ITA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          },
+          {
+            "is_in_array": {
+              "BRA.Iberian_Wars_supported_factions": "ROOT.id"
+            },
+            "NOT": {
+              "has_country_flag": "sent_request_BRA"
+            },
+            "BRA": {
+              "NOT": {
+                "has_country_flag": "supporter_request_flag"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "IBR_Wars_AI_mechanic_compatibility",
+      "is_ai": true,
+      "OR": {
+        "is_in_array": [
+          {
+            "GER.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "ITA.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "USA.Iberian_Wars_supported_factions": "PREV.id"
+          },
+          {
+            "BRA.Iberian_Wars_supported_factions": "PREV.id"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_AI_Request_Artillery_Small",
+      "random_list": {
+        "30": [
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "USA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_USA",
+                  "USA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 100,
+                "USA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "USA"
+            },
+            "set_country_flag": "sent_request_USA"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "GER.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_GER",
+                  "GER": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 200,
+                "GER": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "GER"
+            },
+            "set_country_flag": "sent_request_GER"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "ITA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_ITA",
+                  "ITA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 200,
+                "ITA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "ITA"
+            },
+            "set_country_flag": "sent_request_ITA"
+          },
+          {
+            "modifier": [
+              {
+                "factor": 0,
+                "OR": {
+                  "NOT": {
+                    "is_in_array": {
+                      "BRA.Iberian_Wars_supported_factions": "ROOT.id"
+                    }
+                  },
+                  "has_country_flag": "sent_request_BRA",
+                  "BRA": {
+                    "has_country_flag": "supporter_request_flag"
+                  }
+                }
+              },
+              {
+                "factor": 20,
+                "BRA": {
+                  "is_ai": false
+                }
+              }
+            ],
+            "set_variable": {
+              "IBR_Wars_currently_selected_supporter_var": "BRA"
+            },
+            "set_country_flag": "sent_request_BRA"
+          }
+        ]
+      },
+      "var:IBR_Wars_currently_selected_supporter_var": {
+        "set_variable": [
+          {
+            "IBR_Wars_current_request_type": 6
+          },
+          {
+            "IBR_Wars_current_request_quantity": 100
+          },
+          {
+            "IBR_Wars_current_request_days": 30
+          },
+          {
+            "IBR_Wars_current_requester_influence_change": 3
+          }
+        ]
+      },
+      "IBR_Wars_Initiate_Request_Mission_New": true
+    }
+  },
+  {
+    "id": "IBR_debug_trees_postMalta_tree",
+    "category_id": "IBR_debug_trees",
+    "name": "Загрузить пост-Мальтийское древо фокусов",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "tag": "IBR",
+      "is_ai": false
+    },
+    "visible": {
+      "tag": "IBR"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_debug_trees_postMalta_tree",
+      "load_focus_tree": "IBR_PostMaltaPolitics_Tree"
+    }
+  },
+  {
+    "id": "IBR_caetano_springboard_small_caetano_boost",
+    "category_id": "IBR_caetano_springboard_category",
+    "name": "Провести митинг",
+    "desc": "",
+    "icon": "GFX_decision_generic_podium",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_caetano_springboard"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_caetano_springboard_small_choupana_boost",
+    "category_id": "IBR_caetano_springboard_category",
+    "name": "Сотрудничать с испанскими технократами",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_caetano_springboard"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ita_reclaim_somalia",
+    "category_id": "ITA_east_african_war_category",
+    "name": "Снова наше Сомали",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "IEA_full_collapse",
+      "has_government": "fascism",
+      "NOT": [
+        {
+          "OR": {
+            "has_country_leader": [
+              {
+                "character": "ITA_Galeazzo_Ciano",
+                "ruling_only": true
+              },
+              {
+                "character": "ITA_Junio_Valerio_Borghese",
+                "ruling_only": true
+              }
+            ]
+          }
+        },
+        {
+          "country_exists": "ERT"
+        }
+      ],
+      "country_exists": "SML"
+    },
+    "visible": {
+      "has_global_flag": "IEA_full_collapse",
+      "has_government": "fascism",
+      "NOT": {
+        "OR": {
+          "has_country_leader": [
+            {
+              "character": "ITA_Galeazzo_Ciano",
+              "ruling_only": true
+            },
+            {
+              "character": "ITA_Junio_Valerio_Borghese",
+              "ruling_only": true
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ita_reclaim_somalia",
+      "declare_war_on": {
+        "target": "SML",
+        "type": "annex_everything"
+      }
+    }
+  },
+  {
+    "id": "GRO_muller_small_investigation",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Немного расследовать дела Мюллера",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "GRO_muller_investigation"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_money_cost_1_tt",
+        "check_variable": {
+          "var": "investigation_funds",
+          "value": 1,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "var": "investigation_funds",
+        "value": 1
+      },
+      "set_country_flag": "GRO_muller_investigation"
+    }
+  },
+  {
+    "id": "GRO_schenck_small_investigation",
+    "category_id": "GRO_investigate_treason_category",
+    "name": "Немного расследовать дела Шенка",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "GRO_schenck_investigation"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_money_cost_1_tt",
+        "check_variable": {
+          "var": "investigation_funds",
+          "value": 1,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_the_investigation_begins"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "var": "investigation_funds",
+        "value": 1
+      },
+      "set_country_flag": "GRO_schenck_investigation"
+    }
+  },
+  {
+    "id": "SAM_load_maltsev_politics_tree",
+    "category_id": "SAM_debug_category",
+    "name": "Загрузить политическое древо Арцезо",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision remove SAM_load_maltsev_expansion_politics_tree",
+      "load_focus_tree": "SAM_Politics_Tree_Artsezo"
+    }
+  },
+  {
+    "id": "SAM_load_maltsev_tree",
+    "category_id": "SAM_debug_category",
+    "name": "Загрузить древо Смуты Арцезо",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision remove SAM_load_maltsev_tree",
+      "load_focus_tree": "SAM_Smuta_Artsezo"
+    }
+  },
+  {
+    "id": "MAG_WA_local_Yakov_Malik",
+    "category_id": "MAG_WA_a_government_of_personalities_category",
+    "name": "Назначить Якова Малика",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "MAG_WA_minister_cooldown_flag",
+        "has_idea": "MAG_Yakov_Malik_for"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "remove_ideas_with_trait": "foreign_minister",
+      "add_ideas": "MAG_Yakov_Malik_for",
+      "activate_mission": "MAG_WA_minister_cooldown",
+      "set_country_flag": [
+        "MAG_WA_minister_cooldown_flag",
+        "MAG_WA_local_chosen",
+        "MAG_WA_local_for"
+      ],
+      "MAG_WA_gov_reset_for": true
+    }
+  },
+  {
+    "id": "MAG_mali_invasion_effigy",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "ВТОРЖЕНИЕ В МАЛИ",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "CAO": {
+        "has_war_with": "KAY"
+      },
+      "NOT": {
+        "has_global_flag": "west_african_war_ongoing"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_mali_invasion_effigy"
+    }
+  },
+  {
+    "id": "MAG_WA_support_mali_cameroon",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт ПАОФ",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "CAO": {
+        "has_war_with": "KAY"
+      },
+      "NOT": [
+        {
+          "OR": {
+            "CAO": {
+              "has_idea": "MAG_WA_mercenary_contract_idea"
+            },
+            "KAY": {
+              "has_idea": "MAG_WA_mercenary_contract_idea"
+            }
+          }
+        },
+        {
+          "has_global_flag": "west_african_war_ongoing"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_mali_cameroon",
+      "CAO": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "MAG_WA_support_mali_kayes",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Правительству Кайеса",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "CAO": {
+        "has_war_with": "KAY"
+      },
+      "NOT": [
+        {
+          "OR": {
+            "CAO": {
+              "has_idea": "MAG_WA_mercenary_contract_idea"
+            },
+            "KAY": {
+              "has_idea": "MAG_WA_mercenary_contract_idea"
+            }
+          }
+        },
+        {
+          "has_global_flag": "west_african_war_ongoing"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_mali_kayes",
+      "KAY": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "MAG_WA_support_reclamation_zarmaland",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Зармаганде",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "HAU": {
+        "has_war_with": "ZAR"
+      },
+      "NOT": {
+        "OR": {
+          "HAU": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "ZAR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_reclamation_zarmaland",
+      "ZAR": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "ore_push_reformist_party_to_malenkov",
+    "category_id": "ORE_category_political_situation",
+    "name": "Усилить позиции Маленкова",
+    "desc": "",
+    "icon": "",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "OREChoseMalenkov",
+            "OREChoseBurba",
+            "OREChoseNobody"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ore_push_reformist_party_to_malenkov",
+      "add_popularity": {
+        "ideology": "communist",
+        "popularity": 0.05
+      },
+      "ORE_centralization_med": true
+    }
+  },
+  {
+    "id": "VYT_small_donation_to_the_poor_decision",
+    "category_id": "VYT_economic_strength_category",
+    "name": "Небольшие пожертвования бедным",
+    "desc": "Состояние нашей экономики должно быть как минимум плохое.",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "VYT_economic_strength": {
+          "_op": ">",
+          "value": 19
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VYT_small_donation_to_the_poor_decision",
+      "VYT_increase_popular_support_low": true,
+      "VYT_decrease_economic_strength_low": true,
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.01
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "TNO_improve_poverty_low": true
+    }
+  },
+  {
+    "id": "VYT_invest_in_small_arms_decision",
+    "category_id": "VYT_economic_strength_category",
+    "name": "Инвестировать в пехотное снаряжение",
+    "desc": "Состояние нашей экономики должно быть как минимум средним.",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "VYT_economic_strength": {
+          "_op": ">",
+          "value": 39
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VYT_invest_in_small_arms_decision",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.025
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment_1",
+        "amount": 2000,
+        "producer": "VYT"
+      }
+    }
+  },
+  {
+    "id": "ANG_Sell_Surplus_Fuel_small",
+    "category_id": "ANG_The_Market",
+    "name": "Продать топливо",
+    "desc": "Увеличив наши запасы топлива как за счет законных, так и... не очень законных средств, можно начать продавать его на мировом рынке. Это принесет даже больше прибыли, чем весь черный рынок!",
+    "icon": "GFX_oil_texticon",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ANG_Pre_War_Market_Flag"
+      },
+      "has_fuel": {
+        "_op": ">",
+        "value": 9999
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ANG_investigate_new_sources"
+    },
+    "complete_effect": {
+      "set_country_flag": "ANG_Pre_War_Market_Flag",
+      "custom_effect_tooltip": "ANG_Liquid_Cash_Gain_3",
+      "add_to_variable": {
+        "ANG_Liquid_Cash": 3
+      }
+    }
+  },
+  {
+    "id": "USA_RFK_party_above_all_small_favor",
+    "category_id": "USA_RFK_Party_Above_All",
+    "name": "Небольшое одолжение",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "USA_RFK_working_on_CRA"
+        },
+        {
+          "has_country_flag": "USA_RFK_FR_temp_vote"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_RFK_finished_CRA"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_RFK_party_above_all_small_favor",
+      "set_country_flag": "USA_RFK_FR_temp_vote",
+      "custom_effect_tooltip": [
+        "USA_RFK_party_above_all_small_favor_tt",
+        "USA_RFK_Party_Above_All_Unity_Increase_Small"
+      ],
+      "add_to_variable": [
+        {
+          "temporary_congress_votes": 3
+        },
+        {
+          "rfk_party_above_all_var": 0.5
+        }
+      ]
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_produce_small_arms",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить произвести стрелковое оружие",
+    "desc": "Поскольку наша колония окружена и подвержена набегам местных повстанцев, спрос на стрелковое оружие для оснащения наших войск, чтобы продолжать защищать интересы наших любимых благодетелей, возрастает. Поэтому попросить инвесторов о грузовике с огнестрельным оружием, который будет отправлен в нашу сторону, не повредит.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_produce_small_arms",
+      "custom_effect_tooltip": [
+        "Ask_Investors_to_produce_Small_Arms_tt",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.02
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 500
+      }
+    }
+  },
+  {
+    "id": "VOR_consider_the_plan",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Consider Maltsev Plans",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "VOR_maltsevs_plan_flag"
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_start_of_work_in_Vorkuta",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Working in the Heartland of Vorkuta",
+    "desc": "",
+    "icon": "GFX_decision_generic_train",
+    "cost": 24,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "Vor_works_are_underway_tt",
+        "NOT": {
+          "has_country_flag": "Vor_works_are_underway"
+        }
+      }
+    },
+    "visible": {
+      "863": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": [
+        "VOR_maltsevs_plan_begin",
+        "VOR_maltsevs_plan_phase_1"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Vorkuta",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.3
+        },
+        {
+          "temp_econ_spending_amount": 0.029
+        }
+      ],
+      "econ_inflation_change": true,
+      "863": {
+        "add_manpower": -530,
+        "add_extra_state_shared_building_slots": 1,
+        "add_resource": {
+          "type": "steel",
+          "amount": 10
+        },
+        "add_victory_points": {
+          "province": 13357,
+          "value": 3
+        },
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 1
+        }
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Saranpaul",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Working in the Saranpaul Mountain Range",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 27,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "Vor_works_are_underway_tt",
+        "NOT": {
+          "has_country_flag": "Vor_works_are_underway"
+        }
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_1_3"
+    },
+    "visible": {
+      "863": {
+        "is_controlled_by": "VOR"
+      },
+      "581": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": [
+        "VOR_maltsevs_plan_begin",
+        "VOR_maltsevs_plan_phase_1"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Saranpaul",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.22
+        },
+        {
+          "temp_econ_spending_amount": 0.016
+        }
+      ],
+      "econ_inflation_change": true,
+      "863": {
+        "add_manpower": -210
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Salekhard",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Work on Draining the Salekhard Swamps",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 29,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "Vor_works_are_underway_tt",
+        "NOT": {
+          "has_country_flag": "Vor_works_are_underway"
+        }
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_1_3"
+    },
+    "visible": {
+      "863": {
+        "is_controlled_by": "VOR"
+      },
+      "844": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": [
+        "VOR_maltsevs_plan_begin",
+        "VOR_maltsevs_plan_phase_1"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Salekhard",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.35
+        },
+        {
+          "temp_econ_spending_amount": 0.018
+        }
+      ],
+      "econ_inflation_change": true,
+      "863": {
+        "add_manpower": -3330
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_stage_2",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Plans for New Connections to Distant Regions",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "VOR_reduce_pressure_on_workers_select_tt",
+        "NOT": {
+          "has_country_flag": "VOR_reduce_pressure_on_workers_select"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "AND": [
+          {
+            "has_country_flag": [
+              "VOR_maltsevs_plan_begin",
+              "VOR_maltsevs_plan_phase_1_1",
+              "VOR_maltsevs_plan_phase_1_2",
+              "VOR_maltsevs_plan_phase_1_3",
+              "VOR_maltsevs_plan_phase_1"
+            ]
+          },
+          {
+            "has_completed_focus": "VOR_north_awakens"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_stage_2",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.55
+        },
+        {
+          "gdp_growth_temp": 0.75
+        }
+      ],
+      "econ_inflation_change": true,
+      "econ_gdp_growth_change": true,
+      "863": {
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 1
+        }
+      },
+      "hidden_effect": {
+        "country_event": {
+          "id": "Vorkuta.event.8",
+          "days": 40,
+          "random_days": 20
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_reduce_pressure_on_workers",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Reduce the Daily Workload on Workers",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers_indent",
+    "cost": 24,
+    "fire_only_once": false,
+    "available": {
+      "has_idea": "VOR_Maltsev_Commision"
+    },
+    "visible": {
+      "has_country_flag": "VOR_maltsevs_plan_begin",
+      "has_idea": "VOR_Maltsev_Commision"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_reduce_pressure_on_workers",
+      "set_country_flag": "VOR_reduce_pressure_on_workers_select",
+      "set_temp_variable": {
+        "inflation_temp": -0.06
+      },
+      "econ_inflation_change": true,
+      "TNO_improve_max_workhours_policy_effectiveness_low": true,
+      "TNO_improve_minimum_wage_policy_effectiveness_low": true
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Nyagan",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Working to Tame the Nyagan Rivers",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "Vor_works_are_underway_tt",
+        "NOT": {
+          "has_country_flag": "Vor_works_are_underway"
+        }
+      }
+    },
+    "visible": {
+      "756": {
+        "is_controlled_by": "VOR"
+      },
+      "581": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_2"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Nyagan",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.22
+        },
+        {
+          "temp_econ_spending_amount": 0.026
+        }
+      ],
+      "econ_inflation_change": true,
+      "581": {
+        "add_manpower": -172
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Yugorsk",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Work in the Promising Yugorsk Region",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 22,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "Vor_works_are_underway_tt",
+        "NOT": {
+          "has_country_flag": "Vor_works_are_underway"
+        }
+      }
+    },
+    "visible": {
+      "756": {
+        "is_controlled_by": "VOR"
+      },
+      "845": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_2"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Yugorsk",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.4
+        },
+        {
+          "temp_econ_spending_amount": 0.029
+        }
+      ],
+      "econ_inflation_change": true,
+      "845": {
+        "add_manpower": -2890
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Surgut",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Work on Draining the Surgut Marshes",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 35,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "Vor_works_are_underway_tt",
+        "NOT": {
+          "has_country_flag": "Vor_works_are_underway"
+        }
+      }
+    },
+    "visible": {
+      "756": {
+        "is_controlled_by": "VOR"
+      },
+      "579": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_2"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Surgut",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.25
+        },
+        {
+          "temp_econ_spending_amount": 0.035
+        }
+      ],
+      "econ_inflation_change": true,
+      "756": {
+        "add_manpower": -372
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_nkvd_pressure_on_workers",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Send NKVD Detachments to the Construction Sites",
+    "desc": "",
+    "icon": "GFX_decision_pressure_on_workers",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "AND": [
+          {
+            "divisions_in_state": {
+              "state": 863,
+              "size": {
+                "_op": ">",
+                "value": 3
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 844,
+              "size": {
+                "_op": ">",
+                "value": 1
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 579,
+              "size": {
+                "_op": ">",
+                "value": 2
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 756,
+              "size": {
+                "_op": ">",
+                "value": 3
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 845,
+              "size": {
+                "_op": ">",
+                "value": 4
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 581,
+              "size": {
+                "_op": ">",
+                "value": 1
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 871,
+              "size": {
+                "_op": ">",
+                "value": 2
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 573,
+              "size": {
+                "_op": ">",
+                "value": 3
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 754,
+              "size": {
+                "_op": ">",
+                "value": 1
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 572,
+              "size": {
+                "_op": ">",
+                "value": 3
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 403,
+              "size": {
+                "_op": ">",
+                "value": 2
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 571,
+              "size": {
+                "_op": ">",
+                "value": 3
+              }
+            }
+          },
+          {
+            "divisions_in_state": {
+              "state": 580,
+              "size": {
+                "_op": ">",
+                "value": 2
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "VOR_maltsevs_plan_flag",
+      "OR": [
+        {
+          "has_country_flag": [
+            "VOR_maltsevs_plan_phase_2",
+            "VOR_maltsevs_plan_phase_3"
+          ]
+        },
+        {
+          "AND": [
+            {
+              "NOT": {
+                "has_completed_focus": "VOR_north_awakens"
+              }
+            },
+            {
+              "has_completed_focus": "VOR_focus_on_the_social_sphere"
+            }
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_nkvd_pressure_on_workers",
+      "hidden_effect": {
+        "add_command_power": -20,
+        "add_political_power": -20
+      },
+      "set_country_flag": "VOR_nkvd_pressure_on_workers_select",
+      "set_temp_variable": {
+        "inflation_temp": -0.05
+      },
+      "econ_inflation_change": true,
+      "TNO_worsen_regulations_policy_effectiveness_low": true,
+      "TNO_worsen_max_workhours_policy_effectiveness_low": true
+    }
+  },
+  {
+    "id": "VOR_stage_3",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Final Infrastructure Plans for Improving Social Conditions",
+    "desc": "",
+    "icon": "GFX_decision_VOR_stage_3_plan",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "VOR_nkvd_pressure_on_workers_select_tt",
+        "NOT": {
+          "has_country_flag": "VOR_nkvd_pressure_on_workers_select"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "VOR_maltsevs_plan_phase_2",
+        "VOR_maltsevs_plan_phase_2_1",
+        "VOR_maltsevs_plan_phase_2_2",
+        "VOR_maltsevs_plan_phase_2_3"
+      ],
+      "has_completed_focus": "VOR_focus_on_the_social_sphere"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_stage_3",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.5
+        },
+        {
+          "gdp_growth_temp": -0.25
+        }
+      ],
+      "econ_inflation_change": true,
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "VOR_allocation_funds_from_budget",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Budget Allocation",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "Vor_works_are_underway_tt",
+        "NOT": {
+          "has_country_flag": "Vor_works_are_underway"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "VOR_maltsevs_plan_phase_3",
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "has_country_flag": "VOR_start_of_work_in_Sverdlovsk_select"
+            }
+          },
+          {
+            "NOT": {
+              "has_country_flag": "VOR_start_of_work_in_Zlatoust_select"
+            }
+          },
+          {
+            "NOT": {
+              "has_country_flag": "VOR_start_of_work_in_Chelyabinsk_select"
+            }
+          },
+          {
+            "NOT": {
+              "has_country_flag": "VOR_start_of_work_in_Omsk_select"
+            }
+          },
+          {
+            "NOT": {
+              "has_country_flag": "VOR_start_of_work_in_South_Ural_select"
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_allocation_funds_from_budget",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.35
+        },
+        {
+          "gdp_growth_temp": -0.1
+        }
+      ],
+      "econ_inflation_change": true,
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Sverdlovsk",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Working at the Center of Our Union",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 28,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "Vor_works_are_underway_tt",
+          "NOT": {
+            "has_country_flag": "Vor_works_are_underway"
+          }
+        },
+        {
+          "tooltip": "Vor_funds_available_for_sverdlovsk_tt",
+          "has_country_flag": "Vor_funds_available_for_sverdlovsk"
+        }
+      ]
+    },
+    "visible": {
+      "580": {
+        "is_controlled_by": "VOR"
+      },
+      "653": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_3"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Sverdlovsk",
+      "set_country_flag": [
+        "Vor_works_are_underway",
+        "VOR_start_of_work_in_Sverdlovsk_select"
+      ],
+      "set_temp_variable": {
+        "inflation_temp": 0.3
+      },
+      "econ_inflation_change": true,
+      "653": {
+        "add_manpower": -4102
+      }
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Chelyabinsk",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Work on the Southern Industrial Complex",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 33,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "Vor_works_are_underway_tt",
+          "NOT": {
+            "has_country_flag": "Vor_works_are_underway"
+          }
+        },
+        {
+          "tooltip": "Vor_funds_available_for_Chelyabinsk_tt",
+          "has_country_flag": "Vor_funds_available_for_Chelyabinsk"
+        }
+      ]
+    },
+    "visible": {
+      "572": {
+        "is_controlled_by": "VOR"
+      },
+      "754": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_3"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Chelyabinsk",
+      "set_country_flag": [
+        "Vor_works_are_underway",
+        "VOR_start_of_work_in_Chelyabinsk_select"
+      ],
+      "set_temp_variable": {
+        "inflation_temp": 0.35
+      },
+      "econ_inflation_change": true,
+      "871": {
+        "add_manpower": -3351
+      }
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Zlatoust",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Work on the Ural Infrastructure Expansion",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 45,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "Vor_works_are_underway_tt",
+          "NOT": {
+            "has_country_flag": "Vor_works_are_underway"
+          }
+        },
+        {
+          "tooltip": "Vor_funds_available_for_Zlatoust_tt",
+          "has_country_flag": "Vor_funds_available_for_Zlatoust"
+        }
+      ]
+    },
+    "visible": {
+      "871": {
+        "is_controlled_by": "VOR"
+      },
+      "573": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_3"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Zlatoust",
+      "set_country_flag": [
+        "Vor_works_are_underway",
+        "VOR_start_of_work_in_Zlatoust_select"
+      ],
+      "set_temp_variable": {
+        "inflation_temp": 0.25
+      },
+      "econ_inflation_change": true,
+      "573": {
+        "add_manpower": -2171
+      }
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Omsk",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Work with the Remote Eastern Territories",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 52,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "Vor_works_are_underway_tt",
+          "NOT": {
+            "has_country_flag": "Vor_works_are_underway"
+          }
+        },
+        {
+          "tooltip": "Vor_funds_available_for_Omsk_tt",
+          "has_country_flag": "Vor_funds_available_for_Omsk"
+        }
+      ]
+    },
+    "visible": {
+      "403": {
+        "is_controlled_by": "VOR"
+      },
+      "571": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_3"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Omsk",
+      "set_country_flag": [
+        "Vor_works_are_underway",
+        "VOR_start_of_work_in_Omsk_select"
+      ],
+      "set_temp_variable": {
+        "inflation_temp": 0.65
+      },
+      "econ_inflation_change": true,
+      "571": {
+        "add_manpower": -2083
+      }
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_South_Ural",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Work in the Devastated Southern Trans-Urals",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 66,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "Vor_works_are_underway_tt",
+          "NOT": {
+            "has_country_flag": "Vor_works_are_underway"
+          }
+        },
+        {
+          "tooltip": "Vor_funds_available_for_South_Ural_tt",
+          "has_country_flag": "Vor_funds_available_for_South_Ural"
+        }
+      ]
+    },
+    "visible": {
+      "OR": {
+        "AND": [
+          {
+            "582": {
+              "is_controlled_by": "VOR"
+            },
+            "846": {
+              "is_controlled_by": "VOR"
+            },
+            "847": {
+              "is_controlled_by": "VOR"
+            },
+            "848": {
+              "is_controlled_by": "VOR"
+            }
+          },
+          {
+            "652": {
+              "is_controlled_by": "VOR"
+            },
+            "849": {
+              "is_controlled_by": "VOR"
+            },
+            "852": {
+              "is_controlled_by": "VOR"
+            }
+          }
+        ]
+      },
+      "has_country_flag": "VOR_maltsevs_plan_phase_3"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Omsk",
+      "set_country_flag": [
+        "Vor_works_are_underway",
+        "VOR_start_of_work_in_South_Ural_select"
+      ],
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.5
+        },
+        {
+          "temp_econ_spending_amount": 0.05
+        }
+      ],
+      "econ_inflation_change": true,
+      "754": {
+        "add_manpower": -3497
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "OMO_allow_small_recruitment",
+    "category_id": "OMO_temptations_category",
+    "name": "Allow Small Recruitment",
+    "desc": "",
+    "icon": "GFX_decision_generic_guard",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "OMO_sudoplatovs_temptations",
+      "NOT": {
+        "has_country_flag": "is_warlord"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: OMO_allow_small_recruitment",
+      "OMO_minor_temptation": true,
+      "add_manpower": 750
+    }
+  }
+]

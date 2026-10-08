@@ -1,0 +1,533 @@
+[
+  {
+    "id": "POL_purchase_gambia",
+    "category_id": "POL_reopen_the_maritime_and_colonial_league",
+    "name": "[701.GetName] — приобрести",
+    "desc": "Несколько веков назад Герцогство Курляндское пыталось колонизировать государство [701.GetName] в пользу Польско-литовской унии. Несмотря на добрые отношения с местными жителями, колонизаторов изгнали иностранцы. Пора исправить эту несправедливость.",
+    "icon": "decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "701": {
+        "owner": {
+          "is_in_faction_with": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "owns_state": 701
+        },
+        {
+          "701": {
+            "has_state_flag": "rejected_purchase_flag"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "701": {
+        "save_event_target_as": "POL_colony_purchase",
+        "owner": {
+          "country_event": {
+            "id": "NSB_poland_events.5"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "liberate_the_gambia",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [GAM.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": 701
+        },
+        "GAM": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHI_conduct_war_games",
+    "category_id": "CHI_Secret_Army",
+    "name": "Проводить военные игры",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "CHI_sa_decision_active"
+      },
+      "set_temp_variable": {
+        "tempReqTraining": 10
+      },
+      "CHI_has_set_training_level": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHI_conduct_war_games taken",
+      "set_country_flag": "CHI_sa_decision_active",
+      "set_temp_variable": {
+        "tempSATraining": -10
+      },
+      "CHI_change_sa_training": true,
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "ELS_SalvadoranCoup_MessUpTheirGame",
+    "category_id": "ELS_SalvadoranCoup_category",
+    "name": "Испортить им игру",
+    "desc": "",
+    "icon": "",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "SalvadoranCoup_PulseDuration": {
+          "_op": ">",
+          "value": 4
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "change_v": -2
+      },
+      "SalvadoranCoup_ChangePulseDuration": true
+    }
+  },
+  {
+    "id": "ore_recruit_orenburgians",
+    "category_id": "ORE_category_centralization_gamble",
+    "name": "Вербовать оренбуржцев",
+    "desc": "",
+    "icon": "",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ore_recruit_orenburgians",
+      "tno_conscription_worsen": true
+    }
+  },
+  {
+    "id": "ore_push_the_council_to_recruit_orenburgians",
+    "category_id": "ORE_category_centralization_gamble",
+    "name": "Подтолкнуть Совет к вербовке оренбуржцев",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ORE_sufficient_centralization",
+        "check_variable": {
+          "var": "ORECentralizedPower",
+          "value": 2,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "OR": {
+          "has_government": [
+            "paternalism",
+            "communist"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ore_push_the_council_to_recruit_orenburgians",
+      "ORE_decentralization_great": true,
+      "tno_conscription_worsen": true
+    }
+  },
+  {
+    "id": "ore_mobilize_the_country",
+    "category_id": "ORE_category_centralization_gamble",
+    "name": "Мобилизовать рабочую силу",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ore_mobilize_the_country",
+      "add_manpower": 5000
+    }
+  },
+  {
+    "id": "ore_push_the_council_to_mobilize_the_country",
+    "category_id": "ORE_category_centralization_gamble",
+    "name": "Подтолкнуть Совет к мобилизации рабочей силы",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ORE_sufficient_centralization",
+        "check_variable": {
+          "var": "ORECentralizedPower",
+          "value": 2,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "OR": {
+          "has_government": [
+            "paternalism",
+            "communist"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ore_push_the_council_to_mobilize_the_country",
+      "ORE_decentralization_great": true,
+      "add_manpower": 5000
+    }
+  },
+  {
+    "id": "ore_assemble_more_men",
+    "category_id": "ORE_category_centralization_gamble",
+    "name": "Созвать добровольцев",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ore_assemble_more_men",
+      "ORE": {
+        "652": {
+          "create_unit": {
+            "division": "name = \"Orenburgskiye Novobrantsy\" division_template = \"Podrazdeleniye Opolcheniya\" start_experience_factor = 0.5",
+            "prioritize_location": 3563,
+            "owner": "PREV"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ore_push_the_council_to_assemble_more_men",
+    "category_id": "ORE_category_centralization_gamble",
+    "name": "Подтолкнуть Совет к созыву добровольцев",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ORE_sufficient_centralization",
+        "check_variable": {
+          "var": "ORECentralizedPower",
+          "value": 3,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "OR": {
+          "has_government": [
+            "paternalism",
+            "communist"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ore_push_the_council_to_assemble_more_men",
+      "ORE_decentralization_great": true,
+      "ORE": {
+        "652": {
+          "create_unit": {
+            "division": "name = \"Novobrantsy Orenburgskogo Soveta\" division_template = \"Podrazdeleniye Opolcheniya\" start_experience_factor = 0.5",
+            "prioritize_location": 3563,
+            "owner": "PREV"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_agitates_against_brutality",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам агитирует против жестокости",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_mobilizes_dissidents_in_bureaucracy",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам мобилизует диссидентов",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_appeals_to_unc",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам обращается к УНК",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_imports_foreign_office_dissidents",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам апеллирует к умеренным",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_makes_deals_with_businesses",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам заключает сделки с бизнесом",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_brautigam_ai_spreads_pro_collab_propaganda",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Бройтигам поддерживает коллаборационистов",
+    "desc": "",
+    "icon": "GFX_decision_GER_nsdap_dissident",
+    "cost": "UKR_brautigam_ai_shutup?10",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "UKR_power_struggle_active"
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "UKR_power_struggle_decision_off"
+            }
+          },
+          "country_event": {
+            "id": "UKR_pwr_struggle_hidden_mission_events.1",
+            "days": 7
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_Zsa_Zsas_Game",
+    "category_id": "USA_the_heartless",
+    "name": "Игра Жа Жа",
+    "desc": "",
+    "icon": "GFX_decision_generic_diamond",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "NOT": {
+          "has_country_flag": "USA_URI_Zsa_Zsa_running_amuck"
+        },
+        "has_country_flag": "USA_Zsa_Zsa_Moved_On"
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "NOV_VRPP_copy_american_game_shows",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Copy American Game Shows",
+    "desc": "American citizens enjoy some of the most sophisticated and creative television programs, which have greatly improved Americans' satisfaction with life. Though the  VRPP is no popular organization, it does not mean we must make life so boring. Through imitation or licensing, we will air some American-style programs to the Russian people.",
+    "icon": "GFX_decision_generic_USA_aid",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_copy_american_game_shows",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 20
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_copy_japanese_game_shows",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Copy Japanese Game Shows",
+    "desc": "Japan's massive population has resulted in many opportunities for the media industry, where some of the fiercest competition on the face of the Earth takes place. This offers us ample amounts of chances to create shows imitating some of theirs and avoid their mistakes along the way.",
+    "icon": "GFX_decision_generic_JAP_aid",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_copy_japanese_game_shows",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 20
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  }
+]

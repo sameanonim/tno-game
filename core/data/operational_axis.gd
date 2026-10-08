@@ -17,6 +17,7 @@ enum Posture {
 @export var axis_id: String = "axis_volga_spearhead"
 @export var name: String = "Volga Operational Spearhead"
 @export var target_region_ids: Array = []
+@export var origin_region_id: int = 0
 @export_range(0.0, 100.0, 0.5) var progress: float = 0.0
 
 @export_group("Assigned Forces")
@@ -33,6 +34,8 @@ enum Posture {
 ## Текущий боевой статус оси
 @export var is_stalled: bool = false
 @export var attrition_rate: float = 0.02
+## Ход последнего боевого инцидента (для предотвращения спама дилеммами)
+@export var last_incident_turn: int = -999
 
 
 ## Вычисляет эффективную наступательную силу оси с учетом генерала и стойки
@@ -90,13 +93,15 @@ func to_dict() -> Dictionary:
 		"axis_id": axis_id,
 		"name": name,
 		"target_region_ids": target_region_ids.duplicate(),
+		"origin_region_id": origin_region_id,
 		"progress": progress,
 		"assigned_manpower": assigned_manpower,
 		"assigned_equipment": assigned_equipment.duplicate(true),
 		"commander": cmd_dict,
 		"posture": posture,
 		"is_stalled": is_stalled,
-		"attrition_rate": attrition_rate
+		"attrition_rate": attrition_rate,
+		"last_incident_turn": last_incident_turn
 	}
 
 
@@ -107,12 +112,14 @@ static func from_dict(data: Dictionary) -> OperationalAxis:
 	axis.target_region_ids = []
 	for tid in data.get("target_region_ids", []):
 		axis.target_region_ids.append(int(tid))
+	axis.origin_region_id = int(data.get("origin_region_id", 0))
 	axis.progress = float(data.get("progress", 0.0))
 	axis.assigned_manpower = int(data.get("assigned_manpower", 0))
 	axis.assigned_equipment = data.get("assigned_equipment", {}).duplicate(true)
 	axis.posture = int(data.get("posture", Posture.BALANCED)) as Posture
 	axis.is_stalled = bool(data.get("is_stalled", false))
 	axis.attrition_rate = float(data.get("attrition_rate", 0.02))
+	axis.last_incident_turn = int(data.get("last_incident_turn", -999))
 
 	var cmd_data = data.get("commander", {})
 	if not cmd_data.is_empty():

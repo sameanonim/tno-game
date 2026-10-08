@@ -1,0 +1,301 @@
+[
+  {
+    "id": "EU_kuban_expansion_decision",
+    "category_id": "form_european_union_category",
+    "name": "Кубанская экспансия",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        235,
+        234,
+        218,
+        238,
+        245,
+        237,
+        217,
+        236,
+        265,
+        239,
+        829,
+        401,
+        407,
+        406
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_global_flag": "EU_integrated_kuban_states_flag"
+      },
+      "has_global_flag": "form_european_union_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "POL_restore_kuban_cossacks",
+    "category_id": "POL_cossack_republic_decisions",
+    "name": "Восстановить Кубанскую республику",
+    "desc": "Предательство кубанских казаков стало поворотным моментом в русской гражданской войне, приведшим к поражению Белой армии. На этот раз мы проследим, чтобы Кубань возглавляло лояльное правительство.",
+    "icon": "generic_form_nation",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        234,
+        235,
+        233,
+        232
+      ]
+    },
+    "visible": {
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "POL_pavel_bermondt_avalov",
+            "ruling_only": true
+          },
+          {
+            "character": "POL_rudinger_von_der_goltz",
+            "ruling_only": true
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "pavel_events.2"
+      }
+    }
+  },
+  {
+    "id": "BRA_debug_kubitschek_wins_hundred_days",
+    "category_id": "BRA_debug_decisions",
+    "name": "\"100 дней\": Кубичек побеждает",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRA_show_lott_presidency_options"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_debug_kubitschek_wins_hundred_days",
+      "country_event": {
+        "id": "brazil.45"
+      }
+    }
+  },
+  {
+    "id": "BRA_set_gp_phase_1",
+    "category_id": "BRA_kubitschek_goals_plan_category",
+    "name": "Begin Appointment Phase",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "check_variable": {
+          "BRA_gp_phase": 1
+        }
+      }
+    },
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_set_gp_phase_1",
+      "BRA_begin_appointment_phase": true
+    }
+  },
+  {
+    "id": "BRA_set_gp_phase_2",
+    "category_id": "BRA_kubitschek_goals_plan_category",
+    "name": "Begin Planning Phase",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "check_variable": {
+          "BRA_gp_phase": 2
+        }
+      }
+    },
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_set_gp_phase_2",
+      "country_event": {
+        "id": "brazil_jk.1"
+      }
+    }
+  },
+  {
+    "id": "BRA_set_gp_phase_3",
+    "category_id": "BRA_kubitschek_goals_plan_category",
+    "name": "Begin Execution Phase",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "check_variable": {
+          "BRA_gp_phase": 3
+        }
+      }
+    },
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_set_gp_phase_3",
+      "country_event": {
+        "id": "brazil_jk.2"
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_boost_kubitschek_in_presidential_election",
+    "category_id": "USA_BoP_category",
+    "name": "Операция СТАРЫЙ СОЮЗНИК",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_SouthAmerica": true,
+          "is_ai": true
+        },
+        "BRA": {
+          "AND": {
+            "NOT": {
+              "has_country_flag": "BRA_65_lacerda_candidate"
+            },
+            "has_country_flag": [
+              "BRA_pres_election_active",
+              "BRA_65_kubitschek_candidate"
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_BRA_boost_kubitschek_in_presidential_election",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_CIA_boosting_kubitschek_in_presidential_election"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "RUS_capture_kuban",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Capture Kuban",
+    "desc": "",
+    "icon": "generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        234,
+        1558,
+        1559
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "RUS": {
+        "set_temp_variable": {
+          "temp_exhaustion": -5
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "GER": {
+        "set_temp_variable": {
+          "temp_exhaustion": 3
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "add_war_support": 0.015
+    }
+  },
+  {
+    "id": "VOR_inclusion_of_kuban",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Kuban District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 234
+    },
+    "visible": {
+      "owns_state": 234,
+      "AND": {
+        "234": {
+          "is_core_of": "ROOT"
+        },
+        "1559": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  }
+]

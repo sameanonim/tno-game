@@ -1,0 +1,946 @@
+[
+  {
+    "id": "CZE_white_peace_silesia_owner",
+    "category_id": "political_actions",
+    "name": "Мирный договор с регионом [66.owner.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "all_owned_state": {
+        "is_controlled_by": "ROOT"
+      },
+      "66": {
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "has_war_with": "66.owner",
+      "has_country_flag": "CZE_unlock_white_peace",
+      "NOT": {
+        "has_global_flag": "CZE_block_silesia_war_negotations"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_raise_silver_legions",
+    "category_id": "war_measures",
+    "name": "Поднять Серебряные легионы",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "USA_ally_with_the_silver_shirts"
+    },
+    "visible": {
+      "has_civil_war": true
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "not": {
+            "has_template": "Silver Legion"
+          }
+        },
+        "division_template": {
+          "name": "Silver Legion",
+          "priority": 0,
+          "division_names_group": "USA_INF_01",
+          "is_locked": true,
+          "regiments": {
+            "infantry": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 2
+              }
+            ]
+          }
+        }
+      },
+      "capital_scope": {
+        "create_unit": [
+          {
+            "division": "name = \"1. Silver Legion\" division_template = \"Silver Legion\" start_experience_factor = 0.7",
+            "owner": "ROOT"
+          },
+          {
+            "division": "name = \"2. Silver Legion\" division_template = \"Silver Legion\" start_experience_factor = 0.7",
+            "owner": "ROOT"
+          },
+          {
+            "division": "name = \"3. Silver Legion\" division_template = \"Silver Legion\" start_experience_factor = 0.7",
+            "owner": "ROOT"
+          },
+          {
+            "division": "name = \"4. Silver Legion\" division_template = \"Silver Legion\" start_experience_factor = 0.7",
+            "owner": "ROOT"
+          },
+          {
+            "division": "name = \"5. Silver Legion\" division_template = \"Silver Legion\" start_experience_factor = 0.7",
+            "owner": "ROOT"
+          },
+          {
+            "division": "name = \"6. Silver Legion\" division_template = \"Silver Legion\" start_experience_factor = 0.7",
+            "owner": "ROOT"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "reintegrate_silesia",
+    "category_id": "germany_formable_category",
+    "name": "Повторно интегрировать Силезию",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "66": {
+        "is_fully_controlled_by": "ROOT"
+      },
+      "67": {
+        "is_fully_controlled_by": "ROOT"
+      },
+      "762": {
+        "is_fully_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "PRE",
+          "MEK",
+          "VGE",
+          "SHL",
+          "HAN",
+          "HES",
+          "RHI",
+          "WUR",
+          "BAY",
+          "THU",
+          "SAX",
+          "LUX",
+          "DNZ",
+          "WGR",
+          "DDR",
+          "UBD"
+        ]
+      },
+      "NOT": [
+        {
+          "AND": {
+            "66": {
+              "is_core_of": "ROOT"
+            },
+            "67": {
+              "is_core_of": "ROOT"
+            },
+            "762": {
+              "is_core_of": "ROOT"
+            }
+          }
+        },
+        {
+          "has_global_flag": "reintigrated_silesia_flag"
+        }
+      ],
+      "has_global_flag": "germany_reformed_flag"
+    },
+    "complete_effect": {
+      "IF": [
+        {
+          "limit": {
+            "NOT": {
+              "66": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          "66": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "limit": {
+            "NOT": {
+              "67": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          "67": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "limit": {
+            "NOT": {
+              "762": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          "762": {
+            "add_core_of": "ROOT"
+          }
+        }
+      ],
+      "hidden_effect": {
+        "762": {
+          "set_state_name": "762_german_name"
+        },
+        "set_province_name": {
+          "id": 6464,
+          "name": "province_6464_german_name"
+        },
+        "set_global_flag": "reintigrated_silesia_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_fourth_silesian_uprising_mission",
+    "category_id": "GER_a_fourth_silesian_uprising_cat",
+    "name": "Восстание в Силезии",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "GER_reestablish_the_black_reichswehr",
+    "category_id": "GER_a_fourth_silesian_uprising_cat",
+    "name": "Восстановить «Черный рейхсвер»",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "SIL": {
+        "any_core_state": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "GER_fourth_silesian_uprising_mission"
+    },
+    "complete_effect": {
+      "add_stability": -0.04
+    }
+  },
+  {
+    "id": "GER_mobilize_the_selbschutz",
+    "category_id": "GER_a_fourth_silesian_uprising_cat",
+    "name": "Мобилизовать «Самозащиту»",
+    "desc": "",
+    "icon": "GFX_decision_oppression",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "SIL": {
+        "any_core_state": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "GER_fourth_silesian_uprising_mission"
+    },
+    "complete_effect": {
+      "add_manpower": 150,
+      "custom_effect_tooltip": "generic_skip_one_line_tt",
+      "add_days_mission_timeout": {
+        "mission": "GER_fourth_silesian_uprising_mission",
+        "days": 14
+      }
+    }
+  },
+  {
+    "id": "ICE_a_new_yggdrasill",
+    "category_id": "ICE_improve_the_viking_spirit",
+    "name": "ICE_a_new_yggdrasill",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 120,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ICE_the_viking_spirit",
+      "NOT": {
+        "has_country_flag": "ICE_already_improving_the_viking_spirit_flag"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "ICE_has_best_spirit_idea",
+        "has_idea": "ICE_viking_spirit_odin_freja_thor_aegir_fenrir"
+      },
+      "100": {
+        "is_owned_and_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ICE_the_viking_spirit"
+    },
+    "complete_effect": {
+      "set_country_flag": "ICE_already_improving_the_viking_spirit_flag"
+    }
+  },
+  {
+    "id": "USA_execute_war_plan_silver",
+    "category_id": "USA_war_plans",
+    "name": "Выполнить военный план «Серебряный»",
+    "desc": "",
+    "icon": "generic_operation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war_with": "ITA"
+    },
+    "visible": {
+      "has_completed_focus": "USA_war_plan_silver"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "TUR_fund_the_gemlik_silk_factory",
+    "category_id": "TUR_industrial_projects_category",
+    "name": "Финансировать шелкопрядильную фабрику в Гемлике",
+    "desc": "Правительство оценивает каждый потенциальный индустриальный проект отдельно.",
+    "icon": "generic_factory",
+    "cost": "TUR_etatism_cost_penalty_var?50",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_completed_focus": "TUR_nationalise_all_private_industry",
+          "has_country_flag": "TUR_financing_private_enterprise_flag"
+        }
+      },
+      "340": {
+        "free_building_slots": {
+          "building": "industrial_complex",
+          "size": {
+            "_op": ">",
+            "value": 1
+          },
+          "include_locked": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "TUR_the_sanayiciler",
+      "NOT": {
+        "OR": {
+          "has_country_leader": {
+            "character": "TUR_sefik_husnu",
+            "ruling_only": true
+          },
+          "has_completed_focus": "TUR_nationalise_all_private_industry"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_ideas": "TUR_financing_private_enterprise",
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_financing_private_enterprise_flag",
+          "value": 1,
+          "days": 200
+        }
+      }
+    }
+  },
+  {
+    "id": "MEX_debug_crisis_hawaiian_missile_crisis",
+    "category_id": "MEX_debug_category",
+    "name": "Включить Алеутский кризис в ГУИ",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "leviathan_debug_content",
+      "check_variable": {
+        "var": "MEX_PRI_crisis_number",
+        "value": 3,
+        "compare": "not_equals"
+      }
+    },
+    "complete_effect": {
+      "set_variable": {
+        "MEX_PRI_crisis_number": 3
+      }
+    }
+  },
+  {
+    "id": "USA_cross_the_asile",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Пересечь проход",
+    "desc": "",
+    "icon": "GFX_decision_USA_npp_p",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "USA_hart_presidency",
+      "NOT": {
+        "has_country_flag": "bill_enable_mission_hart"
+      }
+    },
+    "complete_effect": {
+      "USA_HART_increase_pro_stockpile_support": true,
+      "USA_HART_decrease_nat_stockpile_support": true,
+      "custom_effect_tooltip": "USA_explain_relation_tt"
+    }
+  },
+  {
+    "id": "Silence_The_AG",
+    "category_id": "USA_RFK_CONTELPRO",
+    "name": "Генерального прокурора нужно заткнуть",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock_red",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_RFK_AG_Silenced"
+    },
+    "visible": {
+      "has_country_flag": "USA_64_C_NPP"
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "bobby.justice.14",
+        "days": 1
+      }
+    }
+  },
+  {
+    "id": "USA_WFB_approach_wallace",
+    "category_id": "USA_WFB_silver_act_draft",
+    "name": "Подход Джорджа Уоллеса",
+    "desc": "",
+    "icon": "",
+    "cost": 125,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_WFB_approach_harrington",
+    "category_id": "USA_WFB_silver_act_draft",
+    "name": "Подход Майкла Харрингтона",
+    "desc": "",
+    "icon": "",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_WFB_gather_republican_support",
+    "category_id": "USA_WFB_silver_act_draft",
+    "name": "Заручится поддержкой демократов",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_WFB_favor_the_centre",
+    "category_id": "USA_WFB_silver_act_draft",
+    "name": "Одолжение  прогрессивистам",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_WFB_favor_the_far_right",
+    "category_id": "USA_WFB_silver_act_draft",
+    "name": "Одолжение  националистам",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SWRW_Silesian_Freikorps_Winning",
+    "category_id": "SWRW_Silesian_category",
+    "name": "Unify Silesia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        67,
+        66,
+        69,
+        9,
+        75
+      ]
+    },
+    "visible": {
+      "tag": "SFK"
+    },
+    "complete_effect": {
+      "SIL": {
+        "every_core_state": {
+          "remove_core_of": "SIL"
+        }
+      },
+      "CZE": {
+        "every_core_state": {
+          "remove_core_of": "CZE"
+        }
+      },
+      "SFK": {
+        "add_state_core": [
+          67,
+          66,
+          69,
+          9,
+          75
+        ],
+        "declare_war_on": [
+          {
+            "target": "GER",
+            "type": "annex_everything"
+          },
+          {
+            "target": "RPR",
+            "type": "annex_everything"
+          },
+          {
+            "target": "REG",
+            "type": "annex_everything"
+          },
+          {
+            "target": "HRC",
+            "type": "annex_everything"
+          },
+          {
+            "target": "SRH",
+            "type": "annex_everything"
+          }
+        ],
+        "load_oob": "2GCW_SFK_AI",
+        "add_manpower": 500000
+      },
+      "set_global_flag": "SGCW_SilesianRegional_unification"
+    }
+  },
+  {
+    "id": "SWRW_Silesian_Commie_Winning",
+    "category_id": "SWRW_Silesian_category",
+    "name": "Unify Silesia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        67,
+        66,
+        69,
+        9,
+        75
+      ],
+      "SIL": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "SIL"
+    },
+    "complete_effect": {
+      "CZE": {
+        "every_core_state": {
+          "remove_core_of": "CZE"
+        }
+      },
+      "SFK": {
+        "every_core_state": {
+          "remove_core_of": "SFK"
+        }
+      },
+      "SIL": [
+        {
+          "add_state_core": [
+            67,
+            66,
+            69,
+            9,
+            75
+          ]
+        },
+        {
+          "add_manpower": 500000,
+          "load_oob": [
+            "2GCW_SIL_AI",
+            "2GCW_SIL_AI"
+          ],
+          "declare_war_on": [
+            {
+              "target": "GER",
+              "type": "annex_everything"
+            },
+            {
+              "target": "GMA",
+              "type": "annex_everything"
+            }
+          ]
+        }
+      ],
+      "if": [
+        {
+          "limit": {
+            "country_exists": "RPR"
+          },
+          "RPR": {
+            "add_to_faction": "SIL"
+          }
+        },
+        {
+          "limit": {
+            "has_global_flag": "REG_RPR_War"
+          },
+          "RPR": {
+            "add_to_faction": "SIL"
+          },
+          "SIL": {
+            "declare_war_on": {
+              "target": "REG",
+              "type": "annex_everything"
+            },
+            "add_ideas": "REV_Member",
+            "set_major": true
+          }
+        }
+      ],
+      "set_global_flag": "SGCW_SilesianRegional_unification"
+    }
+  },
+  {
+    "id": "SWRW_Silesian_Bohemia_Winning",
+    "category_id": "SWRW_Silesian_category",
+    "name": "Unify Silesia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        67,
+        66,
+        69,
+        9,
+        75
+      ]
+    },
+    "visible": {
+      "tag": "CZE"
+    },
+    "complete_effect": {
+      "SIL": {
+        "every_core_state": {
+          "remove_core_of": "SIL"
+        }
+      },
+      "SFK": {
+        "every_core_state": {
+          "remove_core_of": "SFK"
+        }
+      },
+      "CZE": {
+        "add_state_core": [
+          67,
+          66,
+          69,
+          9,
+          75
+        ],
+        "add_manpower": 500000
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_invade_Silesia",
+    "category_id": "SWRW_GMA_category",
+    "name": "Invade Silesia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "country_exists": [
+          "SFK",
+          "SIL"
+        ]
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA"
+    },
+    "complete_effect": {
+      "declare_war_on": [
+        {
+          "target": "SFK",
+          "type": "annex_everything"
+        },
+        {
+          "target": "SIL",
+          "type": "annex_everything"
+        }
+      ],
+      "CZE": {
+        "give_military_access": "GMA"
+      }
+    }
+  },
+  {
+    "id": "SWRW_Commie_invade_Silesia",
+    "category_id": "SWRW_Commie_category",
+    "name": "Invade Silesia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "country_exists": [
+          "SFK",
+          "CZE"
+        ]
+      },
+      "RPR": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "RPR",
+      "NOT": {
+        "has_global_flag": "SWRW_2GCW_RPR_winner"
+      }
+    },
+    "complete_effect": {
+      "declare_war_on": [
+        {
+          "target": "SFK",
+          "type": "annex_everything"
+        },
+        {
+          "target": "CZE",
+          "type": "annex_everything"
+        }
+      ],
+      "if": {
+        "limit": {
+          "country_exists": "SIL"
+        },
+        "RPR": {
+          "add_to_faction": "SIL"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_RPR_Consume_SIL",
+    "category_id": "SWRW_Commie_category",
+    "name": "Our Silesian Comrades",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "AND": {
+        "country_exists": "SIL",
+        "has_war": false
+      },
+      "RPR": {
+        "has_war": false
+      },
+      "has_global_flag": "SGCW_MainRegional_unification"
+    },
+    "visible": {
+      "tag": "RPR",
+      "NOT": {
+        "has_global_flag": "SWRW_2GCW_RPR_winner"
+      }
+    },
+    "complete_effect": {
+      "RPR": {
+        "annex_country": {
+          "target": "SIL",
+          "transfer_troops": true
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_REG_invade_Silesia",
+    "category_id": "SWRW_REG_category",
+    "name": "Invade Silesia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "country_exists": [
+          "SFK",
+          "SIL",
+          "CZE"
+        ]
+      },
+      "REG": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "REG",
+      "NOT": {
+        "has_global_flag": "SWRW_2GCW_REG_winner"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWRW_GER_invade_Silesia",
+    "category_id": "SWRW_GER_category",
+    "name": "Invade Silesia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "country_exists": [
+          "SFK",
+          "SIL"
+        ]
+      },
+      "GER": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GER",
+      "NOT": {
+        "has_global_flag": "SWRW_2GCW_GER_winner"
+      }
+    },
+    "complete_effect": {
+      "declare_war_on": [
+        {
+          "target": "SFK",
+          "type": "annex_everything"
+        },
+        {
+          "target": "SIL",
+          "type": "annex_everything"
+        }
+      ],
+      "CZE": {
+        "give_military_access": "GER"
+      }
+    }
+  },
+  {
+    "id": "SWRW_SIL_Mega_unify",
+    "category_id": "SWRW_SIL_category",
+    "name": "SWRW_SIL_Mega_unify",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        1025,
+        4,
+        59,
+        775,
+        1810,
+        64,
+        776,
+        85,
+        67,
+        66,
+        69,
+        9,
+        75
+      ]
+    },
+    "visible": {
+      "tag": "SIL",
+      "has_global_flag": "SGCW_SilesianRegional_unification"
+    },
+    "complete_effect": {
+      "RPR": [
+        {
+          "annex_country": {
+            "target": "SIL",
+            "transfer_troops": true
+          }
+        },
+        {
+          "load_oob": "2GCW_RPR_AI",
+          "set_global_flag": "SGCW_MainRegional_unification",
+          "remove_ideas": [
+            "GER_a_nation_in_flames",
+            "GER_our_reich_of_ash",
+            "GER_the_second_german_civil_war",
+            "GER_the_god_of_war",
+            "RPR_a_nation_in_flames",
+            "RPR_the_second_german_civil_war"
+          ]
+        }
+      ]
+    }
+  }
+]

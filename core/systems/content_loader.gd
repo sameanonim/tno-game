@@ -18,7 +18,7 @@ const COUNTRIES_INDEX_PATH = "res://data/countries/index.json"
 const LEGACY_MANIFEST_PATH = "res://data/extracted/countries_manifest.json"
 const LEGACY_TREES_PATH = "res://data/extracted/directives_trees.json"
 
-static var instance: ContentLoader = null
+static var instance = null
 
 var is_ready: bool = false
 var manifest_data: Dictionary = {}
@@ -50,19 +50,24 @@ static func get_instance() -> ContentLoader:
 
 func load_all() -> bool:
 	_load_index_manifest()
-	manifest_data = _read_json_file(LEGACY_MANIFEST_PATH)
-	directives_data = _read_json_file(LEGACY_TREES_PATH)
-
-	var countries = manifest_data.get("countries", {})
-	var trees = directives_data.get("trees_by_tag", {})
 
 	if not index_data.is_empty():
 		is_ready = true
 		_build_dossiers_cache()
 		print("[ContentLoader] Successfully initialized modular index: %d packages available." % index_data.size())
-		content_loaded.emit(index_data.size(), trees.size())
+		content_loaded.emit(index_data.size(), 0)
 		return true
-	elif not countries.is_empty():
+
+	# Fallback to legacy manifest only if index.json is missing
+	if FileAccess.file_exists(LEGACY_MANIFEST_PATH):
+		manifest_data = _read_json_file(LEGACY_MANIFEST_PATH)
+	if FileAccess.file_exists(LEGACY_TREES_PATH):
+		directives_data = _read_json_file(LEGACY_TREES_PATH)
+
+	var countries = manifest_data.get("countries", {})
+	var trees = directives_data.get("trees_by_tag", {})
+
+	if not countries.is_empty():
 		is_ready = true
 		_build_dossiers_cache()
 		print("[ContentLoader] Initialized from legacy manifest: %d countries, %d trees." % [countries.size(), trees.size()])
@@ -82,6 +87,40 @@ func has_extracted_data() -> bool:
 # МОДУЛЬНЫЕ СТРАНОВЫЕ ПАКЕТЫ (COUNTRY PACKAGES API)
 # ==============================================================================
 
+## Загружает данные державы из изолированной SQLite базы данных, если доступен GDExtension
+func load_country_package_sqlite(country_tag: String) -> CountryState:
+	if not ClassDB.class_exists("SQLite"):
+		return null
+	var tag = country_tag.to_upper().strip_edges()
+	var db_path = COUNTRIES_BASE_DIR.path_join(tag).path_join("country.sqlite")
+	if not FileAccess.file_exists(db_path):
+		return null
+	var db = ClassDB.instantiate("SQLite")
+	if db == null:
+		return null
+	db.set("path", db_path)
+	if not db.has_method("open_db") or not db.call("open_db"):
+		return null
+
+	db.call("query", "SELECT key, value FROM profile;")
+	var res = db.get("query_result")
+	if res is Array and not res.is_empty():
+		var dict: Dictionary = {}
+		for row in res:
+			var k = str(row.get("key", ""))
+			var v = str(row.get("value", ""))
+			var p = JSON.new()
+			if p.parse(v) == OK:
+				dict[k] = p.data
+			else:
+				dict[k] = v
+		if not dict.is_empty():
+			var state = CountryState.from_dict(dict)
+			state.country_tag = tag
+			return state
+	return null
+
+
 ##
 ## Загружает изолированный пакет страны:
 ## 1. country.json -> объект CountryState
@@ -99,6 +138,13 @@ func load_country_package(country_tag: String) -> CountryState:
 	var pkg_dir = COUNTRIES_BASE_DIR.path_join(tag)
 	var country_json_path = pkg_dir.path_join("country.json")
 	var profile_json_path = pkg_dir.path_join("country_profile.json")
+
+	# 0. Попытка быстрой загрузки из изолированной базы данных country.sqlite
+	var sqlite_state = load_country_package_sqlite(tag)
+	if sqlite_state != null:
+		_cached_country_states[tag] = sqlite_state
+		country_package_loaded.emit(tag, sqlite_state)
+		return sqlite_state
 
 	var target_json_path := ""
 	if FileAccess.file_exists(country_json_path):
@@ -118,30 +164,70 @@ func load_country_package(country_tag: String) -> CountryState:
 	var state = CountryState.from_dict(country_dict)
 	state.country_tag = tag
 
-	# 2. Загрузка лидеров кабинета (leaders/*.json)
+	# 2. Загрузка лидеров кабинета (leaders/*.json + country.json)
 	var leaders_dir = pkg_dir.path_join("leaders")
 	var loaded_leaders = _load_package_leaders(tag, leaders_dir)
 	_cached_leaders[tag] = loaded_leaders
 
-	# Если лидер не назначен в state, назначаем главу государства из кабинета
-	if state.leader_name.is_empty() and not loaded_leaders.is_empty():
-		for l in loaded_leaders:
-			if l.is_head_of_state:
-				state.leader_name = l.leader_name
-				state.leader_portrait_path = l.portrait_path
-				state.head_of_state = l
-				break
+	# Назначение Главы Государства (Head of State)
+	if state.head_of_state == null and not loaded_leaders.is_empty():
+		var found_hos: LeaderResource = null
+		if not state.leader_name.is_empty():
+			for l in loaded_leaders:
+				if l.leader_name == state.leader_name or l.leader_id == state.leader_name:
+					found_hos = l
+					break
+		if found_hos == null:
+			for l in loaded_leaders:
+				if l.is_head_of_state:
+					found_hos = l
+					break
+		if found_hos == null:
+			found_hos = loaded_leaders[0]
 
-	# Синхронизация cabinet_members и military_commanders если они не были в JSON
-	if state.cabinet_members.is_empty():
+		state.head_of_state = found_hos
+		state.leader_name = found_hos.leader_name
+		if state.leader_portrait_path.is_empty() or state.leader_portrait_path == "res://icon.svg":
+			state.leader_portrait_path = found_hos.portrait_path
+		if state.leader_title.is_empty() or state.leader_title == "Глава государства":
+			state.leader_title = found_hos.title
+
+	# Синхронизация министров кабинета (cabinet_members)
+	if state.cabinet_members.is_empty() and not loaded_leaders.is_empty():
+		var raw_ideas = country_dict.get("ideas", [])
+		var assigned_ids: Dictionary = {}
+		if state.head_of_state != null:
+			assigned_ids[state.head_of_state.leader_id] = true
+
+		# 1) Сначала активные министры из списка national ideas (например, WRS_Nikolay_Baibakov_eco)
+		if raw_ideas is Array:
+			for idea_token in raw_ideas:
+				var tok = str(idea_token)
+				for l in loaded_leaders:
+					if assigned_ids.has(l.leader_id):
+						continue
+					if tok.begins_with(l.leader_id) or l.leader_id in tok:
+						state.cabinet_members.append(l)
+						assigned_ids[l.leader_id] = true
+						break
+
+		# 2) Добавляем всех остальных министров по ролям
 		for l in loaded_leaders:
-			if not l.is_head_of_state and not l.is_military_commander:
+			if assigned_ids.has(l.leader_id):
+				continue
+			if l.role in ["PRIME_MINISTER", "ECONOMY", "FOREIGN_AFFAIRS", "SECURITY", "DEFENSE", "MINISTER"]:
 				state.cabinet_members.append(l)
+				assigned_ids[l.leader_id] = true
+			elif not l.is_head_of_state and not l.is_military_commander:
+				state.cabinet_members.append(l)
+				assigned_ids[l.leader_id] = true
 
-	if state.military_commanders.is_empty():
+	# Синхронизация военачальников (military_commanders)
+	if state.military_commanders.is_empty() and not loaded_leaders.is_empty():
 		for l in loaded_leaders:
-			if l.is_military_commander:
-				state.military_commanders.append(l)
+			if l.is_military_commander or l.role in ["THEATER_COMMANDER", "DEFENSE"]:
+				if state.head_of_state == null or l.leader_id != state.head_of_state.leader_id:
+					state.military_commanders.append(l)
 
 	# 3. Загрузка дерева национальных директив (directives/tree.json)
 	var tree_json_path = pkg_dir.path_join("directives").path_join("tree.json")
@@ -174,6 +260,50 @@ func load_country_by_tag(tag: String) -> CountryState:
 
 
 ##
+## Возвращает всех лидеров и министров страны (Data-Driven API)
+##
+func get_leaders_for_country(tag: String) -> Array[LeaderResource]:
+	var clean_tag = tag.to_upper().strip_edges()
+	if _cached_leaders.has(clean_tag):
+		return _cached_leaders[clean_tag]
+	var pkg_dir = COUNTRIES_BASE_DIR.path_join(clean_tag)
+	var leaders_dir = pkg_dir.path_join("leaders")
+	var loaded = _load_package_leaders(clean_tag, leaders_dir)
+	_cached_leaders[clean_tag] = loaded
+	return loaded
+
+
+##
+## Возвращает только министров кабинета страны (Data-Driven API)
+##
+func get_ministers_for_country(tag: String) -> Array[LeaderResource]:
+	var all_leaders = get_leaders_for_country(tag)
+	var ministers: Array[LeaderResource] = []
+	for l in all_leaders:
+		if l.role in ["PRIME_MINISTER", "ECONOMY", "FOREIGN_AFFAIRS", "SECURITY", "DEFENSE", "MINISTER"]:
+			ministers.append(l)
+		elif not l.is_head_of_state and not l.is_military_commander:
+			ministers.append(l)
+	return ministers
+
+
+##
+## Возвращает главу государства (Data-Driven API)
+##
+func get_head_of_state_for_country(tag: String) -> LeaderResource:
+	var clean_tag = tag.to_upper().strip_edges()
+	if _cached_country_states.has(clean_tag):
+		var st = _cached_country_states[clean_tag]
+		if st.head_of_state != null:
+			return st.head_of_state
+	var all_leaders = get_leaders_for_country(clean_tag)
+	for l in all_leaders:
+		if l.is_head_of_state:
+			return l
+	return all_leaders[0] if not all_leaders.is_empty() else null
+
+
+##
 ## Загружает конкретный ресурс лидера (LeaderResource) для указанной страны (Data-Driven API)
 ##
 func load_leader_resource(tag: String, leader_id: String) -> LeaderResource:
@@ -184,7 +314,7 @@ func load_leader_resource(tag: String, leader_id: String) -> LeaderResource:
 	if _cached_leaders.has(clean_tag):
 		var leaders: Array[LeaderResource] = _cached_leaders[clean_tag]
 		for l in leaders:
-			if l != null and l.leader_id == clean_id:
+			if l != null and (l.leader_id == clean_id or l.leader_name == clean_id):
 				return l
 
 	# 2. Прямая загрузка из JSON-файла пакета
@@ -194,7 +324,18 @@ func load_leader_resource(tag: String, leader_id: String) -> LeaderResource:
 		if not l_dict.is_empty():
 			return LeaderResource.from_dict(l_dict)
 
-	# 3. Fallback: поиск в родительских пакетах (например GER для фракций GCW)
+	# 3. Поиск в country.json ("leaders")
+	var c_file = COUNTRIES_BASE_DIR.path_join(clean_tag).path_join("country.json")
+	if FileAccess.file_exists(c_file):
+		var c_data = _read_json_file(c_file)
+		if c_data.has("leaders") and c_data["leaders"] is Array:
+			for lead in c_data["leaders"]:
+				if lead is Dictionary:
+					var lid = str(lead.get("id", lead.get("leader_id", "")))
+					if lid == clean_id or str(lead.get("name_text", "")) == clean_id:
+						return LeaderResource.from_dict(lead)
+
+	# 4. Fallback: поиск в родительских пакетах (например GER для фракций GCW)
 	for fallback_tag in ["GER", "WRS", "SOV"]:
 		if fallback_tag != clean_tag:
 			var fb_file = COUNTRIES_BASE_DIR.path_join(fallback_tag).path_join("leaders").path_join("%s.json" % clean_id)
@@ -203,16 +344,16 @@ func load_leader_resource(tag: String, leader_id: String) -> LeaderResource:
 				if not fb_dict.is_empty():
 					return LeaderResource.from_dict(fb_dict)
 
-	# 4. Fallback: поиск среди cabinet_members или military_commanders загруженного профиля
+	# 5. Fallback: поиск среди cabinet_members или military_commanders загруженного профиля
 	if _cached_country_states.has(clean_tag):
 		var st = _cached_country_states[clean_tag]
-		if st.head_of_state != null and st.head_of_state.leader_id == clean_id:
+		if st.head_of_state != null and (st.head_of_state.leader_id == clean_id or st.head_of_state.leader_name == clean_id):
 			return st.head_of_state
 		for m in st.cabinet_members:
-			if m != null and m.leader_id == clean_id:
+			if m != null and (m.leader_id == clean_id or m.leader_name == clean_id):
 				return m
 		for c in st.military_commanders:
-			if c != null and c.leader_id == clean_id:
+			if c != null and (c.leader_id == clean_id or c.leader_name == clean_id):
 				return c
 
 	return null
@@ -376,17 +517,124 @@ func get_country_dossier(tag: String) -> Dictionary:
 			if not mp.is_empty() and FileAccess.file_exists(mp):
 				portrait_p = mp
 
+		var c_name = ident.get("country_name", c.get("name_text", tag))
+		var c_name_ru = ident.get("country_name_ru", c.get("name_text", c_name))
+
+		var l_name = ident.get("leader_name", manifest_lead.get("leader_name", ""))
+		var l_title = ident.get("leader_title", manifest_lead.get("title", "Глава государства"))
+		var l_ideology = ident.get("ruling_ideology", manifest_c.get("ruling_ideology", c.get("ruling_party", "Neutral")))
+		var l_portrait = portrait_p
+
+		# Попытка извлечь лидера из прямого экспорта Clausewitz
+		if (l_name.is_empty() or l_name == "UNKNOWN") and c.has("leaders") and c["leaders"] is Array:
+			for lead in c["leaders"]:
+				if lead is Dictionary and lead.has("country_leader"):
+					l_name = str(lead.get("name_text", lead.get("name_key", l_name)))
+
+					# Безопасное извлечение портрета (поддержка Dictionary и Array)
+					var portraits_val = lead.get("portraits")
+					var p_large := ""
+					if portraits_val is Dictionary:
+						var civ_val = portraits_val.get("civilian")
+						if civ_val is Dictionary:
+							p_large = str(civ_val.get("large", ""))
+						elif civ_val is Array and not civ_val.is_empty() and civ_val[0] is Dictionary:
+							p_large = str(civ_val[0].get("large", ""))
+					elif portraits_val is Array and not portraits_val.is_empty() and portraits_val[0] is Dictionary:
+						var civ_val = portraits_val[0].get("civilian")
+						if civ_val is Dictionary:
+							p_large = str(civ_val.get("large", ""))
+						elif civ_val is Array and not civ_val.is_empty() and civ_val[0] is Dictionary:
+							p_large = str(civ_val[0].get("large", ""))
+
+					if not p_large.is_empty() and p_large != "GFX_leader_unknown":
+						var valid_p = p_large
+						var check_paths: Array[String] = [
+							"res://" + valid_p,
+							"res://assets/" + valid_p,
+							"res://assets/gfx/leaders/" + valid_p
+						]
+						var lead_id = str(lead.get("id", lead.get("name_key", "")))
+						if not lead_id.is_empty():
+							check_paths.append("res://assets/gfx/leaders/%s/%s.png" % [tag, lead_id])
+							check_paths.append("res://assets/gfx/leaders/%s/%s.png" % [tag, lead_id.to_lower()])
+
+						var base_fn = valid_p.get_file()
+						var cleaned_fn = base_fn.replace("Portrait_", "").replace("_TNO", "").replace("_tno", "")
+						check_paths.append("res://assets/gfx/leaders/%s/%s" % [tag, cleaned_fn])
+						check_paths.append("res://assets/gfx/leaders/%s/%s" % [tag, cleaned_fn.to_lower()])
+						check_paths.append("res://assets/gfx/leaders/%s/%s_%s" % [tag, tag, cleaned_fn])
+						check_paths.append("res://assets/gfx/leaders/%s/%s_%s" % [tag, tag.to_lower(), cleaned_fn.to_lower()])
+
+						var first_under = cleaned_fn.find("_")
+						if first_under != -1:
+							var stripped_fn = cleaned_fn.substr(first_under + 1)
+							check_paths.append("res://assets/gfx/leaders/%s/%s_%s" % [tag, tag, stripped_fn])
+							check_paths.append("res://assets/gfx/leaders/%s/%s_%s" % [tag, tag.to_lower(), stripped_fn.to_lower()])
+							check_paths.append("res://assets/gfx/leaders/%s/%s" % [tag, stripped_fn])
+							check_paths.append("res://assets/gfx/leaders/%s/%s" % [tag, stripped_fn.to_lower()])
+
+						var found_valid := false
+						for cp in check_paths:
+							if ResourceLoader.exists(cp) or FileAccess.file_exists(cp):
+								l_portrait = cp
+								found_valid = true
+								break
+
+						# Directory scan fallback by leader surname/tokens if still not found
+						if not found_valid:
+							var tag_dir = "res://assets/gfx/leaders/%s" % tag
+							if DirAccess.dir_exists_absolute(tag_dir):
+								var da = DirAccess.open(tag_dir)
+								if da != null:
+									da.list_dir_begin()
+									var fn = da.get_next()
+									var search_token = ""
+									if first_under != -1:
+										search_token = cleaned_fn.substr(first_under + 1).replace(".png", "").to_lower()
+									else:
+										search_token = cleaned_fn.replace(".png", "").to_lower()
+									var token_parts = search_token.split("_")
+									var surname = token_parts[token_parts.size() - 1] if not token_parts.is_empty() else search_token
+									while not fn.is_empty():
+										if not da.current_is_dir() and fn.ends_with(".png"):
+											var fn_l = fn.to_lower()
+											if (surname.length() >= 4 and surname in fn_l) or (search_token.length() >= 4 and search_token in fn_l):
+												l_portrait = tag_dir.path_join(fn)
+												found_valid = true
+												break
+										fn = da.get_next()
+									da.list_dir_end()
+
+						if not found_valid:
+							l_portrait = p_large
+
+					# Безопасное извлечение идеологии (поддержка Dictionary и Array)
+					var cl_val = lead.get("country_leader")
+					var lead_ideo := ""
+					if cl_val is Dictionary:
+						lead_ideo = str(cl_val.get("ideology", ""))
+					elif cl_val is Array and not cl_val.is_empty() and cl_val[0] is Dictionary:
+						lead_ideo = str(cl_val[0].get("ideology", ""))
+
+					if not lead_ideo.is_empty() and l_ideology == "Neutral":
+						l_ideology = lead_ideo
+					break
+
+		if l_name.is_empty():
+			l_name = "UNKNOWN"
+
 		var dossier = {
 			"tag": tag,
-			"name": ident.get("country_name", tag),
-			"name_ru": ident.get("country_name_ru", ident.get("country_name", tag)),
-			"leader_name": ident.get("leader_name", manifest_lead.get("leader_name", "UNKNOWN")),
-			"leader_title": ident.get("leader_title", manifest_lead.get("title", "Глава государства")),
-			"ideology": ident.get("ruling_ideology", manifest_c.get("ruling_ideology", "Neutral")),
+			"name": c_name,
+			"name_ru": c_name_ru,
+			"leader_name": l_name,
+			"leader_title": l_title,
+			"ideology": l_ideology,
 			"sub_ideology": ident.get("sub_ideology", manifest_c.get("sub_ideology", "")),
 			"theater": ident.get("theater", manifest_c.get("theater", "theater_smuta")),
 			"color": color,
-			"portrait_path": portrait_p,
+			"portrait_path": l_portrait,
 			"difficulty_rating": manifest_c.get("difficulty_rating", "●●●○○ (СРЕДНЯЯ)"),
 			"starting_gdp": float(econ.get("gdp_billions", manifest_c.get("starting_gdp", 15.0))),
 			"starting_manpower": int(mil.get("manpower_pool", manifest_c.get("starting_manpower", 50000))),
@@ -885,29 +1133,91 @@ func _load_index_manifest() -> void:
 	file.close()
 
 	var json = JSON.new()
-	if json.parse(text) == OK and json.data is Array:
-		for item in json.data:
-			if item is Dictionary:
-				index_data.append(item as Dictionary)
+	if json.parse(text) == OK:
+		if json.data is Array:
+			for item in json.data:
+				if item is Dictionary:
+					index_data.append(item as Dictionary)
+		elif json.data is Dictionary:
+			for k in json.data.keys():
+				var item = json.data[k]
+				if item is Dictionary:
+					if not item.has("tag"):
+						item["tag"] = str(k)
+					index_data.append(item as Dictionary)
 
 
-func _load_package_leaders(_tag: String, leaders_dir: String) -> Array[LeaderResource]:
+func _load_package_leaders(tag: String, leaders_dir: String) -> Array[LeaderResource]:
 	var result: Array[LeaderResource] = []
-	var dir = DirAccess.open(leaders_dir)
-	if dir == null:
-		return result
+	var loaded_ids: Dictionary = {}
 
-	dir.list_dir_begin()
-	var file_name = dir.get_next()
-	while not file_name.is_empty():
-		if not dir.current_is_dir() and file_name.ends_with(".json"):
-			var full_path = leaders_dir.path_join(file_name)
-			var l_dict = _read_json_file(full_path)
-			if not l_dict.is_empty():
-				var leader_res = LeaderResource.from_dict(l_dict)
+	# 1. Загрузка из директории leaders/*.json
+	if DirAccess.dir_exists_absolute(leaders_dir):
+		var dir = DirAccess.open(leaders_dir)
+		if dir != null:
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			while not file_name.is_empty():
+				if not dir.current_is_dir() and file_name.ends_with(".json") and file_name != "index.json":
+					var full_path = leaders_dir.path_join(file_name)
+					var l_dict = _read_json_file(full_path)
+					if not l_dict.is_empty():
+						var leader_res = LeaderResource.from_dict(l_dict)
+						var l_id = leader_res.leader_id
+						if l_id.is_empty():
+							l_id = file_name.trim_suffix(".json")
+							leader_res.leader_id = l_id
+						if not loaded_ids.has(l_id):
+							loaded_ids[l_id] = true
+							result.append(leader_res)
+				file_name = dir.get_next()
+			dir.list_dir_end()
+
+	# 2. Загрузка из country.json ("leaders": [...])
+	var country_json_path = COUNTRIES_BASE_DIR.path_join(tag).path_join("country.json")
+	if FileAccess.file_exists(country_json_path):
+		var c_data = _read_json_file(country_json_path)
+		if c_data.has("leaders") and c_data["leaders"] is Array:
+			for lead in c_data["leaders"]:
+				if lead is Dictionary:
+					var l_id = str(lead.get("id", lead.get("leader_id", "")))
+					if not l_id.is_empty() and loaded_ids.has(l_id):
+						continue
+					var leader_res = LeaderResource.from_dict(lead)
+					if not leader_res.leader_id.is_empty():
+						loaded_ids[leader_res.leader_id] = true
+					result.append(leader_res)
+
+	# 3. Загрузка из legacy manifest (если есть)
+	var manifest_c = manifest_data.get("countries", {}).get(tag, {})
+	var manifest_leads = manifest_c.get("leaders", [])
+	if manifest_leads is Array:
+		for ml in manifest_leads:
+			if ml is Dictionary:
+				var ml_id = str(ml.get("id", ml.get("leader_id", "")))
+				if not ml_id.is_empty() and loaded_ids.has(ml_id):
+					continue
+				var leader_res = LeaderResource.from_dict(ml)
+				if not leader_res.leader_id.is_empty():
+					loaded_ids[leader_res.leader_id] = true
 				result.append(leader_res)
-		file_name = dir.get_next()
-	dir.list_dir_end()
+
+	# 4. Fallback на теги-алиасы (TYU <-> TYM, SVE <-> SVR, WRS <-> WRRF, SAM <-> ROA)
+	if result.size() < 2:
+		var aliases = {
+			"TYU": "TYM", "TYM": "TYU",
+			"SVE": "SVR", "SVR": "SVE",
+			"WRS": "WRRF", "WRRF": "WRS",
+			"SAM": "ROA", "ROA": "SAM"
+		}
+		if aliases.has(tag):
+			var alias_tag = aliases[tag]
+			var alias_dir = COUNTRIES_BASE_DIR.path_join(alias_tag).path_join("leaders")
+			var alias_leaders = _load_package_leaders(alias_tag, alias_dir)
+			for al in alias_leaders:
+				if not loaded_ids.has(al.leader_id):
+					loaded_ids[al.leader_id] = true
+					result.append(al)
 
 	return result
 

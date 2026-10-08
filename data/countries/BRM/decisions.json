@@ -1,0 +1,185 @@
+[
+  {
+    "id": "BRM_blow_up_the_oil_fields",
+    "category_id": "BRM_burmah_oils_oil_fields",
+    "name": "Взорвать нефтяные месторождения в Бирме",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "288": {
+        "any_neighbor_state": {
+          "controller": {
+            "has_war_with": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "288": {
+        "is_controlled_by_ROOT_or_subject": true
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": {
+        "288": {
+          "has_dynamic_modifier": {
+            "modifier": "BRM_blown_up_oil_fields"
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "BRM_repair_the_oil_fields",
+    "category_id": "BRM_burmah_oils_oil_fields",
+    "name": "Восстановить нефтяные месторождения",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 9
+      }
+    },
+    "visible": {
+      "288": {
+        "is_controlled_by_ROOT_or_subject": true,
+        "has_dynamic_modifier": {
+          "modifier": "BRM_blown_up_oil_fields"
+        }
+      },
+      "has_capitulated": false,
+      "is_subject": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RAJ_akhand_bharat_claim_brm",
+    "category_id": "RAJ_akhand_bharat_cat",
+    "name": "Заявить претензии на [BRM.GetAdjective]ие регионы",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "BRM": {
+          "all_core_state": {
+            "is_controlled_by": "ROOT"
+          }
+        },
+        "all_of_scopes": {
+          "array": "claimed_by_akhand_bharat",
+          "is_controlled_by": "ROOT",
+          "tooltip": "RAJ_akhand_bharat_availability_tt"
+        }
+      }
+    },
+    "visible": {
+      "BRM": {
+        "any_core_state": {
+          "NOT": {
+            "is_core_of": "ROOT"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "is_core_of": "BRM"
+        },
+        "ROOT": {
+          "add_to_array": {
+            "array": "claimed_by_akhand_bharat",
+            "value": "PREV"
+          }
+        },
+        "add_core_of": "ROOT"
+      },
+      "for_each_scope_loop": {
+        "array": "claimed_by_akhand_bharat",
+        "if": {
+          "limit": {
+            "is_core_of": "BRM",
+            "owner": {
+              "is_subject_of": "ROOT"
+            }
+          },
+          "ROOT": {
+            "transfer_state": "PREV"
+          }
+        }
+      },
+      "BRM": {
+        "custom_effect_tooltip": "RAJ_akhand_bharat_annex_subject"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_brm",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [BRM.GetNameRuPrep]",
+    "desc": "[BRM.GetName] будет $RAJ_instigate_generic_desc$",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "TIB",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "BRM",
+        "exists": true,
+        "NOT": {
+          "BRM": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "BRM",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "BRM"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  }
+]

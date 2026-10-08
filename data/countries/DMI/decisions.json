@@ -1,0 +1,1836 @@
+[
+  {
+    "id": "BUL_bulgarian_reintegration_campaign",
+    "category_id": "BUL_bulgarian_administration_of_the_balkans",
+    "name": "Кампания по болгарской реинтеграции в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "compliance": {
+          "_op": ">",
+          "value": 30
+        }
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      },
+      "has_manpower": {
+        "_op": ">",
+        "value": 999
+      },
+      "command_power": {
+        "_op": ">",
+        "value": 14
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BUL_bulgarian_administration_of_the_balkans",
+      "FROM": {
+        "is_fully_controlled_by": "ROOT",
+        "NOT": {
+          "is_core_of": "ROOT"
+        },
+        "any_neighbor_state": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "set_state_flag": "BUL_bulgarian_reintegration_campaign_flag"
+      },
+      "add_manpower": -1000,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500
+      },
+      "add_command_power": -15
+    }
+  },
+  {
+    "id": "CHI_integrate_the_administration",
+    "category_id": "CHI_integrate_the_warlords",
+    "name": "Объединение [From.GetAdjective]ой администрации",
+    "desc": "",
+    "icon": "generic_political_discourse",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "compare_autonomy_state": {
+          "_op": "<",
+          "value": "autonomy_colony"
+        }
+      }
+    },
+    "visible": {
+      "FROM": {
+        "is_subject_of": "ROOT",
+        "has_country_flag": "CHI_integrate_the_army",
+        "NOT": {
+          "has_country_flag": "CHI_integrate_the_administration"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "COG_improve_ruandan_civil_adminsitration",
+    "category_id": "COG_ruanda_urundi_decisions",
+    "name": "Улучшить работу гражданской администрации Руанды",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_idea": "COG_eugene_jungers",
+      "owns_state": 768
+    },
+    "visible": {
+      "has_idea": "COG_eugene_jungers",
+      "owns_state": 768,
+      "768": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "COG_improved_ruandan_administration"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "COG_improve_urundian_civil_adminsitration",
+    "category_id": "COG_ruanda_urundi_decisions",
+    "name": "Улучшить работу гражданской администрации Урунди",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_idea": "COG_eugene_jungers",
+      "owns_state": 769
+    },
+    "visible": {
+      "has_idea": "COG_eugene_jungers",
+      "owns_state": 769,
+      "769": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "COG_improved_urundian_administration"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "GER_expand_ukraine_adminsitrative_area",
+    "category_id": "GER_reichskommissariats",
+    "name": "Расширить Украинский административный район",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "192": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "834": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "198": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "RKU": {
+        "exists": true
+      },
+      "NOT": {
+        "has_country_flag": "GER_handed_over_greater_romania_to_rku"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_rku_expanding_effect_tt",
+      "hidden_effect": [
+        {
+          "every_state": [
+            {
+              "limit": {
+                "GER_is_soviet_greater_romania_state": true,
+                "OR": {
+                  "is_owned_by": "ROOT",
+                  "owner": {
+                    "is_subject_of": "ROOT"
+                  }
+                }
+              },
+              "transfer_state_to": "RKU",
+              "add_compliance": 20
+            },
+            {
+              "limit": {
+                "GER_is_soviet_greater_romania_state": true,
+                "NOT": {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              },
+              "add_contested_owner": "RKU",
+              "set_state_controller_to": "RKU",
+              "add_claim_by": "RKU",
+              "add_compliance": 20
+            }
+          ]
+        },
+        {
+          "set_country_flag": "GER_handed_over_greater_romania_to_rku"
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_further_expand_ukraine_adminsitrative_area",
+    "category_id": "GER_reichskommissariats",
+    "name": "Еще больше расширить Украинский административный район",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "RKC": {
+        "exists": false
+      },
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "766": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "78": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "RKU": {
+        "exists": true
+      },
+      "RKC": {
+        "exists": false
+      },
+      "has_country_flag": "GER_handed_over_greater_romania_to_rku",
+      "NOT": {
+        "has_country_flag": "GER_handed_over_normal_romania_to_rku"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_rku_more_expanding_effect_tt",
+      "hidden_effect": [
+        {
+          "every_state": [
+            {
+              "limit": {
+                "GER_is_additional_soviet_greater_romania_state": true,
+                "OR": {
+                  "is_owned_by": "ROOT",
+                  "owner": {
+                    "is_subject_of": "ROOT"
+                  }
+                }
+              },
+              "transfer_state_to": "RKU",
+              "add_compliance": 20
+            },
+            {
+              "limit": {
+                "GER_is_additional_soviet_greater_romania_state": true,
+                "NOT": {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              },
+              "add_contested_owner": "RKU",
+              "set_state_controller_to": "RKU",
+              "add_claim_by": "RKU",
+              "add_compliance": 20
+            }
+          ]
+        },
+        {
+          "set_country_flag": "GER_handed_over_normal_romania_to_rku"
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_expand_generalgouvernement_adminsitrative_area",
+    "category_id": "GER_reichskommissariats",
+    "name": "Расширить территорию Генерал-губернаторства",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "89": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "91": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "GEN": {
+        "exists": true
+      },
+      "NOT": {
+        "has_country_flag": "GER_handed_over_austrian_galicia_to_gen"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_gen_expanding_effect_tt",
+      "hidden_effect": [
+        {
+          "every_state": [
+            {
+              "limit": {
+                "GER_is_east_GEN_state": true,
+                "OR": {
+                  "is_owned_by": "ROOT",
+                  "owner": {
+                    "is_subject_of": "ROOT"
+                  }
+                }
+              },
+              "transfer_state_to": "GEN",
+              "add_compliance": 20
+            },
+            {
+              "limit": {
+                "GER_is_east_GEN_state": true,
+                "NOT": {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              },
+              "add_contested_owner": "GEN",
+              "set_state_controller_to": "GEN",
+              "add_claim_by": "GEN",
+              "add_compliance": 20
+            }
+          ]
+        },
+        {
+          "set_country_flag": "GER_handed_over_austrian_galicia_to_gen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_expand_rkc_adminsitrative_area",
+    "category_id": "GER_reichskommissariats",
+    "name": "Расширить Балканский административный район",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "163": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "RKC": {
+        "exists": true
+      },
+      "NOT": {
+        "has_country_flag": "GER_handed_over_zadar_to_rkc"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_rkc_expanding_effect_tt",
+      "hidden_effect": [
+        {
+          "every_state": [
+            {
+              "limit": {
+                "GER_is_RKC_zadar_state": true,
+                "OR": {
+                  "is_owned_by": "ROOT",
+                  "owner": {
+                    "is_subject_of": "ROOT"
+                  }
+                }
+              },
+              "transfer_state_to": "RKC",
+              "add_compliance": 20
+            },
+            {
+              "limit": {
+                "GER_is_RKC_zadar_state": true,
+                "NOT": {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              },
+              "add_contested_owner": "RKC",
+              "set_state_controller_to": "RKC",
+              "add_claim_by": "RKC",
+              "add_compliance": 20
+            }
+          ]
+        },
+        {
+          "set_country_flag": "GER_handed_over_zadar_to_rkc"
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_expand_transcacuasian_administrative_duties_decision",
+    "category_id": "GER_realpolitik_cat",
+    "name": "Расширить административные функции Транскавказии на Северный Кавказ",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "GEO": {
+        "exists": true,
+        "is_subject_of": "ROOT"
+      },
+      "has_completed_focus": "GER_establish_eastern_grand_duchies",
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "827": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "828": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "821": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "232": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "233": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_establish_eastern_grand_duchies",
+      "has_global_flag": "form_transcaucasia_flag"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_geo_state_transfer_effect_north_caucasus_tt",
+      "hidden_effect": {
+        "every_state": {
+          "limit": {
+            "OR": {
+              "state": [
+                827,
+                828,
+                821,
+                232,
+                233
+              ]
+            }
+          },
+          "add_core_of": "GEO",
+          "transfer_state_to": "GEO"
+        },
+        "set_global_flag": "northern_caucasus_claimed_flag"
+      }
+    }
+  },
+  {
+    "id": "JAP_sway_admiral_loyalty_decision",
+    "category_id": "JAP_the_peoples_state_decisions",
+    "name": "Поколебать лояльность адмирала",
+    "desc": "",
+    "icon": "GFX_decision_SWE_set_navy_budget",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "JAP_bribe_generals",
+      "NOT": {
+        "has_completed_focus": "JAP_revoke_the_peace_preservation_law"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "USA_readmit_state",
+    "category_id": "USA_congress",
+    "name": "Вновь принять штат в Союз",
+    "desc": "",
+    "icon": "infiltrate_state",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "political_power_daily": {
+        "_op": ">",
+        "value": 0.1
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "is_core_of": "CSA",
+        "not": {
+          "is_core_of": "ROOT"
+        },
+        "is_claimed_by": "ROOT"
+      },
+      "has_completed_focus": "USA_reintegration"
+    },
+    "complete_effect": {
+      "random_state": {
+        "limit": {
+          "is_controlled_by": "ROOT",
+          "is_core_of": "CSA",
+          "not": {
+            "is_core_of": "ROOT"
+          },
+          "is_claimed_by": "ROOT"
+        },
+        "set_state_flag": "USA_state_admit",
+        "custom_effect_tooltip": "USA_readmit_state_tt"
+      }
+    }
+  },
+  {
+    "id": "SIA_develop_phibunsongkhram",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Развить регион [1067.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 1067,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 1
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "1067": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "SIA_develop_southern_indochina",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Развить Южный Индокитай",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        741,
+        1066,
+        286,
+        1068
+      ],
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 3
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "741": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1066": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "286": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1068": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "SIA_develop_northern_indochina",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Развить Северный Индокитай",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        670,
+        1017,
+        1069,
+        671
+      ],
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 3
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "670": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1017": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1069": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "671": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "SIA_develop_northern_malaya",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Развитие Си Рат Малай",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        1062,
+        1064,
+        1061,
+        1065
+      ],
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 3
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "1062": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1064": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1061": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "1065": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "SIA_develop_eastern_burma",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Развитие Сахарат Тай Доем",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        994,
+        999,
+        993
+      ],
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "994": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "999": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      },
+      "993": {
+        "add_dynamic_modifier": {
+          "modifier": "idea_SIA_unity_propaganda",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "SIA_fortress_saigon",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Сайгонская крепость",
+    "desc": "На севере нашу новообразованную империю будет защищать Ханой. Эта местность идеально приспособлена для обороны: на севере ее прикрывают горы, спереди — река Хонгха.",
+    "icon": "GFX_decision_generic_fortification",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_province": 4401
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SIA_fortress_hanoi",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Ханойская крепость",
+    "desc": "С юга на оборону империи встанет Сайгон. Город-крепость возьмет на себя защиту Бангкока — залив [ROOT.GetName] будет надежно защищен от захватчиков.",
+    "icon": "GFX_decision_generic_fortification",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_province": 4075
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SIA_finish_the_triangular_defense_network",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Завершить оборонительный треугольник",
+    "desc": "Достроив две крепости — одну на севере и одну на юге, — мы получим оборонительный треугольник с третьей вершиной в Бангкоке. Даже если одна крепость падет, останутся две другие.",
+    "icon": "GFX_decision_generic_fortification",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "controls_province": [
+        7408,
+        4075,
+        4401
+      ],
+      "has_country_flag": [
+        "has_built_fortress_saigon",
+        "has_built_fortress_hanoi"
+      ]
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SIA_use_abandoned_french_tools",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Использовать брошенные инструменты французов",
+    "desc": "От французских оккупантов осталось тяжелое оборудование. Оно не должно лежать без дела.",
+    "icon": "GFX_decision_generic_confiscation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "add_tech_bonus": {
+        "name": "SIA_use_abandoned_french_tools",
+        "ahead_reduction": 1,
+        "uses": 1,
+        "category": "cat_production"
+      }
+    }
+  },
+  {
+    "id": "SOV_inspection_in_the_administration",
+    "category_id": "SOV_paranoia_system",
+    "name": "Инспекция в администрации",
+    "desc": "Мы проведем инспекцию местной и центральной администрации, чтобы найти потенциальных диссидентов и вредителей.",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": "SOV_paranoia_inspection_decision_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SOV_paranoia_system_active_flag",
+      "custom_trigger_tooltip": {
+        "tooltip": "SOV_paranoia_administration_purgeable_tt",
+        "OR": {
+          "any_character": {
+            "is_character_slot": "political_advisor",
+            "SOV_character_can_be_purged": true
+          },
+          "NOT": [
+            {
+              "has_idea": "SOV_understaffed_bureaucracy"
+            },
+            {
+              "has_idea": "SOV_lavrenty_beriya"
+            }
+          ]
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_paranoia_conducting_inspection_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SOV_paranoia_system_active_flag",
+      "OR": {
+        "any_character": {
+          "is_character_slot": "political_advisor",
+          "SOV_character_can_be_purged": true
+        },
+        "NOT": [
+          {
+            "has_idea": "SOV_understaffed_bureaucracy"
+          },
+          {
+            "has_idea": "SOV_lavrenty_beriya"
+          }
+        ]
+      },
+      "SOV_is_stalinist": true
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_paranoia_conducting_inspection_flag"
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_great_purge_trial_of_the_admirals_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_great_purge_trial_of_the_admirals_dec",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_great_purge_trial_of_the_admirals_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_admiral_accused_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_admiral_accused_dec",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_admiral_accused_effect": true
+    }
+  },
+  {
+    "id": "SOV_recruit_admiral_opposition",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Привлечь на свою сторону адмирала",
+    "desc": "Надо воспользоваться своими связями в Красном флоте, чтобы постараться переманить на свою сторону высших офицеров на случай гражданской войны.",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": "SOV_influence_admiral_decision_cost",
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "hidden_trigger": {
+        "OR": {
+          "has_completed_focus": "SOV_military_support"
+        }
+      },
+      "NOT": {
+        "has_global_flag": "SOV_soviet_civil_war"
+      }
+    },
+    "complete_effect": {
+      "random_list": {
+        "20": [
+          {
+            "SOV_paranoia_very_low_increase_effect": true
+          },
+          {
+            "SOV_paranoia_medium_increase_effect": true
+          }
+        ],
+        "60": {
+          "SOV_paranoia_low_increase_effect": true
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_align_admiral_stalin",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "[ROOT.GetLeader] заручается лояльностью адмирала",
+    "desc": "Пользуясь угрозами, взятками и личными связями, [ROOT.GetLeader] пытается заручиться лояльностью командира флота в ходе подготовки к будущему конфликту.",
+    "icon": "generic_military",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "var:SOV_selected_admiral_stalin": {
+        "OR": {
+          "has_trait": [
+            "trait_SOV_bukharinist",
+            "trait_SOV_trotskyist",
+            "trait_SOV_monarchist_sympathizer"
+          ],
+          "custom_trigger_tooltip": {
+            "tooltip": "SOV_character_purged_flag",
+            "has_character_flag": "SOV_character_purged_flag"
+          }
+        }
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "SOV_soviet_civil_war_not_started": true
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "clear_variable": "SOV_selected_admiral_stalin",
+        "SOV_launch_stalinist_counter_measure": true
+      }
+    }
+  },
+  {
+    "id": "SOV_secure_the_administration_mission",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "$SOV_secure_the_administration$",
+    "desc": "[FROM.GetLeader] работает над фокусом $SOV_secure_the_administration$.",
+    "icon": "SOV_secure_the_administration",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "SOV_soviet_civil_war_not_started": true
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "OFN_AFRICA_MANDATE_expand_administrative_infrastructure",
+    "category_id": "OFN_AFRICA_MANDATE_temporary_command_CAR",
+    "name": "Расширить административную инфраструктуру",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "check_variable": {
+          "money_reserves": {
+            "_op": ">",
+            "value": 0.0
+          }
+        },
+        "tooltip": "OFN_CAR_reserves"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.075
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "custom_effect_tooltip": "OFN_AFRICA_MANDATE_expand_administration_CAR_tt"
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Survival_Contact_Foreign_Admin",
+    "category_id": "Antarctica_GUI_AAG_Survival",
+    "name": "Связаться с иностранной администрацией",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "Antarctica_GUI_AAG_Survival_Mech_Enabled",
+        "Antarctica_Situation_Overview_Emergency_Supply_mission_triggered"
+      ],
+      "check_variable": {
+        "Antarctica_Equipment": {
+          "_op": "<",
+          "value": 25
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Survival_Contact_Foreign_Admin",
+      "set_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess",
+      "hidden_effect": {
+        "add_political_power": -200
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Germany_Establish_Scientific_Administration",
+    "category_id": "Antarctica_GUI_Foreign",
+    "name": "Создать научную администрацию",
+    "desc": "",
+    "icon": "GFX_decision_category_ODF_antarctica_ns",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_global_flag": "Antarctica_Germany_Rescued_NS",
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "GER_albert_speer"
+          },
+          {
+            "character": "GER_martin_bormann"
+          }
+        ]
+      },
+      "tag": "GER",
+      "NOT": {
+        "has_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Germany_Establish_Scientific_Administration",
+      "hidden_effect": {
+        "add_to_variable": {
+          "money_reserves": -30
+        },
+        "set_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Germany_Establish_PartyCivilian_Administration",
+    "category_id": "Antarctica_GUI_Foreign",
+    "name": "Создать гражданскую администрацию",
+    "desc": "",
+    "icon": "GFX_decision_category_ODF_antarctica_ns",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_global_flag": "Antarctica_Germany_Rescued_NS",
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "GER_albert_speer"
+          },
+          {
+            "character": "GER_martin_bormann"
+          }
+        ]
+      },
+      "tag": "GER",
+      "NOT": {
+        "has_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Germany_Establish_PartyCivilian_Administration",
+      "hidden_effect": {
+        "add_to_variable": {
+          "money_reserves": -30
+        },
+        "set_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Germany_Establish_Military_Administration",
+    "category_id": "Antarctica_GUI_Foreign",
+    "name": "Создать военную администрацию",
+    "desc": "",
+    "icon": "GFX_decision_category_ODF_antarctica_ns",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "GER_albert_speer"
+          },
+          {
+            "character": "GER_martin_bormann"
+          }
+        ]
+      },
+      "tag": "GER",
+      "has_global_flag": "Antarctica_Germany_Rescued_NS",
+      "NOT": {
+        "has_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Germany_Establish_Military_Administration",
+      "hidden_effect": {
+        "add_to_variable": {
+          "money_reserves": -30
+        },
+        "set_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Germany_Establish_Administration_Goring",
+    "category_id": "Antarctica_GUI_Foreign",
+    "name": "Создать новую администрацию",
+    "desc": "",
+    "icon": "GFX_decision_category_ODF_antarctica_ns",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_leader": {
+        "character": "GER_hermann_goring"
+      },
+      "tag": "GER",
+      "NOT": {
+        "has_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      },
+      "has_global_flag": "Antarctica_Germany_Rescued_NS"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Germany_Establish_Administration_Goring",
+      "hidden_effect": {
+        "add_to_variable": {
+          "money_reserves": -30
+        },
+        "set_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Germany_Establish_Administration_Heydrich",
+    "category_id": "Antarctica_GUI_Foreign",
+    "name": "Создать новую администрацию",
+    "desc": "",
+    "icon": "GFX_decision_category_ODF_antarctica_ns",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_global_flag": "Antarctica_Germany_Rescued_NS"
+    },
+    "visible": {
+      "has_country_leader": {
+        "character": "GER_reinhard_heydrich"
+      },
+      "tag": "GER",
+      "NOT": {
+        "has_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Germany_Establish_Administration_Heydrich",
+      "hidden_effect": {
+        "add_to_variable": {
+          "money_reserves": -30
+        },
+        "set_country_flag": "Antarctica_Germany_Chose_NS_Admin"
+      }
+    }
+  },
+  {
+    "id": "BRG_rearrange_administration",
+    "category_id": "BRG_operations_category",
+    "name": "Переупорядочить административные должности",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "BRG_setting_the_trap"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_gain_groundwork_10",
+      "add_to_variable": {
+        "BRG_Operations_Groundwork": 10
+      }
+    }
+  },
+  {
+    "id": "debug_reload_admin_titles",
+    "category_id": "global_debug_decisions",
+    "name": "Перезагрузить администр. срань",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision debug_reload_admin_titles",
+      "every_state": {
+        "limit": {
+          "OR": {
+            "has_variable": [
+              "AdminTitle",
+              "AssocRegion",
+              "AssocRegion2",
+              "SubAdminTitle",
+              "SubDivisions"
+            ]
+          }
+        },
+        "clear_variable": [
+          "AdminTitle",
+          "AssocRegion",
+          "AssocRegion2",
+          "SubAdminTitle",
+          "SubDivisions"
+        ]
+      },
+      "clear_array": [
+        "global.has_short_name",
+        "global.is_admin_region"
+      ],
+      "ZZZ": {
+        "TNO_admin_titles": true
+      }
+    }
+  },
+  {
+    "id": "Iberian_Wars_political_decisions_expand_administration_powers",
+    "category_id": "iberian_wars_political_mechanic",
+    "name": "Расширить полномочия власти",
+    "desc": "Военное время диктует свои суровые условия. Роль нашего правительства будет расширена, чтобы им соответствовать.",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "IBR_investigated_civil_servants"
+        }
+      }
+    },
+    "visible": {
+      "is_iberianwar_mainland_nation": true,
+      "has_country_flag": "IBR_political_decisions_opened"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_political_decisions_expand_administration_powers",
+      "set_temp_variable": [
+        {
+          "IBR_wars_opposition_temp": 2
+        },
+        {
+          "IBR_wars_legitimacy_temp": -2
+        }
+      ],
+      "IBR_wars_change_political_opposition": true,
+      "IBR_wars_change_legitimacy": true,
+      "set_country_flag": "IBR_expanded_administration_powers"
+    }
+  },
+  {
+    "id": "JAP_new_admin_offices",
+    "category_id": "JAP_development_plans",
+    "name": "Построить новые админ. здания",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_new_admin_offices",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.05
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": {
+        "add_political_power": -30,
+        "JAP_PM_decrease_power_mini": true
+      }
+    }
+  },
+  {
+    "id": "MEX_admit_some_fault",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Признать свою вину",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": [
+          "MEX_doctorsstrike_second_doctorsstrike",
+          "double_standard"
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_doctor_intern_radicalism_decrease_low": true
+    }
+  },
+  {
+    "id": "OFN_COG_create_kivu_province",
+    "category_id": "OFN_COG_create_administrative_divisions_decisions",
+    "name": "Создать провинцию Киву",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_COG_creating_admin_region"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_create_kivu_province",
+      "set_country_flag": "OFN_COG_creating_admin_region",
+      "TNO_improve_admin_efficiency_low": true,
+      "add_to_variable": {
+        "OFN_MANDATE_administrative_hold": 0.05
+      }
+    }
+  },
+  {
+    "id": "OFN_COG_create_equateur_province",
+    "category_id": "OFN_COG_create_administrative_divisions_decisions",
+    "name": "Создать Экваториальную провинцию",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_COG_creating_admin_region"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_create_equateur_province",
+      "set_country_flag": "OFN_COG_creating_admin_region",
+      "TNO_improve_admin_efficiency_low": true,
+      "add_to_variable": {
+        "OFN_MANDATE_administrative_hold": 0.05
+      }
+    }
+  },
+  {
+    "id": "OFN_COG_create_orientale_province",
+    "category_id": "OFN_COG_create_administrative_divisions_decisions",
+    "name": "Создать Восточную провинцию",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_COG_creating_admin_region"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_create_orientale_province",
+      "set_country_flag": "OFN_COG_creating_admin_region",
+      "TNO_improve_admin_efficiency_low": true,
+      "add_to_variable": {
+        "OFN_MANDATE_administrative_hold": 0.05
+      }
+    }
+  },
+  {
+    "id": "OFN_COG_create_katanga_province",
+    "category_id": "OFN_COG_create_administrative_divisions_decisions",
+    "name": "Создать провинцию Катанга",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_COG_creating_admin_region"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_create_katanga_province",
+      "set_country_flag": "OFN_COG_creating_admin_region",
+      "TNO_improve_admin_efficiency_low": true,
+      "add_to_variable": {
+        "OFN_MANDATE_administrative_hold": 0.05
+      }
+    }
+  },
+  {
+    "id": "OFN_COG_create_stanleyville_province",
+    "category_id": "OFN_COG_create_administrative_divisions_decisions",
+    "name": "Создать провинцию Стэнливилль",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_COG_creating_admin_region"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_create_stanleyville_province",
+      "set_country_flag": "OFN_COG_creating_admin_region",
+      "TNO_improve_admin_efficiency_low": true,
+      "add_to_variable": {
+        "OFN_MANDATE_administrative_hold": 0.05
+      }
+    }
+  },
+  {
+    "id": "OFN_COG_create_leopoldville_province",
+    "category_id": "OFN_COG_create_administrative_divisions_decisions",
+    "name": "Создать провинцию Леопольдвилль",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_COG_creating_admin_region"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_create_leopoldville_province",
+      "set_country_flag": "OFN_COG_creating_admin_region",
+      "TNO_improve_admin_efficiency_low": true,
+      "add_to_variable": {
+        "OFN_MANDATE_administrative_hold": 0.05
+      }
+    }
+  },
+  {
+    "id": "OFN_COG_create_libreville_province",
+    "category_id": "OFN_COG_create_administrative_divisions_decisions",
+    "name": "Создать провинцию Либревилль",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_COG_creating_admin_region"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_create_libreville_province",
+      "set_country_flag": "OFN_COG_creating_admin_region",
+      "TNO_improve_admin_efficiency_low": true,
+      "add_to_variable": {
+        "OFN_MANDATE_administrative_hold": 0.05
+      }
+    }
+  },
+  {
+    "id": "SVR_trial_of_dmitry_yazov",
+    "category_id": "SVR_sverdlovsk_regional_category",
+    "name": "Суд над Дмитрием Язовым",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "SVR_trial_of_lazar_kaganovich"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SVR_black_league_remnants_dealt_with",
+      "NOT": {
+        "has_country_flag": "SVR_yazov_dead"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SVR_trial_of_dmitry_yazov"
+    }
+  },
+  {
+    "id": "TYM_fyp_expand_administrative_infrastructure",
+    "category_id": "TYM_five_year_plan_category",
+    "name": "Восстановить инфраструктуру промышленного планирования",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": "TYM_admin_cost?20",
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_administrative_infrastructure",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_low_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
+    }
+  },
+  {
+    "id": "UKS_rebuild_administrative_structures",
+    "category_id": "UKR_ukraine_must_survive_category",
+    "name": "Rebuild Administrative Structures",
+    "desc": "One of the great benefits of being the successor to the legitimate government is that we have pre-existing institutions to rebuild. Rather than starting from scratch, we will revive these institutions from the Union.",
+    "icon": "GFX_decision_generic_hammer_and_sickle",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UKR_ukraine_must_survive_doing_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "UKR_ukraine_must_survive_preparation_phase",
+      "original_tag": "UKS"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision UKS_rebuild_administrative_structures",
+      "set_temp_variable": [
+        {
+          "UKR_preparation_temp": 10
+        },
+        {
+          "temp_econ_spending_amount": 0.1
+        }
+      ],
+      "UKR_ukraine_must_survive_variable_change": true,
+      "add_stability": 0.2,
+      "TNO_improve_admin_efficiency_low": true,
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "UKR_ukraine_must_survive_doing_decision"
+    }
+  },
+  {
+    "id": "BOV_develop_the_civilian_administration",
+    "category_id": "UKR_BOV_three_heads_of_the_dragon_category",
+    "name": "Укрепить гражданскую администрацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_global_flag": "UKR_UCW_ongoing"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "USA_lower_administrative_spending",
+    "category_id": "USA_coalition_unity",
+    "name": "Придать смелости нашей повестке",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_lower_admin_spending",
+        "check_variable": {
+          "econ_admin_expenditures_slider_pct": {
+            "_op": "<",
+            "value": 41
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_show_NPP_screen"
+      },
+      "has_country_leader": {
+        "character": "USA_Philip_Hart",
+        "ruling_only": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_lower_administrative_spending",
+      "custom_effect_tooltip": "USA_lower_administrative_spending_tt",
+      "set_temp_variable": {
+        "tempSupport": 0.15
+      },
+      "USA_change_hardline_r_coalition_support": false,
+      "hidden_effect": {
+        "activate_mission": "USA_lower_administrative_spending_mission"
+      }
+    }
+  },
+  {
+    "id": "USA_lower_administrative_spending_mission",
+    "category_id": "USA_coalition_unity",
+    "name": "Придать смелости нашей повестке",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "custom_trigger_tooltip": {
+          "tooltip": "USA_lower_admin_spending_mission",
+          "check_variable": {
+            "econ_admin_expenditures_slider_pct": {
+              "_op": "<",
+              "value": 41
+            }
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision complete USA_lower_administrative_spending_mission",
+      "hidden_effect": {
+        "remove_mission": "USA_lower_administrative_spending_mission"
+      }
+    }
+  },
+  {
+    "id": "USA_RFK_Invest_Administration",
+    "category_id": "USA_RFK_No_Die",
+    "name": "Инвестировать в администрацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "USA_rfk_64_injustice_anywhere",
+      "NOT": {
+        "check_variable": {
+          "rfk_admin_investment": {
+            "_op": ">",
+            "value": 4
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_RFK_Invest_Administration"
+    }
+  },
+  {
+    "id": "OFN_admit_member",
+    "category_id": "USA_OFN_membership_category",
+    "name": "Принять гос-во [?USA.OFN_candidate.GetNameWithFlag] в ОСН",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "OFN_membership_all_in_favor",
+        "all_of_scopes": {
+          "array": "global.OFN_members",
+          "OR": {
+            "has_country_flag": "OFN_supports_new_member",
+            "is_subject": true
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_OFN_new_membership_application"
+    },
+    "complete_effect": {
+      "USA": {
+        "add_to_faction": "OFN_candidate"
+      },
+      "add_to_array": {
+        "global.OFN_members": "var:OFN_candidate"
+      },
+      "USA_OFN_clear_candidate_vote": true
+    }
+  },
+  {
+    "id": "YUN_insurgency_GUI_improve_admin",
+    "category_id": "YUN_insurgency",
+    "name": "Улучшить управление в сельск. местности",
+    "desc": "Остатки КПК представляют собой грозную силу, с которой можно иметь дело благодаря их обширным связям в сельской местности: наша административная неэффективность ограничивает проекцию нашей власти, и мы не можем собрать достаточно информации о красной угрозе. Поэтому мы должны начать расширять наше управление в тех деревнях, которыми мы так долго пренебрегали. Хотя города останутся нашим основным источником богатства и ресурсов, большинство нашего населения проживает в сельской местности, и мы не можем рисковать тем, что они попадут в руки партизан.",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "PRC_Pursuit_Favors_from_Civilian_Administration",
+    "category_id": "PRC_The_Conference",
+    "name": "Добиться благосклонности гражданских",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Pursuit_Favors_from_Military"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Pursuit_Favors_from_Civilian_Administration"
+    }
+  }
+]

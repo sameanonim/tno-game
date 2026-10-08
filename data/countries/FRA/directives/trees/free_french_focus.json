@@ -1,0 +1,720 @@
+{
+  "tree_id": "free_french_focus",
+  "tag": "FRA",
+  "directives_count": 23,
+  "directives": [
+    {
+      "id": "FRA_appeal_to_the_french_nation",
+      "name": "Воззвать к французской нации",
+      "desc": "Пусть Франция и проиграла битву, но она не проиграла войну. Сопротивляться — долг каждого француза-патриота.",
+      "icon": "GFX_goal_generic_propaganda",
+      "cost_turns": 2,
+      "x": 18,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": {
+        "has_country_leader": {
+          "ruling_only": true,
+          "character": "FRA_charles_de_gaulle"
+        }
+      },
+      "completion_reward": {
+        "if": {
+          "limit": {
+            "not": {
+              "has_dlc": "Man the Guns"
+            }
+          },
+          "add_manpower": 10000
+        },
+        "else": {
+          "add_manpower": 10000,
+          "add_legitimacy": 15
+        },
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment",
+          "amount": 5000
+        }
+      }
+    },
+    {
+      "id": "FRA_appeal_to_overseas_territories",
+      "name": "Воззвать к заморским территориям",
+      "desc": "Хоть французская метрополия и пала перед врагом, большая часть её империи по-прежнему свободна. Призвав заморские территории на помощь, мы можем ответить на атаки врага.",
+      "icon": "GFX_goal_generic_radar",
+      "cost_turns": 2,
+      "x": 0,
+      "y": 1,
+      "prerequisites": [
+        "FRA_appeal_to_the_french_nation"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "FRA_appeal_to_overseas_territories_tt",
+        "add_offsite_building": {
+          "type": "industrial_complex",
+          "level": 2
+        },
+        "hidden_effect": {
+          "country_event": "lar_appeal_to_overseas_territories.1"
+        }
+      }
+    },
+    {
+      "id": "FRA_intervention_in_north_africa",
+      "name": "Вторжение в Северную Африку",
+      "desc": "Северная Африка лучше всего подходит для вторжения и последующего возвращения родины. Необходимо склонить её на нашу сторону, чтобы наша кампания по освобождению увенчалась успехом.",
+      "icon": "GFX_goal_generic_position_armies",
+      "cost_turns": 3,
+      "x": -5,
+      "y": 1,
+      "prerequisites": [
+        "FRA_appeal_to_overseas_territories"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "FRA_controls_north_africa": true
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": [
+          {
+            "decision": "FRA_prepare_coup_in_north_africa"
+          },
+          {
+            "decision": "FRA_promise_independence_to_north_africa"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FRA_intervention_in_west_africa",
+      "name": "Вторжение в Западную Африку",
+      "desc": "В Западной Африке проживают миллионы человек, которых можно призвать в новую армию, чтобы с её помощью вернуть себе родину.",
+      "icon": "GFX_goal_generic_position_armies",
+      "cost_turns": 3,
+      "x": -3,
+      "y": 1,
+      "prerequisites": [
+        "FRA_appeal_to_overseas_territories"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "FRA_controls_west_africa": true
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": [
+          {
+            "decision": "FRA_prepare_coup_in_west_africa"
+          },
+          {
+            "decision": "FRA_promise_independence_to_west_africa"
+          },
+          {
+            "decision": "FRA_invasion_in_west_africa"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FRA_intervention_in_syria",
+      "name": "Вторжение в Сирию",
+      "desc": "Лишив врага доступа к стратегическим территориям в Сирии, мы защитим Суэцкий канал и значительно улучшим ситуацию в Восточном Средиземноморье.",
+      "icon": "GFX_goal_generic_position_armies",
+      "cost_turns": 3,
+      "x": -1,
+      "y": 1,
+      "prerequisites": [
+        "FRA_appeal_to_overseas_territories"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "FRA_controls_syria": true
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": [
+          {
+            "decision": "FRA_prepare_coup_in_syria"
+          },
+          {
+            "decision": "FRA_promise_independence_to_syria"
+          },
+          {
+            "decision": "FRA_invasion_in_syria"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FRA_intervention_in_indochina",
+      "name": "Вторжение в Индокитай",
+      "desc": "Наши колонии в Индокитае находятся далеко от европейских сражений и идеально подходят, чтобы помочь нам защитить свои интересы в регионе.",
+      "icon": "GFX_goal_generic_position_armies",
+      "cost_turns": 3,
+      "x": 1,
+      "y": 1,
+      "prerequisites": [
+        "FRA_appeal_to_overseas_territories"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "FRA_controls_indochina": true
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": [
+          {
+            "decision": "FRA_prepare_coup_in_indochina"
+          },
+          {
+            "decision": "FRA_promise_independence_to_indochina"
+          },
+          {
+            "decision": "FRA_invasion_in_indochina"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FRA_intervention_in_central_africa",
+      "name": "Вторжение в Центральную Африку",
+      "desc": "Центральная Африка очень важна для военной экономики и как элемент пропаганды.",
+      "icon": "GFX_goal_generic_position_armies",
+      "cost_turns": 3,
+      "x": 3,
+      "y": 1,
+      "prerequisites": [
+        "FRA_appeal_to_overseas_territories"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "FRA_controls_central_africa": true
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": [
+          {
+            "decision": "FRA_prepare_coup_in_central_africa"
+          },
+          {
+            "decision": "FRA_promise_independence_to_central_africa"
+          },
+          {
+            "decision": "FRA_invasion_in_central_africa"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FRA_intervention_in_madagascar",
+      "name": "Вторжение в Мадагаскар",
+      "desc": "Если мы позволим врагу взять и укрепить Мадагаскар, в Индийском океане нас ждёт крах. Нужно действовать быстро и решительно, чтобы остров остался нашим.",
+      "icon": "GFX_goal_generic_position_armies",
+      "cost_turns": 3,
+      "x": 5,
+      "y": 1,
+      "prerequisites": [
+        "FRA_appeal_to_overseas_territories"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "NOT": {
+          "543": {
+            "OR": {
+              "is_controlled_by": "ROOT",
+              "CONTROLLER": {
+                "OR": {
+                  "is_in_faction_with": "ROOT",
+                  "is_subject_of": "ROOT"
+                }
+              }
+            }
+          }
+        }
+      },
+      "completion_reward": {
+        "unlock_decision_tooltip": [
+          {
+            "decision": "FRA_prepare_coup_in_madagascar"
+          },
+          {
+            "decision": "FRA_promise_independence_to_madagascar"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FRA_form_the_national_committee",
+      "name": "Основать Национальный комитет",
+      "desc": "Мало кто верил в успех нашего дела. Но теперь мы наконец-то достаточно сильны, чтобы объявить о создании полноценного ссыльного правительства, которое готово взять на себя управление любой французской территорией, освобождённой от врагов.",
+      "icon": "GFX_goal_generic_intelligence_exchange",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 3,
+      "prerequisites": [
+        "FRA_intervention_in_madagascar",
+        "FRA_intervention_in_syria",
+        "FRA_intervention_in_indochina",
+        "FRA_intervention_in_north_africa",
+        "FRA_intervention_in_west_africa",
+        "FRA_intervention_in_central_africa"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "if": {
+          "limit": {
+            "has_dlc": "Man the Guns"
+          },
+          "has_legitimacy": {
+            "_op": ">",
+            "value": 90
+          }
+        },
+        "else": {
+          "num_of_factories": {
+            "_op": ">",
+            "value": 24
+          }
+        }
+      },
+      "completion_reward": {
+        "add_war_support": 0.1,
+        "add_stability": 0.1
+      }
+    },
+    {
+      "id": "FRA_form_the_provisional_government_of_the_republic",
+      "name": "Образовать временное правительство",
+      "desc": "Теперь, когда Париж освобождён, мы больше не ссыльное правительство. Пора браться за нелёгкий труд по восстановлению страны.",
+      "icon": "GFX_goal_tripartite_pact",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 3,
+      "prerequisites": [
+        "FRA_form_the_national_committee"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "16": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "completion_reward": {
+        "IF": {
+          "limit": {
+            "has_idea": "FRA_defeatism"
+          },
+          "remove_ideas": [
+            "FRA_defeatism"
+          ]
+        },
+        "load_focus_tree": "french_focus"
+      }
+    },
+    {
+      "id": "FRA_continue_the_fight",
+      "name": "Продолжать борьбу",
+      "desc": "Пока что к нам перешло совсем немного солдат, но и тех, что перешли, надо вооружить и экипировать.",
+      "icon": "GFX_goal_generic_major_war",
+      "cost_turns": 3,
+      "x": 9,
+      "y": 1,
+      "prerequisites": [
+        "FRA_appeal_to_the_french_nation"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_offsite_building": {
+          "type": "arms_factory",
+          "level": 2
+        },
+        "create_corps_commander": [
+          {
+            "name": "Marie-Pierre Koenig",
+            "GFX": "GFX_portrait_fra_marie_pierre_koenig",
+            "skill": 3,
+            "traits": [],
+            "attack_skill": 2,
+            "defense_skill": 2,
+            "planning_skill": 3,
+            "logistics_skill": 3
+          },
+          {
+            "name": "Georges Catroux",
+            "GFX": "GFX_portrait_fra_georges_catroux",
+            "skill": 3,
+            "traits": [],
+            "attack_skill": 3,
+            "defense_skill": 3,
+            "planning_skill": 2,
+            "logistics_skill": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "FRA_the_free_french_navy",
+      "name": "Свободный французский флот",
+      "desc": "Наши союзники заняты отчаянной борьбой за выживание, в которой крайне важны морские пути. Мы должны им помочь.",
+      "icon": "GFX_goal_generic_build_navy",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 2,
+      "prerequisites": [
+        "FRA_continue_the_fight"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_equipment_to_stockpile": {
+          "type": "convoy",
+          "amount": 50
+        },
+        "create_navy_leader": {
+          "name": "Emilie Muselier",
+          "GFX": "GFX_portrait_fra_emilie_muselier",
+          "skill": 3,
+          "traits": [],
+          "attack_skill": 1,
+          "defense_skill": 2,
+          "maneuvering_skill": 3,
+          "coordination_skill": 4
+        }
+      }
+    },
+    {
+      "id": "FRA_colonial_recruitment",
+      "name": "Вербовка в колониях",
+      "desc": "Теперь, когда вербовать солдат с родины нельзя, надо обратиться за помощью к нашим колониям. Многие из наших подданных готовы воевать за нас с оружием в руках.",
+      "icon": "GFX_goal_generic_allies_build_infantry",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "FRA_continue_the_fight"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "any_owned_state": {
+          "is_controlled_by": "ROOT",
+          "NOT": {
+            "is_core_of": "ROOT"
+          }
+        }
+      },
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_colonial_recruitment"
+        ]
+      }
+    },
+    {
+      "id": "FRA_the_regiment_normandie",
+      "name": "Полк «Нормандия-Неман»",
+      "desc": "Очень важно, чтобы мир видел: мы, французы, сражаемся на всех фронтах. Теперь, когда Советы воюют с нашим общим врагом, мы можем отправить им на помощь небольшую группу лётчиков-истребителей.",
+      "icon": "GFX_focus_fra_regiment_normandie",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 2,
+      "prerequisites": [
+        "FRA_continue_the_fight"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "any_enemy_country": {
+          "has_war_with": "SOV"
+        },
+        "NOT": {
+          "has_war_with": "SOV"
+        }
+      },
+      "completion_reward": {
+        "air_experience": 25,
+        "SOV": {
+          "add_equipment_to_stockpile": {
+            "type": "small_plane_airframe",
+            "amount": 100,
+            "producer": "FRA"
+          }
+        }
+      }
+    },
+    {
+      "id": "FRA_refus_absurde",
+      "name": "Refus Absurde",
+      "desc": "Даже в час поражения в некоторых сердцах сильна воля к сопротивлению. Они станут основой Сопротивления на оккупированных территориях.",
+      "icon": "GFX_goal_generic_demand_territory",
+      "cost_turns": 3,
+      "x": 8,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": {
+        "OR": {
+          "IF": {
+            "limit": {
+              "has_dlc": "Man the Guns"
+            },
+            "has_legitimacy": {
+              "_op": ">",
+              "value": 40
+            }
+          },
+          "ELSE": {
+            "num_of_factories": {
+              "_op": ">",
+              "value": 14
+            }
+          },
+          "has_war": false
+        }
+      },
+      "completion_reward": {
+        "remove_ideas": [
+          "FRA_defeatism"
+        ]
+      }
+    },
+    {
+      "id": "FRA_the_maquis",
+      "name": "Маки",
+      "desc": "В сельских районах Франции может укрыться всякий, кто желает сбежать от оккупантов или их прислужников-коллаборационистов. Мы должны поддержать людей, которые не желают работать на врага, и со временем мы сможем превратить эти районы в очаги сопротивления.",
+      "icon": "GFX_focus_focus_fra_maquis",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 2,
+      "prerequisites": [
+        "FRA_refus_absurde"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": [
+          "FRA_maquis"
+        ],
+        "every_state": {
+          "limit": {
+            "is_core_of": "ROOT",
+            "not": {
+              "is_controlled_by": "ROOT"
+            },
+            "infrastructure": {
+              "_op": "<",
+              "value": 3
+            }
+          },
+          "add_resistance_target": {
+            "amount": 10,
+            "tooltip": "FRA_the_maquis"
+          }
+        }
+      }
+    },
+    {
+      "id": "FRA_reach_out_to_trade_unions",
+      "name": "Обратиться к профсоюзам",
+      "desc": "Если мы хотим ударить по промышленности, которую вынудили работать на врага, следует установить хорошую связь с рабочими. Они могут задерживать или саботировать любое производство куда эффективнее любых внешних сил.",
+      "icon": "GFX_goal_generic_major_alliance",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "FRA_refus_absurde"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "FRA_connections_to_trade_unions"
+      }
+    },
+    {
+      "id": "FRA_cooperation_with_the_communists",
+      "name": "Сотрудничество с коммунистами",
+      "desc": "В нашей общей борьбе мы не должны отказываться ни от одного предложения помощи, даже если предлагающие называют себя товарищами.",
+      "icon": "GFX_focus_generic_soviet_politics",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "FRA_reach_out_to_trade_unions"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "if": {
+          "limit": {
+            "communism": {
+              "_op": "<",
+              "value": 0.14
+            }
+          },
+          "add_popularity": {
+            "ideology": "communism",
+            "popularity": 0.05
+          }
+        },
+        "add_ideas": "FRA_communist_cooperation_2"
+      }
+    },
+    {
+      "id": "FRA_connections_to_industrialists",
+      "name": "Связи с промышленниками",
+      "desc": "Сотрудничество с рабочими военной промышленности полезно, но и сотрудничество с людьми, управляющими заводами, даёт свои преимущества.",
+      "icon": "GFX_goal_generic_intelligence_exchange",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 2,
+      "prerequisites": [
+        "FRA_refus_absurde"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_ideas": "FRA_industrialist_connections"
+      }
+    },
+    {
+      "id": "FRA_the_civil_and_military_organization",
+      "name": "Гражданская и военная организация",
+      "desc": "Многие небольшие группы бойцов Сопротивления объединяются в более крупную организацию. Надо высказать им свою поддержку.",
+      "icon": "GFX_goal_generic_military_deal",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "FRA_connections_to_industrialists"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "FRA_industrialist_connections",
+          "add_idea": "FRA_civil_and_military_organization"
+        }
+      }
+    },
+    {
+      "id": "FRA_national_council_of_the_resistance",
+      "name": "Национальный совет Сопротивления",
+      "desc": "Французское сопротивление становится всё сильнее и сильнее. Оно набрало такую мощь, что теперь ему нужен новый комитет по координации действий.",
+      "icon": "GFX_focus_focus_fra_national_resistance_council",
+      "cost_turns": 3,
+      "x": 0,
+      "y": 2,
+      "prerequisites": [
+        "FRA_the_civil_and_military_organization",
+        "FRA_cooperation_with_the_communists",
+        "FRA_form_the_national_committee"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "FRA_civil_and_military_organization",
+          "add_idea": "FRA_national_council_of_the_resistance"
+        }
+      }
+    },
+    {
+      "id": "FRA_national_uprising",
+      "name": "Национальное восстание",
+      "desc": "Время пришло. Пора взять оружие и выйти из тени, закрывавшей вас долгие годы!",
+      "icon": "GFX_goal_generic_dangerous_deal",
+      "cost_turns": 3,
+      "x": -2,
+      "y": 2,
+      "prerequisites": [
+        "FRA_national_council_of_the_resistance"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "FRA_national_uprising",
+          "days": 90
+        }
+      }
+    },
+    {
+      "id": "FRA_french_forces_of_the_interior",
+      "name": "Французские внутренние силы",
+      "desc": "В рядах Сопротивления по всей Франции тысячи вооружённых людей. Продвигаясь вместе с союзниками по стране, мы соберём их и превратим в солдат нашей армии.",
+      "icon": "GFX_focus_prc_infiltration",
+      "cost_turns": 3,
+      "x": 2,
+      "y": 2,
+      "prerequisites": [
+        "FRA_national_council_of_the_resistance"
+      ],
+      "mutually_exclusive": [],
+      "available": [],
+      "completion_reward": {
+        "custom_effect_tooltip": "FRA_french_forces_of_the_interior_tt",
+        "division_template": {
+          "name": "FFI Demi-Brigade",
+          "division_names_group": "FRA_INF_01",
+          "is_locked": true,
+          "regiments": {
+            "infantry": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 3
+              },
+              {
+                "x": 0,
+                "y": 4
+              }
+            ]
+          },
+          "support": []
+        },
+        "every_owned_state": {
+          "limit": {
+            "is_core_of": "ROOT",
+            "not": {
+              "has_state_flag": "FRA_core_state_liberated"
+            },
+            "is_fully_controlled_by": "ROOT"
+          },
+          "create_unit": [
+            {
+              "division": "name = \"1re Demi-Brigade des FFI\" division_template = \"FFI Demi-Brigade\" start_experience_factor = 0",
+              "owner": "ROOT"
+            },
+            {
+              "division": "name = \"2me Demi-Brigade des FFI\" division_template = \"FFI Demi-Brigade\" start_experience_factor = 0",
+              "owner": "ROOT"
+            },
+            {
+              "division": "name = \"3me Demi-Brigade des FFI\" division_template = \"FFI Demi-Brigade\" start_experience_factor = 0",
+              "owner": "ROOT"
+            }
+          ],
+          "set_state_flag": "FRA_core_state_liberated"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,755 @@
+[
+  {
+    "id": "INS_set_leader_to_oerip",
+    "category_id": "INS_leaders_cat",
+    "name": "Избрать лидером: $INS_oerip_soemohardjo$",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "INS_has_changed_leader"
+      },
+      "has_character": "INS_oerip_soemohardjo",
+      "INS_oerip_soemohardjo": {
+        "is_country_leader": false
+      }
+    },
+    "visible": {
+      "has_completed_focus": "INSHOL_democracy"
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "INS_has_changed_leader",
+        "days": 120,
+        "value": 1
+      },
+      "if": {
+        "limit": {
+          "INS_oerip_soemohardjo": {
+            "can_be_country_leader": true
+          }
+        },
+        "promote_character": {
+          "character": "INS_oerip_soemohardjo",
+          "ideology": "conservatism"
+        }
+      },
+      "else": {
+        "INS_oerip_soemohardjo": {
+          "add_country_leader_role": {
+            "promote_leader": true,
+            "country_leader": {
+              "ideology": "conservatism",
+              "expire": "1965.1.1.1",
+              "traits": [
+                "INS_the_indonesian_general"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "debug_civil_war_germany_GoeringWins",
+    "category_id": "global_debug_decisions",
+    "name": "Форсировать победу Геринга",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_global_flag": "german_civil_war",
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "conflict_debug_decisions"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision debug_civil_war_germany_GoeringWins",
+      "GGR": {
+        "if": [
+          {
+            "limit": {
+              "country_exists": "SGR"
+            },
+            "annex_country": {
+              "target": "SGR",
+              "transfer_troops": false
+            }
+          },
+          {
+            "limit": {
+              "country_exists": "BGR"
+            },
+            "annex_country": {
+              "target": "BGR",
+              "transfer_troops": false
+            }
+          },
+          {
+            "limit": {
+              "country_exists": "HGR"
+            },
+            "annex_country": {
+              "target": "HGR",
+              "transfer_troops": false
+            }
+          }
+        ]
+      },
+      "GER_GCW_conclude": true
+    }
+  },
+  {
+    "id": "HGR_incorporate_OER",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [OER.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_OER_req_tt",
+        "OER": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_OER_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_militarist_decisions"
+      },
+      "OER": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_OER",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_OER_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[OER.GetFlag]Заслать диверсантов СС",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_militarist_action",
+        "has_decision": "HGR_incorporate_OER"
+      },
+      "command_power": {
+        "_op": ">",
+        "value": 14
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_OER_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_militarist_decisions"
+      },
+      "OER": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_OER_decision_a_1",
+      "set_country_flag": "HGR_took_militarist_action",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "HGR_increase_ss_hardliner_opinion_med": true,
+      "OER": {
+        "increase_Heydrich_influence_medium": true
+      }
+    }
+  },
+  {
+    "id": "HGR_OER_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[OER.GetFlag]Помочь восстанию Шёрнера",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_militarist_action",
+        "has_decision": "HGR_incorporate_OER"
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_OER_influence_true",
+        "HGR_OER_schorner_reveal"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_militarist_decisions"
+      },
+      "OER": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_OER_decision_a_2",
+      "set_country_flag": "HGR_took_militarist_action",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500,
+        "producer": "GER"
+      },
+      "HGR_increase_militarist_opinion_med": true,
+      "OER": {
+        "increase_Heydrich_influence_small": true,
+        "add_stability": -0.05
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_guns_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Поставки оружия бурам",
+    "desc": "Мы отправим партию оружия Фолькстату, чтобы поддержать его в предстоящей битве.\n\nЭто решение может быть активировано каждые 90 дней.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "GRO": {
+        "has_equipment": {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 999
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_supplying_the_boers"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_guns_for_boers_decision",
+      "GRO": {
+        "add_command_power": -15,
+        "add_political_power": -50,
+        "send_equipment": {
+          "equipment": "infantry_equipment",
+          "amount": 1000,
+          "target": "BOR"
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_support_equipment_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Поставка доп. оснащения бурам",
+    "desc": "Мы отправим партию Доп. оснащения Фолькстату, чтобы поддержать его в предстоящей битве.\n\nЭто решение может быть активировано каждые 90 дней.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "GRO": {
+        "has_equipment": {
+          "support_equipment": {
+            "_op": ">",
+            "value": 749
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_supplying_the_boers"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_support_equipment_for_boers_decision",
+      "GRO": {
+        "add_command_power": -15,
+        "add_political_power": -50,
+        "send_equipment": {
+          "equipment": "support_equipment",
+          "amount": 750,
+          "target": "BOR"
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_second_level_equipment_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Увеличить поддержку Бурской Республики",
+    "desc": "Увеличив поддержку Фолькстата, мы откроем новый набор решений, позволяющий отправлять ещё больше оружия нашему союзнику.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "GRO": {
+        "has_equipment": {
+          "support_equipment": {
+            "_op": ">",
+            "value": 1499
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "GRO_supplying_the_boers"
+    },
+    "complete_effect": {
+      "add_command_power": -20,
+      "add_political_power": -100,
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_second_level_equipment_for_boers_decision",
+      "set_country_flag": "GRO_SAF_war_second_level_boers_aid",
+      "GRO": {
+        "send_equipment": {
+          "equipment": "support_equipment",
+          "amount": 1500,
+          "target": "BOR"
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_artillery_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Поставка артиллерии бурам",
+    "desc": "Мы отправим партию артиллерии Фолькстату, чтобы поддержать его в предстоящей битве.\n\nЭто решение может быть активировано каждые 90 дней.",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "GRO": {
+        "has_equipment": {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 799
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "GRO_supplying_the_boers",
+        "GRO_SAF_war_second_level_boers_aid"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_artillery_for_boers_decision",
+      "GRO": {
+        "send_equipment": {
+          "equipment": "artillery_equipment",
+          "amount": 800,
+          "target": "BOR"
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_anti_air_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Поставка оружий ПВО бурам",
+    "desc": "Мы отправим партию оружий ПВО Фолькстату, чтобы поддержать его в предстоящей битве.\n\nЭто решение может быть активировано каждые 90 дней.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "GRO": {
+        "has_equipment": {
+          "anti_air_equipment": {
+            "_op": ">",
+            "value": 499
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "GRO_supplying_the_boers",
+        "GRO_SAF_war_second_level_boers_aid"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_anti_air_for_boers_decision",
+      "GRO": {
+        "add_command_power": -15,
+        "add_political_power": -50,
+        "send_equipment": {
+          "equipment": "anti_air_equipment",
+          "amount": 500,
+          "target": "BOR"
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_apc_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Поставка бронетранспортёров бурам",
+    "desc": "Мы отправим партию бронетранспортёров Фолькстату, чтобы поддержать его в предстоящей битве.\n\nЭто решение может быть активировано каждые 90 дней.",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "GRO": {
+        "has_equipment": {
+          "APC_chassis": {
+            "_op": ">",
+            "value": 499
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "GRO_supplying_the_boers",
+        "GRO_SAF_war_second_level_boers_aid"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_apc_for_boers_decision",
+      "GRO": {
+        "send_equipment": {
+          "type": "APC_chassis",
+          "amount": 500,
+          "target": "BOR"
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_third_level_equipment_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Усиление поддержки Фолькстата",
+    "desc": "Увеличив поддержку Фолькстата, мы откроем новый набор решений, позволяющий отправлять ещё больше оружия нашему союзнику.",
+    "icon": "",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "GRO": {
+        "has_equipment": {
+          "support_equipment": {
+            "_op": ">",
+            "value": 1999
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "GRO_supplying_the_boers",
+        "GRO_SAF_war_second_level_boers_aid"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_third_level_equipment_for_boers_decision",
+      "set_country_flag": "GRO_SAF_war_third_level_boers_aid",
+      "send_equipment": {
+        "equipment": "anti_air_equipment",
+        "amount": 2000,
+        "target": "BOR"
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_jets_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Поставка истребителей бурам",
+    "desc": "Мы отправим партию истребителей Фолькстату, чтобы поддержать его в предстоящей битве.\n\nЭто решение может быть активировано каждые 90 дней.\n\n\"",
+    "icon": "",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "GRO": {
+        "has_equipment": {
+          "jet_fighter_equipment_1": {
+            "_op": ">",
+            "value": 199
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "GRO_supplying_the_boers",
+        "GRO_SAF_war_third_level_boers_aid"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_jets_for_boers_decision",
+      "GRO": {
+        "send_equipment": {
+          "type": "jet_fighter_equipment_1",
+          "amount": 200,
+          "target": "BOR"
+        }
+      }
+    }
+  },
+  {
+    "id": "GRO_SAF_war_tanks_for_boers_decision",
+    "category_id": "GRO_supply_the_boers_category",
+    "name": "Поставка танков Бурам",
+    "desc": "Мы отправим партию танков Фолькстату, чтобы поддержать его в предстоящей битве.\n\nЭто решение может быть активировано каждые 90 дней.\n\n\"",
+    "icon": "",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "country_exists": "BOR",
+      "BOR": {
+        "has_capitulated": false
+      },
+      "has_equipment": {
+        "MBT_chassis": {
+          "_op": ">",
+          "value": 199
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "GRO_supplying_the_boers",
+        "GRO_SAF_war_third_level_boers_aid"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_SAF_war_tanks_for_boers_decision",
+      "GRO": {
+        "send_equipment": {
+          "type": "MBT_chassis",
+          "amount": 200,
+          "target": "BOR"
+        }
+      }
+    }
+  },
+  {
+    "id": "SAF_Boers_power_change_decision",
+    "category_id": "SAF_state_of_south_africa",
+    "name": "Влияние буров увеличивается",
+    "desc": "",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SAF_Boers_decision",
+    "category_id": "SAF_state_of_south_africa",
+    "name": "Буры",
+    "desc": "",
+    "icon": "GFX_decision_SAF_boer",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "SAF_referendum_decisions"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SAF_arrest_boers_militias_decision",
+    "category_id": "SAF_state_of_south_africa",
+    "name": "Арестовать бурских ополченцев",
+    "desc": "",
+    "icon": "GFX_decision_ENG_cop",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SAF_referendum_decisions"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SAF_disrupt_boer_supplies_decision",
+    "category_id": "SAF_state_of_south_africa",
+    "name": "Нарушить линий поставок на северо-восток",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SAF_referendum_decisions"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_Pick_Up_The_Pace_On_City_Goers",
+    "category_id": "USA_the_heartless",
+    "name": "Взять лидерство над горожанами",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_URI_defense_mechanic"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_chep_presidency",
+        "USA_conservative_activism_uri_repeal"
+      ],
+      "check_variable": {
+        "var_USA_URI_Leader_City_Goers": 0
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_Pick_Up_The_Pace_On_City_Goers",
+      "set_variable": {
+        "var_USA_URI_Leader_City_Goers": 1
+      },
+      "set_temp_variable": {
+        "temp_var_chep_var": "USA_Chep_Burnout"
+      },
+      "add_to_temp_variable": {
+        "temp_var_chep_var": -0.15
+      },
+      "add_to_variable": {
+        "USA_Chep_Burnout": -0.15
+      },
+      "custom_effect_tooltip": "USA_chep_spread_thin_tt"
+    }
+  },
+  {
+    "id": "USA_Assign_Jane_Jacobs_to_City_Goers",
+    "category_id": "USA_the_heartless",
+    "name": "Назначить Джейн Джекобс организовывать горожан",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "USA_URI_defense_mechanic"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_chep_presidency",
+        "USA_URI_Jane_Jacobs_unlocked",
+        "USA_conservative_activism_uri_repeal"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_Assign_Jane_Jacobs_to_City_Goers",
+      "set_variable": {
+        "var_USA_URI_Leader_City_Goers": 2
+      },
+      "custom_effect_tooltip": "USA_URI_repeal_citygoers_tt"
+    }
+  },
+  {
+    "id": "USA_WFB_SAF_invest_in_boer_land",
+    "category_id": "USA_WFB_CFN_category",
+    "name": "Инвестировать в земли Буров",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "CFN_selected_reform": 2
+      },
+      "SAF": {
+        "is_in_faction_with": "USA",
+        "has_country_flag": "CFN_founding_member",
+        "owns_state": 275
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_WFB_SAF_invest_in_boer_land",
+      "add_to_variable": {
+        "SAF.CFN_voting_desire^2": 15
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "SAF": {
+        "custom_effect_tooltip": "WFB_opinion_increase_IMF_15",
+        "275": {
+          "set_temp_variable": {
+            "state_value_multiplier_temp": 1.1
+          },
+          "econ_state_value_change_multiply": true
+        }
+      }
+    }
+  }
+]

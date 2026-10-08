@@ -1,0 +1,2728 @@
+[
+  {
+    "id": "AUS_extended_workshifts",
+    "category_id": "AUS_antischluss_category",
+    "name": "Продленные смены",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_antischluss_measures_flag",
+        "has_idea": "AUS_extended_workshifts_idea"
+      },
+      "OR": {
+        "AUS_anschluss_risk_high": true,
+        "AUS_anschluss_risk_critical": true
+      },
+      "is_subject": false,
+      "has_civil_war": false
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "AUS_extended_workshifts_idea"
+      },
+      "OR": [
+        {
+          "AUS_anschluss_risk_low": false,
+          "AUS_anschluss_risk_medium": false
+        },
+        {
+          "AUS_anschluss_risk_high": true,
+          "AUS_anschluss_risk_critical": true
+        }
+      ],
+      "is_subject": false
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_antischluss_measures_flag",
+      "add_timed_idea": {
+        "idea": "AUS_extended_workshifts_idea",
+        "days": 90
+      },
+      "add_stability": -0.1
+    }
+  },
+  {
+    "id": "ENG_urge_restraint",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Призвать к сдержанности",
+    "desc": "Наш следующий марш должен пройти идеально, так как его насильственный разгон взбудоражит всю страну и приведет к масштабным беспорядкам или даже к гражданской войне. Надо предупредить участников марша, чтобы те любой ценой воздерживались от насилия, хотя, конечно, нашим радикальным сторонникам это не понравится.",
+    "icon": "eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "ENG_march_timer_flag"
+        },
+        {
+          "has_country_flag": "ENG_restrained_march_flag"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "add_popularity": {
+        "ideology": "fascism",
+        "popularity": -0.01
+      },
+      "119": {
+        "set_state_flag": "ENG_has_blackshirt_support"
+      },
+      "custom_effect_tooltip": [
+        "ENG_urge_restraint_tt",
+        "ENG_speech_against_germany_tt"
+      ],
+      "set_country_flag": "ENG_restrained_march_flag"
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_northern_ireland",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Северной Ирландии",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Северной Ирландии. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 26,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 119
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "119": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.041,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.027
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.081,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.027
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.054,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.027
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_northern_ireland",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_the_highlands",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Северо-Шотландском нагорье",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Северо-Шотландском нагорье. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 6,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 120
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "120": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.009,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.006
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.018,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.006
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.012,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.006
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_highlands",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_on_the_isle_of_man",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников на острове Мэн",
+    "desc": "",
+    "icon": "eng_blackshirt_march",
+    "cost": 6,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 932
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "932": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.009,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.006
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.018,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.006
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.012,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.006
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_man",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_aberdeenshire",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Абердиншире",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Абердине. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 17,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 136
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "136": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.026,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.017
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.051,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.017
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.034,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.017
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_aberdeenshire",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_cumbria",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Камбрии",
+    "desc": "",
+    "icon": "eng_blackshirt_march",
+    "cost": 31,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 931
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "931": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.048,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.032
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.096,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.032
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.064,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.032
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_cumbria",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_lanark",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Ланарке",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Ланарке. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 48,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 133
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "133": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.077,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.051
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.153,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.051
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.102,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.051
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_lanark",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_lothian",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Лотиане",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Лотиане. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 31,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 121
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "121": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.048,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.032
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.096,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.032
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.064,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.032
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_lothian",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_northern_england",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Нортумберленде",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Северной Англии. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 46,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 131
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "131": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.072,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.048
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.144,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.048
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.096,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.048
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_northern_england",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_yorkshire",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Йоркшире",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Йоркшире. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 91,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 130
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "130": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.157,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.101
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.303,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.101
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.202,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.101
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_yorkshire",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_lancashire",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Ланкашире",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Ланкашире. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 113,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 132
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "132": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.195,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.13
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.39,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.13
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.26,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.13
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_lancashire",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_wales",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Уэльсе",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Уэльсе. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 49,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 122
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "122": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.078,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.052
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.156,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.052
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.104,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.052
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_wales",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_west_midlands",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Западном Мидленде",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Западном Мидленде. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 76,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 128
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "128": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.125,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.083
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.249,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.083
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.166,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.083
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_west_midlands",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_east_midlands",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Восточном Мидленде",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Восточном Мидленде. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 47,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 129
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "129": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.075,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.05
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.15,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.05
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.1,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.05
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_east_midlands",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_east_anglia",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Восточной Англии",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Восточной Англии. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 125
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "125": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.047,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.031
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.093,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.031
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.062,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.031
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_east_anglia",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_gloucestershire",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Глостершире",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Глостершире. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 39,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 338
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "338": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.062,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.041
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.123,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.041
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.082,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.041
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_gloucestershire",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_london",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Лондоне",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Лондоне. Он, несомненно, привлечет на нашу сторону местное население или спровоцирует гражданскую войну, если вспыхнет насилие.",
+    "icon": "eng_blackshirt_march",
+    "cost": 173,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 126
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "126": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.333,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.222
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.666,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.222
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.444,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.222
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_london",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_cornwall",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Корнуолле",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Корнуолле. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 27,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 123
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "123": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.042,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.028
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.084,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.028
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.056,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.028
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_cornwall",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_blackshirt_march_in_sussex",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие чернорубашечников в Сассексе",
+    "desc": "Сейчас готовится крупный марш чернорубашечников в Сассексе. Он, несомненно, привлечет на нашу сторону местное население.",
+    "icon": "eng_blackshirt_march",
+    "cost": 67,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_march_timer_flag"
+      },
+      "has_full_control_of_state": 127
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "127": {
+        "save_event_target_as": "ENG_blackshirt_march_state"
+      },
+      "random_list": {
+        "25": [
+          {
+            "country_event": {
+              "id": "mtg_britain.57",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.108,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.072
+              }
+            }
+          },
+          {
+            "modifier": {
+              "factor": 0.2,
+              "has_country_flag": "ENG_restrained_march_flag"
+            },
+            "country_event": {
+              "id": "mtg_britain.59",
+              "days": 1
+            },
+            "effect_tooltip": {
+              "add_stability": -0.216,
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": 0.072
+              }
+            }
+          }
+        ],
+        "50": {
+          "country_event": {
+            "id": "mtg_britain.58",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.144,
+            "add_popularity": {
+              "ideology": "fascism",
+              "popularity": 0.072
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "ENG_blackshirt_march_tt",
+      "set_country_flag": [
+        "ENG_march_temp_sussex",
+        "ENG_march_timer_flag"
+      ]
+    }
+  },
+  {
+    "id": "ENG_march_on_downing_street",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Шествие на Даунинг-стрит",
+    "desc": "Большой марш к дому номер 10 по Даунинг-стрит, несомненно, заставит правительство провести референдум о будущем нации. Оно не рискнет противиться воле народа.",
+    "icon": "eng_blackshirt_march",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_full_control_of_state": 126,
+      "fascism": {
+        "_op": ">",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "mtg_britain.35",
+        "days": 1
+      },
+      "set_country_flag": {
+        "flag": "ENG_switched_to_fascism_communism_dominions_timer_flag",
+        "value": 1,
+        "days": 180
+      }
+    }
+  },
+  {
+    "id": "ENG_reconciliatory_speech",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Примирительная речь",
+    "desc": "Возможно, примирительная речь — именно то, что нужно, чтобы снизить растущую политическую напряженность внутри страны.",
+    "icon": "eng_blackshirt_march",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "GER": {
+        "NOT": {
+          "has_government": "fascism"
+        }
+      },
+      "has_stability": {
+        "_op": "<",
+        "value": 0.8
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      },
+      "GER": {
+        "NOT": {
+          "has_government": "fascism"
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ENG_speech_against_germany_tt"
+    }
+  },
+  {
+    "id": "ENG_speech_against_germany",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "Выступить с речью против Германии",
+    "desc": "Вместе с популярностью Мосли растет и шквал нелепой критики в его адрес. Возможно, чтобы развеять опасения народа о насильственном переходе к гитлеризму, Мосли стоит произнести длинную проникновенную речь и в недвусмысленных формулировках откреститься от гитлеровского варианта фашизма.",
+    "icon": "eng_blackshirt_speech",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "has_government": "fascism"
+      },
+      "has_stability": {
+        "_op": "<",
+        "value": 0.8
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      },
+      "FROM": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "mtg_britain.60",
+        "hours": 6
+      },
+      "custom_effect_tooltip": "ENG_speech_against_germany_tt",
+      "add_ai_strategy": [
+        {
+          "type": "antagonize",
+          "id": "FROM",
+          "value": 50
+        },
+        {
+          "type": "alliance",
+          "id": "FROM",
+          "value": -50
+        },
+        {
+          "type": "befriend",
+          "id": "FROM",
+          "value": -50
+        },
+        {
+          "type": "protect",
+          "id": "FROM",
+          "value": -50
+        }
+      ],
+      "FROM": {
+        "add_ai_strategy": [
+          {
+            "type": "antagonize",
+            "id": "ROOT",
+            "value": 50
+          },
+          {
+            "type": "alliance",
+            "id": "ROOT",
+            "value": -50
+          },
+          {
+            "type": "befriend",
+            "id": "ROOT",
+            "value": -50
+          },
+          {
+            "type": "protect",
+            "id": "ROOT",
+            "value": -50
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ENG_the_mosley_plan",
+    "category_id": "ENG_organize_the_blackshirts",
+    "name": "План Мосли",
+    "desc": "Смелые экономические реформы наряду с масштабной пропагандой и государственными инвестициями должны сплотить народ в едином порыве, дабы восстановить величие нации и начать перевооружение.",
+    "icon": "generic_construction",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "won_british_civil_war"
+    },
+    "visible": {
+      "has_country_flag": "won_british_civil_war"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_Workshop_Goal_1_Timeout",
+    "category_id": "PKT_ENG_dummy_category",
+    "name": "ENG_Workshop_Goal_1_Timeout",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_Workshop_Goal_2_Timeout",
+    "category_id": "PKT_ENG_dummy_category",
+    "name": "ENG_Workshop_Goal_2_Timeout",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ita_send_blackshirts",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "Послать чернорубашечников",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "ita_tur_ita_lose"
+        },
+        {
+          "has_global_flag": "ita_tur_ita_win"
+        }
+      ],
+      "IME": {
+        "has_war_with": "TUR"
+      },
+      "has_global_flag": "italy_turkey_war",
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "IME": {
+        "add_manpower": 5000
+      },
+      "ITA": {
+        "add_manpower": -5000
+      }
+    }
+  },
+  {
+    "id": "ITA_rally_young_blackshirts",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Обратиться к молодым чернорубашечникам",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_rally_young_blackshirts",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -15
+        },
+        {
+          "political_power": -75
+        }
+      ],
+      "ITA_blackshirts_add_borghese_pop": true,
+      "add_manpower": 750,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 750,
+        "producer": "ITA"
+      }
+    }
+  },
+  {
+    "id": "ita_alg_send_blackshirts",
+    "category_id": "ITA_algerian_war_category",
+    "name": "Направить чернорубашечников",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "ILG": {
+        "has_war_with": "SLG"
+      },
+      "AND": {
+        "country_exists": [
+          "SLG",
+          "ILG"
+        ]
+      }
+    },
+    "complete_effect": {
+      "ILG": {
+        "add_manpower": 10000
+      },
+      "ITA": {
+        "add_manpower": -10000
+      }
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_kokshetau",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Кокшетау",
+    "desc": "",
+    "icon": "GFX_decision_diplo_north_kazakhstan",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 590
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_shukshin_conquered_kaz_flag"
+      },
+      "owns_state": 590,
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "590": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "1807": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "1808": {
+                "is_core_of": "ROOT"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "NOV_shukshin_leader",
+    "category_id": "NOV_debug_category",
+    "name": "NOV_shukshin_leader",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "NOV_election_debug"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_shukshin_leader",
+      "NOV_shukshin_wins": true
+    }
+  },
+  {
+    "id": "NOV_load_unification_shukshin_tree",
+    "category_id": "NOV_debug_category",
+    "name": "Load Shukshin's Reunification Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_load_unification_shukshin_tree",
+      "load_focus_tree": {
+        "tree": "NOV_novosibirsk_unification_shukshin",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "NOV_load_shukshin_war_preparation_tree",
+    "category_id": "NOV_debug_category",
+    "name": "Load Shukshin's War Preparation Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_load_shukshin_war_preparation_tree",
+      "load_focus_tree": {
+        "tree": "NOV_novosibirsk_war_preparation_shukshin",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "NOV_load_shukshin_war_tree",
+    "category_id": "NOV_debug_category",
+    "name": "Load Shukshin's War Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_load_shukshin_war_tree",
+      "load_focus_tree": {
+        "tree": "NOV_novosibirsk_second_west_russian_war_shukshin",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "NOV_load_shukshin_total_victory_tree",
+    "category_id": "NOV_debug_category",
+    "name": "Load Reconstruction Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_load_shukshin_total_victory_tree",
+      "load_focus_tree": {
+        "tree": "NOV_novosibirsk_victory_shukshin",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "NOV_load_shukshin_failure_tree",
+    "category_id": "NOV_debug_category",
+    "name": "Load Failure Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_load_shukshin_failure_tree",
+      "load_focus_tree": {
+        "tree": "NOV_novosibirsk_failure_shukshin",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "NOV_shukshin_influence_ticker",
+    "category_id": "NOV_The_Election_category",
+    "name": "Шукшин начал действовать!",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda_off",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "NOV_pokryshkin_campaigning"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "NOV_shukshin_effigy",
+    "category_id": "NOV_The_Election_category",
+    "name": "Выборная кампания Шукшина",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "NOV_shukshin_campaigning"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SBA_visit_verkhneudinsk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить верхнеудинскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_one"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_verkhneudinsk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.26",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_norilsk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить норильскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_one"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_norilsk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.27",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_krasnoyarsk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить красноярскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_one"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_krasnoyarsk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.28",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_yakutsk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить якутскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_two"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_yakutsk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.29",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_gorno_altaysk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить горно-алтайскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_two"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_gorno_altaysk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.30",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_boguchany_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "SBA_visit_boguchany_commune",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_two"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_boguchany_commune ",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.31",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_novosibirsk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить новосибирскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_three"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_novosibirsk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.32",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_magadan_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить магаданскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_three"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_magadan_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.33",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_tomsk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить томскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_three"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_tomsk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.34",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "UKR_expand_underground_workshops",
+    "category_id": "UKR_ukraine_must_survive_category",
+    "name": "Expand Underground Workshops",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_inspection",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UKR_ukraine_must_survive_doing_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "UKR_ukraine_must_survive_insurgency_phase",
+      "NOT": {
+        "has_global_flag": "Kyiv_Nuked"
+      },
+      "check_variable": {
+        "UKR_survive_variable": {
+          "_op": ">",
+          "value": 69.99
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision UKR_expand_underground_workshops",
+      "set_temp_variable": [
+        {
+          "UKR_preparation_temp": 5
+        },
+        {
+          "temp_econ_spending_amount": 0.1
+        }
+      ],
+      "UKR_ukraine_must_survive_variable_change": true,
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "UKR_ukraine_must_survive_doing_decision"
+    }
+  },
+  {
+    "id": "RUS_shukshin_reorganise_central_asia",
+    "category_id": "SWRW_novosibirsk_misc_category",
+    "name": "Reorganise Central Asia",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "AND": {
+        "586": {
+          "is_owned_by": "RUS"
+        },
+        "732": {
+          "is_owned_by": "RUS"
+        },
+        "742": {
+          "is_owned_by": "RUS"
+        },
+        "585": {
+          "is_owned_by": "RUS"
+        },
+        "405": {
+          "is_owned_by": "RUS"
+        },
+        "750": {
+          "is_owned_by": "RUS"
+        },
+        "564": {
+          "is_owned_by": "RUS"
+        },
+        "original_tag": "NOV",
+        "has_global_flag": "RUS_shukshin_unification"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Reorganise Central Asia",
+      "hidden_effect": [
+        {
+          "TRK": {
+            "remove_ideas": "ZZZ_anarchy"
+          }
+        },
+        {
+          "every_country": {
+            "limit": {
+              "OR": {
+                "has_idea": [
+                  "CA_Turkes_Kenes_Apathy",
+                  "CA_Turkes_Kenes_Infighting"
+                ]
+              }
+            },
+            "remove_ideas": [
+              "CA_Turkes_Kenes_Apathy",
+              "CA_Turkes_Kenes_Infighting"
+            ]
+          }
+        }
+      ],
+      "clr_global_flag": "TNO_rip_turkmenistan",
+      "RUS_shukshin_central_asia_occupation": true
+    }
+  },
+  {
+    "id": "NOV_SWRW_Shukshins_Defeat_Tree",
+    "category_id": "NOV_SWRW_debug_category",
+    "name": "Load Scenario of Shukshin's Defeat",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_SWRW_Shukshins_Defeat_Tree",
+      "hidden_effect": {
+        "set_global_flag": "RUS_shukshin_unification",
+        "country_event": {
+          "id": "RUS_victory.5",
+          "hours": 10
+        }
+      }
+    }
+  },
+  {
+    "id": "NOV_RSLP_talk_with_shukshin",
+    "category_id": "NOV_RSLP_russia_ofn",
+    "name": "Talk with Shukshin",
+    "desc": "Though Vasily Shukshin is a friend of democracy and freedom, he considers Russian sovereignty just as crucial. A long advocate for the establishment of a Russia-led Eurasian coalition, his status as a liberator of the nation greatly affects the  RAPP's opinion on the OFN. Let us remind him of the benefits of international cooperation, and the prospect of  VRPP taking advantage of our potential failure if he does not work with us. Surely Shukshin will favour liberals any day over greedy oligarchs.",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "rslp_shukshin": true
+      },
+      "rslp_conservative_100": true
+    },
+    "visible": {
+      "NOT": {
+        "rslp_shukshin": true
+      }
+    },
+    "complete_effect": {
+      "add_popularity": {
+        "ideology": "liberalism",
+        "popularity": 0.1
+      },
+      "add_stability": 0.05,
+      "set_country_flag": [
+        "NOV_RSLP_SHUKSHIN_TALK",
+        "NOV_RSLP_SHUKSHIN"
+      ],
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RSLP_talk_with_shukshin"
+    }
+  },
+  {
+    "id": "VOR_inclusion_of_kokshetau",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Akmola District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 1807
+    },
+    "visible": {
+      "owns_state": 1807,
+      "AND": {
+        "1807": {
+          "is_core_of": "ROOT"
+        },
+        "1808": {
+          "is_core_of": "ROOT"
+        },
+        "590": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_military_conscripted_kokshetau",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Akmola to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "590": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1807": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1808": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        590,
+        1807,
+        1808
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_kokshetau",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "590": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "1807": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "1808": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_kokshetau",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Akmola to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "590": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1807": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1808": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        590,
+        1807,
+        1808
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_kokshetau",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "590": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "1807": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "1808": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_kokshetau",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Akmola",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "590": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "1807": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "1808": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        590,
+        1807,
+        1808
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_kokshetau",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "590": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "1807": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "1808": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "590": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "1807": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "1808": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "590": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "1807": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "1808": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "YGR_send_volunteers_to_kokshatai",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Start a Partnership with [KOK.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_diplo_aid_northern_kazakhstan",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "KOK": {
+        "has_war": true
+      },
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 1499
+          }
+        },
+        {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 249
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 299
+          }
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_war_with": "KOK"
+      },
+      "country_exists": "KOK",
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      },
+      "has_country_flag": "RUS_regional_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_send_volunteers_to_kokshatai",
+      "custom_effect_tooltip": "YGR_send_volunteers_to_kokshatai_tt",
+      "KOK": {
+        "add_war_support": 0.1,
+        "country_event": {
+          "id": "KOK_event.3",
+          "hours": 12
+        }
+      },
+      "send_equipment": [
+        {
+          "equipment": "infantry_equipment",
+          "amount": 1500,
+          "target": "KOK"
+        },
+        {
+          "equipment": "artillery_equipment",
+          "amount": 250,
+          "target": "GEO"
+        },
+        {
+          "equipment": "support_equipment",
+          "amount": 300,
+          "target": "KOK"
+        }
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.038
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": {
+        "YGR": {
+          "set_temp_variable": [
+            {
+              "target": "KOK"
+            },
+            {
+              "number": 1
+            }
+          ],
+          "TNO_set_num_volunteers": true
+        },
+        "add_command_power": -20,
+        "add_political_power": -20
+      }
+    }
+  }
+]

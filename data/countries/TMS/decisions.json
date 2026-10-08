@@ -1,0 +1,81 @@
+[
+  {
+    "id": "SOV_build_national_academy_of_sciences_integrated_republic_TMS",
+    "category_id": "SOV_national_academy_of_sciences_dec_cat",
+    "name": "Построить: [TMS.GetAdjective]ую $SOV_build_national_academy_of_sciences_integrated_republic_default$",
+    "desc": "Мы построим в государстве [TMS.GetNameDef] Национальную академию наук — она несомненно ускорит исследования в нашей стране.",
+    "icon": "GFX_decision_SOV_academy_of_sciences",
+    "cost": "SOV_national_academy_of_sciences_construction_cost",
+    "fire_only_once": true,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_national_academies_of_sciences",
+      "NOT": [
+        {
+          "has_country_flag": "SOV_national_academy_of_sciences_built_TMS_flag"
+        },
+        {
+          "country_exists": "TMS"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AM_fight_TMS",
+    "category_id": "RUS_after_midnight_category",
+    "name": "Напасть на [TMS.GetFlag] [TMS.GetName]",
+    "desc": "",
+    "icon": "GFX_AM_Samara",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "global.AM_sandbox_mode": 1
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AM_fight_TMS",
+      "declare_war_on": {
+        "target": "TMS",
+        "type": "annex_everything"
+      },
+      "subtract_from_variable": {
+        "global.AM_progress_count": 1
+      },
+      "TNO_am_counter_calculate": true
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_TMS",
+    "category_id": "RUS_AM_coring_category",
+    "name": "Интегрировать [TMS.GetFlag] [TMS.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "all_state": {
+        "OR": {
+          "NOT": {
+            "is_core_of": "TMS"
+          },
+          "AND": {
+            "is_owned_by": "ROOT",
+            "NOT": {
+              "is_core_of": "ROOT"
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  }
+]

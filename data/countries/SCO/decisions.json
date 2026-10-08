@@ -1,0 +1,4298 @@
+[
+  {
+    "id": "AST_scorch_the_north",
+    "category_id": "AST_war_is_coming_cat",
+    "name": "Выжженная земля на севере",
+    "desc": "В случае угрозы вторжения с севера могут быть его можно остановить, несмотря на значительные издержки. Тактика выжженной земли приведет к замедлению развития северных регионов, однако может оказаться необходимой мерой для сдерживания агрессора.",
+    "icon": "generic_scorched_earth",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "add_days_mission_timeout": {
+        "mission": "AST_summon_the_cabinet_mission",
+        "days": 60
+      },
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "AST_scorch_the_north_tt"
+      ],
+      "effect_tooltip": {
+        "every_owned_state": {
+          "limit": {
+            "is_owned_by": "ROOT",
+            "infrastructure": {
+              "_op": ">",
+              "value": 0
+            },
+            "OR": {
+              "state": [
+                870,
+                520,
+                872
+              ]
+            }
+          },
+          "damage_building": {
+            "type": "infrastructure",
+            "damage": 3
+          }
+        }
+      },
+      "set_country_flag": "AST_scorch_the_north"
+    }
+  },
+  {
+    "id": "CHI_scorched_earth_tactics",
+    "category_id": "war_measures",
+    "name": "CHI_scorched_earth_tactics",
+    "desc": "",
+    "icon": "generic_scorched_earth",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "is_controlled_by": "ROOT",
+        "infrastructure": {
+          "_op": ">",
+          "value": 0
+        },
+        "any_neighbor_state": {
+          "NOT": {
+            "is_fully_controlled_by": "ROOT"
+          },
+          "controller": {
+            "has_war_with": "CHI"
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "CHI_scorched_earth_tactics",
+          "CHI_sea_scorched_earth_tactics"
+        ]
+      }
+    },
+    "complete_effect": {
+      "every_owned_state": {
+        "limit": {
+          "is_controlled_by": "ROOT",
+          "infrastructure": {
+            "_op": ">",
+            "value": 0
+          },
+          "any_neighbor_state": {
+            "NOT": {
+              "is_fully_controlled_by": "ROOT"
+            },
+            "controller": {
+              "has_war_with": "CHI"
+            }
+          }
+        },
+        "damage_building": {
+          "type": "infrastructure",
+          "damage": 3
+        }
+      },
+      "random_country": {
+        "limit": {
+          "PRC_has_low_popular_support": true
+        },
+        "PRC_low_popular_support_level_down": true
+      }
+    }
+  },
+  {
+    "id": "open_up_political_discourse_democratic",
+    "category_id": "democratic_on_the_rise",
+    "name": "Начало политических дебатов",
+    "desc": "Мы должны начать работу по примирению конфликтующих точек зрения в нашем правительстве. Возможно, со временем это даст нам возможность мирным образом изменить политический строй нашей державы.",
+    "icon": "generic_political_discourse",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "fascism": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "democratic": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "communism": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "neutrality": {
+        "_op": "<",
+        "value": 0.9
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "set_country_flag": "open_up_political_discourse_democratic"
+    }
+  },
+  {
+    "id": "FIN_request_an_armistice_with_moscow",
+    "category_id": "FIN_foreign_politics_decision_category",
+    "name": "FIN_request_an_armistice_with_moscow",
+    "desc": "",
+    "icon": "GFX_decision_hol_war_on_pacifism",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "SOV",
+      "GER": {
+        "has_war_with": "SOV"
+      },
+      "OR": {
+        "surrender_progress": {
+          "_op": ">",
+          "value": 0.05
+        },
+        "AND": {
+          "812": {
+            "is_controlled_by": "SOV"
+          },
+          "808": {
+            "is_controlled_by": "SOV"
+          },
+          "11": {
+            "is_controlled_by": "SOV"
+          },
+          "206": {
+            "is_controlled_by": "SOV"
+          },
+          "763": {
+            "is_controlled_by": "SOV"
+          }
+        },
+        "SOV": [
+          {
+            "has_idea": "SOV_the_rush_for_berlin"
+          },
+          {
+            "has_active_mission": "SOV_operation_iskra_ongoing"
+          }
+        ],
+        "any_owned_state": {
+          "NOT": [
+            {
+              "state": 145
+            },
+            {
+              "is_controlled_by": "ROOT"
+            }
+          ],
+          "is_core_of": "ROOT"
+        }
+      },
+      "has_civil_war": false,
+      "is_in_faction": false,
+      "has_completed_focus": "FIN_cooperation_with_germany"
+    },
+    "visible": {
+      "has_war_with": "SOV",
+      "GER": {
+        "has_war_with": "SOV"
+      },
+      "SOV": {
+        "has_country_flag": "SOV_great_patriotic_war_flag"
+      },
+      "has_completed_focus": "FIN_cooperation_with_germany",
+      "has_civil_war": false,
+      "is_in_faction": false,
+      "NOT": [
+        {
+          "has_country_flag": "FIN_already_attempted_an_armistice"
+        },
+        {
+          "has_country_flag": "FIN_negotiating_switching_sides_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "set_country_flag": "FIN_negotiating_armistice_flag"
+        },
+        {
+          "set_country_flag": "FIN_already_attempted_an_armistice"
+        }
+      ],
+      "SOV": {
+        "country_event": {
+          "id": "AAT_finland_continuation_war.08",
+          "days": 1,
+          "random_days": 3
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "SOV": [
+          {
+            "white_peace": "FIN",
+            "IF": [
+              {
+                "limit": {
+                  "146": {
+                    "is_owned_by": "FIN"
+                  }
+                },
+                "SOV": {
+                  "transfer_state": 146
+                }
+              },
+              {
+                "limit": {
+                  "147": {
+                    "is_owned_by": "FIN"
+                  }
+                },
+                "SOV": {
+                  "transfer_state": 147
+                }
+              },
+              {
+                "limit": {
+                  "722": {
+                    "is_owned_by": "FIN"
+                  }
+                },
+                "SOV": {
+                  "transfer_state": 722
+                }
+              }
+            ]
+          },
+          {
+            "army_experience": 25,
+            "navy_experience": 25,
+            "air_experience": 25,
+            "add_political_power": 100
+          }
+        ],
+        "ROOT": {
+          "send_equipment": [
+            {
+              "equipment": "infantry_equipment",
+              "amount": 2500,
+              "target": "SOV"
+            },
+            {
+              "equipment": "support_equipment",
+              "amount": 500,
+              "target": "SOV"
+            },
+            {
+              "equipment": "artillery_equipment",
+              "amount": 150,
+              "target": "SOV"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_establish_scotland_decision",
+    "category_id": "GER_realpolitik_cat",
+    "name": "Основать Большое Шотландское государство",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "has_completed_focus": "GER_establish_western_grand_duchies",
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "121": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "133": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "136": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "120": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "933": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "131": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "931": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "932": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_establish_western_grand_duchies",
+      "SCO": {
+        "OR": {
+          "exists": false,
+          "is_subject_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_sco_state_transfer_effect_tt",
+      "IF": {
+        "limit": {
+          "has_government": "neutrality",
+          "SCO": {
+            "NOT": {
+              "is_subject_of": "ROOT"
+            }
+          }
+        },
+        "set_autonomy": {
+          "target": "SCO",
+          "autonomy_state": "autonomy_personal_union"
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt"
+      },
+      "ELSE_IF": [
+        {
+          "limit": {
+            "has_government": "democratic",
+            "SCO": {
+              "NOT": {
+                "is_subject_of": "ROOT"
+              }
+            }
+          },
+          "set_autonomy": {
+            "target": "SCO",
+            "autonomy_state": "autonomy_colony"
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt"
+        },
+        {
+          "limit": {
+            "SCO": {
+              "NOT": {
+                "is_subject_of": "ROOT"
+              }
+            }
+          },
+          "set_autonomy": {
+            "target": "SCO",
+            "autonomy_state": "autonomy_puppet"
+          },
+          "custom_effect_tooltip": "generic_skip_one_line_tt"
+        }
+      ],
+      "hidden_effect": {
+        "every_state": {
+          "limit": {
+            "OR": {
+              "state": [
+                121,
+                133,
+                136,
+                120,
+                933,
+                131,
+                931,
+                932
+              ]
+            }
+          },
+          "add_core_of": "SCO",
+          "transfer_state_to": "SCO"
+        },
+        "SCO": {
+          "add_manpower": 25000,
+          "add_equipment_to_stockpile": [
+            {
+              "type": "infantry_equipment",
+              "amount": 1000,
+              "producer": "GER"
+            },
+            {
+              "type": "support_equipment",
+              "amount": 250,
+              "producer": "GER"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "ICE_incite_communist_uprising_scotland",
+    "category_id": "ICE_infiltrate_the_british_isles_category",
+    "name": "ICE_incite_communist_uprising_scotland",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ICE_uprising_scotland_tt",
+        "121": {
+          "owner": {
+            "communism": {
+              "_op": ">",
+              "value": "ICE.communism_support_needed"
+            }
+          }
+        }
+      },
+      "SCO": {
+        "exists": false
+      },
+      "ENG": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      }
+    },
+    "visible": {
+      "SCO": {
+        "exists": false
+      },
+      "ENG": {
+        "NOT": {
+          "has_government": "communism"
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ICE_incite_communist_uprising_scotland_tt",
+      "hidden_effect": {
+        "set_country_flag": "achivement_started_uprising_scotland",
+        "every_other_country": {
+          "limit": {
+            "any_owned_state": {
+              "is_core_of": "SCO"
+            }
+          },
+          "add_to_array": {
+            "ICE.scottish_uprising_enemies": "THIS"
+          }
+        },
+        "SCO": [
+          {
+            "transfer_state": 121
+          },
+          {
+            "division_template": {
+              "name": "Workers' Militias",
+              "is_locked": false,
+              "regiments": {
+                "infantry": [
+                  {
+                    "x": 0,
+                    "y": 0
+                  },
+                  {
+                    "x": 0,
+                    "y": 1
+                  },
+                  {
+                    "x": 0,
+                    "y": 2
+                  }
+                ]
+              },
+              "support": []
+            },
+            "121": {
+              "create_unit": {
+                "division": "name = \"Workers' Militia\" division_template = \"Workers' Militias\" start_experience_factor = 0.1 start_equipment_factor = 1 start_manpower_factor = 1",
+                "owner": "SCO",
+                "allow_spawning_on_enemy_provs": true,
+                "count": 1
+              }
+            },
+            "add_popularity": {
+              "ideology": "communism",
+              "popularity": 0.25
+            },
+            "set_politics": {
+              "ruling_party": "communism",
+              "elections_allowed": false
+            }
+          }
+        ],
+        "for_each_scope_loop": {
+          "array": "ICE.scottish_uprising_enemies",
+          "SCO": {
+            "declare_war_on": {
+              "target": "PREV",
+              "type": "independence_wargoal"
+            }
+          },
+          "121": {
+            "teleport_armies": []
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_sell_obsolete_escort_ships_to_country",
+    "category_id": "ITA_naval_cooperation_programs_dec_cat",
+    "name": "Продать устаревшие корабли сопровождения государству [FROM.GetNameDef]",
+    "desc": "В нашем флоте есть устаревшие корабли, которые можно продать другой стране.",
+    "icon": "GFX_decision_generic_naval",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "OR": {
+          "is_in_faction_with": "ROOT",
+          "is_in_faction": false
+        },
+        "is_major": false,
+        "capital_scope": {
+          "is_on_continent": "europe"
+        },
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_navy_size": {
+          "size": {
+            "_op": ">",
+            "value": 0
+          },
+          "archetype": "ship_hull_light"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ITA_escort_ships_purchase_ongoing_flag"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "ITA_sold_obsolete_escort_ships_flag"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "ITA_escort_ships_purchase_ongoing_flag",
+      "FROM": {
+        "country_event": {
+          "id": "BBA_italy_naval_cooperation_programs.08",
+          "hours": 1
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "ITA_sell_obsolete_escort_ships_to_country_only_once_tt"
+      ],
+      "effect_tooltip": {
+        "custom_effect_tooltip": "ITA_cooperation_programs_deal_others_tt",
+        "add_timed_idea": {
+          "idea": "ITA_sold_obsolete_escort_ships_ns",
+          "days": 365
+        }
+      }
+    }
+  },
+  {
+    "id": "open_up_political_discourse_fascism",
+    "category_id": "fascism_on_the_rise",
+    "name": "Начало политических дебатов",
+    "desc": "Мы должны начать работу по примирению конфликтующих точек зрения в нашем правительстве. Возможно, со временем это даст нам возможность мирным образом изменить политический строй нашей державы.",
+    "icon": "generic_political_discourse",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "fascism": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "democratic": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "communism": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "neutrality": {
+        "_op": "<",
+        "value": 0.9
+      }
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_idea_with_trait": [
+            "fascist_demagogue",
+            "syncretic_revanchist",
+            "GER_revolutionary_nationalist_advisor"
+          ]
+        },
+        {
+          "AND": {
+            "original_tag": "GER",
+            "has_completed_focus": "GER_expatriate_the_communists_ww",
+            "has_country_flag": "GER_strasserism_relevant_in_germany_flag"
+          },
+          "check_has_focus_tree_to_switch_to_fascism": true
+        }
+      ],
+      "NOT": [
+        {
+          "has_country_flag": "open_up_political_discourse_fascism"
+        },
+        {
+          "has_government": "fascism"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "open_up_political_discourse_fascism"
+    }
+  },
+  {
+    "id": "open_up_political_discourse_communist",
+    "category_id": "communism_on_the_rise",
+    "name": "Начало политических дебатов",
+    "desc": "Мы должны начать работу по примирению конфликтующих точек зрения в нашем правительстве. Возможно, со временем это даст нам возможность мирным образом изменить политический строй нашей державы.",
+    "icon": "generic_political_discourse",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "fascism": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "democratic": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "communism": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "neutrality": {
+        "_op": "<",
+        "value": 0.9
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_idea_with_trait": [
+          "communist_revolutionary",
+          "ambitious_union_boss"
+        ],
+        "AND": {
+          "has_idea_with_trait": "ARG_communist_insurrectionist",
+          "original_tag": "IRQ"
+        }
+      },
+      "NOT": {
+        "has_government": "communism"
+      },
+      "check_has_focus_tree_to_switch_to_communism": true
+    },
+    "complete_effect": {
+      "set_country_flag": "open_up_political_discourse_communist"
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_great_purge_moscow_trial_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_great_purge_moscow_trial_dec",
+    "desc": "",
+    "icon": "eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_great_purge_moscow_trial_effect": true
+    }
+  },
+  {
+    "id": "SOV_propaganda_defend_moscow",
+    "category_id": "SOV_propaganda_campaigns",
+    "name": "Отстоим Москву!",
+    "desc": "",
+    "icon": "eng_propaganda_campaigns",
+    "cost": "SOV_propaganda_defend_moscow_cost",
+    "fire_only_once": false,
+    "available": {
+      "SOV_propaganda_poster_slot_available": true,
+      "controls_state": 219,
+      "219": {
+        "any_neighbor_state": {
+          "controller": {
+            "has_war_with": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": "SOV_expand_the_agitprop",
+        "has_country_flag": "SOV_debug_unlock_propaganda_campaigns_flag"
+      }
+    },
+    "complete_effect": {
+      "set_variable": {
+        "SOV_new_propaganda_campaign": 5
+      },
+      "SOV_pick_propaganda_campaign_slot_effect": true,
+      "SOV_achievement_propaganda_counter_effect": true,
+      "219": {
+        "add_dynamic_modifier": {
+          "modifier": "SOV_defend_moscow",
+          "scope": "SOV"
+        },
+        "every_neighbor_state": {
+          "add_dynamic_modifier": {
+            "modifier": "SOV_defend_moscow",
+            "scope": "SOV"
+          }
+        }
+      },
+      "custom_effect_tooltip": "SOV_propaganda_defend_moscow_state_modifier_tt"
+    }
+  },
+  {
+    "id": "SOV_hold_moscow",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Удерживать город [219.GetName]",
+    "desc": "[219.GetName] выстоит!",
+    "icon": "generic_civil_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "controls_state": 219
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "219": {
+        "save_event_target_as": "soviet_city"
+      },
+      "country_event": "wtt_soviet_hold_city.6"
+    }
+  },
+  {
+    "id": "SOV_scorched_earth",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Применение тактики выжженной земли",
+    "desc": "",
+    "icon": "generic_scorched_earth",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "any_enemy_country": {
+        "SOV_is_major_not_original_sov": true
+      },
+      "surrender_progress": {
+        "_op": ">",
+        "value": 0
+      },
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_desperate_measures",
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_scorched_earth",
+      "unlock_decision_tooltip": [
+        "SOV_scorched_earth_baltics",
+        "SOV_scorched_earth_byelorussia",
+        "SOV_scorched_earth_ukraine",
+        "SOV_scorched_earth_stalingrad",
+        "SOV_scorched_earth_caucasus",
+        "SOV_scorched_earth_moscow"
+      ]
+    }
+  },
+  {
+    "id": "SOV_scorched_earth_baltics",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Тактика выжженной земли в Прибалтике",
+    "desc": "",
+    "icon": "generic_scorched_earth",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "has_country_flag": "SOV_scorched_earth",
+      "has_equipment": {
+        "support_equipment": {
+          "_op": ">",
+          "value": 24
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SOV_scorched_earth",
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      },
+      "OR": {
+        "controls_state": [
+          188,
+          814,
+          189,
+          11,
+          815,
+          190,
+          12,
+          809,
+          810,
+          808,
+          191,
+          13,
+          811,
+          812,
+          813
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "support_equipment_1",
+        "amount": -25
+      },
+      "every_controlled_state": {
+        "limit": {
+          "OR": {
+            "state": [
+              188,
+              814,
+              189,
+              11,
+              815,
+              190,
+              12,
+              809,
+              810,
+              808,
+              191,
+              13,
+              811,
+              812,
+              813
+            ]
+          }
+        },
+        "damage_building": {
+          "type": "infrastructure",
+          "damage": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_scorched_earth_byelorussia",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Тактика выжженной земли в Белоруссии",
+    "desc": "",
+    "icon": "generic_scorched_earth",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "has_country_flag": "SOV_scorched_earth",
+      "has_equipment": {
+        "support_equipment": {
+          "_op": ">",
+          "value": 49
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SOV_scorched_earth",
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      },
+      "any_of": {
+        "array": "BLR.core_states",
+        "var:v": {
+          "is_controlled_by": "SOV"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "support_equipment_1",
+        "amount": -50
+      },
+      "every_state": {
+        "limit": {
+          "is_core_of": "BLR",
+          "is_controlled_by": "SOV"
+        },
+        "damage_building": {
+          "type": "infrastructure",
+          "damage": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_scorched_earth_ukraine",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Тактика выжженной земли на Украине",
+    "desc": "",
+    "icon": "generic_scorched_earth",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "has_country_flag": "SOV_scorched_earth",
+      "has_equipment": {
+        "support_equipment": {
+          "_op": ">",
+          "value": 74
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "SOV_scorched_earth",
+      "any_of": {
+        "array": "UKR.core_states",
+        "var:v": {
+          "is_controlled_by": "SOV"
+        }
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "support_equipment_1",
+        "amount": -75
+      },
+      "every_state": {
+        "limit": {
+          "is_core_of": "UKR",
+          "is_controlled_by": "SOV"
+        },
+        "damage_building": {
+          "type": "infrastructure",
+          "damage": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_scorched_earth_caucasus",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Тактика выжженной земли на Кавказе",
+    "desc": "",
+    "icon": "generic_scorched_earth",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "has_country_flag": "SOV_scorched_earth",
+      "has_equipment": {
+        "support_equipment": {
+          "_op": ">",
+          "value": 49
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SOV_scorched_earth",
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      },
+      "OR": {
+        "controls_state": [
+          229,
+          230,
+          231,
+          232,
+          233,
+          234,
+          235,
+          821,
+          826,
+          827,
+          828
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "support_equipment_1",
+        "amount": -50
+      },
+      "every_controlled_state": {
+        "limit": {
+          "OR": {
+            "state": [
+              229,
+              230,
+              231,
+              232,
+              233,
+              234,
+              235,
+              821,
+              826,
+              827,
+              828
+            ]
+          }
+        },
+        "damage_building": {
+          "type": "infrastructure",
+          "damage": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_scorched_earth_stalingrad",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Тактика выжженной земли на подходах к Сталинграду",
+    "desc": "",
+    "icon": "generic_scorched_earth",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "has_country_flag": "SOV_scorched_earth",
+      "has_equipment": {
+        "support_equipment": {
+          "_op": ">",
+          "value": 49
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SOV_scorched_earth",
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      },
+      "OR": {
+        "controls_state": [
+          245,
+          217,
+          218,
+          238,
+          237,
+          236,
+          265,
+          829
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "support_equipment_1",
+        "amount": -50
+      },
+      "every_controlled_state": {
+        "limit": {
+          "OR": {
+            "state": [
+              245,
+              217,
+              218,
+              238,
+              237,
+              236,
+              265,
+              829
+            ]
+          }
+        },
+        "damage_building": {
+          "type": "infrastructure",
+          "damage": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_scorched_earth_moscow",
+    "category_id": "SOV_great_patriotic_war",
+    "name": "Тактика выжженной земли на подходах к Москве",
+    "desc": "",
+    "icon": "generic_scorched_earth",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "has_country_flag": "SOV_scorched_earth",
+      "has_equipment": {
+        "support_equipment": {
+          "_op": ">",
+          "value": 49
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SOV_scorched_earth",
+      "NOT": {
+        "has_country_flag": "SOV_order_227_flag"
+      },
+      "OR": {
+        "controls_state": [
+          220,
+          222,
+          224,
+          243,
+          205,
+          242,
+          246,
+          219
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "support_equipment_1",
+        "amount": -50
+      },
+      "every_state": {
+        "limit": {
+          "OR": {
+            "state": [
+              220,
+              222,
+              224,
+              243,
+              205,
+              242,
+              246,
+              219
+            ]
+          },
+          "is_controlled_by": "SOV"
+        },
+        "damage_building": {
+          "type": "infrastructure",
+          "damage": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_secure_moscow_opposition",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Заручиться поддержкой в Москве",
+    "desc": "Воспользоваться нашими связями в Москве, чтобы обеспечить там восстание партизан в попытке захватить столицу.",
+    "icon": "GFX_decision_revolt",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "SOV_secure_leningrad_opposition"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_completed_focus": "SOV_align_the_zinovyevites"
+      },
+      "NOT": {
+        "has_global_flag": "SOV_soviet_civil_war"
+      }
+    },
+    "complete_effect": {
+      "random_list": {
+        "20": [
+          {
+            "SOV_paranoia_very_low_increase_effect": true
+          },
+          {
+            "SOV_paranoia_medium_increase_effect": true
+          }
+        ],
+        "60": {
+          "SOV_paranoia_low_increase_effect": true
+        }
+      }
+    }
+  },
+  {
+    "id": "SPA_expand_influence_in_the_pais_vasco_garrison",
+    "category_id": "SPR_the_inevitable_civil_war",
+    "name": "Расширить влияние в басконском гарнизоне",
+    "desc": "",
+    "icon": [
+      {
+        "key": "spa_garrison_control_none",
+        "trigger": {
+          "has_completed_focus": "SPA_a_great_spain",
+          "792": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 1,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spa_garrison_control_weak",
+        "trigger": {
+          "has_completed_focus": "SPA_a_great_spain",
+          "792": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 2,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spa_garrison_control_strong",
+        "trigger": {
+          "has_completed_focus": "SPA_a_great_spain",
+          "792": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 3,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spa_garrison_control_total",
+        "trigger": {
+          "has_completed_focus": "SPA_a_great_spain",
+          "792": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 4,
+              "compare": "greater_than_or_equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spr_garrison_control_none",
+        "trigger": {
+          "has_completed_focus": "SPR_the_popular_front",
+          "792": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 1,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spr_garrison_control_weak",
+        "trigger": {
+          "has_completed_focus": "SPR_the_popular_front",
+          "792": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 2,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spr_garrison_control_strong",
+        "trigger": {
+          "has_completed_focus": "SPR_the_popular_front",
+          "792": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 3,
+              "compare": "equals"
+            }
+          }
+        }
+      },
+      {
+        "key": "spr_garrison_control_total",
+        "trigger": {
+          "has_completed_focus": "SPR_the_popular_front",
+          "792": {
+            "check_variable": {
+              "var": "SPA_garrison_control",
+              "value": 4,
+              "compare": "greater_than_or_equals"
+            }
+          }
+        }
+      }
+    ],
+    "cost": "792.SPA_garrison_control_cost?10",
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 792,
+      "if": [
+        {
+          "limit": {
+            "has_completed_focus": "SPA_a_great_spain"
+          },
+          "custom_trigger_tooltip": {
+            "tooltip": "SPA_expand_influence_nationalists_trigger_tt",
+            "792": {
+              "check_variable": {
+                "var": "SPA_garrison_control",
+                "value": 4,
+                "compare": "less_than"
+              }
+            }
+          }
+        },
+        {
+          "limit": {
+            "has_completed_focus": "SPR_the_popular_front"
+          },
+          "custom_trigger_tooltip": {
+            "tooltip": "SPR_expand_influence_republicans_trigger_tt",
+            "792": {
+              "check_variable": {
+                "var": "SPA_garrison_control",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            }
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "SPA_already_expanding_influence_flag"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_global_flag": "spanish_civil_war"
+      },
+      "has_country_flag": "SPR_spanish_elections_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "SPA_already_expanding_influence_flag"
+    }
+  },
+  {
+    "id": "SPA_expand_influence_in_the_pais_vasco_garrison_mission",
+    "category_id": "SPR_opposition_civil_war_preparations",
+    "name": "Возникло сопротивление влиянию в басконском гарнизоне",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "SPR",
+      "has_country_flag": "SPR_spanish_elections_flag",
+      "NOT": {
+        "has_global_flag": "spanish_civil_war"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SPA_pais_vasco_offensive",
+    "category_id": "SPR_civil_war_offensives",
+    "name": "Басконское наступление",
+    "desc": "",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_full_control_of_state": 792
+        },
+        {
+          "has_active_mission": "SPR_preparing_offensive"
+        }
+      ],
+      "792": {
+        "has_state_flag": "SPR_unplanned_offensive_flag",
+        "OR": {
+          "is_controlled_by": "ROOT",
+          "any_neighbor_state": {
+            "is_controlled_by": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "SPR",
+      "has_global_flag": "spanish_civil_war",
+      "NOT": {
+        "has_global_flag": "scw_over"
+      },
+      "792": {
+        "has_state_flag": "SPR_unplanned_offensive_flag"
+      }
+    },
+    "complete_effect": {
+      "activate_mission": "SPR_preparing_offensive",
+      "set_country_flag": "SPR_preparing_offensive_in_progress_flag",
+      "every_other_country": {
+        "limit": {
+          "original_tag": "SPR"
+        },
+        "activate_mission": "SPA_pais_vasco_offensive_mission"
+      }
+    }
+  },
+  {
+    "id": "SPA_pais_vasco_offensive_mission",
+    "category_id": "SPR_civil_war_offensives",
+    "name": "Неминуемо басконское наступление",
+    "desc": "",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "original_tag": "SPR",
+      "has_global_flag": "spanish_civil_war",
+      "NOT": {
+        "has_global_flag": "scw_over"
+      },
+      "792": {
+        "has_state_flag": "SPR_unplanned_offensive_flag"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SPA_activate_pais_vasco_fifth_columnists",
+    "category_id": "SPR_civil_war_offensives",
+    "name": "Задействовать басконскую пятую колонну",
+    "desc": "",
+    "icon": "generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "792": {
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        },
+        "any_neighbor_state": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "tag": "SPA",
+      "has_global_flag": "spanish_civil_war",
+      "NOT": {
+        "has_global_flag": "scw_over"
+      },
+      "792": {
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "has_completed_focus": "SPA_the_fifth_column"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SPA_establish_pais_vasco_carlist_cell",
+    "category_id": "SPA_preparing_the_carlist_insurrection",
+    "name": "Основать басконскую карлистскую ячейку",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": 792,
+      "792": [
+        {
+          "NOT": {
+            "has_state_flag": "SPA_carlist_cell_flag"
+          }
+        },
+        {
+          "NOT": {
+            "has_state_flag": "SPA_union_militar_flag"
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "SPA_already_establishing_carlist_cell_flag"
+      }
+    },
+    "visible": {
+      "has_global_flag": "spanish_civil_war",
+      "NOT": [
+        {
+          "has_global_flag": "scw_over"
+        },
+        {
+          "has_global_flag": "SPR_carlist_uprising_flag"
+        }
+      ],
+      "has_completed_focus": "SPA_prepare_the_carlist_insurrection"
+    },
+    "complete_effect": {
+      "set_country_flag": "SPA_already_establishing_carlist_cell_flag"
+    }
+  },
+  {
+    "id": "SS_recruitment_scotland",
+    "category_id": "SS_recruitment",
+    "name": "Разрешить призыв СС в Шотландии",
+    "desc": "",
+    "icon": "generic_army_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "AND": [
+          {
+            "121": {
+              "is_controlled_by": "GER"
+            },
+            "133": {
+              "is_controlled_by": "GER"
+            },
+            "136": {
+              "is_controlled_by": "GER"
+            },
+            "120": {
+              "is_controlled_by": "GER"
+            }
+          },
+          {
+            "121": {
+              "CONTROLLER": {
+                "is_subject_of": "GER"
+              }
+            },
+            "133": {
+              "CONTROLLER": {
+                "is_subject_of": "GER"
+              }
+            },
+            "136": {
+              "CONTROLLER": {
+                "is_subject_of": "GER"
+              }
+            },
+            "120": {
+              "CONTROLLER": {
+                "is_subject_of": "GER"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "AND": [
+          {
+            "121": {
+              "is_controlled_by": "GER"
+            },
+            "133": {
+              "is_controlled_by": "GER"
+            },
+            "136": {
+              "is_controlled_by": "GER"
+            },
+            "120": {
+              "is_controlled_by": "GER"
+            }
+          },
+          {
+            "121": {
+              "CONTROLLER": {
+                "is_subject_of": "GER"
+              }
+            },
+            "133": {
+              "CONTROLLER": {
+                "is_subject_of": "GER"
+              }
+            },
+            "136": {
+              "CONTROLLER": {
+                "is_subject_of": "GER"
+              }
+            },
+            "120": {
+              "CONTROLLER": {
+                "is_subject_of": "GER"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "country_event": "ss_recruitment_alternate.2"
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_Decision_Expand_Substation_Scott",
+    "category_id": "Antarctica_GUI_AAO",
+    "name": "Расширить Субстанцию Скотт",
+    "desc": "",
+    "icon": "GFX_decision_generic_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "Antarctica_GUI_AAO_Decision_Letter_Received_Available"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Decision_Expand_Substation_Scott",
+      "add_to_variable": {
+        "Antarctica_Militarization": -4
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAA_Decision_Scouting_Expedition_Giro",
+    "category_id": "Antarctica_GUI_AAA",
+    "name": "Поиск места для подбазы",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "Antarctica_GUI_AAA_Decision_Scouting_Expedition_Giro_Enabled"
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAA_Sub_Base_Explored"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAA_Decision_Scouting_Expedition_Giro",
+      "add_political_power": -50,
+      "add_to_variable": [
+        {
+          "Antarctica_Equipment": -25
+        },
+        {
+          "Antarctica_Militarization": -10
+        },
+        {
+          "Antarctica_Legitimacy": -10
+        }
+      ]
+    }
+  },
+  {
+    "id": "AAC_conduct_aerial_scouting_missions",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Запустить воздушную разведку",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: completed AAC_conduct_aerial_scouting_missions",
+      "hidden_effect": {
+        "air_experience": -50
+      }
+    }
+  },
+  {
+    "id": "AAC_Diplomacy_Complementary_Pisco",
+    "category_id": "Antarctica_GUI_AAC_Diplomacy",
+    "name": "Преподнести писко",
+    "desc": "",
+    "icon": "GFX_decision_generic_luxury_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "AAC_Diplomacy_Active_Country": 0
+        }
+      },
+      "has_country_flag": "AAC_negotiations_decisions_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Diplomacy_Complementary_Pisco",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "tempEq": -5
+        },
+        "Antarctica_change_equipment": true
+      },
+      "set_temp_variable": {
+        "prog_change_temp": 2.5
+      },
+      "Antarctica_AAC_Diplo_Modify_Progress": true
+    }
+  },
+  {
+    "id": "SCO_1962_ILP_Setup",
+    "category_id": "SCO_debug_category",
+    "name": "Определить победу в 1962 году за НЛП",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "is_ai": false
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_1962_ILP_Setup",
+      "set_variable": [
+        {
+          "SCO_English_Approval": 45
+        },
+        {
+          "SCO_English_Approval_c": 0
+        }
+      ],
+      "hidden_effect": {
+        "set_politics": {
+          "ruling_party": "progressivism",
+          "elections_allowed": true
+        },
+        "add_popularity": {
+          "ideology": "progressivism",
+          "popularity": 0.05
+        },
+        "load_focus_tree": "SCO_ILP_Victory",
+        "remove_all_ministers": true,
+        "add_ideas": [
+          "SCO_Alice_Cullen_eco",
+          "SCO_Myer_Galpern_for",
+          "SCO_Eustace_George_Willis_hog",
+          "SCO_Malcom_MacPherson_sec"
+        ]
+      }
+    }
+  },
+  {
+    "id": "SCO_1962_SNP_Setup",
+    "category_id": "SCO_debug_category",
+    "name": "Определить победу в 1962 году за ШНП",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "is_ai": false
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_1962_SNP_Setup",
+      "SCO_Decrease_English_Approval_point_one": true,
+      "add_popularity": {
+        "ideology": "liberalism",
+        "popularity": 0.05
+      },
+      "hidden_effect": {
+        "load_focus_tree": "SCO_SNP_Victory"
+      }
+    }
+  },
+  {
+    "id": "SCO_1962_UP_Setup",
+    "category_id": "SCO_debug_category",
+    "name": "Определить победу в 1962 году за ЮП",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "is_ai": false
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_1962_UP_Setup",
+      "set_variable": [
+        {
+          "SCO_English_Approval": 65
+        },
+        {
+          "SCO_English_Approval_c": 0.6
+        }
+      ],
+      "set_politics": {
+        "ruling_party": "conservatism",
+        "elections_allowed": true
+      },
+      "hidden_effect": {
+        "add_popularity": {
+          "ideology": "conservatism",
+          "popularity": 0.05
+        },
+        "set_country_flag": "SCO_UP_Victory",
+        "load_focus_tree": "SCO_UP_Victory",
+        "remove_all_ministers": true,
+        "add_ideas": [
+          "SCO_James_Stuart_hog",
+          "SCO_Iain_Sproat_for",
+          "SCO_Kate_Losinska_eco",
+          "SCO_Michael_Noble_sec"
+        ]
+      }
+    }
+  },
+  {
+    "id": "SCO_ECW_Send_Guns",
+    "category_id": "SCO_ECW_Intervention_category",
+    "name": "Отправить оружие СВОЕВ",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "SCO_UPECW_Transfer_Weapons"
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_ECW_Send_Guns",
+      "FEN": {
+        "country_event": {
+          "id": "SCO.3105"
+        },
+        "add_equipment_to_stockpile": [
+          {
+            "type": "infantry_equipment_3",
+            "amount": 2000,
+            "producer": "SCO"
+          },
+          {
+            "type": "anti_tank_equipment_2",
+            "amount": 300,
+            "producer": "SCO"
+          },
+          {
+            "type": "artillery_equipment_2",
+            "amount": 75,
+            "producer": "SCO"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "SCO_ECW_Send_Agents",
+    "category_id": "SCO_ECW_Intervention_category",
+    "name": "Отправить агентов на английскую территорию",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "SCO_UPECW_SAS_Agents"
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_ECW_Send_Agents",
+      "add_manpower": -2500,
+      "FEN": {
+        "country_event": {
+          "id": "SCO.3107"
+        },
+        "add_manpower": 2500
+      }
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Military_Police_in_Edinburgh",
+    "category_id": "SCO_paranoia_category",
+    "name": "Военная полиция в Эдинбурге",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Military_Police_in_Edinburgh_Investigate",
+    "category_id": "SCO_paranoia_category",
+    "name": "Исследовать военную полицию",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Military_Police_in_Edinburgh_Mole",
+            "SCO_Paranoia_Military_Police_in_Edinburgh_Reassign_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Police_in_Edinburgh"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Military_Police_in_Edinburgh_Investigate"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Military_Police_in_Edinburgh_Mole",
+    "category_id": "SCO_paranoia_category",
+    "name": "Отправить наших мужчин",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Paranoia_Military_Police_in_Edinburgh_Investigate",
+          "SCO_Paranoia_Military_Police_in_Edinburgh_Reassign_Them"
+        ]
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Police_in_Edinburgh"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Military_Police_in_Edinburgh_Mole"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Military_Police_in_Edinburgh_Reassign_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Переназначить генералов",
+    "desc": "",
+    "icon": "GFX_decision_generic_point",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Military_Police_in_Edinburgh_Mole",
+            "SCO_Paranoia_Military_Police_in_Edinburgh_Investigate"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Police_in_Edinburgh"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Military_Police_in_Edinburgh_Reassign_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Generals_Meeting",
+    "category_id": "SCO_paranoia_category",
+    "name": "Встреча генералов",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Generals_Meeting_Bug_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Наблюдать за генералами",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Generals_Meeting_Arrest_Them",
+            "SCO_Paranoia_Generals_Meeting_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Generals_Meeting"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Generals_Meeting_Bug_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Generals_Meeting_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Расследовать их деяния",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Generals_Meeting_Arrest_Them",
+            "SCO_Paranoia_Generals_Meeting_Bug_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Generals_Meeting"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Generals_Meeting_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Generals_Meeting_Arrest_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Арестовать генералов",
+    "desc": "",
+    "icon": "GFX_decision_generic_arrest",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Generals_Meeting_Bug_Them",
+            "SCO_Paranoia_Generals_Meeting_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Generals_Meeting"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Generals_Meeting_Arrest_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Ships_in_FoF",
+    "category_id": "SCO_paranoia_category",
+    "name": "Шотландский флот в заливе Ферт-оф-Форт",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Ships_in_FoF_Investigate",
+    "category_id": "SCO_paranoia_category",
+    "name": "Исследовать флот",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Ships_in_FoF_Break_Up",
+            "SCO_Paranoia_Ships_in_FoF_Spy"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Ships_in_FoF"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Ships_in_FoF_Investigate"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Ships_in_FoF_Spy",
+    "category_id": "SCO_paranoia_category",
+    "name": "Отправить шпиона на флот",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Ships_in_FoF_Break_Up",
+            "SCO_Paranoia_Ships_in_FoF_Investigate"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Ships_in_FoF"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Ships_in_FoF_Spy"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Ships_in_FoF_Break_Up",
+    "category_id": "SCO_paranoia_category",
+    "name": "Прорвать блокаду",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Ships_in_FoF_Investigate",
+            "SCO_Paranoia_Ships_in_FoF_Spy"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Ships_in_FoF"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Ships_in_FoF_Break_Up"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Coup",
+    "category_id": "SCO_paranoia_category",
+    "name": "Шотландский сюжет",
+    "desc": "",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Coup_Investigate",
+    "category_id": "SCO_paranoia_category",
+    "name": "Изучить отчёты",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Coup_Arrest_Soldiers",
+            "SCO_Paranoia_Coup_Watch"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Coup"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Coup_Investigate"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Coup_Watch",
+    "category_id": "SCO_paranoia_category",
+    "name": "Наблюдать за армией на равнинах",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Coup_Arrest_Soldiers",
+            "SCO_Paranoia_Coup_Investigate"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Coup"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Coup_Watch"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Coup_Arrest_Soldiers",
+    "category_id": "SCO_paranoia_category",
+    "name": "Арестовать солдат в равнинах",
+    "desc": "",
+    "icon": "GFX_decision_generic_arrest",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Coup_Investigate",
+            "SCO_Paranoia_Coup_Watch"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Coup"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Coup_Arrest_Soldiers"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Military_Aberdeen_Airport",
+    "category_id": "SCO_paranoia_category",
+    "name": "Странные вещи в Абердине",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Aberdeen_Airport_Bug_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Установить наблюдение",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Aberdeen_Investigate_Them",
+            "SCO_Paranoia_Aberdeen_Expose_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Aberdeen_Airport"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Aberdeen_Airport_Bug_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Aberdeen_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Исследовать ВВС",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Aberdeen_Airport_Bug_Them",
+            "SCO_Paranoia_Aberdeen_Expose_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Aberdeen_Airport"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Aberdeen_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Aberdeen_Expose_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Разоблачить заговорщиков",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Aberdeen_Investigate_Them",
+            "SCO_Paranoia_Aberdeen_Airport_Bug_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Aberdeen_Airport"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Aberdeen_Expose_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Military_Clyde",
+    "category_id": "SCO_paranoia_category",
+    "name": "Линкоры на Клайде",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Clyde_infiltrate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Отправить агентов",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Clyde_Arrest_Them",
+            "SCO_Paranoia_Clyde_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Clyde"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Clyde_infiltrate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Clyde_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Исследовать флот",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Clyde_Arrest_Them",
+            "SCO_Paranoia_Clyde_infiltrate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Clyde"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Clyde_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Clyde_Arrest_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Арестовать офицеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_arrest",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Clyde_infiltrate_Them",
+            "SCO_Paranoia_Clyde_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Clyde"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Clyde_Arrest_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Military_Lossiemouth",
+    "category_id": "SCO_paranoia_category",
+    "name": "Странные полёты в Лоссимуте",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Lossiemouth_Bug_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Внедриться в учения",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Lossiemouth_Force_Resignations",
+            "SCO_Paranoia_Lossiemouth_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Lossiemouth"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Lossiemouth_Bug_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Lossiemouth_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Изучить полёты",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Lossiemouth_Force_Resignations",
+            "SCO_Paranoia_Lossiemouth_Bug_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Lossiemouth"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: SCO_Paranoia_Lossiemouth_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Lossiemouth_Force_Resignations",
+    "category_id": "SCO_paranoia_category",
+    "name": "Отставка офицера Вооружённых Сил",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Lossiemouth_Bug_Them",
+            "SCO_Paranoia_Lossiemouth_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Lossiemouth"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Lossiemouth_Force_Resignations"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Military_Highlands",
+    "category_id": "SCO_paranoia_category",
+    "name": "Армейские учения в Нагорье",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Highlands_Bug_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Внедриться в учения",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Highlands_Investigate_Them",
+            "SCO_Paranoia_Highlands_Disperse_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Highlands"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Highlands_Bug_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Highlands_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Изучить армейские учения в Нагорье",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Highlands_Bug_Them",
+            "SCO_Paranoia_Highlands_Disperse_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Highlands"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Highlands_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Highlands_Disperse_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Распустить армию в Нагорье",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Highlands_Investigate_Them",
+            "SCO_Paranoia_Highlands_Bug_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Highlands"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Highlands_Disperse_Them"
+    }
+  },
+  {
+    "id": "SCO_Election_The_Presidents_Campaign",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания президента",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Campaign_UP_Fuckery"
+        ]
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "president_campaign_already_done"
+      },
+      "if": [
+        {
+          "limit": {
+            "has_country_flag": "SCO_SNP_Campaign"
+          },
+          "has_country_flag": "SCO_SNP_President"
+        },
+        {
+          "limit": {
+            "has_country_flag": "SCO_ILP_Campaign"
+          },
+          "has_country_flag": "SCO_ILP_President"
+        },
+        {
+          "limit": {
+            "has_country_flag": "SCO_UP_Campaign"
+          },
+          "has_country_flag": "SCO_UP_President"
+        }
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Election_Raise_Party_Turnout",
+    "category_id": "SCO_Elections_Category",
+    "name": "Увеличить численность партии",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Campaign_UP_Fuckery",
+          "SCO_Election_The_Presidents_Campaign"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "SCO_SNP_Campaign",
+          "SCO_ILP_Campaign",
+          "SCO_UP_Campaign"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_Campaign_in_Highlands",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания в Нагорье",
+    "desc": "Мы проведём кампанию в Шотландском Нагорье - земле, где преобладают горы и холод.\n\nЗдесь проживает [?120.state_population_k] тысяч человек.",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Raise_Party_Turnout",
+          "SCO_Election_Campaign_UP_Fuckery",
+          "SCO_Election_The_Presidents_Campaign"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "SCO_SNP_Campaign",
+          "SCO_ILP_Campaign",
+          "SCO_UP_Campaign"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_Campaign_in_Aberdeenshire",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания в Абердиншире",
+    "desc": "Мы проведём кампанию в Абердиншире, регионе, где сосредоточена диверсифицированная промышленность.\n\nЗдесь проживает [?136.state_population_k] тысяч человек.",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Raise_Party_Turnout",
+          "SCO_Election_Campaign_UP_Fuckery",
+          "SCO_Election_The_Presidents_Campaign"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "SCO_SNP_Campaign",
+          "SCO_ILP_Campaign",
+          "SCO_UP_Campaign"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_Campaign_in_Fife",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания в Файфе",
+    "desc": "Мы проведём кампанию в Файфе - родине древнего Королевства Пиктов.\n\n\nЗдесь проживает [?1320.state_population_k] тысяч человек.",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Raise_Party_Turnout",
+          "SCO_Election_Campaign_UP_Fuckery",
+          "SCO_Election_The_Presidents_Campaign"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "SCO_SNP_Campaign",
+          "SCO_ILP_Campaign",
+          "SCO_UP_Campaign"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_Campaign_in_Lanark",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания в Стратклайде",
+    "desc": "Дом для Глазго и второй по численности населения регион в Шотландии - Стратклайд всегда будет полем битвы для трёх сторон.\n\n\nЗдесь проживает [?133.state_population_k] тысяч человек.",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Raise_Party_Turnout",
+          "SCO_Election_Campaign_UP_Fuckery",
+          "SCO_Election_The_Presidents_Campaign"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "SCO_SNP_Campaign",
+          "SCO_ILP_Campaign",
+          "SCO_UP_Campaign"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_Campaign_in_Dumfries",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания в Ланарке",
+    "desc": "Мы проведём кампанию в приграничном районе Ланарке, где проживает множество английских беженцев.\n\n\nЗдесь проживает [?1321.state_population_k] тысяч человек.",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Raise_Party_Turnout",
+          "SCO_Election_Campaign_UP_Fuckery",
+          "SCO_Election_The_Presidents_Campaign"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "SCO_SNP_Campaign",
+          "SCO_ILP_Campaign",
+          "SCO_UP_Campaign"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_Campaign_in_Lothian",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания в Лотиане",
+    "desc": "Мы проведём кампанию в столице Шотландии Эдинбурге. Это - самый густонаселенный регион Шотландии.\n\n\nЗдесь проживает [?121.state_population_k] тысяч человек.",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Raise_Party_Turnout",
+          "SCO_Election_Campaign_UP_Fuckery",
+          "SCO_Election_The_Presidents_Campaign"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "SCO_SNP_Campaign",
+          "SCO_ILP_Campaign",
+          "SCO_UP_Campaign"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_Campaign_UP_Fuckery",
+    "category_id": "SCO_Elections_Category",
+    "name": "Отправить людей от комиссии",
+    "desc": "Мы введем в Избирательную комиссию наших единомышленников, которые выполнят свой долг перед Союзом и обеспечат, чтобы наша партия получила голоса, которых она заслуживает.",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "SCO_Election_Campaign_in_Highlands",
+          "SCO_Election_Campaign_in_Fife",
+          "SCO_Election_Campaign_in_Lanark",
+          "SCO_Election_Campaign_in_Dumfries",
+          "SCO_Election_Campaign_in_Aberdeenshire",
+          "SCO_Election_Campaign_in_Lothian",
+          "SCO_Election_Raise_Party_Turnout",
+          "SCO_Election_The_Presidents_Campaign"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "SCO_UP_Campaign"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_SNP_Campaign_in_Highlands",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ШНП в Нагорье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_SNP_Campaign_in_Aberdeenshire",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ШНП в Абердиншире",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_SNP_Campaign_in_Fife",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ШНП в Файфе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_SNP_Campaign_in_Lanark",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ШНП в Стратклайде",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_SNP_Campaign_in_Dumfries",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ШНП в Ланарке",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_SNP_Campaign_in_Lothian",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ШНП в Лотиане",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_ILP_Campaign_in_Highlands",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания НЛП в Нагорье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_ILP_Campaign_in_Aberdeenshire",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания НЛП в Абердиншире",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_ILP_Campaign_in_Fife",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания НЛП в Файфе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_ILP_Campaign_in_Lanark",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания НЛП в Стратклайде",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_ILP_Campaign_in_Dumfries",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания НЛП в Ланарке",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_ILP_Campaign_in_Lothian",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания НЛП в Лотиане",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_UP_Campaign_in_Highlands",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ЮП в Нагорье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_UP_Campaign_in_Aberdeenshire",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ЮП в Абердиншире",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_UP_Campaign_in_Fife",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ЮП в Файфе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_UP_Campaign_in_Lanark",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ЮП в Стратклайде",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_UP_Campaign_in_Dumfries",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ЮП в Ланарке",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_UP_Campaign_in_Lothian",
+    "category_id": "SCO_Elections_Category",
+    "name": "Кампания ЮП в Лотиане",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_UP_Campaign_Raise_Party_Turnout",
+    "category_id": "SCO_Elections_Category",
+    "name": "Увеличить численность партии",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_SNP_Campaign_Raise_Party_Turnout",
+    "category_id": "SCO_Elections_Category",
+    "name": "Увеличить численность партии",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_AI_ILP_Campaign_Raise_Party_Turnout",
+    "category_id": "SCO_Elections_Category",
+    "name": "Увеличить численность партии",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SCO_Election_Campaign_On"
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SCO_Election_Countdown_1962",
+    "category_id": "SCO_Elections_Category",
+    "name": "День всеобщих выборов",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Election_Countdown_1966",
+    "category_id": "SCO_Elections_Category",
+    "name": "День всеобщих выборов",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Election_Countdown_1970",
+    "category_id": "SCO_Elections_Category",
+    "name": "День всеобщих выборов",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Election_Countdown_Presidential_1965",
+    "category_id": "SCO_Elections_Category",
+    "name": "Президентские выборы",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Election_Countdown_Presidential_1969",
+    "category_id": "SCO_Elections_Category",
+    "name": "Президентские выборы",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": {
+      "country_event": {
+        "id": "SCO.4016"
+      }
+    }
+  },
+  {
+    "id": "SCO_Aid_HMMLR_Provide_Training",
+    "category_id": "SCO_Aid_HMMLR",
+    "name": "Обеспечить обучение",
+    "desc": "Граница незащищённая, чем мы и Сопротивление неоднократно злоупотребляли в прошлом. Переправка солдат через границу для обучения в шотландской армии поможет им получить реальный боевой опыт, когда наступит финальная битва.",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Aid_HMMLR_Provide_Training",
+      "if": [
+        {
+          "limit": {
+            "ENG": {
+              "has_country_flag": "ENG_Player_HMMLR"
+            }
+          },
+          "ENG": {
+            "country_event": {
+              "id": "SCO.6006",
+              "days": 1
+            }
+          },
+          "else": {
+            "FEN": {
+              "add_manpower": 250
+            }
+          }
+        },
+        {
+          "limit": {
+            "has_global_flag": "ECW_ongoing"
+          },
+          "custom_effect_tooltip": "SCO_providing_training_to_hmmlr_tt",
+          "hidden_effect": {
+            "FEN": {
+              "TNO_improve_training_policy_effectiveness_low": true
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "SCO_Aid_HMMLR_Provide_Equipment",
+    "category_id": "SCO_Aid_HMMLR",
+    "name": "Предоставить оборудование",
+    "desc": "Сказать, что у английских повстанцев проблемы с оборудованием, - ничего не сказать. Неудивительно, что ведение войны означает, что контрабанда шотландского оружия через границу в руки СВОЕВ будет благом для их дела.",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 249
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Aid_HMMLR_Provide_Equipment",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -250,
+        "producer": "SCO"
+      },
+      "if": {
+        "limit": {
+          "ENG": {
+            "has_country_flag": "ENG_Player_HMMLR"
+          }
+        },
+        "ENG": {
+          "country_event": {
+            "id": "SCO.6007",
+            "days": 1
+          }
+        },
+        "else": {
+          "FEN": {
+            "add_equipment_to_stockpile": {
+              "type": "infantry_equipment",
+              "amount": 250,
+              "producer": "SCO"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "wal_rent_scottish_dockyards",
+    "category_id": "wal_union_navy_category",
+    "name": "Арендовать шотландские верфи",
+    "desc": "",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "WAL_UnionistNavyDream"
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "WAL_RentedScotland"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision wal_rent_scottish_dockyards",
+      "custom_effect_tooltip": "WAL_RentingScotland",
+      "hidden_effect": {
+        "SCO": {
+          "country_event": {
+            "id": "WALSCO.1",
+            "hours": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_WAC_discontent_declines",
+    "category_id": "USA_proxy_war_homefront_GUI",
+    "name": "Недовольство рассеивается...",
+    "desc": "Долгосрочная общественная оппозиция нашему вмешательству в Западную Африку все еще никуда не делась. Хотя со временем общественность забудет обо всех проблемах, связанных с боевыми действиями, пока они этого не сделают, нам придется продолжать терпеть негативные последствия этого недовольства.",
+    "icon": "GFX_decision_generic_military_hat_red",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "check_variable": {
+          "USA_WAC_WAR_Discontent": 0
+        },
+        "tooltip": "USA_WAC_discontent_is_gone_tt"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision complete USA_WAC_discontent_declines"
+    }
+  },
+  {
+    "id": "USA_CIA_panama_hopscotch",
+    "category_id": "USA_BoP_category",
+    "name": "Операция КЛАССИКИ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_CentralAmerica": true,
+          "is_ai": true
+        },
+        "PAN": {
+          "has_country_flag": "PAN_US_Back_Remon"
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_panama_hopscotch_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@CentralAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "PAN_forpol.42",
+              "days": 5
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "PAN_forpol.43",
+              "days": 5
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "debug_tt_econ_scorer_test",
+    "category_id": "global_debug_decisions",
+    "name": "debug_tt_econ_scorer_test",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_econ_debug_decisions"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision debug_tt_econ_scorer_test",
+      "clear_array": "global.econ_countries",
+      "every_country": {
+        "add_to_array": {
+          "global.econ_countries": "THIS"
+        }
+      },
+      "get_sorted_scored_countries": {
+        "scorer": "GDP_rank_scorer",
+        "array": "global.econ_countries"
+      },
+      "for_each_scope_loop": {
+        "array": "global.econ_countries",
+        "add_to_variable": {
+          "global.econ_countries_index": 1
+        },
+        "set_variable": {
+          "econ_ranking": "global.econ_countries_index"
+        }
+      },
+      "clear_variable": "global.econ_countries_index",
+      "remove_dynamic_modifier": {
+        "modifier": "TNO_fiscal_crisis_modifier"
+      }
+    }
+  },
+  {
+    "id": "MEX_kabuki_utilise_discontent",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Использовать недовольство",
+    "desc": "",
+    "icon": "GFX_decision_generic_reassurance",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_the_technocratic_counter",
+        "OR": {
+          "check_variable": {
+            "MEX_PRI_selected_group": 0
+          },
+          "is_ai": true
+        }
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "MEX_kabuki_workers_pick_ordaz",
+            "MEX_kabuki_workers_pick_madrazo",
+            "MEX_kabuki_workers_pick_lozano"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_tolerate_labour_discourse",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Терпимый трудовой дискурс",
+    "desc": "",
+    "icon": "GFX_decision_generic_protest",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": [
+          "MEX_doctorsstrike_second_doctorsstrike",
+          "absorb_the_unions"
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_doctor_intern_radicalism_decrease_med": true,
+      "MEX_PRI_decrease_power_workers_med": true
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_moscow",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Moscow",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 1442
+    },
+    "visible": {
+      "owns_state": [
+        1442,
+        219
+      ],
+      "1442": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "219": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "RUS_SWRW_ongoing"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_discourage_paramilitary_violence",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Воспрепятствовать насилию ополчения",
+    "desc": "",
+    "icon": "GFX_decision_generic_protest",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 3
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "SAM_discourage_fraternization",
+    "category_id": "SAM_smuggling_category",
+    "name": "Препятствовать братанию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "SAM_smuggling_network_size": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "SAM_anti_smuggling_visible"
+    },
+    "visible": {
+      "has_country_flag": [
+        "SAM_has_contacts_among_soldiers",
+        "SAM_anti_smuggling_visible"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_discourage_fraternization",
+      "SAM_decrease_corruption_large": true,
+      "SAM_smaller_smuggling_network": true,
+      "clr_country_flag": "SAM_has_contacts_among_soldiers",
+      "hidden_effect": {
+        "SAM_change_corruption_spirit": true
+      }
+    }
+  },
+  {
+    "id": "TOM_Decembrist_discord_mission",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Большой Раздор",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "TOM_megaproject_complete_tt",
+        "check_variable": {
+          "TOM_megaproject_progress": {
+            "_op": ">",
+            "value": 99.99
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "custom_effect_tooltip": "TOM_Decembrist_discord_mission_success_tt",
+      "hidden_effect": [
+        {
+          "TOM_Increase_Idealism_high": [
+            true,
+            true,
+            true
+          ],
+          "TOM_Decrease_Political_Outsiders_high": [
+            true,
+            true
+          ]
+        },
+        {
+          "country_event": {
+            "id": "TOM_petrov.23",
+            "days": 7
+          }
+        }
+      ],
+      "every_owned_state": {
+        "limit": {
+          "TOM_can_have_elections_in_state": true
+        },
+        "TOM_Increase_Dec_Pop_high": true
+      },
+      "clr_country_flag": "TOM_started_megaproject"
+    }
+  },
+  {
+    "id": "TOM_Decembrist_increase_budget_10m",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Инвестировать 10 миллионов долларов",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Decembrist_increase_budget_10m",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.01
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "TOM_Increase_Megaproject_Progress_low": true
+    }
+  },
+  {
+    "id": "TOM_Decembrist_increase_budget_25m",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Инвестировать 25 миллионов долларов",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Decembrist_increase_budget_25m",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.025
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "TOM_Increase_Megaproject_Progress_med": true
+    }
+  },
+  {
+    "id": "TOM_Decembrist_increase_budget_50m",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Инвестировать 50 миллионов долларов",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Decembrist_increase_budget_50m",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.05
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "TOM_Increase_Megaproject_Progress_high": true
+    }
+  },
+  {
+    "id": "TOM_culture_and_practice_protection_act",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Принять закон \"О защите культуры и верований\"",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_culture_and_practice_protection_act",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "TOM_mend_the_urban_rural_divide",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Устранить разрыв между городом и деревней",
+    "desc": "",
+    "icon": "GFX_decision_terrain_plains",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_mend_the_urban_rural_divide"
+    }
+  },
+  {
+    "id": "TOM_apolitical_politial_education",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Спонсировать аполитичное политическое образование",
+    "desc": "",
+    "icon": "GFX_decision_generic_education",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_apolitical_politial_education"
+    }
+  },
+  {
+    "id": "TOM_apolitical_improve_salon_introductions",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Улучшить представление салона",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "TOM_decembrist_megaproject_1"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_apolitical_improve_salon_introductions",
+      "add_stability": -0.05
+    }
+  },
+  {
+    "id": "TOM_apolitical_mobilize_the_media",
+    "category_id": "TOM_Decembrist_Great_Discord_Category",
+    "name": "Мобилизировать новых медиа",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "TOM_decembrist_megaproject_2"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_apolitical_mobilize_the_media",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "UKR_UCW_scouts_westwards",
+    "category_id": "UKR_ucw_supply_category",
+    "name": "Послать разведчиков",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UCW_supply_doing_faction_decision"
+      }
+    },
+    "visible": {
+      "original_tag": "UKS",
+      "has_country_flag": "UKR_UCW_faction_show"
+    },
+    "complete_effect": {
+      "set_country_flag": "UCW_supply_doing_faction_decision",
+      "add_to_variable": {
+        "UCW_remaining_supply": -20
+      },
+      "hidden_effect": {
+        "add_political_power": -25,
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment",
+          "amount": -100
+        },
+        "add_manpower": -250
+      }
+    }
+  },
+  {
+    "id": "UKR_scorch_the_earth",
+    "category_id": "UKR_ukraine_must_survive_category",
+    "name": "Scorch the Earth",
+    "desc": "",
+    "icon": "GFX_decision_generic_lockdown",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UKR_ukraine_must_survive_doing_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "UKR_ukraine_must_survive_insurgency_phase",
+      "NOT": {
+        "has_global_flag": "Kyiv_Nuked"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision UKR_scorch_the_earth",
+      "set_temp_variable": [
+        {
+          "UKR_preparation_temp": 5
+        },
+        {
+          "temp_econ_GDP_boost_percentage": -0.02
+        },
+        {
+          "temp_econ_spending_amount": 0.1
+        }
+      ],
+      "UKR_ukraine_must_survive_variable_change": true,
+      "econ_GDP_boost_once_percentage": true,
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "UKR_ukraine_must_survive_doing_decision"
+    }
+  },
+  {
+    "id": "USA_debug_scoop_inauguration",
+    "category_id": "USA_debug_inaugurations_category",
+    "name": "Инаугурация Ковша Джексона",
+    "desc": "",
+    "icon": "GFX_decision_USA_npp_p",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_debug_decisions"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_debug_scoop_inauguration",
+      "country_event": {
+        "id": "USA.1703"
+      }
+    }
+  },
+  {
+    "id": "RUS_march_over_moscow",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "March Into Moscow",
+    "desc": "",
+    "icon": "generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        1442,
+        219
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "RUS": {
+        "set_temp_variable": {
+          "temp_exhaustion": -6
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "GER": {
+        "set_temp_variable": {
+          "temp_exhaustion": 4
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "add_war_support": 0.03
+    }
+  },
+  {
+    "id": "GER_offer_moscow",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Offer Moscow",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "GER_will_accept_minor_victory": true
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "RUS": {
+          "country_event": {
+            "id": "RUS_victory.1",
+            "hours": 6
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_offer_moscow_caucasia",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Offer Moscow and Caucasia",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "GER_will_accept_small_victory": true
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "RUS": {
+          "country_event": {
+            "id": "RUS_victory.2",
+            "hours": 6
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_offer_moscow_caucasia_ukraine",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Offer Moscow, Caucasia and Ukraine",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "GER_will_accept_medium_victory": true
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "RUS": {
+          "country_event": {
+            "id": "RUS_victory.3",
+            "hours": 6
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_demand_moscow",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Demand Moscow",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_GER_peace_will_accept",
+        "GER_will_accept_minor_victory": true
+      }
+    },
+    "visible": {
+      "is_russian_nation": true,
+      "OR": {
+        "has_country_flag": "peace_talks_started"
+      },
+      "NOT": [
+        {
+          "tag": "OMS"
+        },
+        {
+          "tag": "SGV"
+        }
+      ],
+      "check_variable": {
+        "WRW_deccat": 3
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "country_event": {
+          "id": "RUS_victory.6",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_demand_moscow_caucasia",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Demand Moscow and Caucasia",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_GER_peace_will_accept",
+        "GER_will_accept_small_victory": true
+      }
+    },
+    "visible": {
+      "is_russian_nation": true,
+      "OR": {
+        "has_country_flag": "peace_talks_started"
+      },
+      "NOT": [
+        {
+          "tag": "OMS"
+        },
+        {
+          "tag": "SGV"
+        }
+      ],
+      "check_variable": {
+        "WRW_deccat": 3
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "country_event": {
+          "id": "RUS_victory.7",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_demand_moscow_caucasia_ukraine",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Demand Moscow, Caucasia, and Ukraine",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_GER_peace_will_accept",
+        "GER_will_accept_medium_victory": true
+      }
+    },
+    "visible": {
+      "is_russian_nation": true,
+      "OR": {
+        "has_country_flag": "peace_talks_started"
+      },
+      "NOT": [
+        {
+          "tag": "OMS"
+        },
+        {
+          "tag": "SGV"
+        }
+      ],
+      "check_variable": {
+        "WRW_deccat": 3
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "country_event": {
+          "id": "RUS_victory.8",
+          "hours": 6
+        }
+      }
+    }
+  }
+]

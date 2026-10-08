@@ -216,8 +216,12 @@ static func evaluate_leaf(cond: Dictionary, state: CountryState) -> bool:
 			return _compare(current_val, op, target_val)
 
 		"has_idea":
-			var idea_id = str(cond.get("idea", cond.get("value", "")))
-			return state.has_flag("idea_" + idea_id) or state.has_flag(idea_id) or state.has_active_law(idea_id) or state.has_national_spirit(idea_id)
+			var idea_id = str(cond.get("idea_id", cond.get("idea", cond.get("target", cond.get("id", cond.get("value", ""))))))
+			if state.has_method("has_idea"):
+				return state.has_idea(idea_id)
+			var has_law = state.has_active_law(idea_id) if state.has_method("has_active_law") else false
+			var has_spirit = state.has_national_spirit(idea_id) if state.has_method("has_national_spirit") else false
+			return state.has_flag("idea_" + idea_id) or state.has_flag(idea_id) or has_law or has_spirit
 
 		"controls_state", "owns_state", "has_state", "fully_controls_state":
 			var target_state_id = int(cond.get("state", cond.get("value", cond.get("state_id", 0))))

@@ -247,6 +247,10 @@ func initialize(tm: TurnManager, mc: MapController, p_state: CountryState) -> vo
 	if player_state_ref != null and player_state_ref.country_tag in [TAG_SPEER, TAG_BORMANN, TAG_GOERING, TAG_HEYDRICH]:
 		player_contender_tag = player_state_ref.country_tag
 
+
+func setup(tm: TurnManager, mc: MapController = null, p_state: CountryState = null) -> void:
+	initialize(tm, mc, p_state)
+
 	var cfg = ConfigManager.get_instance()
 	if cfg != null and cfg.is_loaded:
 		turns_until_hitler_death = cfg.get_int("gcw", "turns_until_hitler_death", turns_until_hitler_death)

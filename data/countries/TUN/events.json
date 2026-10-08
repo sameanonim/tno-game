@@ -1,0 +1,2507 @@
+[
+  {
+    "id": "soviet.1",
+    "type": "country_event",
+    "title": "Укрепление Японии",
+    "desc": "Напряжение на маньчжурской границе нарастало уже некоторое время, а сейчас от наших монгольских товарищей поступают сообщения о том, что японцы скапливают силы в Хэйлунцзяне. Если мы отступим, это воспримут как признак слабости, но если ответить силой, ситуация обострится. Какой будет приказ, товарищ командир?",
+    "picture": "GFX_report_event_japanese_transport_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы ответим силой.",
+        "name_key": "soviet.1.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": -25,
+          "hidden_effect": {
+            "random_list": {
+              "60": {
+                "JAP": {
+                  "country_event": {
+                    "days": 1,
+                    "id": "japan.3"
+                  }
+                }
+              },
+              "40": {
+                "JAP": {
+                  "country_event": {
+                    "days": 1,
+                    "id": "japan.4"
+                  }
+                }
+              }
+            }
+          },
+          "effect_tooltip": {
+            "random_list": {
+              "60": {
+                "country_event": "soviet.2"
+              },
+              "40": {
+                "country_event": "soviet.3"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Мы не можем увязать в войне с Японией.",
+        "name_key": "soviet.1.b",
+        "trigger": {},
+        "effects": {
+          "JAP": {
+            "effect_tooltip": {
+              "add_stability": 0.05
+            },
+            "country_event": {
+              "days": 1,
+              "id": "japan.5"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.2",
+    "type": "country_event",
+    "title": "Успешный поход",
+    "desc": "Наша атака на японские войска вдоль маньчжурской границы увенчалась успехом! Наши храбрые солдаты застали их врасплох, когда они еще не закончили подготовку, и задали им хорошую взбучку.",
+    "picture": "GFX_report_event_dead_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Отлично!",
+        "name_key": "soviet.2.a",
+        "trigger": {},
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "561": {
+                  "is_owned_by": "SOV",
+                  "any_neighbor_state": {
+                    "OR": {
+                      "is_owned_by": [
+                        "JAP",
+                        "MAN"
+                      ]
+                    }
+                  }
+                }
+              },
+              "561": {
+                "add_manpower": -30000
+              }
+            },
+            {
+              "limit": {
+                "NOT": {
+                  "561": {
+                    "is_owned_by": "SOV",
+                    "any_neighbor_state": {
+                      "OR": {
+                        "is_owned_by": [
+                          "JAP",
+                          "MAN"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "random_owned_state": {
+                "limit": {
+                  "any_neighbor_state": {
+                    "OR": {
+                      "is_owned_by": [
+                        "JAP",
+                        "MAN"
+                      ]
+                    }
+                  }
+                },
+                "add_manpower": -30000
+              }
+            }
+          ],
+          "army_experience": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.3",
+    "type": "country_event",
+    "title": "Неудачный поход",
+    "desc": "Наша атака на японские войска вдоль маньчжурской границы закончилась неудачей! Враг взял наши войска в тиски, и мы понесли тяжелые потери, прежде чем смогли отступить.",
+    "picture": "GFX_report_event_dead_soldiers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Подготовить расстрельную команду.",
+        "name_key": "soviet.3.a",
+        "trigger": {},
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "561": {
+                  "is_owned_by": "SOV",
+                  "any_neighbor_state": {
+                    "OR": {
+                      "is_owned_by": [
+                        "JAP",
+                        "MAN"
+                      ]
+                    }
+                  }
+                }
+              },
+              "561": {
+                "add_manpower": -20000
+              }
+            },
+            {
+              "limit": {
+                "NOT": {
+                  "561": {
+                    "is_owned_by": "SOV",
+                    "any_neighbor_state": {
+                      "OR": {
+                        "is_owned_by": [
+                          "JAP",
+                          "MAN"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "random_owned_state": {
+                "limit": {
+                  "any_neighbor_state": {
+                    "OR": {
+                      "is_owned_by": [
+                        "JAP",
+                        "MAN"
+                      ]
+                    }
+                  }
+                },
+                "add_manpower": -20000
+              }
+            }
+          ],
+          "add_political_power": -25,
+          "army_experience": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.4",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] отдает Бессарабию",
+    "desc": "[FROM.GetAdjective]ие власти благоразумно уступили нашим требованиям и отвели свои войска из Бессарабии. Мы присоединим эту территорию к союзу в качестве Молдавской советской социалистической республики. Теперь ее жители смогут насладиться всеми преимуществами социализма.",
+    "picture": "GFX_report_event_soviet_army_greeted",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Превосходно.",
+        "name_key": "soviet.4.a",
+        "trigger": {},
+        "effects": {
+          "set_variable": {
+            "SOV.former_controller_of_bessarabia": "78.controller"
+          },
+          "ROOT": {
+            "if": [
+              {
+                "limit": {
+                  "78": {
+                    "is_owned_and_controlled_by": "FROM"
+                  }
+                },
+                "transfer_state": 78
+              },
+              {
+                "limit": {
+                  "80": {
+                    "is_owned_and_controlled_by": "FROM"
+                  }
+                },
+                "transfer_state": 80
+              },
+              {
+                "limit": {
+                  "766": {
+                    "is_owned_and_controlled_by": "FROM"
+                  }
+                },
+                "transfer_state": 766
+              }
+            ]
+          },
+          "hidden_effect": {
+            "SOV": {
+              "country_event": {
+                "days": 1,
+                "id": "news.10"
+              }
+            },
+            "news_event": {
+              "id": "news.199"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.5",
+    "type": "country_event",
+    "title": "Румыния отвергла наши требования",
+    "desc": "Румыны отказались уступить нашим требованиям! По всей видимости, нам придется выдавливать их оккупационные войска из Бессарабии силой.",
+    "picture": "GFX_report_event_stalin_02",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Глупцы!",
+        "name_key": "soviet.5.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "take_state",
+            "target": "FROM",
+            "generator": [
+              78
+            ]
+          },
+          "hidden_effect": {
+            "SOV": {
+              "country_event": {
+                "days": 1,
+                "id": "news.11"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.6",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] подчиняется",
+    "desc": "[FROM.GetNameDefCap] подчиняется нашим требованиям. Мы заменили разлагающееся правительство в Таллинне народным парламентом, который единогласно проголосовал за то, что [FROM.GetNameDef] станет советской социалистической республикой. После недолгого обсуждения Верховный Совет удовлетворил эту просьбу.",
+    "picture": "GFX_report_event_soviet_invasion_map",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Добро пожаловать в Союз, товарищи.",
+        "name_key": "soviet.6.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "FROM": {
+                "has_country_flag": "cave_to_enemy_pressure_flag"
+              }
+            },
+            "puppet": "FROM"
+          },
+          "else": {
+            "annex_country": {
+              "target": "FROM"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.7",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] отвергает наше предложение",
+    "desc": "[FROM.GetNameDefCap] возмутительным образом отказывается принять наше щедрое предложение о взаимопомощи! Капиталисты и их прихлебатели в Таллинне имели наглость выдвинуть требование соблюдать территориальную целостность их страны!",
+    "picture": "GFX_report_event_generic_read_write",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы должны защитить [FROM.GetAdjective]ий народ от самого себя.",
+        "name_key": "soviet.7.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "annex_everything",
+            "target": "EST"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.8",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] подчиняется",
+    "desc": "[FROM.GetAdjective]ое правительство в Риге подчинилось нашим требованиям, и мы заменили его народным собранием. Этот орган единогласно проголосовал за вступление в наш великий Союз советских социалистических республик. Мы любезно ответили согласием на эту просьбу.",
+    "picture": "GFX_report_event_soviet_tank_parade",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Теперь вы социалисты!",
+        "name_key": "soviet.8.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "FROM": {
+                "has_country_flag": "cave_to_enemy_pressure_flag"
+              }
+            },
+            "puppet": "FROM"
+          },
+          "else": {
+            "annex_country": {
+              "target": "FROM"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.9",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] отвергает наше предложение",
+    "desc": "Буржуазные угнетатели, под чьей пятой загибается [FROM.GetNameDef], окончательно утратили рассудок! Они отвергли наше щедрое предложение о взаимопомощи и требуют немедленного отвода советских вооруженных сил от своей границы!",
+    "picture": "report_event_generic_sign_treaty2",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "[FROM.GetAdjective]ий народ должен быть освобожден.",
+        "name_key": "soviet.9.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "annex_everything",
+            "target": "LAT"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.10",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] подчиняется",
+    "desc": "Наше требование о размещении военных баз на территории державы [FROM.GetNameDef] было удовлетворено, но, к несчастью, ее правительство пало. Мы установили народный парламент, чтобы избежать анархии, и он единогласно проголосовал за обращение к Верховному Совету с просьбой о вступлении в наш Союз. Мы ответили согласием.",
+    "picture": "GFX_report_event_soviet_tank_parade",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы спасем вас от капитализма.",
+        "name_key": "soviet.10.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "FROM": {
+                "has_country_flag": "cave_to_enemy_pressure_flag",
+                "NOT": {
+                  "has_completed_focus": "LIT_appease_nazis"
+                }
+              }
+            },
+            "puppet": "FROM"
+          },
+          "else": {
+            "annex_country": {
+              "target": "FROM"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.11",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] отвергает наше предложение",
+    "desc": "[FROM.GetNameDefCap] жаждет самоуничтожения! Глупцы, засевшие в правительстве этой страны, отказываются впустить наши войска. Они что, думают, им будет лучше под немцами? Эгоистичные лидеры совершают преступление против собственного народа, не позволяя ему стать частью социалистического мира.",
+    "picture": "report_event_generic_sign_treaty2",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "[FROM.GetAdjective]ий народ страдал достаточно.",
+        "name_key": "soviet.11.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "annex_everything",
+            "target": "LIT"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.12",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] принимает наши требования",
+    "desc": "Скопление наших вооруженных сил на границе убедило [FROM.GetAdjective]ое правительство принять скромное предложение о пересмотре границ. Мы получили контроль над Карелией, и теперь [195.GetName] находится в куда большей безопасности.",
+    "picture": "GFX_report_event_soviet_finnish_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы думали, они станут сопротивляться...",
+        "name_key": "soviet.12.a",
+        "trigger": {},
+        "effects": {
+          "SOV": {
+            "transfer_state": 146,
+            "custom_effect_tooltip": "FIN_remove_soviet_claims_in_other_states_tt"
+          },
+          "hidden_effect": {
+            "FIN": {
+              "every_core_state": {
+                "limit": {
+                  "is_owned_by": "PREV",
+                  "is_claimed_by": "ROOT"
+                },
+                "remove_claim_by": "ROOT"
+              }
+            },
+            "SOV": {
+              "country_event": {
+                "days": 1,
+                "id": "news.13"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.13",
+    "type": "country_event",
+    "title": "[FROM.GetNameDefCap] отклоняет наши требования",
+    "desc": "[FROM.GetAdjective]ое правительство отвергло наши требования, но этого следовало ожидать. Если мы хотим получить Карелию, ее придется отнять силой. Пора преподать упрямым финнам урок, который они нескоро забудут!",
+    "picture": "GFX_report_event_soviet_tanks_snow",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы раздавим их за пару недель.",
+        "name_key": "soviet.13.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "take_state",
+            "target": "FIN",
+            "generator": [
+              146
+            ]
+          },
+          "hidden_effect": {
+            "SOV": {
+              "country_event": {
+                "days": 1,
+                "id": "news.12"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.14",
+    "type": "country_event",
+    "title": "Членство в СССР",
+    "desc": "Москва давит на нас, чтобы мы официально присоединились к СССР. Следует ли нам согласиться?",
+    "picture": "GFX_report_event_stalin_01",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Да, мы присоединяемся.",
+        "name_key": "soviet.14.a",
+        "trigger": {},
+        "effects": {
+          "SOV": {
+            "country_event": {
+              "id": "soviet.16"
+            }
+          },
+          "custom_effect_tooltip": "GAME_OVER_TT"
+        }
+      },
+      {
+        "name": "Нет, нам еще есть куда расти!",
+        "name_key": "soviet.14.b",
+        "trigger": {},
+        "effects": {
+          "SOV": {
+            "country_event": {
+              "id": "soviet.15"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.15",
+    "type": "country_event",
+    "title": "Танну-Тува отвечает отказом!",
+    "desc": "Тувинцы ответили возмутительным отказом на наше предложение о присоединении к Советскому Союзу! Чего этот жалкий народец надеется достичь самостоятельно — загадка, не имеющая ответа.",
+    "picture": "GFX_report_event_stalin_02",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Удачи им в этом.",
+        "name_key": "soviet.15.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.16",
+    "type": "country_event",
+    "title": "Аннексия Танну-Тувы",
+    "desc": "Верховный Совет получил формальный запрос от тувинского парламента о присоединении к Советскому Союзу. Они станут Тувинской автономной областью в составе РСФСР.",
+    "picture": "GFX_report_event_stalin_propaganda",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Добро пожаловать в Союз, товарищи.",
+        "name_key": "soviet.16.a",
+        "trigger": {},
+        "effects": {
+          "annex_country": {
+            "target": "TAN"
+          },
+          "hidden_effect": {
+            "SOV": {
+              "country_event": {
+                "days": 1,
+                "id": "news.14"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.17",
+    "type": "country_event",
+    "title": "Укрепление линии Сталина",
+    "desc": "Осмотр наших оборонительных сооружений вдоль западной границы полностью завершен, и трудовые лагеря готовы начать работы по их укреплению. Очень скоро линия Сталина станет достойна своего славного имени!",
+    "picture": "GFX_report_event_bunker_01",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Товарищ Сталин может нами гордиться!",
+        "name_key": "soviet.17.a",
+        "trigger": {},
+        "effects": {
+          "209": {
+            "add_building_construction": [
+              {
+                "type": "bunker",
+                "province": 11202,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 6324,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 11392,
+                "level": 5
+              }
+            ]
+          },
+          "210": {
+            "add_building_construction": {
+              "type": "bunker",
+              "province": 6242,
+              "level": 5
+            }
+          },
+          "207": {
+            "add_building_construction": [
+              {
+                "type": "bunker",
+                "province": 6249,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 9241,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 3331,
+                "level": 5
+              }
+            ]
+          },
+          "206": {
+            "add_building_construction": {
+              "type": "bunker",
+              "province": 9289,
+              "level": 5
+            }
+          },
+          "202": {
+            "add_building_construction": [
+              {
+                "type": "bunker",
+                "province": 9568,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 3543,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 504,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 6497,
+                "level": 5
+              }
+            ]
+          },
+          "203": {
+            "add_building_construction": [
+              {
+                "type": "bunker",
+                "province": 9451,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 11409,
+                "level": 5
+              }
+            ]
+          },
+          "192": {
+            "add_building_construction": [
+              {
+                "type": "bunker",
+                "province": 3757,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 9714,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 741,
+                "level": 5
+              },
+              {
+                "type": "bunker",
+                "province": 11670,
+                "level": 5
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.18",
+    "type": "country_event",
+    "title": "Сианьский инцидент",
+    "desc": "Давление, оказанное государством [SOV.GetNameDef] извне, чтобы прекратить боевые действия между нами и китайской Красной Армией, привело к тому, что народ стал брать управление в свои руки. Два генерала арестовали лидера [Root.GetLeader] и попытались заключить мир между нами и коммунистами, чтобы объединить Китай перед лицом внешней угрозы. Международная общественность настаивает на мирном решении конфликта, и кроме того, сейчас Китай ослаблен — вот доводы в пользу объединения усилий. Так что же нам делать?",
+    "picture": "GFX_report_event_china_politicians_captured",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "date": {
+        "_op": ">",
+        "value": "1936.11.1"
+      },
+      "tag": "CHI",
+      "has_opinion_modifier": "hostile_status",
+      "NOT": {
+        "has_dlc": "Waking the Tiger"
+      }
+    },
+    "immediate": {},
+    "options": [
+      {
+        "name": "Провести мирные переговоры с коммунистической партией.",
+        "name_key": "soviet.18.a",
+        "trigger": {},
+        "effects": {
+          "PRC": {
+            "country_event": {
+              "id": "soviet.19",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "Никогда!",
+        "name_key": "soviet.18.b",
+        "trigger": {},
+        "effects": {
+          "set_global_flag": "CHI_no_national_front_flag",
+          "custom_effect_tooltip": "CHI_no_united_front"
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.19",
+    "type": "country_event",
+    "title": "Националисты предлагают перемирие",
+    "desc": "Разногласия в рядах националистов создали неустойчивую ситуацию. Их лидер [From.GetLeader] был арестован, чтобы заставить наших противников заключить перемирие с нами и объединить Китай перед лицом внешней угрозы. Хотя мы хотели бы покарать Гоминьдан за все его преступления против нас, нельзя допустить, чтобы Китай оказался в руках иностранных империалистов. Другого шанса на объединение не будет.",
+    "picture": "GFX_report_event_japanese_chinese_surrender",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы примем перемирие.",
+        "name_key": "soviet.19.a",
+        "trigger": {},
+        "effects": {
+          "remove_opinion_modifier": {
+            "target": "CHI",
+            "modifier": "hostile_status"
+          },
+          "CHI": {
+            "remove_opinion_modifier": {
+              "target": "PRC",
+              "modifier": "hostile_status"
+            },
+            "country_event": {
+              "id": "soviet.21",
+              "days": 1
+            }
+          },
+          "hidden_effect": {
+            "605": {
+              "if": {
+                "limit": {
+                  "is_border_conflict": true
+                },
+                "set_border_war": false
+              }
+            },
+            "620": {
+              "if": {
+                "limit": {
+                  "is_border_conflict": true
+                },
+                "set_border_war": false
+              }
+            },
+            "607": {
+              "if": {
+                "limit": {
+                  "is_border_conflict": true
+                },
+                "set_border_war": false
+              }
+            },
+            "622": {
+              "if": {
+                "limit": {
+                  "is_border_conflict": true
+                },
+                "set_border_war": false
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Революцию нельзя отложить в сторону!",
+        "name_key": "soviet.19.b",
+        "trigger": {},
+        "effects": {
+          "SOV": {
+            "country_event": {
+              "id": "soviet.22",
+              "days": 1
+            }
+          },
+          "set_global_flag": "CHI_no_national_front_flag",
+          "custom_effect_tooltip": "CHI_no_united_front"
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.20",
+    "type": "country_event",
+    "title": "Китайские националисты отказываются от переговоров",
+    "desc": "Несмотря на похищение лидера [From.GetLeader], националисты отказались проводить переговоры о перемирии с коммунистами. Увы, но народ Китая будет и дальше воевать сам с собой и станет для захватчиков легкой добычей.",
+    "picture": "GFX_report_event_nationalist_china_machinegun_firing",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы сделали все, что могли.",
+        "name_key": "soviet.20.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.21",
+    "type": "country_event",
+    "title": "Перемирие в гражданской войне в Китае",
+    "desc": "Переговоры в Сиане принесли результаты. Националисты и коммунисты согласились заключить мир и положить конец военным действиям хотя бы на время, чтобы совместно отразить внешнюю угрозу.",
+    "picture": "GFX_report_event_chinese_japanese_handshake",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Для Китая еще есть надежда.",
+        "name_key": "soviet.21.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "PRC": {
+              "remove_opinion_modifier": {
+                "target": "CHI",
+                "modifier": "hostile_status"
+              }
+            },
+            "CHI": {
+              "remove_opinion_modifier": {
+                "target": "PRC",
+                "modifier": "hostile_status"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.22",
+    "type": "country_event",
+    "title": "Китайские коммунисты отказываются от переговоров",
+    "desc": "Несмотря на все старания генералов Гоминьдана заключить мир с вождями коммунистической партии, коммунисты отказываются даже от временного перемирия, пока жив лидер националистов. Похоже, боевые действия прекратятся нескоро.",
+    "picture": "GFX_report_event_chinese_officers",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Врагам Китая пора разделять и властвовать.",
+        "name_key": "soviet.22.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.23",
+    "type": "country_event",
+    "title": "[SOV.GetNameDefCap] уступает территории",
+    "desc": "[SOV.GetNameDefCap] не желает идти на обострение отношений с империей, ведь державе есть о чем беспокоиться. В знак мира между двумя странами государство уступает нам некоторые территории и надеется на укрепление дипломатических отношений.",
+    "picture": "GFX_report_event_soviet_japanese_pact",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Возможно, это станет поворотным моментом.",
+        "name_key": "soviet.23.a",
+        "trigger": {},
+        "effects": {
+          "transfer_state": 655
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.24",
+    "type": "country_event",
+    "title": "Пятая колонна",
+    "desc": "Преследование врагов народа, ведущих контрреволюционную и подрывную деятельность, продолжалось с того самого момента, когда партия пришла к власти. Когда Троцкий был отправлен в изгнание, внутренняя борьба за власть заставила нас направить все усилия на очистку партийных рядов от предателей. Сталин превратил себя в культовую фигуру, но нажил себе на этом множество реальных врагов и еще больше воображаемых.\n\nГенеральный секретарь ведет постоянную борьбу за власть и жестко реагирует на малейшие подозрения. Лишение членства в партии для его противников означает арест или смерть. Мрачные времена наступают для тех, кто недостаточно предан — или выказывает слишком много преданности, вызывая недоверие.",
+    "picture": "GFX_report_event_soviet_purge_speech",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Что если Зиновьев и его окружение до сих пор связаны с Троцким?",
+        "name_key": "soviet.24.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.29",
+    "type": "country_event",
+    "title": "Франция хочет присоединиться к Коминтерну",
+    "desc": "Наши товарищи во французской коммунистической партии добились большого прогресса. Франция готова присоединиться к Коминтерну.",
+    "picture": "GFX_report_event_stalin_01",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Добро пожаловать",
+        "name_key": "soviet.29.a",
+        "trigger": {},
+        "effects": {
+          "SOV": {
+            "add_to_faction": "FRA"
+          },
+          "FRA": {
+            "add_ai_strategy": {
+              "type": "alliance",
+              "id": "SOV",
+              "value": 200
+            }
+          },
+          "hidden_effect": {
+            "news_event": {
+              "hours": 6,
+              "id": "news.180"
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет!",
+        "name_key": "soviet.29.b",
+        "trigger": {},
+        "effects": {
+          "FRA": {
+            "add_opinion_modifier": {
+              "target": "SOV",
+              "modifier": "SOV_FRA_join_comintern_reject"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.100",
+    "type": "country_event",
+    "title": "Коммунисты успокаиваются",
+    "desc": "Поскольку сейчас и мы, и [SOV.GetNameDef] воюем с общим врагом, Советы стали оказывать меньше поддержки коммунистическим партиям у нас дома.",
+    "picture": "GFX_report_event_soviet_soldiers_tank",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": false,
+    "trigger": {
+      "has_idea": "comintern_influence",
+      "has_war": true,
+      "SOV": {
+        "has_war": true
+      },
+      "NOT": {
+        "has_war_with": "SOV"
+      },
+      "any_enemy_country": {
+        "has_war_with": "SOV"
+      }
+    },
+    "immediate": {},
+    "options": [
+      {
+        "name": "Скатертью дорожка!",
+        "name_key": "soviet.100.a",
+        "trigger": {},
+        "effects": {
+          "remove_ideas": "comintern_influence"
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.30",
+    "type": "country_event",
+    "title": "Потребовать Бессарабию",
+    "desc": "Румыния не может сопротивляться мощи Красной армии. Если мы направим им наше законное требование, они могут отдать Бессарабию, не оказывая сопротивления.",
+    "picture": "GFX_report_event_stalin_propaganda",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "tag": "SOV",
+      "FROM": {
+        "tag": "ROM"
+      },
+      "NOT": {
+        "has_country_flag": "bessarabia_demand"
+      },
+      "78": {
+        "is_claimed_by": "SOV",
+        "is_owned_by": "ROM"
+      }
+    },
+    "immediate": {
+      "set_country_flag": "bessarabia_demand"
+    },
+    "options": [
+      {
+        "name": "Направить ультиматум!",
+        "name_key": "soviet.30.a",
+        "trigger": {},
+        "effects": {
+          "ROM": {
+            "country_event": {
+              "days": 2,
+              "id": "romania.1"
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет, мы возьмем свое силой!",
+        "name_key": "soviet.30.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.31",
+    "type": "country_event",
+    "title": "Потребовать Карелию",
+    "desc": "Финляндия не может сопротивляться мощи Красной армии. Если мы направим им наше законное требование, они могут отдать Карелию, не оказывая сопротивления.",
+    "picture": "GFX_report_event_stalin_propaganda",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "tag": "SOV",
+      "FROM": {
+        "tag": "FIN"
+      },
+      "NOT": {
+        "has_country_flag": "karjala_demand"
+      },
+      "146": {
+        "is_claimed_by": "SOV",
+        "is_owned_by": "FIN"
+      }
+    },
+    "immediate": {
+      "set_country_flag": "karjala_demand"
+    },
+    "options": [
+      {
+        "name": "Направить ультиматум!",
+        "name_key": "soviet.31.a",
+        "trigger": {},
+        "effects": {
+          "FIN": {
+            "country_event": {
+              "days": 2,
+              "id": "finland.1"
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет, мы возьмем свое силой!",
+        "name_key": "soviet.31.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.32",
+    "type": "country_event",
+    "title": "Надавить на Эстонию",
+    "desc": "Эстония не может сопротивляться мощи Красной армии. Если мы направим им требование о размещении военных баз и контроле за безопасностью границ, то сможем аннексировать их без сопротивления.",
+    "picture": "GFX_report_event_soviet_in_riga",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "tag": "SOV",
+      "FROM": {
+        "tag": "EST",
+        "any_owned_state": {
+          "is_claimed_by": "SOV"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "estonia_demand"
+      }
+    },
+    "immediate": {
+      "set_country_flag": "estonia_demand"
+    },
+    "options": [
+      {
+        "name": "Направить ультиматум!",
+        "name_key": "soviet.32.a",
+        "trigger": {},
+        "effects": {
+          "EST": {
+            "country_event": {
+              "days": 2,
+              "id": "baltic.1"
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет, мы возьмем свое силой!",
+        "name_key": "soviet.32.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.33",
+    "type": "country_event",
+    "title": "Надавить на Латвию",
+    "desc": "Латвия не может сопротивляться мощи Красной армии. Если мы направим им требование о размещении военных баз и контроле за безопасностью границ, то сможем аннексировать их без сопротивления.",
+    "picture": "GFX_report_event_soviet_in_riga",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "tag": "SOV",
+      "FROM": {
+        "tag": "LAT",
+        "any_owned_state": {
+          "is_claimed_by": "SOV"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "latvia_demand"
+      }
+    },
+    "immediate": {
+      "set_country_flag": "latvia_demand"
+    },
+    "options": [
+      {
+        "name": "Направить ультиматум!",
+        "name_key": "soviet.33.a",
+        "trigger": {},
+        "effects": {
+          "LAT": {
+            "country_event": {
+              "days": 2,
+              "id": "baltic.2"
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет, мы возьмем свое силой!",
+        "name_key": "soviet.33.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.34",
+    "type": "country_event",
+    "title": "Надавить на Литву",
+    "desc": "Литва не может сопротивляться мощи Красной армии. Если мы направим им требование о размещении военных баз и контроле за безопасностью границ, то сможем аннексировать их без сопротивления.",
+    "picture": "GFX_report_event_soviet_in_riga",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "tag": "SOV",
+      "FROM": {
+        "tag": "LIT",
+        "any_owned_state": {
+          "is_claimed_by": "SOV"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "lithuania_demand"
+      }
+    },
+    "immediate": {
+      "set_country_flag": "lithuania_demand"
+    },
+    "options": [
+      {
+        "name": "Направить ультиматум!",
+        "name_key": "soviet.34.a",
+        "trigger": {},
+        "effects": {
+          "LIT": {
+            "country_event": {
+              "days": 2,
+              "id": "baltic.3"
+            }
+          }
+        }
+      },
+      {
+        "name": "Нет, мы возьмем свое силой!",
+        "name_key": "soviet.34.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.35",
+    "type": "country_event",
+    "title": "[From.GetNameDefCap] хочет стать частью [SOV.GetNameRuGen]",
+    "desc": "Недавние политические беспорядки в государстве [From.GetName] дали ясно понять местному правительству, что их будущее связано с нашей державой. Они понимают, сколько добра может принести всему миру могучий Советский Союз, и желают отдать все силы на его благо.",
+    "picture": "GFX_report_event_soviet_in_riga",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Начать действовать в этом направлении.",
+        "name_key": "soviet.35.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "if": [
+              {
+                "limit": {
+                  "FROM": {
+                    "tag": "LIT"
+                  }
+                },
+                "SOV": {
+                  "annex_country": {
+                    "target": "LIT",
+                    "transfer_troops": true
+                  },
+                  "add_named_threat": {
+                    "threat": 2,
+                    "name": "soviet.35_threat_LIT"
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "FROM": {
+                    "tag": "FIN"
+                  }
+                },
+                "SOV": {
+                  "annex_country": {
+                    "target": "FIN",
+                    "transfer_troops": true
+                  },
+                  "add_named_threat": {
+                    "threat": 5,
+                    "name": "soviet.35_threat_FIN"
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "FROM": {
+                    "tag": "EST"
+                  }
+                },
+                "SOV": {
+                  "annex_country": {
+                    "target": "EST",
+                    "transfer_troops": true
+                  },
+                  "add_named_threat": {
+                    "threat": 2,
+                    "name": "soviet.35_threat_EST"
+                  }
+                }
+              },
+              {
+                "limit": {
+                  "FROM": {
+                    "tag": "LAT"
+                  }
+                },
+                "SOV": {
+                  "annex_country": {
+                    "target": "LAT",
+                    "transfer_troops": true
+                  },
+                  "add_named_threat": {
+                    "threat": 2,
+                    "name": "soviet.35_threat_LAT"
+                  }
+                }
+              }
+            ]
+          },
+          "hidden_effect": {
+            "FROM": {
+              "country_event": {
+                "id": "baltic.6",
+                "hours": 6
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Время для таких действий еще не пришло.",
+        "name_key": "soviet.35.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.36",
+    "type": "country_event",
+    "title": "[From.GetName] желает нашего правления.",
+    "desc": "Недавние политические беспорядки в государстве [From.GetName] дали ясно понять местному правительству, что их будущее связано с нами. Они просят у нас защиты и предлагают безоговорочную поддержку. Официально они сохранят независмость как страна, но будут во всем следовать указаниям Советского Союза.",
+    "picture": "GFX_report_event_soviet_in_riga",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "FROM": {
+          "save_event_target_as": "baltic"
+        }
+      }
+    },
+    "options": [
+      {
+        "name": "Еще одно орудие нашего прогресса.",
+        "name_key": "soviet.36.a",
+        "trigger": {},
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "FROM": {
+                  "is_puppet": false
+                }
+              },
+              "SOV": {
+                "puppet": "FROM"
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "LIT"
+                }
+              },
+              "add_named_threat": {
+                "threat": 1,
+                "name": "soviet.36_threat_LIT"
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "FIN"
+                }
+              },
+              "add_named_threat": {
+                "threat": 2,
+                "name": "soviet.36_threat_FIN"
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "EST"
+                }
+              },
+              "add_named_threat": {
+                "threat": 1,
+                "name": "soviet.36_threat_EST"
+              }
+            },
+            {
+              "limit": {
+                "FROM": {
+                  "tag": "LAT"
+                }
+              },
+              "add_named_threat": {
+                "threat": 1,
+                "name": "soviet.36_threat_LAT"
+              }
+            }
+          ],
+          "hidden_effect": {
+            "news_event": {
+              "id": "news.70",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "Их слишком сложно будет защищать.",
+        "name_key": "soviet.36.b",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "soviet.60",
+    "type": "country_event",
+    "title": "Раздел Польши",
+    "desc": "Польша принадлежит нам, но ее западные области отходят в [GER.GetAdjective]ую зону влияния согласно положениям пакта Молотова-Риббентропа. Следует ли нам отвести войска и позволить [GER.GetAdjective]им властям завладеть территорией? Если мы этого не сделаем, договор будет аннулирован.",
+    "picture": "GFX_report_event_soviet_tanks",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "tag": "SOV",
+      "has_global_flag": "sov_yes_pact",
+      "GER": {
+        "exists": true,
+        "is_subject": false
+      },
+      "NOT": [
+        {
+          "has_war_with": "GER"
+        },
+        {
+          "has_global_flag": "germany_lost_the_war"
+        }
+      ],
+      "OR": {
+        "OR": [
+          {
+            "owns_state": [
+              88,
+              92,
+              90,
+              86,
+              87,
+              85,
+              98,
+              10,
+              762,
+              807
+            ]
+          },
+          {
+            "any_other_country": {
+              "is_in_faction_with": "SOV",
+              "SOV": {
+                "is_faction_leader": true
+              },
+              "OR": {
+                "owns_state": [
+                  88,
+                  92,
+                  90,
+                  86,
+                  87,
+                  85,
+                  98,
+                  10,
+                  762,
+                  807
+                ],
+                "AND": {
+                  "POL": {
+                    "has_capitulated": true
+                  },
+                  "OR": {
+                    "controls_state": [
+                      88,
+                      92,
+                      90,
+                      86,
+                      87,
+                      85,
+                      98,
+                      10,
+                      762,
+                      807
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "AND": {
+          "POL": {
+            "has_capitulated": true
+          },
+          "OR": {
+            "controls_state": [
+              88,
+              92,
+              90,
+              86,
+              87,
+              85,
+              98,
+              10,
+              762,
+              807
+            ]
+          }
+        }
+      }
+    },
+    "immediate": {},
+    "options": [
+      {
+        "name": "Да. Сейчас не время нарушать договоры.",
+        "name_key": "soviet.60.a",
+        "trigger": {},
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "88": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 88,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 88
+              }
+            },
+            {
+              "limit": {
+                "92": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 92,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 92
+              }
+            },
+            {
+              "limit": {
+                "90": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 90,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 90
+              }
+            },
+            {
+              "limit": {
+                "86": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 86,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 86,
+                "add_state_core": 86
+              }
+            },
+            {
+              "limit": {
+                "87": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 87,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 87
+              }
+            },
+            {
+              "limit": {
+                "85": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 85,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 85,
+                "add_state_core": 85
+              }
+            },
+            {
+              "limit": {
+                "98": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 98,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 98
+              }
+            },
+            {
+              "limit": {
+                "10": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 10,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 10
+              }
+            },
+            {
+              "limit": {
+                "762": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 762,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 762,
+                "add_state_core": 762
+              }
+            },
+            {
+              "limit": {
+                "807": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 807,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 807
+              }
+            },
+            {
+              "limit": {
+                "188": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 188,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 188
+              }
+            },
+            {
+              "limit": {
+                "70": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 70,
+                      "NOT": {
+                        "owns_state": 70
+                      },
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 70
+              }
+            },
+            {
+              "limit": {
+                "71": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 71,
+                      "NOT": {
+                        "owns_state": 71
+                      },
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 71
+              }
+            },
+            {
+              "limit": {
+                "664": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 664,
+                      "NOT": {
+                        "owns_state": 664
+                      },
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 664
+              }
+            },
+            {
+              "limit": {
+                "72": {
+                  "OR": {
+                    "is_controlled_by": "SOV",
+                    "any_other_country": {
+                      "controls_state": 72,
+                      "is_in_faction_with": "SOV",
+                      "SOV": {
+                        "is_faction_leader": true
+                      }
+                    }
+                  }
+                }
+              },
+              "GER": {
+                "transfer_state": 72
+              }
+            }
+          ],
+          "GER": {
+            "country_event": "soviet.61"
+          }
+        }
+      },
+      {
+        "name": "Нет! Польша должна целиком входить в наше Отечество!",
+        "name_key": "soviet.60.b",
+        "trigger": {},
+        "effects": {
+          "GER": [
+            {
+              "country_event": "soviet.62"
+            },
+            {
+              "add_state_claim": [
+                88,
+                92,
+                90,
+                86,
+                87,
+                85,
+                98,
+                10,
+                762,
+                807
+              ],
+              "effect_tooltip": {
+                "create_wargoal": {
+                  "type": "annex_everything",
+                  "target": "SOV"
+                }
+              }
+            }
+          ],
+          "clr_global_flag": "sov_yes_pact",
+          "diplomatic_relation": {
+            "country": "GER",
+            "relation": "non_aggression_pact",
+            "active": false
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.61",
+    "type": "country_event",
+    "title": "Советы соблюдают договор",
+    "desc": "Выполняя условия договора, [SOV.GetAdjective]ие власти передали западные области Польши под наше управление. Немецкие войска уже взяли их под свою защиту.",
+    "picture": "GFX_report_event_soviet_german_soldier_handshake",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Превосходно.",
+        "name_key": "germany.12.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "GER": {
+                "controls_state": [
+                  85,
+                  86,
+                  87
+                ]
+              }
+            },
+            "hidden_effect": {
+              "news_event": {
+                "hours": 6,
+                "id": "news.287"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.62",
+    "type": "country_event",
+    "title": "Советы нарушают договор",
+    "desc": "Вопреки многократным заверениям, Советы не отвели свои войска, не предприняли никаких попыток передать нам территории и не вернулись в согласованные с нами границы. Похоже, они не собираются выполнять условия договора.",
+    "picture": "GFX_report_event_soviet_tanks",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Только зря чернила перевели!",
+        "name_key": "soviet.62.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "annex_everything",
+            "target": "SOV"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.63",
+    "type": "country_event",
+    "title": "soviet.63.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": false,
+    "trigger": {
+      "tag": "SOV",
+      "country_exists": [
+        "UKR",
+        "BLR",
+        "GEO",
+        "AZR",
+        "ARM",
+        "UZB",
+        "TAJ",
+        "KYR",
+        "TMS",
+        "KAZ"
+      ],
+      "NOT": {
+        "has_global_flag": "SOV_became_russia"
+      }
+    },
+    "immediate": {
+      "set_cosmetic_tag": "SOV_russia",
+      "set_global_flag": "SOV_became_russia"
+    },
+    "options": []
+  },
+  {
+    "id": "soviet.64",
+    "type": "country_event",
+    "title": "soviet.64.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": false,
+    "trigger": {
+      "tag": "SOV",
+      "NOT": [
+        {
+          "country_exists": "UKR"
+        },
+        {
+          "country_exists": "BLR"
+        },
+        {
+          "country_exists": "GEO"
+        },
+        {
+          "country_exists": "AZR"
+        },
+        {
+          "country_exists": "ARM"
+        },
+        {
+          "country_exists": "UZB"
+        },
+        {
+          "country_exists": "TAJ"
+        },
+        {
+          "country_exists": "KYR"
+        },
+        {
+          "country_exists": "TMS"
+        },
+        {
+          "country_exists": "KAZ"
+        },
+        {
+          "any_state": {
+            "is_core_of": "SOV",
+            "NOT": [
+              {
+                "state": 329
+              },
+              {
+                "is_owned_by": "SOV"
+              }
+            ]
+          }
+        }
+      ],
+      "has_global_flag": "SOV_became_russia"
+    },
+    "immediate": {
+      "drop_cosmetic_tag": true,
+      "clr_global_flag": "SOV_became_russia"
+    },
+    "options": []
+  },
+  {
+    "id": "soviet.999",
+    "type": "country_event",
+    "title": "soviet.999.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "tag": "SOV",
+      "has_war_with": "GER",
+      "surrender_progress": {
+        "_op": "<",
+        "value": 0.5
+      },
+      "has_government": "communism",
+      "NOT": {
+        "has_global_flag": "barbarossa_counter"
+      }
+    },
+    "immediate": {
+      "play_no_invincible_armies_effect": true
+    },
+    "options": []
+  },
+  {
+    "id": "soviet.70",
+    "type": "country_event",
+    "title": "Давление со стороны [SOV.GetNameRuGen]",
+    "desc": "Несмотря на освобождение нашей родины от [GER.GetAdjective]ой оккупации, нам всё еще надо считаться с вездесущим государством [SOV.GetName]. Теперь оно отказывается признавать легитимность нашего правительства, пока назначенные [SOV.GetAdjective]ими силами коммунисты не получат в нем значительную роль. На самом деле это плохо завуалированная угроза от [SOV.GetAdjective]ого государства: оно ожидает, что мы пойдем с ним одним курсом. Наши партнеры тем временем не торопятся предложить на какую-либо помощь в сопротивлении требованиям, которые выдвинул [SOV.GetLeader].",
+    "picture": "GFX_report_event_soviet_tanks",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "tag": "POL",
+      "is_subject": false,
+      "NOT": {
+        "has_government": "communism"
+      },
+      "has_global_flag": "yalta_agreed_flag",
+      "SOV": {
+        "exists": true,
+        "is_subject": false
+      },
+      "OR": {
+        "NOT": {
+          "GER": {
+            "has_government": "fascism"
+          }
+        },
+        "GER": {
+          "exists": false
+        }
+      }
+    },
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы не в том состоянии, чтобы снова сражаться.",
+        "name_key": "soviet.70.a",
+        "trigger": {},
+        "effects": {
+          "add_timed_idea": {
+            "idea": "communist_influence",
+            "days": 730
+          },
+          "SOV": {
+            "country_event": {
+              "id": "soviet.71",
+              "days": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "[SOV.GetLeader] не будет диктовать нам свои условия.",
+        "name_key": "soviet.70.b",
+        "trigger": {},
+        "effects": {
+          "SOV": {
+            "country_event": {
+              "id": "soviet.72",
+              "days": 1
+            }
+          },
+          "effect_tooltip": {
+            "SOV": {
+              "create_wargoal": {
+                "type": "puppet_wargoal_focus",
+                "target": "ROOT"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.71",
+    "type": "country_event",
+    "title": "Сближение с [POL.GetAdjective]им государством",
+    "desc": "Из-за давления нашего правительства и постоянной угрозы, исходящей от всемогущей Красной Армии, буржуазная администрация [POL.GetNameRuGen] согласилась признать власть коммунистической партии единственной легитимной властью народа. Мы могли бы утвердить свою волю силой, но теперь в этом нет необходимости, и мы можем быть уверены: [POL.GetName] войдет в сферу нашего влияния.",
+    "picture": "GFX_report_event_soviet_tanks",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Они подчинились — и правильно сделали.",
+        "name_key": "soviet.71.a",
+        "trigger": {},
+        "effects": {
+          "effect_tooltip": {
+            "FROM": {
+              "add_timed_idea": {
+                "idea": "communist_influence",
+                "days": 730
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.72",
+    "type": "country_event",
+    "title": "[POL.GetNameDefCap] продолжает угнетать пролетариат",
+    "desc": "В своей неуместной буржуазной заносчивости нелегитимная администрация [POL.GetNameRuGen] отказывается признавать власть коммунистической партии. Нельзя позволить этим глупцам снова превратить Польшу в плацдарм для фашистского вторжения, от которого может пострадать [SOV.GetNameDef]. Немедленно ввести государство [POL.GetName] в сферу нашего влияния — безотлагательное дело и вопрос государственной безопасности.",
+    "picture": "GFX_report_event_soviet_tanks",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы сокрушим [POL.GetAdjective]ую буржуазию раз и навсегда.",
+        "name_key": "soviet.72.a",
+        "trigger": {},
+        "effects": {
+          "create_wargoal": {
+            "type": "puppet_wargoal_focus",
+            "target": "FROM"
+          }
+        }
+      },
+      {
+        "name": "Народ устал от войны. Мы найдем другой способ.",
+        "name_key": "soviet.72.b",
+        "trigger": {},
+        "effects": {
+          "FROM": {
+            "country_event": {
+              "id": "soviet.73",
+              "days": 7
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.73",
+    "type": "country_event",
+    "title": "[SOV.GetNameDefCap] идет на попятную",
+    "desc": "Недавняя напряженность, возникшая из-за внешней политики [POL.GetNameRuGen], ослабла, поскольку [SOV.GetNameDef] теперь отказывается от своей прежней агрессивной риторики. Хотя вероятность очередного вторжения снизилась, мы должны быть начеку и внимательно следить за нашими восточными соседями и их марионетками.",
+    "picture": "GFX_report_event_soviet_tanks",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Нужно быть настороже.",
+        "name_key": "soviet.73.a",
+        "trigger": {},
+        "effects": {
+          "add_political_power": 50
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.74",
+    "type": "country_event",
+    "title": "Государство [FROM.GetNameDefCap] должно вернуть [ROOT.GetAdjective]ую территорию",
+    "desc": "В качестве жеста доброй воли и дружбы [FROM.GetAdjective]ого и [ROOT.GetAdjective]ого государств [FROM.GetLeader] предлагает вернуть часть удерживаемой ими территории, исторически принадлежавшей Польше.",
+    "picture": "GFX_report_event_SOV_demands",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": [],
+    "immediate": {},
+    "options": [
+      {
+        "name": "Лучше, чем ничего",
+        "name_key": "soviet.74.a",
+        "trigger": {},
+        "effects": {
+          "POL": {
+            "add_autonomy_score": {
+              "value": -250,
+              "localization": "POL_accepted_states"
+            },
+            "add_popularity": {
+              "ideology": "FROM",
+              "popularity": 0.05
+            }
+          },
+          "FROM": [
+            {
+              "every_owned_state": {
+                "limit": {
+                  "is_core_of": "POL",
+                  "OR": {
+                    "state": 97,
+                    "NOT": {
+                      "any_country_with_core": {
+                        "NOT": {
+                          "tag": "POL"
+                        }
+                      }
+                    }
+                  }
+                },
+                "transfer_state_to": "POL"
+              }
+            },
+            {
+              "country_event": {
+                "id": "soviet.75",
+                "hours": 2,
+                "random_hours": 6
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Мы не принимаем подачки",
+        "name_key": "soviet.74.b",
+        "trigger": {},
+        "effects": {
+          "POL": {
+            "add_autonomy_score": {
+              "value": 250,
+              "localization": "POL_refused_states"
+            }
+          },
+          "FROM": [
+            {
+              "every_owned_state": {
+                "limit": {
+                  "is_core_of": "POL",
+                  "OR": {
+                    "state": 97,
+                    "NOT": {
+                      "any_country_with_core": {
+                        "NOT": {
+                          "tag": "POL"
+                        }
+                      }
+                    }
+                  }
+                },
+                "remove_core_of": "POL",
+                "add_core_of": "SOV",
+                "add_claim_by": "POL"
+              }
+            },
+            {
+              "country_event": {
+                "id": "soviet.76",
+                "hours": 2,
+                "random_hours": 6
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.75",
+    "type": "country_event",
+    "title": "[FROM.GetLeader] принимает наше предложение.",
+    "desc": "[FROM.GetAdjective]ое правительство приняло наше предложение вернуть территорию. Будем надеяться, что такой шаг в обозримом будущем удовлетворит все стороны и снизит риск международных конфликтов.",
+    "picture": "GFX_report_event_SOV_demands",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Как и ожидалось",
+        "name_key": "soviet.75.a",
+        "trigger": {},
+        "effects": {
+          "add_stability": 0.05
+        }
+      }
+    ]
+  },
+  {
+    "id": "soviet.76",
+    "type": "country_event",
+    "title": "[FROM.GetLeader] отклоняет наше предложение",
+    "desc": "[FROM.GetAdjective]ое правительство по какой-то причине отклонило наше предложение вернуть территорию. Сейчас неясно, что оно затевает. По крайней мере, это затруднит им претензии на указанные земли в будущем.",
+    "picture": "GFX_report_event_SOV_demands",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Всем не угодишь",
+        "name_key": "soviet.76.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  }
+]

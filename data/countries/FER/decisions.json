@@ -1,0 +1,2980 @@
+[
+  {
+    "id": "AFG_claim_state",
+    "category_id": "AFG_kabul_conference_category",
+    "name": "Обсудить [AFG.GetAdjective]ую экспансию в регион [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "OWNER": {
+          "has_war_with": "ROOT"
+        },
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "AFG_arranged_expansion_modifier"
+          }
+        },
+        "is_controlled_by_ROOT_or_ally": true
+      },
+      "NOT": {
+        "has_country_flag": "AFG_expansion_claim_in_progress"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AFG_kabul_conference",
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "AFG_arranged_expansion_modifier"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "AFG_expansion_claim_in_progress"
+      }
+    }
+  },
+  {
+    "id": "AFG_claim_state_middle_east",
+    "category_id": "AFG_kabul_conference_category",
+    "name": "$AFG_claim_state$",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "OWNER": {
+          "has_war_with": "ROOT"
+        },
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "AFG_arranged_expansion_modifier"
+          }
+        },
+        "is_controlled_by_ROOT_or_ally": true
+      },
+      "NOT": {
+        "has_country_flag": "AFG_expansion_claim_in_progress"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AFG_kabul_conference",
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "AFG_arranged_expansion_modifier"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "AFG_expansion_claim_in_progress"
+      }
+    }
+  },
+  {
+    "id": "AUS_offer_nap_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Предложить государству [FROM.OWNER.GetNameDef] пакт о ненападении",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      }
+    },
+    "visible": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        },
+        "OWNER": {
+          "NOT": [
+            {
+              "has_country_flag": [
+                "AUS_went_militarist_with_FROM_OWNER_flag",
+                "AUS_sent_ultimatum_flag"
+              ]
+            },
+            {
+              "has_non_aggression_pact_with": "ROOT"
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "FROM": {
+        "set_state_flag": "AUS_currently_targets_this_landd_of_old_flag"
+      }
+    }
+  },
+  {
+    "id": "COG_offer_uranium_sales_decision",
+    "category_id": "economy_decisions",
+    "name": "Предложить продажу урана государству [FROM.GetNameWithFlag]",
+    "desc": "",
+    "icon": "GFX_decision_gre_investment_decisions",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "CONGO_smuggle_uranium"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "ww_congo.63",
+          "hours": 6,
+          "random_hours": 12
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "add_offsite_building": {
+          "type": "industrial_complex",
+          "level": 2
+        },
+        "add_breakthrough_progress": {
+          "specialization": "specialization_nuclear",
+          "value": 0.1
+        },
+        "custom_effect_tooltip": "generic_skip_one_line_tt",
+        "FROM": {
+          "add_ideas": "COG_congolese_uranium_trade_ns",
+          "add_breakthrough_progress": {
+            "specialization": "specialization_nuclear",
+            "value": 0.25
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_warlord_autonomy_offer_economic_support_decision",
+    "category_id": "CHI_integrate_the_warlords_sea_cat",
+    "name": "Предложить экономическую поддержку [FROM.GetNameRuDat]",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": "FROM.CHI_warlord_integration_pp_cost",
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "CHI_warlord_economic_support_flag"
+          }
+        },
+        "NOT": {
+          "has_country_flag": "CHI_warlord_economic_support_flag"
+        }
+      },
+      "else": {
+        "limit": {
+          "has_country_flag": "CHI_warlord_economic_support_flag"
+        },
+        "custom_trigger_tooltip": {
+          "tooltip": "CHI_warlord_economic_support_reset_tt",
+          "NOT": {
+            "has_country_flag": "CHI_warlord_economic_support_flag"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_dynamic_modifier": {
+        "modifier": "CHI_american_support"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": [
+        {
+          "flag": "CHI_warlord_economic_support_flag",
+          "value": 1,
+          "days": 90
+        },
+        "flag_id"
+      ],
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "CHI_chinese_economic_support_idea",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_warlord_autonomy_offer_industrial_support_decision",
+    "category_id": "CHI_integrate_the_warlords_sea_cat",
+    "name": "Предложить промышленную поддержку [FROM.GetNameRuDat]",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": "FROM.CHI_warlord_integration_pp_cost",
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "CHI_warlord_industrial_support_flag"
+          }
+        },
+        "NOT": {
+          "has_country_flag": "CHI_warlord_industrial_support_flag"
+        }
+      },
+      "else": {
+        "limit": {
+          "has_country_flag": "CHI_warlord_industrial_support_flag"
+        },
+        "custom_trigger_tooltip": {
+          "tooltip": "CHI_warlord_industrial_support_reset_tt",
+          "NOT": {
+            "has_country_flag": "CHI_warlord_industrial_support_flag"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_dynamic_modifier": {
+        "modifier": "CHI_american_support"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "CHI_warlord_industrial_support_flag",
+        "value": 1,
+        "days": 90
+      },
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "CHI_chinese_industrial_support_idea",
+          "days": 180
+        }
+      }
+    }
+  },
+  {
+    "id": "COG_freedom_at_gunpoint_offer_peace",
+    "category_id": "COG_freedom_at_gunpoint_category",
+    "name": "Предложить мир государству [FROM.Capital.OWNER.GetName] в обмен на независимость [FROM.GetAdjective]ой территории",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "capital_scope": {
+          "OWNER": {
+            "has_war_with": "ROOT",
+            "is_subject": false
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "COG_freedom_at_gunpoint_subject_offer_peace",
+    "category_id": "COG_freedom_at_gunpoint_category",
+    "name": "Предложить мир в обмен на [FROM.GetAdjective]ую независимость",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "any_country": {
+        "has_subject": "FROM",
+        "has_war_with": "ROOT"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "DEN_offer_protection_decision",
+    "category_id": "DEN_offer_protection_category",
+    "name": "DEN_offer_protection_decision",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 49
+          }
+        },
+        "has_government": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_sway_the_nordics"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "denmark_expansion_event.800",
+          "hours": 3
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "ROOT": {
+          "puppet": "FROM"
+        }
+      }
+    }
+  },
+  {
+    "id": "ENG_trade_unions_demand_referendum",
+    "category_id": "ENG_concessions_to_the_trade_unions",
+    "name": "Провести референдум",
+    "desc": "Поддержка социалистов резко выросла, и теперь нам остается лишь уступить требованиям профсоюзов о референдуме. Исход такого решения предрешен...",
+    "icon": "eng_trade_unions_demand",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "communism": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "has_country_flag": [
+        "ENG_trade_unions_demand_minister_appointment",
+        "ENG_trade_unions_demand_legislation_amendment_done_flag",
+        "ENG_trade_unions_demand_conscription_limitations_done_flag",
+        "ENG_trade_unions_demand_workplace_safety_legislation_done_flag",
+        "ENG_trade_unions_demand_increase_in_paid_leave_done_flag",
+        "ENG_trade_unions_demand_minimum_pay_increase_done_flag",
+        "ENG_trade_unions_demand_construction_safety_legislation_done_flag",
+        "ENG_trade_unions_demand_mandatory_union_days_done_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "ENG_trade_unions_demand_timer"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "communism"
+      },
+      "tag": "ENG",
+      "has_completed_focus": "ENG_concessions_to_the_trade_unions"
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_idea": "ENG_factory_safety_regulations_1"
+          },
+          "remove_ideas": "ENG_factory_safety_regulations_1"
+        },
+        {
+          "limit": {
+            "has_idea": "ENG_factory_safety_regulations_2"
+          },
+          "remove_ideas": "ENG_factory_safety_regulations_2"
+        },
+        {
+          "limit": {
+            "has_idea": "ENG_factory_safety_regulations_3"
+          },
+          "remove_ideas": "ENG_factory_safety_regulations_3"
+        },
+        {
+          "limit": {
+            "has_idea": "ENG_construction_safety_regulations"
+          },
+          "remove_ideas": "ENG_construction_safety_regulations"
+        },
+        {
+          "limit": {
+            "has_idea": "ENG_mandatory_union_days"
+          },
+          "remove_ideas": "ENG_mandatory_union_days"
+        },
+        {
+          "limit": {
+            "has_country_flag": "ENG_trade_unions_demand_conscription_limitations"
+          },
+          "hidden_effect": {
+            "clr_country_flag": "ENG_trade_unions_demand_conscription_limitations"
+          },
+          "custom_effect_tooltip": "ENG_trade_unions_demand_referendum_tt"
+        }
+      ],
+      "set_country_flag": [
+        "ENG_switched_to_communism_civil_war_flag",
+        {
+          "flag": "ENG_switched_to_communism_civil_war_timer_flag",
+          "value": 1,
+          "days": 730
+        },
+        {
+          "flag": "ENG_switched_to_fascism_communism_dominions_timer_flag",
+          "value": 1,
+          "days": 180
+        }
+      ],
+      "country_event": {
+        "id": "political.19"
+      },
+      "ENG_request_trade_union_support_cost_level_down": true,
+      "custom_effect_tooltip": "ENG_concessions_to_the_trade_unions_tt_2",
+      "activate_mission": "ENG_expected_decolonization"
+    }
+  },
+  {
+    "id": "ENG_trade_unions_demand_referendum_mission",
+    "category_id": "ENG_concessions_to_the_trade_unions",
+    "name": "Профсоюзы требуют провести референдум",
+    "desc": "",
+    "icon": "eng_trade_unions_demand",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "communism"
+    },
+    "visible": {
+      "tag": "ENG",
+      "communism": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "has_country_flag": [
+        "ENG_trade_unions_demand_minister_appointment",
+        "ENG_trade_unions_demand_legislation_amendment_done_flag",
+        "ENG_trade_unions_demand_conscription_limitations_done_flag",
+        "ENG_trade_unions_demand_workplace_safety_legislation_done_flag",
+        "ENG_trade_unions_demand_increase_in_paid_leave_done_flag",
+        "ENG_trade_unions_demand_minimum_pay_increase_done_flag",
+        "ENG_trade_unions_demand_construction_safety_legislation_done_flag",
+        "ENG_trade_unions_demand_mandatory_union_days_done_flag"
+      ],
+      "NOT": {
+        "has_government": "communism"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ENG_imperial_conference_decision",
+    "category_id": "ENG_imperial_conference_decision",
+    "name": "Имперская конференция",
+    "desc": "Началась имперская конференция, и в течение двух следующих месяцев мы сможем продвигать там выгодные нам решения, прежде чем делегаты из разных стран доминиона вернутся домой. Чем лучше дипломатические отношения с доминионами, тем выше вероятность того, что они примут наши предложения.",
+    "icon": "generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "ENG",
+      "has_country_flag": "ENG_imperial_conference_timer_flag"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ENG_discuss_imperial_defense",
+    "category_id": "ENG_imperial_conference_decision",
+    "name": "Обсудить оборону империи",
+    "desc": "Мы выдвинем предложение, согласно которому все члены Содружества должны будут внести значительный вклад в защиту Империи.",
+    "icon": "eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_imperial_conference_discussion_in_progress"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_imperial_conference",
+      "has_country_flag": "ENG_imperial_conference_timer_flag"
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "mtg_britain.83",
+        "hours": 6
+      },
+      "set_country_flag": "ENG_imperial_conference_discussion_in_progress"
+    }
+  },
+  {
+    "id": "ENG_discuss_imperial_trade",
+    "category_id": "ENG_imperial_conference_decision",
+    "name": "Обсудить торговлю империи",
+    "desc": "Мы выдвинем предложение, согласно которому все члены Содружества должны будут расширить торговые льготы в границах Империи, чтобы мы все добились еще большего процветания.",
+    "icon": "eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_imperial_conference_discussion_in_progress"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_imperial_conference",
+      "has_country_flag": "ENG_imperial_conference_timer_flag"
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "mtg_britain.87",
+        "hours": 6
+      },
+      "set_country_flag": "ENG_imperial_conference_discussion_in_progress"
+    }
+  },
+  {
+    "id": "ENG_discuss_imperial_economy",
+    "category_id": "ENG_imperial_conference_decision",
+    "name": "Обсудить экономику империи",
+    "desc": "Мы выдвинем предложение, согласно которому все члены Содружества должны будут внести значительный вклад в свою экономику, чтобы меньше зависеть от наших инвестиций и усилить экономическую мощь Империи в целом.",
+    "icon": "eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_imperial_conference_discussion_in_progress"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_imperial_conference",
+      "has_country_flag": "ENG_imperial_conference_timer_flag"
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "mtg_britain.91",
+        "hours": 6
+      },
+      "set_country_flag": "ENG_imperial_conference_discussion_in_progress"
+    }
+  },
+  {
+    "id": "ENG_discuss_appeasement",
+    "category_id": "ENG_imperial_conference_decision",
+    "name": "Обсудить умиротворение",
+    "desc": "Наша политика умиротворения подверглась значительной критике, поэтому мы представим ее на рассмотрение Содружеству.",
+    "icon": "eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_imperial_conference_discussion_in_progress"
+      },
+      "has_war": false
+    },
+    "visible": {
+      "has_completed_focus": "ENG_imperial_conference",
+      "has_country_flag": "ENG_imperial_conference_timer_flag"
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "mtg_britain.95",
+        "hours": 6
+      },
+      "set_country_flag": "ENG_imperial_conference_discussion_in_progress"
+    }
+  },
+  {
+    "id": "ENG_discuss_imperial_federation",
+    "category_id": "ENG_imperial_conference_decision",
+    "name": "Обсудить федеративную империю",
+    "desc": "Еще с предыдущего столетия были слышны предложения объединить все части Империи в единую федеративную империю, а не развивать автономность и независимость всех доминионов. Мы подготовим итоговое обсуждение по этому вопросу.",
+    "icon": "eng_imperial_federation",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ENG_imperial_conference_discussion_in_progress"
+      },
+      "OR": {
+        "CAN": {
+          "exists": true
+        },
+        "SAF": {
+          "exists": true
+        },
+        "AST": {
+          "exists": true
+        },
+        "NZL": {
+          "exists": true
+        },
+        "AND": {
+          "RAJ": {
+            "is_subject_of": "ENG"
+          },
+          "has_completed_focus": "ENG_indian_autonomy"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_imperial_conference",
+      "has_country_flag": "ENG_imperial_conference_timer_flag"
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "mtg_britain.99",
+        "hours": 6
+      },
+      "set_country_flag": "ENG_imperial_conference_discussion_in_progress",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_completed_focus": "ENG_indian_autonomy"
+          }
+        },
+        "custom_effect_tooltip": "ENG_indian_autonomy_tt"
+      }
+    }
+  },
+  {
+    "id": "hold_the_democratic_national_referendum",
+    "category_id": "democratic_on_the_rise",
+    "name": "Проведение всенародного референдума",
+    "desc": "Заручившись достаточной поддержкой, мы можем провести референдум об изменении политического строя без излишнего кровопролития.",
+    "icon": "generic_political_discourse",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "OR": {
+        "democratic": {
+          "_op": ">",
+          "value": 0.6
+        },
+        "has_country_flag": "open_up_political_discourse_democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true,
+      "if": {
+        "limit": {
+          "NOR_AAT": true
+        },
+        "original_tag": "NOR",
+        "has_country_flag": "NOR_included_in_generic_political"
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "political.20"
+      }
+    }
+  },
+  {
+    "id": "ETH_freedom_at_gunpoint_offer_peace",
+    "category_id": "ETH_freedom_at_gunpoint_category",
+    "name": "Предложить мир государству [FROM.Capital.OWNER.GetName] в обмен на независимость [FROM.GetAdjective]ой территории",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "capital_scope": {
+          "OWNER": {
+            "has_war_with": "ROOT"
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "integrate_the_fertile_crescent",
+    "category_id": "form_arabia_category",
+    "name": "Интегрировать Плодородный полумесяц",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        676,
+        675,
+        291,
+        1011,
+        1010
+      ]
+    },
+    "visible": {
+      "has_global_flag": "form_arabia_flag",
+      "has_country_flag": "is_arabia_flag"
+    },
+    "complete_effect": {
+      "676": {
+        "add_core_of": "ROOT"
+      },
+      "675": {
+        "add_core_of": "ROOT"
+      },
+      "291": {
+        "add_core_of": "ROOT"
+      },
+      "413": {
+        "add_core_of": "ROOT"
+      },
+      "656": {
+        "add_core_of": "ROOT"
+      },
+      "1011": {
+        "add_core_of": "ROOT"
+      },
+      "1010": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "HUN_referendum_in_southern_slovakia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Организовать референдум в регионе [664.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums",
+      "is_subject": false,
+      "OR": {
+        "has_government": [
+          "democratic",
+          "neutrality"
+        ]
+      },
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 65
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "WW_hungary.111",
+          "days": 2,
+          "random": 3
+        },
+        "hidden_effect": {
+          "set_country_flag": "HUN_held_south_slovakia_referendum"
+        }
+      }
+    }
+  },
+  {
+    "id": "HUN_referendum_in_carpathian_ruthenia",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Организовать референдум в регионе [73.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums",
+      "is_subject": false,
+      "OR": {
+        "has_government": [
+          "democratic",
+          "neutrality"
+        ]
+      },
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 65
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "WW_hungary.114",
+          "days": 2,
+          "random": 3
+        },
+        "hidden_effect": {
+          "set_country_flag": "HUN_held_carpathian_referendum"
+        }
+      }
+    }
+  },
+  {
+    "id": "HUN_referendum_in_vojvodina",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Организовать референдум в регионе [45.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums",
+      "is_subject": false,
+      "OR": {
+        "has_government": [
+          "democratic",
+          "neutrality"
+        ]
+      },
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 65
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "WW_hungary.117",
+          "days": 2,
+          "random": 3
+        },
+        "hidden_effect": {
+          "set_country_flag": "HUN_held_vojvode_referendum"
+        }
+      }
+    }
+  },
+  {
+    "id": "HUN_referendum_in_north_transylvania",
+    "category_id": "HUN_territorial_revision_category",
+    "name": "Организовать референдум в Секейфёльде",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums",
+      "is_subject": false,
+      "OR": {
+        "has_government": [
+          "democratic",
+          "neutrality"
+        ]
+      },
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 65
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "wuw_HUN_hold_territorial_referendums"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "WW_hungary.120",
+          "days": 2,
+          "random": 3
+        },
+        "hidden_effect": {
+          "set_country_flag": "HUN_held_north_transylvanian_referendum"
+        }
+      }
+    }
+  },
+  {
+    "id": "ICE_the_ferocity_of_the_fenrir",
+    "category_id": "ICE_improve_the_viking_spirit",
+    "name": "ICE_the_ferocity_of_the_fenrir",
+    "desc": "",
+    "icon": "GFX_decision_eng_imperial_federation",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ICE_the_viking_spirit",
+      "NOT": {
+        "has_country_flag": "ICE_already_improving_the_viking_spirit_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ICE_the_viking_spirit"
+    },
+    "complete_effect": {
+      "set_country_flag": "ICE_already_improving_the_viking_spirit_flag"
+    }
+  },
+  {
+    "id": "ICE_the_fertility_of_freya",
+    "category_id": "ICE_improve_the_viking_spirit",
+    "name": "ICE_the_fertility_of_freya",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ICE_the_viking_spirit",
+      "NOT": {
+        "has_country_flag": "ICE_already_improving_the_viking_spirit_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ICE_the_viking_spirit"
+    },
+    "complete_effect": {
+      "set_country_flag": "ICE_already_improving_the_viking_spirit_flag"
+    }
+  },
+  {
+    "id": "INS_papua_referendum_decision",
+    "category_id": "INS_malay_unification_cat",
+    "name": "$INSHOL_papua_referendum$",
+    "desc": "$INSHOL_papua_referendum_desc$",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "original_tag": "INS",
+      "is_subject": false,
+      "669": {
+        "is_core_of": "INS"
+      },
+      "1057": {
+        "is_core_of": "INS"
+      },
+      "AST": {
+        "controls_state": [
+          523,
+          979,
+          1073,
+          737,
+          1070
+        ],
+        "OR": {
+          "is_subject": false,
+          "has_autonomy_state": "autonomy_dominion"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_decision_transfer_lands_to_church",
+    "category_id": "MEX_category_church_power",
+    "name": "Передать земли церкви",
+    "desc": "Дореволюционная церковь была сильна и богата. Жадные генералы и губернаторы присвоили большие участки церковной земли, отобрав их у прежних владельцев, но мы можем всё вернуть.",
+    "icon": "generic_operation",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "MEX_focus_antidisestablishmentarianism",
+      "NOT": {
+        "has_idea": "MEX_church_power_5"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "MEX_increase_church_power": true
+    }
+  },
+  {
+    "id": "hold_the_fascist_national_referendum",
+    "category_id": "fascism_on_the_rise",
+    "name": "Проведение всенародного референдума",
+    "desc": "Заручившись достаточной поддержкой, мы можем провести референдум об изменении политического строя без излишнего кровопролития.",
+    "icon": "generic_political_discourse",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "fascism": {
+        "_op": ">",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "fascism"
+      },
+      "OR": [
+        {
+          "fascism": {
+            "_op": ">",
+            "value": 0.6
+          },
+          "has_country_flag": "open_up_political_discourse_fascism"
+        },
+        {
+          "AND": {
+            "original_tag": "GER",
+            "has_completed_focus": "GER_expatriate_the_communists_ww",
+            "has_country_flag": "GER_strasserism_relevant_in_germany_flag"
+          },
+          "check_has_focus_tree_to_switch_to_fascism": true
+        }
+      ],
+      "IF": [
+        {
+          "limit": {
+            "has_dlc": "Trial of Allegiance"
+          },
+          "NOT": {
+            "original_tag": "ARG"
+          }
+        },
+        {
+          "limit": {
+            "has_dlc": "Arms Against Tyranny"
+          },
+          "NOT": {
+            "original_tag": "NOR"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "political.18"
+      }
+    }
+  },
+  {
+    "id": "hold_the_communist_national_referendum",
+    "category_id": "communism_on_the_rise",
+    "name": "Проведение всенародного референдума",
+    "desc": "Заручившись достаточной поддержкой, мы можем провести референдум об изменении политического строя без излишнего кровопролития.",
+    "icon": "generic_political_discourse",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "communism": {
+        "_op": ">",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "communism"
+      },
+      "OR": {
+        "communism": {
+          "_op": ">",
+          "value": 0.6
+        },
+        "has_country_flag": "open_up_political_discourse_communist"
+      },
+      "check_has_focus_tree_to_switch_to_communism": true
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "political.19"
+      }
+    }
+  },
+  {
+    "id": "SIA_war_fervor_coup_dummy",
+    "category_id": "SIA_war_fervor_cat",
+    "name": "Военный пыл выходит из-под контроля",
+    "desc": "Если накопившаяся у народа потребность в войне не найдет выхода, она будет направлена на нас.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.95
+      },
+      "has_civil_war": false,
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SIA_war_fervor_coup",
+    "category_id": "SIA_war_fervor_cat",
+    "name": "Надвигающийся переворот",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SIA_urge_restraint",
+    "category_id": "SIA_war_fervor_cat",
+    "name": "Призвать к сдержанности",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "has_idea": "idea_SIA_war_fervor"
+    },
+    "visible": {},
+    "complete_effect": {
+      "add_war_support": -0.15
+    }
+  },
+  {
+    "id": "SWI_offer_operative",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Предложить агента",
+    "desc": "",
+    "icon": "GFX_decision_recruit_operative",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "has_intelligence_agency": true,
+      "FROM": {
+        "has_intelligence_agency": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_share_spy_networks"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland.15",
+          "hours": 4
+        }
+      },
+      "add_opinion_modifier": {
+        "target": "ROOT",
+        "modifier": "SWI_supporting_intelligence"
+      },
+      "random_list": {
+        "50": [
+          {
+            "modifier": [
+              {
+                "factor": 0.5,
+                "ROOT": {
+                  "OR": {
+                    "has_idea": [
+                      "SWI_buero_ha_idea",
+                      "SWI_federal_police_idea"
+                    ]
+                  }
+                }
+              },
+              {
+                "factor": 0.5,
+                "NOT": {
+                  "any_other_country": {
+                    "SWI_is_country_to_balance": true,
+                    "has_opinion": {
+                      "target": "ROOT",
+                      "value": {
+                        "_op": "<",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "every_other_country": {
+              "limit": {
+                "OR": {
+                  "SWI_is_fascist_to_balance": true,
+                  "AND": {
+                    "SWI_is_country_to_balance": true,
+                    "has_war_with": "FROM"
+                  }
+                }
+              },
+              "add_opinion_modifier": {
+                "target": "ROOT",
+                "modifier": "SWI_grave_breach_of_neutrality"
+              }
+            }
+          },
+          []
+        ]
+      }
+    }
+  },
+  {
+    "id": "SWI_offer_intel_support",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Предложить поддержку разведкой",
+    "desc": "",
+    "icon": "GFX_decision_SWI_expand_covert_operations",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_intelligence_agency": true
+    },
+    "visible": {
+      "has_completed_focus": "SWI_support_allied_espionage"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "SWI_intel_support_idea",
+        "days": 90
+      },
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "SWI_intel_support_idea",
+          "days": 90
+        },
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "SWI_supporting_intelligence"
+        }
+      },
+      "random_list": {
+        "50": [
+          {
+            "modifier": [
+              {
+                "factor": 0.5,
+                "ROOT": {
+                  "OR": {
+                    "has_idea": [
+                      "SWI_buero_ha_idea",
+                      "SWI_federal_police_idea"
+                    ]
+                  }
+                }
+              },
+              {
+                "factor": 0.5,
+                "NOT": {
+                  "any_other_country": {
+                    "SWI_is_country_to_balance": true,
+                    "has_opinion": {
+                      "target": "ROOT",
+                      "value": {
+                        "_op": "<",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "every_other_country": {
+              "limit": {
+                "OR": {
+                  "SWI_is_fascist_to_balance": true,
+                  "AND": {
+                    "SWI_is_country_to_balance": true,
+                    "has_war_with": "FROM"
+                  }
+                }
+              },
+              "add_opinion_modifier": {
+                "target": "ROOT",
+                "modifier": "SWI_grave_breach_of_neutrality"
+              }
+            }
+          },
+          []
+        ]
+      }
+    }
+  },
+  {
+    "id": "SWI_offer_fascist_to_trade_gold",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Открыть банки для фашистской нации",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SWI_axis_gold"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland_trade.8",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "custom_effect_tooltip": "if_they_accept_tt",
+        "SWI_increase_gold_trade": true
+      }
+    }
+  },
+  {
+    "id": "SWI_offer_democratic_to_trade_gold",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Открыть банки для демократической нации",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [
+      {
+        "has_completed_focus": "SWI_allied_gold"
+      },
+      {
+        "original_tag": "SWI",
+        "has_completed_focus": "SWI_allied_gold"
+      }
+    ],
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland_trade.8",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "custom_effect_tooltip": "if_they_accept_tt",
+        "SWI_increase_gold_trade": true
+      }
+    }
+  },
+  {
+    "id": "TUR_offer_conscription_exceptions_to_kurdish_groups",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Предложить освободить курдские группы от призыва",
+    "desc": "Многие курдские группы не требуют полной независимости — лишь определённой степени автономности. Мы, чтобы добиться мира, можем предоставить её, освободив население от призыва.",
+    "icon": "generic_military",
+    "cost": 120,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "AND": {
+          "is_core_of": "KUR",
+          "NOT": {
+            "is_core_of": "TUR"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "TUR_peace_at_home",
+      "NOT": {
+        "AND": {
+          "350": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "353": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "352": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "800": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "AND": {
+            "is_core_of": "KUR",
+            "NOT": {
+              "is_core_of": "TUR"
+            }
+          }
+        },
+        "save_event_target_as": "TUR_kurdish_state_event_target",
+        "hidden_effect": {
+          "event_target:TUR_kurdish_state_event_target": {
+            "add_dynamic_modifier": {
+              "modifier": "conscription_exemptions_granted"
+            },
+            "TUR_integrate_kurdish_state_forced_effect": true
+          }
+        }
+      },
+      "effect_tooltip": {
+        "event_target:TUR_kurdish_state_event_target": {
+          "add_ideas": "conscription_exemptions_granted",
+          "TUR_integrate_kurdish_state_forced_effect": true
+        }
+      }
+    }
+  },
+  {
+    "id": "HOL_offer_venezuelan_protection",
+    "category_id": "VEN_abc_islands",
+    "name": "Предложить венесуэльскую защиту",
+    "desc": "",
+    "icon": "decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_war_with": "USA"
+        },
+        {
+          "has_war_with": "ENG"
+        },
+        {
+          "has_war_with": "HOL"
+        }
+      ],
+      "695": {
+        "is_owned_and_controlled_by": "HOL"
+      },
+      "HOL": {
+        "has_capitulated": true
+      }
+    },
+    "visible": {
+      "original_tag": "VEN",
+      "695": {
+        "is_owned_and_controlled_by": "HOL"
+      },
+      "NOT": {
+        "has_global_flag": "ven_claims_abc_islands"
+      }
+    },
+    "complete_effect": {
+      "HOL": {
+        "country_event": {
+          "id": "mtg_netherlands.1",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_TUR_granatwerfer_34",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_TUR_granatwerfer_34$",
+    "desc": "",
+    "icon": "GFX_decision_generic_mortar_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      },
+      "has_country_flag": "AAC_unlock_turkish_equipment"
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_TUR_granatwerfer_34"
+        }
+      ],
+      "check_variable": {
+        "AAC_Marine_Active_Category": 1
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_TUR_granatwerfer_34",
+      "add_to_variable": {
+        "AAC_unlocked_support_weapons": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "add_political_power": -25,
+        "set_temp_variable": {
+          "tempEq": -5
+        },
+        "Antarctica_change_equipment": true
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_TUR_granatwerfer_34"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "SWRW_ArcadeMode_Replace_Klopfer",
+    "category_id": "TNO_ArcadeMode_category",
+    "name": "Replace Klopfer",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "GER": {
+        "has_character": "GER_gerhard_klopfer"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SWRW_ArcadeMode_Replace_Klopfer",
+      "hidden_effect": {
+        "GER": {
+          "GER_gerhard_klopfer": {
+            "set_character_name": "Theodor Pfizer",
+            "set_portraits": {
+              "civilian": {
+                "large": "gfx/leaders/debug/GER_Theodor_Pfizer.png",
+                "small": "gfx/leaders/debug/GER_Theodor_Pfizer_minister.png"
+              }
+            }
+          },
+          "set_country_leader_description": {
+            "desc": ""
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "BRA_debug_activate_cayenne_referendum",
+    "category_id": "BRA_debug_decisions",
+    "name": "Begin the Cayenne Referendum",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRA_show_proxy_options"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_debug_activate_cayenne_referendum",
+      "TNO_fopo_add_cayenne_referendum_tab": true,
+      "TNO_fopo_setup_cayenne_referendum": true
+    }
+  },
+  {
+    "id": "BRA_offer_concessions",
+    "category_id": "BRA_hundred_days_category",
+    "name": "Предложить уступки",
+    "desc": "Хотя политические уступки в пользу некоторых сенаторов навредят нашей кампании, они дадут нам больше возможностей для взаимодействий в будущем.",
+    "icon": "GFX_decision_generic_document_concessions",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRA_campaign_trigger",
+        "NOT": {
+          "has_country_flag": "BRA_hd_campaign_ongoing"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "BRA_hd_chose_adhemar",
+          "BRA_hd_chose_lacerda",
+          "BRA_hd_chose_goulart",
+          "BRA_hd_chose_kubitschek"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_offer_concessions",
+      "set_country_flag": "BRA_hd_campaign_ongoing",
+      "if": {
+        "limit": {
+          "has_country_flag": "BRA_hd_chose_adhemar"
+        },
+        "BRA_hd_decrease_adhemar_support_low": true
+      },
+      "else_if": [
+        {
+          "limit": {
+            "has_country_flag": "BRA_hd_chose_lacerda"
+          },
+          "BRA_hd_decrease_lacerda_support_low": true
+        },
+        {
+          "limit": {
+            "has_country_flag": "BRA_hd_chose_goulart"
+          },
+          "BRA_hd_decrease_goulart_support_low": true
+        }
+      ],
+      "else": {
+        "BRA_hd_decrease_kubitschek_support_low": true
+      }
+    }
+  },
+  {
+    "id": "FIN_offer_limited_surrender",
+    "category_id": "FIN_winter_war",
+    "name": "FIN_offer_limited_surrender",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "AND": {
+        "NOT": [
+          {
+            "country_exists": "MPR"
+          },
+          {
+            "country_exists": "ONG"
+          }
+        ]
+      },
+      "NOT": [
+        {
+          "surrender_progress": {
+            "_op": ">",
+            "value": 0.16
+          }
+        },
+        {
+          "has_country_flag": "FIN_waiting_response"
+        }
+      ]
+    },
+    "visible": {
+      "OR": {
+        "has_war_with": [
+          "WSR",
+          "WSB",
+          "SIB"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FIN_offer_limited_surrender",
+      "set_country_flag": "FIN_waiting_response",
+      "if": {
+        "limit": {
+          "WSR": {
+            "exists": true
+          }
+        },
+        "WSR": {
+          "country_event": {
+            "id": "murmansk_peace.3",
+            "days": 3
+          },
+          "add_ideas": "RUS_Army_Defeatism"
+        }
+      },
+      "else_if": {
+        "limit": {
+          "WSB": {
+            "exists": true
+          }
+        },
+        "WSB": {
+          "country_event": {
+            "id": "murmansk_peace.3",
+            "days": 3
+          },
+          "add_ideas": "RUS_Army_Defeatism"
+        }
+      },
+      "else": {
+        "SIB": {
+          "country_event": {
+            "id": "murmansk_peace.3",
+            "days": 3
+          },
+          "add_ideas": "RUS_Army_Defeatism"
+        }
+      }
+    }
+  },
+  {
+    "id": "FIN_offer_unconditional_surrender",
+    "category_id": "FIN_winter_war",
+    "name": "FIN_offer_unconditional_surrender",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "surrender_progress": {
+        "_op": ">",
+        "value": 0.16
+      },
+      "NOT": {
+        "has_country_flag": "FIN_waiting_response"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_war_with": [
+          "WSR",
+          "WSB",
+          "SIB"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FIN_offer_unconditional_surrender",
+      "set_country_flag": "FIN_waiting_response",
+      "if": {
+        "limit": {
+          "WSR": {
+            "exists": true
+          }
+        },
+        "WSR": {
+          "country_event": {
+            "id": "murmansk_peace.1",
+            "days": 3
+          }
+        }
+      },
+      "else_if": {
+        "limit": {
+          "WSB": {
+            "exists": true
+          }
+        },
+        "WSB": {
+          "country_event": {
+            "id": "murmansk_peace.1",
+            "days": 3
+          }
+        }
+      },
+      "else": {
+        "SIB": {
+          "country_event": {
+            "id": "murmansk_peace.1",
+            "days": 3
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "negotiate_deferred_payment",
+    "category_id": "Fiscal_crisis_response_category",
+    "name": "Договориться с кредиторами",
+    "desc": "Иногда яйцо сегодня лучше, чем курица в следующем году. Наши кредиторы хотят получить свои деньги, но даже они знают, что веревка, натянутая слишком сильно, рискует оборваться: таким образом, самое грозное оружие, имеющееся в нашем распоряжении, - это возможность просто объявить дефолт. Хотя это было бы катастрофично для нашей экономики, это также означало бы, что все наши кредиторы останутся без единой монеты: пусть Самсон умрет вместе со всеми филистерами.\n\nКонечно, мы можем собрать убедительные аргументы, позволяющие сократить наш общий долг в обмен на обещание не объявлять дефолт и в конечном итоге выплатить все долги. Однако угрозы нашим кредиторам - не лучший способ снова заявить о себе на мировом финансовом рынке: как только кризис закончится, мы можем ожидать, что потенциальные покупатели облигаций будут требовать более высоких процентных ставок...",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_interest_rate_down",
+      "add_to_variable": [
+        {
+          "interest_rate_fc": -0.6
+        },
+        {
+          "inflation_fc": 5
+        }
+      ],
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": 14,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "FRA_gax_referendum_passes",
+    "category_id": "FRA_debug_category",
+    "name": "Референдум прошёл",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_leader": {
+        "character": "FRA_Pierre_Gaxotte",
+        "ruling_only": true
+      }
+    },
+    "visible": {
+      "has_country_flag": "FRA_gaxotte_debug_enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_gax_referendum_passes",
+      "set_cosmetic_tag": "FRA_kingdom",
+      "add_country_leader_role": {
+        "character": "FRA_Henri_VI",
+        "promote_leader": true,
+        "country_leader": {
+          "ideology": "despotism_interim_government_subtype",
+          "expire": "1983.1.1",
+          "id": -1
+        }
+      },
+      "remove_all_ministers": true,
+      "add_ideas": [
+        "FRA_Pierre_Pujo_hog",
+        "FRA_Jean_dOrmesson_for",
+        "FRA_Andre_de_La_Franquerie_eco",
+        "FRA_Nicolas_Kayanakis_sec"
+      ]
+    }
+  },
+  {
+    "id": "FRA_gax_referendum_fails",
+    "category_id": "FRA_debug_category",
+    "name": "Референдум провалился",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_leader": {
+        "character": "FRA_Pierre_Gaxotte",
+        "ruling_only": true
+      }
+    },
+    "visible": {
+      "has_country_flag": "FRA_gaxotte_debug_enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_gax_referendum_fails",
+      "set_cosmetic_tag": "FRA_kingdom",
+      "set_party_name": [
+        {
+          "ideology": "conservatism",
+          "name": "FRS_despotism_party",
+          "long_name": "FRS_despotism_party_long"
+        },
+        {
+          "ideology": "paternalism",
+          "name": "FRS_despotism_party",
+          "long_name": "FRS_despotism_party_long"
+        }
+      ],
+      "add_popularity": [
+        {
+          "ideology": "conservatism",
+          "popularity": 0.1
+        },
+        {
+          "ideology": "paternalism",
+          "popularity": 0.1
+        },
+        {
+          "ideology": "despotism",
+          "popularity": 0.175
+        }
+      ],
+      "add_country_leader_role": [
+        {
+          "character": "FRA_Henri_VII",
+          "promote_leader": true,
+          "country_leader": {
+            "ideology": "despotism_interim_government_subtype",
+            "expire": "1983.1.1",
+            "id": -1
+          }
+        },
+        {
+          "character": "FRA_Olivier_Guichard",
+          "promote_leader": true,
+          "country_leader": {
+            "ideology": "conservatism_paternalistic_conservatism_subtype",
+            "expire": "1983.1.1",
+            "id": -1
+          }
+        },
+        {
+          "character": "FRA_Jean_dOrmesson",
+          "promote_leader": true,
+          "country_leader": {
+            "ideology": "paternalism_anocracy_subtype",
+            "expire": "1983.1.1",
+            "id": -1
+          }
+        }
+      ],
+      "remove_all_ministers": true,
+      "add_ideas": [
+        "FRA_Michel_dOrleans_hog",
+        "FRA_Jean_dOrmesson_for",
+        "FRA_Jacques_Rueff_eco",
+        "FRA_Marcel_Carpentier_sec"
+      ]
+    }
+  },
+  {
+    "id": "debug_trigger_antilles_referendum_proxy",
+    "category_id": "global_debug_decisions",
+    "name": "Вызвать Референдум на Антилах",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "show_mt_proxys"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: debug_trigger_antilles_referendum_proxy",
+      "FWI": {
+        "country_event": {
+          "id": "FWI_proxy.1"
+        }
+      }
+    }
+  },
+  {
+    "id": "GNG_Product_Set_No_Preference",
+    "category_id": "GNG_Product_Decisions_GUI",
+    "name": "Без приоритетов в НИОКР",
+    "desc": "",
+    "icon": "GFX_decision_generic_research_cancel_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "GNG_disable_all_mechanics_IJA"
+        },
+        {
+          "check_variable": {
+            "GNG_field_of_research": 0
+          }
+        }
+      ],
+      "has_country_flag": "GNG_show_research_decisions"
+    },
+    "complete_effect": {
+      "set_variable": {
+        "GNG_field_of_research": 0
+      },
+      "GNG_research_modifiers_base_calc": true
+    }
+  },
+  {
+    "id": "GNG_hold_a_massive_press_conference",
+    "category_id": "GNG_Product_Decisions_GUI",
+    "name": "Проведение масштабной пресс-конференции",
+    "desc": "Ничто так не привлекает внимание, как хорошая пресс-конференция. Мы можем произвести фурор с помощью правильной организации, нескольких удачно подобранных слов и щедрых 'поощрений' для прессы. Естественно, такое мероприятие обойдется недешево, но, как и с любыми инвестициями, суть в том, чтобы обеспечить приличный доход. Любые сегодняшние затраты покажутся каплей в море, как только потенциальные клиенты посмотрят нашу конференцию по телевизору или прочитают о ней в утренней газете.",
+    "icon": "GFX_decision_generic_podium_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GNG_has_not_reached_product_interest_cap": true
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_show_advertisement_decisions"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -25,
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.06
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "GNG_offer_collective_incentives_and_punishments_gft",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Метод кнута и пряника для  ФРГ",
+    "desc": "Немного наличных здесь, ложное обещание смягчить агрессивные действия полиции там - и наименее фанатичные члены профсоюзов останутся сидеть дома, а не пойдут на баррикады.",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_do_as_i_say",
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.25
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "GNG_offer_collective_incentives_and_punishments_ccl",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Метод кнута и пряника для  ККТ",
+    "desc": "Немного наличных здесь, ложное обещание смягчить агрессивные действия полиции там - и наименее фанатичные члены профсоюзов останутся сидеть дома, а не пойдут на баррикады.",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_do_as_i_say",
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.25
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "JAP_offer_concessions_to_the_hardliners",
+    "category_id": "JAP_faction_relations",
+    "name": "Предложить концессии  радикалам",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "JAP_prime_minister": 5
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_offer_concessions_to_the_hardliners",
+      "set_temp_variable": {
+        "temp_hl_approval_change": 0.05
+      },
+      "JAP_change_hardliner_approval": true
+    }
+  },
+  {
+    "id": "MEX_kabuki_offer_an_increase_to_the_minimum_wage",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Предложить увеличить минимальную заработную плату",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_rallying_the_party",
+        "check_variable": {
+          "MEX_PRI_selected_group": 0
+        }
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "MEX_kabuki_workers_pick_ordaz",
+            "MEX_kabuki_workers_pick_madrazo",
+            "MEX_kabuki_workers_pick_lozano"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "MEX_PRI_decrease_madrazo_pop_businessmen_low": true,
+      "MEX_PRI_decrease_ordaz_pop_businessmen_very_low": true,
+      "hidden_effect": {
+        "add_political_power": -15,
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.005
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "MEX_kabuki_offer_political_postings_to_prominent_activists",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Предложить политические объявления активистам",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_rallying_the_party",
+        "check_variable": {
+          "MEX_PRI_selected_group": 0
+        }
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "MEX_kabuki_workers_pick_ordaz",
+            "MEX_kabuki_workers_pick_madrazo",
+            "MEX_kabuki_workers_pick_lozano"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "MEX_PRI_increase_corruption_workers_very_low": true
+    }
+  },
+  {
+    "id": "MEX_doctorsstrike_amm_ammri_cooperation_interfered",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Сотрудничество МАВ и МАВРИ предотвращено",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "MEX_doctorsstrike_blank_tooltip",
+        "NOT": {
+          "has_country_flag": "amm_ammri_cooperation_cancelled"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "MAG_WA_mercenary_Fernando_Calistrat",
+    "category_id": "MAG_WA_a_government_of_personalities_category",
+    "name": "Назначить Фернандо Калистрата",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "MAG_WA_minister_cooldown_flag",
+        "has_idea": "MAG_Fernando_Calistrat_sec"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "MAG_WA_heia_safari"
+    },
+    "complete_effect": {
+      "remove_ideas_with_trait": "security_minister",
+      "add_ideas": "MAG_Fernando_Calistrat_sec",
+      "activate_mission": "MAG_WA_minister_cooldown",
+      "set_country_flag": [
+        "MAG_WA_minister_cooldown_flag",
+        "MAG_WA_merc_chosen",
+        "MAG_WA_merc_sec"
+      ],
+      "MAG_WA_gov_reset_sec": true
+    }
+  },
+  {
+    "id": "WSR_hold_preliminary_conference",
+    "category_id": "WSR_peace_category",
+    "name": "Провести предварительную конференцию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "peace_preparation_50_tt",
+        "check_variable": {
+          "global.RWSUnificationReceptiveness": {
+            "_op": ">",
+            "value": 49.99
+          }
+        }
+      },
+      "NOT": [
+        {
+          "has_global_flag": "RUS_PRELIM_CONFERENCE"
+        },
+        {
+          "has_country_flag": "RUS_diplo_action_executing"
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing",
+      "set_global_flag": "RUS_PRELIM_CONFERENCE"
+    }
+  },
+  {
+    "id": "WSR_offer_access_to_foreign_goods",
+    "category_id": "WSR_peace_category",
+    "name": "Обеспечить доступ к иностранным товарам",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "WSR_offer_diplomatic_concession",
+    "category_id": "WSR_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "WSB_hold_preliminary_conference",
+    "category_id": "WSB_peace_category",
+    "name": "Провести предварительную конференцию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "peace_preparation_50_tt",
+        "check_variable": {
+          "global.RWSUnificationReceptiveness": {
+            "_op": ">",
+            "value": 49.99
+          }
+        }
+      },
+      "NOT": [
+        {
+          "has_global_flag": "RUS_PRELIM_CONFERENCE"
+        },
+        {
+          "has_country_flag": "RUS_diplo_action_executing"
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing",
+      "set_global_flag": "RUS_PRELIM_CONFERENCE"
+    }
+  },
+  {
+    "id": "WSB_offer_resource_deals",
+    "category_id": "WSB_peace_category",
+    "name": "Предложить договор о доступе к ресурсам",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "WSB_offer_diplomatic_concession",
+    "category_id": "WSB_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "CSB_hold_preliminary_conference",
+    "category_id": "CSB_peace_category",
+    "name": "Провести предварительную конференцию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "peace_preparation_50_tt",
+        "check_variable": {
+          "global.SIBUnificationReceptiveness": {
+            "_op": ">",
+            "value": 49.99
+          }
+        }
+      },
+      "NOT": [
+        {
+          "has_global_flag": "SIB_PRELIM_CONFERENCE"
+        },
+        {
+          "has_country_flag": "RUS_diplo_action_executing"
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing",
+      "set_global_flag": "SIB_PRELIM_CONFERENCE"
+    }
+  },
+  {
+    "id": "CSB_offer_industrial_aid",
+    "category_id": "CSB_peace_category",
+    "name": "Предложить акт о промышленной помощи",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "CSB_offer_diplomatic_concession",
+    "category_id": "CSB_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "FST_hold_preliminary_conference",
+    "category_id": "FST_peace_category",
+    "name": "Провести предварительную конференцию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "peace_preparation_50_tt",
+        "check_variable": {
+          "global.SIBUnificationReceptiveness": {
+            "_op": ">",
+            "value": 49.99
+          }
+        }
+      },
+      "NOT": [
+        {
+          "has_global_flag": "SIB_PRELIM_CONFERENCE"
+        },
+        {
+          "has_country_flag": "RUS_diplo_action_executing"
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing",
+      "set_global_flag": "SIB_PRELIM_CONFERENCE"
+    }
+  },
+  {
+    "id": "FST_offer_access_to_foreign_goods",
+    "category_id": "FST_peace_category",
+    "name": "Обеспечить доступ к иностранным товарам",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "FST_offer_diplomatic_concession",
+    "category_id": "FST_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "RWS_hold_preliminary_conference",
+    "category_id": "RWS_peace_category",
+    "name": "Провести предварительную конференцию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "peace_preparation_50_tt",
+        "check_variable": {
+          "global.RUSUnificationReceptiveness": {
+            "_op": ">",
+            "value": 49.99
+          }
+        }
+      },
+      "NOT": [
+        {
+          "has_global_flag": "RWS_PRELIM_CONFERENCE"
+        },
+        {
+          "has_country_flag": "RUS_diplo_action_executing"
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing",
+      "set_global_flag": "RWS_PRELIM_CONFERENCE"
+    }
+  },
+  {
+    "id": "RWS_offer_access_to_foreign_goods",
+    "category_id": "RWS_peace_category",
+    "name": "Обеспечить доступ к иностранным товарам",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "RWS_offer_diplomatic_concession",
+    "category_id": "RWS_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "SIB_hold_preliminary_conference",
+    "category_id": "SIB_peace_category",
+    "name": "Провести предварительную конференцию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "peace_preparation_50_tt",
+        "check_variable": {
+          "global.RUSUnificationReceptiveness": {
+            "_op": ">",
+            "value": 49.99
+          }
+        }
+      },
+      "NOT": [
+        {
+          "has_global_flag": "RWS_PRELIM_CONFERENCE"
+        },
+        {
+          "has_country_flag": "RUS_diplo_action_executing"
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing",
+      "set_global_flag": "RWS_PRELIM_CONFERENCE"
+    }
+  },
+  {
+    "id": "SIB_offer_access_to_foreign_goods",
+    "category_id": "SIB_peace_category",
+    "name": "Обеспечить доступ к иностранным товарам",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "SIB_offer_diplomatic_concession",
+    "category_id": "SIB_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "SAF_Iberia_Coluna_Infernal",
+    "category_id": "SAF_Iberia_category",
+    "name": "Собрать иберийский спецназ",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": [
+        "Iberia_Nurses",
+        "Iberia_psyops"
+      ]
+    },
+    "visible": {
+      "has_country_flag": "Sao_tome_base",
+      "always": false
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_Iberia_Coluna_Infernal"
+    }
+  },
+  {
+    "id": "FUK_offer_a_nationalist_alternative",
+    "category_id": "FUK_power_struggle_category",
+    "name": "Предложить националистическую альтернативу",
+    "desc": "",
+    "icon": "GFX_decision_generic_podium",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UKR_FUK_power_struggle_active_decision",
+        "has_government": "fascism"
+      }
+    },
+    "visible": {
+      "has_country_flag": "UKR_FUK_power_struggle",
+      "NOT": {
+        "has_government": "fascism"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_offer_a_nationalist_alternative",
+      "set_country_flag": "UKR_FUK_power_struggle_active_decision"
+    }
+  },
+  {
+    "id": "USA_restrict_fertilizer_abuse",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Ограничить злоупотребление удобрениями",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_rural_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_rural_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_rural"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_rural_response",
+      "add_to_variable": {
+        "USA_rural_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_management_efficiency_var": -0.04
+        },
+        {
+          "USA_temp_happiness_var": -0.04
+        },
+        {
+          "USA_HART_TEMP_RURAL_TRUST": 0.06
+        }
+      ],
+      "USA_management_efficiency_adjust": true,
+      "USA_happiness_adjust": true,
+      "USA_Hart_rural_deed": true
+    }
+  },
+  {
+    "id": "WRS_project_ferment",
+    "category_id": "WRS_project_indrik_category",
+    "name": "Проект ФЕРМЕНТ",
+    "desc": "Войны будущего по тотальности будут превосходить наши нынешние тотальные войны. Пространство боя будет традиционно охватывать не только воздух, море и землю, но и саму биологию. Биологическое оружие представляет собой колоссальную силу и может дать нашим силам решающее преимущество даже в конфликте против сверхдержавы. Его развитие должно быть приоритетным.\n\nУвеличит Госдолг на $400 Миллионов долларов США.",
+    "icon": "GFX_decision_generic_bioweapons",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "WRS_doing_indrik_project_tt",
+        "NOT": {
+          "has_country_flag": "WRS_doing_indrik_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WRS_project_ferment",
+      "set_country_flag": [
+        "WRS_doing_indrik_project",
+        "WRS_INDRIK_7_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "GER_offer_moscow",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Offer Moscow",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "GER_will_accept_minor_victory": true
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "RUS": {
+          "country_event": {
+            "id": "RUS_victory.1",
+            "hours": 6
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_offer_moscow_caucasia",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Offer Moscow and Caucasia",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "GER_will_accept_small_victory": true
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "RUS": {
+          "country_event": {
+            "id": "RUS_victory.2",
+            "hours": 6
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_offer_moscow_caucasia_ukraine",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Offer Moscow, Caucasia and Ukraine",
+    "desc": "",
+    "icon": "GFX_decision_offer_peace",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "GER_will_accept_medium_victory": true
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_peace_offered",
+      "WRW_update_peace_acceptance": true,
+      "hidden_effect": {
+        "RUS": {
+          "country_event": {
+            "id": "RUS_victory.3",
+            "hours": 6
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "PRC_Enforce_Goverment_Authority",
+    "category_id": "PRC_The_Conference",
+    "name": "Обеспечение соблюдения полномочий правительства",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {
+      "has_stability": {
+        "_op": "<",
+        "value": 0.5
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Enforce_Goverment_Authority",
+      "add_stability": 0.05,
+      "TNO_improve_political_parties_policy_effectiveness_med": true
+    }
+  },
+  {
+    "id": "PRC_Pursuit_Favors_from_Military",
+    "category_id": "PRC_The_Conference",
+    "name": "Добиться благосклонности военных",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Pursuit_Favors_from_Civilian_Administration"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Pursuit_Favors_from_Military"
+    }
+  },
+  {
+    "id": "PRC_Pursuit_Favors_from_Civilian_Administration",
+    "category_id": "PRC_The_Conference",
+    "name": "Добиться благосклонности гражданских",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Pursuit_Favors_from_Military"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Pursuit_Favors_from_Civilian_Administration"
+    }
+  },
+  {
+    "id": "PRC_Weaken_Military_Power",
+    "category_id": "PRC_The_Conference",
+    "name": "Ослабить военных",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 55,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Weaken_Civilian_Power"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Weaken_Military_Power",
+      "PRC_decrease_Army_Loyalty_high": true
+    }
+  },
+  {
+    "id": "PRC_Weaken_Civilian_Power",
+    "category_id": "PRC_The_Conference",
+    "name": "Ослабить гражданских",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Weaken_Military_Power"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Weaken_Civilian_Power",
+      "PRC_decrease_Civilian_Loyalty_high": true
+    }
+  },
+  {
+    "id": "PRC_Empower_Military_Power",
+    "category_id": "PRC_The_Conference",
+    "name": "Усилить военных",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 55,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Empower_Civilian_Power"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Empower_Military_Power",
+      "PRC_decrease_Civilian_Loyalty_high": true
+    }
+  },
+  {
+    "id": "PRC_Empower_Civilian_Power",
+    "category_id": "PRC_The_Conference",
+    "name": "Усилить гражданских",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Empower_Military_Power"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Weaken_Civilian_Power",
+      "PRC_decrease_Army_Loyalty_high": true
+    }
+  }
+]

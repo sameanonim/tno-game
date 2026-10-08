@@ -1,0 +1,144 @@
+[
+  {
+    "id": "HUN_dismiss_fascist_generals",
+    "category_id": "HUN_fascist_movements_category",
+    "name": "Распустить генералов-фашистов",
+    "desc": "",
+    "icon": "GFX_decision_eng_blackshirt_march",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_government": "fascism"
+        },
+        {
+          "has_global_flag": "arrow_cross_insurgency_happened"
+        }
+      ],
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_establishing_a_new_dynasty",
+          "wuw_HUN_elect_a_democratic_king"
+        ]
+      }
+    },
+    "visible": {
+      "tag": "HUN",
+      "NOT": [
+        {
+          "has_government": "fascism"
+        },
+        {
+          "OR": {
+            "has_country_flag": "HUN_dismissed_fascist_generals_flag",
+            "has_global_flag": "arrow_cross_insurgency_happened"
+          }
+        }
+      ],
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_establishing_a_new_dynasty",
+          "wuw_HUN_elect_a_democratic_king"
+        ]
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SOV_dismiss_the_counter_revolution",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Прекратить контрреволюцию",
+    "desc": "Публично опровергнув все слухи о контрреволюции, мы, возможно, сумеем отвлечь внимание НКВД от наших агентов. При этом, однако, мы можем и лишиться части наших сторонников, которые примут опровержение всерьез.",
+    "icon": "generic_speech",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "hidden_trigger": {
+        "has_completed_focus": "SOV_embrace_the_black_hundreds"
+      },
+      "NOT": {
+        "has_global_flag": "SOV_soviet_civil_war"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "SOV_dismiss_the_counter_revolution_tt",
+        "SOV_dismiss_cd_tt"
+      ],
+      "subtract_from_variable": [
+        {
+          "SOV_exiles_army_support": 0.01
+        },
+        {
+          "SOV_exiles_navy_support": 0.01
+        },
+        {
+          "SOV_exiles_air_support": 0.01
+        }
+      ]
+    }
+  },
+  {
+    "id": "SWI_dismiss_council",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Распустить совет",
+    "desc": "Наши враги слишком сильны, а распри и конфликты в Федеральном совете их только радуют. Великому лидеру пора встать у руля и провести государство [ROOT.GetNonIdeologyName] через этот шторм.",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 350,
+    "fire_only_once": false,
+    "available": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "has_variable": "SWI_confederation_president",
+      "var:SWI_confederation_president": {
+        "SWI_councilor_is_democratic": true
+      },
+      "OR": {
+        "is_power_balance_in_range": {
+          "id": "SWI_centralization_bop",
+          "range": "SWI_centralization_bop_fully_council"
+        },
+        "NOT": {
+          "has_power_balance": {
+            "id": "SWI_centralization_bop"
+          }
+        }
+      }
+    },
+    "visible": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.2
+      },
+      "has_variable": "SWI_confederation_president",
+      "has_completed_focus": "SWI_president_for_life",
+      "NOT": {
+        "has_country_flag": "SWI_elected_centralized_president"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_debug_chase_smith_inauguration",
+    "category_id": "USA_debug_inaugurations_category",
+    "name": "Инаугурация Маргарет Чейз Смит",
+    "desc": "",
+    "icon": "GFX_decision_USA_npp_n",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_debug_decisions"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_debug_chase_smith_inauguration",
+      "country_event": {
+        "id": "USA.160"
+      }
+    }
+  }
+]

@@ -1,0 +1,1165 @@
+[
+  {
+    "id": "CHL_mapuche_liberate_rapa_nuis",
+    "category_id": "CHL_mapuche_nationalism_decisions",
+    "name": "Освободить [RAP.GetAdjective]ий народ",
+    "desc": "",
+    "icon": "GFX_decision_CHL_mapuche_liberate_rapa_nuis",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "OR": {
+        "AND": [
+          {
+            "controls_state": 948,
+            "RAP": {
+              "exists": false
+            }
+          },
+          {
+            "RAP": {
+              "exists": true,
+              "controls_state": 948
+            },
+            "has_subject": "RAP"
+          },
+          {
+            "RAP": {
+              "exists": false
+            },
+            "any_country": {
+              "is_subject_of": "ROOT",
+              "controls_state": 948
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "NOT": {
+        "has_country_flag": "CHL_released_rapa_nui_flag"
+      }
+    },
+    "complete_effect": {
+      "IF": [
+        {
+          "limit": {
+            "948": {
+              "OR": {
+                "is_controlled_by": "ROOT",
+                "any_country": {
+                  "is_subject_of": "ROOT",
+                  "controls_state": "PREV"
+                }
+              }
+            }
+          },
+          "948": {
+            "transfer_state_to": "RAP"
+          }
+        },
+        {
+          "limit": {
+            "270": {
+              "NOT": {
+                "is_core_of": "RAP"
+              }
+            }
+          },
+          "270": {
+            "add_core_of": "RAP"
+          }
+        },
+        {
+          "limit": {
+            "270": {
+              "OR": {
+                "is_controlled_by": "ROOT",
+                "any_country": {
+                  "is_subject_of": "ROOT",
+                  "controls_state": "PREV"
+                }
+              }
+            }
+          },
+          "270": {
+            "transfer_state_to": "RAP"
+          }
+        },
+        {
+          "limit": {
+            "NOT": {
+              "has_subject": "RAP"
+            }
+          },
+          "puppet": "RAP"
+        }
+      ],
+      "RAP": {
+        "add_stability": 0.15,
+        "add_war_support": 0.1,
+        "add_political_power": 150,
+        "add_manpower": 10000,
+        "hidden_effect": {
+          "division_template": {
+            "name": "Guerreros de Rapa Nui",
+            "is_locked": false,
+            "division_names_group": "SPR_INF_01",
+            "priority": 1,
+            "template_counter": 86,
+            "override_model": "CHL_infantry_alt_1_entity",
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "recon": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          }
+        },
+        "random_state": {
+          "limit": {
+            "is_controlled_by": "RAP"
+          },
+          "create_unit": [
+            {
+              "division": "name = \"1a Guerreros de Rapa Nui\" division_template = \"Guerreros de Rapa Nui\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "RAP"
+            },
+            {
+              "division": "name = \"2a Guerreros de Rapa Nui\" division_template = \"Guerreros de Rapa Nui\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "RAP"
+            },
+            {
+              "division": "name = \"3a Guerreros de Rapa Nui\" division_template = \"Guerreros de Rapa Nui\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "RAP"
+            },
+            {
+              "division": "name = \"4a Guerreros de Rapa Nui\" division_template = \"Guerreros de Rapa Nui\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "RAP"
+            }
+          ]
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "CHL_released_rapa_nui_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_collect_scrap_metal",
+    "category_id": "GER_price_controls_cat",
+    "name": "Собрать металлолом",
+    "desc": "",
+    "icon": "GFX_decision_steel",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GER_inactivate_price_control_measures_flag"
+      }
+    },
+    "complete_effect": {
+      "GER_modify_industrial_modifier": true,
+      "add_to_variable": {
+        "GER_industrial_consumer_goods_factor": -0.05,
+        "tooltip": "consumer_goods_factor_tt"
+      },
+      "GER_reduce_mefo_bills_penalty": true,
+      "add_timed_idea": {
+        "idea": "GER_collect_scrap_metal_ns",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "BRG_prepare_trap",
+    "category_id": "BRG_operations_category",
+    "name": "Подготовить ловушку",
+    "desc": "",
+    "icon": "GFX_decision_generic_point",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "BRG_setting_the_trap"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "BRG_prepare_trap_cost",
+      "hidden_effect": {
+        "every_owned_state": {
+          "subtract_from_variable": {
+            "BRG_Cop_To_Worker_Ratio": 1
+          },
+          "if": {
+            "limit": {
+              "check_variable": {
+                "BRG_Cop_To_Worker_Ratio": 0
+              }
+            },
+            "set_state_flag": "BRG_already_shit_cops"
+          },
+          "clamp_variable": {
+            "var": "BRG_Cop_To_Worker_Ratio",
+            "min": 1,
+            "max": 10
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "BRI_Midnight_SaveTheTrapped",
+    "category_id": "BRI_The_Chimes_of_Midnight_category",
+    "name": "Спасти попавших в ловушку",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock_red",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRI_Midnight_GenericShown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete BRI_Midnight_SaveTheTrapped",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Confidence": -10
+        },
+        "BRI_Midnight_ConfidenceAdd": true
+      }
+    }
+  },
+  {
+    "id": "GRO_mines_level_1",
+    "category_id": "GRO_booby_trap_the_border_category",
+    "name": "Расставить ловушки по [FROM.getName]",
+    "desc": "По завершении, если этот регион будет оккупирован вражескими силами, инфраструктуре этого региона будет нанесен незначительный ущерб.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "is_controlled_by": "GRO",
+        "NOT": {
+          "has_state_flag": [
+            "level_1_trap",
+            "level_2_trap",
+            "level_3_trap"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_Rommelstadt_level_1",
+      "ROOT": {
+        "add_command_power": -5,
+        "add_political_power": -15
+      }
+    }
+  },
+  {
+    "id": "GRO_mines_level_2",
+    "category_id": "GRO_booby_trap_the_border_category",
+    "name": "Увеличить число ловушек по [FROM.getName]",
+    "desc": "По завершении, если этот регион будет оккупирован вражескими силами, инфраструктуре этого региона будет нанесен значительный ущерб.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "is_controlled_by": "GRO",
+        "has_state_flag": "level_1_trap"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_mines_level_1",
+      "ROOT": {
+        "add_command_power": -10,
+        "add_political_power": -20
+      }
+    }
+  },
+  {
+    "id": "GRO_mines_level_3",
+    "category_id": "GRO_booby_trap_the_border_category",
+    "name": "Завершить развертывание пограничных ловушек по [FROM.getName]",
+    "desc": "По завершении, если этот регион будет оккупирован вражескими силами, инфраструктуре этого региона будет нанесен огромный ущерб.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "is_controlled_by": "GRO",
+        "has_state_flag": "level_2_trap"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_mines_level_3",
+      "ROOT": {
+        "add_command_power": -15,
+        "add_political_power": -25
+      }
+    }
+  },
+  {
+    "id": "NOV_load_rapp_tree",
+    "category_id": "NOV_debug_category",
+    "name": "Load RAPP Tree",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_load_RSLP_tree",
+      "load_focus_tree": {
+        "tree": "NOV_novosibirsk_victory_shukshin",
+        "keep_completed": false
+      },
+      "clr_country_flag": [
+        "NOV_VRPP_Presidency",
+        "NOV_DSPR_Presidency",
+        "NOV_RSLP_Presidency"
+      ],
+      "set_country_flag": "NOV_RAPP_Presidency",
+      "mark_focus_tree_layout_dirty": true
+    }
+  },
+  {
+    "id": "IRK_rapid_factory_modernization",
+    "category_id": "IRK_five_year_plans",
+    "name": "Стремительная модернизация фабрик",
+    "desc": "С улучшением доступа к внешнему миру мы получаем очевидные преимущества в виде более лёгкого доступа к промышленному оборудованию. Пока наши конкуренты к западу от нас, не имеющие выхода к морю, испытывают трудности с приобретением современного оборудования, поскольку они окружены нежелающими сотрудничать государствами-изгоями, наш выход к морю полностью меняет ситуацию. Благодаря недавнему расширению мощностей Магадана мы имеем все возможности для импорта такого оборудования, которое необходимо для оживления нашей промышленной экономики.",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 80,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "IRK_five_year_plans_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRK_rapid_factory_modernization",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.18
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "TOM_Scrap_Bastillard_Economic_Program",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать бастильярскую экономическую программу",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": [
+        "TOM_idea_bastillard_economy",
+        "TOM_idea_incompatible_economy"
+      ],
+      "NOT": [
+        {
+          "has_government": "paternalism"
+        },
+        {
+          "has_country_flag": "TOM_Economy_Plan_Decision"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Bastillard_Economic_Program",
+      "activate_mission": "TOM_Scrap_Bastillard_Economic_Program_bill",
+      "TOM_Increase_Idealism_med": true,
+      "custom_effect_tooltip": "TOM_scrap_program_tt",
+      "set_country_flag": "TOM_Economy_Plan_Decision"
+    }
+  },
+  {
+    "id": "TOM_Scrap_Bastillard_Economic_Program_bill",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать бастильярскую экономическую программу - в процессе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_country_flag": "Modernist_Constitution"
+        },
+        "TOM_Mod_check_industry_bill_approval": true
+      },
+      "else": {
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Bastillard_Economic_Program_bill",
+      "remove_ideas": [
+        "TOM_idea_bastillard_economy",
+        "TOM_idea_incompatible_economy"
+      ],
+      "add_timed_idea": {
+        "idea": "TOM_idea_economic_transition",
+        "days": 120
+      }
+    }
+  },
+  {
+    "id": "TOM_Scrap_Bastillard_Military_Program",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать бастильярскую военную программу",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": [
+        "TOM_idea_bastillard_army",
+        "TOM_idea_incompatible_army"
+      ],
+      "NOT": [
+        {
+          "has_government": "paternalism"
+        },
+        {
+          "has_country_flag": "TOM_Economy_Plan_Decision"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Bastillard_Military_Program",
+      "activate_mission": "TOM_Scrap_Bastillard_Military_Program_bill",
+      "TOM_Increase_Idealism_med": true,
+      "custom_effect_tooltip": "TOM_scrap_program_tt",
+      "set_country_flag": "TOM_Military_Plan_Decision"
+    }
+  },
+  {
+    "id": "TOM_Scrap_Bastillard_Military_Program_bill",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать бастильярскую военную программу - в процессе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_country_flag": "Modernist_Constitution"
+        },
+        "TOM_Mod_check_military_bill_approval": true
+      },
+      "else": {
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Bastillard_Military_Program_bill",
+      "swap_ideas": {
+        "remove_idea": "TOM_idea_bastillard_army",
+        "add_idea": "TOM_idea_standardized_army"
+      },
+      "remove_ideas": "TOM_idea_incompatible_army",
+      "add_timed_idea": {
+        "idea": "TOM_idea_military_transition",
+        "days": 120
+      }
+    }
+  },
+  {
+    "id": "TOM_Scrap_Modernist_Economic_Program",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать модернистскую экономическую программу",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": [
+        "TOM_idea_modernist_economy",
+        "TOM_idea_incompatible_economy"
+      ],
+      "NOT": [
+        {
+          "has_government": "liberalism"
+        },
+        {
+          "has_country_flag": "TOM_Economy_Plan_Decision"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Modernist_Economic_Program",
+      "activate_mission": "TOM_Scrap_Modernist_Economic_Program_bill",
+      "TOM_Increase_Idealism_med": true,
+      "custom_effect_tooltip": "TOM_scrap_program_tt",
+      "set_country_flag": "TOM_Economy_Plan_Decision"
+    }
+  },
+  {
+    "id": "TOM_Scrap_Modernist_Economic_Program_bill",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать модернистскую экономическую программу - В процессе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_country_flag": "Modernist_Constitution"
+        },
+        "TOM_Mod_check_industry_bill_approval": true
+      },
+      "else": {
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Modernist_Economic_Program_bill",
+      "remove_ideas": [
+        "TOM_idea_modernist_economy",
+        "TOM_idea_incompatible_economy"
+      ],
+      "add_timed_idea": {
+        "idea": "TOM_idea_economic_transition",
+        "days": 120
+      }
+    }
+  },
+  {
+    "id": "TOM_Scrap_Modernist_Military_Program",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать модернистскую военную программу",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": [
+        "TOM_idea_modernist_army",
+        "TOM_idea_incompatible_army"
+      ],
+      "NOT": [
+        {
+          "has_government": "liberalism"
+        },
+        {
+          "has_country_flag": "TOM_Economy_Plan_Decision"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Modernist_Military_Program",
+      "activate_mission": "TOM_Scrap_Modernist_Military_Program_bill",
+      "TOM_Increase_Idealism_med": true,
+      "custom_effect_tooltip": "TOM_scrap_program_tt",
+      "set_country_flag": "TOM_Military_Plan_Decision"
+    }
+  },
+  {
+    "id": "TOM_Scrap_Modernist_Military_Program_bill",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать модернистскую военную программу - в процессе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_country_flag": "Modernist_Constitution"
+        },
+        "TOM_Mod_check_military_bill_approval": true
+      },
+      "else": {
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Modernist_Military_Program_bill",
+      "swap_ideas": {
+        "remove_idea": "TOM_idea_modernist_army",
+        "add_idea": "TOM_idea_standardized_army"
+      },
+      "remove_ideas": "TOM_idea_incompatible_army",
+      "add_timed_idea": {
+        "idea": "TOM_idea_military_transition",
+        "days": 120
+      }
+    }
+  },
+  {
+    "id": "TOM_Scrap_Humanist_Economic_Program",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать гуманистскую экономическую программу",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": [
+        "TOM_idea_humanist_economy",
+        "TOM_idea_incompatible_economy"
+      ],
+      "NOT": [
+        {
+          "has_government": "progressivism"
+        },
+        {
+          "has_country_flag": "TOM_Economy_Plan_Decision"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Humanist_Economic_Program",
+      "activate_mission": "TOM_Scrap_Humanist_Economic_Program_bill",
+      "TOM_Increase_Idealism_med": true,
+      "custom_effect_tooltip": "TOM_scrap_program_tt",
+      "set_country_flag": "TOM_Economy_Plan_Decision"
+    }
+  },
+  {
+    "id": "TOM_Scrap_Humanist_Economic_Program_bill",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать гуманистскую экономическую программу - в процессе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_country_flag": "Modernist_Constitution"
+        },
+        "TOM_Mod_check_industry_bill_approval": true
+      },
+      "else": {
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Humanist_Economic_Program_bill",
+      "remove_ideas": [
+        "TOM_idea_humanist_economy",
+        "TOM_idea_incompatible_economy"
+      ],
+      "add_timed_idea": {
+        "idea": "TOM_idea_economic_transition",
+        "days": 120
+      }
+    }
+  },
+  {
+    "id": "TOM_Scrap_Humanist_Military_Program",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать гуманистскую военную программу",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": [
+        "TOM_idea_humanist_army",
+        "TOM_idea_incompatible_army"
+      ],
+      "NOT": [
+        {
+          "has_government": "progressivism"
+        },
+        {
+          "has_country_flag": "TOM_Economy_Plan_Decision"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Humanist_Military_Program",
+      "activate_mission": "TOM_Scrap_Humanist_Military_Program_bill",
+      "TOM_Increase_Idealism_med": true,
+      "custom_effect_tooltip": "TOM_scrap_program_tt",
+      "set_country_flag": "TOM_Military_Plan_Decision"
+    }
+  },
+  {
+    "id": "TOM_Scrap_Humanist_Military_Program_bill",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать гуманистскую военную программу - в процессе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_country_flag": "Modernist_Constitution"
+        },
+        "TOM_Mod_check_military_bill_approval": true
+      },
+      "else": {
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Humanist_Military_Program_bill",
+      "swap_ideas": {
+        "remove_idea": "TOM_idea_humanist_army",
+        "add_idea": "TOM_idea_standardized_army"
+      },
+      "remove_ideas": "TOM_idea_incompatible_army",
+      "add_timed_idea": {
+        "idea": "TOM_idea_military_transition",
+        "days": 120
+      }
+    }
+  },
+  {
+    "id": "TOM_Scrap_Decembrist_Economic_Program",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать декабристскую экономическую программу",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": [
+        "TOM_idea_decembrist_economy",
+        "TOM_idea_incompatible_economy"
+      ],
+      "NOT": [
+        {
+          "has_government": "conservatism"
+        },
+        {
+          "has_country_flag": "TOM_Economy_Plan_Decision"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Decembrist_Economic_Program",
+      "activate_mission": "TOM_Scrap_Decembrist_Economic_Program_bill",
+      "TOM_Increase_Idealism_med": true,
+      "custom_effect_tooltip": "TOM_scrap_program_tt",
+      "set_country_flag": "TOM_Economy_Plan_Decision"
+    }
+  },
+  {
+    "id": "TOM_Scrap_Decembrist_Economic_Program_bill",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать декабристскую экономическую программу - в процессе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_country_flag": "Decembrist_Constitution"
+        },
+        "TOM_Mod_check_industry_bill_approval": true
+      },
+      "else": {
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Decembrist_Economic_Program_bill",
+      "remove_ideas": [
+        "TOM_idea_decembrist_economy",
+        "TOM_idea_incompatible_economy"
+      ],
+      "add_timed_idea": {
+        "idea": "TOM_idea_economic_transition",
+        "days": 120
+      }
+    }
+  },
+  {
+    "id": "TOM_Scrap_Decembrist_Military_Program",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать декабристскую военную программу",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": [
+        "TOM_idea_decembrist_army",
+        "TOM_idea_incompatible_army"
+      ],
+      "NOT": [
+        {
+          "has_government": "conservatism"
+        },
+        {
+          "has_country_flag": "TOM_Economy_Plan_Decision"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Decembrist_Military_Program",
+      "activate_mission": "TOM_Scrap_Decembrist_Military_Program_bill",
+      "TOM_Increase_Idealism_med": true,
+      "custom_effect_tooltip": "TOM_scrap_program_tt",
+      "set_country_flag": "TOM_Military_Plan_Decision"
+    }
+  },
+  {
+    "id": "TOM_Scrap_Decembrist_Military_Program_bill",
+    "category_id": "TOM_Ruling_Tomsk",
+    "name": "Забраковать декабристскую военную программу - в процессе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "has_country_flag": "Decembrist_Constitution"
+        },
+        "TOM_Mod_check_military_bill_approval": true
+      },
+      "else": {
+        "TOM_check_house_bill_approval": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_Scrap_Decembrist_Military_Program_bill",
+      "swap_ideas": {
+        "remove_idea": "TOM_idea_decembrist_army",
+        "add_idea": "TOM_idea_standardized_army"
+      },
+      "remove_ideas": "TOM_idea_incompatible_army",
+      "add_timed_idea": {
+        "idea": "TOM_idea_military_transition",
+        "days": 120
+      }
+    }
+  },
+  {
+    "id": "UKR_create_booby_traps",
+    "category_id": "UKR_ukraine_must_survive_category",
+    "name": "Create Booby Traps",
+    "desc": "",
+    "icon": "GFX_decision_generic_death_road",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UKR_ukraine_must_survive_doing_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "UKR_ukraine_must_survive_insurgency_phase",
+      "NOT": {
+        "has_global_flag": "Kyiv_Nuked"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision UKR_create_booby_traps",
+      "set_temp_variable": [
+        {
+          "UKR_preparation_temp": 5
+        },
+        {
+          "temp_econ_spending_amount": 0.1
+        }
+      ],
+      "UKR_ukraine_must_survive_variable_change": true,
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "UKR_ukraine_must_survive_doing_decision"
+    }
+  },
+  {
+    "id": "NOV_RAPP_take_off",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "The Eagle Soars",
+    "desc": "",
+    "icon": "GFX_decision_rockets",
+    "cost": 1,
+    "fire_only_once": true,
+    "available": {
+      "rapp_rocket": true
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "NOV_the_photon_rocket",
+          "NOV_borrow_american_designs"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RAPP_take_off"
+    }
+  },
+  {
+    "id": "NOV_RAPP_build_additional_infrastructure",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "Build Additional Infrastructure",
+    "desc": "Though Baikonur is an ideal spot for our Cosmodrome, Soviet-era infrastructure, which initially hampered our efforts in unifying the region, is once again proving problematic. Of course, we cannot forcibly divert all the trains and trucks to the site, so in compensation, new railways and roads must be built to enable faster transportation of goods and people.",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RAPP_build_additional_infrastructure",
+      "set_temp_variable": [
+        {
+          "temp_spend": 400
+        },
+        {
+          "temp_monthly": 2
+        }
+      ],
+      "NOV_RAPP_Space_Total_Cost_Change": true,
+      "NOV_RAPP_Monthly_Change": true
+    }
+  },
+  {
+    "id": "NOV_RAPP_ensure_stream_of_supplies",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "Ensure Stream of Supplies",
+    "desc": "Many talented individuals are not willing to go to the middle of Kazakhstan due to its weather, and lack of sources of food and amenities. These trivial things must not stop the Cosmodrome! Besides, artificially building up the local economy may prove helpful in the long term, as we won't be going any time soon.",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RAPP_ensure_stream_of_supplies",
+      "set_temp_variable": {
+        "temp_monthly": 3
+      },
+      "NOV_RAPP_Monthly_Change": true
+    }
+  },
+  {
+    "id": "NOV_RAPP_invite_american_experts",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "Invite American Experts",
+    "desc": "The United States has seen many successes in the field of space exploration. Indeed, we must learn from those involved with the construction of American spaceports to understand what it truly takes to raise a bastion of progress from thin air.",
+    "icon": "GFX_decision_generic_USA_aid",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RAPP_invite_american_experts",
+      "set_temp_variable": {
+        "temp_monthly": 1
+      },
+      "NOV_RAPP_Monthly_Change": true
+    }
+  },
+  {
+    "id": "NOV_RAPP_develop_site_procedures",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "Develop Site Procedures",
+    "desc": "As this is the first time we are building anything like this, many of our managers and workers are still somewhat unfamiliar with all the advanced electronics being shipped in. To avoid accidents on-site, we must reserve some hours and invest them into informing classes so they do not mishandle anything of worth. Aside from that, maybe we can slip some patriotic propaganda into these classes...",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RAPP_develop_site_procedures",
+      "set_temp_variable": {
+        "temp_monthly": 1
+      },
+      "NOV_RAPP_Monthly_Change": true
+    }
+  },
+  {
+    "id": "NOV_RAPP_conscript_military_personnel",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "Conscript Military Personnel",
+    "desc": "The Army possesses many young men perfect for the job. As our Federation secures its place among the powers of this world, we expect the coming decades to be relatively peaceful. If the army has no real enemies to fight, they shall waltz with the hot sun of Kazakhstan!",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RAPP_conscript_military_personnel",
+      "add_command_power": -20,
+      "add_manpower": -2000
+    }
+  },
+  {
+    "id": "NOV_RAPP_develop_local_manufactories",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "Develop Local Manufactories",
+    "desc": "Shipping construction materials and electronics from far-off Russian cities are obviously most inefficient. It would be infinitely cheaper if we are able to secure some source of quality materials from Kazakhstan itself. We should seek to use this opportunity to invest in local municipalities, such as Kyzyl-Orda and Zhezqasghan. This may also help with reducing unemployment and promoting urbanisation in these regions!",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RAPP_develop_local_manufactories",
+      "404": {
+        "set_temp_variable": {
+          "state_value_multiplier_temp": 1.02
+        },
+        "econ_state_value_change_multiply_specified_state": true
+      },
+      "set_temp_variable": {
+        "temp_monthly": 3
+      },
+      "NOV_RAPP_Monthly_Change": true
+    }
+  },
+  {
+    "id": "NOV_RAPP_Space_Monthly",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "Our Monthly Progress",
+    "desc": "",
+    "icon": "GFX_decision_rockets",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "NOV_RAPP_fuck_you_castamir",
+    "category_id": "NOV_RAPP_space_category",
+    "name": "Disappear the Zvezdograd",
+    "desc": "The City of Star, as many of our workers call it, is already quite deceptive with its current name, Baikonur. However, some in our government are arguing for additional security measures. These officials claim it is better if Baikonur is wiped off the maps to avoid potential sabotaging from hostiles in Europe and make the purpose of this place clear to its citizens. Honestly, the idea doesn't sound so bad...",
+    "icon": "GFX_decision_generic_investigate_no",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_RAPP_fuck_you_castamir"
+    }
+  },
+  {
+    "id": "RUS_rapid_factory_modernization",
+    "category_id": "RUS_five_year_plans",
+    "name": "Rapid Factory Modernization",
+    "desc": "With our improved access to the outside world comes the obvious benefits of having easier access to industrial equipment. While our landlocked rivals in the west struggle to get their hands on modern machinery as they're surrounded by uncooperative rogue states, our access to the sea changes the situation entirely. With the recent expansion of Magadan's facilities, we're in a good position to import the kind of machinery we need to revitalize our industrial economy.",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 80,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "RUS_five_year_plans_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_rapid_factory_modernization",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.18
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "OMO_improve_demographic_situation",
+    "category_id": "OMO_temptations_category",
+    "name": "Improve the Difficult Demographic Situation",
+    "desc": "",
+    "icon": "GFX_decision_demographic_situation",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "has_country_flag": "OMO_sudoplatovs_temptations"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OMO_galvanize_the_peasantry_for_hardship",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_global_flag": "RUS_national_unification"
+          }
+        },
+        "OMO_minor_reverse_temptation": true
+      },
+      "else": {
+        "OMO_minor_temptation": true
+      }
+    }
+  }
+]

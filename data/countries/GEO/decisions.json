@@ -1,0 +1,563 @@
+[
+  {
+    "id": "BUL_appoint_georgiev",
+    "category_id": "political_actions",
+    "name": "Назначить Кимона Георгиева премьер-министром",
+    "desc": "Кимон Георгиев превратился в одну из наиболее значимых фигур Отечественного фронта. Учитывая все его достоинства, пора признать, что [ROOT.GetNameDef] заслуживает именно такого премьер-министра.",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "BUL_zveno_integrated_flag",
+      "has_completed_focus": "BUL_the_fatherland_front"
+    },
+    "visible": {
+      "has_government": "communism",
+      "NOT": {
+        "has_country_leader": {
+          "character": "BUL_kimon_georgiev"
+        }
+      }
+    },
+    "complete_effect": {
+      "retire_ideology_leader": "communism",
+      "if": {
+        "limit": {
+          "has_character": "BUL_kimon_georgiev"
+        },
+        "add_country_leader_role": {
+          "character": "BUL_kimon_georgiev",
+          "country_leader": {
+            "ideology": "anti_revisionism",
+            "traits": [
+              "old_coup_maker",
+              "hardened_officer"
+            ],
+            "expire": "1965.1.1"
+          },
+          "promote_leader": true
+        }
+      }
+    }
+  },
+  {
+    "id": "CHL_protect_indigeous_lands",
+    "category_id": "CHL_mapuche_reconcilliation_decisions",
+    "name": "Поклясться защищать туземные территории",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_mapuche_reconcilliation_campaigns"
+    },
+    "visible": {
+      "has_completed_focus": "CHL_mapuche_reconcilliation_campaigns",
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "CHL_no_more_mapuche_conflict",
+            "CHL_protecting_mapuche_lands"
+          ]
+        }
+      },
+      "has_country_flag": "CHL_formed_conadi_flag"
+    },
+    "complete_effect": {
+      "CHL_mapuche_conflict_level_down": true,
+      "950": {
+        "add_dynamic_modifier": {
+          "modifier": "CHL_protecting_mapuche_lands_modifier",
+          "scope": "CHL"
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "CHL_protecting_mapuche_lands"
+      }
+    }
+  },
+  {
+    "id": "ITA_bop_concesions_to_the_bourgeoisie",
+    "category_id": "ITA_balance_of_power_category",
+    "name": "Уступки буржуазии",
+    "desc": "",
+    "icon": "GFX_decision_generic_fundraising",
+    "cost": "ITA_bop_concesions_to_the_bourgeoisie_cost",
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_government": [
+          "communism",
+          "democratic"
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_common_ground"
+    },
+    "complete_effect": {
+      "add_popularity": {
+        "ideology": "democratic",
+        "popularity": 0.1
+      },
+      "ITA_bop_medium_increase_effect": true
+    }
+  },
+  {
+    "id": "SOV_build_national_academy_of_sciences_integrated_republic_GEO",
+    "category_id": "SOV_national_academy_of_sciences_dec_cat",
+    "name": "Построить: [GEO.GetAdjective]ую $SOV_build_national_academy_of_sciences_integrated_republic_default$",
+    "desc": "Мы построим в государстве [GEO.GetNameDef] Национальную академию наук — она несомненно ускорит исследования в нашей стране.",
+    "icon": "GFX_decision_SOV_academy_of_sciences",
+    "cost": "SOV_national_academy_of_sciences_construction_cost",
+    "fire_only_once": true,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_national_academies_of_sciences",
+      "NOT": [
+        {
+          "has_country_flag": "SOV_national_academy_of_sciences_built_GEO_flag"
+        },
+        {
+          "country_exists": "GEO"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHI_Geological_Survey",
+    "category_id": "CHI_Resource_Exploitation",
+    "name": "Комиссия по геологической службе",
+    "desc": "Историческое отсутствие индустриализации оставило Китай с множеством неиспользованных месторождений полезных ископаемых, ожидающих открытия и разработки. Мы должны поручить Национальной геологической службе определить местонахождение этих месторождений.",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "CHI_is_not_in_crisis": true
+    },
+    "visible": {
+      "has_completed_focus": "CHI_Digging_Deep",
+      "NOT": {
+        "has_country_flag": "CHI_all_surveyed"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHI_Geological_Survey taken",
+      "set_temp_variable": [
+        {
+          "temp_econ_spending_amount": 0.3
+        },
+        {
+          "CHI_calc_cost": 0.15
+        }
+      ],
+      "econ_spend_money_once_effect_raw_money": true,
+      "CHI_calc_industry_cost_change": true
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_georgia",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Georgia",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        1558,
+        231,
+        1293
+      ]
+    },
+    "visible": {
+      "owns_state": [
+        1293,
+        231,
+        1558
+      ],
+      "231": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "1558": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "1293": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "RUS_SWRW_ongoing"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MAG_WA_collaborator_Georgy_Dzhakelli",
+    "category_id": "MAG_WA_a_government_of_personalities_category",
+    "name": "Назначить Георгия Джакели",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "MAG_WA_minister_cooldown_flag",
+        "has_idea": "MAG_Georgy_Dzhakelli_hog"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "remove_ideas_with_trait": "head_of_government",
+      "add_ideas": "MAG_Georgy_Dzhakelli_hog",
+      "activate_mission": "MAG_WA_minister_cooldown",
+      "set_country_flag": [
+        "MAG_WA_minister_cooldown_flag",
+        "MAG_WA_collab_chosen",
+        "MAG_WA_collab_hog"
+      ],
+      "MAG_WA_gov_reset_hog": true
+    }
+  },
+  {
+    "id": "MAG_WA_collaborator_Georgy_Shekherev",
+    "category_id": "MAG_WA_a_government_of_personalities_category",
+    "name": "Назначить Георгия Шехерева",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "MAG_WA_minister_cooldown_flag",
+        "has_idea": "MAG_Georgy_Shekherev_sec"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "MAG_WA_make_use_of_the_blackshirts"
+    },
+    "complete_effect": {
+      "remove_ideas_with_trait": "security_minister",
+      "add_ideas": "MAG_Georgy_Shekherev_sec",
+      "activate_mission": "MAG_WA_minister_cooldown",
+      "set_country_flag": [
+        "MAG_WA_minister_cooldown_flag",
+        "MAG_WA_collab_chosen",
+        "MAG_WA_collab_sec"
+      ],
+      "MAG_WA_gov_reset_sec": true
+    }
+  },
+  {
+    "id": "ARK_rush_to_Kapstadt",
+    "category_id": "ARK_south_african_war_catgeory",
+    "name": "Рывок на Капштадт",
+    "desc": "В условиях продолжающегося развала Южной Африки нам пора избавиться от этого демократического пятна и ее союзников.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "SAF": {
+        "NOT": {
+          "controls_province": 13488
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "country_event": {
+        "id": "saw_collapse.21"
+      }
+    }
+  },
+  {
+    "id": "BOR_desperate_defence",
+    "category_id": "ARK_south_african_war_catgeory",
+    "name": "BOR_desperate_defence",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "surrender_progress": {
+        "_op": ">",
+        "value": 0.2
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BOR_desperate_defence",
+      "custom_effect_tooltip": "BOR_desperate_defence_tt",
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_template": "Boer Volunteers"
+            }
+          },
+          "division_template": {
+            "name": "Boer Volunteers",
+            "regiments": {
+              "light_infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                }
+              ]
+            }
+          }
+        },
+        "random_owned_controlled_state": {
+          "create_unit": [
+            {
+              "division": "name = \"Boer Volunteers\" division_template = \"Boer Volunteers\" start_experience_factor = 0.1 start_equipment_factor = 0.9",
+              "owner": "BOR"
+            },
+            {
+              "division": "name = \"Boer Volunteers\" division_template = \"Boer Volunteers\" start_experience_factor = 0.1 start_equipment_factor = 0.9",
+              "owner": "BOR"
+            },
+            {
+              "division": "name = \"Boer Volunteers\" division_template = \"Boer Volunteers\" start_experience_factor = 0.1 start_equipment_factor = 0.9",
+              "owner": "BOR"
+            },
+            {
+              "division": "name = \"Boer Volunteers\" division_template = \"Boer Volunteers\" start_experience_factor = 0.1 start_equipment_factor = 0.9",
+              "owner": "BOR"
+            },
+            {
+              "division": "name = \"Boer Volunteers\" division_template = \"Boer Volunteers\" start_experience_factor = 0.1 start_equipment_factor = 0.9",
+              "owner": "BOR"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "ARK_emergency_production",
+    "category_id": "ARK_south_african_war_catgeory",
+    "name": "Аварийное производство",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "surrender_progress": {
+        "_op": ">",
+        "value": 0.1
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ARK_emergency_production"
+    }
+  },
+  {
+    "id": "George_Weston_Limited",
+    "category_id": "USA_WAL_foreign_business_category",
+    "name": "George_Weston_Limited",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_WAL_canadian_business"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision George_Weston_Limited",
+      "AST": {
+        "set_country_flag": "saf_support_rallied"
+      }
+    }
+  },
+  {
+    "id": "GEO_withdraw_from_the_war",
+    "category_id": "SWRW_Georgia_category",
+    "name": "Withdraw from the War",
+    "desc": "",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "1556": {
+        "is_controlled_by": "GEO"
+      },
+      "231": {
+        "is_controlled_by": "GEO"
+      }
+    },
+    "visible": {
+      "has_war_with": "CAU",
+      "original_tag": "GEO"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: GEO_withdraw_from_the_war",
+      "white_peace": "CAU",
+      "GEO": {
+        "transfer_state": [
+          1556,
+          231
+        ]
+      }
+    }
+  },
+  {
+    "id": "RUS_SWRW_invade_georgia",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Invade defenseless Georgia",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "command_power": {
+        "_op": ">",
+        "value": 14.99
+      },
+      "any_controlled_state": {
+        "is_fully_controlled_by": "ROOT",
+        "any_neighbor_state": {
+          "is_fully_controlled_by": "GEO"
+        }
+      }
+    },
+    "visible": {
+      "is_russian_nation": true,
+      "check_variable": {
+        "WRW_deccat": 3
+      },
+      "NOT": {
+        "OR": {
+          "has_global_flag": "RUS_generic_authoritarian_unifier",
+          "AND": {
+            "has_global_flag": "RUS_generic_democratic_unifier",
+            "NOT": {
+              "has_global_flag": "RUS_shukshin_unification"
+            }
+          }
+        }
+      },
+      "country_exists": "GEO",
+      "any_controlled_state": {
+        "is_fully_controlled_by": "ROOT",
+        "any_neighbor_state": {
+          "is_fully_controlled_by": "GEO"
+        }
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_exhaustion": 1
+      },
+      "WRW_add_war_exhaustion": true,
+      "hidden_effect": {
+        "FUK": {
+          "diplomatic_relation": {
+            "country": "GEO",
+            "relation": "guarantee",
+            "active": false
+          }
+        },
+        "GEO": {
+          "if": {
+            "limit": {
+              "NOT": {
+                "has_idea": "tno_conscription_extensive_conscription"
+              }
+            },
+            "tno_conscription_worsen": true,
+            "add_ideas": [
+              "tno_conscription_extensive_conscription"
+            ]
+          },
+          "every_core_state": {
+            "add_core_of": "CAU"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_inclusion_of_westgeorgia",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Poti District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 1293
+    },
+    "visible": {
+      "owns_state": 1293,
+      "AND": {
+        "1558": {
+          "is_core_of": "ROOT"
+        },
+        "1293": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_inclusion_of_eastgeorgia",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Tbilisi District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 231
+    },
+    "visible": {
+      "owns_state": 231,
+      "AND": {
+        "1556": {
+          "is_core_of": "ROOT"
+        },
+        "231": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  }
+]

@@ -1,0 +1,179 @@
+[
+  {
+    "id": "develop_katanga_cobalt_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Начать разработку залежей кобальта в Катанге",
+    "desc": "",
+    "icon": "chromium",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 889,
+      "controls_state": 889,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "has_tech": "excavation3",
+      "IF": {
+        "limit": {
+          "OR": {
+            "original_tag": [
+              "BEL",
+              "COG"
+            ]
+          },
+          "has_dlc": "Gotterdammerung"
+        },
+        "has_completed_focus": "CONGO_heat_resistant_cobalt"
+      }
+    },
+    "visible": {
+      "owns_state": 889,
+      "controls_state": 889,
+      "889": {
+        "NOT": {
+          "has_state_flag": "katana_cobalt_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "develop_katanga_cobalt_deposits_2",
+    "category_id": "prospect_for_resources",
+    "name": "Расширить разработку залежей кобальта в Катанге",
+    "desc": "",
+    "icon": "chromium",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 889,
+      "controls_state": 889,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 6
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "owns_state": 889,
+      "controls_state": 889,
+      "889": {
+        "has_state_flag": "katana_cobalt_developed",
+        "NOT": {
+          "has_state_flag": "katana_cobalt_further_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "OFN_COG_create_katanga_province",
+    "category_id": "OFN_COG_create_administrative_divisions_decisions",
+    "name": "Создать провинцию Катанга",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OFN_COG_creating_admin_region"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_create_katanga_province",
+      "set_country_flag": "OFN_COG_creating_admin_region",
+      "TNO_improve_admin_efficiency_low": true,
+      "add_to_variable": {
+        "OFN_MANDATE_administrative_hold": 0.05
+      }
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_ust_katav",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Белорецка",
+    "desc": "",
+    "icon": "GFX_decision_ural_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 848
+    },
+    "visible": {
+      "owns_state": 848,
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "848": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "847": {
+                "is_core_of": "ROOT"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MAG_WA_support_congo_katanga",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт государству [KTG.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "KTG": {
+        "exists": true
+      },
+      "has_global_flag": "CONGO_PW_HAPPENING",
+      "NOT": {
+        "OR": {
+          "AZD": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "CFS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "CPR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "KTG": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "KSI": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GRO": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "COG": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_congo_katanga",
+      "KTG": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  }
+]

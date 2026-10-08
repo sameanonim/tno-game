@@ -675,7 +675,25 @@ static func process_turn(state: CountryState, regions: Dictionary = {}) -> Econo
 	report.poverty_change = soc_data["poverty_delta"]
 	report.literacy_change = soc_data["literacy_delta"]
 	report.corruption_change = soc_data["corruption_delta"]
-	
+
+	# Влияние ползунков бюджета на боеготовность, мораль и социальную стабильность
+	if state.military_spending_share >= 0.25:
+		var readiness_gain: float = (state.military_spending_share - 0.20) * 12.0 * (52.0 / turns_year)
+		state.army_readiness = clampf(state.army_readiness + readiness_gain, 5.0, 100.0)
+		state.army_morale = clampf(state.army_morale + (0.8 * 52.0 / turns_year), 5.0, 100.0)
+	elif state.military_spending_share < 0.15:
+		var readiness_loss: float = (0.15 - state.military_spending_share) * 8.0 * (52.0 / turns_year)
+		state.army_readiness = clampf(state.army_readiness - readiness_loss, 5.0, 100.0)
+		state.army_morale = clampf(state.army_morale - (0.5 * 52.0 / turns_year), 5.0, 100.0)
+
+	if state.civilian_spending_share >= 0.25:
+		state.radicalization = clampf(state.radicalization - (0.35 * 52.0 / turns_year), 0.0, 100.0)
+		state.legitimacy = clampf(state.legitimacy + (0.20 * 52.0 / turns_year), 0.0, 100.0)
+		state.manpower_pool += int(float(state.manpower_pool) * 0.0005)
+	elif state.civilian_spending_share < 0.18:
+		state.radicalization = clampf(state.radicalization + (0.40 * 52.0 / turns_year), 0.0, 100.0)
+		state.legitimacy = clampf(state.legitimacy - (0.25 * 52.0 / turns_year), 0.0, 100.0)
+
 	# 3. Доходы и расходы бюджета
 	var revenue: float = calculate_turn_revenue(state)
 	var exp_dict: Dictionary = calculate_turn_expenses(state)

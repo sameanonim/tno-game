@@ -673,17 +673,19 @@ static func _simulate_axis_turn(
 	# 5. СМЕНА ВЛАДЕЛЬЦА ПРИ ПРОРЫВЕ (PROGRESS >= 100%)
 	if axis.progress >= 100.0:
 		rep["captured_region_id"] = target_id
+		var old_owner: String = front.defender_tag
 		if target_region != null:
 			rep["captured_region_name"] = target_region.province_name
-			var old_owner = target_region.owner_tag
+			if not target_region.owner_tag.is_empty():
+				old_owner = target_region.owner_tag
 			target_region.owner_tag = front.attacker_tag
 			
 			# Штрафы оккупации эпохи Русской Смуты (Анархия)
 			target_region.unrest = 85.0
 			target_region.garrison_strength = 15.0
 
-			rep["new_owner"] = front.attacker_tag
-			rep["previous_owner"] = old_owner
+		rep["new_owner"] = front.attacker_tag
+		rep["previous_owner"] = old_owner
 
 		# Переход к следующей цели на оперативной оси
 		axis.target_region_ids.pop_front()
@@ -733,12 +735,17 @@ static func _simulate_axis_turn(
 			"enemy_losses": def_casualties
 		}, "Ось [%s]: %s (прогресс %0.1f%%). Потери: наши -%d, враг -%d." % [axis.name, status_str, axis.progress, atk_casualties, def_casualties])
 
-	# 6. ГЕНЕРАЦИЯ БОЕВЫХ ДИЛЕММ (BATTLE INCIDENTS) — Детерминированный расчет
-	var incident_roll = _get_deterministic_factor(axis_seed + 6, 0.0, 1.0)
-	if ratio >= 1.85 and incident_roll < 0.35:
-		rep["battle_incident"] = _create_battle_incident("breakthrough", axis, front, attacker, defender, current_turn)
-	elif ratio <= 0.55 and axis.posture == OperationalAxis.Posture.AGGRESSIVE_BREAKTHROUGH and incident_roll < 0.40:
-		rep["battle_incident"] = _create_battle_incident("encirclement_risk", axis, front, attacker, defender, current_turn)
+	# 6. ГЕНЕРАЦИЯ БОЕВЫХ ДИЛЕММ (BATTLE INCIDENTS) — Детерминированный расчет с кулдауном
+	var incident_cooldown: int = cfg.get_int("military", "battle_incident_turn_cooldown", 4) if cfg != null else 4
+	var can_trigger_incident: bool = (current_turn - axis.last_incident_turn) >= incident_cooldown
+	if can_trigger_incident:
+		var incident_roll = _get_deterministic_factor(axis_seed + 6, 0.0, 1.0)
+		if ratio >= 1.85 and incident_roll < 0.35:
+			rep["battle_incident"] = _create_battle_incident("breakthrough", axis, front, attacker, defender, current_turn)
+			axis.last_incident_turn = current_turn
+		elif ratio <= 0.55 and axis.posture == OperationalAxis.Posture.AGGRESSIVE_BREAKTHROUGH and incident_roll < 0.40:
+			rep["battle_incident"] = _create_battle_incident("encirclement_risk", axis, front, attacker, defender, current_turn)
+			axis.last_incident_turn = current_turn
 
 	return rep
 

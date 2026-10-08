@@ -1,0 +1,121 @@
+[
+  {
+    "id": "SIA_demand_independence_LAO",
+    "category_id": "SIA_asian_democratic_compact_cat",
+    "name": "Потребовать освобождения [LAO.GetNameRuGen]",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "demand_release_cooldown"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "1068": {
+          "controller": {
+            "NOT": [
+              {
+                "original_tag": "LAO"
+              },
+              {
+                "tag": "ROOT"
+              },
+              {
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        },
+        "1069": {
+          "controller": {
+            "NOT": [
+              {
+                "original_tag": "LAO"
+              },
+              {
+                "tag": "ROOT"
+              },
+              {
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        },
+        "670": {
+          "controller": {
+            "NOT": [
+              {
+                "original_tag": "LAO"
+              },
+              {
+                "tag": "ROOT"
+              },
+              {
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "clear_array": "SIA_lao_owners",
+      "every_state": {
+        "limit": {
+          "OR": {
+            "state": [
+              1068,
+              1069,
+              670
+            ]
+          },
+          "NOT": {
+            "is_controlled_by": "ROOT"
+          },
+          "controller": {
+            "NOT": {
+              "original_tag": "LAO"
+            }
+          }
+        },
+        "if": {
+          "limit": {
+            "NOT": {
+              "is_in_array": {
+                "array": "ROOT.SIA_lao_owners",
+                "value": "THIS.controller"
+              }
+            }
+          },
+          "add_to_array": {
+            "array": "ROOT.SIA_lao_owners",
+            "value": "THIS.controller"
+          }
+        }
+      },
+      "custom_effect_tooltip": "SIA_demand_independence_LAO_tt",
+      "hidden_effect": {
+        "for_each_scope_loop": {
+          "array": "SIA_lao_owners",
+          "set_variable": {
+            "SIA_adc_demand_country_to_be_released": "LAO"
+          },
+          "country_event": {
+            "id": "siam_adc.1",
+            "hours": 2
+          }
+        }
+      },
+      "set_country_flag": {
+        "flag": "demand_release_cooldown",
+        "value": 1,
+        "days": 5
+      }
+    }
+  }
+]

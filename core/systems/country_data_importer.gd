@@ -8,10 +8,11 @@ extends RefCounted
 ## (data/countries_index.json). Собирает экземпляры CountryState, LeaderResource и PartyData.
 ##
 
-const COUNTRIES_INDEX_PATH: String = "res://data/countries_index.json"
-const COUNTRIES_INDEX_FALLBACK: String = "res://data/countries/index.json"
-const COUNTRY_PROFILE_TEMPLATE: String = "res://data/countries/%s/country_profile.json"
-const COUNTRY_FALLBACK_TEMPLATE: String = "res://data/countries/%s/country.json"
+const COUNTRIES_INDEX_PATH: String = "res://data/countries/index.json"
+const COUNTRIES_INDEX_FALLBACK: String = "res://data/countries_index.json"
+const COUNTRY_PROFILE_TEMPLATE: String = "res://data/countries/%s/country.json"
+const COUNTRY_FALLBACK_TEMPLATE: String = "res://data/countries/%s/country_profile.json"
+const COUNTRY_SQLITE_TEMPLATE: String = "res://data/countries/%s/country.sqlite"
 const STARTING_COUNTRIES_PATH: String = "res://data/starting_countries_state.json"
 
 
@@ -21,6 +22,26 @@ static func load_country(tag: String) -> CountryState:
 	var profile_path = COUNTRY_PROFILE_TEMPLATE % clean_tag
 
 	var profile_data: Dictionary = {}
+
+	# 0. Попытка загрузки из изолированной SQLite базы данных при наличии модуля
+	if ClassDB.class_exists("SQLite"):
+		var sqlite_path = COUNTRY_SQLITE_TEMPLATE % clean_tag
+		if FileAccess.file_exists(sqlite_path):
+			var db = ClassDB.instantiate("SQLite")
+			if db != null:
+				db.set("path", sqlite_path)
+				if db.has_method("open_db") and db.call("open_db"):
+					db.call("query", "SELECT key, value FROM profile;")
+					var res = db.get("query_result")
+					if res is Array and not res.is_empty():
+						for row in res:
+							var k = str(row.get("key", ""))
+							var v = str(row.get("value", ""))
+							var p = JSON.new()
+							if p.parse(v) == OK:
+								profile_data[k] = p.data
+							else:
+								profile_data[k] = v
 
 	# 1. Попытка загрузить country_profile.json
 	if FileAccess.file_exists(profile_path):

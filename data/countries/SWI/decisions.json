@@ -1,0 +1,3050 @@
+[
+  {
+    "id": "AST_switch_combat_specialization",
+    "category_id": "AST_special_forces_cat",
+    "name": "Смена боевой специализации",
+    "desc": "",
+    "icon": "GFX_generic_industry",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "AST_special_forces_active"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_tech": "jungle_training_tech"
+        },
+        "custom_effect_tooltip": {
+          "localization_key": "generic_enables_tech_tt",
+          "TECH_EFFECT": "tech_effect|desert_training_tech",
+          "TECH_NAME": "desert_training_tech"
+        },
+        "hidden_effect": {
+          "set_technology": {
+            "jungle_training_tech": 0,
+            "desert_training_tech": 1
+          }
+        }
+      },
+      "else_if": {
+        "limit": {
+          "has_tech": "desert_training_tech"
+        },
+        "custom_effect_tooltip": {
+          "localization_key": "generic_enables_tech_tt",
+          "TECH_EFFECT": "tech_effect|jungle_training_tech",
+          "TECH_NAME": "jungle_training_tech"
+        },
+        "hidden_effect": {
+          "set_technology": {
+            "jungle_training_tech": 1,
+            "desert_training_tech": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "AUS_reintegrate_FROM_switzerland_decision",
+    "category_id": "AUS_reintegrating_the_empire_category",
+    "name": "Заново интегрировать территорию [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_propaganda",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_reintegrating_state_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "AUS_reclaim_habsburg"
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_reintegrating_state_flag"
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_switch_ideology",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_switch_ideology",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": "DEN_decision_very_high_cost",
+    "fire_only_once": false,
+    "available": {
+      "has_stability": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "NOT": {
+        "has_completed_focus": "DEN_form_the_danish_freedom_council"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "DEN_overlord_ruling_party_tt",
+        "hidden_trigger": {
+          "OR": {
+            "AND": [
+              {
+                "var:DEN.DEN_overlord_nation": {
+                  "has_government": "fascism"
+                },
+                "fascism": {
+                  "_op": ">",
+                  "value": 0.4
+                }
+              },
+              {
+                "var:DEN.DEN_overlord_nation": {
+                  "has_government": "communism"
+                },
+                "communism": {
+                  "_op": ">",
+                  "value": 0.4
+                }
+              },
+              {
+                "var:DEN.DEN_overlord_nation": {
+                  "has_government": "neutrality"
+                },
+                "neutrality": {
+                  "_op": ">",
+                  "value": 0.4
+                }
+              },
+              {
+                "var:DEN.DEN_overlord_nation": {
+                  "has_government": "democratic"
+                },
+                "democratic": {
+                  "_op": ">",
+                  "value": 0.4
+                }
+              }
+            ]
+          }
+        }
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": 0
+        }
+      }
+    },
+    "visible": {
+      "is_subject": true,
+      "has_completed_focus": "DEN_align_with_overlord",
+      "NOT": {
+        "has_government": "var:DEN.DEN_overlord_nation"
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_high_decrease_effect": true,
+      "if": [
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "has_government": "communism"
+            }
+          },
+          "set_politics": {
+            "ruling_party": "communism"
+          },
+          "if": {
+            "limit": {
+              "communism": {
+                "_op": "<",
+                "value": 0.6
+              }
+            },
+            "add_stability": -0.1
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "has_government": "fascism"
+            }
+          },
+          "set_politics": {
+            "ruling_party": "fascism"
+          },
+          "if": {
+            "limit": {
+              "fascism": {
+                "_op": "<",
+                "value": 0.6
+              }
+            },
+            "add_stability": -0.1
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "has_government": "neutrality"
+            }
+          },
+          "set_politics": {
+            "ruling_party": "neutrality"
+          },
+          "if": {
+            "limit": {
+              "neutrality": {
+                "_op": "<",
+                "value": 0.6
+              }
+            },
+            "add_stability": -0.1
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true,
+            "OVERLORD": {
+              "has_government": "democratic"
+            }
+          },
+          "set_politics": {
+            "ruling_party": "democratic"
+          },
+          "if": {
+            "limit": {
+              "democratic": {
+                "_op": "<",
+                "value": 0.6
+              }
+            },
+            "add_stability": -0.1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "FIN_request_to_switch_sides_in_the_war",
+    "category_id": "FIN_foreign_politics_decision_category",
+    "name": "FIN_request_to_switch_sides_in_the_war",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "SOV",
+      "GER": {
+        "has_war_with": "SOV"
+      },
+      "any_country": {
+        "has_government": "democratic",
+        "is_faction_leader": true,
+        "has_war_with": "GER"
+      },
+      "722": {
+        "is_owned_and_controlled_by": "ROOT"
+      },
+      "OR": {
+        "surrender_progress": {
+          "_op": ">",
+          "value": 0.05
+        },
+        "SOV": [
+          {
+            "has_idea": "SOV_the_rush_for_berlin"
+          },
+          {
+            "has_active_mission": "SOV_operation_iskra_ongoing"
+          }
+        ],
+        "any_owned_state": {
+          "NOT": [
+            {
+              "state": 145
+            },
+            {
+              "is_controlled_by": "ROOT"
+            }
+          ],
+          "is_core_of": "ROOT"
+        }
+      },
+      "has_civil_war": false,
+      "is_in_faction": false,
+      "has_completed_focus": "FIN_cooperation_with_germany"
+    },
+    "visible": {
+      "has_war_with": "SOV",
+      "GER": {
+        "has_war_with": "SOV"
+      },
+      "SOV": {
+        "has_country_flag": "SOV_great_patriotic_war_flag"
+      },
+      "has_completed_focus": "FIN_cooperation_with_germany",
+      "has_civil_war": false,
+      "is_in_faction": false,
+      "NOT": [
+        {
+          "has_country_flag": "FIN_already_attempted_to_switch_sides"
+        },
+        {
+          "has_country_flag": "FIN_negotiating_armistice_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "set_country_flag": "FIN_negotiating_switching_sides_flag"
+        },
+        {
+          "set_country_flag": "FIN_already_attempted_to_switch_sides"
+        }
+      ],
+      "add_war_support": -0.03,
+      "add_popularity": [
+        {
+          "ideology": "democratic",
+          "popularity": 0.05
+        },
+        {
+          "ideology": "communism",
+          "popularity": 0.05
+        }
+      ],
+      "random_country": {
+        "limit": {
+          "has_government": "democratic",
+          "is_faction_leader": true,
+          "has_war_with": "GER"
+        },
+        "set_country_flag": "FIN_major_democratic_leader_flag",
+        "country_event": {
+          "id": "AAT_finland_continuation_war.12",
+          "days": 3,
+          "random_days": 5
+        }
+      },
+      "SOV": {
+        "country_event": {
+          "id": "AAT_finland_continuation_war.13",
+          "days": 1
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "every_country": {
+          "limit": {
+            "has_war_with": "ROOT"
+          },
+          "white_peace": "ROOT"
+        },
+        "IF": [
+          {
+            "limit": {
+              "GER": {
+                "has_military_access_to": "ROOT"
+              }
+            },
+            "ROOT": {
+              "diplomatic_relation": [
+                {
+                  "country": "GER",
+                  "relation": "military_access",
+                  "active": false
+                },
+                {
+                  "country": "GER",
+                  "relation": "docking_rights",
+                  "active": false
+                },
+                {
+                  "country": "GER",
+                  "relation": "non_aggression_pact",
+                  "active": false
+                }
+              ]
+            },
+            "GER": {
+              "diplomatic_relation": {
+                "country": "ROOT",
+                "relation": "guarantee",
+                "active": false
+              }
+            }
+          },
+          {
+            "limit": {
+              "ROOT": {
+                "has_idea": "FIN_the_lone_wolf"
+              }
+            },
+            "ROOT": {
+              "remove_ideas": "FIN_the_lone_wolf"
+            }
+          }
+        ],
+        "SOV": {
+          "add_timed_idea": {
+            "idea": "FIN_compensation_for_side_switch_good",
+            "days": 365
+          }
+        },
+        "ROOT": [
+          {
+            "add_timed_idea": {
+              "idea": "FIN_compensation_for_side_switch_bad",
+              "days": 365
+            }
+          },
+          {
+            "add_to_war": {
+              "targeted_alliance": "ENG",
+              "enemy": "GER",
+              "hostility_reason": "asked_to_join"
+            }
+          },
+          {
+            "add_popularity": {
+              "ideology": "democratic",
+              "popularity": 0.1
+            }
+          }
+        ],
+        "random_country": {
+          "limit": {
+            "has_country_flag": "FIN_major_democratic_leader_flag"
+          },
+          "add_to_faction": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_find_biggest_fascist",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_find_biggest_fascist",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "SWI_find_biggest_fascist_neighbor": true
+    }
+  },
+  {
+    "id": "SWI_is_FRA_country_to_balance",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_is_FRA_country_to_balance",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FRA": {
+        "SWI_is_country_to_balance": true
+      },
+      "var:SWI.SWI_angriest_country": []
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SWI_add_dynamic_modifiers",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_add_dynamic_modifiers",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "add_dynamic_modifier": [
+        {
+          "modifier": "SWI_dormant_citizen_militia"
+        },
+        {
+          "modifier": "SWI_active_citizen_militia"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SWI_remove_dynamic_modifiers",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_remove_dynamic_modifiers",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "SWI_turn_militias_into_regulars": true
+    }
+  },
+  {
+    "id": "start_systems",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "start_systems",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "complete_national_focus": [
+        "SWI_swiss_guiding_principles",
+        "SWI_fortify_border_with_germany",
+        "SWI_armed_neutrality"
+      ]
+    }
+  },
+  {
+    "id": "SWI_add_100MR",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_add_100MR",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "add_to_variable": {
+        "var": "SWI_military_readiness",
+        "value": 100
+      }
+    }
+  },
+  {
+    "id": "SWI_test_making_president",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_test_making_president",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "var:SWI_confederation_president": {
+        "SWI_make_centralized_president": true
+      },
+      "remove_power_balance": {
+        "id": "SWI_centralization_bop"
+      },
+      "set_country_flag": "SWI_elected_centralized_president"
+    }
+  },
+  {
+    "id": "SWI_plus_20_BoP",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_plus_20_BoP",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "add_power_balance_value": {
+        "id": "SWI_centralization_bop",
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "SWI_minus_100_BoP",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_minus_100_BoP",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "add_power_balance_value": {
+        "id": "SWI_centralization_bop",
+        "value": -1
+      }
+    }
+  },
+  {
+    "id": "SWI_make_germany_angry",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_make_germany_angry",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "GER": {
+        "SWI_add_large_bad_opinion": true
+      },
+      "SWI_update_neighbor_opinion_balance": true
+    }
+  },
+  {
+    "id": "SWI_make_germany_happy",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_make_germany_happy",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "GER": {
+        "SWI_add_large_good_opinion": true
+      },
+      "SWI_update_neighbor_opinion_balance": true
+    }
+  },
+  {
+    "id": "SWI_go_council",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_go_council",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "add_power_balance_value": {
+        "id": "SWI_centralization_bop",
+        "value": -1
+      },
+      "add_power_balance_modifier": {
+        "id": "SWI_centralization_bop",
+        "modifier": "SWI_DEBUG_all_council"
+      }
+    }
+  },
+  {
+    "id": "SWI_trigger_elections",
+    "category_id": "SWI_debug_decisions_category",
+    "name": "SWI_trigger_elections",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "SWI": {
+        "country_event": {
+          "id": "BBA_SWI_annual_election.1",
+          "hours": 2
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_oust_confederation_president",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Изгнать президента конфедерации",
+    "desc": "",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 300,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SWI_ongoing_president_initiative",
+        "hidden_trigger": {
+          "has_country_flag": "SWI_elected_centralized_president"
+        }
+      }
+    },
+    "visible": {
+      "has_variable": "SWI_confederation_president",
+      "NOT": {
+        "has_country_flag": "SWI_elected_centralized_president"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "SWI_oust_the_conferedation_president",
+      "hidden_effect": {
+        "set_variable": {
+          "SWI_ousted_president": "SWI_confederation_president"
+        },
+        "clear_variable": "SWI_confederation_president",
+        "set_country_flag": "SWI_vacant_confederation_president_position",
+        "SWI_outgoing_president_cleanup": true,
+        "SWI_update_councilors": true
+      },
+      "add_power_balance_value": {
+        "id": "SWI_centralization_bop",
+        "value": 0.2
+      },
+      "add_ideas": [
+        "SWI_no_confederation_president_idea"
+      ]
+    }
+  },
+  {
+    "id": "SWI_no_elected_president",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Без президента конфедерации",
+    "desc": "",
+    "icon": "GFX_decision_SWI_no_elected_president",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SWI_vacant_confederation_president_position"
+      },
+      "has_completed_focus": "SWI_swiss_guiding_principles"
+    },
+    "visible": {
+      "has_country_flag": "SWI_vacant_confederation_president_position"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_elect_a_new_confederation_president",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Избрать нового президента конфедерации",
+    "desc": "",
+    "icon": "GFX_decision_SWI_elect_confederation_president",
+    "cost": 250,
+    "fire_only_once": false,
+    "available": {
+      "has_active_mission": "SWI_no_elected_president",
+      "NOT": {
+        "has_variable": "SWI_confederation_president"
+      }
+    },
+    "visible": {
+      "has_active_mission": "SWI_no_elected_president"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_no_confederation_councilor",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Нет советника конфедерации",
+    "desc": "Если кресло советника слишком долго будет оставаться пустым, его непременно попытаются занять с личными целями некомпетентные оппортунисты.",
+    "icon": "GFX_decision_SWI_no_elected_president",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "SWI_elected_centralized_president"
+          }
+        },
+        "has_completed_focus": "SWI_swiss_guiding_principles",
+        "NOT": {
+          "SWI_council_not_filled": true
+        }
+      },
+      "else": {
+        "has_country_flag": "SWI_elected_centralized_president"
+      }
+    },
+    "visible": {
+      "SWI_council_not_filled": true,
+      "has_completed_focus": "SWI_swiss_guiding_principles",
+      "NOT": {
+        "has_country_flag": "SWI_elected_centralized_president"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_case_north_decision",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Операция «Север»",
+    "desc": "",
+    "icon": "GFX_decision_hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "ROOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_case_north"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_case_west_decision",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Операция «Запад»",
+    "desc": "",
+    "icon": "GFX_decision_hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "ROOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_case_west"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_decision_remove_councilor_1",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "[SWI_Get_ousted_councilor_text_1]",
+    "desc": "Изгнание советника привело в движение механизмы Швейцарской ассамблеи. Прежде чем мы сможем занять эту должность, нам придется выждать какое-то время.",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "is_power_balance_in_range": {
+          "id": "SWI_centralization_bop",
+          "range": {
+            "_op": "<",
+            "value": "SWI_centralization_bop_balanced"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_variable": "SWI_councilor_1",
+      "has_completed_focus": "SWI_swiss_guiding_principles"
+    },
+    "complete_effect": {
+      "var:SWI_councilor_1": {
+        "SWI_remove_councilor": true
+      },
+      "clear_variable": "SWI_councilor_1"
+    }
+  },
+  {
+    "id": "SWI_decision_remove_councilor_2",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "[SWI_Get_ousted_councilor_text_2]",
+    "desc": "$SWI_decision_remove_councilor_1_desc$",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "is_power_balance_in_range": {
+          "id": "SWI_centralization_bop",
+          "range": {
+            "_op": "<",
+            "value": "SWI_centralization_bop_balanced"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_variable": "SWI_councilor_2",
+      "has_completed_focus": "SWI_swiss_guiding_principles"
+    },
+    "complete_effect": {
+      "var:SWI_councilor_2": {
+        "SWI_remove_councilor": true
+      },
+      "clear_variable": "SWI_councilor_2"
+    }
+  },
+  {
+    "id": "SWI_decision_remove_councilor_3",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "[SWI_Get_ousted_councilor_text_3]",
+    "desc": "$SWI_decision_remove_councilor_1_desc$",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "is_power_balance_in_range": {
+          "id": "SWI_centralization_bop",
+          "range": {
+            "_op": "<",
+            "value": "SWI_centralization_bop_balanced"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_variable": "SWI_councilor_3",
+      "has_completed_focus": "SWI_swiss_guiding_principles"
+    },
+    "complete_effect": {
+      "var:SWI_councilor_3": {
+        "SWI_remove_councilor": true
+      },
+      "clear_variable": "SWI_councilor_3"
+    }
+  },
+  {
+    "id": "SWI_influence_future_cantons",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Влиять на будущие кантоны",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 65,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "ROOT": {
+        "NOT": {
+          "has_country_flag": "SWI_influencing_a_state"
+        }
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "set_state_flag": "SWI_state_being_influenced",
+        "ROOT": {
+          "set_variable": {
+            "SWI_influence_target_state": "PREV"
+          }
+        }
+      },
+      "ROOT": {
+        "set_country_flag": "SWI_influencing_a_state"
+      }
+    }
+  },
+  {
+    "id": "SWI_press_for_future_canton",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "[FROM.Owner.GetName] — надавить, чтобы вытребовать регион [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": 250,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "ROOT": {
+        "NOT": {
+          "has_country_flag": "SWI_claiming_a_state"
+        }
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "set_state_flag": "SWI_state_being_claimed",
+        "ROOT": {
+          "set_variable": {
+            "SWI_state_being_claimed": "PREV"
+          }
+        }
+      },
+      "ROOT": {
+        "set_country_flag": "SWI_claiming_a_state"
+      }
+    }
+  },
+  {
+    "id": "SWI_invite_to_entente",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Пригласить в нейтральную Антанту",
+    "desc": "",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SWI_neutral_entente"
+    },
+    "complete_effect": {
+      "FROM": {
+        "set_country_flag": "SWI_entente_request_sent",
+        "country_event": {
+          "id": "BBA_switzerland.19",
+          "hours": 2
+        }
+      },
+      "if": {
+        "limit": {
+          "ROOT": {
+            "NOT": {
+              "is_in_faction": true
+            }
+          }
+        },
+        "create_faction": "SWI_neutral_entente_faction"
+      }
+    }
+  },
+  {
+    "id": "SWI_buy_ships_from_country",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "[SWI_get_buy_ships_from_country_title]",
+    "desc": "",
+    "icon": "GFX_decision_generic_naval",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "SWI_country_positive_opinion": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_buy_foreign_surplus_ships"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "generic_purchase_ships_events.01",
+          "hours": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_cancel_fascism_ban",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Отменить запрет фашистских партий",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 250,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_idea": "fascism_banned"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_dismiss_council",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Распустить совет",
+    "desc": "Наши враги слишком сильны, а распри и конфликты в Федеральном совете их только радуют. Великому лидеру пора встать у руля и провести государство [ROOT.GetNonIdeologyName] через этот шторм.",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 350,
+    "fire_only_once": false,
+    "available": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "has_variable": "SWI_confederation_president",
+      "var:SWI_confederation_president": {
+        "SWI_councilor_is_democratic": true
+      },
+      "OR": {
+        "is_power_balance_in_range": {
+          "id": "SWI_centralization_bop",
+          "range": "SWI_centralization_bop_fully_council"
+        },
+        "NOT": {
+          "has_power_balance": {
+            "id": "SWI_centralization_bop"
+          }
+        }
+      }
+    },
+    "visible": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.2
+      },
+      "has_variable": "SWI_confederation_president",
+      "has_completed_focus": "SWI_president_for_life",
+      "NOT": {
+        "has_country_flag": "SWI_elected_centralized_president"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_embrace_communism",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Принять коммунизм",
+    "desc": "Теперь, когда все готово, нужно действовать быстро и воспользоваться шансом превратить государство [ROOT.GetNonIdeologyName] в рай для рабочих — такой шанс выпадает лишь раз в жизни.",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 300,
+    "fire_only_once": false,
+    "available": {
+      "communism": {
+        "_op": ">",
+        "value": 0.5
+      },
+      "var:SWI_confederation_president": {
+        "SWI_councilor_is_any_kind_of_communist": true
+      },
+      "has_variable": "SWI_confederation_president",
+      "OR": {
+        "is_power_balance_in_range": {
+          "id": "SWI_centralization_bop",
+          "range": "SWI_centralization_bop_fully_council"
+        },
+        "NOT": {
+          "has_power_balance": {
+            "id": "SWI_centralization_bop"
+          }
+        }
+      }
+    },
+    "visible": {
+      "communism": {
+        "_op": ">",
+        "value": 0.2
+      },
+      "has_variable": "SWI_confederation_president",
+      "has_completed_focus": "SWI_president_for_life",
+      "NOT": {
+        "has_country_flag": "SWI_elected_centralized_president"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_declare_the_alpine_confederation",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Провозгласить Альпийскую конфедерацию",
+    "desc": "Теперь, когда наша демократия расширилась за пределы Альп, Конфедерация уже не принадлежит государству [SWI.GetNonIdeologyName] — она принадлежит всем альпийским народам и сообществам.",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "SWI_can_form_alpine": true,
+      "has_government": "democratic",
+      "democratic": {
+        "_op": ">",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "any_controlled_state": {
+        "is_alpine_state": true,
+        "NOT": {
+          "is_core_of": "SWI"
+        }
+      },
+      "democratic": {
+        "_op": ">",
+        "value": 0.3
+      }
+    },
+    "complete_effect": {
+      "SWI_turn_into_alpine": true
+    }
+  },
+  {
+    "id": "SWI_declare_the_alpine_union",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Провозгласить Альпийский союз",
+    "desc": "Волю рабочих и народов Альп не остановить. Мы продолжаем освобождать все новые земли от ига буржуазии, наше влияние уже вышло за пределы государства [SWI.GetNonIdeologyName], и это должно отразиться в наших границах.",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "SWI_can_form_alpine": true,
+      "has_government": "communism",
+      "communism": {
+        "_op": ">",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "any_controlled_state": {
+        "is_alpine_state": true,
+        "NOT": {
+          "is_core_of": "SWI"
+        }
+      },
+      "communism": {
+        "_op": ">",
+        "value": 0.3
+      }
+    },
+    "complete_effect": {
+      "SWI_turn_into_alpine": true
+    }
+  },
+  {
+    "id": "SWI_recently_finished_president_initiative_mission",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Президентская инициатива недавно выполнена",
+    "desc": "",
+    "icon": "GFX_decision_SWI_elect_confederation_president",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SWI_recently_finished_president_initiative"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "SWI_ongoing_president_initiative"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_defense_fund_drive",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Сбор средств для Фонда обороны",
+    "desc": "Чтобы обороняться против потенциальных агрессоров, нужны деньги, которых у швейцарского федерального правительства нет. Мы можем обратиться к гражданам Швейцарии, чтобы они пожертвовали нам необходимые средства.",
+    "icon": "GFX_decision_generic_fundraising",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "OR": {
+            "has_trait": [
+              "SWI_pragmatic_democrat",
+              "SWI_democratic_capitalist",
+              "SWI_nationalistic_industrialist"
+            ]
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_swiss_democratic_tradition_campaign",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Кампания за демократические традиции Швейцарии",
+    "desc": "Мы можем напомнить народу Швейцарии о наших давних демократических традициях, о том, что мы — старейшая и, быть может, единственная демократическая страна в Европе.",
+    "icon": "GFX_decision_SWI_swiss_democratic_tradition_campaign",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "OR": {
+            "has_trait": [
+              "SWI_cantonal_conservative",
+              "SWI_radical_democrat"
+            ]
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_rally_workers",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Сплотить рабочих",
+    "desc": "Рабочие могут сыграть ключевую роль в обороне державы [SWI.GetName], поэтому мы можем призвать их к участию в создании [SWI.GetAdjective]ой военной мощи и попросить добровольно пойти на сопутствующие жертвы.",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "OR": {
+            "has_trait": [
+              "SWI_trade_unionist",
+              "SWI_corporatist"
+            ]
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_anti_fascist_drive",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Антифашистское движение",
+    "desc": "В государстве [ROOT.GetName], направленном на самоопределение и местную дипломатическую власть, нет места фашизму. Чтобы наша страна стала настоящим раем, мы должны полностью искоренить в ней фашизм.",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "OR": {
+            "has_trait": [
+              "SWI_anarchist",
+              "SWI_soviet_spy"
+            ]
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_focus_on_swiss_unity",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Сделать акцент на единстве швейцарцев",
+    "desc": "Мы можем убедить [SWI.GetAdjective]ий народ в том, что в данной ситуации нужно забыть о наших различиях в том, что касается родного языка, класса, происхождения и политических убеждений. Мы должны потратить наши ресурсы и усилия на то, чтобы объединить и защитить страну под названием [SWI.GetNameDef].",
+    "icon": "GFX_decision_SWI_focus_on_swiss_unity",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "OR": {
+            "has_trait": [
+              "SWI_social_democrat",
+              "SWI_socialist_pacifist"
+            ]
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_isolate_switzerland",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Изолировать Швейцарию",
+    "desc": "Мы можем сосредоточиться на том, чтобы держава [SWI.GetName] была самодостаточной и могла сама за себя постоять. Возможно, это наш единственный шанс сохранить независимость.",
+    "icon": "GFX_decision_SWI_isolate_switzerland",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "has_trait": "SWI_conservative_democrat"
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_militarization_drive",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Милитаризация",
+    "desc": "Мы можем сделать акцент на усилении [SWI.GetAdjective]ой военной машины, чтобы у нас появилась возможность защитить себя и даже предотвратить наступление противника.",
+    "icon": "GFX_decision_generic_military",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "OR": {
+            "has_trait": [
+              "SWI_militaristic_democrat",
+              "SWI_militaristic_nationalist"
+            ]
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_expand_covert_operations",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Увеличить число тайных операций",
+    "desc": "Мы можем увеличить расходы на шпионаж и тем самым склонить чашу весов на международной арене в нашу пользу, одновременно сохраняя видимость нейтралитета.",
+    "icon": "GFX_decision_SWI_expand_covert_operations",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "has_trait": "SWI_intelligence_officer"
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_expand_arms_industry",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Усилить производство оружия",
+    "desc": "Мы можем развить нашу способность создавать и довольно быстро производить новое вооружение. Это сделает нас независимыми от других государств в вопросах обороны.",
+    "icon": "GFX_decision_generic_industry",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": true,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "has_trait": "SWI_weapons_designer"
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_support_humanitarian_efforts",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Поддержать гуманитарные операции",
+    "desc": "Мы не можем сидеть сложа руки, когда рядом творятся чудовищные злодеяния. Мы обязаны помочь угнетенным европейцам и дать им убежище в нашей стране.",
+    "icon": "GFX_decision_SWI_support_humanitarian_efforts",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "has_trait": "SWI_humanitarian"
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "every_other_country": {
+          "limit": {
+            "capital_scope": {
+              "is_on_continent": "europe"
+            },
+            "OR": {
+              "has_government": [
+                "fascism",
+                "neutrality"
+              ]
+            },
+            "num_occupied_states": {
+              "_op": ">",
+              "value": 0
+            }
+          },
+          "ROOT": {
+            "add_to_array": {
+              "array": "SWI_humanitarian_support_countries",
+              "value": "PREV"
+            }
+          }
+        }
+      },
+      "for_each_scope_loop": {
+        "array": "SWI_humanitarian_support_countries",
+        "add_ideas": [
+          "SWI_humanitarian_effort"
+        ]
+      },
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_diplomatic_mission",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Дипломатическая миссия",
+    "desc": "Мы можем отправить дипломатические делегации, чтобы улучшить отношения с другими странами, развеять их сомнения относительно нашего нейтралитета и тем самым предотвратить нападение на нашу страну.",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "has_trait": "SWI_diplomat"
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "every_other_country": {
+        "limit": {
+          "SWI_is_country_to_balance": true
+        },
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "SWI_diplomatic_visit"
+        }
+      },
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_spouse_fascism",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Проповедовать идеалы фашизма",
+    "desc": "Если учесть то, какая ситуация складывается в мире, то, возможно, надежнее всего будет выбрать союзниками фашистов. Мы можем приступить к распространению фашистской пропаганды, чтобы люди были готовы к изменению наших ценностей.",
+    "icon": "GFX_decision_hol_radio_oranje",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "OR": {
+            "AND": [
+              {
+                "NOT": {
+                  "SWI": {
+                    "has_country_flag": "SWI_elected_centralized_president"
+                  }
+                },
+                "OR": {
+                  "has_trait": [
+                    "SWI_fascist_recruiter",
+                    "SWI_fascist_propagandist"
+                  ]
+                }
+              },
+              {
+                "SWI": {
+                  "has_country_flag": "SWI_elected_centralized_president"
+                },
+                "SWI_councilor_is_fascist": true
+              }
+            ]
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "add_manpower": 10000,
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_appease_fascists",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Задобрить фашистов",
+    "desc": "Мы можем смириться с новым европейским порядком и научиться сосуществовать с нашими соседями-фашистами. Возможно, это позволит нам избежать войны и поможет сохранить независимость и нейтралитет.",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "AND": {
+            "NOT": {
+              "SWI": {
+                "has_country_flag": "SWI_elected_centralized_president"
+              }
+            },
+            "OR": {
+              "has_trait": [
+                "SWI_fascist",
+                "SWI_fascist_appeaser"
+              ]
+            }
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "SWI_fascism_friendly_confederation_president"
+        }
+      },
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_renounce_guiding_principles",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Отвергнуть основополагающие принципы",
+    "desc": "[SWI_renounce_guiding_princpiples_desc_loc]",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_power_balance_modifier": [
+          {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_cantons"
+          },
+          {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_council"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_power_balance_modifier": {
+              "id": "SWI_centralization_bop",
+              "modifier": "SWI_guiding_principles_cantons"
+            }
+          },
+          "remove_power_balance_modifier": {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_cantons"
+          }
+        },
+        {
+          "limit": {
+            "has_power_balance_modifier": {
+              "id": "SWI_centralization_bop",
+              "modifier": "SWI_guiding_principles_council"
+            }
+          },
+          "remove_power_balance_modifier": {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_council"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "SWI_compromise_with_cantons",
+    "category_id": "SWI_centralization_power_balance_decisions",
+    "name": "Пойти на компромисс с кантонами",
+    "desc": "",
+    "icon": "GFX_decision_SWI_focus_on_swiss_unity",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_power_balance_in_range": {
+        "id": "SWI_centralization_bop",
+        "range": "SWI_centralization_bop_balanced"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "add_power_balance_value": {
+        "id": "SWI_centralization_bop",
+        "value": 0.2
+      }
+    }
+  },
+  {
+    "id": "SWI_consolidate_council_power",
+    "category_id": "SWI_centralization_power_balance_decisions",
+    "name": "Объединить власть совета",
+    "desc": "",
+    "icon": "GFX_decision_SWI_consolidate_council_power",
+    "cost": 80,
+    "fire_only_once": false,
+    "available": {
+      "is_power_balance_in_range": {
+        "id": "SWI_centralization_bop",
+        "range": "SWI_centralization_bop_very_council"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SWI_push_for_centralization",
+    "category_id": "SWI_centralization_power_balance_decisions",
+    "name": "Добиваться централизации",
+    "desc": "",
+    "icon": "GFX_decision_SWI_elect_confederation_president",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "is_power_balance_in_range": {
+        "id": "SWI_centralization_bop",
+        "range": "SWI_centralization_bop_balanced"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "add_stability": -0.3
+    }
+  },
+  {
+    "id": "SWI_strengthen_military_high_command",
+    "category_id": "SWI_centralization_power_balance_decisions",
+    "name": "Усилить высшее военное командование",
+    "desc": "",
+    "icon": "GFX_decision_SWI_guisan_speech",
+    "cost": 150,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_rally_cantonal_defense",
+    "category_id": "SWI_centralization_power_balance_decisions",
+    "name": "Собрать силы обороны кантонов",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "is_power_balance_in_range": {
+          "id": "SWI_centralization_bop",
+          "range": "SWI_centralization_bop_fully_council"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_council_diplomatic_effort",
+    "category_id": "SWI_centralization_power_balance_decisions",
+    "name": "Дипломатические усилия совета",
+    "desc": "",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": "var:SWI_diplomatic_effort_cost",
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_country_angry_mission",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "[SWI_get_country_angry_mission_title]",
+    "desc": "Кажется, [?SWI_angriest_country.GetNameDef] воспринимает наши действия по отношению к другим странам как недопустимое нарушение нейтралитета. Если срочно не задобрить это государство, оно непременно воспользуется поводом, чтобы напасть на нас.",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "SWI_angriest_country_still_mad": false
+    },
+    "visible": {
+      "has_country_flag": "SWI_in_breach_of_neutrality",
+      "has_idea": "SWI_swiss_neutrality"
+    },
+    "complete_effect": {
+      "SWI_angry_country_cleanup": true
+    }
+  },
+  {
+    "id": "SWI_backchannel_negotiations",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Тайные переговоры",
+    "desc": "",
+    "icon": "decision_hol_exchange_intelligence_data",
+    "cost": 90,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SWI_in_breach_of_neutrality",
+      "NOT": {
+        "has_country_flag": "SWI_has_done_backchannel_negotiations_once"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SWI_show_of_defensive_force",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Демонстрация оборонительной силы",
+    "desc": "",
+    "icon": "GFX_decision_SWI_swiss_military_tradition_campaign",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SWI_armed_neutrality",
+      "NOT": {
+        "has_country_flag": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "SWI_mr_max_reduction": true
+    }
+  },
+  {
+    "id": "SWI_ask_for_guarantees",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Попросить гарантии у [FROM.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SWI_in_breach_of_neutrality"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland.21",
+          "hours": 1
+        },
+        "set_country_flag": "SWI_already_asked_for_guarantees"
+      }
+    }
+  },
+  {
+    "id": "SWI_publicly_appease_country",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Публично задобрить государство [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": {
+        "FROM.opinion@SWI": {
+          "_op": "<",
+          "value": "SWI_terrible_opinion"
+        }
+      },
+      "SWI_is_historical_ai": false
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SWI_publicly_reject_country",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Публично осудить государство [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true,
+      "SWI_is_historical_ai": false
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "SWI_concessions_to_fascists",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Уступки [ROOT.GetAdjective]ой [FROM.GetRulingIdeology_RU_lower_ShortAdj]ой партии",
+    "desc": "[SWI_concessions_to_political_party_desc]",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "ROOT.party_popularity_100@fascism": {
+          "_op": "<",
+          "value": 10
+        }
+      },
+      "NOT": [
+        {
+          "has_government": "fascism"
+        },
+        {
+          "has_idea": "fascism_banned"
+        }
+      ]
+    },
+    "complete_effect": {
+      "SWI_concessions_to_party_effects": true
+    }
+  },
+  {
+    "id": "SWI_concessions_to_democrats",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Уступки [ROOT.GetAdjective]ой [FROM.GetRulingIdeology_RU_lower_ShortAdj]ой партии",
+    "desc": "[SWI_concessions_to_political_party_desc]",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "ROOT.party_popularity_100@democratic": {
+          "_op": "<",
+          "value": 10
+        }
+      },
+      "NOT": {
+        "has_government": "democratic"
+      }
+    },
+    "complete_effect": {
+      "SWI_concessions_to_party_effects": true
+    }
+  },
+  {
+    "id": "SWI_concessions_to_communists",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Уступки [ROOT.GetAdjective]ой [FROM.GetRulingIdeology_RU_lower_ShortAdj]ой партии",
+    "desc": "[SWI_concessions_to_political_party_desc]",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "ROOT.party_popularity_100@communism": {
+          "_op": "<",
+          "value": 10
+        }
+      },
+      "NOT": {
+        "has_government": "communism"
+      }
+    },
+    "complete_effect": {
+      "SWI_concessions_to_party_effects": true
+    }
+  },
+  {
+    "id": "SWI_concessions_to_monarchists",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Уступки [FROM.GetAdjective]им монархистам",
+    "desc": "[SWI_concessions_to_political_party_desc]",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "ROOT.party_popularity_100@neutrality": {
+          "_op": "<",
+          "value": 10
+        }
+      },
+      "NOT": {
+        "has_government": "neutrality"
+      }
+    },
+    "complete_effect": {
+      "SWI_concessions_to_party_effects": true
+    }
+  },
+  {
+    "id": "SWI_cancel_trade_agreement_prematurely",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Преждевременно отменить торговое соглашение",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "SWI_seek_trade_agreement_with_germany",
+          "SWI_seek_allied_trade"
+        ]
+      },
+      "has_idea": "SWI_active_trade_agreement",
+      "SWI_is_historical_ai": false
+    },
+    "complete_effect": {
+      "ROOT": {
+        "remove_ideas": [
+          "SWI_active_trade_agreement"
+        ]
+      },
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland_trade.2",
+          "hours": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_weapons_production_for_civilian_supplies",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Обменять части оружия на припасы",
+    "desc": "Наши припасы на исходе, и поэтому у нас нет выбора — мы вынуждены разрешить части наших военных заводов производить детали для [FROM.GetAdjective]их вооруженных сил. Таким образом мы получим немного припасов и, возможно, помешаем государству [FROM.GetNameDef] напасть на державу [ROOT.GetName].",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "check_variable": [
+          {
+            "opinion@ROOT": {
+              "_op": ">",
+              "value": "SWI_neutral_opinion"
+            }
+          },
+          {
+            "opinion@ROOT": {
+              "_op": "<",
+              "value": "SWI_safe_opinion"
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ROOT": {
+        "add_offsite_building": {
+          "type": "industrial_complex",
+          "level": 3
+        }
+      },
+      "FROM": {
+        "add_offsite_building": {
+          "type": "arms_factory",
+          "level": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_offer_operative",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Предложить агента",
+    "desc": "",
+    "icon": "GFX_decision_recruit_operative",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "has_intelligence_agency": true,
+      "FROM": {
+        "has_intelligence_agency": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_share_spy_networks"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland.15",
+          "hours": 4
+        }
+      },
+      "add_opinion_modifier": {
+        "target": "ROOT",
+        "modifier": "SWI_supporting_intelligence"
+      },
+      "random_list": {
+        "50": [
+          {
+            "modifier": [
+              {
+                "factor": 0.5,
+                "ROOT": {
+                  "OR": {
+                    "has_idea": [
+                      "SWI_buero_ha_idea",
+                      "SWI_federal_police_idea"
+                    ]
+                  }
+                }
+              },
+              {
+                "factor": 0.5,
+                "NOT": {
+                  "any_other_country": {
+                    "SWI_is_country_to_balance": true,
+                    "has_opinion": {
+                      "target": "ROOT",
+                      "value": {
+                        "_op": "<",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "every_other_country": {
+              "limit": {
+                "OR": {
+                  "SWI_is_fascist_to_balance": true,
+                  "AND": {
+                    "SWI_is_country_to_balance": true,
+                    "has_war_with": "FROM"
+                  }
+                }
+              },
+              "add_opinion_modifier": {
+                "target": "ROOT",
+                "modifier": "SWI_grave_breach_of_neutrality"
+              }
+            }
+          },
+          []
+        ]
+      }
+    }
+  },
+  {
+    "id": "SWI_offer_intel_support",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Предложить поддержку разведкой",
+    "desc": "",
+    "icon": "GFX_decision_SWI_expand_covert_operations",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_intelligence_agency": true
+    },
+    "visible": {
+      "has_completed_focus": "SWI_support_allied_espionage"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "SWI_intel_support_idea",
+        "days": 90
+      },
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "SWI_intel_support_idea",
+          "days": 90
+        },
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "SWI_supporting_intelligence"
+        }
+      },
+      "random_list": {
+        "50": [
+          {
+            "modifier": [
+              {
+                "factor": 0.5,
+                "ROOT": {
+                  "OR": {
+                    "has_idea": [
+                      "SWI_buero_ha_idea",
+                      "SWI_federal_police_idea"
+                    ]
+                  }
+                }
+              },
+              {
+                "factor": 0.5,
+                "NOT": {
+                  "any_other_country": {
+                    "SWI_is_country_to_balance": true,
+                    "has_opinion": {
+                      "target": "ROOT",
+                      "value": {
+                        "_op": "<",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "every_other_country": {
+              "limit": {
+                "OR": {
+                  "SWI_is_fascist_to_balance": true,
+                  "AND": {
+                    "SWI_is_country_to_balance": true,
+                    "has_war_with": "FROM"
+                  }
+                }
+              },
+              "add_opinion_modifier": {
+                "target": "ROOT",
+                "modifier": "SWI_grave_breach_of_neutrality"
+              }
+            }
+          },
+          []
+        ]
+      }
+    }
+  },
+  {
+    "id": "SWI_support_secret_ally",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Поддержать тайного союзника",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SWI_offer_fascist_to_trade_gold",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Открыть банки для фашистской нации",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SWI_axis_gold"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland_trade.8",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "custom_effect_tooltip": "if_they_accept_tt",
+        "SWI_increase_gold_trade": true
+      }
+    }
+  },
+  {
+    "id": "SWI_offer_democratic_to_trade_gold",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Открыть банки для демократической нации",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [
+      {
+        "has_completed_focus": "SWI_allied_gold"
+      },
+      {
+        "original_tag": "SWI",
+        "has_completed_focus": "SWI_allied_gold"
+      }
+    ],
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland_trade.8",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "custom_effect_tooltip": "if_they_accept_tt",
+        "SWI_increase_gold_trade": true
+      }
+    }
+  },
+  {
+    "id": "SWI_seek_increased_trade",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Стараться нарастить торговлю",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": true,
+      "check_variable": {
+        "SWI.SWI_gold_trade": {
+          "_op": "<",
+          "value": "SWI.SWI_max_gold_trade"
+        }
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland_trade.11",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "custom_effect_tooltip": "if_they_accept_tt",
+        "FROM": {
+          "SWI_increase_gold_trade": true
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_seize_fascist_gold",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Конфисковать золото фашистской нации",
+    "desc": "",
+    "icon": "GFX_decision_gre_investment_decisions",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_dynamic_modifier": {
+        "modifier": "SWI_gold_trade_with_switzerland"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "SWI_take_a_stance",
+          "SWI_oasis_of_democracy"
+        ]
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "SWI_seize_gold": true,
+        "country_event": {
+          "id": "BBA_switzerland_trade.12",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "create_wargoal": {
+          "target": "FROM",
+          "type": "topple_government"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_seize_democratic_gold",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Конфисковать золото демократической нации",
+    "desc": "",
+    "icon": "GFX_decision_gre_investment_decisions",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SWI_abandon_neutrality"
+    },
+    "complete_effect": {
+      "FROM": {
+        "SWI_seize_gold": true,
+        "country_event": {
+          "id": "BBA_switzerland_trade.12",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "create_wargoal": {
+          "target": "FROM",
+          "type": "topple_government"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_purchase_democratic_planes_fighters",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Закупить истребители у [FROM.GetNameRuGen]",
+    "desc": "Защита неба над [ROOT.GetNameRuInst] не может ждать, пока мы обретем возможность сами производить свои самолеты, так что пока нам придется полагаться на поставки истребителей из [FROM.GetNameRuGen].",
+    "icon": "GFX_decision_generic_air",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "var:SWI.SWI_democratic_planes_seller": {
+        "SWI_country_is_happy": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_purchase_american_planes"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_purchase_democratic_planes_cas",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Закупить бомбардировщики у [FROM.GetNameRuGen]",
+    "desc": "Наши производственные мощности пока ограничены, и в деле снабжения наших ВВС бомбардировщиками, необходимыми для поддержки войск, нам приходится полагаться на [FROM.GetNameRuAcc].",
+    "icon": "GFX_decision_generic_air",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "var:SWI.SWI_democratic_planes_seller": {
+        "SWI_country_is_happy": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_purchase_american_planes"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_purchase_fascist_planes_fighters",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Закупить истребители у [FROM.GetNameRuGen]",
+    "desc": "Защита неба над [ROOT.GetNameRuInst] не может ждать, пока мы обретем возможность сами производить свои самолеты, так что пока нам придется полагаться на поставки истребителей из [FROM.GetNameRuGen].",
+    "icon": "GFX_decision_generic_air",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "var:SWI.SWI_biggest_fascist": {
+        "SWI_country_is_happy": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_purchase_german_planes"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_purchase_fascist_planes_cas",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Закупить бомбардировщики у [FROM.GetNameRuGen]",
+    "desc": "Наши производственные мощности пока ограничены, и в деле снабжения наших ВВС бомбардировщиками, необходимыми для поддержки войск, нам приходится полагаться на [FROM.GetNameRuAcc].",
+    "icon": "GFX_decision_generic_air",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "var:SWI.SWI_biggest_fascist": {
+        "SWI_country_is_happy": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_purchase_german_planes"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_fund_resistance_decision",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Финансировать группы сопротивления в государстве [SWI_FROM_or_fake_country_word]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SWI_fund_resistance_groups"
+    },
+    "complete_effect": {
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "SWI_resistance_groups_funded_by_foreign_country",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_activate_militia",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Развернуть гражданское ополчение",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "var": "SWI_military_readiness",
+        "value": "SWI_min_mil_readiness",
+        "compare": "greater_than_or_equals"
+      },
+      "NOT": [
+        {
+          "has_country_flag": "SWI_militia_active"
+        },
+        {
+          "has_country_flag": "SWI_militias_turned_into_regulars"
+        }
+      ],
+      "has_template_majority_unit": "militia"
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": [
+          "SWI_militia_active",
+          "SWI_militias_turned_into_regulars"
+        ]
+      }
+    },
+    "complete_effect": {
+      "SWI_mr_total_reduction": true
+    }
+  },
+  {
+    "id": "SWI_deactivate_militia",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Отозвать гражданское ополчение",
+    "desc": "",
+    "icon": "GFX_decision_POL_looming_peasants_strike",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SWI_militia_active"
+    },
+    "visible": {
+      "has_country_flag": "SWI_militia_active"
+    },
+    "complete_effect": {
+      "clr_country_flag": "SWI_militia_active",
+      "custom_effect_tooltip": "SWI_remove_citizen_militia_active_tooltip",
+      "hidden_effect": {
+        "remove_dynamic_modifier": {
+          "modifier": "SWI_active_citizen_militia"
+        }
+      },
+      "SWI_reset_citizen_militia_active_modifier": true,
+      "add_dynamic_modifier": {
+        "modifier": "SWI_dormant_citizen_militia"
+      }
+    }
+  },
+  {
+    "id": "SWI_militia_active",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Гражданское ополчение развернуто",
+    "desc": "",
+    "icon": "GFX_decision_SWI_swiss_military_tradition_campaign",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_building_up_military_readiness_mission",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Наращивание боевой готовности",
+    "desc": "Мы направляем свою нацию к укреплению обороны [ROOT.GetNameRuGen]. Выпущены в продажу военные облигации, граждане тренируются дома, образуются ассоциации, в школах и на предприятиях проводятся занятия по военной подготовке. Мы должны быть готовы любой ценой.",
+    "icon": "GFX_decision_SWI_swiss_military_tradition_campaign",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_confederation_president_speech",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Речь президента совета",
+    "desc": "",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_active_mission": "SWI_militia_active",
+        "has_country_flag": "SWI_president_gave_MR_speech"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_guisan_speech",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Речь Гизана",
+    "desc": "",
+    "icon": "GFX_decision_SWI_guisan_speech",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      },
+      "has_completed_focus": "SWI_promote_guisan"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -50,
+        "add_political_power": -50
+      }
+    }
+  },
+  {
+    "id": "SWI_military_training_drive",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Кампания по военной подготовке",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -50,
+        "add_political_power": -100
+      }
+    }
+  },
+  {
+    "id": "SWI_expand_military_staff",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Расширить военное руководство",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": [
+        {
+          "var": "SWI_military_readiness",
+          "value": 50,
+          "compare": "greater_than_or_equals"
+        },
+        {
+          "var": "SWI_max_mil_readiness",
+          "value": 599,
+          "compare": "less_than_or_equals"
+        }
+      ],
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "SWI_mr_high_medium_reduction": true
+    }
+  },
+  {
+    "id": "SWI_broaden_militias",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Расширить ополчение",
+    "desc": "",
+    "icon": "GFX_decision_POL_looming_peasants_strike",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "SWI_mr_max_reduction": true
+    }
+  },
+  {
+    "id": "SWI_arm_the_population",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Раздать оружие",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -2000
+      }
+    }
+  },
+  {
+    "id": "SWI_focus_on_the_economy",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Сконцентрироваться на гражданской экономике",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "var": "SWI_military_readiness",
+        "value": 70,
+        "compare": "greater_than_or_equals"
+      },
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "SWI_mr_high_reduction": true
+      }
+    }
+  },
+  {
+    "id": "SWI_focus_on_military_production",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Сконцентрироваться на военном производстве",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "var": "SWI_military_readiness",
+        "value": 50,
+        "compare": "greater_than_or_equals"
+      },
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "SWI_mr_high_medium_reduction": true
+      }
+    }
+  },
+  {
+    "id": "SWI_improve_divisions",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Улучшить дивизии",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": [
+        {
+          "var": "SWI_military_readiness",
+          "value": "SWI_mr_high_amount",
+          "compare": "greater_than_or_equals"
+        },
+        {
+          "SWI_militia_template_level": {
+            "_op": "<",
+            "value": 10
+          }
+        }
+      ],
+      "NOT": {
+        "has_active_mission": "SWI_militia_active"
+      }
+    },
+    "complete_effect": {
+      "SWI_mr_max_reduction": true
+    }
+  },
+  {
+    "id": "SWI_improve_deployment_speed",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Улучшить скорость развертывания",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SWI_expedite_mobilization",
+      "check_variable": {
+        "SWI_militia_activation_time": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "SWI_mr_max_reduction": true
+    }
+  },
+  {
+    "id": "SWI_field_hospital_for_militias",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Полевые госпитали для ополчения",
+    "desc": "[ROOT.GetNonIdeologyName] практикует давнюю традицию сострадания и готово оказывать всем медпомощь. Надо воспользоваться этим, чтобы лучше готовить ополчение нашей страны.",
+    "icon": "GFX_decision_generic_research",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_idea": "SWI_spirit_of_saint_bernard_idea"
+    },
+    "complete_effect": {
+      "SWI_mr_lowest_reduction": true
+    }
+  },
+  {
+    "id": "SWI_support_for_militias",
+    "category_id": "SWI_military_readiness_decisions_category",
+    "name": "Роты обеспечения для ополчения",
+    "desc": "Мы сможем усилить свое ополчение, обеспечив ему достойное снабжение. Так отряды ополчения станут крепче и универсальнее.",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": [
+        "tech_engineers",
+        "tech_recon",
+        "tech_logistics_company"
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "SWI_expanded_military_support"
+    },
+    "complete_effect": {
+      "SWI_mr_lowest_reduction": true
+    }
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_SWI_Rolex_Explorer_Watches",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_SWI_Rolex_Explorer_Watches$",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_SWI_Rolex_Explorer_Watches"
+        }
+      ],
+      "check_variable": {
+        "AAC_Marine_Active_Category": 4
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_SWI_Rolex_Explorer_Watches",
+      "add_to_variable": {
+        "AAC_unlocked_creature_comforts": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "set_temp_variable": {
+          "tempEq": -5
+        },
+        "Antarctica_change_equipment": true
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_SWI_Rolex_Explorer_Watches"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "BRA_lacerda_party_switch_mission_90",
+    "category_id": "BRA_lacerda_udn_management_category",
+    "name": "Дезертирство сенатора",
+    "desc": "",
+    "icon": "GFX_decision_category_BRA_samba",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRA_lacerda_party_switch_trigger_tt",
+        "check_variable": {
+          "BRA_lacerda_udn_manage_unity": {
+            "_op": ">",
+            "value": 19.99
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "JAP_flick_the_switch",
+    "category_id": "JAP_takagi_electrify_tokyo",
+    "name": "Запустить электричество",
+    "desc": "Проект завершён, осталось только правильно использовать электросеть.",
+    "icon": "GFX_decision_generic_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "JAP_construction_has_completed"
+    },
+    "visible": {
+      "has_country_flag": "JAP_tokyo_electrifying"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_flick_the_switch",
+      "country_event": {
+        "id": "jappmtakagi.107"
+      },
+      "add_ideas": "JAP_takagi_tokyo_nights"
+    }
+  },
+  {
+    "id": "KOM_switch_roe",
+    "category_id": "KOM_opposition_category",
+    "name": "Сменить процедуры нейтрализации",
+    "desc": "",
+    "icon": "",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "KOM_hunt_opposition"
+    },
+    "visible": {
+      "has_country_flag": "KOM_hunt_opposition"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision remove KOM_switch_roe",
+      "custom_effect_tooltip": "KOM_switch_roe_tt",
+      "hidden_effect": {
+        "country_event": {
+          "id": "komi_opposition.100"
+        }
+      }
+    }
+  }
+]

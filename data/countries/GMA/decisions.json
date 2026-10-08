@@ -1,0 +1,737 @@
+[
+  {
+    "id": "PRC_criticize_dogmatism",
+    "category_id": "PRC_the_communist_power_struggle_balance_of_power_category",
+    "name": "Раскритиковать догматизм",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "PRC_rally_the_peasants",
+          "PRC_the_unwilling_diarchy_focus"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "HGR_show_hide_pragmatist_decisions",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Показать/скрыть решения прагматистов СС",
+    "desc": "",
+    "icon": "GFX_decision_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "HGR_BEL_influence_true",
+          "HGR_DSH_influence_true",
+          "HGR_APF_influence_true",
+          "HGR_SSF_influence_true",
+          "HGR_KSS_influence_true",
+          "HGR_AUS_influence_true"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_show_hide_pragmatist_decisions",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "HGR_hide_pragmatist_decisions"
+          }
+        },
+        "set_country_flag": "HGR_hide_pragmatist_decisions"
+      },
+      "else": {
+        "clr_country_flag": "HGR_hide_pragmatist_decisions"
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_invade_Silesia",
+    "category_id": "SWRW_GMA_category",
+    "name": "Invade Silesia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "country_exists": [
+          "SFK",
+          "SIL"
+        ]
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA"
+    },
+    "complete_effect": {
+      "declare_war_on": [
+        {
+          "target": "SFK",
+          "type": "annex_everything"
+        },
+        {
+          "target": "SIL",
+          "type": "annex_everything"
+        }
+      ],
+      "CZE": {
+        "give_military_access": "GMA"
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_Consume_CZE",
+    "category_id": "SWRW_GMA_category",
+    "name": "Reach Out to Bohemia",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "AND": {
+        "country_exists": "CZE",
+        "has_war": false
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA"
+    },
+    "complete_effect": {
+      "CZE": {
+        "GER_albert_schnez": {
+          "set_nationality": "GMA"
+        }
+      },
+      "GMA": {
+        "annex_country": {
+          "target": "CZE",
+          "transfer_troops": true
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_Mega_Unify",
+    "category_id": "SWRW_GMA_category",
+    "name": "Reunite the Fatherland",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        1025,
+        4,
+        59,
+        775,
+        1810,
+        64,
+        776,
+        85,
+        67,
+        66,
+        69,
+        9,
+        75
+      ]
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SGCW_MainRegional_unification"
+    },
+    "complete_effect": {
+      "GMA": {
+        "add_state_core": [
+          66,
+          69,
+          75,
+          67,
+          9
+        ],
+        "create_faction": "PKT_faction",
+        "every_owned_state": {
+          "add_core_of": "GMA"
+        },
+        "set_capital": {
+          "state": 64,
+          "remember_old_capital": false
+        },
+        "add_ideas": [
+          "PKT_Member"
+        ],
+        "remove_ideas": [
+          "GER_economic_apocalypse",
+          "GER_a_nation_in_flames",
+          "GER_our_reich_of_ash",
+          "GER_the_second_german_civil_war",
+          "GER_the_god_of_war",
+          "GMA_a_nation_in_flames",
+          "GMA_the_second_german_civil_war"
+        ],
+        "add_timed_idea": [
+          {
+            "idea": "GER_economic_apocalypse",
+            "days": 305
+          },
+          {
+            "idea": "GER_Reconstruction_of_Germany",
+            "days": 495
+          }
+        ],
+        "GER_SWRW_establish_econ_sphere_post_war": true
+      },
+      "set_temp_variable": {
+        "target": "GMA"
+      },
+      "SWRW_Add_german_target_To_Cold_War_GUI": true,
+      "hidden_effect": {
+        "every_country": {
+          "limit": {
+            "is_ai": false
+          },
+          "news_event": {
+            "id": "Global_Conflicts.21",
+            "days": 2
+          }
+        },
+        "GMA": {
+          "news_event": {
+            "id": "Global_GCW.7",
+            "days": 15
+          }
+        }
+      },
+      "RUS": {
+        "SWRW_fopo_remove_2GCW_tab": true
+      },
+      "if": [
+        {
+          "limit": {
+            "OR": {
+              "has_global_flag": [
+                "RUS_generic_communist_unifier",
+                "RUS_shukshin_unification"
+              ],
+              "RUS": {
+                "has_global_flag": "RUS_generic_democratic_unifier"
+              }
+            }
+          },
+          "RUS": {
+            "SWRW_fopo_remove_2GCW_tab": true
+          }
+        },
+        {
+          "limit": {
+            "USA": {
+              "OR": {
+                "has_government": [
+                  "progressivism",
+                  "liberalism",
+                  "conservatism",
+                  "paternalism"
+                ]
+              }
+            }
+          },
+          "USA": {
+            "SWRW_fopo_remove_2GCW_tab": true
+          }
+        }
+      ],
+      "set_global_flag": "SWRW_2GCW_GMA_winner"
+    }
+  },
+  {
+    "id": "SWRW_GMA_invade_HOL",
+    "category_id": "SWRW_GMA_category",
+    "name": "Put Down the Dutch Traitors",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "HOL": {
+            "is_guaranteed_by": "USA"
+          }
+        },
+        {
+          "HOL": {
+            "has_government": "national_socialism"
+          }
+        }
+      ],
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "country_exists": "HOL",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWRW_GMA_invite_HOL",
+    "category_id": "SWRW_GMA_category",
+    "name": "Our Germanic Brothers",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "HOL": {
+        "has_government": "national_socialism"
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "country_exists": "HOL",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {
+      "GMA": {
+        "add_to_faction": "HOL"
+      },
+      "HOL": {
+        "remove_faction_status": true,
+        "add_ideas": "PKT_Member",
+        "econ_join_sphere_GMA": true
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_invade_DEN",
+    "category_id": "SWRW_GMA_category",
+    "name": "Retake Kopenhagen",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "DEN": [
+          {
+            "has_government": "despotism"
+          },
+          {
+            "has_government": "ultranationalism"
+          }
+        ]
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWRW_GMA_invite_DEN",
+    "category_id": "SWRW_GMA_category",
+    "name": "Bring the Danes Back into the Fold",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "DEN": [
+          {
+            "has_government": "despotism"
+          },
+          {
+            "has_government": "ultranationalism"
+          }
+        ]
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {
+      "GMA": {
+        "add_to_faction": "DEN"
+      },
+      "DEN": {
+        "remove_faction_status": true,
+        "add_ideas": "PKT_Member",
+        "econ_join_sphere_GMA": true
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_invade_SLO",
+    "category_id": "SWRW_GMA_category",
+    "name": "March on Bratislava",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "SLO": {
+          "has_government": "national_socialism"
+        }
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWRW_GMA_invite_SLO",
+    "category_id": "SWRW_GMA_category",
+    "name": "An Offer to the Slovakians",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "SLO": {
+        "has_government": "national_socialism"
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {
+      "GMA": {
+        "add_to_faction": "SLO"
+      },
+      "SLO": {
+        "remove_faction_status": true,
+        "add_ideas": "PKT_Member",
+        "econ_join_sphere_GMA": true
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_invade_POL",
+    "category_id": "SWRW_GMA_category",
+    "name": "Crush the Polish Dream",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "POL": {
+          "is_in_faction_with": "RUS"
+        }
+      },
+      "10": {
+        "owner": {
+          "has_war": false
+        }
+      },
+      "country_exists": "POL",
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWRW_GMA_invite_POL",
+    "category_id": "SWRW_GMA_category",
+    "name": "Contact Baatz",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "10": {
+        "owner": {
+          "has_war": false
+        }
+      },
+      "country_exists": "OZW",
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {
+      "OZW": [
+        {
+          "set_cosmetic_tag": "GGN",
+          "remove_faction_status": true,
+          "add_ideas": "PKT_Member",
+          "econ_join_sphere_GMA": true,
+          "get_current_government_type": true,
+          "save_party_popularities": true,
+          "set_variable": [
+            {
+              "TNO_economy_type": "token:Econ_Type_Corporatism"
+            },
+            {
+              "TNO_economy_subtype": "token:Econ_Subtype_Gelenkte_Wirtschaft"
+            }
+          ]
+        },
+        {
+          "restore_previous_government_type": true,
+          "apply_party_popularities": true
+        }
+      ],
+      "GMA": {
+        "add_to_faction": "OZW",
+        "set_autonomy": {
+          "target": "OZW",
+          "autonomy_state": "autonomy_autonomous_reichskommissariat"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_invade_Hungary",
+    "category_id": "SWRW_GMA_category",
+    "name": "Restore Order in Hungary",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_global_flag": [
+          "HUS_winner",
+          "HUD_winner"
+        ]
+      },
+      "NOT": {
+        "HUS": [
+          {
+            "is_in_faction": true
+          },
+          {
+            "is_guaranteed_by": "RUS"
+          }
+        ],
+        "HUD": {
+          "is_guaranteed_by": "RUS"
+        }
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWRW_GMA_invite_HUN",
+    "category_id": "SWRW_GMA_category",
+    "name": "Reach Out to Szálasi",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "HUN_winner",
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {
+      "GMA": {
+        "add_to_faction": "HUN"
+      },
+      "HUN": {
+        "remove_faction_status": true,
+        "add_ideas": "PKT_Member",
+        "econ_join_sphere_GMA": true
+      }
+    }
+  },
+  {
+    "id": "SWRW_GMA_invite_GLC",
+    "category_id": "SWRW_GMA_category",
+    "name": "A Meeting with Heusinger",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "country_exists": "GLC",
+      "GLC": {
+        "has_war": false
+      },
+      "GMA": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "tag": "GMA",
+      "has_global_flag": "SWRW_2GCW_GMA_winner",
+      "has_country_flag": "Post_2GCW_Leader_Picked"
+    },
+    "complete_effect": {
+      "GMA": [
+        {
+          "add_to_faction": "GLC"
+        },
+        {
+          "set_autonomy": {
+            "target": "GLC",
+            "autonomy_state": "autonomy_military_government"
+          }
+        }
+      ],
+      "GLC": [
+        {
+          "GER_adolf_heusinger": {
+            "set_nationality": "GMA"
+          },
+          "remove_faction_status": true,
+          "add_ideas": "PKT_Member",
+          "econ_join_sphere_GMA": true
+        },
+        {
+          "get_current_government_type": true,
+          "save_party_popularities": true
+        },
+        {
+          "restore_previous_government_type": true,
+          "apply_party_popularities": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "SWRW_GMA_win",
+    "category_id": "SWRW_2GCW_Winning_debug_category",
+    "name": "Fire a Wehrmacht Victory",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "GMA": [
+        {
+          "annex_country": {
+            "target": "GER",
+            "transfer_troops": true
+          }
+        },
+        {
+          "annex_country": {
+            "target": "RPR",
+            "transfer_troops": true
+          }
+        },
+        {
+          "annex_country": {
+            "target": "HRC",
+            "transfer_troops": true
+          }
+        },
+        {
+          "annex_country": {
+            "target": "SRH",
+            "transfer_troops": true
+          }
+        },
+        {
+          "annex_country": {
+            "target": "REG",
+            "transfer_troops": true
+          }
+        },
+        {
+          "annex_country": {
+            "target": "SIL",
+            "transfer_troops": true
+          }
+        },
+        {
+          "annex_country": {
+            "target": "CZE",
+            "transfer_troops": true
+          }
+        },
+        {
+          "annex_country": {
+            "target": "SFK",
+            "transfer_troops": true
+          }
+        },
+        {
+          "every_owned_state": {
+            "add_core_of": "GMA"
+          },
+          "change_tag_from": "PREV"
+        }
+      ],
+      "set_global_flag": "SGCW_ongoing"
+    }
+  }
+]

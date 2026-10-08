@@ -25,7 +25,27 @@ var current_region: RegionData
 var current_player: CountryState
 
 
+func _ensure_nodes() -> void:
+	if title_label == null and has_node("VBox/HeaderHBox/TitleLabel"):
+		title_label = get_node("VBox/HeaderHBox/TitleLabel") as Label
+	if close_button == null and has_node("VBox/HeaderHBox/CloseButton"):
+		close_button = get_node("VBox/HeaderHBox/CloseButton") as Button
+	if stats_text == null and has_node("VBox/StatsRichText"):
+		stats_text = get_node("VBox/StatsRichText") as RichTextLabel
+	if btn_invest_infra == null and has_node("VBox/ActionsVBox/BtnInvestInfra"):
+		btn_invest_infra = get_node("VBox/ActionsVBox/BtnInvestInfra") as Button
+	if btn_suppress == null and has_node("VBox/ActionsVBox/BtnSuppress"):
+		btn_suppress = get_node("VBox/ActionsVBox/BtnSuppress") as Button
+	if btn_mobilize == null and has_node("VBox/ActionsVBox/BtnMobilize"):
+		btn_mobilize = get_node("VBox/ActionsVBox/BtnMobilize") as Button
+	if btn_garrison == null and has_node("VBox/ActionsVBox/BtnGarrison"):
+		btn_garrison = get_node("VBox/ActionsVBox/BtnGarrison") as Button
+	if status_label == null and has_node("VBox/StatusLabel"):
+		status_label = get_node("VBox/StatusLabel") as Label
+
+
 func _ready() -> void:
+	_ensure_nodes()
 	if close_button != null and not close_button.pressed.is_connected(_on_close_pressed):
 		close_button.pressed.connect(_on_close_pressed)
 	if btn_invest_infra != null and not btn_invest_infra.pressed.is_connected(_on_invest_infra_pressed):
@@ -39,6 +59,7 @@ func _ready() -> void:
 
 
 func setup_for_region(region: RegionData, player_state: CountryState) -> void:
+	_ensure_nodes()
 	current_region = region
 	current_player = player_state
 	refresh_display()

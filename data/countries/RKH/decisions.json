@@ -1,0 +1,855 @@
+[
+  {
+    "id": "RKH_legtimatize_the_protektorat",
+    "category_id": "political_actions",
+    "name": "Узаконить [RKH.GetNameRuAcc]",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {
+      "has_stability": {
+        "_op": ">",
+        "value": 0.75
+      },
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.75
+      },
+      "if": {
+        "limit": {
+          "has_government": "fascism"
+        },
+        "fascism": {
+          "_op": ">",
+          "value": 0.75
+        }
+      },
+      "9": {
+        "is_fully_controlled_by": "ROOT",
+        "compliance": {
+          "_op": ">",
+          "value": 85
+        },
+        "resistance": {
+          "_op": "<",
+          "value": 15
+        }
+      },
+      "75": {
+        "is_fully_controlled_by": "ROOT",
+        "compliance": {
+          "_op": ">",
+          "value": 85
+        },
+        "resistance": {
+          "_op": "<",
+          "value": 15
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "9": {
+          "is_core_of": "ROOT"
+        },
+        "75": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {
+      "9": {
+        "add_core_of": "ROOT"
+      },
+      "75": {
+        "add_core_of": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_arkhangelsk",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция [214.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_arkhangelsk_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 214
+    },
+    "visible": {
+      "owns_state": 214,
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "214": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "862": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "262": {
+                "is_core_of": "ROOT"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "OMS_construct_arkhangelsk_bunkers",
+    "category_id": "OMS_national_redoubt_program_category",
+    "name": "Построить бункеры в Архангельске",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMS_national_redoubt_construction"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "OMS_national_redoubt_program_flag",
+        "OMS_a_societal_redoubt_flag"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OMS_construct_arkhangelsk_bunkers",
+      "set_country_flag": "OMS_national_redoubt_construction",
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "WSR_expand_arkhangelsk",
+    "category_id": "RUS_murmansk_crisis_category",
+    "name": "Милитаризовать архангельский порт",
+    "desc": "",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "MPR": {
+        "exists": true,
+        "has_war_with": "FIN"
+      }
+    },
+    "visible": {
+      "MPR": {
+        "exists": true,
+        "has_war_with": "FIN"
+      },
+      "NOT": {
+        "has_war_with": "FIN"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WSR_expand_arkhangelsk",
+      "hidden_effect": {
+        "add_command_power": -20
+      }
+    }
+  },
+  {
+    "id": "SAM_arkhangelsk_artsezo",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Архангельск под контроль Внутреннего круга",
+    "desc": "",
+    "icon": "GFX_decision_generic_chess_king",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "214": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 214
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_arkhangelsk_artsezo",
+      "add_to_variable": [
+        {
+          "SAM_artsezo_ruled_states": 3
+        },
+        {
+          "SAM_inner_circle_influence": 3
+        }
+      ],
+      "214": {
+        "set_state_flag": "SAM_artsezo_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+        }
+      },
+      "862": {
+        "set_state_flag": "SAM_artsezo_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+        }
+      },
+      "262": {
+        "set_state_flag": "SAM_artsezo_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_inner_circle_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_inner_circle_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_arkhangelsk_military",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Архангельск под контроль Военной администрации",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "214": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 214
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_arkhangelsk_military",
+      "add_to_variable": [
+        {
+          "SAM_military_ruled_states": 3
+        },
+        {
+          "SAM_military_influence": 3
+        }
+      ],
+      "214": {
+        "set_state_flag": "SAM_military_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_military_ruled_dynamic_modifier"
+        }
+      },
+      "862": {
+        "set_state_flag": "SAM_military_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_military_ruled_dynamic_modifier"
+        }
+      },
+      "262": {
+        "set_state_flag": "SAM_military_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_military_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_military_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_military_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_arkhangelsk_civilian",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Архангельск под контроль Гражданской администрации",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "214": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 214
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_arkhangelsk_civilian",
+      "add_to_variable": [
+        {
+          "SAM_civilian_ruled_states": 3
+        },
+        {
+          "SAM_civilian_influence": 3
+        }
+      ],
+      "214": {
+        "set_state_flag": "SAM_civilian_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_civilian_ruled_dynamic_modifier"
+        }
+      },
+      "862": {
+        "set_state_flag": "SAM_civilian_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_civilian_ruled_dynamic_modifier"
+        }
+      },
+      "262": {
+        "set_state_flag": "SAM_civilian_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_civilian_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_civilian_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_civilian_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_arkhangelsk_strip_away",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Лишить права владения Архангельском",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "214": {
+        "OR": {
+          "has_state_flag": [
+            "SAM_artsezo_ruled",
+            "SAM_military_ruled",
+            "SAM_civilian_ruled"
+          ]
+        }
+      },
+      "owns_state": 214
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_arkhangelsk_strip_away",
+      "custom_effect_tooltip": "SAM_strip_away_tt",
+      "if": {
+        "limit": {
+          "214": {
+            "has_state_flag": "SAM_artsezo_ruled"
+          }
+        },
+        "SAM_artsezo_increase_inner_circle_tension_high": true,
+        "subtract_from_variable": [
+          {
+            "SAM_artsezo_ruled_states": 3
+          },
+          {
+            "SAM_inner_circle_influence": 3
+          }
+        ],
+        "custom_effect_tooltip": "SAM_artsezo_decrease_inner_circle_influence_low_tt"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "214": {
+              "has_state_flag": "SAM_military_ruled"
+            }
+          },
+          "SAM_artsezo_increase_military_tension_high": true,
+          "subtract_from_variable": [
+            {
+              "SAM_military_ruled_states": 3
+            },
+            {
+              "SAM_military_influence": 3
+            }
+          ],
+          "custom_effect_tooltip": "SAM_artsezo_decrease_military_influence_low_tt"
+        },
+        {
+          "limit": {
+            "214": {
+              "has_state_flag": "SAM_civilian_ruled"
+            }
+          },
+          "SAM_artsezo_increase_civilian_tension_high": true,
+          "subtract_from_variable": [
+            {
+              "SAM_civilian_ruled_states": 3
+            },
+            {
+              "SAM_civilian_influence": 3
+            }
+          ],
+          "custom_effect_tooltip": "SAM_artsezo_decrease_civilian_influence_low_tt"
+        }
+      ],
+      "hidden_effect": {
+        "214": {
+          "clr_state_flag": [
+            "SAM_civilian_ruled",
+            "SAM_military_ruled",
+            "SAM_artsezo_ruled"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "SAM_civilian_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_military_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+            }
+          ]
+        },
+        "862": {
+          "clr_state_flag": [
+            "SAM_civilian_ruled",
+            "SAM_military_ruled",
+            "SAM_artsezo_ruled"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "SAM_civilian_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_military_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+            }
+          ]
+        },
+        "262": {
+          "clr_state_flag": [
+            "SAM_civilian_ruled",
+            "SAM_military_ruled",
+            "SAM_artsezo_ruled"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "SAM_civilian_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_military_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "SBA_visit_verkhneudinsk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить верхнеудинскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_one"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_verkhneudinsk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.26",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Strategies_EnforceExtendedWorkhours",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Расширить количество рабочих часов",
+    "desc": "Взаимоисключающее с решением $RUS_Decision_Smuta_Strategies_ResourceExtractionOverdrive$.",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true,
+      "check_variable": {
+        "ROOT.RUS_smuta_dec_stage_3_1": 1
+      },
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "has_war": true,
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Strategies_ResourceExtractionOverdrive"
+      },
+      "check_variable": {
+        "ROOT.RUS_smuta_dec_stage_3": 1
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Strategies_EnforceExtendedWorkhours",
+      "hidden_effect": {
+        "add_command_power": -15
+      }
+    }
+  },
+  {
+    "id": "SGV_construct_arkhangelsk_bunkers",
+    "category_id": "SGV_national_redoubt_program_category",
+    "name": "Assemble the Redoubt in Arkhangelsk",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 214,
+      "NOT": {
+        "has_country_flag": "OMS_national_redoubt_construction"
+      }
+    },
+    "visible": {
+      "controls_state": 214,
+      "has_country_flag": [
+        "SGV_national_redoubt_program_start",
+        "OMS_national_redoubt_program_flag",
+        "OMS_a_societal_redoubt_flag"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_arkhangelsk_bunkers",
+      "set_country_flag": "OMS_national_redoubt_construction",
+      "hidden_effect": {
+        "add_command_power": -25
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": "GDP"
+      },
+      "multiply_temp_variable": {
+        "temp_econ_spending_amount": 0.015
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_military_conscripted_arkhangelsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Arkhangelsk to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "214": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "262": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "862": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        214,
+        262,
+        862
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_arkhangelsk",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "214": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "262": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "862": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_arkhangelsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "VOR_rural_destination_arkhangelsk",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "214": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "262": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "862": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        214,
+        262,
+        862
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_arkhangelsk",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "214": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "262": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "862": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_arkhangelsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Arkhangelsk",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "214": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "262": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "862": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        214,
+        262,
+        862
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_arkhangelsk",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "214": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "262": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "862": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "214": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "262": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "862": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "214": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "262": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "862": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

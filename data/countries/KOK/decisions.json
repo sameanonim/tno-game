@@ -1,0 +1,489 @@
+[
+  {
+    "id": "debug_start_gekokujo",
+    "category_id": "global_debug_decisions",
+    "name": "Начать Гекокудзе",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "JAP": {
+        "has_idea": "JAP_Dai_Li_conspiracy"
+      },
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "conflict_debug_decisions"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_start_gekokujo",
+      "JAP": {
+        "set_variable": {
+          "JAP_Tension": 100
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_gekokujo_begin",
+    "category_id": "JAP_debug_decisions",
+    "name": "Начать Гекокудзё",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_gekokujo_begin",
+      "country_event": {
+        "id": "japdlc.700"
+      }
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_kokshetau",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Кокшетау",
+    "desc": "",
+    "icon": "GFX_decision_diplo_north_kazakhstan",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 590
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_shukshin_conquered_kaz_flag"
+      },
+      "owns_state": 590,
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "590": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "1807": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "1808": {
+                "is_core_of": "ROOT"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_inclusion_of_kokshetau",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Akmola District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 1807
+    },
+    "visible": {
+      "owns_state": 1807,
+      "AND": {
+        "1807": {
+          "is_core_of": "ROOT"
+        },
+        "1808": {
+          "is_core_of": "ROOT"
+        },
+        "590": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_military_conscripted_kokshetau",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Akmola to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "590": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1807": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1808": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        590,
+        1807,
+        1808
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_kokshetau",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "590": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "1807": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "1808": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_kokshetau",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Akmola to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "590": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1807": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1808": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        590,
+        1807,
+        1808
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_kokshetau",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "590": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "1807": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "1808": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_kokshetau",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Akmola",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "590": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "1807": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "1808": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        590,
+        1807,
+        1808
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_kokshetau",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "590": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "1807": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "1808": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "590": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "1807": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "1808": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "590": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "1807": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "1808": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "YGR_send_volunteers_to_kokshatai",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Start a Partnership with [KOK.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_diplo_aid_northern_kazakhstan",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "KOK": {
+        "has_war": true
+      },
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 1499
+          }
+        },
+        {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 249
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 299
+          }
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_war_with": "KOK"
+      },
+      "country_exists": "KOK",
+      "hidden_trigger": {
+        "has_country_flag": "YGR_Smuggling_enabled"
+      },
+      "has_country_flag": "RUS_regional_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_send_volunteers_to_kokshatai",
+      "custom_effect_tooltip": "YGR_send_volunteers_to_kokshatai_tt",
+      "KOK": {
+        "add_war_support": 0.1,
+        "country_event": {
+          "id": "KOK_event.3",
+          "hours": 12
+        }
+      },
+      "send_equipment": [
+        {
+          "equipment": "infantry_equipment",
+          "amount": 1500,
+          "target": "KOK"
+        },
+        {
+          "equipment": "artillery_equipment",
+          "amount": 250,
+          "target": "GEO"
+        },
+        {
+          "equipment": "support_equipment",
+          "amount": 300,
+          "target": "KOK"
+        }
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.038
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": {
+        "YGR": {
+          "set_temp_variable": [
+            {
+              "target": "KOK"
+            },
+            {
+              "number": 1
+            }
+          ],
+          "TNO_set_num_volunteers": true
+        },
+        "add_command_power": -20,
+        "add_political_power": -20
+      }
+    }
+  }
+]

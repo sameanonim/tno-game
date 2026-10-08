@@ -149,7 +149,19 @@ func get_tags_with_focus_trees() -> Array[String]:
 	return fallback
 
 
+func normalize_tag(tag: String) -> String:
+	var clean = tag.to_upper().strip_edges()
+	match clean:
+		"SVE": return "SVR"
+		"TYM": return "TYU"
+		"WRRF": return "WRS"
+		"ROA": return "SAM"
+		_: return clean
+
+
 func get_country_dossier(tag: String) -> Dictionary:
+	var clean_tag = normalize_tag(tag)
+
 	var dossiers = {
 		# --- РУССКАЯ СМУТА ---
 		"WRS": {
@@ -161,7 +173,7 @@ func get_country_dossier(tag: String) -> Dictionary:
 			"sub_ideology": "Военная Стратократия",
 			"theater": "theater_smuta",
 			"color": Color(0.85, 0.20, 0.20),
-			"portrait_path": "res://icon.svg",
+			"portrait_path": "res://assets/gfx/leaders/WRS/WRS_Mikhail_Tukhachevsky.png",
 			"difficulty_rating": "●●○○○ (УМЕРЕННАЯ)",
 			"starting_gdp": 18.5,
 			"starting_manpower": 85000,
@@ -172,36 +184,70 @@ func get_country_dossier(tag: String) -> Dictionary:
 		"KOM": {
 			"tag": "KOM",
 			"name": "Республика Коми (Сыктывкар)",
-			"leader_name": "Национальное Собрание",
-			"leader_title": "Председатель Парламента",
+			"leader_name": "Николай Вознесенский",
+			"leader_title": "Премьер-министр Республики Коми",
 			"ideology": "Прогрессивизм",
-			"sub_ideology": "Социал-Либеральная Демократия",
+			"sub_ideology": "Реформистский Социализм",
 			"theater": "theater_smuta",
 			"color": Color(0.65, 0.25, 0.25),
-			"portrait_path": "res://icon.svg",
+			"portrait_path": "res://assets/gfx/leaders/KOM/KOM_Nikolai_Voznesensky.png",
 			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
 			"starting_gdp": 14.0,
 			"starting_manpower": 50000,
 			"starting_factories": 22,
-			"traits": ["Расколотый парламент", "Арена всех идеологий", "Хрупкая демократия"],
+			"traits": ["Популярный трибун", "План восстановления", "Хрупкая коалиция"],
 			"lore": "Сыктывкар превратился в бурлящий котел: от коммунистов Суслова и Бухариной до ультранационалистов Гумилева и фанатиков Таборицкого. Судьба демократии висит на волоске."
 		},
-		"SVE": {
-			"tag": "SVE",
-			"name": "Уральский Военный Округ (Свердловск)",
-			"leader_name": "Павел Батов",
-			"leader_title": "Генерал-лейтенант",
+		"VYT": {
+			"tag": "VYT",
+			"name": "Княжество Вятка",
+			"leader_name": "Владимир III (Романов)",
+			"leader_title": "Государь Император Всероссийский",
 			"ideology": "Авторитарная Демократия",
-			"sub_ideology": "Временная Военная Хунта",
+			"sub_ideology": "Конституционная Монархия",
 			"theater": "theater_smuta",
-			"color": Color(0.35, 0.65, 0.35),
-			"portrait_path": "res://icon.svg",
+			"color": Color(0.20, 0.40, 0.65),
+			"portrait_path": "res://assets/gfx/leaders/VYT/VYT_Vladimir_III.png",
 			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
-			"starting_gdp": 22.0,
-			"starting_manpower": 92000,
-			"starting_factories": 41,
-			"traits": ["Солдатский маршал", "Оборонительный рубеж Урала", "Прагматичный баланс"],
-			"lore": "Генерал Батов и Рокоссовский сохранили костяк кадровых офицеров. Урал готов оборонять свои рубежи и собирать русские земли без фанатизма и кровавых чисток."
+			"starting_gdp": 16.0,
+			"starting_manpower": 60000,
+			"starting_factories": 26,
+			"traits": ["Законный Государь", "Альянс с Солидаристами", "Русский Триколор"],
+			"lore": "Император Владимир Кириллович вернулся на родную землю, стремясь искупить ошибки прошлого и объединить Россию под сенью двуглавого орла."
+		},
+		"SAM": {
+			"tag": "SAM",
+			"name": "Комитет Освобождения Народов России (Самара)",
+			"leader_name": "Андрей Власов",
+			"leader_title": "Председатель КОНР и Главком РОА",
+			"ideology": "Деспотизм",
+			"sub_ideology": "Олигархический Авторитаризм",
+			"theater": "theater_smuta",
+			"color": Color(0.55, 0.45, 0.25),
+			"portrait_path": "res://assets/gfx/leaders/SAM/SAM_Andrey_Vlasov.png",
+			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+			"starting_gdp": 17.5,
+			"starting_manpower": 70000,
+			"starting_factories": 29,
+			"traits": ["Тень коллаборационизма", "Кадровая Русская Освободительная Армия", "Немецкие контрабандисты"],
+			"lore": "Власов и ветераны РОА несут тяжелое клеймо предателей, но обладают дисциплинированной армией и жаждут доказать, что сражались за Россию, а не за Берлин."
+		},
+		"PRM": {
+			"tag": "PRM",
+			"name": "Арийское Братство (Пермь)",
+			"leader_name": "Гутрум Вагнер",
+			"leader_title": "Верховный Вождь Братства",
+			"ideology": "Национал-Социализм",
+			"sub_ideology": "Славянский Ариизм",
+			"theater": "theater_smuta",
+			"color": Color(0.25, 0.25, 0.25),
+			"portrait_path": "res://assets/gfx/leaders/PRM/PRM_Gutrum_Vagner.png",
+			"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+			"starting_gdp": 9.5,
+			"starting_manpower": 35000,
+			"starting_factories": 18,
+			"traits": ["Искаженный Рейх", "Кастовое рабство", "Воинский фанатизм"],
+			"lore": "Алексей Добровольский отринул славянскую культуру ради культа немецкой силы, превратив Пермь в жестокую пародию на нацистский орден."
 		},
 		"TYU": {
 			"tag": "TYU",
@@ -212,7 +258,7 @@ func get_country_dossier(tag: String) -> Dictionary:
 			"sub_ideology": "Ортодоксальный Сталинизм",
 			"theater": "theater_smuta",
 			"color": Color(0.70, 0.12, 0.12),
-			"portrait_path": "res://icon.svg",
+			"portrait_path": "res://assets/gfx/leaders/TYM/TYM_Lazar_Kaganovich.png",
 			"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
 			"starting_gdp": 15.0,
 			"starting_manpower": 68000,
@@ -220,22 +266,107 @@ func get_country_dossier(tag: String) -> Dictionary:
 			"traits": ["Железный Лазарь", "Ударные пятилетки", "Централизованный диктат"],
 			"lore": "Каганович считает падение Союза предательством партийных принципов. Возрождение сибирской тайги пятилетками и тяжелой артиллерией — завет генералиссимуса Сталина."
 		},
+		"SVR": {
+			"tag": "SVR",
+			"name": "Уральский Военный Округ (Свердловск)",
+			"leader_name": "Константин Рокоссовский",
+			"leader_title": "Глава Военного Совета Урала",
+			"ideology": "Авторитарная Демократия",
+			"sub_ideology": "Временная Военная Хунта",
+			"theater": "theater_smuta",
+			"color": Color(0.35, 0.65, 0.35),
+			"portrait_path": "res://assets/gfx/leaders/SVR/SVR_Konstantin_Rokossovsky.png",
+			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+			"starting_gdp": 22.0,
+			"starting_manpower": 92000,
+			"starting_factories": 41,
+			"traits": ["Солдатский маршал", "Оборонительный рубеж Урала", "Прагматичный баланс"],
+			"lore": "Генерал Батов и Рокоссовский сохранили костяк кадровых офицеров. Урал готов оборонять свои рубежи и собирать русские земли без фанатизма и кровавых чисток."
+		},
 		"OMS": {
 			"tag": "OMS",
 			"name": "Черная Лига (Омск)",
-			"leader_name": "Дмитрий Язов",
-			"leader_title": "Верховный Главнокомандующий",
+			"leader_name": "Дмитрий Карбышев",
+			"leader_title": "Председатель Всероссийской Черной Лиги",
 			"ideology": "Ультранационализм",
 			"sub_ideology": "Стратократия Великого Суда",
 			"theater": "theater_smuta",
 			"color": Color(0.20, 0.20, 0.20),
-			"portrait_path": "res://icon.svg",
+			"portrait_path": "res://assets/gfx/leaders/OMS/OMS_Dmitry_Karbyshev.png",
 			"difficulty_rating": "●●●●● (ЭКСТРЕМАЛЬНАЯ)",
 			"starting_gdp": 12.0,
 			"starting_manpower": 110000,
 			"starting_factories": 28,
 			"traits": ["Архитектор Великого Суда", "Бункерная фанатичность", "Культ возмездия"],
 			"lore": "Для Черной Лиги Россия умерла, осталась лишь миссия: возмездие Тевтону любой ценой, даже если цена — мировой ядерный пепел. Все ресурсы до копейки идут на подготовку к финальной войне."
+		},
+		"TOM": {
+			"tag": "TOM",
+			"name": "Свободная Территория Томск",
+			"leader_name": "Борис Пастернак",
+			"leader_title": "Президент Республики / Председатель Салона",
+			"ideology": "Либерализм",
+			"sub_ideology": "Салонная Демократия",
+			"theater": "theater_smuta",
+			"color": Color(0.25, 0.55, 0.50),
+			"portrait_path": "res://assets/gfx/leaders/TOM/TOM_Boris_Pasternak.png",
+			"difficulty_rating": "●●○○○ (УМЕРЕННАЯ)",
+			"starting_gdp": 20.0,
+			"starting_manpower": 58000,
+			"starting_factories": 35,
+			"traits": ["Салоны интеллигенции", "Сибирский гуманизм", "Высокие технологии"],
+			"lore": "Томск — оазис культуры и науки посреди анархии. Четыре интеллектуальных салона спорят о будущем свободной России."
+		},
+		"NOV": {
+			"tag": "NOV",
+			"name": "Сибирская Федерация (Новосибирск)",
+			"leader_name": "Александр Покрышкин",
+			"leader_title": "Премьер-министр Сибирской Федерации",
+			"ideology": "Авторитарная Демократия",
+			"sub_ideology": "Корпоратократия",
+			"theater": "theater_smuta",
+			"color": Color(0.30, 0.45, 0.60),
+			"portrait_path": "res://assets/gfx/leaders/NOV/NOV_Alexander_Pokryshkin.png",
+			"difficulty_rating": "●●○○○ (УМЕРЕННАЯ)",
+			"starting_gdp": 24.0,
+			"starting_manpower": 80000,
+			"starting_factories": 45,
+			"traits": ["Концерны Сибири", "Авиационные заводы", "Прагматичный меркантилизм"],
+			"lore": "Покрышкин опирается на альянс технократов и промышленных корпораций. Новосибирск скупает технологии и готовит экономическую экспансию."
+		},
+		"KEM": {
+			"tag": "KEM",
+			"name": "Кемеровское Княжество",
+			"leader_name": "Рюрик II (Николай Крылов)",
+			"leader_title": "Король Всея Руси",
+			"ideology": "Авторитаризм",
+			"sub_ideology": "Монархо-социализм",
+			"theater": "theater_smuta",
+			"color": Color(0.50, 0.20, 0.35),
+			"portrait_path": "res://assets/gfx/leaders/KEM/KEM_Rurik_II.png",
+			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+			"starting_gdp": 16.5,
+			"starting_manpower": 62000,
+			"starting_factories": 30,
+			"traits": ["Коронация в Кузбассе", "Народная монархия", "Династический раскол"],
+			"lore": "Бывший советский генерал Крылов провозгласил себя воскресшим Рюриком, сочетая древнерусские обряды, рабочие советы и промышленную мощь Кузбасса."
+		},
+		"SBA": {
+			"tag": "SBA",
+			"name": "Сибирская Черная Армия (СБА)",
+			"leader_name": "Сибирский Совет",
+			"leader_title": "Военный Совет Черной Армии",
+			"ideology": "Либертарный Социализм",
+			"sub_ideology": "Анархо-коммунизм",
+			"theater": "theater_smuta",
+			"color": Color(0.15, 0.15, 0.15),
+			"portrait_path": "res://assets/gfx/leaders/SBA/SBA_Siberian_Soviet.png",
+			"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+			"starting_gdp": 13.0,
+			"starting_manpower": 70000,
+			"starting_factories": 24,
+			"traits": ["Вольная Сибирь", "Прямая демократия коммун", "Ополчение Черной Гвардии"],
+			"lore": "Анархисты Канска отвергают любую государственную тиранию. Но военная хунта внутри Черной Армии все сильнее угрожает идеалам свободы."
 		},
 		"IRK": {
 			"tag": "IRK",
@@ -246,13 +377,30 @@ func get_country_dossier(tag: String) -> Dictionary:
 			"sub_ideology": "Государство Госбезопасности",
 			"theater": "theater_smuta",
 			"color": Color(0.55, 0.15, 0.15),
-			"portrait_path": "res://icon.svg",
+			"portrait_path": "res://assets/gfx/leaders/IRK/IRK_Genrikh_Yagoda.png",
 			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
 			"starting_gdp": 17.0,
 			"starting_manpower": 75000,
 			"starting_factories": 34,
 			"traits": ["Чекистский монолит", "Тайная полиция", "Байкальская крепость"],
 			"lore": "Законные преемники союзного центра во главе с НКВД держат в кулаке Восточную Сибирь, готовясь разгромить белогвардейцев и бунтовщиков Саблина."
+		},
+		"BRY": {
+			"tag": "BRY",
+			"name": "Бурятская Советская Республика",
+			"leader_name": "Валерий Саблин",
+			"leader_title": "Секретарь Революционного Комитета",
+			"ideology": "Социализм",
+			"sub_ideology": "Идеалистический Ленинизм",
+			"theater": "theater_smuta",
+			"color": Color(0.75, 0.20, 0.20),
+			"portrait_path": "res://assets/gfx/leaders/BRY/BRY_Valery_Sablin.png",
+			"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+			"starting_gdp": 10.0,
+			"starting_manpower": 45000,
+			"starting_factories": 19,
+			"traits": ["Искренний идеалист", "Огни революции", "Партизанский Байкал"],
+			"lore": "Молодой политрук Саблин поднял восстание против чекистской тирании Ягоды во имя истинных идеалов Ленина и народных советов."
 		},
 		"CHT": {
 			"tag": "CHT",
@@ -263,13 +411,47 @@ func get_country_dossier(tag: String) -> Dictionary:
 			"sub_ideology": "Военно-монархическая реставрация",
 			"theater": "theater_smuta",
 			"color": Color(0.40, 0.40, 0.70),
-			"portrait_path": "res://icon.svg",
+			"portrait_path": "res://assets/gfx/leaders/CHT/CHT_Mikhail_II.png",
 			"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
 			"starting_gdp": 11.5,
 			"starting_manpower": 54000,
 			"starting_factories": 22,
 			"traits": ["Пленник белых генералов", "Тоска по родине", "Маньчжурское снабжение"],
 			"lore": "Молодой австралийский эмигрант Михаил Романов завлечен белоэмигрантскими атаманами Семенова и превращен в номинального царя Забайкалья."
+		},
+		"MAG": {
+			"tag": "MAG",
+			"name": "Российская Фашистская Партия (Магадан)",
+			"leader_name": "Михаил Матковский",
+			"leader_title": "Вождь ВФО / Премьер-министр",
+			"ideology": "Фашизм",
+			"sub_ideology": "Прагматичный Фашизм",
+			"theater": "theater_smuta",
+			"color": Color(0.45, 0.40, 0.30),
+			"portrait_path": "res://assets/gfx/leaders/MAG/MAG_Mikhail_Matkovsky.png",
+			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+			"starting_gdp": 13.5,
+			"starting_manpower": 48000,
+			"starting_factories": 23,
+			"traits": ["Американские наемники", "Порт на Тихом океане", "Разрыв с Родзаевским"],
+			"lore": "Матковский порвал с безумием Родзаевского и сделал ставку на помощь США и наемников Вербелла, превратив Магадан в плацдарм для броска в Сибирь."
+		},
+		"AMR": {
+			"tag": "AMR",
+			"name": "Всероссийская Фашистская Партия (Амур)",
+			"leader_name": "Константин Родзаевский",
+			"leader_title": "Верховный Вождь ВФП",
+			"ideology": "Национал-Социализм",
+			"sub_ideology": "Русский Фашизм",
+			"theater": "theater_smuta",
+			"color": Color(0.30, 0.25, 0.20),
+			"portrait_path": "res://assets/gfx/leaders/AMR/AMR_Konstantin_Rodzaevsky.png",
+			"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+			"starting_gdp": 11.0,
+			"starting_manpower": 52000,
+			"starting_factories": 21,
+			"traits": ["Чернорубашечники Амура", "Харбинский союз", "Неумолимый реваншизм"],
+			"lore": "Родзаевский в Харбине грезил о русском национал-социализме под эгидой Японии. Теперь его чернорубашечники готовы залить Дальний Восток кровью."
 		},
 
 		# --- НЕМЕЦКИЙ КРИЗИС ---
@@ -369,7 +551,7 @@ func get_country_dossier(tag: String) -> Dictionary:
 			"sub_ideology": "Тоталитарный Патернализм",
 			"theater": "theater_superpowers",
 			"color": Color(0.30, 0.30, 0.30),
-			"portrait_path": "res://icon.svg",
+			"portrait_path": "res://assets/gfx/leaders/GER/GER_adolf_hitler.png",
 			"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
 			"starting_gdp": 210.0,
 			"starting_manpower": 850000,
@@ -464,16 +646,56 @@ func get_country_dossier(tag: String) -> Dictionary:
 		}
 	}
 
-	if content_loader != null and content_loader.has_extracted_data():
-		var extracted_dossier = content_loader.get_country_dossier(tag)
-		if not extracted_dossier.is_empty():
-			if str(extracted_dossier.get("lore", "")).is_empty() and dossiers.has(tag):
-				extracted_dossier["lore"] = dossiers[tag].get("lore", "")
-			if extracted_dossier.get("traits", []).is_empty() and dossiers.has(tag):
-				extracted_dossier["traits"] = dossiers[tag].get("traits", [])
-			return extracted_dossier
+	# Псевдонимы
+	dossiers["SVE"] = dossiers["SVR"]
+	dossiers["TYM"] = dossiers["TYU"]
+	dossiers["WRRF"] = dossiers["WRS"]
 
-	return dossiers.get(tag, dossiers["WRS"])
+	var final_dossier: Dictionary = dossiers.get(clean_tag, dossiers["WRS"]).duplicate()
+	if dossiers.has(clean_tag):
+		var curated: Dictionary = dossiers[clean_tag]
+		if content_loader != null and content_loader.has_extracted_data():
+			var extracted_dossier = content_loader.get_country_dossier(clean_tag)
+			if not extracted_dossier.is_empty():
+				var merged = extracted_dossier.duplicate()
+				for k in curated:
+					var val = merged.get(k)
+					var fallback_to_curated := false
+					if val == null:
+						fallback_to_curated = true
+					elif val is String:
+						if val.is_empty() or val == "UNKNOWN" or val == "res://icon.svg":
+							fallback_to_curated = true
+						elif k == "portrait_path":
+							var cp = val.replace("\\", "/")
+							if not cp.begins_with("res://"):
+								if cp.begins_with("gfx/") or cp.begins_with("assets/"):
+									cp = "res://" + cp
+								else:
+									cp = "res://assets/gfx/leaders/" + cp
+							if not ResourceLoader.exists(cp) and not FileAccess.file_exists(cp):
+								fallback_to_curated = true
+					elif val is Array and val.is_empty():
+						fallback_to_curated = true
+
+					if fallback_to_curated:
+						merged[k] = curated[k]
+				final_dossier = merged
+			else:
+				final_dossier = curated.duplicate()
+		else:
+			final_dossier = curated.duplicate()
+	elif content_loader != null and content_loader.has_extracted_data():
+		var extracted = content_loader.get_country_dossier(clean_tag)
+		if not extracted.is_empty():
+			final_dossier = extracted.duplicate()
+
+	if final_dossier.has("portrait_path") and not final_dossier.has("leader_portrait"):
+		final_dossier["leader_portrait"] = final_dossier["portrait_path"]
+	elif final_dossier.has("leader_portrait") and not final_dossier.has("portrait_path"):
+		final_dossier["portrait_path"] = final_dossier["leader_portrait"]
+
+	return final_dossier
 
 
 # ==============================================================================
@@ -489,6 +711,8 @@ func bootstrap_new_game(config: GameStartConfig) -> void:
 	state.country_tag = dossier["tag"]
 	state.country_name = dossier["name"]
 	state.leader_name = dossier["leader_name"]
+	state.leader_title = dossier.get("leader_title", "Глава государства")
+	state.leader_portrait_path = dossier.get("portrait_path", "res://icon.svg")
 	state.ruling_ideology = dossier["ideology"]
 	state.sub_ideology = dossier["sub_ideology"]
 	state.country_color = dossier["color"]
@@ -498,6 +722,13 @@ func bootstrap_new_game(config: GameStartConfig) -> void:
 	state.civilian_factories = int(dossier.get("starting_factories", 30) * 0.4)
 	state.war_support_percent = float(dossier.get("war_support_percent", dossier.get("starting_war_support", 65.0)))
 
+	# Создание и привязка канонического лидера государства (Head of State)
+	var hos := LeaderResource.new()
+	hos.leader_name = state.leader_name
+	hos.title = state.leader_title
+	hos.portrait_path = state.leader_portrait_path
+	hos.ideology = state.ruling_ideology
+	state.head_of_state = hos
 
 	# Применение модификаторов сложности
 	_apply_difficulty(state, config.difficulty)
@@ -512,7 +743,8 @@ func bootstrap_new_game(config: GameStartConfig) -> void:
 	session_bootstrapped.emit(config)
 
 	# Переход на боевую сцену
-	get_tree().change_scene_to_file("res://ui/screens/terminal_main.tscn")
+	if is_inside_tree() and get_tree() != null:
+		get_tree().change_scene_to_file("res://ui/screens/terminal_main.tscn")
 
 
 func _apply_difficulty(state: CountryState, diff: Difficulty) -> void:

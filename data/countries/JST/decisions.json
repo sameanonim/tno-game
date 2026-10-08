@@ -1,0 +1,213 @@
+[
+  {
+    "id": "infiltrate_JST",
+    "category_id": "JST_UPO_category",
+    "name": "Проникнуть в Оберабшнит СС Остланд",
+    "desc": "Мы можем увеличить наше присутствие в Остланде в 3 раза, и с каждым уровнем результаты нашей деятельности будут продуктивнее",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "JST",
+      "has_manpower": {
+        "_op": ">",
+        "value": 1000
+      }
+    },
+    "visible": {
+      "has_war_with": "JST"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision infiltrate_JST",
+      "JST": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "infiltration_1"
+            }
+          },
+          "set_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_1"
+            },
+            "set_country_flag": "infiltration_2",
+            "clr_country_flag": "infiltration_1"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "set_country_flag": "infiltration_3",
+            "clr_country_flag": "infiltration_2"
+          }
+        ]
+      },
+      "add_manpower": -1000
+    }
+  },
+  {
+    "id": "JST_poison_water",
+    "category_id": "JST_UPO_category",
+    "name": "Отравить их запасы воды",
+    "desc": "Отравляя запасы воды в армии наших противников, мы можем сократить их людские ресурсы",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "JST"
+    },
+    "visible": {
+      "has_war_with": "JST",
+      "JST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JST_poison_water",
+      "JST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "add_manpower": -5000,
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "add_manpower": -10000,
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "add_manpower": -15000,
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "JST_sabotage_army",
+    "category_id": "JST_UPO_category",
+    "name": "Саботировать их армию",
+    "desc": "Мы можем провести диверсию в их армии, чтобы позволить нашим войскам продвинуться вперед",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "JST"
+    },
+    "visible": {
+      "has_war_with": "JST",
+      "JST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JST_sabotage_army",
+      "JST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "add_timed_idea": {
+            "idea": "UPO_army1",
+            "days": 40
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army2",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army3",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "JST_sabotage_industry",
+    "category_id": "JST_UPO_category",
+    "name": "Саботировать их промышленность",
+    "desc": "Мы можем воспользоваться нашими агентами, чтобы вывести из строя их промышленные мощности",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "JST"
+    },
+    "visible": {
+      "has_war_with": "JST",
+      "JST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JST_sabotage_industry",
+      "JST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  }
+]

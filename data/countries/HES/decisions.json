@@ -1,0 +1,2592 @@
+[
+  {
+    "id": "hold_fight_on_the_beaches_speech",
+    "category_id": "political_actions",
+    "name": "Речь «Мы будем сражаться на пляжах»",
+    "desc": "«Мы пойдем до конца, мы будем биться во Франции, мы будем биться на морях и океанах, мы будем биться с растущей уверенностью и растущей силой в воздухе, мы будем защищать наш Остров, чего бы это нам ни стоило, мы будем биться на пляжах, мы будем биться на местах высадки, мы будем биться в полях, на улицах, мы будем биться на холмах, мы никогда не сдадимся...»",
+    "icon": "generic_political_discourse",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_government": "democratic",
+      "has_country_leader": {
+        "ruling_only": true,
+        "character": "ENG_winston_churchill"
+      },
+      "has_war_with": "GER",
+      "is_in_faction_with": "FRA",
+      "FRA": {
+        "surrender_progress": {
+          "_op": ">",
+          "value": 0.2
+        }
+      }
+    },
+    "visible": {
+      "tag": "ENG",
+      "has_government": "democratic",
+      "has_war_with": "GER",
+      "has_country_flag": "blood_toil_tears_sweat_speech",
+      "has_country_leader": {
+        "ruling_only": true,
+        "character": "ENG_winston_churchill"
+      }
+    },
+    "complete_effect": {
+      "add_war_support": 0.05,
+      "if": {
+        "limit": {
+          "USA": {
+            "exists": true,
+            "has_war": false,
+            "has_government": "ROOT"
+          }
+        },
+        "USA": {
+          "set_country_flag": "fight_on_the_beaches_speech"
+        }
+      },
+      "set_country_flag": "fight_on_the_beaches_speech",
+      "play_we_shall_fight_on_the_beaches_effect": true
+    }
+  },
+  {
+    "id": "FIN_set_up_weapon_caches_in_state",
+    "category_id": "FIN_national_defense_category",
+    "name": "FIN_set_up_weapon_caches_in_state",
+    "desc": "",
+    "icon": "GFX_decision_ger_military_buildup",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "FIN_weapon_caches_modifier"
+          }
+        },
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "FIN_weapon_caches",
+          "FIN_defensive_preparations"
+        ]
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "FIN_remove_mana_cost": "FIN_weapon_caches_decision_cost"
+        },
+        "multiply_temp_variable": {
+          "FIN_remove_mana_cost": -1
+        },
+        "add_command_power": "FIN_remove_mana_cost",
+        "add_political_power": "FIN_remove_mana_cost",
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment",
+          "amount": -50
+        },
+        "add_to_variable": {
+          "FIN_weapon_caches_decision_cost": "FIN_weapon_caches_decision_cost_increase"
+        },
+        "set_variable": {
+          "FIN_weapon_caches_decision_cost_for_trigger": "FIN_weapon_caches_decision_cost"
+        },
+        "subtract_from_variable": {
+          "FIN_weapon_caches_decision_cost_for_trigger": 1
+        }
+      },
+      "custom_effect_tooltip": "FIN_weapon_caches_cost_increase_tt"
+    }
+  },
+  {
+    "id": "FIN_search_for_weapon_caches_in_state",
+    "category_id": "FIN_finnish_resistance_category",
+    "name": "FIN_search_for_weapon_caches_in_state",
+    "desc": "",
+    "icon": "GFX_decision_FIN_weapon_caches",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "has_dynamic_modifier": {
+          "modifier": "FIN_weapon_caches_modifier"
+        },
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "FIN_remove_cp_cost": "FIN.FIN_search_for_weapon_caches_decision_cost"
+        },
+        "multiply_temp_variable": {
+          "FIN_remove_cp_cost": -1
+        },
+        "add_command_power": "FIN_remove_cp_cost"
+      }
+    }
+  },
+  {
+    "id": "move_capital_to_thessaloniki",
+    "category_id": "form_greater_greece_category",
+    "name": "Перенести столицу в Фессалоники",
+    "desc": "Афины были столицей Первой эллинской цивилизации, Константинополь — столицей Второй, но вот город Фессалоники, вечная «вторая столица» на протяжении всей эллинской истории, станет столицей Третьей эллинской цивилизации.",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "if": {
+        "limit": {
+          "has_government": "democratic"
+        },
+        "has_completed_focus": "GRE_nenikikamen"
+      },
+      "controls_state": 797
+    },
+    "visible": {
+      "has_global_flag": "form_greater_greece_flag",
+      "NOT": {
+        "has_country_flag": "GRE_chose_a_new_capital_city"
+      }
+    },
+    "complete_effect": {
+      "add_stability": 0.1,
+      "set_capital": {
+        "state": 731
+      },
+      "hidden_effect": {
+        "set_country_flag": "GRE_chose_a_new_capital_city"
+      }
+    }
+  },
+  {
+    "id": "object_to_attaches",
+    "category_id": "foreign_politics",
+    "name": "Протесты против атташе",
+    "desc": "Наши враги получают военную помощь из-за рубежа! Мы должны выразить решительный протест и потребовать отзыва любых атташе.",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "FROM": {
+        "NOT": [
+          {
+            "has_country_flag": "rejected_withdrawing_attache"
+          },
+          {
+            "has_country_flag": "rejected_withdrawing_attache@ROOT"
+          },
+          {
+            "has_country_flag": "object_attache_going_on"
+          }
+        ]
+      },
+      "has_war": true,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_war_with": "FROM"
+        },
+        {
+          "AND": {
+            "original_tag": "SPR",
+            "has_completed_focus": "SPR_regional_defense_council_of_aragon"
+          }
+        }
+      ],
+      "any_enemy_country": {
+        "has_attache_from": "FROM"
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "generic.14",
+          "hours": 6
+        }
+      },
+      "hidden_effect": {
+        "FROM": {
+          "set_country_flag": "object_attache_going_on"
+        }
+      }
+    }
+  },
+  {
+    "id": "HUN_establish_new_academy_of_sciences_branches_program_decision",
+    "category_id": "HUN_national_academy_of_sciences_category",
+    "name": "Учредить программу развития [HUN.GetAdjective]ой академии наук",
+    "desc": "",
+    "icon": "GFX_decision_SOV_academy_of_sciences",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_expand_the_hungarian_academy_of_sciences",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      }
+    },
+    "visible": {
+      "has_completed_focus": "wuw_HUN_expand_the_hungarian_academy_of_sciences",
+      "NOT": {
+        "has_country_flag": "HUN_expanded_science_academy_national_flag"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "RAJ_GOE_orchestrate_train_robberies",
+    "category_id": "RAJ_GOE_communism_infiltration_cat",
+    "name": "Устраивать ограбления поездов",
+    "desc": "Нарушение железнодорожных перевозок ослабляет колониальную логистику, а мы получаем припасы и ресурсы для дальнейших операций.",
+    "icon": "GFX_decision_generic_train",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "RAJ_red_in_the_shadows"
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "idea_RAJ_train_robberies",
+        "has_government": "communism"
+      },
+      "has_completed_focus": "RAJ_red_in_the_shadows"
+    },
+    "complete_effect": {
+      "add_ideas": "idea_RAJ_train_robberies",
+      "custom_effect_tooltip": "RAJ_GOE_orchestrate_train_robberies_tt"
+    }
+  },
+  {
+    "id": "RAJ_secure_west_bengal_decision",
+    "category_id": "RAJ_GOE_communism_border_clashes_cat",
+    "name": "Ударить по Восточному Пакистану",
+    "desc": "Калькутта изолирована, и ситуация там нестабильна. Нам необходимо установить контроль над регионом, пока противники не успели там закрепиться.",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "PAK": {
+        "controls_state": 431,
+        "exists": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "controls_state": 426,
+      "RAJ": {
+        "custom_trigger_tooltip": {
+          "tooltip": "TRIGGER_HAS_NOT_ANY_BORDER_WAR",
+          "has_border_war": false,
+          "NOT": {
+            "has_country_flag": "RAJ_started_border_war"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "RAJ_strike_eastern_pakistan",
+      "PAK": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "PAK": {
+        "country_event": {
+          "id": "GOE_RAJ.42",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": "RAJ_red_punjab_operation_decision_tt",
+      "hidden_effect": {
+        "set_country_flag": "RAJ_started_border_war"
+      }
+    }
+  },
+  {
+    "id": "RAJ_secure_rajahsthan_decision",
+    "category_id": "RAJ_GOE_communism_border_clashes_cat",
+    "name": "Занять Раджастхан",
+    "desc": "Раджастхан постепенно становится оплотом контрреволюции. Мы должны подчинить этот штат и восстановить наши позиции, пока он не превратился в реальную угрозу.",
+    "icon": "GFX_decision_generic_reorganize_irregulars",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "PAK": {
+        "controls_state": 433,
+        "exists": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "controls_state": 437,
+      "RAJ": {
+        "custom_trigger_tooltip": {
+          "tooltip": "TRIGGER_HAS_NOT_ANY_BORDER_WAR",
+          "has_border_war": false,
+          "NOT": {
+            "has_country_flag": "RAJ_started_border_war"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "RAJ_secure_rajahsthan",
+      "PAK": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "PAK": {
+        "country_event": {
+          "id": "GOE_RAJ.44",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": "RAJ_red_punjab_operation_decision_tt",
+      "hidden_effect": {
+        "set_country_flag": "RAJ_started_border_war"
+      }
+    }
+  },
+  {
+    "id": "RAJ_red_punjab_operation_decision",
+    "category_id": "RAJ_GOE_communism_border_clashes_cat",
+    "name": "Операция «Красный Пенджаб»",
+    "desc": "Наша столица находится слишком близко к [PAK.GetAdjRuLower]ой границе, что делает нас уязвимыми. Мы должны установить контроль над прилегающими регионами — только тогда [RAJ.GetName] будет в безопасности.",
+    "icon": "GFX_decision_hol_war_on_pacifism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "PAK": {
+        "controls_state": 986,
+        "exists": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "controls_state": 439,
+      "RAJ": {
+        "custom_trigger_tooltip": {
+          "tooltip": "TRIGGER_HAS_NOT_ANY_BORDER_WAR",
+          "has_border_war": false,
+          "NOT": {
+            "has_country_flag": "RAJ_started_border_war"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "RAJ_red_punjab_operation",
+      "PAK": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "PAK": {
+        "country_event": {
+          "id": "GOE_RAJ.40",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": "RAJ_red_punjab_operation_decision_tt",
+      "hidden_effect": {
+        "set_country_flag": "RAJ_started_border_war"
+      }
+    }
+  },
+  {
+    "id": "SOV_organize_popular_speeches_poum",
+    "category_id": "SOV_soviet_aid_to_poum_decision_category",
+    "name": "Организовать народные выступления",
+    "desc": "Чтобы поддержать войну, нашим испанским товарищам нужна полная поддержка народа. Мы должны провести совместно с влиятельными участниками местных организаций информационную и агитационную кампанию, чтобы вновь разжечь пламя революции в испанском народе.",
+    "icon": "eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "SPR_scw_in_progress": true,
+      "country_exists": "SPC",
+      "SPC": {
+        "has_completed_focus": "SPR_the_anti_fascist_workers_revolution"
+      },
+      "NOT": {
+        "has_war_with": "SPC"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SPA_hand_over_the_ceda_campaign_chest_mission",
+    "category_id": "SPR_opposition_civil_war_preparations",
+    "name": "Отдать фонд финансирования кампании CEDA",
+    "desc": "",
+    "icon": "eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "SPR",
+      "NOT": {
+        "has_global_flag": "spanish_civil_war"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SPR_enlarge_the_weapon_caches_mission",
+    "category_id": "SPR_opposition_civil_war_preparations",
+    "name": "Увеличить схроны с оружием",
+    "desc": "",
+    "icon": "eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "SPR",
+      "NOT": {
+        "has_global_flag": "spanish_civil_war"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "WTT_border_conflict_initiate_incident",
+    "category_id": "CHI_border_clashes",
+    "name": "Устроить инцидент на границе с государством [From.From.GetName]",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "any_owned_state": {
+          "is_controlled_by": "FROM",
+          "impassable": false,
+          "any_neighbor_state": {
+            "state_is_fully_controlled_by_ROOT_or_subject": true,
+            "set_temp_variable": {
+              "var:attacker_state_temp": "id"
+            },
+            "has_ROOT_at_least_1_div_in_current_state_scope": true,
+            "hidden_trigger": {
+              "NOT": {
+                "has_state_flag": "border_incident_active"
+              }
+            }
+          },
+          "NOT": {
+            "has_state_flag": "border_incident_active"
+          },
+          "set_temp_variable": {
+            "var:defender_state_temp": "id"
+          }
+        }
+      },
+      "NOT": {
+        "has_non_aggression_pact_with": "FROM"
+      }
+    },
+    "visible": {
+      "FROM": [
+        {
+          "exists": true
+        },
+        {
+          "NOT": [
+            {
+              "is_subject_of": "ROOT"
+            },
+            {
+              "is_in_faction_with": "ROOT"
+            }
+          ]
+        },
+        {
+          "has_not_initiated_border_incident_with_ROOT": true
+        }
+      ],
+      "NOT": [
+        {
+          "has_war_with": "FROM"
+        },
+        {
+          "is_subject_of": "FROM"
+        }
+      ],
+      "OR": [
+        {
+          "AND": [
+            {
+              "has_country_flag": "CHI_institute_cross_border_raids",
+              "NOT": {
+                "tag": "event_target:WTT_current_china_leader"
+              },
+              "FROM": {
+                "NOT": {
+                  "tag": "event_target:WTT_current_china_leader"
+                }
+              }
+            },
+            {
+              "has_country_flag": "CHI_provoke_border_clashes",
+              "FROM": {
+                "tag": "event_target:WTT_current_china_leader"
+              }
+            },
+            {
+              "FROM": {
+                "has_country_flag": "CHI_provoke_border_clashes"
+              },
+              "tag": "event_target:WTT_current_china_leader"
+            },
+            {
+              "OR": [
+                {
+                  "has_completed_focus": [
+                    "CHI_anti_opposition_campaigns",
+                    "CHI_sea_anti_opposition_campaigns"
+                  ]
+                },
+                {
+                  "AND": [
+                    {
+                      "OR": [
+                        {
+                          "has_completed_focus": [
+                            "CHI_cooperation_with_the_nationalists",
+                            "CHI_sea_cooperation_with_the_nationalists"
+                          ]
+                        },
+                        {
+                          "FROM": [
+                            {
+                              "has_completed_focus": "CHI_cooperation_with_the_communists"
+                            },
+                            {
+                              "has_completed_focus": "CHI_sea_cooperation_with_the_communists"
+                            }
+                          ]
+                        }
+                      ],
+                      "NOT": {
+                        "is_subject_of": "event_target:WTT_communist_china"
+                      },
+                      "FROM": {
+                        "NOT": {
+                          "is_subject_of": "event_target:WTT_current_china_leader"
+                        }
+                      }
+                    },
+                    {
+                      "OR": [
+                        {
+                          "has_completed_focus": [
+                            "CHI_cooperation_with_the_communists",
+                            "CHI_sea_cooperation_with_the_communists"
+                          ]
+                        },
+                        {
+                          "FROM": [
+                            {
+                              "has_completed_focus": "CHI_cooperation_with_the_nationalists"
+                            },
+                            {
+                              "has_completed_focus": "CHI_sea_cooperation_with_the_nationalists"
+                            }
+                          ]
+                        }
+                      ],
+                      "NOT": {
+                        "is_subject_of": "event_target:WTT_current_china_leader"
+                      },
+                      "FROM": {
+                        "NOT": {
+                          "is_subject_of": "event_target:WTT_communist_china"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "event_target:WTT_communist_china",
+              "FROM": {
+                "OR": {
+                  "has_completed_focus": [
+                    "CHI_cooperation_with_the_nationalists",
+                    "CHI_sea_cooperation_with_the_nationalists"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "NOT": {
+            "has_border_war_with": "FROM"
+          },
+          "FROM": {
+            "any_owned_state": {
+              "is_controlled_by": "FROM",
+              "impassable": false,
+              "hidden_trigger": {
+                "NOT": {
+                  "has_state_flag": "border_incident_active"
+                }
+              },
+              "any_neighbor_state": {
+                "hidden_trigger": {
+                  "NOT": {
+                    "has_state_flag": "border_incident_active"
+                  }
+                },
+                "is_fully_controlled_by": "ROOT"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "FROM": {
+          "random_owned_controlled_state": {
+            "limit": {
+              "impassable": false,
+              "hidden_trigger": {
+                "NOT": {
+                  "has_state_flag": "border_incident_active"
+                }
+              },
+              "any_neighbor_state": {
+                "hidden_trigger": {
+                  "NOT": {
+                    "has_state_flag": "border_incident_active"
+                  }
+                },
+                "has_ROOT_at_least_1_div_in_current_state_scope": true,
+                "state_is_fully_controlled_by_ROOT_or_subject": true
+              }
+            },
+            "save_event_target_as": "defender_state",
+            "set_variable": {
+              "FROM.defender_state_vs_@ROOT": "id"
+            },
+            "set_temp_variable": {
+              "defender_state_temp": "id"
+            },
+            "set_state_flag": "border_incident_active"
+          }
+        },
+        "random_state": {
+          "limit": {
+            "impassable": false,
+            "state_is_fully_controlled_by_ROOT_or_subject": true,
+            "hidden_trigger": {
+              "NOT": {
+                "has_state_flag": "border_incident_active"
+              }
+            },
+            "has_ROOT_at_least_1_div_in_current_state_scope": true,
+            "any_neighbor_state": {
+              "state": "var:FROM.defender_state_vs_@ROOT"
+            }
+          },
+          "save_event_target_as": "attacker_state",
+          "set_variable": {
+            "FROM.attacker_state_vs_@ROOT": "id"
+          },
+          "set_temp_variable": {
+            "attacker_state_temp": "id"
+          },
+          "set_state_flag": "border_incident_active"
+        }
+      },
+      "custom_effect_tooltip": "WTT_border_incident_delay_until_new_incident_180",
+      "FROM": {
+        "country_event": {
+          "id": "wtt_border_incident_defender_warning.1",
+          "hours": 1
+        },
+        "activate_targeted_decision": {
+          "target": "ROOT",
+          "decision": "WTT_border_conflict_incident_warning_defender"
+        }
+      }
+    }
+  },
+  {
+    "id": "WTT_border_conflict_incident_warning_defender",
+    "category_id": "CHI_border_clashes",
+    "name": "Инцидент на границе государств [From.From.GetName] и [From.GetNameDef]",
+    "desc": "Подвести дивизии к границе с государством [From.From.GetName]",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "WTT_border_conflict_escalation_warning_defender",
+    "category_id": "CHI_border_clashes",
+    "name": "Инцидент на границе государств [From.From.GetName] и [From.GetNameDef]",
+    "desc": "Держать дивизии в государстве [From.From.GetName]\n[From.GetNameDef] может довести ситуацию до пограничного конфликта.",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "WTT_escalate_incident_to_border_conflict",
+    "category_id": "CHI_border_clashes",
+    "name": "Развить пограничный конфликт с государством [From.GetName]",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "var:FROM.attacker_state_vs_@ROOT": {
+        "state_is_fully_controlled_by_ROOT_or_subject": true
+      },
+      "divisions_in_border_state": {
+        "state": "var:FROM.attacker_state_vs_@ROOT",
+        "border_state": "var:FROM.defender_state_vs_@ROOT",
+        "size": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "start_border_war": {
+        "change_state_after_war": false,
+        "attacker": {
+          "state": "var:FROM.attacker_state_vs_@ROOT",
+          "num_provinces": 4,
+          "on_win": "wtt_border_conflict_won_attacker.1",
+          "on_lose": "wtt_border_conflict_lost_attacker.1",
+          "on_cancel": "wtt_border_conflict_canceled_attacker.1"
+        },
+        "defender": {
+          "state": "var:FROM.defender_state_vs_@ROOT",
+          "num_provinces": 4,
+          "on_win": "wtt_border_conflict_won_defender.1",
+          "on_lose": "wtt_border_conflict_lost_defender.1",
+          "on_cancel": "wtt_border_conflict_canceled_defender.1"
+        }
+      },
+      "FROM": {
+        "activate_targeted_decision": [
+          {
+            "target": "ROOT",
+            "decision": "WTT_border_conflict_escalate_conflict"
+          },
+          {
+            "target": "ROOT",
+            "decision": "WTT_border_conflict_time_until_cancelled"
+          }
+        ]
+      },
+      "activate_targeted_decision": [
+        {
+          "target": "FROM",
+          "decision": "WTT_border_conflict_escalate_conflict"
+        },
+        {
+          "target": "FROM",
+          "decision": "WTT_border_conflict_time_until_cancelled"
+        }
+      ]
+    }
+  },
+  {
+    "id": "WTT_border_conflict_time_until_cancelled",
+    "category_id": "CHI_border_clashes",
+    "name": "В государстве [From.From.GetName] без перемен",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "var:FROM.defender_state_vs_@ROOT": {
+        "has_border_war": false
+      },
+      "var:FROM.attacker_state_vs_@ROOT": {
+        "has_border_war": false
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "WTT_border_conflict_escalate_conflict",
+    "category_id": "CHI_border_clashes",
+    "name": "Развить конфликт",
+    "desc": "",
+    "icon": "decision_generic_ignite_civil_war",
+    "cost": 200,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_border_war_with": "FROM"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "is_border_conflict_defender_vs_FROM": true
+        },
+        "set_border_war_data": {
+          "attacker": "var:ROOT.defender_state_vs_@FROM",
+          "defender": "var:ROOT.defender_state_vs_@FROM",
+          "defender_modifier": 0.15,
+          "combat_width": 100
+        }
+      },
+      "else": {
+        "set_border_war_data": {
+          "attacker": "var:FROM.defender_state_vs_@ROOT",
+          "defender": "var:FROM.defender_state_vs_@ROOT",
+          "attacker_modifier": 0.15,
+          "combat_width": 100
+        }
+      },
+      "FROM": {
+        "set_country_flag": {
+          "flag": "WTT_border_conflict_escalate_to_war_cooldown_@ROOT",
+          "days": "@border_conflict_escalate_to_war_countdown",
+          "value": 1
+        },
+        "remove_targeted_decision": {
+          "target": "ROOT",
+          "decision": "WTT_border_conflict_escalate_conflict"
+        }
+      },
+      "set_country_flag": {
+        "flag": "WTT_border_conflict_escalate_to_war_cooldown_@FROM",
+        "days": "@border_conflict_escalate_to_war_countdown",
+        "value": 1
+      },
+      "custom_effect_tooltip": "in_45_days",
+      "activate_targeted_decision": {
+        "target": "FROM",
+        "decision": "WTT_border_conflict_escalate_to_war"
+      }
+    }
+  },
+  {
+    "id": "WTT_border_conflict_escalate_to_war",
+    "category_id": "CHI_border_clashes",
+    "name": "Довести конфликт до войны",
+    "desc": "",
+    "icon": "decision_generic_ignite_civil_war",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "WTT_border_conflict_escalate_to_war_cooldown_@FROM"
+      },
+      "has_border_war_with": "FROM"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "is_border_conflict_defender_vs_FROM": true
+        },
+        "var:ROOT.defender_state_vs_@FROM": {
+          "save_event_target_as": "their_state"
+        },
+        "var:ROOT.attacker_state_vs_@FROM": {
+          "save_event_target_as": "our_state"
+        }
+      },
+      "else": {
+        "var:FROM.defender_state_vs_@ROOT": {
+          "save_event_target_as": "our_state"
+        },
+        "var:FROM.attacker_state_vs_@ROOT": {
+          "save_event_target_as": "their_state"
+        }
+      },
+      "FROM": {
+        "country_event": {
+          "id": "wtt_border_conflict_escalate_to_war.1"
+        },
+        "hidden_effect": {
+          "remove_targeted_decision": {
+            "target": "ROOT",
+            "decision": "WTT_border_conflict_escalate_to_war"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "WTT_border_conflict_back_out_of_conflict",
+    "category_id": "CHI_border_clashes",
+    "name": "Выйти из конфликта",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_border_war_with": "FROM"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "is_border_conflict_defender_vs_FROM": true
+        },
+        "finalize_border_war": {
+          "attacker_win": true,
+          "attacker": "ROOT.attacker_state_vs_@FROM",
+          "defender": "ROOT.attacker_state_vs_@FROM"
+        }
+      },
+      "else": {
+        "finalize_border_war": {
+          "attacker": "FROM.attacker_state_vs_@ROOT",
+          "defender": "FROM.attacker_state_vs_@ROOT",
+          "defender_win": true
+        }
+      }
+    }
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_CAN_Inuit_Polar_Clothes",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_CAN_Inuit_Polar_Clothes$",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_CAN_Inuit_Polar_Clothes"
+        }
+      ],
+      "check_variable": {
+        "AAC_Marine_Active_Category": 2
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_CAN_Inuit_Polar_Clothes",
+      "add_to_variable": {
+        "AAC_unlocked_body_kit": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "set_temp_variable": {
+          "tempEq": -10
+        },
+        "Antarctica_change_equipment": true
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_CAN_Inuit_Polar_Clothes"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_SWI_Rolex_Explorer_Watches",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_SWI_Rolex_Explorer_Watches$",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_SWI_Rolex_Explorer_Watches"
+        }
+      ],
+      "check_variable": {
+        "AAC_Marine_Active_Category": 4
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_SWI_Rolex_Explorer_Watches",
+      "add_to_variable": {
+        "AAC_unlocked_creature_comforts": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "set_temp_variable": {
+          "tempEq": -5
+        },
+        "Antarctica_change_equipment": true
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_SWI_Rolex_Explorer_Watches"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "BRI_Chimes_fortify_Manchester_Lancashire",
+    "category_id": "BRI_The_Chimes_of_Midnight_category",
+    "name": "Укрепить район Манчестер-Ланкашир",
+    "desc": "",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        2001,
+        132
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Currently_Building_Forts"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRI_Midnight_Fortifications_Shown",
+      "tag": "FEN"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.75
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_political_power": -20,
+      "set_country_flag": "BRI_Currently_Building_Forts"
+    }
+  },
+  {
+    "id": "BRI_Chimes_fortify_Liverpool_Cheshire",
+    "category_id": "BRI_The_Chimes_of_Midnight_category",
+    "name": "Укрепить район Ливерпуль-Чешир",
+    "desc": "",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        2000,
+        2004
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Currently_Building_Forts"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRI_Midnight_Fortifications_Shown",
+      "tag": "FEN"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.75
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_political_power": -20,
+      "set_country_flag": "BRI_Currently_Building_Forts"
+    }
+  },
+  {
+    "id": "GER_Speer_ICW_iranisches_freiwilligenkorps",
+    "category_id": "GER_BoP_category",
+    "name": "Иранский Волонтерский Корпус",
+    "desc": "Наш добровольческий корпус, Iranisches Freiwillgenkorps, будет нашим сапогом на этой земле. Опираясь на опыт героического Африканского корпуса, эти люди будут обучены проявлять инициативу, смогут действовать независимо от Фатерлянда и все это без какого-либо намека на субординацию. Они смогут побороть любого врага, что будет стоять перед ними!",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "if": {
+        "limit": {
+          "has_global_flag": "german_civil_war_speervic"
+        },
+        "SRT": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Speer_ICW_iranisches_freiwilligenkorps",
+      "hidden_effect": {
+        "add_command_power": -20
+      }
+    }
+  },
+  {
+    "id": "GER_Speer_ICW_expand_the_iranisches_freiwilligenkorps",
+    "category_id": "GER_BoP_category",
+    "name": "Расширить Иранский Волонтерский Корпус",
+    "desc": "Даже при нашей широкой поддержке война в Иране все еще продолжается. Хотя помощь Рейха и стала решающим звеном, на местах просто не хватает людей, чтобы положить конец этому конфликту. У нас есть много солдат, которые добровольно вызвались сражаться; мы соберем этих нетерпеливых и храбрых людей и пошлем еще больше боевых формирований в Иран, чтобы раз и навсегда покончить с этой войной.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "target": "PER"
+      },
+      "TNO_volunteer_cap_less_4": true
+    },
+    "visible": {
+      "TNO_fopo_iran_selected": true,
+      "has_country_flag": "GER_iran_volunteers"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Speer_ICW_expand_the_iranisches_freiwilligenkorps"
+    }
+  },
+  {
+    "id": "SGR_statereich_speeches",
+    "category_id": "SGR_state_of_the_reich_category",
+    "name": "Выступить с речью",
+    "desc": "Хотя многие считают студентов главной опорой Альберта Шпеера, именно НСДАП является дамокловым мечом, от которого зависит мнение нашего общества. Однако благодаря свой харизме и политической проницательности Шпеер может устроить ослепительную демонстрацию, чтобы успокоить некоторых из наиболее несговорчивых членов партии.",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": "SGR_speech_cost?5",
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_statereich_speeches",
+      "add_to_variable": {
+        "SGR_speech_cost": 5
+      },
+      "if": {
+        "limit": {
+          "is_ai": true
+        },
+        "add_stability": 0.05
+      }
+    }
+  },
+  {
+    "id": "ITA_help_borghese_army",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе в армии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_army",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_army_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_help_borghese_navy",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе во флоте",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_navy",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_navy_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_help_borghese_airforce",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе в ВВС",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_airforce",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_airforce_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_help_borghese_MSVN",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе в ДМНБ",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_MSVN",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_blackshirts_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_help_borghese_carabinieri",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе на карабинеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_carabinieri",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_carabinieri_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_marches_in_libia",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Марши в Ливии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_marches_in_libia",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "450": {
+        "add_manpower": 600
+      },
+      "448": {
+        "add_manpower": 600
+      }
+    }
+  },
+  {
+    "id": "ITA_marches_in_albania",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Марши в Албании",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_marches_in_albania",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "1295": {
+        "add_manpower": 600
+      },
+      "44": {
+        "add_manpower": 600
+      }
+    }
+  },
+  {
+    "id": "ITA_marches_in_montenegro",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Марши в Черногории",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_marches_in_montenegro",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "745": {
+        "add_manpower": 600
+      },
+      "1326": {
+        "add_manpower": 600
+      }
+    }
+  },
+  {
+    "id": "ITA_borghese_coup",
+    "category_id": "ita_best_of_enemies",
+    "name": "Боргезе делает свой ход",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "AND": {
+        "has_global_flag": "ITA_lost_oil_crisis",
+        "count_triggers": {
+          "amount": 4,
+          "check_variable": [
+            {
+              "ITA_Borghese_RoyalArmy": {
+                "_op": ">",
+                "value": "ITA_Sogno_RoyalArmy"
+              }
+            },
+            {
+              "ITA_Borghese_RoyalNavy": {
+                "_op": ">",
+                "value": "ITA_Sogno_RoyalNavy"
+              }
+            },
+            {
+              "ITA_Borghese_RoyalAirforce": {
+                "_op": ">",
+                "value": "ITA_Sogno_RoyalAirforce"
+              }
+            },
+            {
+              "ITA_Borghese_Blackshirts": {
+                "_op": ">",
+                "value": "ITA_Sogno_Blackshirts"
+              }
+            },
+            {
+              "ITA_Borghese_Carabinieri": {
+                "_op": ">",
+                "value": "ITA_Sogno_Carabinieri"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHT_repair_the_baikal_highway",
+    "category_id": "CHT_chessboard_category",
+    "name": "Восстановить Байкальскую магистраль",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_repair_the_baikal_highway",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.04
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_finish_the_amur_highway",
+    "category_id": "CHT_chessboard_category",
+    "name": "Закончить Амурское шоссе",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_finish_the_amur_highway",
+      "random_owned_controlled_state": {
+        "limit": {
+          "state": 561
+        },
+        "add_manpower": -3500
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.04
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_complete_the_magadan_connection",
+    "category_id": "CHT_chessboard_category",
+    "name": "Завершить Магаданскую магистраль",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "CHT_amur_highway_finished"
+    },
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_complete_the_magadan_connection",
+      "random_owned_controlled_state": {
+        "limit": {
+          "state": 562
+        },
+        "add_manpower": -3500
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.04
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_restoration_of_Irkutsk_hps",
+    "category_id": "CHT_chessboard_category",
+    "name": "Восстановительные работы на Иркутской ГЭС",
+    "desc": "",
+    "icon": "GFX_decision_generic_dam",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_restoration_of_irkutsk_hps",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.08
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_develop_Blagoveshchensk_railway_hub",
+    "category_id": "CHT_chessboard_category",
+    "name": "Развивать железнодорожный узел Благовещенска",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 35,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "CHT_amur_highway_finished"
+    },
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_develop_Blagoveshchensk_railway_hub",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.08
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_expand_the_port_of_magadan",
+    "category_id": "CHT_chessboard_category",
+    "name": "Расширить порт в Магадане",
+    "desc": "",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 35,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "check_variable": {
+          "CHT_phase_1_count": {
+            "_op": ">",
+            "value": 4
+          }
+        },
+        "tooltip": "CHT_econ_phase_done_tt"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_the_port_of_magadan",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.08
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_expand_resource_exploitation_yakutia",
+    "category_id": "CHT_chessboard_category",
+    "name": "Расширить добычу полезных ископаемых в Якутии",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_resource_exploitation_yakutia",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_expand_resource_exploitation_irkutsk",
+    "category_id": "CHT_chessboard_category",
+    "name": "Расширить добычу полезных ископаемых в Иркутской зоне",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_resource_exploitation_yakutia",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_yakutia_resource_lease",
+    "category_id": "CHT_chessboard_category",
+    "name": "\"Аренда\" якутских ресурсов Японией",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "AND": {
+        "has_country_flag": "CHT_yakutia_resources",
+        "NOT": {
+          "has_country_flag": "CHT_split_with_japan"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_resource_exploitation_yakutia",
+      "give_resource_rights": [
+        {
+          "receiver": "JAP",
+          "state": 574,
+          "resources": [
+            "oil",
+            "aluminium",
+            "rubber",
+            "tungsten",
+            "steel",
+            "chromium",
+            "uranium"
+          ]
+        },
+        {
+          "receiver": "JAP",
+          "state": 760,
+          "resources": [
+            "oil",
+            "aluminium",
+            "rubber",
+            "tungsten",
+            "steel",
+            "chromium",
+            "uranium"
+          ]
+        }
+      ],
+      "custom_effect_tooltip": "CHT_resource_lease_tt",
+      "add_to_variable": [
+        {
+          "CHT_restoration_misc_income": 0.1
+        },
+        {
+          "CHT_restoration_construct_speed": 0.1
+        }
+      ],
+      "force_update_dynamic_modifier": true
+    }
+  },
+  {
+    "id": "CHT_irkutsk_resource_lease",
+    "category_id": "CHT_chessboard_category",
+    "name": "\"Аренда\" иркутских ресурсов Японией",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "AND": {
+        "has_country_flag": "CHT_irkutsk_resources",
+        "NOT": {
+          "has_country_flag": "CHT_split_with_japan"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_resource_exploitation_yakutia",
+      "give_resource_rights": [
+        {
+          "receiver": "JAP",
+          "state": 564,
+          "resources": [
+            "oil",
+            "aluminium",
+            "rubber",
+            "tungsten",
+            "steel",
+            "chromium",
+            "uranium"
+          ]
+        },
+        {
+          "receiver": "JAP",
+          "state": 566,
+          "resources": [
+            "oil",
+            "aluminium",
+            "rubber",
+            "tungsten",
+            "steel",
+            "chromium",
+            "uranium"
+          ]
+        }
+      ],
+      "custom_effect_tooltip": "CHT_resource_lease_tt",
+      "add_to_variable": [
+        {
+          "CHT_restoration_misc_income": 0.1
+        },
+        {
+          "CHT_restoration_construct_speed": 0.1
+        }
+      ],
+      "force_update_dynamic_modifier": true
+    }
+  },
+  {
+    "id": "CHT_develop_magadan_for_large_scale_shipping",
+    "category_id": "CHT_chessboard_category",
+    "name": "Развить Магадан для больших поставок",
+    "desc": "",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_develop_magadan_for_large_scale_shipping",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHf_develop_domestic_imperial_industries",
+    "category_id": "CHT_chessboard_category",
+    "name": "CHf_develop_domestic_imperial_industries",
+    "desc": "",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHf_develop_domestic_imperial_industries",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.1
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_imperial_heart_of_siberia",
+    "category_id": "CHT_chessboard_category",
+    "name": "Имперское сердце Сибири",
+    "desc": "",
+    "icon": "GFX_decision_generic_chess_king",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "check_variable": {
+          "CHT_phase_2_count": {
+            "_op": ">",
+            "value": 3
+          }
+        },
+        "tooltip": "CHT_econ_phase_done_tt"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_resource_exploitation_yakutia",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_Phase_3_Info",
+    "category_id": "CHT_chessboard_category",
+    "name": "Должен остаться лишь один",
+    "desc": "",
+    "icon": "GFX_decision_category_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "always": false,
+        "tooltip": "CHT_phase_3_start_tt"
+      }
+    },
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "NOT": {
+          "has_country_flag": [
+            "CHT_supported_mikhail",
+            "CHT_supported_shepunov"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHT_encourage_investment_in_trade_hubs",
+    "category_id": "CHT_chessboard_category",
+    "name": "Поощрение инвестиций в наши торговые центры",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "has_country_flag": "CHT_supported_mikhail"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_encourage_investment_in_trade_hubs",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.07
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_expand_national_industrialization_effort",
+    "category_id": "CHT_chessboard_category",
+    "name": "Расширить индустриализацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 65,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "has_country_flag": "CHT_supported_mikhail"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_national_industrialization_effort",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_modernize_irkutsk_hps",
+    "category_id": "CHT_chessboard_category",
+    "name": "Модернизировать Иркутскую ГЭС",
+    "desc": "",
+    "icon": "GFX_decision_generic_dam",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "has_country_flag": "CHT_supported_mikhail"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_modernize_irkutsk_hps",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.07
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_invest_in_uranium_extraction",
+    "category_id": "CHT_chessboard_category",
+    "name": "Инвестиции в добычу урана",
+    "desc": "",
+    "icon": "GFX_decision_generic_reactor",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "has_country_flag": "CHT_supported_shepunov"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_invest_in_uranium_extraction",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_organize_uranium_deal",
+    "category_id": "CHT_chessboard_category",
+    "name": "Организовать торговлю ураном с Японией",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 2
+        }
+      },
+      "has_country_flag": "CHT_uranium_extraction"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_organize_uranium_deal",
+      "custom_effect_tooltip": "CHT_organize_uranium_deal_tt",
+      "add_to_variable": [
+        {
+          "misc_income_modifier": 0.25
+        },
+        {
+          "production_speed_buildings_factor": 0.1
+        },
+        {
+          "industrial_capacity_factory": 0.1
+        }
+      ],
+      "force_update_dynamic_modifier": true,
+      "give_resource_rights": {
+        "receiver": "JAP",
+        "state": 565,
+        "resources": [
+          "oil",
+          "aluminium",
+          "rubber",
+          "tungsten",
+          "steel",
+          "chromium",
+          "uranium"
+        ]
+      }
+    }
+  },
+  {
+    "id": "CHT_invite_zaibatsu_investments",
+    "category_id": "CHT_chessboard_category",
+    "name": "Предложить дзайбацу инвестировать в приграничные регионы",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "has_country_flag": "CHT_supported_shepunov"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_invite_zaibatsu_investments",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.09
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_siberian_war_preparations",
+    "category_id": "CHT_chessboard_category",
+    "name": "Подготовка к Сибирской войне",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_army_base",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "has_country_flag": "CHT_supported_shepunov"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_siberian_war_preparations",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.09
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_prepare_for_the_westward_expansion",
+    "category_id": "CHT_chessboard_category",
+    "name": "Подготовка к Великой западной экспансии",
+    "desc": "",
+    "icon": "GFX_decision_diplo_siberia_superregional",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "check_variable": {
+          "CHT_phase_3_count": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "tooltip": "CHT_econ_phase_done_tt"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 2
+        }
+      },
+      "OR": {
+        "has_country_flag": [
+          "CHT_supported_mikhail",
+          "CHT_supported_shepunov"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_prepare_for_the_westward_expansion",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_Phase_4_Info",
+    "category_id": "CHT_chessboard_category",
+    "name": "В ожидании объединения Сибири",
+    "desc": "",
+    "icon": "GFX_decision_category_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "always": false,
+        "tooltip": "CHT_phase_4_start_tt"
+      }
+    },
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 3
+          }
+        },
+        "NOT": {
+          "has_country_flag": "RUS_superregional_stage"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHT_siberian_highway_project",
+    "category_id": "CHT_chessboard_category",
+    "name": "Проект \"Великая Сибирская магистраль\"",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_country_flag": "RUS_superregional_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_siberian_highway_projectw",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_novosibirsk_naval_program",
+    "category_id": "CHT_chessboard_category",
+    "name": "Программа развития флота Магадана",
+    "desc": "",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_country_flag": "RUS_superregional_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_novosibirsk_naval_program",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_stolypin_land_grants_program",
+    "category_id": "CHT_chessboard_category",
+    "name": "Программа \"Столыпинских\" сибирских земельных грантов",
+    "desc": "",
+    "icon": "GFX_decision_generic_farm",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_country_flag": [
+        "CHT_mikhail_victorious",
+        "RUS_superregional_stage"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_stolypin_land_grants_program",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_operation_ilya_muromets",
+    "category_id": "CHT_chessboard_category",
+    "name": "Начать проект \"Илья Муромец\"",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_country_flag": [
+        "CHT_shepunov_victorious",
+        "RUS_superregional_stage"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_operation_ilya_muromets",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "WSR_border_clashes_batov",
+    "category_id": "OMS_DECCAT_insurgency",
+    "name": "Вражеские столкновения на границе!",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WSR_border_clashes_batov",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -250,
+        "producer": "WSB"
+      },
+      "add_manpower": -500,
+      "effect_tooltip": {
+        "WSR": {
+          "add_political_power": -50,
+          "add_stability": -0.05,
+          "add_manpower": -500
+        }
+      }
+    }
+  },
+  {
+    "id": "WSR_border_clashes",
+    "category_id": "RUS_reunification_category",
+    "name": "Столкновение гос-ва [WSB.GetFlag] с Черной Лигой",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "OMS_not_doing_decision_other",
+        "NOT": {
+          "has_country_flag": "WSR_decision_batov_doing_one"
+        }
+      }
+    },
+    "visible": {
+      "OMS": {
+        "exists": true,
+        "has_country_flag": [
+          "OMS_batov_insurgency_active",
+          "RUS_regional_stage"
+        ]
+      },
+      "OR": {
+        "573": {
+          "check_variable": {
+            "THIS.base_status": 2
+          }
+        },
+        "871": {
+          "check_variable": {
+            "THIS.base_status": 2
+          }
+        },
+        "756": {
+          "check_variable": {
+            "THIS.base_status": 2
+          }
+        },
+        "863": {
+          "check_variable": {
+            "THIS.base_status": 2
+          }
+        }
+      },
+      "has_country_flag": "RUS_regional_stage",
+      "NOT": {
+        "has_country_flag": "WSR_decision_batov_ii_disabled"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "WSR_decision_batov_doing_one",
+      "hidden_effect": {
+        "add_command_power": -30,
+        "WSB": {
+          "activate_mission": "WSR_border_clashes_batov"
+        },
+        "set_variable": {
+          "WSR_took_decision_batov_ii": 1
+        }
+      },
+      "add_equipment_to_stockpile": {
+        "type": "artillery_equipment",
+        "amount": -75,
+        "producer": "WSR"
+      },
+      "custom_effect_tooltip": "OMS_unresponsive_tt",
+      "effect_tooltip": {
+        "WSB": {
+          "every_owned_state": {
+            "limit": {
+              "OR": {
+                "state": [
+                  573,
+                  871,
+                  756,
+                  863
+                ]
+              },
+              "check_variable": {
+                "THIS.base_status": 2
+              }
+            },
+            "set_variable": {
+              "THIS.base_status": 1
+            },
+            "custom_effect_tooltip": "OMS_destroy_base_up_tt"
+          }
+        },
+        "WSR": {
+          "if": [
+            {
+              "limit": {
+                "WSR": {
+                  "original_tag": "WRS",
+                  "has_country_leader": {
+                    "character": "WRS_Georgy_Zhukov",
+                    "ruling_only": true
+                  }
+                }
+              },
+              "WRS_zhukovregional_increase_akhromeyev_influence_low": true,
+              "WRRFTangle_calcXY": true
+            },
+            {
+              "limit": {
+                "WSR": {
+                  "OR": [
+                    {
+                      "original_tag": [
+                        "KOM",
+                        "VYT"
+                      ]
+                    },
+                    {
+                      "has_government": [
+                        "progressivism",
+                        "liberalism",
+                        "liberal_conservatism",
+                        "conservatism",
+                        "paternalism"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "every_owned_state": {
+                "limit": {
+                  "state": [
+                    262,
+                    869,
+                    866,
+                    398,
+                    753
+                  ]
+                },
+                "RUS_authdem_campaign_effects": true
+              },
+              "if": {
+                "limit": {
+                  "original_tag": "KOM"
+                },
+                "custom_effect_tooltip": "KOM_omsk_border_tt"
+              },
+              "else_if": {
+                "limit": {
+                  "original_tag": "VYT"
+                },
+                "custom_effect_tooltip": "VYT_omsk_border_tt"
+              }
+            }
+          ],
+          "else_if": [
+            {
+              "limit": {
+                "WSR": {
+                  "original_tag": "KOM",
+                  "has_country_leader": {
+                    "character": "KOM_Svetlana_Stalina",
+                    "ruling_only": true
+                  },
+                  "has_government": "liberal_conservatism"
+                }
+              },
+              "KOM_PSD_empower_right_low": true
+            },
+            {
+              "limit": {
+                "WSR": {
+                  "original_tag": "KOM",
+                  "has_country_leader": {
+                    "character": "KOM_Ivan_Serov",
+                    "ruling_only": true
+                  }
+                }
+              },
+              "KOM_Ordosocialist_Increase_Left": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "UKR_set_up_weapon_caches",
+    "category_id": "UKR_ukraine_must_survive_category",
+    "name": "Set Up Weapon Caches",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UKR_ukraine_must_survive_doing_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "UKR_ukraine_must_survive_insurgency_phase",
+      "NOT": {
+        "has_global_flag": "Kyiv_Nuked"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision UKR_set_up_weapon_caches",
+      "set_temp_variable": [
+        {
+          "UKR_preparation_temp": 5
+        },
+        {
+          "temp_econ_spending_amount": 0.1
+        }
+      ],
+      "UKR_ukraine_must_survive_variable_change": true,
+      "add_equipment_to_stockpile": [
+        {
+          "type": "infantry_equipment",
+          "amount": -1000
+        },
+        {
+          "type": "anti_tank_equipment",
+          "amount": -250
+        },
+        {
+          "type": "support_equipment",
+          "amount": -250
+        }
+      ],
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "UKR_ukraine_must_survive_doing_decision"
+    }
+  },
+  {
+    "id": "OMO_restore_churches",
+    "category_id": "OMO_territories_category",
+    "name": "Restore Churches",
+    "desc": "",
+    "icon": "GFX_decision_OMO_church",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  }
+]

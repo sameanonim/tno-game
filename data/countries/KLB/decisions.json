@@ -1,0 +1,130 @@
+[
+  {
+    "id": "HGR_incorporate_KLB",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [KLB.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_KLB_req_tt",
+        "KLB": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_KLB_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "KLB": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_KLB",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_KLB_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KLB.GetFlag]Перехватить бургундскую разведку",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_KLB"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KLB_influence_true",
+        "HGR_KLB_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "KLB": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KLB_decision_a_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "add_war_support": 0.025,
+      "KLB": {
+        "increase_Heydrich_influence_small": true,
+        "add_war_support": -0.025
+      }
+    }
+  },
+  {
+    "id": "HGR_KLB_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[KLB.GetFlag]Перерезать линии связи",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_KLB"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_KLB_influence_true",
+        "HGR_KLB_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "KLB": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_KLB_decision_a_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "KLB": {
+        "increase_Heydrich_influence_medium": true,
+        "add_equipment_to_stockpile": {
+          "type": "support_equipment",
+          "amount": -100,
+          "producer": "BRG"
+        }
+      }
+    }
+  }
+]

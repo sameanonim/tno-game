@@ -1,0 +1,294 @@
+[
+  {
+    "id": "AM_fight_TMW",
+    "category_id": "RUS_after_midnight_category",
+    "name": "Напасть на [TMW.GetFlag] [TMW.GetName]",
+    "desc": "",
+    "icon": "GFX_AM_SBA",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "global.AM_sandbox_mode": 1
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AM_fight_TMW",
+      "declare_war_on": {
+        "target": "TMW",
+        "type": "annex_everything"
+      },
+      "subtract_from_variable": {
+        "global.AM_progress_count": 1
+      },
+      "TNO_am_counter_calculate": true
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_TMW",
+    "category_id": "RUS_AM_coring_category",
+    "name": "Интегрировать [TMW.GetFlag] [TMW.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "all_state": {
+        "OR": {
+          "NOT": {
+            "is_core_of": "TMW"
+          },
+          "AND": {
+            "is_owned_by": "ROOT",
+            "NOT": {
+              "is_core_of": "ROOT"
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Send_More_Planes",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Отправить больше самолетов",
+    "desc": "Отправка большего количества самолетов Хюттигу и Мюллеру заслужит если не благодарность, то, по крайней мере, снизит подозрения.",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 14.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "COG": {
+        "add_equipment_to_stockpile": {
+          "type": "fighter_equipment",
+          "amount": 20
+        }
+      },
+      "GRO": {
+        "add_equipment_to_stockpile": {
+          "type": "fighter_equipment",
+          "amount": 20
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "ANG_Muller_Sus": 2
+        },
+        {
+          "ANG_Huttig_Sus": 2
+        }
+      ],
+      "custom_effect_tooltip": [
+        "ANG_Lower_Muller_Sus_Low",
+        "ANG_Lower_Huttig_Sus_Low"
+      ],
+      "ANG_Sus_Clamp_Check": true
+    }
+  },
+  {
+    "id": "ANG_Airlift_Mullers_Men",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Транспорт для Мюллера",
+    "desc": "Мюллер был бы рад, если бы мы перебросили по воздуху его подкрепление на фронт, снизив его подозрения.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 29.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Supplement_Huttigs_Ranks",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Восстановить резервы Хюттигу",
+    "desc": "Мы можем послать дополнительные силы к Хюттигу, чтобы помочь ему с нехваткой рабочей силы, порадовать его и снизить наши подозрения.",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 29.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -30
+      },
+      "add_manpower": -750,
+      "GRO": {
+        "add_manpower": 750
+      },
+      "subtract_from_variable": {
+        "ANG_Huttig_Sus": 3
+      },
+      "custom_effect_tooltip": "ANG_Lower_Huttig_Sus_Medium",
+      "ANG_Sus_Clamp_Check": true
+    }
+  },
+  {
+    "id": "ANG_Personally_Lead_Bombing_Run",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Показать мастерство Шенка",
+    "desc": "Рейхскомиссар Шенк может лично возглавить бомбардировку, произведя впечатление на своих коллег и снизив их подозрения, даже если наш рейхскомиссар \"промахнется\" по всем своим целям.",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 49.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Fake_Action_Reports",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Поддельные отчеты о действиях",
+    "desc": "Если мы хотим избежать подозрений Мюллера и Хюттига, мы должны, по крайней мере, создать видимость серьезной борьбы с южноафриканцами. Фальшивые боевые донесения должны быть составлены и отправлены нашим коллегам-рейхскомиссарам, чтобы создать впечатление, что наши войска делают все возможное, чтобы помочь.",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 24.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_invitethemin"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Fake_Evidence",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Концы в воду!",
+    "desc": "Мы можем создать некоторые ложные доказательства наших проступков, чтобы отвести подозрения. Кто поверит таким откровенно фальшивым доказательствам?",
+    "icon": "GFX_decision_generic_investigate_no",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_invitethemin"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Fabricate_Frontline_incident",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Сфабриковать инцидент на передовой",
+    "desc": "Наши разведывательные службы могут сфабриковать инцидент на передовой, чтобы отвлечь наших коллег от расследования нас.",
+    "icon": "GFX_decision_generic_border_war_alt",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_thespyhaven"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Increase_War_Propaganda",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Усилить военную пропаганду",
+    "desc": "Мы можем выпустить новую волну пропаганды, чтобы убедить наших коллег в решимости Шенка выиграть войну.",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_thespyhaven"
+    },
+    "complete_effect": {
+      "subtract_from_variable": [
+        {
+          "ANG_Muller_Sus": 3
+        },
+        {
+          "ANG_Huttig_Sus": 2
+        }
+      ],
+      "custom_effect_tooltip": [
+        "ANG_Lower_Muller_Sus_Medium",
+        "ANG_Lower_Huttig_Sus_Low"
+      ],
+      "ANG_Sus_Clamp_Check": true
+    }
+  },
+  {
+    "id": "ANG_Show_Trials_Against_Natives",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Показательные процессы против бунтовщиков",
+    "desc": "Мы можем провести показательные судебные процессы против местных жителей, чтобы продемонстрировать, что мы караем повстанцев.",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": [
+      20,
+      40
+    ],
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_thespyhaven"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Stage_Crackdowns",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Продолжение марлезонского балета",
+    "desc": "Мы можем организовать фальшивое подавление горячих точек повстанцев, чтобы сбить наших коллег со следа.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_thespyhaven"
+    },
+    "complete_effect": {}
+  }
+]

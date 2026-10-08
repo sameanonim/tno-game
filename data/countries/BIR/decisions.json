@@ -1,0 +1,1489 @@
+[
+  {
+    "id": "mers_el_kebir_raid",
+    "category_id": "operations",
+    "name": "Операция «Катапульта»",
+    "desc": "Французский флот находится в руках вишистского режима. Нельзя допустить, чтобы он был передан Германии. Сколь бы это ни было мерзко, мы вынуждены требовать от наших бывших союзников капитуляции под угрозой уничтожения.",
+    "icon": "generic_naval",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_country_leader": {
+        "ruling_only": true,
+        "character": "ENG_winston_churchill"
+      },
+      "has_government": "democratic",
+      "has_war_with": "GER",
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "FRA",
+        "has_government": "fascism"
+      }
+    },
+    "visible": {
+      "has_country_leader": {
+        "ruling_only": true,
+        "character": "ENG_winston_churchill"
+      },
+      "tag": "ENG",
+      "has_government": "democratic",
+      "has_war_with": "GER",
+      "OR": {
+        "AND": {
+          "is_in_faction_with": "FRA",
+          "FRA": {
+            "surrender_progress": {
+              "_op": ">",
+              "value": 0.2
+            }
+          }
+        },
+        "any_country_with_original_tag": {
+          "original_tag_to_check": "FRA",
+          "has_government": "fascism"
+        }
+      }
+    },
+    "complete_effect": {
+      "random_other_country": {
+        "limit": {
+          "original_tag": "FRA",
+          "has_government": "fascism"
+        },
+        "country_event": {
+          "id": "wtt_britain.25",
+          "hours": 5
+        }
+      }
+    }
+  },
+  {
+    "id": "BRI_Midnight_Mission_Hold_Birmingham",
+    "category_id": "BRI_The_Chimes_of_Midnight_category",
+    "name": "Удерживать Бирмингем",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "tag": "ENG"
+        },
+        "FEN": {
+          "controls_state": 2002
+        }
+      },
+      "else": {
+        "NOT": {
+          "FEN": {
+            "controls_state": 2002
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "Exhaustion": 10
+        },
+        {
+          "Confidence": -20
+        },
+        {
+          "Acclimation": 10
+        }
+      ],
+      "BRI_Midnight_ExhaustionAdd": true,
+      "BRI_Midnight_ConfidenceAdd": true,
+      "BRI_Midnight_AcclimationAdd": true
+    }
+  },
+  {
+    "id": "BRI_Midnight_Mission_Retake_Birmingham",
+    "category_id": "BRI_The_Chimes_of_Midnight_category",
+    "name": "Повторно занять Бирмингем",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "tag": "ENG"
+        },
+        "ENG": {
+          "controls_state": 2002
+        }
+      },
+      "else": {
+        "NOT": {
+          "ENG": {
+            "controls_state": 2002
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "Exhaustion": -5
+        },
+        {
+          "Confidence": 15
+        },
+        {
+          "Acclimation": -10
+        }
+      ],
+      "BRI_Midnight_ExhaustionAdd": true,
+      "BRI_Midnight_ConfidenceAdd": true,
+      "BRI_Midnight_AcclimationAdd": true
+    }
+  },
+  {
+    "id": "USA_CIA_align_with_novosibirsk",
+    "category_id": "USA_BoP_category",
+    "name": "Настроить Новосибирск на ОСН",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "country_exists": "NOV",
+      "NOV": {
+        "has_country_flag": [
+          "RUS_regional_stage",
+          "NOV_active_JAPvsUSA"
+        ]
+      },
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "check_variable": {
+        "USA_CIA_align_with_novosibirsk_times": {
+          "_op": "<",
+          "value": 3
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_align_with_novosibirsk_tt",
+      "add_to_variable": {
+        "USA_CIA_align_with_novosibirsk_times": 1
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Russia"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_aligning_novosibirsk",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_disalign_novosibirsk",
+    "category_id": "USA_BoP_category",
+    "name": "Дистанцировать Новосибирск от Сферы",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "country_exists": "NOV",
+      "NOV": {
+        "has_country_flag": [
+          "RUS_regional_stage",
+          "NOV_active_JAPvsUSA"
+        ]
+      },
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "check_variable": {
+        "USA_CIA_disalign_novosibirsk_times": {
+          "_op": "<",
+          "value": 3
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_disalign_novosibirsk_tt",
+      "add_to_variable": {
+        "USA_CIA_disalign_novosibirsk_times": 1
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Russia"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_disaligning_novosibirsk",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_invest_in_novosibirsk",
+    "category_id": "USA_BoP_category",
+    "name": "Инвестировать в Новосибирск",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_25_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.024
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "country_exists": "NOV",
+      "NOV": {
+        "has_country_flag": "RUS_regional_stage"
+      },
+      "NOT": {
+        "has_global_flag": "RUS_national_unification"
+      },
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_invest_in_novosibirsk_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Russia"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_invest_in_novosibirsk",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.025
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_Speer_ICW_expand_the_gebirgsjager_program",
+    "category_id": "GER_BoP_category",
+    "name": "Расширить горнострелковую программу",
+    "desc": "Иран — это, прежде всего, горная страна. Если мы хотим получить наилучшие результаты от нашего добровольческого корпуса, то любые войска, которые участвуют в иранском конфликте, должны пройти ускоренный курс горной войны в течение недели с нашими горнострелками. Хотя это будет жестоко, тренировки значительно повысит нашу эффективность и спасет многие жизни на поле боя.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GER_iran_volunteers"
+    },
+    "visible": {
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Speer_ICW_expand_the_gebirgsjager_program",
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_novosibirsk",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Новосибирска",
+    "desc": "",
+    "icon": "GFX_decision_novosibirsk_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 570
+    },
+    "visible": {
+      "owns_state": 570,
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "570": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "40": {
+                "is_core_of": "ROOT"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_coring_integrate_birobidzhan",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Биробиджана",
+    "desc": "",
+    "icon": "GFX_decision_birobidzhan_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 657
+    },
+    "visible": {
+      "owns_state": 657,
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "657": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "1646": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "1364": {
+                "is_core_of": "ROOT"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHT_novosibirsk_naval_program",
+    "category_id": "CHT_chessboard_category",
+    "name": "Программа развития флота Магадана",
+    "desc": "",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_country_flag": "RUS_superregional_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_novosibirsk_naval_program",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "IRK_novosibirsk_special_economic_sector",
+    "category_id": "IRK_five_year_plans",
+    "name": "Особая экономическая зона Новосибирска",
+    "desc": "Новосибирск - идеальный город для создания ещё одного ОЭС. Его огромный промышленный и технологический потенциал в сочетании с отличным аэропортом делает его идеальным местом для коммерческих и промышленных инвестиций. Открыв его для внешних инвесторов в тщательно контролируемых и спланированных рамках, мы сможем значительно обогатить наш Союз, а также воспользоваться преимуществами технологий, которые иностранные компании привнесут, когда укрепят свои позиции в ОЭС.",
+    "icon": "GFX_decision_generic_building",
+    "cost": 125,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "IRK_five_year_plans_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_dynamic_modifier": {
+        "modifier": "IRK_open_and_reformed_economy"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRK_novosibirsk_special_economic_sector",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "NOV_investigate_factories_in_novosibirsk",
+    "category_id": "NOV_narodnik_investigation_category",
+    "name": "Расследование на фабриках в Новосибирске",
+    "desc": "Рабочие классы Новосибирска в целом недовольны своими условиями и поэтому являются легкой мишенью для вербовщиков террористов, проповедующих чушь о перераспределения богатства. В результате распространились слухи о том, что народники уже проникли на многие фабрики города, продвигая свою пропаганду по цехам и вводя в свои ряды рабочих. Мы не можем допустить, чтобы двигатели нашего экономического прогресса стали нашей самой большой угрозой безопасности.",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_operation_in_progress"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_investigate_factories_in_novosibirsk",
+      "hidden_effect": {
+        "add_command_power": -15,
+        "country_event": {
+          "id": "NOV.34"
+        }
+      },
+      "set_country_flag": "NOV_operation_in_progress"
+    }
+  },
+  {
+    "id": "NOV_sibir_effigy",
+    "category_id": "NOV_USA_vs_Japan_category",
+    "name": "СИБИРЬ",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_sibir_effigy"
+    }
+  },
+  {
+    "id": "NOV_sabotage_sibir",
+    "category_id": "NOV_USA_vs_Japan_category",
+    "name": "Саботировать \"Сибирь\"",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SBA_recapture_novosibirsk",
+    "category_id": "SBA_collapse_category",
+    "name": "Отбить Новосибирск",
+    "desc": "",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOV": {
+        "exists": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "country_event": "SBA.98"
+    }
+  },
+  {
+    "id": "SBA_visit_novosibirsk_commune",
+    "category_id": "SBA_build_a_nuke_workshop",
+    "name": "Посетить новосибирскую коммуну",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SBA_visiting_commune"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SBA_kerbal_nuke_program_stage_three"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SBA_visit_novosibirsk_commune",
+      "set_country_flag": "SBA_visiting_commune",
+      "country_event": {
+        "id": "SBA_LibSoc.32",
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "TOM_campaign_on_Novosibirsk",
+    "category_id": "TOM_Regional_Campaign",
+    "name": "Кампания в Новосибирске",
+    "desc": "",
+    "icon": "GFX_decision_generic_podium",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "TOM_Is_Campaigning"
+      }
+    },
+    "visible": {
+      "570": {
+        "TOM_can_have_elections_in_state": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_campaign_on_Novosibirsk",
+      "set_country_flag": "TOM_Is_Campaigning"
+    }
+  },
+  {
+    "id": "TOM_voting_campaign_in_Novosibirsk",
+    "category_id": "TOM_Regional_Campaign",
+    "name": "Избирательная кампания в Новосибирске",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "TOM_Turnout_Decisions"
+      }
+    },
+    "visible": {
+      "570": {
+        "TOM_can_have_elections_in_state": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_voting_campaign_in_Novosibirsk",
+      "set_country_flag": "TOM_Turnout_Decisions"
+    }
+  },
+  {
+    "id": "TOM_suppress_voting_in_Novosibirsk",
+    "category_id": "TOM_Regional_Campaign",
+    "name": "Подавление голосования в Новосибирске",
+    "desc": "",
+    "icon": "GFX_decision_generic_protest",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "TOM_Turnout_Decisions"
+      }
+    },
+    "visible": {
+      "570": {
+        "TOM_can_have_elections_in_state": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_suppress_voting_in_Novosibirsk",
+      "set_country_flag": "TOM_Turnout_Decisions"
+    }
+  },
+  {
+    "id": "WRS_tukha_operation_firebird",
+    "category_id": "WRS_power_struggle_tukha_category",
+    "name": "ОПЕРАЦИЯ: ЖАР-ПТИЦА",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "NOV_fate_of_armenia",
+    "category_id": "SWRW_novosibirsk_misc_category",
+    "name": "The Fate of Armenia",
+    "desc": "",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "original_tag": "NOV",
+      "ARM": {
+        "is_in_faction_with": "RUS"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: NOV_fate_of_armenia",
+      "country_event": "NOV_postwar.100"
+    }
+  },
+  {
+    "id": "RUS_shukshin_reorganise_central_asia",
+    "category_id": "SWRW_novosibirsk_misc_category",
+    "name": "Reorganise Central Asia",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "AND": {
+        "586": {
+          "is_owned_by": "RUS"
+        },
+        "732": {
+          "is_owned_by": "RUS"
+        },
+        "742": {
+          "is_owned_by": "RUS"
+        },
+        "585": {
+          "is_owned_by": "RUS"
+        },
+        "405": {
+          "is_owned_by": "RUS"
+        },
+        "750": {
+          "is_owned_by": "RUS"
+        },
+        "564": {
+          "is_owned_by": "RUS"
+        },
+        "original_tag": "NOV",
+        "has_global_flag": "RUS_shukshin_unification"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Reorganise Central Asia",
+      "hidden_effect": [
+        {
+          "TRK": {
+            "remove_ideas": "ZZZ_anarchy"
+          }
+        },
+        {
+          "every_country": {
+            "limit": {
+              "OR": {
+                "has_idea": [
+                  "CA_Turkes_Kenes_Apathy",
+                  "CA_Turkes_Kenes_Infighting"
+                ]
+              }
+            },
+            "remove_ideas": [
+              "CA_Turkes_Kenes_Apathy",
+              "CA_Turkes_Kenes_Infighting"
+            ]
+          }
+        }
+      ],
+      "clr_global_flag": "TNO_rip_turkmenistan",
+      "RUS_shukshin_central_asia_occupation": true
+    }
+  },
+  {
+    "id": "NOV_DSPR_generic_target_sibir",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Target Sibir",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Generic",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_country_flag": "DSPR_Selected"
+          }
+        },
+        "set_country_flag": "DSPR_Selected"
+      },
+      "set_variable": {
+        "dspr_decision_target": 1
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_sibir_folder",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "[getSibirFolderLoc]",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "dspr_dismantling": true
+    },
+    "visible": {
+      "has_country_flag": "NOV_DSPR_Switch"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_country_flag": "NOV_DSPR_Sibir"
+        },
+        "clr_country_flag": "NOV_DSPR_Sibir"
+      },
+      "else": {
+        "set_country_flag": "NOV_DSPR_Sibir"
+      }
+    }
+  },
+  {
+    "id": "NOV_DSPR_sibir",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "=== SIBIR DECISIONS ===",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "has_country_flag": [
+        "NOV_DSPR_Sibir",
+        "NOV_DSPR_Switch"
+      ]
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "RUS_novosibirsk_special_economic_sector",
+    "category_id": "RUS_five_year_plans",
+    "name": "Novosibirsk Special Economic Sector",
+    "desc": "Novosibirsk is an ideal city to establish another SES. Its great industrial and technological capacities combined with its excellent airport makes it a perfect site for commercial and industrial investment. By opening it up to outside investors under a carefully controlled and planned framework, we'll be able to greatly enrich our Union while also reaping the benefits of the technologies that the foreign companies bring to the table when they establish themselves in the SES.",
+    "icon": "GFX_decision_generic_building",
+    "cost": 125,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "RUS_five_year_plans_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_dynamic_modifier": {
+        "modifier": "RUS_open_and_reformed_economy"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_novosibirsk_special_economic_sector",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "RUS_issue_of_birobidzhan",
+    "category_id": "RUS_lord_of_the_east_category",
+    "name": "Negotiations for Birobidzhan",
+    "desc": "",
+    "icon": "GFX_decision_birobidzhan_icon",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "SGV_construct_novosibirsk_bunkers",
+    "category_id": "SGV_national_redoubt_program_category",
+    "name": "Assemble the Redoubt in Novosibirsk",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 570,
+      "NOT": {
+        "has_country_flag": "OMS_national_redoubt_construction"
+      }
+    },
+    "visible": [
+      {
+        "controls_state": 570,
+        "has_country_flag": [
+          "SGV_national_redoubt_program_start",
+          "OMS_national_redoubt_program_flag"
+        ]
+      },
+      {
+        "has_country_flag": [
+          "OMS_national_redoubt_program_flag",
+          "OMS_a_societal_redoubt_flag"
+        ]
+      }
+    ],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_novosibirsk_bunkers",
+      "set_country_flag": "OMS_national_redoubt_construction",
+      "hidden_effect": {
+        "add_command_power": -20,
+        "add_political_power": -20
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": "GDP"
+      },
+      "multiply_temp_variable": {
+        "temp_econ_spending_amount": 0.015
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_inclusion_of_birobidzhan",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Birobidzhan District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 657
+    },
+    "visible": {
+      "owns_state": 657,
+      "AND": {
+        "1364": {
+          "is_core_of": "ROOT"
+        },
+        "657": {
+          "is_core_of": "ROOT"
+        },
+        "1646": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VOR_military_conscripted_novosibirsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Novosibirsk to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "570": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "40": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        570,
+        40
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_novosibirsk",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "570": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "40": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_novosibirsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Novosibirsk to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "570": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "40": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        570,
+        40
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_novosibirsk",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "570": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "40": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_novosibirsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Novosibirsk",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "570": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "40": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        570,
+        40
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_novosibirsk",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "570": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "40": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "570": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "40": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "570": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "40": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_military_conscripted_birobidzhan",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Birobidzhan to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "1364": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "657": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1646": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        1364,
+        657,
+        1646
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_birobidzhan",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "1364": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "657": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "1646": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_birobidzhan",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Birobidzhan to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "1364": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "657": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "1646": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        1364,
+        657,
+        1646
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_birobidzhan",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "1364": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "657": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "1646": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_birobidzhan",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Birobidzhan",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "1364": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "657": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "1646": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        1364,
+        657,
+        1646
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_birobidzhan",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "1364": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "657": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "1646": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "1364": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "657": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "1646": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "1364": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "657": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "1646": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

@@ -16,6 +16,7 @@ extends PanelContainer
 signal end_turn_requested()
 signal country_flag_clicked()
 signal defcon_clicked()
+signal directive_clicked()
 
 @onready var flag_rect: TextureRect = $HBox/CountrySection/FlagContainer/FlagRect
 @onready var flag_overlay: TextureRect = $HBox/CountrySection/FlagContainer/FlagOverlay
@@ -44,6 +45,12 @@ signal defcon_clicked()
 @onready var pill_econ: PanelContainer = $HBox/PillsScroll/PillsHBox/PillEcon
 @onready var lbl_econ: Label = $HBox/PillsScroll/PillsHBox/PillEcon/HBox/ValLabel
 
+# Пилюля активной национальной директивы
+@onready var pill_directive: PanelContainer = get_node_or_null("HBox/PillsScroll/PillsHBox/PillDirective")
+@onready var btn_directive: Button = get_node_or_null("HBox/PillsScroll/PillsHBox/PillDirective/HBox/DirectiveButton")
+@onready var progress_directive: ProgressBar = get_node_or_null("HBox/PillsScroll/PillsHBox/PillDirective/HBox/ProgressBar")
+@onready var lbl_directive_turns: Label = get_node_or_null("HBox/PillsScroll/PillsHBox/PillDirective/HBox/TurnsLabel")
+
 # Правая секция: DEFCON, Время, Кнопка хода
 @onready var defcon_btn: Button = $HBox/CrisisHBox/DefconButton
 @onready var defcon_icon: TextureRect = $HBox/CrisisHBox/DefconButton/DefconIcon
@@ -64,6 +71,8 @@ func _connect_signals() -> void:
 		btn_end_turn.pressed.connect(func(): end_turn_requested.emit())
 	if defcon_btn != null:
 		defcon_btn.pressed.connect(func(): defcon_clicked.emit())
+	if btn_directive != null:
+		btn_directive.pressed.connect(func(): directive_clicked.emit())
 	
 	var flag_btn = get_node_or_null("HBox/CountrySection/FlagContainer/FlagButton")
 	if flag_btn != null:
@@ -163,6 +172,52 @@ func update_state(state: CountryState, turn_manager: TurnManager = null) -> void
 		else:
 			lbl_econ.text = "$%.1fB / $%.1fB [%s]" % [state.gdp_billions, state.national_debt_billions, state.get_credit_rating()]
 
+	# 8.5. Активная национальная директива / Государственный фокус
+	var act_dir: DirectiveResource = null
+	if turn_manager != null and "active_directive" in turn_manager:
+		act_dir = turn_manager.active_directive
+	if act_dir == null and state != null and not state.active_directives.is_empty():
+		if turn_manager != null and turn_manager.directive_manager != null:
+			var d_id: String = str(state.active_directives[0])
+			act_dir = turn_manager.directive_manager.all_directives.get(d_id, null)
+
+	if btn_directive != null:
+		if act_dir != null:
+			var dir_name = act_dir.title if not act_dir.title.is_empty() else act_dir.id
+			if is_inside_tree() and has_node("/root/LocalizationManager"):
+				var loc = get_node("/root/LocalizationManager")
+				dir_name = loc.tr_key(act_dir.id, dir_name)
+			btn_directive.text = "[ %s ]" % dir_name.to_upper()
+			btn_directive.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
+
+			var spent_turns: int = act_dir.turns_to_complete - act_dir.turns_remaining
+			if turn_manager != null and turn_manager.directive_manager != null:
+				spent_turns = turn_manager.directive_manager.active_progress.get(act_dir.id, spent_turns)
+			var total_turns: int = maxi(act_dir.turns_to_complete, act_dir.turns_required)
+			total_turns = maxi(total_turns, 1)
+			var pct: float = clampf(float(spent_turns) / float(total_turns) * 100.0, 0.0, 100.0)
+
+			if progress_directive != null:
+				progress_directive.visible = true
+				progress_directive.value = pct
+			if lbl_directive_turns != null:
+				lbl_directive_turns.visible = true
+				lbl_directive_turns.text = "%d/%d" % [spent_turns, total_turns]
+
+			if pill_directive != null:
+				pill_directive.tooltip_text = "АКТИВНАЯ НАЦИОНАЛЬНАЯ ДИРЕКТИВА: %s\nПрогресс: %d из %d ходов (%d%%)\nНажмите для перехода в Древо Директив." % [
+					dir_name, spent_turns, total_turns, int(pct)
+				]
+		else:
+			btn_directive.text = tr("[ ВЫБРАТЬ ДИРЕКТИВУ ]")
+			btn_directive.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_AMBER)
+			if progress_directive != null:
+				progress_directive.visible = false
+			if lbl_directive_turns != null:
+				lbl_directive_turns.visible = false
+			if pill_directive != null:
+				pill_directive.tooltip_text = "НЕТ АКТИВНОЙ ДИРЕКТИВЫ!\nАппарат правительства простаивает. Нажмите для утверждения новой директивы."
+
 
 	# 9. Уровень DEFCON (1 - 5)
 	var defcon_level = state.story_flags.get("defcon_level", 5)
@@ -181,3 +236,31 @@ func update_state(state: CountryState, turn_manager: TurnManager = null) -> void
 			lbl_date.text = turn_manager.get_formatted_date().to_upper()
 		if lbl_turn_counter != null:
 			lbl_turn_counter.text = "TURN %d [W%d]" % [turn_manager.current_turn, (turn_manager.current_turn % 4) + 1]
+
+	# 11. Подробные тактические подсказки (Tooltips)
+	if pill_pc != null:
+		var sgn_pc = "+" if state.pc_gain_per_turn >= 0 else ""
+		pill_pc.tooltip_text = "ПОЛИТИЧЕСКИЙ КАПИТАЛ (PC)\nБаланс: %0.1f | Прирост за ход: %s%0.1f\nНеобходим для директив, решений и кадровых назначений." % [state.political_capital, sgn_pc, state.pc_gain_per_turn]
+	if pill_cap != null:
+		pill_cap.tooltip_text = "ОЧКИ КАБИНЕТА (CAP)\nГотовность аппарата: %d / %d\nОпределяет предел одновременно выполняемых национальных проектов." % [state.current_cap, state.max_cap]
+	if pill_stab != null:
+		var stab_pct = int(round(state.get_stability_index() * 100))
+		pill_stab.tooltip_text = "СТАБИЛЬНОСТЬ РЕЖИМА: %d%%\nВлияет на эффективность сбора налогов, фабрик и риск мятежей." % stab_pct
+	if pill_war != null:
+		var ws_val = int(round(state.get("war_support_percent") if "war_support_percent" in state else (state.get("army_morale") if "army_morale" in state else 65.0)))
+		pill_war.tooltip_text = "ПОДДЕРЖКА ВОЙНЫ: %d%%\nМоральный дух армии и готовность общества к эскалации." % ws_val
+	if pill_manpower != null:
+		pill_manpower.tooltip_text = "ЛЮДСКИЕ РЕСУРСЫ: %d чел.\nРезерв для пополнения гарнизонов, дивизий и операций." % int(state.manpower_pool)
+	if pill_factories != null:
+		pill_factories.tooltip_text = "ПРОМЫШЛЕННЫЙ ПОТЕНЦИАЛ (IC)\nФабрики ТНП: %d | Военные заводы: %d\nОпределяет объемы производства и темпы модернизации." % [state.civilian_factories, state.military_factories]
+	if pill_econ != null:
+		pill_econ.tooltip_text = "МАКРОЭКОНОМИЧЕСКИЙ СТАТУС\nВВП: $%0.2f B | Госдолг: $%0.2f B | Рейтинг: [%s]\nКликните для перехода в панель управления экономикой." % [state.gdp_billions, state.national_debt_billions, state.get_credit_rating()]
+	if defcon_btn != null:
+		var def_names = {
+			5: "DEFCON 5 [МИРНОЕ ВРЕМЯ] // Риск термоядерного удара минимален",
+			4: "DEFCON 4 [ДВОЙНОЙ КОНТРОЛЬ] // Повышенная готовность разведки и ПВО",
+			3: "DEFCON 3 [БОЕВАЯ ТРЕВОГА] // Готовность ракетных сил за 15 минут",
+			2: "DEFCON 2 [ПРЕДЪЯДЕРНАЯ ГОТОВНОСТЬ] // Стратегические бомбардировщики в воздухе",
+			1: "DEFCON 1 [ЯДЕРНЫЙ УДАР] // Неминуемая тотальная термоядерная война"
+		}
+		defcon_btn.tooltip_text = "ИНДИКАТОР DEFCON (УРОВЕНЬ %d)\n%s" % [defcon_level, def_names.get(defcon_level, "")]

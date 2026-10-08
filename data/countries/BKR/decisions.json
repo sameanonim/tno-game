@@ -1,0 +1,209 @@
+[
+  {
+    "id": "ONG_guard_BKR",
+    "category_id": "ONG_anti_commie_guard",
+    "name": "Направить Гвардию в Башкирию",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "BKR": {
+          "has_war_with": "WRS"
+        },
+        "AND": {
+          "KOM": {
+            "OR": {
+              "has_government": [
+                "communist",
+                "socialist"
+              ]
+            }
+          },
+          "BKR": {
+            "has_war_with": "KOM"
+          }
+        }
+      }
+    },
+    "visible": {
+      "WRS": {
+        "exists": true
+      },
+      "BKR": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_guard_BKR",
+      "BKR": {
+        "country_event": {
+          "id": "ONG.2",
+          "days": 3
+        }
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -185
+      }
+    }
+  },
+  {
+    "id": "ONG_faction_BKR",
+    "category_id": "ONG_faction",
+    "name": "Республика Башкортостан",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ONG_diplomats_sent"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_faction_BKR",
+      "set_country_flag": "ONG_diplomats_sent"
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_BKR",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [BKR.GetFlag] Башкортостан",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "BKR": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "BKR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_BKR",
+      "set_temp_variable": {
+        "TargetTag": "BKR"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "BKR.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "BKR"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "BKR"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_BKR": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_BKR_Generic",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Атаковать [BKR.GetFlag] Башкортостан",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true,
+      "custom_trigger_tooltip": {
+        "tooltip": "WRS_no_possible_peace_tt",
+        "NOT": {
+          "has_country_flag": "INVASION_BKR_DISALLOWED"
+        }
+      }
+    },
+    "visible": {
+      "is_central_russian_nation": true,
+      "is_neighbor_of": "BKR",
+      "has_war": false,
+      "NOT": {
+        "has_non_aggression_pact_with": "BKR"
+      },
+      "RUS_Smuta_ScriptedTrigger_Expansion_BKR_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_BKR_Generic",
+      "if": {
+        "limit": {
+          "has_country_flag": "tukha_in_power"
+        },
+        "custom_effect_tooltip": "WRS_SMUTA_SEND_ULTIMATUM_tt",
+        "hidden_effect": {
+          "BKR": {
+            "country_event": {
+              "id": "tukha.57"
+            }
+          }
+        }
+      },
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Y": -0.3
+        },
+        "RUS_Smuta_Supplies_Add_Y": true,
+        "set_country_flag": "RUS_Smuta_preparing_expansion"
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_BKR_KOM_Propose_Union",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Предложить объединение [BKR.GetFlag] Башкирам",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "is_neighbor_of": "BKR",
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true,
+      "NOT": {
+        "has_war_with": "BKR"
+      }
+    },
+    "visible": {
+      "tag": "KOM",
+      "BKR": {
+        "exists": true
+      },
+      "OR": {
+        "AND": {
+          "has_government": "despotism",
+          "has_country_leader": {
+            "character": "KOM_Svetlana_Stalina",
+            "ruling_only": true
+          }
+        },
+        "has_government": [
+          "progressivism",
+          "liberal_conservatism",
+          "liberalism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "INVASION_BKR_DISALLOWED"
+    }
+  }
+]

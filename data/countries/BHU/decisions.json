@@ -1,0 +1,65 @@
+[
+  {
+    "id": "RAJ_akhand_bharat_claim_bhu",
+    "category_id": "RAJ_akhand_bharat_cat",
+    "name": "Заявить претензии на [BHU.GetAdjective]ие регионы",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "BHU": {
+          "all_core_state": {
+            "is_controlled_by": "ROOT"
+          }
+        },
+        "all_of_scopes": {
+          "array": "claimed_by_akhand_bharat",
+          "is_controlled_by": "ROOT",
+          "tooltip": "RAJ_akhand_bharat_availability_tt"
+        }
+      }
+    },
+    "visible": {
+      "BHU": {
+        "any_core_state": {
+          "NOT": {
+            "is_core_of": "ROOT"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "is_core_of": "BHU"
+        },
+        "ROOT": {
+          "add_to_array": {
+            "array": "claimed_by_akhand_bharat",
+            "value": "PREV"
+          }
+        },
+        "add_core_of": "ROOT"
+      },
+      "for_each_scope_loop": {
+        "array": "claimed_by_akhand_bharat",
+        "if": {
+          "limit": {
+            "is_core_of": "BHU",
+            "owner": {
+              "is_subject_of": "ROOT"
+            }
+          },
+          "ROOT": {
+            "transfer_state": "PREV"
+          }
+        }
+      },
+      "BHU": {
+        "custom_effect_tooltip": "RAJ_akhand_bharat_annex_subject"
+      }
+    }
+  }
+]

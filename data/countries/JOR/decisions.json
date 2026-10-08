@@ -1,0 +1,323 @@
+[
+  {
+    "id": "AST_seize_local_leadership_in_state_major",
+    "category_id": "AST_union_control_1_cat",
+    "name": "Захватить власть в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "eng_blackshirt_march",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "POL_promote_falangism_in_major",
+    "category_id": "POL_promote_falangism_decisions",
+    "name": "Пропагандировать фалангизм в государстве [FROM.Owner.GetNameDef]",
+    "desc": "",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "FROM": {
+        "owner": {
+          "add_timed_idea": {
+            "idea": "POL_falangist_propaganda",
+            "days": 70
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "POR_major_cancel_portuguese_blockade_evasion",
+    "category_id": "POR_naval_blockade",
+    "name": "Отменить соглашение с Португалией об избегании блокады",
+    "desc": "Нам больше не нужно использовать португальские конвои, чтобы обходить британскую блокаду. Мы немедленно отменим соглашение.",
+    "icon": "generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "POR_evade_blockade_flag"
+    },
+    "visible": {
+      "has_country_flag": "POR_evade_blockade_flag",
+      "NOT": {
+        "has_country_flag": "POR_cancel_evade_blockade_flag"
+      }
+    },
+    "complete_effect": {
+      "add_war_support": -0.1,
+      "set_country_flag": "POR_cancel_evade_blockade_flag",
+      "clr_country_flag": "POR_evade_blockade_flag"
+    }
+  },
+  {
+    "id": "BRI_Enable_Supermajority_Mode",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Включить режим превосходства",
+    "desc": "",
+    "icon": "GFX_decision_ENG_britain",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRI_Show_Lower_Difficulty_Decisions",
+      "NOT": {
+        "has_country_flag": [
+          "BRI_Enabled_Supermajority_Mode",
+          "BRI_Enabled_Higher_Budgets",
+          "BRI_Enabled_Harder_Party_of_Contrasts",
+          "BRI_Enabled_Harder_Mann",
+          "BRI_Enabled_Harder_Civil_War",
+          "BRI_Enabled_Lower_Budgets",
+          "BRI_Enabled_Easier_Mann",
+          "BRI_Enabled_Easier_Civil_War"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Enable_Supermajority_Mode",
+      "custom_effect_tooltip": "BRI_Enable_Supermajority_Mode_tt",
+      "set_country_flag": [
+        "BRI_Enabled_Supermajority_Mode",
+        "BRI_Enabled_Lower_Budgets",
+        "BRI_Enabled_Easier_Mann",
+        "BRI_Enabled_Easier_Civil_War"
+      ]
+    }
+  },
+  {
+    "id": "BRI_Disable_Supermajority_Mode",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить режим превосходства",
+    "desc": "",
+    "icon": "GFX_decision_ENG_britain",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Lower_Difficulty_Decisions",
+        "BRI_Enabled_Supermajority_Mode"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Supermajority_Mode",
+      "clr_country_flag": [
+        "BRI_Enabled_Supermajority_Mode",
+        "BRI_Enabled_Lower_Budgets",
+        "BRI_Enabled_Easier_Mann",
+        "BRI_Enabled_Easier_Civil_War"
+      ]
+    }
+  },
+  {
+    "id": "ITA_increase_exploitation_transjordan",
+    "category_id": "ITA_ENI_exploitation",
+    "name": "[Get.GetTransjordan_ENI_invest]",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "OR": {
+          "AND": [
+            {
+              "check_variable": {
+                "ITA_ENI_transjordan_stage": 2
+              },
+              "has_country_flag": "ILG_low_turnout_transjordan"
+            },
+            {
+              "check_variable": {
+                "ITA_ENI_transjordan_stage": 4
+              },
+              "has_country_flag": "ILG_medium_turnout_transjordan"
+            }
+          ],
+          "check_variable": {
+            "ITA_ENI_transjordan_stage": 5
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GER_Bormann_EconMech_open_statfjord",
+    "category_id": "GER_Bormann_EconMech_category",
+    "name": "Открытие Статфьордских нефтянных месторождений",
+    "desc": "Открытие крупных залежей нефти в Северном море было, конечно, неожиданностью, но однако приятной. Как только будет создана техническая инфраструктура, эксплуатация этих месторождений значительно уменьшит нашу зависимость от ненадёжных источников, таких как Персия или Кавказ. Поэтому совместные усилия по разработке добычи нефти в Северном море предпочтительнее.",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation3",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 5
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "BOR_EconMech_enable_decisions",
+        "NOT": {
+          "has_country_flag": "BOR_EconMech_OilCrisis"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": "BOR_EconMech_specific_show",
+        "is_ai": true
+      },
+      "has_country_flag": "BOR_NOR_oil_discovered"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_EconMech_open_statfjord",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "IBR_post_trium_majority_decision",
+    "category_id": "IBR_pp_post_trium_category",
+    "name": "Стандартизировать праздники",
+    "desc": "Чтобы обеспечить бесперебойную работу Союза, некоторые национальные праздники должны быть отодвинуты на задний план.",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_pp_decisions_blocked"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_majority_alignment": {
+            "_op": ">",
+            "value": -10
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "IBR_pp_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_foreign_majority_decision",
+    "category_id": "IBR_pp_foreign_category",
+    "name": "Провести банкеты с иностранными лидерами",
+    "desc": "Эти, казалось бы, излишние расходы на самом деле являются одними из самых больших инвестиций, которые могут быть сделаны.",
+    "icon": "GFX_decision_generic_investors",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_pp_decisions_blocked"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_majority_alignment": {
+            "_op": "<",
+            "value": 10
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "IBR_pp_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_terrorism_majority_decision",
+    "category_id": "IBR_pp_terrorism_category",
+    "name": "Дать символические уступки местным",
+    "desc": "Несколько символических мер могут ослабить напряженность в отношениях между более широкими слоями населения региона.",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_pp_decisions_blocked"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_majority_alignment": {
+            "_op": ">",
+            "value": -10
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "IBR_pp_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_economics_majority_decision",
+    "category_id": "IBR_pp_economics_category",
+    "name": "Уменьшить субсидии для сельского хозяйства",
+    "desc": "Земледельцы Иберии нисколько не пострадают от маленького сокращения дотаций. Хватит ныть.",
+    "icon": "GFX_decision_generic_farm",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_pp_decisions_blocked"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_majority_alignment": {
+            "_op": "<",
+            "value": 10
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "IBR_pp_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_stability_majority_decision",
+    "category_id": "IBR_pp_stability_category",
+    "name": "Устранить проблемных, но популярных чиновников",
+    "desc": "У нас есть основания полагать, что некоторые любимцы в народе имеют неприемлемые взгляды. Их устранение необходимо.",
+    "icon": "GFX_decision_generic_assassination",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_pp_decisions_blocked"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_majority_alignment": {
+            "_op": ">",
+            "value": -10
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "IBR_pp_decisions_blocked"
+    }
+  }
+]

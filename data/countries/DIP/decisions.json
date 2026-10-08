@@ -1,0 +1,4835 @@
+[
+  {
+    "id": "BRA_jaguar_diplomacy_decision",
+    "category_id": "BRA_jaguar_diplomacy_cat",
+    "name": "Обсудить внешнюю политику и торговлю с государством [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "BRA_jaguar_diplomacy",
+      "NOT": [
+        {
+          "has_country_flag": "BRA_jaguar_diplomacy_in_progress"
+        },
+        {
+          "has_war_with": "FROM"
+        }
+      ],
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 25
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRA_jaguar_diplomacy"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRA_jaguar_diplomacy_in_progress"
+    }
+  },
+  {
+    "id": "HOL_pursue_diplomatic_grievances",
+    "category_id": "HOL_bernhard",
+    "name": "Настоять на дипломатических претензиях",
+    "desc": "Оскорбления в адрес принца Бернарда и фактически всего нашего правительства переросли в полномасштабный дипломатический скандал на грани военных угроз. Мы требуем немедленных и недвусмысленных извинений, иначе нам придется перейти от слов к делу...",
+    "icon": "generic_army_support",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "FROM": {
+        "exists": true,
+        "has_country_flag": "HOL_bernhard_row_target"
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "mtg_netherlands.60",
+          "hours": 6
+        },
+        "clr_country_flag": "HOL_bernhard_row_target"
+      },
+      "custom_effect_tooltip": "HOL_pursue_diplomatic_grievances_tt"
+    }
+  },
+  {
+    "id": "ITA_pressure_country_government_balkan",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "$SOV_pressure_country_government_baltic$",
+    "desc": "$SOV_pressure_country_government_baltic_desc$",
+    "icon": "generic_political_discourse",
+    "cost": "ITA_pressure_country_government_cost",
+    "fire_only_once": false,
+    "available": {
+      "is_faction_leader": true,
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 49
+          }
+        },
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ITA_pressure_government_active_flag"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "ITA_pressure_government_active_flag"
+    }
+  },
+  {
+    "id": "ITA_promote_ideology_rallies_balkan",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "$SOV_promote_ideology_rallies_balkan$",
+    "desc": "$SOV_promote_ideology_rallies_balkan_desc$",
+    "icon": "generic_political_rally",
+    "cost": "ITA_promote_ideology_rallies_cost",
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "ITA_send_ultimatum_to_country_balkan",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "$SOV_send_ultimatum_to_country_balkan$",
+    "desc": "$SOV_send_ultimatum_to_country_balkan_desc$",
+    "icon": "eng_trade_unions_demand",
+    "cost": "ITA_send_ultimatum_to_country_cost",
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "is_subject": false
+      },
+      "is_subject": false
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ITA_fight_alongside_country_comrades_balkan",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "$SOV_fight_alongside_country_comrades_balkan$",
+    "desc": "$SOV_fight_alongside_country_comrades_balkan_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_coronate_prince_aimone",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Короновать принца Аймоне",
+    "desc": "",
+    "icon": "GFX_decision_eng_ally_imperialist_coup",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "CRO": {
+        "exists": true,
+        "NOT": {
+          "has_war_with": "ITA"
+        },
+        "OR": [
+          {
+            "is_subject": false,
+            "is_subject_of": "ITA"
+          },
+          {
+            "has_government": [
+              "fascism",
+              "neutrality"
+            ]
+          }
+        ]
+      }
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ITA_aimones_coronation"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ITA_demand_tomislavs_absolute_reign",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Потребовать абсолютной власти Томислава",
+    "desc": "",
+    "icon": "GFX_decision_eng_abdication_crisis",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "CRO": {
+        "exists": true,
+        "is_subject_of": "ITA"
+      },
+      "has_country_flag": "ITA_aimones_coronation"
+    },
+    "visible": {
+      "has_country_flag": "ITA_aimones_coronation",
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ITA_aimones_absolute_reign"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ITA_establish_the_regno_albania",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Основать Албанское правление",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "ALB": {
+        "exists": false
+      },
+      "44": {
+        "is_controlled_by": "ITA"
+      },
+      "805": {
+        "is_controlled_by": "ITA"
+      },
+      "934": {
+        "is_controlled_by": "ITA"
+      }
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "44": {
+        "is_controlled_by": "ITA"
+      },
+      "NOT": {
+        "has_country_flag": "ITA_established_albania"
+      }
+    },
+    "complete_effect": {
+      "ALB": [
+        {
+          "transfer_state": [
+            44,
+            805,
+            934
+          ],
+          "IF": [
+            {
+              "limit": {
+                "802": {
+                  "is_controlled_by": "ITA"
+                }
+              },
+              "transfer_state": 802
+            },
+            {
+              "limit": {
+                "970": {
+                  "is_controlled_by": "ITA"
+                }
+              },
+              "transfer_state": 970
+            }
+          ],
+          "add_ideas": "ITA_ALB_italian_settlers"
+        },
+        {
+          "division_template": {
+            "name": "Milicia Fashiste Shqiptare",
+            "is_locked": true,
+            "division_names_group": "ALB_INF_01",
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "802": {
+        "add_core_of": "ALB"
+      },
+      "970": {
+        "add_core_of": "ALB"
+      },
+      "IF": [
+        {
+          "limit": {
+            "has_dlc": "Together for Victory"
+          },
+          "ITA": {
+            "set_autonomy": {
+              "target": "ALB",
+              "autonomy_state": "autonomy_reichsprotectorate",
+              "end_wars": false,
+              "end_civil_wars": false
+            }
+          }
+        },
+        {
+          "limit": {
+            "NOT": {
+              "has_dlc": "Together for Victory"
+            }
+          },
+          "ITA": {
+            "puppet": "ALB"
+          }
+        }
+      ],
+      "44": {
+        "create_unit": [
+          {
+            "division": "name = \"1. Milicia Fashiste Shqiptare\" division_template = \"Milicia Fashiste Shqiptare\" start_experience_factor = 0.1 start_equipment_factor = 1.0",
+            "owner": "ALB"
+          },
+          {
+            "division": "name = \"2. Milicia Fashiste Shqiptare\" division_template = \"Milicia Fashiste Shqiptare\" start_experience_factor = 0.1 start_equipment_factor = 1.0",
+            "owner": "ALB"
+          }
+        ]
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_established_albania"
+      }
+    }
+  },
+  {
+    "id": "ITA_establish_the_governato_del_montenegro",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Основать Губернаторство Черногория",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "MNT": {
+        "exists": false
+      },
+      "105": {
+        "is_controlled_by": "ITA"
+      }
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "105": {
+        "is_controlled_by": "ITA"
+      },
+      "NOT": {
+        "has_country_flag": "ITA_established_montenegro"
+      }
+    },
+    "complete_effect": {
+      "MNT": [
+        {
+          "transfer_state": 105
+        },
+        {
+          "division_template": {
+            "name": "Montenegrin Chetniks",
+            "is_locked": true,
+            "division_names_group": "ITA_INF_01",
+            "regiments": {
+              "mountaineers": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "IF": [
+        {
+          "limit": {
+            "has_dlc": "Together for Victory"
+          },
+          "ITA": {
+            "set_autonomy": {
+              "target": "MNT",
+              "autonomy_state": "autonomy_reichskommissariat",
+              "end_wars": false,
+              "end_civil_wars": false
+            }
+          }
+        },
+        {
+          "limit": {
+            "NOT": {
+              "has_dlc": "Together for Victory"
+            }
+          },
+          "ITA": {
+            "puppet": "MNT"
+          }
+        }
+      ],
+      "105": {
+        "create_unit": [
+          {
+            "division": "name = \"First Montenegrin Chetnik Brigade\" division_template = \"Montenegrin Chetniks\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0",
+            "owner": "MNT"
+          },
+          {
+            "division": "name = \"Second Montenegrin Chetnik Brigade\" division_template = \"Montenegrin Chetniks\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0",
+            "owner": "MNT"
+          },
+          {
+            "division": "name = \"Third Montenegrin Chetnik Brigade\" division_template = \"Montenegrin Chetniks\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0",
+            "owner": "MNT"
+          }
+        ]
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_established_montenegro",
+        "MNT": {
+          "country_event": {
+            "id": "BBA_italy_interaction_events.7",
+            "days": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_demand_recognition_of_the_bashkimi_kombetar",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Придать официальный статус Башкими Комбетар",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "ALB": {
+        "exists": true,
+        "is_subject_of": "ITA"
+      },
+      "802": {
+        "OR": {
+          "is_controlled_by": [
+            "ALB",
+            "ITA",
+            "YUG"
+          ]
+        }
+      },
+      "YUG": {
+        "exists": true,
+        "OR": {
+          "is_subject_of": "ITA",
+          "is_in_faction_with": "ITA"
+        }
+      }
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "ALB": {
+        "exists": true,
+        "is_subject_of": "ITA"
+      },
+      "NOT": {
+        "has_country_flag": "ITA_bashkimi_kombetar"
+      }
+    },
+    "complete_effect": {
+      "YUG": {
+        "country_event": {
+          "id": "BBA_italy_interaction_events.29",
+          "hours": 8,
+          "random_hours": 4
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_bashkimi_kombetar"
+      }
+    }
+  },
+  {
+    "id": "ITA_demand_dalmatia",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Потребовать регион [103.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false
+    },
+    "visible": {},
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_italy_interaction_events.8",
+          "days": 2,
+          "random": 3
+        },
+        "hidden_effect": {
+          "set_country_flag": "ITA_sent_dalmatian_demands"
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_claim_the_montengrin_throne",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Заявить права на черногорский престол",
+    "desc": "",
+    "icon": "GFX_decision_eng_support_imperialist_coup",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "44": {
+          "is_controlled_by": "ITA"
+        },
+        "any_subject_country": {
+          "controls_state": 44
+        },
+        "103": {
+          "is_controlled_by": "ITA"
+        }
+      },
+      "NOT": {
+        "105": {
+          "is_controlled_by": "ITA"
+        },
+        "any_subject_country": {
+          "original_tag": "MNT",
+          "controls_state": 105
+        },
+        "any_country": {
+          "is_subject_of": "ITA",
+          "controls_state": 105
+        }
+      },
+      "any_country": {
+        "controls_state": 105,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "OR": {
+        "44": {
+          "is_controlled_by": "ITA"
+        },
+        "ITA": {
+          "any_subject_country": {
+            "controls_state": 44
+          }
+        },
+        "103": {
+          "is_controlled_by": "ITA"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ITA_demanded_montenegro"
+      }
+    },
+    "complete_effect": {
+      "random_country": {
+        "limit": {
+          "controls_state": 105
+        },
+        "country_event": {
+          "id": "BBA_italy_interaction_events.11",
+          "days": 2,
+          "random": 3
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_demanded_montenegro"
+      }
+    }
+  },
+  {
+    "id": "ITA_support_the_hungarians",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Поддержать венгерские претензии на регион [45.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "45": {
+        "NOT": {
+          "OR": {
+            "is_owned_by": "HUN",
+            "is_controlled_by": "HUN"
+          }
+        }
+      },
+      "IF": [
+        {
+          "limit": {
+            "ITA": {
+              "has_government": "fascism"
+            }
+          },
+          "HUN": {
+            "OR": {
+              "has_government": [
+                "fascism",
+                "neutrality"
+              ]
+            }
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_government": "neutrality"
+            }
+          },
+          "HUN": {
+            "has_government": "neutrality"
+          }
+        }
+      ]
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ITA_appeased_hungary"
+      }
+    },
+    "complete_effect": {
+      "HUN": {
+        "country_event": {
+          "id": "BBA_italy_interaction_events.30",
+          "hours": 2,
+          "random_hours": 5
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_appeased_hungary"
+      }
+    }
+  },
+  {
+    "id": "ITA_demand_turkish_demilitarization",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Потребовать демилитаризацию регионов [342.GetName] и [339.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "ITA": {
+        "has_completed_focus": "ITA_befriend_greece"
+      },
+      "any_country": {
+        "controls_state": [
+          342,
+          339
+        ],
+        "has_war": false,
+        "NOT": {
+          "is_in_faction_with": "ITA"
+        }
+      }
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ITA_antalya_demilitarized"
+      }
+    },
+    "complete_effect": {
+      "random_country": {
+        "limit": {
+          "controls_state": 342
+        },
+        "country_event": {
+          "id": "BBA_italy_interaction_events.14",
+          "days": 1,
+          "random": 4
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_antalya_demilitarized"
+      }
+    }
+  },
+  {
+    "id": "ITA_give_the_dodecanese_islands_to_greece_for_an_alliance",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Предложить Додеканес государству [GRE.GetNameDef] за альянс",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "ITA_befriend_greece",
+      "is_faction_leader": true,
+      "is_subject": false,
+      "controls_state": 164,
+      "GRE": {
+        "is_subject": false,
+        "has_civil_war": false,
+        "NOT": {
+          "has_government": "communism"
+        }
+      }
+    },
+    "visible": {
+      "GRE": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": "ROOT"
+        }
+      },
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      },
+      "controls_state": 164,
+      "NOT": {
+        "has_country_flag": "ITA_dodecanese_offered_to_greece"
+      }
+    },
+    "complete_effect": {
+      "random_country": {
+        "limit": {
+          "original_tag": "GRE",
+          "is_subject": false,
+          "has_civil_war": false,
+          "NOT": {
+            "has_government": "communism"
+          }
+        },
+        "country_event": {
+          "id": "BBA_italy_interaction_events.18",
+          "days": 1,
+          "random": 4
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_dodecanese_offered_to_greece"
+      }
+    }
+  },
+  {
+    "id": "ITA_give_the_dodecanese_islands_to_turkey_for_an_alliance",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Предложить Додеканес государству [TUR.GetNameDef] за альянс",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "ITA_befriend_turkey",
+      "is_faction_leader": true,
+      "is_subject": false,
+      "controls_state": 164,
+      "TUR": {
+        "is_subject": false,
+        "has_civil_war": false,
+        "NOT": {
+          "has_government": "communism"
+        }
+      }
+    },
+    "visible": {
+      "TUR": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": "ROOT"
+        }
+      },
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      },
+      "controls_state": 164,
+      "NOT": {
+        "has_country_flag": "ITA_dodecanese_offered_to_turkey"
+      }
+    },
+    "complete_effect": {
+      "random_country": {
+        "limit": {
+          "original_tag": "TUR",
+          "is_subject": false,
+          "has_civil_war": false,
+          "NOT": {
+            "has_government": "communism"
+          }
+        },
+        "country_event": {
+          "id": "BBA_italy_interaction_events.21",
+          "days": 1,
+          "random": 4
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_dodecanese_offered_to_turkey"
+      }
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_FIN",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [FIN.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_the_north_sea",
+      "FIN": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_DEN",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [DEN.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_finno_polish_pact",
+      "DEN": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_NOR",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [NOR.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_finno_polish_pact",
+      "NOR": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_SWE",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [SWE.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_finno_polish_pact",
+      "SWE": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_CZE",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [CZE.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_the_mediterranean",
+      "CZE": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_YUG",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [YUG.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_the_mediterranean",
+      "YUG": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_AUS",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [AUS.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_coerce_czechoslovakia",
+      "AUS": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_HUN",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [HUN.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_coerce_czechoslovakia",
+      "HUN": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_GRE",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [GRE.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_protect_yugoslavia",
+      "NOT": {
+        "has_completed_focus": "POL_control_the_bosporus"
+      },
+      "GRE": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_TUR",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [TUR.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "POL_protect_yugoslavia",
+      "NOT": {
+        "has_completed_focus": "POL_invite_greece"
+      },
+      "TUR": {
+        "is_ai": true,
+        "exists": true,
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "POL_diplomatic_mission_to_ITA",
+    "category_id": "POL_miedzymorze_decisions",
+    "name": "Дипломатическая миссия в государстве [ITA.GetNameDef]",
+    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
+    "icon": "infiltrate_state",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "POL_completing_miedzymorze_decision"
+      },
+      "has_completed_focus": "POL_austro_hungarian_alliance",
+      "OR": {
+        "has_completed_focus": [
+          "POL_invite_greece",
+          "POL_control_the_bosporus"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "POL_austro_hungarian_alliance",
+          "POL_invite_greece",
+          "POL_control_the_bosporus"
+        ]
+      },
+      "ITA": {
+        "NOT": {
+          "is_in_faction": true,
+          "has_war_with": "ROOT",
+          "has_country_flag": [
+            "rejected_miedzymorze_flag",
+            "delegation_recieved_flag"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "POL_completing_miedzymorze_decision"
+    }
+  },
+  {
+    "id": "PRC_28_bolshevik_faction_decision_enlai_diplomatic_feelers",
+    "category_id": "PRC_28_bolshevik_faction_cat",
+    "name": "Отправить лидера $PRC_zhou_enlai$ в [FROM.GetNameRuAcc] с дипломатической миссией.",
+    "desc": "Отправив помощь Эньлаю в [FROM.GetNameRuAcc], мы сможем улучшить свое положение в альянсе «[ROOT.GetFactionName]».",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": "PRC_28_bolshevik_decisions_cost",
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "PRC_zhou_enlai_on_diplomatic_mission"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "PRC_zhou_enlai_on_diplomatic_mission"
+    }
+  },
+  {
+    "id": "SOV_pressure_country_government_baltic",
+    "category_id": "SOV_diplomacy_baltic_decision_category",
+    "name": "Надавить на [FROM.GetAdjective]ое правительство",
+    "desc": "Мы надавим на [FROM.GetAdjective]ое правительство, чтобы оно приняло политику, более соответствующую нашим интересам.",
+    "icon": "generic_political_discourse",
+    "cost": "SOV_pressure_country_government_cost",
+    "fire_only_once": false,
+    "available": {
+      "is_faction_leader": true,
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 49
+          }
+        },
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_pressure_government_active_flag"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "SOV_pressure_government_active_flag"
+    }
+  },
+  {
+    "id": "SOV_promote_ideology_rallies_baltic",
+    "category_id": "SOV_diplomacy_baltic_decision_category",
+    "name": "Пропагандировать идеологические кампании в государстве [FROM.GetNameDef]",
+    "desc": "[ROOT.GetAdjective]ие агенты будут проводить политические собрания по всему государству [FROM.GetNameDef], и тогда [ROOT.GetIdeologyNameWithCaps] найдет путь к сердцам [FROM.GetAdjective]ого народа.",
+    "icon": "generic_political_rally",
+    "cost": "SOV_promote_ideology_rallies_cost",
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "SOV_send_ultimatum_to_country_baltic",
+    "category_id": "SOV_diplomacy_baltic_decision_category",
+    "name": "Послать ультиматум в государство [FROM.GetNameDef]",
+    "desc": "Выдвинув ультиматум, мы надавим на [FROM.GetAdjective]ое правительство, чтобы то уступило нашим требованиям.",
+    "icon": "eng_trade_unions_demand",
+    "cost": "SOV_send_ultimatum_to_country_cost",
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "exists": true,
+        "has_capitulated": false,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "is_subject": false
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_fight_alongside_country_comrades_baltic",
+    "category_id": "SOV_diplomacy_baltic_decision_category",
+    "name": "Сражаться бок о бок с нашими [FROM.GetAdjective]ими товарищами",
+    "desc": "$BUL_fight_alongside_country_comrades_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_pressure_country_government_nordic",
+    "category_id": "SOV_diplomacy_nordic_decision_category",
+    "name": "$SOV_pressure_country_government_baltic$",
+    "desc": "$SOV_pressure_country_government_baltic_desc$",
+    "icon": "generic_political_discourse",
+    "cost": "SOV_pressure_country_government_cost",
+    "fire_only_once": false,
+    "available": {
+      "is_faction_leader": true,
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 49
+          }
+        },
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "if": {
+          "limit": {
+            "original_tag": "FIN"
+          },
+          "NOT": {
+            "has_idea": "FIN_the_lone_wolf"
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_pressure_government_active_flag"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "SOV_pressure_government_active_flag"
+    }
+  },
+  {
+    "id": "SOV_promote_ideology_rallies_nordic",
+    "category_id": "SOV_diplomacy_nordic_decision_category",
+    "name": "$SOV_promote_ideology_rallies_baltic$",
+    "desc": "$SOV_promote_ideology_rallies_baltic_desc$",
+    "icon": "generic_political_rally",
+    "cost": "SOV_promote_ideology_rallies_cost",
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "SOV_fight_alongside_country_comrades_nordic",
+    "category_id": "SOV_diplomacy_nordic_decision_category",
+    "name": "$SOV_fight_alongside_country_comrades_baltic$",
+    "desc": "$SOV_fight_alongside_country_comrades_baltic_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_pressure_country_government_balkan",
+    "category_id": "SOV_diplomacy_balkan_decision_category",
+    "name": "$SOV_pressure_country_government_baltic$",
+    "desc": "$SOV_pressure_country_government_baltic_desc$",
+    "icon": "generic_political_discourse",
+    "cost": "SOV_pressure_country_government_cost",
+    "fire_only_once": false,
+    "available": {
+      "is_faction_leader": true,
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 49
+          }
+        },
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_pressure_government_active_flag"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "SOV_pressure_government_active_flag"
+    }
+  },
+  {
+    "id": "SOV_promote_ideology_rallies_balkan",
+    "category_id": "SOV_diplomacy_balkan_decision_category",
+    "name": "$SOV_promote_ideology_rallies_baltic$",
+    "desc": "$SOV_promote_ideology_rallies_baltic_desc$",
+    "icon": "generic_political_rally",
+    "cost": "SOV_promote_ideology_rallies_cost",
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "SOV_send_ultimatum_to_country_balkan",
+    "category_id": "SOV_diplomacy_balkan_decision_category",
+    "name": "$SOV_send_ultimatum_to_country_baltic$",
+    "desc": "$SOV_send_ultimatum_to_country_baltic_desc$",
+    "icon": "eng_trade_unions_demand",
+    "cost": "SOV_send_ultimatum_to_country_cost",
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "is_subject": false
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_fight_alongside_country_comrades_balkan",
+    "category_id": "SOV_diplomacy_balkan_decision_category",
+    "name": "$SOV_fight_alongside_country_comrades_baltic$",
+    "desc": "$SOV_fight_alongside_country_comrades_baltic_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_pressure_country_government_middle_east",
+    "category_id": "SOV_diplomacy_middle_east_decision_category",
+    "name": "$SOV_pressure_country_government_baltic$",
+    "desc": "$SOV_pressure_country_government_baltic_desc$",
+    "icon": "hol_attract_foreign_investors",
+    "cost": "SOV_pressure_country_government_cost",
+    "fire_only_once": false,
+    "available": {
+      "is_faction_leader": true,
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 49
+          }
+        },
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_pressure_government_active_flag"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "SOV_pressure_government_active_flag"
+    }
+  },
+  {
+    "id": "SOV_promote_ideology_rallies_middle_east",
+    "category_id": "SOV_diplomacy_middle_east_decision_category",
+    "name": "$SOV_promote_ideology_rallies_baltic$",
+    "desc": "$SOV_promote_ideology_rallies_baltic_desc$",
+    "icon": "hol_attract_foreign_investors",
+    "cost": "SOV_promote_ideology_rallies_cost",
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "SOV_send_ultimatum_to_country_middle_east",
+    "category_id": "SOV_diplomacy_middle_east_decision_category",
+    "name": "$SOV_send_ultimatum_to_country_baltic$",
+    "desc": "$SOV_send_ultimatum_to_country_baltic_desc$",
+    "icon": "hol_attract_foreign_investors",
+    "cost": "SOV_send_ultimatum_to_country_cost",
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "is_subject": false
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_fight_alongside_country_comrades_middle_east",
+    "category_id": "SOV_diplomacy_middle_east_decision_category",
+    "name": "$SOV_fight_alongside_country_comrades_baltic$",
+    "desc": "$SOV_fight_alongside_country_comrades_baltic_desc$",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_stability": {
+        "_op": ">",
+        "value": 0.25
+      },
+      "NOT": {
+        "has_war_with": "FROM"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "random_country": {
+            "limit": {
+              "original_tag": "FROM",
+              "has_civil_war": true,
+              "NOT": {
+                "has_government": "ROOT"
+              }
+            },
+            "ROOT": {
+              "add_to_war": {
+                "targeted_alliance": "FROM",
+                "enemy": "PREV",
+                "hostility_reason": "asked_to_join"
+              }
+            }
+          }
+        },
+        {
+          "diplomatic_relation": {
+            "country": "FROM",
+            "relation": "military_access",
+            "active": true
+          },
+          "FROM": {
+            "diplomatic_relation": {
+              "country": "ROOT",
+              "relation": "military_access",
+              "active": true
+            }
+          }
+        }
+      ],
+      "custom_effect_tooltip": "BUL_fight_alongside_country_comrades_join_cw_tt",
+      "effect_tooltip": {
+        "give_military_access": "FROM",
+        "FROM": {
+          "give_military_access": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_preparations_for_operation_countenance",
+    "category_id": "SOV_diplomacy_middle_east_decision_category",
+    "name": "Подготовка к операции «Согласие»",
+    "desc": "",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_operation_countenance",
+    "category_id": "SOV_diplomacy_middle_east_decision_category",
+    "name": "Операция «Согласие»",
+    "desc": "",
+    "icon": "generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "PER": {
+        "has_capitulated": true
+      },
+      "all_of_scopes": {
+        "array": "SOV_iranian_initial_states",
+        "OR": {
+          "is_controlled_by": "SOV",
+          "any_allied_country": {
+            "controls_state": "PREV"
+          },
+          "AND": {
+            "has_global_flag": "SOV_agreed_anglo_soviet_invasion_of_iran_flag",
+            "OR": {
+              "is_controlled_by": "ENG",
+              "ENG": {
+                "any_allied_country": {
+                  "controls_state": "PREV"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "add_command_power": 50,
+      "add_war_support": 0.1,
+      "effect_tooltip": {
+        "if": {
+          "limit": {
+            "OR": {
+              "has_global_flag": "SOV_soviet_invasion_of_iran_flag",
+              "AND": {
+                "has_global_flag": "SOV_agreed_anglo_soviet_invasion_of_iran_flag",
+                "NOT": {
+                  "country_exists": "ENG"
+                }
+              }
+            }
+          },
+          "FROM": {
+            "puppet": "ROOT",
+            "transfer_state": [
+              419,
+              420,
+              416
+            ]
+          },
+          "give_resource_rights": [
+            {
+              "receiver": "FROM",
+              "state": 411
+            },
+            {
+              "receiver": "FROM",
+              "state": 412
+            },
+            {
+              "receiver": "FROM",
+              "state": 413
+            }
+          ]
+        },
+        "else_if": {
+          "limit": {
+            "has_global_flag": "SOV_agreed_anglo_soviet_invasion_of_iran_flag"
+          },
+          "ENG": {
+            "puppet": "ROOT"
+          },
+          "SOV": {
+            "transfer_state": [
+              419,
+              420,
+              416
+            ]
+          },
+          "FROM": {
+            "give_resource_rights": [
+              {
+                "receiver": "SOV",
+                "state": 411
+              },
+              {
+                "receiver": "SOV",
+                "state": 412
+              },
+              {
+                "receiver": "ENG",
+                "state": 413
+              }
+            ],
+            "give_military_access": "ROOT"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_send_infantry_equipment_asia",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Отправить пехотное снаряжение",
+    "desc": "Мы должны отправить нашим китайским союзникам военное снаряжение, чтобы они могли успешно сражаться как с империалистическими нациями, окружающими их, так и с амбициозными китайскими военачальниками.",
+    "icon": "generic_industry",
+    "cost": "SOV_send_infantry_equipment_cost",
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 999
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 199
+          }
+        }
+      ]
+    },
+    "visible": {
+      "country_exists": "FROM",
+      "NOT": {
+        "has_war_with": "FROM"
+      },
+      "FROM": {
+        "SOV_is_valid_subject": true
+      },
+      "OR": {
+        "AND": [
+          {
+            "has_completed_focus": "SOV_two_red_flags",
+            "FROM": {
+              "tag": "PRC"
+            }
+          },
+          {
+            "has_completed_focus": "SOV_support_the_kuomintang",
+            "FROM": {
+              "tag": "CHI"
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "send_equipment": [
+        {
+          "type": "infantry_equipment",
+          "amount": 1000,
+          "target": "FROM"
+        },
+        {
+          "type": "support_equipment",
+          "amount": 200,
+          "target": "FROM"
+        }
+      ],
+      "FROM": {
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "SOV_sent_us_weapons"
+        }
+      },
+      "hidden_effect": {
+        "FROM": {
+          "country_event": {
+            "id": "NSB_soviet_foreign_politics_events.250",
+            "hours": 2
+          },
+          "add_ai_strategy": {
+            "type": "befriend",
+            "id": "SOV",
+            "value": 5
+          }
+        }
+      },
+      "custom_effect_tooltip": "SOV_send_equipment_cd_tt"
+    }
+  },
+  {
+    "id": "SOV_peace_deal_for_south_sakhalin_and_kuril_islands",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Предложить мир в обмен на территории [537.GetName] и [555.GetName]",
+    "desc": "Мы предложим [JAP.GetAdjective]ому правительству прекратить все враждебные действия, если они согласятся вернуть нам наши бывшие территории — [537.GetName] и [555.GetName].",
+    "icon": "eng_trade_unions_support",
+    "cost": "SOV_peace_deal_cost",
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        537,
+        555
+      ],
+      "JAP": [
+        {
+          "owns_state": 537
+        },
+        {
+          "owns_state": 555
+        }
+      ],
+      "surrender_progress": {
+        "_op": "<",
+        "value": 0.01
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "JAP": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.260",
+          "hours": 4,
+          "random_hours": 2
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept",
+      "effect_tooltip": {
+        "JAP": {
+          "white_peace": "FROM"
+        },
+        "537": {
+          "add_core_of": "ROOT"
+        },
+        "555": {
+          "add_core_of": "ROOT"
+        },
+        "transfer_state": [
+          537,
+          555
+        ]
+      }
+    }
+  },
+  {
+    "id": "SOV_peace_deal_for_hokkaido",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Предложить мир за Южный Сахалин, Курилы и Хоккайдо",
+    "desc": "Мы предложим [JAP.GetAdjective]ому правительству прекратить все враждебные действия, если они согласятся вернуть нам наши бывшие территории, [537.GetName] и [555.GetName], а также если [536.GetName] перейдет под [ROOT.GetAdjective]ий контроль.",
+    "icon": "eng_trade_unions_support",
+    "cost": "SOV_peace_deal_cost",
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        537,
+        555,
+        536
+      ],
+      "JAP": [
+        {
+          "owns_state": 537
+        },
+        {
+          "owns_state": 555
+        },
+        {
+          "owns_state": 536
+        }
+      ],
+      "surrender_progress": {
+        "_op": "<",
+        "value": 0.01
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "JAP": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.261",
+          "hours": 4,
+          "random_hours": 2
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept",
+      "effect_tooltip": {
+        "JAP": {
+          "white_peace": "FROM"
+        },
+        "537": {
+          "add_core_of": "ROOT"
+        },
+        "555": {
+          "add_core_of": "ROOT"
+        },
+        "transfer_state": [
+          537,
+          555,
+          536
+        ]
+      }
+    }
+  },
+  {
+    "id": "SOV_cancel_the_japanese_resource_rights_to_sakhalin_decision",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Отменить [JAP.GetAdjRuLower]ие права на ресурсы в регионе [655.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_forestry",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 655
+    },
+    "visible": {
+      "has_completed_focus": "SOV_prepare_a_war_with_japan",
+      "655": {
+        "is_owned_and_controlled_by": "ROOT"
+      },
+      "JAP": {
+        "has_resources_rights": {
+          "state": 655
+        }
+      }
+    },
+    "complete_effect": {
+      "JAP": {
+        "remove_resource_rights": 655,
+        "country_event": {
+          "id": "SEA_japan_popup_events.47",
+          "hours": 4,
+          "random_hours": 2
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_sinkiang_mineral_prospection_sik",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Предложить добычу ресурсов в государстве Юж. [SIK.GetNameDef]",
+    "desc": "[ROOT.GetAdjective]ие представители заинтересовались золотом и редкими полезными ископаемыми, добываемыми на Алтае, в регионе [SIK.GetNameDef]. Чтобы получить доступ к синьцзянскому рынку, мы предложим вести разведку новых залежей и улучшить инфраструктуру в регионе [619.GetName], богатом ископаемыми, но бедном техникой и современными методами добычи.",
+    "icon": "generic_construction",
+    "cost": "SOV_sinkiang_proposal_cost",
+    "fire_only_once": false,
+    "available": {
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          619
+        ]
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      },
+      "NOT": {
+        "has_country_flag": "SOV_sinkiang_investment_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          619
+        ]
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_country_flag": "SOV_sinkiang_prospection_rejected_flag"
+        },
+        {
+          "has_country_flag": "SOV_sinkiang_prospection_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_sinkiang_investment_ongoing_flag",
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.273",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt"
+      ],
+      "effect_tooltip": [
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_complied_with_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_cg_tt_sov"
+        },
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_rejected_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_refuse_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_sinkiang_oil_prospection_sik",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Предложить добычу ресурсов в государстве Сев. [SIK.GetNameDef]",
+    "desc": "Область [618.GetName], что в северной части региона [SIK.GetNameDef], богата нефтью и полезными ископаемыми, но ни то, ни другое наши соседи не добывают. Мы попросим у них разрешения провести в тех местах геологоразведку и разрабатывать найденные месторождения.",
+    "icon": "generic_construction",
+    "cost": "SOV_sinkiang_proposal_cost",
+    "fire_only_once": false,
+    "available": {
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          618
+        ]
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 1
+      },
+      "NOT": {
+        "has_country_flag": "SOV_sinkiang_investment_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          618
+        ]
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_country_flag": "SOV_sinkiang_oil_prospection_rejected_flag"
+        },
+        {
+          "has_country_flag": "SOV_sinkiang_oil_prospection_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_sinkiang_investment_ongoing_flag",
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.276",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt"
+      ],
+      "effect_tooltip": [
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_complied_with_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_cg_tt_sov"
+        },
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_rejected_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_refuse_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_sinkiang_military_aid_sik",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Военная помощь региону [SIK.GetNameDef]",
+    "desc": "Мы предложим региону [SIK.GetNameDef] военную помощь в обмен на увеличение экспорта его промышленных товаров, необходимых нашей стране.",
+    "icon": "generic_military",
+    "cost": "SOV_sinkiang_proposal_cost",
+    "fire_only_once": false,
+    "available": {
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          618
+        ]
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      },
+      "has_equipment": [
+        {
+          "small_plane_airframe": {
+            "_op": ">",
+            "value": 39
+          }
+        },
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 499
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "SOV_sinkiang_investment_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          759
+        ]
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_country_flag": "SOV_sinkiang_military_aid_rejected_flag"
+        },
+        {
+          "has_country_flag": "SOV_sinkiang_military_aid_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_sinkiang_investment_ongoing_flag",
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.278",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt"
+      ],
+      "effect_tooltip": [
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_complied_with_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_cg_tt_sov",
+          "send_equipment": [
+            {
+              "type": "small_plane_airframe",
+              "amount": 40,
+              "target": "SIK"
+            },
+            {
+              "type": "infantry_equipment",
+              "amount": 500,
+              "target": "SIK"
+            }
+          ]
+        },
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_rejected_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_refuse_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_sinkiang_support_expansion_sik",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Поддержка экспансии региона [SIK.GetNameDef]",
+    "desc": "Наши торговые посредники в регионе [SIK.GetNameDef] требуют политики расширения экспорта в державу [ROOT.GetNameDef], поскольку территориальная экспансия Синьцзяня увеличила ассортимент товаров.",
+    "icon": "infiltrate_state",
+    "cost": "SOV_sinkiang_proposal_cost",
+    "fire_only_once": false,
+    "available": {
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "is_in_faction_with": "ROOT",
+        "has_full_control_of_state": [
+          604,
+          755,
+          756,
+          754,
+          753,
+          283,
+          616
+        ]
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "has_equipment": {
+        "motorized_equipment": {
+          "_op": ">",
+          "value": 299
+        }
+      },
+      "NOT": {
+        "has_country_flag": "SOV_sinkiang_investment_ongoing_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "SIK": {
+        "SOV_is_valid_subject": true,
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "has_full_control_of_state": [
+          617,
+          759
+        ]
+      },
+      "is_subject": false,
+      "has_capitulated": false,
+      "NOT": [
+        {
+          "has_country_flag": "SOV_sinkiang_support_expansion_rejected_flag"
+        },
+        {
+          "has_country_flag": "SOV_sinkiang_support_expansion_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SOV_sinkiang_investment_ongoing_flag",
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.280",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt"
+      ],
+      "effect_tooltip": [
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_complied_with_our_demands"
+          },
+          "send_equipment": {
+            "type": "motorized_equipment",
+            "amount": 300,
+            "target": "SIK"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_cg_tt_sov"
+        },
+        {
+          "add_opinion_modifier": {
+            "target": "SIK",
+            "modifier": "SOV_rejected_our_demands"
+          },
+          "custom_effect_tooltip": "SOV_sinikiang_influence_refuse_tt"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SOV_formalize_of_the_soviet_republic_of_sinkiang",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Официально закрепить Советскую республику Синьцзян",
+    "desc": "Пора потребовать интеграции [SIK.GetNameRuGen] в качестве независимой Советской социалистической республикой, подчиненной правительству [FROM.GetNameRuGen].",
+    "icon": "generic_nationalism",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": [
+        "SOV_sinkiang_prospection_flag",
+        "SOV_sinkiang_oil_prospection_flag",
+        "SOV_sinkiang_military_aid_flag",
+        {
+          "flag": "SOV_sinkiang_joined_comintern_counter_flag",
+          "days": {
+            "_op": ">",
+            "value": 730
+          }
+        }
+      ],
+      "SIK": {
+        "is_in_faction_with": "ROOT",
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 80
+          }
+        },
+        "has_government": "ROOT"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "SOV_sinkiang_joined_comintern_days_tt",
+        "has_country_flag": {
+          "flag": "SOV_sinkiang_joined_comintern_counter_flag",
+          "days": {
+            "_op": ">",
+            "value": 730
+          }
+        }
+      },
+      "strength_ratio": {
+        "tag": "SIK",
+        "ratio": {
+          "_op": ">",
+          "value": 2
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_the_gobi_gambit",
+      "country_exists": "SIK",
+      "SIK": {
+        "is_subject": false
+      },
+      "NOT": {
+        "has_war_with": "SIK"
+      }
+    },
+    "complete_effect": {
+      "SIK": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.282",
+          "hours": 2
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "if_they_refuse_tt",
+        "SOV_formalize_of_the_soviet_republic_of_sinkiang_only_once_tt"
+      ],
+      "effect_tooltip": {
+        "puppet": "SIK",
+        "add_opinion_modifier": {
+          "target": "SIK",
+          "modifier": "SOV_complied_with_our_demands"
+        },
+        "SIK": {
+          "set_cosmetic_tag": "SIK_ssr",
+          "set_party_name": {
+            "ideology": "communism",
+            "long_name": "SIK_CPSU_communism_party_long",
+            "name": "SIK_CPSU_communism_party"
+          }
+        }
+      },
+      "add_opinion_modifier": {
+        "target": "ROOT",
+        "modifier": "SOV_rejected_our_demands"
+      }
+    }
+  },
+  {
+    "id": "SWI_diplomatic_mission",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Дипломатическая миссия",
+    "desc": "Мы можем отправить дипломатические делегации, чтобы улучшить отношения с другими странами, развеять их сомнения относительно нашего нейтралитета и тем самым предотвратить нападение на нашу страну.",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "has_trait": "SWI_diplomat"
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "every_other_country": {
+        "limit": {
+          "SWI_is_country_to_balance": true
+        },
+        "add_opinion_modifier": {
+          "target": "ROOT",
+          "modifier": "SWI_diplomatic_visit"
+        }
+      },
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_council_diplomatic_effort",
+    "category_id": "SWI_centralization_power_balance_decisions",
+    "name": "Дипломатические усилия совета",
+    "desc": "",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": "var:SWI_diplomatic_effort_cost",
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "Antarctica_GUI_AAO_Decision_Connect_With_American_Diplomats",
+    "category_id": "Antarctica_GUI_AAO",
+    "name": "Связь с американскими дипломатами",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "Antarctica_GUI_AAO_Decision_Connect_With_American_Diplomats_Available",
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAO_Decision_Connect_With_American_Diplomats_Improved_Available"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Decision_Connect_With_American_Diplomats"
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAO_Decision_Connect_With_American_Diplomats_Improved",
+    "category_id": "Antarctica_GUI_AAO",
+    "name": "Связь с американскими дипломатами",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "Antarctica_GUI_AAO_Decision_Connect_With_American_Diplomats_Improved_Available"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Decision_Connect_With_American_Diplomats_Improved"
+    }
+  },
+  {
+    "id": "AAC_Diplomacy_Minimize_Argentine_Threat",
+    "category_id": "Antarctica_GUI_AAC_Diplomacy",
+    "name": "Снизить угрозу со стороны Аргентины",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "AAC_Diplomacy_Active_Country": 0
+        }
+      },
+      "has_country_flag": "AAC_negotiations_decisions_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Diplomacy_Minimize_Argentine_Threat",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "tempMil": -5
+        },
+        "Antarctica_change_militarization": true
+      },
+      "set_temp_variable": {
+        "prog_change_temp": 2.5
+      },
+      "Antarctica_AAC_Diplo_Modify_Progress": true
+    }
+  },
+  {
+    "id": "AAC_Diplomacy_Utilize_Intercepted_Cables",
+    "category_id": "Antarctica_GUI_AAC_Diplomacy",
+    "name": "Использовать перехваченные данные",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "intel_check": 10
+      },
+      "custom_trigger_tooltip": {
+        "check_variable": {
+          "var": "Antarctica_Intel_on_AAA_Value",
+          "value": "intel_check",
+          "compare": "greater_than_or_equals"
+        },
+        "tooltip": "Intel_over_AAA_check_tt"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "AAC_Diplomacy_Active_Country": 0
+        }
+      },
+      "has_country_flag": "AAC_negotiations_decisions_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Diplomacy_Utilize_Intercepted_Cables",
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "Antarctica_Intel_on_AAA_Value": 2
+        },
+        "clamp_variable": {
+          "var": "Antarctica_Intel_on_AAA_Value",
+          "min": 0
+        }
+      },
+      "set_temp_variable": {
+        "prog_change_temp": 2.5
+      },
+      "Antarctica_AAC_Diplo_Modify_Progress": true
+    }
+  },
+  {
+    "id": "AAC_Diplomacy_Make_Trivial_Concessions",
+    "category_id": "Antarctica_GUI_AAC_Diplomacy",
+    "name": "Пойти на незначительные уступки",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_concessions",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "AAC_Diplomacy_Active_Country": 0
+        }
+      },
+      "has_country_flag": "AAC_negotiations_decisions_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Diplomacy_Make_Trivial_Concessions",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "tempLeg": -5
+        },
+        "Antarctica_change_legitimacy": true
+      },
+      "set_temp_variable": {
+        "prog_change_temp": 2.5
+      },
+      "Antarctica_AAC_Diplo_Modify_Progress": true
+    }
+  },
+  {
+    "id": "AAC_Diplomacy_Complementary_Pisco",
+    "category_id": "Antarctica_GUI_AAC_Diplomacy",
+    "name": "Преподнести писко",
+    "desc": "",
+    "icon": "GFX_decision_generic_luxury_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "AAC_Diplomacy_Active_Country": 0
+        }
+      },
+      "has_country_flag": "AAC_negotiations_decisions_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Diplomacy_Complementary_Pisco",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "tempEq": -5
+        },
+        "Antarctica_change_equipment": true
+      },
+      "set_temp_variable": {
+        "prog_change_temp": 2.5
+      },
+      "Antarctica_AAC_Diplo_Modify_Progress": true
+    }
+  },
+  {
+    "id": "AAC_Diplomacy_Launch_Charm_Offensive",
+    "category_id": "Antarctica_GUI_AAC_Diplomacy",
+    "name": "Начать 'кампанию по обаянию'",
+    "desc": "",
+    "icon": "GFX_decision_generic_invitation",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "AAC_Diplomacy_Active_Country": 0
+        }
+      },
+      "has_country_flag": "AAC_negotiations_decisions_visible"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Diplomacy_Launch_Charm_Offensive",
+      "set_temp_variable": {
+        "prog_change_temp": 2.5
+      },
+      "Antarctica_AAC_Diplo_Modify_Progress": true
+    }
+  },
+  {
+    "id": "AAC_Diplomacy_Negotiation_Deadline",
+    "category_id": "Antarctica_GUI_AAC_Diplomacy",
+    "name": "[GetAACNegotiationDeadline]",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_generic_document",
+        "trigger": {
+          "check_variable": {
+            "var": "AAC_Diplomacy_Negotiation_Progress",
+            "value": "AAC_Diplomacy_Negotiation_Threshold",
+            "compare": "greater_than_or_equals"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_generic_clock_red",
+        "trigger": {
+          "NOT": {
+            "check_variable": {
+              "var": "AAC_Diplomacy_Negotiation_Progress",
+              "value": "AAC_Diplomacy_Negotiation_Threshold",
+              "compare": "greater_than_or_equals"
+            }
+          }
+        }
+      }
+    ],
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Diplomacy_Negotiation_Deadline"
+    }
+  },
+  {
+    "id": "BRA_backchannel_diplomacy",
+    "category_id": "BRA_Riots_GUI",
+    "name": "Закулисная дипломатия",
+    "desc": "",
+    "icon": "GFX_decision_BRA_msd_radicalism",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "NOT": {
+          "has_country_flag": "BRA_riots_move_taken"
+        },
+        "tooltip": "BRA_riots_move_taken_tt"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "BRA_selected_riot_group": 2
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_backchannel_diplomacy",
+      "set_temp_variable": {
+        "BRA_Riots_MSD_Radicalism_Temp": 5
+      },
+      "BRA_Riots_MSD_Radicalism_Change": true,
+      "set_country_flag": "BRA_riots_move_taken",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.05
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "IBR_import_lightair_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи легких самолетов",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "fighter_1960"
+      },
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_heavyair_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи тяжелых самолетов",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "heavy_air_1960"
+      },
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_helicopter_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи самолетов",
+    "desc": "",
+    "icon": "GFX_decision_market_helicopter",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "scout_helicopter_1960"
+      },
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_destroyer_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи эсминцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "improved_ship_hull_light"
+      },
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_cruisers_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи крейсеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "improved_ship_hull_cruiser"
+      },
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_frigate_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи фрегатов",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "improved_ship_hull_more_light"
+      },
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_submarine_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи подлодок",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "improved_ship_hull_submarine"
+      },
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_artillery_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи артиллерии",
+    "desc": "",
+    "icon": "GFX_decision_market_towed_artillery",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": [
+        {
+          "has_tech": "light_SPART_1960"
+        },
+        {
+          "has_tech": "SPART_1960"
+        },
+        {
+          "has_tech": "light_SPAA_1960"
+        },
+        {
+          "has_tech": "SPAA_1960"
+        }
+      ],
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_armor_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи брони",
+    "desc": "",
+    "icon": "GFX_decision_market_armor",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": [
+        {
+          "has_tech": "APC_1960"
+        },
+        {
+          "has_tech": "IFV_1960"
+        },
+        {
+          "has_tech": "MBT_1960"
+        }
+      ],
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_weapon_designs_decision_1960",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи пехотного оружия",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "infantry_weapons_improvements_mine_2"
+      },
+      "date": {
+        "_op": "<",
+        "value": "1970.01.01"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_lightair_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи легких самолетов",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "fighter_1970"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_heavyair_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи тяжелых самолетов",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "heavy_air_1970"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_helicopter_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи самолетов",
+    "desc": "",
+    "icon": "GFX_decision_market_helicopter",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "scout_helicopter_1970"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_destroyer_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи эсминцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "advanced_ship_hull_light"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_cruisers_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи крейсеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "advanced_ship_hull_cruiser"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_frigate_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи фрегатов",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "advanced_ship_hull_more_light"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_submarine_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи подлодок",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "advanced_ship_hull_submarine"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_artillery_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи артиллерии",
+    "desc": "",
+    "icon": "GFX_decision_market_towed_artillery",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": [
+        {
+          "has_tech": "light_SPART_1970"
+        },
+        {
+          "has_tech": "SPART_1970"
+        },
+        {
+          "has_tech": "light_SPAA_1970"
+        },
+        {
+          "has_tech": "SPAA_1970"
+        }
+      ],
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_armor_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи брони",
+    "desc": "",
+    "icon": "GFX_decision_market_armor",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": [
+        {
+          "has_tech": "APC_1970"
+        },
+        {
+          "has_tech": "IFV_1970"
+        },
+        {
+          "has_tech": "MBT_1970"
+        }
+      ],
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_weapon_designs_decision_1970",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи пехотного оружия",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "infantry_weapons_improvements_mine_3"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_lightair_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи легких самолетов",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "MCA_1980"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_heavyair_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи тяжелых самолетов",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "heavy_air_1980"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_helicopter_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи самолетов",
+    "desc": "",
+    "icon": "GFX_decision_market_helicopter",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "scout_helicopter_1980"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_destroyer_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи эсминцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "semi_modern_ship_hull_light"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_cruisers_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи крейсеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "semi_modern_ship_hull_cruiser"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_frigate_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи фрегатов",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "semi_modern_ship_hull_more_light"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_submarine_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи подлодок",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "semi_modern_ship_hull_submarine"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_artillery_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи артиллерии",
+    "desc": "",
+    "icon": "GFX_decision_market_towed_artillery",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": [
+        {
+          "has_tech": "light_SPART_1980"
+        },
+        {
+          "has_tech": "SPART_1980"
+        },
+        {
+          "has_tech": "light_SPAA_1980"
+        },
+        {
+          "has_tech": "SPAA_1980"
+        }
+      ],
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_armor_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи брони",
+    "desc": "",
+    "icon": "GFX_decision_market_armor",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": [
+        {
+          "has_tech": "APC_1980"
+        },
+        {
+          "has_tech": "IFV_1980"
+        },
+        {
+          "has_tech": "MBT_1980"
+        }
+      ],
+      "date": [
+        {
+          "_op": ">",
+          "value": "1980.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1990.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_import_weapon_designs_decision_1980",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Импортировать чертежи пехотного оружия",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_import_designs",
+      "USA": {
+        "has_tech": "infantry_weapons_improvements_ammo_3"
+      },
+      "date": [
+        {
+          "_op": ">",
+          "value": "1970.01.01"
+        },
+        {
+          "_op": "<",
+          "value": "1980.01.01"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_special_army_training_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Специальные Армейские тренировки",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_military_advisors",
+      "USA": {
+        "has_war": false
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_special_navy_training_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Специальные военно-морские тренировки",
+    "desc": "",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_military_advisors",
+      "USA": {
+        "has_war": false
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_special_air_training_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Специальные воздушные тренировки",
+    "desc": "",
+    "icon": "GFX_decision_market_helicopter",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_military_advisors",
+      "USA": {
+        "has_war": false
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_army_officer_training_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Тренировка армейских офицеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_military_advisors",
+      "USA": {
+        "has_war": false
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_navy_officer_training_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Тренировка военно-морских офицеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_military_advisors",
+      "USA": {
+        "has_war": false
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_air_officer_training_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Тренировка военно-воздушных офицеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_military_advisors",
+      "USA": {
+        "has_war": false
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_invest_cuba_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Инвестировать в Кубу",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_latinamerica_investments",
+      "AND": {
+        "NOT": [
+          {
+            "CUB": {
+              "check_variable": {
+                "ECON_SPHERE_LEADER": "MEX"
+              }
+            }
+          },
+          {
+            "CUB": {
+              "check_variable": {
+                "ECON_SPHERE_LEADER": "USA"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_cuba_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.03
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_dominican_republic_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Инвестировать в Доминиканскую Республику",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_latinamerica_investments"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_dominican_republic_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.012
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_haiti_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Инвестировать в Гаити",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_latinamerica_investments",
+      "country_exists": "HAI",
+      "OR": {
+        "HAI": [
+          {
+            "has_government": "despotism"
+          },
+          {
+            "has_government": "paternalism"
+          }
+        ]
+      },
+      "NOT": {
+        "HAI": {
+          "check_variable": {
+            "ECON_SPHERE_LEADER": "MEX"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_haiti_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.006
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_southern_cone_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Инвестировать в \"Южный конус\"",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_latinamerica_investments"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_southern_cone_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.05
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_andes_region_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Инвестировать в Андский регион",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_latinamerica_investments"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_andes_region_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.05
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_brazil_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Инвестировать в Бразилию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_latinamerica_investments",
+      "NOT": {
+        "BRA": {
+          "has_government": "socialist"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_brazil_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.05
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_attract_american_investors_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Привлечь американских инвесторов",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_attract_investors"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_attract_canadian_investors_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Привлечь канадских инвесторов",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_attract_investors",
+      "CAN": {
+        "is_in_faction_with": "USA"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_invest_slovakia_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в Словакию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "country_exists": "SLO",
+      "SLO": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_slovakia_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.011
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_bulgaria_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в Болгарию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "BUL": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_bulgaria_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.022
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_romania_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в Румынию",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "ROM": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_romania_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.038
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_poland_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в Польшу",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "OR": {
+        "POL": {
+          "is_in_faction_with": "GER"
+        },
+        "GGN": {
+          "is_in_faction_with": "GER"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_poland_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.03
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_ukraine_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в РК Украина",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "UKR": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_ukraine_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.04
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invest_kaukasien_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в РК Кавказия",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "CAU": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_kaukasien_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.023
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invite_IG_Farben_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции ИГ Фарбен",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_invite_Siemens_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции Сименс",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_invite_Reichswerke_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции Рейхсверке",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_invite_Daimler_Benz_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции Даймлер-Бенц",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "west_russia_diplo_with_wsb",
+    "category_id": "RUS_reunification_category",
+    "name": "Начать переговоры об объединении",
+    "desc": "",
+    "icon": "GFX_decision_diplo_western_siberia",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "date": {
+        "_op": ">",
+        "value": "1968.5.31"
+      },
+      "NOT": [
+        {
+          "has_country_flag": "WSR_war_decisions"
+        },
+        {
+          "WSB": {
+            "has_country_flag": "WSB_war_decisions"
+          }
+        }
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_WSB_compatible_tt"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_regional_stage",
+      "NOT": {
+        "has_country_flag": "RUS_superregional_stage"
+      },
+      "WSR_WSB_is_compatible": true,
+      "WSB": [
+        {
+          "can_form_west_siberia": true
+        },
+        {
+          "exists": true
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "WSR_peace_decisions",
+      "country_event": {
+        "id": "russia_unification.2",
+        "days": 1
+      },
+      "hidden_effect": {
+        "GER": {
+          "country_event": {
+            "id": "GER_Espionage.9",
+            "days": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "west_siberia_diplo_with_wsr",
+    "category_id": "RUS_reunification_category",
+    "name": "Начать переговоры об объединении",
+    "desc": "",
+    "icon": "GFX_decision_diplo_western_russia",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "date": {
+        "_op": ">",
+        "value": "1968.5.31"
+      },
+      "NOT": [
+        {
+          "has_country_flag": "WSB_war_decisions"
+        },
+        {
+          "WSR": {
+            "has_country_flag": "WSR_war_decisions"
+          }
+        }
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_WSR_compatible_tt"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_regional_stage",
+      "NOT": {
+        "has_country_flag": "RUS_superregional_stage"
+      },
+      "WSR_WSB_is_compatible": true,
+      "WSR": [
+        {
+          "can_form_west_russia": true
+        },
+        {
+          "exists": true
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "WSB_peace_decisions",
+      "country_event": {
+        "id": "russia_unification.4",
+        "days": 1
+      },
+      "hidden_effect": {
+        "GER": {
+          "country_event": {
+            "id": "GER_Espionage.9",
+            "days": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "central_siberia_diplo_with_fst",
+    "category_id": "RUS_reunification_category",
+    "name": "Начать переговоры об объединении",
+    "desc": "",
+    "icon": "GFX_decision_diplo_far_east",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "date": {
+        "_op": ">",
+        "value": "1968.5.31"
+      },
+      "NOT": [
+        {
+          "has_country_flag": "CSB_war_decisions"
+        },
+        {
+          "FST": {
+            "has_country_flag": "FST_war_decisions"
+          }
+        }
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_FST_compatible_tt"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_regional_stage",
+      "NOT": {
+        "has_country_flag": "RUS_superregional_stage"
+      },
+      "CSB_FST_is_compatible": true,
+      "FST": {
+        "can_form_far_east": true
+      },
+      "country_exists": "FST"
+    },
+    "complete_effect": {
+      "set_country_flag": "CSB_peace_decisions",
+      "country_event": {
+        "id": "russia_unification.6",
+        "days": 1
+      },
+      "hidden_effect": {
+        "GER": {
+          "country_event": {
+            "id": "GER_Espionage.9",
+            "days": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "far_east_diplo_with_csb",
+    "category_id": "RUS_reunification_category",
+    "name": "Начать переговоры об объединении",
+    "desc": "",
+    "icon": "GFX_decision_diplo_central_siberia",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "date": {
+        "_op": ">",
+        "value": "1968.5.31"
+      },
+      "NOT": [
+        {
+          "has_country_flag": "FST_war_decisions"
+        },
+        {
+          "CSB": {
+            "has_country_flag": "CSB_war_decisions"
+          }
+        }
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_CSB_compatible_tt"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_regional_stage",
+      "NOT": {
+        "has_country_flag": "RUS_superregional_stage"
+      },
+      "CSB_FST_is_compatible": true,
+      "CSB": {
+        "can_form_central_siberia": true
+      },
+      "country_exists": "CSB"
+    },
+    "complete_effect": {
+      "set_country_flag": "FST_peace_decisions",
+      "country_event": {
+        "id": "russia_unification.8",
+        "days": 1
+      },
+      "hidden_effect": {
+        "GER": {
+          "country_event": {
+            "id": "GER_Espionage.9",
+            "days": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "russia_diplo_with_siberia",
+    "category_id": "RUS_reunification_category",
+    "name": "Начать переговоры об объединении",
+    "desc": "",
+    "icon": "GFX_decision_diplo_siberia_superregional",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "date": {
+        "_op": ">",
+        "value": "1970.05.01"
+      },
+      "NOT": [
+        {
+          "has_country_flag": "RWS_war_decisions"
+        },
+        {
+          "SIB": {
+            "has_country_flag": "SIB_war_decisions"
+          }
+        }
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_SIB_compatible_tt"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_superregional_stage",
+      "RWS_SIB_is_compatible": true,
+      "SIB": [
+        {
+          "can_form_central_siberia": true,
+          "can_form_far_east": true
+        },
+        {
+          "exists": true
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "RWS_peace_decisions",
+      "country_event": {
+        "id": "russia_unification.18",
+        "days": 1
+      },
+      "hidden_effect": {
+        "GER": {
+          "country_event": {
+            "id": "GER_Espionage.9",
+            "days": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "siberia_diplo_with_russia",
+    "category_id": "RUS_reunification_category",
+    "name": "Начать переговоры об объединении",
+    "desc": "",
+    "icon": "GFX_decision_diplo_russia_superregional",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "date": {
+        "_op": ">",
+        "value": "1970.05.01"
+      },
+      "NOT": [
+        {
+          "has_country_flag": "RWS_war_decisions"
+        },
+        {
+          "RWS": {
+            "has_country_flag": "RWS_war_decisions"
+          }
+        }
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_RWS_compatible_tt"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_superregional_stage",
+      "RWS_SIB_is_compatible": true,
+      "RWS": [
+        {
+          "can_form_west_russia": true,
+          "can_form_west_siberia": true
+        },
+        {
+          "exists": true
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "SIB_peace_decisions",
+      "country_event": {
+        "id": "russia_unification.8",
+        "days": 1
+      },
+      "hidden_effect": {
+        "GER": {
+          "country_event": {
+            "id": "GER_Espionage.9",
+            "days": 3
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "WSR_offer_diplomatic_concession",
+    "category_id": "WSR_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "WSB_offer_diplomatic_concession",
+    "category_id": "WSB_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "CSB_offer_diplomatic_concession",
+    "category_id": "CSB_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "FST_offer_diplomatic_concession",
+    "category_id": "FST_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "RWS_offer_diplomatic_concession",
+    "category_id": "RWS_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "SIB_offer_diplomatic_concession",
+    "category_id": "SIB_peace_category",
+    "name": "Попросить о дипломатических уступках",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "RUS_diplo_action_executing"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "RUS_diplo_action_executing"
+    }
+  },
+  {
+    "id": "USA_diplomatic_mission",
+    "category_id": "USA_the_heartless",
+    "name": "Отправить Киссинджера на Восток",
+    "desc": "",
+    "icon": "GFX_decision_OMO_christian_tourism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "USA_URI_Kissinger_unlocked"
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_URI_Kissinger_unlocked",
+        "USA_conservative_activism_uri_repeal"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_diplomatic_mission",
+      "USA_Chep_Conservative_PR_down": true
+    }
+  },
+  {
+    "id": "USA_WFB_ENG_promote_anti_pakt_diplo",
+    "category_id": "USA_WFB_CFN_category",
+    "name": "Продвигать антинемецкую дипломатию",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "CFN_selected_reform": 1
+      },
+      "has_global_flag": "FEN_GF_WonEcw",
+      "ENG": {
+        "is_in_faction_with": "USA",
+        "has_country_flag": "CFN_founding_member"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_WFB_ENG_promote_anti_pakt_diplo",
+      "add_to_variable": {
+        "ENG.CFN_voting_desire^1": 10
+      },
+      "ENG": {
+        "custom_effect_tooltip": "WFB_opinion_increase_diplo_10"
+      }
+    }
+  },
+  {
+    "id": "WRW_start_diplomatic_talks",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Start Diplomatic Talks",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": [
+          "RUS_SWRW_peace_blocker",
+          "peace_talks_started"
+        ],
+        "tag": [
+          "OMS",
+          "SGV"
+        ]
+      },
+      "check_variable": {
+        "WRW_deccat": 3
+      }
+    },
+    "complete_effect": {}
+  }
+]

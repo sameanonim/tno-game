@@ -1,0 +1,532 @@
+[
+  {
+    "id": "ott_merge_the_eyalets_of_jeddah_habesh_and_yemen",
+    "category_id": "form_ottoman_empire_category",
+    "name": "Объединить эялеты Джидду, Хабеш и Йемен",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "TUR_abdulmejid_ii",
+            "ruling_only": true
+          },
+          {
+            "character": "TUR_durrushehvar_i",
+            "ruling_only": true
+          }
+        ]
+      },
+      "controls_state": [
+        679,
+        293,
+        659,
+        855,
+        856,
+        992
+      ]
+    },
+    "visible": {
+      "original_tag": "TUR",
+      "NOT": {
+        "has_global_flag": "ottoman_yemen_flag"
+      },
+      "has_completed_focus": "TUR_reclaiming_our_lost_empire"
+    },
+    "complete_effect": {
+      "679": {
+        "add_core_of": "ROOT"
+      },
+      "293": {
+        "add_core_of": "ROOT"
+      },
+      "659": {
+        "add_core_of": "ROOT"
+      },
+      "855": {
+        "add_core_of": "ROOT"
+      },
+      "856": {
+        "add_core_of": "ROOT"
+      },
+      "992": {
+        "add_core_of": "ROOT"
+      },
+      "hidden_effect": {
+        "set_global_flag": "ottoman_yemen_flag"
+      }
+    }
+  },
+  {
+    "id": "ITA_increase_exploitation_yemen",
+    "category_id": "ITA_ENI_exploitation",
+    "name": "[Get.GetYemen_ENI_invest]",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "OR": {
+          "AND": [
+            {
+              "check_variable": {
+                "ITA_ENI_yemen_stage": 2
+              },
+              "has_country_flag": "ILG_low_turnout_yemen"
+            },
+            {
+              "check_variable": {
+                "ITA_ENI_yemen_stage": 4
+              },
+              "has_country_flag": "ILG_medium_turnout_yemen"
+            }
+          ],
+          "check_variable": {
+            "ITA_ENI_yemen_stage": 5
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ita_send_volunteers_to_yemen",
+    "category_id": "ITA_oil_crisis_category",
+    "name": "Отправить добровольцев в [YEM.GetFlag] Йемен",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_global_flag": "arab_war_ongoing",
+      "YEM": {
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "target": "YEM"
+      },
+      "TNO_increase_volunteer_cap_1": true
+    }
+  },
+  {
+    "id": "GNG_OC_Send_Volunteers_to_YEM",
+    "category_id": "GNG_Research_Team_category",
+    "name": "Отправить исследовательскую группу в [YEM.GetFlag] [YEM.GetNameDef]",
+    "desc": "Чтобы получить необходимые данные для наших исследований, было бы разумно отправить ИГТП в [YEM.GetNameDef], где группа сможет в боевых условиях протестировать новое снаряжение.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "NOT": [
+        {
+          "ITA": {
+            "is_in_faction_with": "USA"
+          }
+        },
+        {
+          "has_global_flag": "OC_Yemen_CW_over"
+        }
+      ],
+      "has_country_flag": "GNG_PTRG_OC",
+      "YEM": [
+        {
+          "exists": true
+        },
+        {
+          "has_war": true
+        }
+      ],
+      "GNG_not_sending_volunteers_OC": true
+    },
+    "complete_effect": {
+      "set_country_flag": "GNG_OC_is_sending_volunteers_YEM",
+      "custom_effect_tooltip": "GNG_OC_sending_volunteers",
+      "hidden_effect": {
+        "set_country_flag": "may_send_volunteers",
+        "set_temp_variable": [
+          {
+            "target": "YEM"
+          },
+          {
+            "number": 1
+          }
+        ],
+        "TNO_set_num_volunteers": true
+      }
+    }
+  },
+  {
+    "id": "ITA_volunteers_to_yemen",
+    "category_id": "ita_demitaly_supporting_proxies",
+    "name": "ITA_volunteers_to_yemen",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "ITA_available_volunteer_manpower": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ITA_oil_crisis_demitaly_war",
+      "YEM": {
+        "exists": true,
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "YEM": {
+        "ITA_manpower_giving": true
+      }
+    }
+  },
+  {
+    "id": "ITA_volunteer_division_yemen",
+    "category_id": "ita_demitaly_supporting_proxies",
+    "name": "ITA_volunteer_division_yemen",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "ITA_available_volunteer_manpower": {
+          "_op": ">",
+          "value": 7000
+        }
+      },
+      "YEM": {
+        "capital_scope": {
+          "is_controlled_by": "PREV"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ITA_oil_crisis_demitaly_war",
+      "YEM": {
+        "exists": true,
+        "has_war": true
+      },
+      "check_variable": {
+        "ITA_oc_demitaly_war_tier": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "YEM": {
+        "ITA_volunteer_divisions_giving": true
+      }
+    }
+  },
+  {
+    "id": "ITA_airstrikes_in_yemen",
+    "category_id": "ita_demitaly_supporting_proxies",
+    "name": "ITA_airstrikes_in_yemen",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ITA_oil_crisis_demitaly_war",
+      "YEM": {
+        "exists": true,
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "has_war_with": "YEM"
+        },
+        "add_timed_idea": {
+          "idea": "ITA_airstrike_campaign_enemy",
+          "days": 100
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_guns_to_yemen",
+    "category_id": "ita_demitaly_supporting_proxies",
+    "name": "ITA_guns_to_yemen",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ITA_oil_crisis_demitaly_war",
+      "YEM": {
+        "exists": true,
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "YEM": {
+        "ITA_equipment_guns_giving": true
+      }
+    }
+  },
+  {
+    "id": "ITA_vehicles_to_yemen",
+    "category_id": "ita_demitaly_supporting_proxies",
+    "name": "ITA_vehicles_to_yemen",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ITA_oil_crisis_demitaly_war",
+      "OR": {
+        "check_variable": [
+          {
+            "ITA_oc_demitaly_war_tier": 2
+          },
+          {
+            "ITA_oc_demitaly_war_tier": 3
+          }
+        ]
+      },
+      "YEM": {
+        "exists": true,
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "YEM": {
+        "ITA_equipment_APC_IFV_giving": true
+      }
+    }
+  },
+  {
+    "id": "ITA_tanks_to_yemen",
+    "category_id": "ita_demitaly_supporting_proxies",
+    "name": "ITA_tanks_to_yemen",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ITA_oil_crisis_demitaly_war",
+      "check_variable": {
+        "ITA_oc_demitaly_war_tier": 3
+      },
+      "YEM": {
+        "exists": true,
+        "has_war": true
+      }
+    },
+    "complete_effect": {
+      "YEM": {
+        "ITA_equipment_tanks_giving": true
+      }
+    }
+  },
+  {
+    "id": "PRM_load_yemelyanov_regional_tree",
+    "category_id": "PRM_debug_category",
+    "name": "Загрузить региональное древо Емельянова",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRM_load_yemelyanov_regional_tree",
+      "load_focus_tree": {
+        "tree": "PRM_yemelyanov_regional",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "PRM_load_yemelyanov_superregional_tree",
+    "category_id": "PRM_debug_category",
+    "name": "Загрузить суперрегиональное древо Емельянова",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRM_load_yemelyanov_superregional_tree",
+      "load_focus_tree": {
+        "tree": "PRM_yemelyanov_superregional",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "MAG_yemeni_civil_war_effigy",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "ГРАЖДАНСКАЯ ВОЙНА В ЙЕМЕНЕ",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "NYM": {
+        "has_war_with": "YEM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_yemeni_civil_war_effigy"
+    }
+  },
+  {
+    "id": "MAG_WA_support_yemeni_republicans",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Йеменской Арабской Республике",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NYM": [
+        {
+          "exists": true
+        },
+        {
+          "has_war_with": "YEM"
+        }
+      ],
+      "NOT": {
+        "OR": {
+          "NYM": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "YEM": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_yemeni_republicans",
+      "NYM": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "MAG_WA_support_yemeni_monarchists",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Эмирату Йемен",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "YEM": {
+        "exists": true
+      },
+      "NYM": {
+        "has_war_with": "YEM"
+      },
+      "NOT": {
+        "OR": {
+          "NYM": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "YEM": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_yemeni_monarchists",
+      "YEM": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "MAG_yemeni_saudi_war_effigy",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "САУДО-ЙЕМЕНСКАЯ ВОЙНА",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {
+      "NYM": {
+        "has_war_with": "SAU"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_yemeni_saudi_war_effigy"
+    }
+  },
+  {
+    "id": "MAG_WA_support_yemen",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Йеменской Арабской Демократической Республике",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NYM": [
+        {
+          "exists": true
+        },
+        {
+          "has_war_with": "SAU"
+        }
+      ],
+      "NOT": {
+        "OR": {
+          "NYM": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "SAU": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_yemen",
+      "NYM": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  }
+]

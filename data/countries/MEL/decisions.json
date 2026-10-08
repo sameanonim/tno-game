@@ -1,0 +1,492 @@
+[
+  {
+    "id": "WLA_reclaim_the_old_homeland_decision",
+    "category_id": "political_actions",
+    "name": "Вернуть себе старую родину",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": 122
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "WLA_integrated_wls_flag"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "USA_homeland_defense",
+    "category_id": "war_measures",
+    "name": "Чрезвычайный акт о защите родины",
+    "desc": "Враги ступили на землю нашей гордой нации. Американский народ должен собраться с силами и оттеснить захватчиков обратно в море.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "any_core_state": {
+        "NOT": {
+          "is_controlled_by": "USA"
+        }
+      },
+      "has_civil_war": false
+    },
+    "visible": {
+      "has_defensive_war": true,
+      "CSA": {
+        "exists": false
+      }
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_war_support": {
+              "_op": "<",
+              "value": 0.9
+            }
+          },
+          "set_war_support": 0.9
+        },
+        {
+          "limit": {
+            "has_idea": "great_depression"
+          },
+          "remove_ideas": "great_depression"
+        },
+        {
+          "limit": {
+            "NOT": {
+              "OR": {
+                "has_idea": [
+                  "extensive_conscription",
+                  "scraping_the_barrel",
+                  "service_by_requirement",
+                  "all_adults_serve"
+                ]
+              }
+            }
+          },
+          "add_ideas": "extensive_conscription"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "undisturbed_isolation",
+                "isolation",
+                "civilian_economy",
+                "low_economic_mobilisation"
+              ]
+            }
+          },
+          "add_ideas": "war_economy"
+        }
+      ],
+      "add_ideas": "USA_homeland_defense"
+    }
+  },
+  {
+    "id": "ENG_enforce_blackouts",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Начать общенациональные отключения электроэнергии",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "NOT": {
+        "has_idea": "ENG_blackouts_idea"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_idea": "ENG_blackouts_idea"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_end_the_blackouts",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Завершить общенациональные отключения электроэнергии",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_idea": "ENG_blackouts_idea"
+    },
+    "visible": {
+      "has_idea": "ENG_blackouts_idea"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_promote_the_blitz_spirit",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Повысить дух «Блица»",
+    "desc": "",
+    "icon": "GFX_decision_eng_install_government",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "has_completed_focus": "general_rearmament_focus"
+    },
+    "visible": {
+      "has_war_with": "GER",
+      "NOT": {
+        "has_idea": "ENG_blitz_spirit_idea"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_the_homeland_defense_act",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Акт о гражданской обороне",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "any_owned_state": {
+        "is_core_of": "ROOT",
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_war": true
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "ENG_desperate_defense_of_the_homeland",
+        "days": 180
+      }
+    }
+  },
+  {
+    "id": "ENG_establish_the_local_defense_volunteers",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Создать добровольные отряды самообороны",
+    "desc": "",
+    "icon": "GFX_decision_eng_blackshirt_march",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_utilize_home_guard_in_factories",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Использовать войска местной самообороны на фабриках",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true
+    },
+    "visible": {
+      "has_country_flag": "ENG_home_guard_established_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_raise_the_home_guard_in_state",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Создать войска местной самообороны в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "any_owned_state": {
+        "is_core_of": "ROOT",
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ENG_raising_militia_flag"
+      }
+    },
+    "visible": {
+      "is_subject": false,
+      "has_civil_war": false,
+      "has_country_flag": "ENG_home_guard_established_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "ENG_raising_militia_flag"
+    }
+  },
+  {
+    "id": "ENG_send_the_home_guard_back_home",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Отправить войска местной самообороны по домам",
+    "desc": "",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "has_country_flag": "ENG_home_guard_established_flag"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ENG_disband_home_guards_tt",
+      "hidden_effect": {
+        "delete_units": {
+          "division_template": "Home Guard Defense Brigades",
+          "disband": false
+        }
+      }
+    }
+  },
+  {
+    "id": "ott_reform_the_eyalet_of_rumelia",
+    "category_id": "form_ottoman_empire_category",
+    "name": "Преобразовать эялет Румелию",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "TUR_abdulmejid_ii",
+            "ruling_only": true
+          },
+          {
+            "character": "TUR_durrushehvar_i",
+            "ruling_only": true
+          }
+        ]
+      },
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "form_rumelia_greece_required_states_tt",
+          "controls_state": [
+            47,
+            185,
+            731,
+            184
+          ]
+        },
+        {
+          "tooltip": "form_rumelia_bulgaria_required_states_tt",
+          "controls_state": [
+            48,
+            801,
+            212,
+            211
+          ]
+        },
+        {
+          "tooltip": "form_rumelia_yugoslavia_required_states_tt",
+          "controls_state": [
+            106,
+            970,
+            803,
+            802,
+            108,
+            105,
+            107
+          ]
+        },
+        {
+          "tooltip": "form_rumelia_albania_required_states_tt",
+          "controls_state": [
+            44,
+            805,
+            934
+          ]
+        }
+      ]
+    },
+    "visible": {
+      "original_tag": "TUR",
+      "NOT": {
+        "has_global_flag": "ottoman_balkans_flag"
+      },
+      "has_completed_focus": "TUR_reclaim_macedonia"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "form_rumelia_greece_coring_states_tt",
+        "form_rumelia_bulgaria_coring_states_tt",
+        "form_rumelia_yugoslavia_coring_states_tt",
+        "form_rumelia_albania_coring_states_tt"
+      ],
+      "hidden_effect": [
+        {
+          "47": {
+            "add_core_of": "ROOT"
+          },
+          "185": {
+            "add_core_of": "ROOT"
+          },
+          "731": {
+            "add_core_of": "ROOT"
+          },
+          "184": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "48": {
+            "add_core_of": "ROOT"
+          },
+          "801": {
+            "add_core_of": "ROOT"
+          },
+          "212": {
+            "add_core_of": "ROOT"
+          },
+          "211": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "106": {
+            "add_core_of": "ROOT"
+          },
+          "970": {
+            "add_core_of": "ROOT"
+          },
+          "803": {
+            "add_core_of": "ROOT"
+          },
+          "802": {
+            "add_core_of": "ROOT"
+          },
+          "108": {
+            "add_core_of": "ROOT"
+          },
+          "105": {
+            "add_core_of": "ROOT"
+          },
+          "107": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "44": {
+            "add_core_of": "ROOT"
+          },
+          "805": {
+            "add_core_of": "ROOT"
+          },
+          "934": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "set_global_flag": "ottoman_balkans_flag"
+        }
+      ]
+    }
+  },
+  {
+    "id": "PRM_load_yemelyanov_regional_tree",
+    "category_id": "PRM_debug_category",
+    "name": "Загрузить региональное древо Емельянова",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRM_load_yemelyanov_regional_tree",
+      "load_focus_tree": {
+        "tree": "PRM_yemelyanov_regional",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "PRM_load_yemelyanov_superregional_tree",
+    "category_id": "PRM_debug_category",
+    "name": "Загрузить суперрегиональное древо Емельянова",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRM_load_yemelyanov_superregional_tree",
+      "load_focus_tree": {
+        "tree": "PRM_yemelyanov_superregional",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "BOV_recruit_melnykite_turncoats",
+    "category_id": "UKR_BOV_three_heads_of_the_dragon_category",
+    "name": "Завербовать мельниковцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_global_flag": "UKR_UCW_ongoing"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "RUS_home_sweet_homel",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Home Sweet Homel",
+    "desc": "",
+    "icon": "generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        241,
+        225,
+        1427
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "RUS": {
+        "set_temp_variable": {
+          "temp_exhaustion": -5
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "GER": {
+        "set_temp_variable": {
+          "temp_exhaustion": 3
+        },
+        "WRW_add_war_exhaustion": true
+      },
+      "add_war_support": 0.015
+    }
+  }
+]

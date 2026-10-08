@@ -180,6 +180,15 @@
 ├── data/                       # Готовые игровые базы данных (нации, законы, технологии)
 ├── extracted_tno_data/         # Данные, извлеченные из первоисточников TNO
 ├── map_data/                   # Маски провинций, списки определений и LUT-таблицы
+├── pipeline/                   # Единый Python-пайплайн экспорта данных (VFS, Clausewitz AST, SQLite)
+│   ├── config.py               # Автодискаверинг путей (Steam, HoI4, TNO, Submods)
+│   ├── vfs.py                  # Двухслойная виртуальная файловая система
+│   ├── parsers/                # Лексер и AST-парсер Clausewitz и локализации
+│   ├── extractors/             # Экстракторы карты, стран, директив, событий, решений
+│   ├── converters/             # LUT-генератор и конвертер графики (DDS->PNG)
+│   ├── db/                     # SQLite базы данных (localization.sqlite) и кэш
+│   ├── validator.py            # Аудит целостности и верификация связей
+│   └── cli.py                  # Главная точка входа утилиты
 ├── scenes/                     # Скомпонованные Godot сцены
 ├── scripts/                    # Скрипты контроллеров и геймплейная логика
 ├── shaders/                    # Шейдеры ЭЛТ, карты провинций и портретов лидеров
@@ -207,6 +216,68 @@
    ```
 2. Откройте Godot Engine и импортируйте файл [`project.godot`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/project.godot).
 3. Нажмите клавишу **F5** (или кнопку «Играть») для запуска с начальной сцены [`ui/screens/main_menu.tscn`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/ui/screens/main_menu.tscn).
+
+---
+
+---
+
+## Data Pipeline (Единая утилита экспорта данных)
+
+Для экспорта и синхронизации игровых данных из **Hearts of Iron IV**, модификации **The New Order: Last Days of Europe** и сабмодов (2WRW, Russian Localization) разработана единая модульная подсистема экспорта.
+
+### Способы запуска
+
+#### 1. Автономный исполняемый файл (`tno_exporter.exe`)
+Не требует установленного Python и сторонних библиотек. Использует настройки из [`pipeline/settings.json`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/pipeline/settings.json):
+```bash
+# Интерактивное консольное меню (с выбором шагов):
+.\tno_exporter.exe
+
+# Быстрая очистка всех дублирующихся и устаревших файлов:
+.\tno_exporter.exe --clean-duplicates
+
+# Экспорт модульных пакетов стран (country.json + country.sqlite):
+.\tno_exporter.exe --package-countries
+
+# Сквозной полный экспорт всех подсистем и аудит целостности:
+.\tno_exporter.exe --all --validate
+```
+
+#### 2. Запуск через Godot Engine (GDScript / Headless)
+Через класс [`PipelineExporterBridge`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/core/systems/pipeline_exporter_bridge.gd) и утилиту [`tools/run_exporter.gd`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/tools/run_exporter.gd):
+```bash
+# Запуск очистки дубликатов из консоли движка:
+godot --headless -s tools/run_exporter.gd -- --clean
+
+# Сквозной экспорт через движок:
+godot --headless -s tools/run_exporter.gd -- --all
+```
+
+#### 3. Модульный запуск через Python CLI
+```bash
+python -m pipeline.cli --help
+python -m pipeline.cli --clean-duplicates
+python -m pipeline.cli --package-countries --tags GER,USA,JAP,KOM
+```
+
+### Архитектура пакетов стран (`data/countries/<TAG>/`)
+Каждая держава изолирована в отдельную директорию со своей схемой данных:
+* `country.json` — профиль страны, стартовые политики, фракции, правительство.
+* `country.sqlite` — изолированная реляционная база данных (таблицы: `profile`, `territory`, `leaders`, `directives`, `events`, `decisions`).
+* `territory.json` — провинции и контролируемые штаты.
+* `leaders/` — досье и портреты персонажей кабинета и генералитета.
+* `directives/` — активное дерево `tree.json`, подкаталог `trees/` и `trees_manifest.json`.
+* `events.json` / `decisions.json` — нарративные события и доступные решения.
+* `localisation/` — локализованные строковые ключи державы (`country_ru.json`, `country_en.json`).
+
+### Дедупликация данных
+Утилита дедупликации ([`pipeline/cleaner.py`](file:///e:/Godot_v4.7.2-stable_win64.exe/TNOGame/tno-game/pipeline/cleaner.py)) автоматически устраняет:
+* Неструктурированные файлы `data/countries/<TAG>.json` в пользу модульных пакетов `country.json`.
+* Внутренние дубликаты `country_profile.json` и `ru.json`/`en.json`.
+* Рассыпанные файлы директив `tree_*.json` в пользу каноничных `trees/<tree_id>.json`.
+* Неиндексированные промежуточные файлы в `data/events/*.json` и `data/decisions/*.json`.
+* Устаревшие монолитные дампы `data/extracted/` и дубликаты масок карты.
+
 
 ---
 

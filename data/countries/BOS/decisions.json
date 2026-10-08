@@ -1,0 +1,714 @@
+[
+  {
+    "id": "expand_bosnia_coal_mines",
+    "category_id": "prospect_for_resources",
+    "name": "Расширить угольные шахты в регионе [104.GetName]",
+    "desc": "",
+    "icon": "coal",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 104,
+      "controls_state": 104,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "owns_state": 104,
+      "controls_state": 104,
+      "104": {
+        "NOT": {
+          "has_state_flag": "bosnia_coal_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AUS_hand_bosnia_to_our_cro_puppet",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Передать регионы [104.GetName] и [804.GetName] государству [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ott_enlarge_the_vilayet_of_bosnia",
+    "category_id": "form_ottoman_empire_category",
+    "name": "Увеличить вилайет Боснию",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "TUR_abdulmejid_ii",
+            "ruling_only": true
+          },
+          {
+            "character": "TUR_durrushehvar_i",
+            "ruling_only": true
+          }
+        ]
+      },
+      "controls_state": [
+        104,
+        804,
+        103
+      ]
+    },
+    "visible": {
+      "original_tag": "TUR",
+      "NOT": {
+        "has_global_flag": "ottoman_bosnia_flag"
+      },
+      "has_completed_focus": "TUR_reclaiming_our_lost_empire"
+    },
+    "complete_effect": {
+      "104": {
+        "add_core_of": "ROOT"
+      },
+      "804": {
+        "add_core_of": "ROOT"
+      },
+      "103": {
+        "add_core_of": "ROOT"
+      },
+      "hidden_effect": {
+        "set_global_flag": "ottoman_bosnia_flag",
+        "163": {
+          "add_core_of": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "reestablish_the_bosporan_kingdom",
+    "category_id": "form_roman_empire_category",
+    "name": "Восстановление Боспорского царства",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 120,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": [
+        192,
+        197,
+        196,
+        137,
+        226,
+        200,
+        227,
+        218,
+        234
+      ],
+      "OR": {
+        "CRI": [
+          {
+            "exists": false
+          },
+          {
+            "is_subject_of": "ITA"
+          }
+        ]
+      }
+    },
+    "visible": {
+      "original_tag": "ITA",
+      "NOT": {
+        "has_global_flag": "the_bosporan_kingdom_flag"
+      },
+      "has_global_flag": "form_roman_empire_flag"
+    },
+    "complete_effect": {
+      "192": {
+        "add_core_of": "CRI"
+      },
+      "197": {
+        "add_core_of": "CRI"
+      },
+      "196": {
+        "add_core_of": "CRI"
+      },
+      "226": {
+        "add_core_of": "CRI"
+      },
+      "200": {
+        "add_core_of": "CRI"
+      },
+      "227": {
+        "add_core_of": "CRI"
+      },
+      "218": {
+        "add_core_of": "CRI"
+      },
+      "234": {
+        "add_core_of": "CRI"
+      },
+      "CRI": {
+        "transfer_state": [
+          192,
+          197,
+          196,
+          137,
+          226,
+          200,
+          227,
+          218,
+          234
+        ],
+        "set_cosmetic_tag": "regnum_bospori"
+      },
+      "hidden_effect": {
+        "set_global_flag": "the_bosporan_kingdom_flag",
+        "IF": [
+          {
+            "limit": {
+              "ITA": {
+                "has_government": "fascism"
+              }
+            },
+            "CRI": {
+              "set_politics": {
+                "ruling_party": "fascism",
+                "elections_allowed": false,
+                "last_election": "1935.12.17",
+                "election_frequency": 48
+              }
+            }
+          },
+          {
+            "limit": {
+              "ITA": {
+                "has_government": "neutrality"
+              }
+            },
+            "CRI": {
+              "set_politics": {
+                "ruling_party": "neutrality",
+                "elections_allowed": false,
+                "last_election": "1935.12.17",
+                "election_frequency": 48
+              }
+            }
+          }
+        ],
+        "ROOT": {
+          "puppet": "CRI"
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_exploit_the_gombos_treaty",
+    "category_id": "GER_price_controls_cat",
+    "name": "Нажиться на торговом соглашении Гёмбёша",
+    "desc": "Торговое соглашение, которое венгерский премьер-министр Дьюла Гёмбёш подписал с нами в 1934 году, важно для стимулирования венгерской экономики и восстановления после Великой депрессии, но у него есть и значительные недостатки. По этому соглашению мы можем продавать пшеницу по хорошей цене, но заработанные деньги должны оставлять в Германии и тратить только на покупку немецких промышленных товаров. Мы можем вывести все средства со счета, открытого в своей стране, и помочь таким образом экономике государства, однако подобный шаг грозит потерей возможного союзника.",
+    "icon": "GFX_decision_generic_fundraising",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "HUN": {
+        "has_idea": "HUN_gombos_trade_treaty",
+        "NOT": {
+          "is_in_faction_with": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_dlc": "Gotterdammerung",
+      "NOT": {
+        "OR": {
+          "is_in_faction_with": "HUN",
+          "has_guaranteed": "HUN"
+        }
+      },
+      "HUN": {
+        "exists": true,
+        "has_capitulated": false
+      }
+    },
+    "complete_effect": {
+      "GER_modify_industrial_modifier": true,
+      "add_to_variable": {
+        "GER_industrial_consumer_goods_factor": -0.15,
+        "tooltip": "consumer_goods_factor_tt"
+      },
+      "custom_effect_tooltip": [
+        "GER_exploit_the_gombos_treaty_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "GER_reduce_mefo_bills_penalty": true,
+      "HUN": {
+        "country_event": {
+          "id": "wuw_GER_diplomacy.56",
+          "hours": 2
+        }
+      },
+      "effect_tooltip": {
+        "HUN": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "GER_stole_our_money_opm"
+          },
+          "remove_ideas": "HUN_gombos_trade_treaty"
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_bosnia_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Боснию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "BOS": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "BOS"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "BOS": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_bosnian_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "BOS": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "BOS"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_bosnian_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "RAJ_GOE_try_to_arrest_bose",
+    "category_id": "RAJ_GOE_independence_movement",
+    "name": "Британские власти пытаются арестовать Субхаса Чандру Боса",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "RAJ_GOE_communism_sway_bose",
+    "category_id": "RAJ_GOE_communism_infiltration_cat",
+    "name": "Привлечь Боса на нашу сторону",
+    "desc": "Субхас Чандра Бос обладает значительным влиянием в националистических кругах. Если направить его амбиции в русло нашего движения, это придаст нам легитимности и откроет доступ к более широким сетям поддержки.",
+    "icon": "generic_civil_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "communism": {
+        "_op": ">",
+        "value": 0.15
+      },
+      "has_war_support": {
+        "_op": ">",
+        "value": 0.2
+      },
+      "has_country_flag": "has_infiltrated_congress"
+    },
+    "visible": {
+      "has_completed_focus": "RAJ_red_in_the_shadows"
+    },
+    "complete_effect": {
+      "set_country_flag": "has_swayed_bose_to_communism",
+      "if": {
+        "limit": {
+          "RAJ_subhas_chanda_bose": {
+            "has_trait": "pragmatic_authoritarian"
+          }
+        },
+        "remove_trait": {
+          "character": "RAJ_subhas_chanda_bose",
+          "trait": "pragmatic_authoritarian",
+          "slot": "political_advisor"
+        }
+      },
+      "add_trait": {
+        "character": "RAJ_subhas_chanda_bose",
+        "trait": "red_tiger_of_bengal",
+        "slot": "political_advisor"
+      }
+    }
+  },
+  {
+    "id": "ROM_claim_bosnia",
+    "category_id": "ROM_dividing_yugo",
+    "name": "Заявить претензии: [104.GetName]",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_ROM_claim_yugo_4",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_3",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_2",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_1",
+        "trigger": {
+          "104": {
+            "NOT": {
+              "has_state_flag": [
+                "strongest_claimant_GER",
+                "strongest_claimant_ROM",
+                "strongest_claimant_ITA",
+                "strongest_claimant_HUN"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_4",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_3",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_2",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_4",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_3",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_2",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_4",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_3",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_2",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      }
+    ],
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "104": {
+        "has_anyone_else_claimed_ROM": true
+      },
+      "OR": {
+        "GER": {
+          "has_country_flag": "invited_to_split_yugo"
+        },
+        "ITA": {
+          "has_country_flag": "invited_to_split_yugo"
+        },
+        "HUN": {
+          "has_country_flag": "invited_to_split_yugo"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "invited_to_split_yugo",
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "claiming_a_yugoslav_state_flag"
+        }
+      },
+      "104": {
+        "owner": {
+          "OR": {
+            "tag": "YUG",
+            "is_subject_of": "YUG"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "claiming_a_yugoslav_state_flag"
+      }
+    }
+  },
+  {
+    "id": "BRA_lacerda_tavora_talks_with_party_bosses",
+    "category_id": "BRA_lacerda_udn_management_category",
+    "name": "Тавора ведет переговоры с региональными партиями",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": "BRA_lacerda_decision_tick_cost",
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "BRA_UDN_management_GUI_visible"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_to_variable": {
+          "BRA_lacerda_decision_tick_cost": 5
+        },
+        "clamp_variable": {
+          "var": "BRA_lacerda_decision_tick_cost",
+          "min": 0
+        },
+        "clr_country_flag": "BRA_lacerda_tavora_talks_with_party_bosses_flag",
+        "if": {
+          "limit": {
+            "has_country_flag": "BRA_UDN_management_GUI_visible"
+          },
+          "random_list": {
+            "1": [
+              {
+                "activate_mission": "BRA_lacerda_banda_investigates_varguists"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_sarney_works_with_opposition_flag",
+                "activate_mission": "BRA_lacerda_sarney_works_with_opposition"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_campos_defends_udn_flag",
+                "activate_mission": "BRA_lacerda_campos_defends_udn"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_pinto_calls_for_reforms_flag",
+                "activate_mission": "BRA_lacerda_pinto_calls_for_reforms"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_gomes_makes_a_speech_flag",
+                "activate_mission": "BRA_lacerda_gomes_makes_a_speech"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_baleeiro_fights_corporatism_flag",
+                "activate_mission": "BRA_lacerda_baleeiro_fights_corporatism"
+              },
+              {
+                "set_country_flag": "BRA_lacerda_magalhaes_plots_intrigues_flag",
+                "activate_mission": "BRA_lacerda_magalhaes_plots_intrigues"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_modernise_amtrack_bos_nyc",
+    "category_id": "USA_the_interstate_highway",
+    "name": "Модернизировать Амтрак BOS-NYC",
+    "desc": "",
+    "icon": "GFX_decision_USA_amtrak",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_flag": "USA_amtrack_is_in_business"
+    },
+    "complete_effect": {
+      "hidden_effect": [
+        {
+          "add_political_power": -25
+        },
+        {
+          "country_event": {
+            "id": "hart.100",
+            "days": 15
+          }
+        }
+      ],
+      "custom_effect_tooltip": "USA_amtrak_modernisation_begins_tt",
+      "set_variable": {
+        "USA_BOSTON_NYC_PROGRESS": 0.1
+      }
+    }
+  }
+]

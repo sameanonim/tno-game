@@ -1,0 +1,4677 @@
+[
+  {
+    "id": "DEN_bop_occupation_sabotage_civ_industry",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_sabotage_civ_industry",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": "DEN_decision_high_cost",
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "DEN_escalate_the_sabotages",
+      "custom_trigger_tooltip": {
+        "tooltip": "DEN_cic_to_overlord_10_or_more_tt",
+        "check_variable": {
+          "DEN_occupation_laws_cic_to_overlord": {
+            "_op": ">",
+            "value": 0.09
+          }
+        }
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.6
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_form_the_danish_freedom_council"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_increase_effect": true,
+      "custom_effect_tooltip": "DEN_deteriorating_overlord_relations"
+    }
+  },
+  {
+    "id": "DEN_bop_occupation_sabotage_mil_industry",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_sabotage_mil_industry",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": "DEN_decision_high_cost",
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "DEN_escalate_the_sabotages",
+      "custom_trigger_tooltip": {
+        "tooltip": "DEN_mic_to_overlord_10_or_more_tt",
+        "check_variable": {
+          "DEN_occupation_laws_mic_to_overlord": {
+            "_op": ">",
+            "value": 0.09
+          }
+        }
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": ">",
+          "value": -0.6
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_form_the_danish_freedom_council"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_low_increase_effect": true,
+      "custom_effect_tooltip": "DEN_deteriorating_overlord_relations"
+    }
+  },
+  {
+    "id": "INS_release_puppet_sabah",
+    "category_id": "INS_borneo_puppet_cat",
+    "name": "Провозгласить Республику Сабах",
+    "desc": "Отпустить Сабах в качестве интегрированного участника Индонезийского Союза.",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "country_exists": "SAB"
+      },
+      "owns_state": 1024
+    },
+    "visible": {
+      "has_country_flag": "INS_can_release_borneo_puppets"
+    },
+    "complete_effect": {
+      "release": "SAB",
+      "set_autonomy": {
+        "target": "SAB",
+        "autonomy_state": "autonomy_taog_indonesian_union_state"
+      }
+    }
+  },
+  {
+    "id": "PRC_establish_sabotage_operations",
+    "category_id": "PRC_guerilla_warfare_sea_cat",
+    "name": "Создать антияпонскую базу на территории региона [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decisions_generic_sabotage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "PRC_currently_establishing_anti_japanese_base_state",
+        "has_completed_focus": "PRC_the_peoples_republic"
+      },
+      "IF": {
+        "limit": {
+          "controller": {
+            "OR": {
+              "original_tag": "JAP",
+              "is_subject_of": "JAP"
+            }
+          }
+        },
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "JAP_intense_anti_guerilla_operation"
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "PRC_establish_friendly_bases",
+          "PRC_launch_sabotage_campaigns"
+        ]
+      },
+      "NOT": {
+        "has_completed_focus": "PRC_the_peoples_republic"
+      },
+      "FROM": {
+        "OR": {
+          "AND": [
+            {
+              "NOT": {
+                "is_core_of": "controller"
+              },
+              "controller": {
+                "has_war_with": "ROOT"
+              },
+              "OR": {
+                "has_dynamic_modifier": {
+                  "modifier": "PRC_guerilla_cells_active_2"
+                },
+                "compliance": {
+                  "_op": ">",
+                  "value": 69
+                }
+              }
+            },
+            {
+              "is_core_of": "controller",
+              "controller": {
+                "has_war_with": "ROOT"
+              }
+            }
+          ]
+        },
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "PRC_anti_japanese_base"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "PRC_currently_establishing_anti_japanese_base_state",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -50
+      }
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_anti_saboteur_campaign_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_anti_saboteur_campaign_dec",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_regular_purge_anti_saboteur_campaign_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_naval_anti_saboteur_campaign_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_naval_anti_saboteur_campaign_dec",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_naval_anti_saboteur_campaign_effect": true
+    }
+  },
+  {
+    "id": "SOV_DEBUG_trigger_regular_purge_airforce_anti_saboteur_campaign_dec",
+    "category_id": "SOV_paranoia_system",
+    "name": "SOV_DEBUG_trigger_regular_purge_airforce_anti_saboteur_campaign_dec",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
+    },
+    "complete_effect": {
+      "SOV_trigger_regular_purge_airforce_anti_saboteur_campaign_effect": true
+    }
+  },
+  {
+    "id": "SOV_wreckers_sabotage_contruction",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Саботировать строительство",
+    "desc": "Активисты ждут приказа атаковать стройплощадки по всей стране.",
+    "icon": "GFX_decision_generic_wreckers",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "any_enemy_country": {
+        "has_idea": "SOV_organized_wreckers_idea"
+      }
+    },
+    "complete_effect": {
+      "SOS": {
+        "custom_effect_tooltip": "SOV_wreckers_sabotage_contruction_tt",
+        "hidden_effect": {
+          "every_controlled_state": {
+            "limit": {
+              "is_controlled_by": "SOS",
+              "industrial_complex": {
+                "_op": ">",
+                "value": 2
+              }
+            },
+            "damage_building": {
+              "type": "industrial_complex",
+              "damage": 2
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_wreckers_sabotage_military_production",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Саботировать выпуск военной продукции",
+    "desc": "Без оружия [SOS.GetLeader] и его армия не смогут сражаться.",
+    "icon": "GFX_decision_generic_wreckers",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "any_enemy_country": {
+        "has_idea": "SOV_organized_wreckers_idea"
+      }
+    },
+    "complete_effect": {
+      "SOS": {
+        "custom_effect_tooltip": "SOV_wreckers_sabotage_military_production_tt",
+        "hidden_effect": {
+          "every_controlled_state": {
+            "limit": {
+              "arms_factory": {
+                "_op": ">",
+                "value": 2
+              }
+            },
+            "damage_building": {
+              "type": "arms_factory",
+              "damage": 2
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_wreckers_sabotage_dockyards",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Саботировать вражеские верфи",
+    "desc": "Если устроить диверсию на верфях, которыми пользуется [SOS.GetLeader], [SOS.GetAdjective]ие силы будут отвлечены.",
+    "icon": "GFX_decision_generic_wreckers",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "any_enemy_country": {
+        "has_idea": "SOV_organized_wreckers_idea"
+      }
+    },
+    "complete_effect": {
+      "SOS": {
+        "custom_effect_tooltip": "SOV_wreckers_sabotage_dockyards_tt",
+        "hidden_effect": {
+          "every_controlled_state": {
+            "limit": {
+              "dockyard": {
+                "_op": ">",
+                "value": 2
+              }
+            },
+            "damage_building": {
+              "type": "dockyard",
+              "damage": 2
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_wreckers_sabotage_railways",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Саботировать вражеские железные дороги",
+    "desc": "Без припасов армия не сможет ни передвигаться, ни воевать.",
+    "icon": "GFX_decision_generic_wreckers",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "any_enemy_country": {
+        "has_idea": "SOV_organized_wreckers_idea"
+      }
+    },
+    "complete_effect": {
+      "SOS": {
+        "custom_effect_tooltip": "SOV_wreckers_sabotage_railways_tt",
+        "hidden_effect": {
+          "random_controlled_state": [
+            {
+              "damage_building": {
+                "type": "rail_way",
+                "damage": 1
+              },
+              "set_state_flag": "railway_damaged_flag"
+            },
+            {
+              "limit": {
+                "NOT": {
+                  "has_state_flag": "railway_damaged_flag"
+                }
+              },
+              "damage_building": {
+                "type": "rail_way",
+                "damage": 1
+              },
+              "set_state_flag": "railway_damaged_flag"
+            },
+            {
+              "limit": {
+                "NOT": {
+                  "has_state_flag": "railway_damaged_flag"
+                }
+              },
+              "damage_building": {
+                "type": "rail_way",
+                "damage": 1
+              },
+              "set_state_flag": "railway_damaged_flag"
+            }
+          ],
+          "every_owned_state": {
+            "limit": {
+              "has_state_flag": "railway_damaged_flag"
+            },
+            "clr_state_flag": "railway_damaged_flag"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "SOV_sabotage_behind_enemy_lines_decision",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Диверсии в тылу врага",
+    "desc": "Лояльных нам партизан, действующих в тылу врага, можно задействовать для нарушения работы коммуникаций противника в регионе [FROM.Getname]. Нападения на штабы, перерезание телеграфных проводов, спуск поездов под откос — все это ослабляет врага перед атаками наших войск и повышает шансы на успешное освобождение России.",
+    "icon": "generic_assassination",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "ROOT": {
+        "NOT": {
+          "has_country_flag": "sabotage_behind_enemy_lines_flag"
+        }
+      }
+    },
+    "visible": {
+      "FROM": {
+        "OR": {
+          "is_controlled_by": "SOS",
+          "AND": {
+            "is_controlled_by": "SOV",
+            "NOT": {
+              "is_fully_controlled_by": "SOV"
+            }
+          }
+        },
+        "is_owned_by": "SOS",
+        "NOT": {
+          "region": 133
+        },
+        "any_neighbor_state": {
+          "is_controlled_by": "SOV"
+        }
+      },
+      "has_global_flag": "SOV_soviet_civil_war"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -15,
+        "set_country_flag": "sabotage_behind_enemy_lines_flag"
+      }
+    }
+  },
+  {
+    "id": "SWE_rangers_sabotage",
+    "category_id": "SWE_military_matters",
+    "name": "SWE_rangers_sabotage",
+    "desc": "",
+    "icon": "decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_manpower": {
+        "_op": ">",
+        "value": 1300
+      },
+      "NOT": {
+        "has_country_flag": "SWE_rangers_sent_out"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWE_jagartrupper"
+    },
+    "complete_effect": {
+      "FROM": {
+        "if": [
+          {
+            "limit": {
+              "supply_node": {
+                "_op": ">",
+                "value": 0
+              }
+            },
+            "damage_building": {
+              "type": "supply_node",
+              "damage": 1.5
+            },
+            "add_to_temp_variable": {
+              "PREV.supply_level": 8
+            }
+          },
+          {
+            "limit": {
+              "naval_base": {
+                "_op": ">",
+                "value": 0
+              }
+            },
+            "damage_building": {
+              "type": "naval_base",
+              "damage": 1.5
+            },
+            "add_to_temp_variable": {
+              "PREV.supply_level": 5
+            }
+          }
+        ]
+      },
+      "multiply_temp_variable": [
+        {
+          "supply_level": 100
+        },
+        {
+          "supply_level": -1
+        }
+      ],
+      "set_temp_variable_to_random": {
+        "var": "SWE_manpower_loss_from_raid",
+        "min": "supply_level",
+        "max": 0
+      },
+      "clamp_variable": {
+        "var": "supply_level",
+        "min": -1300,
+        "max": 0
+      },
+      "hidden_effect": {
+        "add_manpower": "SWE_manpower_loss_from_raid"
+      },
+      "custom_effect_tooltip": "SWE_rangers_tt",
+      "set_country_flag": {
+        "flag": "SWE_rangers_sent_out",
+        "days": 90,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "TNO_ArcadeMode_Disable",
+    "category_id": "TNO_ArcadeMode_category",
+    "name": "Отключить аркадный режим",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_ArcadeMode_Disable",
+      "clr_country_flag": "TNO_ArcadeMode_enable",
+      "custom_effect_tooltip": "TNO_ArcadeMode_Disable_tt"
+    }
+  },
+  {
+    "id": "TNO_ArcadeMode_DisableNuclearArsenals",
+    "category_id": "TNO_ArcadeMode_category",
+    "name": "Отключить ядерные арсеналы",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_global_flag": "nukes_disabled"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_ArcadeMode_DisableNuclearArsenals",
+      "set_global_flag": "nukes_disabled",
+      "custom_effect_tooltip": "TNO_ArcadeMode_DisableNuclearArsenals_tt"
+    }
+  },
+  {
+    "id": "BRA_disable_debug",
+    "category_id": "BRA_debug_decisions",
+    "name": "Отключить решения дебага",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_disable_debug",
+      "set_country_flag": "BRA_disabled_debug"
+    }
+  },
+  {
+    "id": "BRI_Disable_Blue_Monday_Mode",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить режим Синего понедельника",
+    "desc": "",
+    "icon": "GFX_decision_ENG_britain",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Higher_Difficulty_Decisions",
+        "BRI_Enabled_Blue_Monday_Mode"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Blue_Monday_Mode",
+      "clr_country_flag": [
+        "BRI_Enabled_Blue_Monday_Mode",
+        "BRI_Enabled_Higher_Budgets",
+        "BRI_Enabled_Harder_Party_of_Contrasts",
+        "BRI_Enabled_Harder_Mann",
+        "BRI_Enabled_Harder_Civil_War"
+      ]
+    }
+  },
+  {
+    "id": "BRI_Disable_Higher_Budgets",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить высокие ожидания от бюджета",
+    "desc": "",
+    "icon": "GFX_decision_ENG_inflation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Higher_Difficulty_Decisions",
+        "BRI_Enabled_Higher_Budgets"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Blue_Monday_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Higher_Budgets",
+      "clr_country_flag": "BRI_Enabled_Higher_Budgets"
+    }
+  },
+  {
+    "id": "BRI_Disable_Harder_Party_of_Contrasts",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить сложную партию контрастов",
+    "desc": "",
+    "icon": "GFX_decision_ENG_ideologues",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Higher_Difficulty_Decisions",
+        "BRI_Enabled_Harder_Party_of_Contrasts"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Blue_Monday_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Harder_Party_of_Contrasts",
+      "clr_country_flag": "BRI_Enabled_Harder_Party_of_Contrasts"
+    }
+  },
+  {
+    "id": "BRI_Disable_Harder_Mann",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить сложную битву за Мэн",
+    "desc": "",
+    "icon": "GFX_decision_ENG_mann_red",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Higher_Difficulty_Decisions",
+        "BRI_Enabled_Harder_Mann"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Blue_Monday_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Harder_Mann",
+      "clr_country_flag": "BRI_Enabled_Harder_Mann"
+    }
+  },
+  {
+    "id": "BRI_Disable_Harder_Civil_War",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить сложную гражданку",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support_red",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Higher_Difficulty_Decisions",
+        "BRI_Enabled_Harder_Civil_War"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Blue_Monday_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Harder_Civil_War",
+      "clr_country_flag": "BRI_Enabled_Harder_Civil_War"
+    }
+  },
+  {
+    "id": "BRI_Disable_Supermajority_Mode",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить режим превосходства",
+    "desc": "",
+    "icon": "GFX_decision_ENG_britain",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Lower_Difficulty_Decisions",
+        "BRI_Enabled_Supermajority_Mode"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Supermajority_Mode",
+      "clr_country_flag": [
+        "BRI_Enabled_Supermajority_Mode",
+        "BRI_Enabled_Lower_Budgets",
+        "BRI_Enabled_Easier_Mann",
+        "BRI_Enabled_Easier_Civil_War"
+      ]
+    }
+  },
+  {
+    "id": "BRI_Disable_Lower_Budgets",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить низкие ожидания от бюджета",
+    "desc": "",
+    "icon": "GFX_decision_ENG_gdp_growth",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Lower_Difficulty_Decisions",
+        "BRI_Enabled_Lower_Budgets"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Supermajority_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Lower_Budgets",
+      "clr_country_flag": "BRI_Enabled_Lower_Budgets"
+    }
+  },
+  {
+    "id": "BRI_Disable_Easier_Mann",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить легкую битву за Мэн",
+    "desc": "",
+    "icon": "GFX_decision_ENG_mann_green",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Lower_Difficulty_Decisions",
+        "BRI_Enabled_Easier_Mann"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Supermajority_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Easier_Mann",
+      "clr_country_flag": "BRI_Enabled_Easier_Mann"
+    }
+  },
+  {
+    "id": "BRI_Disable_Easier_Civil_War",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить легкую гражданку",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Lower_Difficulty_Decisions",
+        "BRI_Enabled_Easier_Civil_War"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Supermajority_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Easier_Civil_War",
+      "clr_country_flag": "BRI_Enabled_Easier_Civil_War"
+    }
+  },
+  {
+    "id": "CHI_Sabotage_Japanophiles",
+    "category_id": "CHI_gov_legitimacy_category",
+    "name": "Саботировать Японофилов",
+    "desc": "Прискорбный случай взяточничества, участие в каких-то сомнительных сделках, подразумеваемых связи с какими-то позорными группами интересов... редко можно встретить члена Законодательного Юаня который ни в чем не коррумпирован, и фракция Японофилов не является исключением из этого правила. После нескольких арестов, мы получим их влияние в Юане стремительно быстро. Конечно, Япония и её сторонники не отнесутся к этим действиям легкомысленно...",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "CHI_faction_visible": 1
+        },
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "faction_influence_change_japanophile": -0.1
+        },
+        {
+          "faction_influence_change_oldguard": 0.05
+        },
+        {
+          "faction_influence_change_reformist": 0.05
+        },
+        {
+          "faction_opinion_change_japanophile": -20
+        },
+        {
+          "faction_opinion_change_reformist": 5
+        }
+      ],
+      "CHI_Yuan_influence_change": true,
+      "CHI_Yuan_opinion_change": true,
+      "CHI_Leg_Yuan_Clamp_Everything": true,
+      "CHI_GUI_LegYuan_Setup": true,
+      "add_opinion_modifier": {
+        "target": "JAP",
+        "modifier": "CHI_sabotaged_japanophiles"
+      },
+      "reverse_add_opinion_modifier": {
+        "target": "JAP",
+        "modifier": "CHI_sabotaged_japanophiles"
+      },
+      "CHI_Update_Leg_Yuan_Modifier": true
+    }
+  },
+  {
+    "id": "USA_CIA_GER_SGR_sabotage_repatriation_efforts",
+    "category_id": "USA_BoP_category",
+    "name": "Атаковать восстановление немецкой экономики",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_50_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.049
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_SGR_sabotage_repatriation_efforts_success_flag"
+      },
+      "GER": {
+        "has_country_flag": "SGR_phase2",
+        "NOT": {
+          "has_country_flag": "SGR_phase3"
+        },
+        "check_variable": {
+          "repatriation_effectiveness": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_sabotaging_reptriation",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_SGR_sabotage_repatriation_efforts_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.05
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_GER_SGR_sabotage_infrastructure",
+    "category_id": "USA_BoP_category",
+    "name": "Саботаж восточной инфраструктуры репатриации",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_50_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.049
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_SGR_sabotage_infrastructure_success_flag"
+      },
+      "GER": {
+        "has_country_flag": "SGR_phase2",
+        "NOT": {
+          "has_country_flag": "SGR_phase3"
+        },
+        "check_variable": {
+          "repatriation_effectiveness": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_destroying_repatriation_infrastructure",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_SGR_sabotage_infrastructure_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.05
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_GER_BOR_political_sabotage",
+    "category_id": "USA_BoP_category",
+    "name": "Саботаж немецкой политики",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_25_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.024
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "has_global_flag": "german_civil_war_bormannvic",
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_BOR_political_sabotage_success_flag"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_GER_BOR_political_fuckery",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_BOR_political_sabotage_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.025
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_GER_BOR_political_sabotage_big",
+    "category_id": "USA_BoP_category",
+    "name": "Разрушить режим Бормана",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_30_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.029
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "has_global_flag": "german_civil_war_bormannvic",
+      "has_country_flag": "USA_CIA_GER_BOR_political_sabotage_success_flag"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_GER_BOR_political_fuckery_big",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_BOR_political_sabotage_major_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.03
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_GER_BOR_economic_sabotage_initial",
+    "category_id": "USA_BoP_category",
+    "name": "Замедлить проект Гроссраум",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_45_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.044
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "has_global_flag": "german_civil_war_bormannvic",
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_initial_success_flag"
+      },
+      "GER": {
+        "has_country_flag": "BOR_EconomyMechanic_Active"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_GER_BOR_economic_fuckery",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_BOR_economic_sabotage_initial_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.045
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_GER_BOR_economic_sabotage_second",
+    "category_id": "USA_BoP_category",
+    "name": "Сорвать рост немецкой квалифицированной рабочей силы",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_30_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.029
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "has_global_flag": "german_civil_war_bormannvic",
+      "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_initial_success_flag",
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_second_success_flag"
+      },
+      "GER": {
+        "has_country_flag": "BOR_EconomyMechanic_Active"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_GER_BOR_economic_fuckery",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_BOR_economic_sabotage_second_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.03
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_GER_BOR_economic_sabotage_infrastructure",
+    "category_id": "USA_BoP_category",
+    "name": "Ударить по инфраструктуре Гроссраума",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_30_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.029
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "has_global_flag": "german_civil_war_bormannvic",
+      "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_initial_success_flag",
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_infrastructure_success_flag"
+      },
+      "GER": {
+        "has_country_flag": "BOR_EconomyMechanic_Active"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_GER_BOR_infrastructure_fuckery_big",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_BOR_economic_sabotage_infrastructure_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.03
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_GER_BOR_economic_sabotage_infrastructure_second",
+    "category_id": "USA_BoP_category",
+    "name": "Саботаж немецких рабовладельческих транспортировок",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_30_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.029
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "has_global_flag": "german_civil_war_bormannvic",
+      "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_infrastructure_success_flag",
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_infrastructure_second_success_flag"
+      },
+      "GER": {
+        "has_country_flag": "BOR_EconomyMechanic_Active"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_GER_BOR_infrastructure_fuckery_big",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_BOR_economic_sabotage_infrastructure_second_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.03
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_GER_BOR_economic_sabotage_combined",
+    "category_id": "USA_BoP_category",
+    "name": "Парализовать немецкую экономику",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_30_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.029
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "has_global_flag": "german_civil_war_bormannvic",
+      "has_country_flag": [
+        "USA_CIA_GER_BOR_economic_sabotage_second_success_flag",
+        "USA_CIA_GER_BOR_economic_sabotage_infrastructure_second_success_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_combined_success_flag"
+      },
+      "GER": {
+        "has_country_flag": "BOR_EconomyMechanic_Active"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_GER_BOR_final_economic_fuckery",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_BOR_economic_sabotage_combined_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.03
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_RUS_Unification_Sabotage",
+    "category_id": "USA_BoP_category",
+    "name": "Саботаж снабжения государства [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_25_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.024
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": [
+          {
+            "TNO_Espionage_Viewing_Russia": true,
+            "is_ai": true
+          },
+          {
+            "has_country_flag": [
+              "USA_CIA_RUS_WSRvsWSB",
+              "USA_CIA_RUS_CSBvsFST",
+              "USA_CIA_RUS_RWSvsSIB"
+            ]
+          }
+        ],
+        "NOT": {
+          "has_global_flag": "RUS_national_unification"
+        },
+        "FROM": {
+          "if": [
+            {
+              "limit": {
+                "tag": "WSB"
+              },
+              "exists": true,
+              "USA": {
+                "has_country_flag": "RUS_CIA_backing_WSR"
+              },
+              "WSB": {
+                "NOT": {
+                  "original_tag": "OMS"
+                }
+              }
+            },
+            {
+              "limit": {
+                "tag": "WSR"
+              },
+              "exists": true,
+              "USA": {
+                "has_country_flag": "RUS_CIA_backing_WSB"
+              }
+            },
+            {
+              "limit": {
+                "tag": "FST"
+              },
+              "exists": true,
+              "USA": {
+                "has_country_flag": "RUS_CIA_backing_CSB"
+              }
+            },
+            {
+              "limit": {
+                "tag": "CSB"
+              },
+              "exists": true,
+              "USA": {
+                "has_country_flag": "RUS_CIA_backing_FST"
+              }
+            },
+            {
+              "limit": {
+                "tag": "SIB"
+              },
+              "exists": true,
+              "USA": {
+                "has_country_flag": "RUS_CIA_backing_RWS"
+              }
+            },
+            {
+              "limit": {
+                "tag": "RWS"
+              },
+              "exists": true,
+              "USA": {
+                "has_country_flag": "RUS_CIA_backing_SIB",
+                "RWS": {
+                  "NOT": {
+                    "original_tag": "OMS"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_UNIFICATION_3_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Russia"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "CIA_USA_Unification_Sabotage_operation",
+          "FROM": {
+            "set_country_flag": "USA_CIA_being_sabotaged"
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": {
+        "TNO_Espionage_Agents": 1
+      }
+    }
+  },
+  {
+    "id": "Sabotage_USA_CAU_GW",
+    "category_id": "USA_BoP_category",
+    "name": "Sabotage Kaukasien Supply Lines",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_GLBCW_selected": true,
+      "has_global_flag": "Global_Caucasia_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10,
+        "add_political_power": -25
+      },
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "USA_sabotage_effort",
+          "days": 49
+        }
+      }
+    }
+  },
+  {
+    "id": "FRA_disable_debug",
+    "category_id": "FRA_debug_category",
+    "name": "Отключить дебаг",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FRA_disable_debug",
+      "set_country_flag": "FRA_debug_disabled"
+    }
+  },
+  {
+    "id": "GER_GCW_sabotage_frontlines",
+    "category_id": "GER_GCW_mechanic_category",
+    "name": "Саботаж фронтовых линий [FROM.GetName]",
+    "desc": "С началом войны немецкие земли были расколоты и разделены между различными силами, соперничающими за власть. Если мы хотим выйти на вершину этого конфликта, мы должны использовать любые возможные средства, чтобы сокрушить нашего врага. Тайная операция по преследованию и разрушению линии фронта противника могла оказаться тактическим маневром, необходимым для перелома хода сражения.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GCW_influence_more_than_or_equals_5_tt",
+        "check_variable": {
+          "GCW_influence": {
+            "_op": ">",
+            "value": 4
+          }
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "show_GCW_influence_actions": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "FROM": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_GCW_sabotage_frontlines",
+      "GCW_decrease_influence_small": true,
+      "set_country_flag": "GCW_decision_taken"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_west_russia",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Меч\" - Западн. Росс.",
+    "desc": "Агенты [getIntelAgencyShort] будут отправлены в Западную Россию, для проникновения и сбора информации о правителях этого региона. Собрав информацию о ситуации, они начнут саботаж инфраструктуры в регионе, надеясь замедлить процесс объединения.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_Fleck_Researched": true,
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "WSR": {
+        "exists": true,
+        "has_country_flag": "RUS_regional_stage",
+        "NOT": {
+          "has_country_flag": "RUS_superregional_stage",
+          "OR": {
+            "AND": [
+              {
+                "has_global_flag": "german_civil_war_speervic",
+                "original_tag": "VYT"
+              },
+              {
+                "has_country_leader": {
+                  "character": "SAM_Vladimir_Artsezo",
+                  "ruling_only": true
+                },
+                "GER": {
+                  "has_country_flag": "GER_Espionage_oktan_failure"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_west_russia",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.055
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_west_siberia",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Меч\" - Западн. Сиб.",
+    "desc": "Агенты [getIntelAgencyShort] будут отправлены в Западную Сибирь, для внедрения и сбора информации о правителях этого региона. Собрав информацию о ситуации, они начнут саботаж инфраструктуры в регионе, надеясь замедлить процесс объединения.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_Fleck_Researched": true,
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "WSB": {
+        "exists": true,
+        "has_country_flag": "RUS_regional_stage",
+        "NOT": {
+          "has_country_flag": "RUS_superregional_stage"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_west_siberia",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.06
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_central_siberia",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Меч\" - Централ. Сиб.",
+    "desc": "Агенты [getIntelAgencyShort] будут отправлены в Центральную Сибирь, для внедрения и сбора информации о правителях этого региона. Собрав информацию о ситуации, они начнут саботаж инфраструктуры в регионе, надеясь замедлить процесс объединения.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_Fleck_Researched": true,
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "CSB": {
+        "exists": true,
+        "has_country_flag": "RUS_regional_stage",
+        "NOT": {
+          "has_country_flag": "RUS_superregional_stage"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_central_siberia",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.065
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_far_east",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Меч\" - Дальн. Вост.",
+    "desc": "Агенты [getIntelAgencyShort] будут отправлены на Дальний Восток, для внедрения и сбора информации о правителях этого региона. Собрав информацию о ситуации, они начнут саботаж инфраструктуры в регионе, надеясь замедлить процесс объединения.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_Fleck_Researched": true,
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "FST": {
+        "exists": true,
+        "has_country_flag": "RUS_regional_stage",
+        "NOT": {
+          "has_country_flag": "RUS_superregional_stage"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_far_east",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.07
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_RWS_unification_talks",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Доверие\" - Россия",
+    "desc": "К сожалению, гражданская война отвлекла наше необходимое внимание от дел военачальников в России, где Иваны использовали это время, чтобы устранить своих конкурентов и организовать себя в несколько могущественных государств, угрожая объединиться и снова спустить свои орды против Фатерлянда.\n\nПока мы все еще сохраняем свое влияние в Сибири, мы должны препятствовать мирному объединению России. Саботируя их переговоры, сея между ними недоверие и настраивая полевых командиров друг против друга, мы можем гарантировать, что, даже если Россия снова воссоединится, ее внутренняя борьба разорвет её на части.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_Sonder_Researched": true,
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "WSR": {
+        "has_country_flag": [
+          "WSR_peace_decisions",
+          "RUS_regional_stage"
+        ],
+        "NOT": {
+          "has_country_flag": [
+            "RUS_fucked_up_horribly_war_time",
+            "RUS_superregional_stage"
+          ],
+          "has_war_with": "WSB"
+        }
+      },
+      "WSB": {
+        "has_country_flag": [
+          "WSB_peace_decisions",
+          "RUS_regional_stage"
+        ],
+        "NOT": {
+          "has_country_flag": [
+            "RUS_fucked_up_horribly_war_time",
+            "RUS_superregional_stage"
+          ],
+          "has_war_with": "WSR"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_RWS_unification_talks",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_SIB_unification_talks",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Доверие\" - Сибирь",
+    "desc": "К сожалению, гражданская война отвлекла наше необходимое внимание от дел военачальников в России, где Иваны использовали это время, чтобы устранить своих конкурентов и организовать себя в несколько могущественных государств, угрожая объединиться и снова спустить свои орды против Фатерлянда.\n\nПока мы все еще сохраняем свое влияние в Сибири, мы должны препятствовать мирному объединению России. Саботируя их переговоры, сея между ними недоверие и настраивая полевых командиров друг против друга, мы можем гарантировать, что, даже если Россия снова воссоединится, ее внутренняя борьба разорвет её на части.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_Sonder_Researched": true,
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "CSB": {
+        "has_country_flag": [
+          "WSR_peace_decisions",
+          "RUS_regional_stage"
+        ],
+        "NOT": {
+          "has_country_flag": [
+            "RUS_fucked_up_horribly_war_time",
+            "RUS_superregional_stage"
+          ],
+          "has_war_with": "FST"
+        }
+      },
+      "FST": {
+        "has_country_flag": [
+          "WSB_peace_decisions",
+          "RUS_regional_stage"
+        ],
+        "NOT": {
+          "has_country_flag": [
+            "RUS_fucked_up_horribly_war_time",
+            "RUS_superregional_stage"
+          ],
+          "has_war_with": "CSB"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_SIB_unification_talks",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_RUS_unification_talks",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Доверие\"",
+    "desc": "К сожалению, гражданская война отвлекла наше необходимое внимание от дел военачальников в России, где Иваны использовали это время, чтобы устранить своих конкурентов и организовать себя в несколько могущественных государств, угрожая объединиться и снова спустить свои орды против Фатерланда.\n\nПока мы все еще сохраняем свое влияние в Сибири, мы должны препятствовать мирному объединению России. Саботируя их переговоры, сея между ними недоверие и настраивая полевых командиров друг против друга, мы можем гарантировать, что, даже если Россия снова воссоединится, ее внутренняя борьба разорвет её на части.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_Sonder_Researched": true,
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Russia": true,
+        "is_ai": true
+      },
+      "RWS": {
+        "has_country_flag": [
+          "RWS_peace_decisions",
+          "RUS_superregional_stage"
+        ],
+        "NOT": {
+          "has_country_flag": "RUS_fucked_up_horribly_war_time",
+          "has_war_with": "SIB"
+        }
+      },
+      "SIB": {
+        "has_country_flag": [
+          "SIB_peace_decisions",
+          "RUS_superregional_stage"
+        ],
+        "NOT": {
+          "has_country_flag": "RUS_fucked_up_horribly_war_time",
+          "has_war_with": "RWS"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_RUS_unification_talks",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_mandate_congo",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Змея\" - Конго",
+    "desc": "В наших интересах отправить агентов ИСБ в Конго для снабжения оставшихся там немецких войск. Затем эти ветераны вызовут хаос в мандате, сражаясь с американскими войсками и убивая местных жителей, создавая еще больше проблем для американцев.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Africa": true,
+        "is_ai": true
+      },
+      "COG": {
+        "is_in_faction_with": "USA",
+        "has_country_flag": "OFN_MANDATE_not_decolonized"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_mandate_congo",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_mandate_angola",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Змея\" - Ангола",
+    "desc": "В наших интересах отправить агентов ИСБ в Анголу для снабжения оставшихся там немецких войск. Затем эти ветераны вызовут хаос в мандате, сражаясь с американскими войсками и убивая местных жителей, создавая еще больше проблем для американцев.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Africa": true,
+        "is_ai": true
+      },
+      "ANG": {
+        "is_in_faction_with": "USA",
+        "has_country_flag": "OFN_MANDATE_not_decolonized"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_mandate_angola",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_mandate_east",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Змея\" - Восточная Африка",
+    "desc": "Неэффективная администрация Хюттига оставила за собой большой бардак в Восточной Африке, но, к счастью, мы не те, кто разгребает этот беспорядок. Изгнав силы покойного рейхскомиссара из наших бывших владений, американцы унаследовали административные неудачи Хюттига и втянулись в бесконечную войну с дикими полчищами темного континента.\n\nПоскольку у генералов ОСН мало средств для восстановления порядка над африканскими собаками, несложно будет еще больше дестабилизировать регион и заставить их сожалеть о том, что они вообде вступили в эти безнадежные земли.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": [
+        {
+          "TNO_Espionage_Viewing_Africa": true,
+          "is_ai": true
+        },
+        {
+          "MZB": {
+            "is_in_faction_with": "USA",
+            "has_country_flag": "OFN_MANDATE_not_decolonized"
+          },
+          "USC": {
+            "is_in_faction_with": "USA",
+            "has_country_flag": "OFN_MANDATE_not_decolonized"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_mandate_east",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_BOR_HVA_saudi_sabotage",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Чёрное золото\"",
+    "desc": "Ближний Восток долгое время был под контролем Италии. Таким образом, большая часть ресурсов, содержащихся в этом районе, стала недоступна для нас, когда итальянцы вышли из нашего пакта. Однако неприязнь к Италии принесла нам на их место еще одного друга в регионе. Баасистское движение, строго антиколониальное, презирает Италию. Мы их естественные друзья, и поэтому они, вероятно, будут рады поделиться своими ресурсами, в случае прихода к власти. Если мы сможем саботировать военную инфраструктуру их врагов, баасисты смогут объединить арабский мир в противостоянии Италии создать государства, которые будут готовы тесно сотрудничать с Рейхом!",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": [
+        {
+          "TNO_Espionage_Viewing_MiddleEast": true,
+          "is_ai": true
+        },
+        {
+          "has_country_flag": [
+            "BOR_HVA_saudi_sabotage_mission",
+            "BOR_HVA_decisions_debug"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_BOR_HVA_saudi_sabotage",
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.06
+        },
+        {
+          "TNO_Espionage_Expertise": 20
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ],
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_sabotage_enemy",
+    "category_id": "GER_BoP_category",
+    "name": "Саботировать врагов",
+    "desc": "Рейх находится в состоянии войны. [getGermanIntelAgencyShort] безразлично с кем мы воюем - она заботится о том, чтобы сохранить нацию в безопасности, и, в меру своих возможностей, начнет кампанию, которая посеет раздор и смятение в рядах врага. Это рискованная операция, но она может дать нам огромное преимущество.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "custom_trigger_tooltip": {
+        "tooltip": "SGR_RND_25_expertise_tt",
+        "check_variable": [
+          {
+            "TNO_Espionage_Expertise": {
+              "_op": ">",
+              "value": 24
+            }
+          },
+          {
+            "TNO_Espionage_Budget": {
+              "_op": ">",
+              "value": 0.019
+            }
+          }
+        ]
+      },
+      "TNO_Espionage_Sonder_Researched": true,
+      "GER": {
+        "has_war": true
+      }
+    },
+    "visible": {
+      "OR": {
+        "TNO_BoP_Viewing_Espionage": true,
+        "is_ai": true
+      },
+      "has_war": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_sabotage_enemy",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Expertise": 25
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          },
+          {
+            "TNO_Espionage_Budget": 0.02
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "GNG_disable_margin_call_mode",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Режим требования маржи",
+    "desc": "",
+    "icon": "GFX_decision_GNG_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_higher_difficulty_decisions",
+        "GNG_enabled_margin_call_mode"
+      ]
+    },
+    "complete_effect": {
+      "clr_country_flag": [
+        "GNG_enabled_margin_call_mode",
+        "GNG_enabled_higher_debt",
+        "GNG_enabled_higher_growth_expectations",
+        "GNG_manchukuo_econ_buff",
+        "GNG_enabled_harder_legco",
+        "GNG_enable_harder_underworld",
+        "GNG_enable_harder_riots"
+      ]
+    }
+  },
+  {
+    "id": "GNG_disable_higher_debt",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Более высокий долг",
+    "desc": "",
+    "icon": "GFX_decision_GNG_yen",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_higher_difficulty_decisions",
+        "GNG_enabled_higher_debt"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enabled_margin_call_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enabled_higher_debt"
+    }
+  },
+  {
+    "id": "GNG_disable_higher_growth_expectations",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Выше Ожидаемый рост",
+    "desc": "",
+    "icon": "GFX_decision_generic_economy_graph",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_higher_difficulty_decisions",
+        "GNG_enabled_higher_growth_expectations"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enabled_margin_call_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enabled_higher_growth_expectations"
+    }
+  },
+  {
+    "id": "GNG_disable_manchukuo_econ_buff",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Маньчжоу-Го Buff",
+    "desc": "",
+    "icon": "GFX_decision_GNG_pearl",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_higher_difficulty_decisions",
+        "GNG_manchukuo_econ_buff"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enabled_margin_call_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_manchukuo_econ_buff"
+    }
+  },
+  {
+    "id": "GNG_disable_harder_legco",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Сложнее LegCo",
+    "desc": "",
+    "icon": "GFX_decision_GNG_legco",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_higher_difficulty_decisions",
+        "GNG_enabled_harder_legco"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enabled_margin_call_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enabled_harder_legco"
+    }
+  },
+  {
+    "id": "GNG_disable_harder_underworld",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Жестче МеньшеМир",
+    "desc": "",
+    "icon": "GFX_decision_GNG_crime",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_higher_difficulty_decisions",
+        "GNG_enable_harder_underworld"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enabled_margin_call_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enable_harder_underworld"
+    }
+  },
+  {
+    "id": "GNG_disable_harder_riots",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Сложнее Беспорядки",
+    "desc": "",
+    "icon": "GFX_decision_GNG_rioters",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_higher_difficulty_decisions",
+        "GNG_enable_harder_riots"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enabled_margin_call_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enable_harder_riots"
+    }
+  },
+  {
+    "id": "GNG_disable_bailout_mode",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Режим аварийного отключения.",
+    "desc": "",
+    "icon": "GFX_decision_GNG_generic",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_lower_difficulty_decisions",
+        "GNG_enable_bailout_mode"
+      ]
+    },
+    "complete_effect": {
+      "clr_country_flag": [
+        "GNG_enable_bailout_mode",
+        "GNG_enabled_lower_growth_expectations",
+        "GNG_enabled_easier_legco",
+        "GNG_enable_easier_riots"
+      ]
+    }
+  },
+  {
+    "id": "GNG_disable_lower_growth_expectations",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Снижение ожидаемого роста",
+    "desc": "",
+    "icon": "GFX_decision_generic_economy_graph",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_lower_difficulty_decisions",
+        "GNG_enabled_lower_growth_expectations"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enable_bailout_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enabled_lower_growth_expectations"
+    }
+  },
+  {
+    "id": "GNG_disable_easier_legco",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Проще LegCo",
+    "desc": "",
+    "icon": "GFX_decision_GNG_legco",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_lower_difficulty_decisions",
+        "GNG_enabled_easier_legco"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enable_bailout_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enabled_easier_legco"
+    }
+  },
+  {
+    "id": "GNG_disable_easier_riots",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Проще Беспорядки",
+    "desc": "",
+    "icon": "GFX_decision_GNG_rioters",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_lower_difficulty_decisions",
+        "GNG_enable_easier_riots"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enable_bailout_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enable_easier_riots"
+    }
+  },
+  {
+    "id": "Iberian_Wars_intelligence_operations_sabotage_enemy_nation",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Провести диверсию в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_intelligence_operations_opened"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_intelligence_operations_sabotage_enemy_nation",
+      "FROM": {
+        "set_temp_variable": [
+          {
+            "IBR_wars_efficiency_gain_temp": -0.15
+          },
+          {
+            "IBR_wars_construction_speed_temp": -0.1
+          }
+        ],
+        "IBR_wars_change_efficiency_gain": true,
+        "IBR_wars_change_construction_speed": true
+      }
+    }
+  },
+  {
+    "id": "IBR_council_sabotage_the_intervention_process",
+    "category_id": "IBR_caudillos_category",
+    "name": "Саботировать вмешательство",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_burn",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "IBR_legislative_council_rogue",
+      "check_variable": {
+        "IBR_caudillo_popularity_bar": {
+          "_op": ">",
+          "value": 64.99
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_debug_disable_ordaz_raid_branch",
+    "category_id": "MEX_debug_category",
+    "name": "MEX_debug_disable_ordaz_raid_branch",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "ordaz_debug_content",
+        "MEX_madera_raid_happened"
+      ]
+    },
+    "complete_effect": {
+      "clr_country_flag": "MEX_madera_raid_happened",
+      "mark_focus_tree_layout_dirty": true
+    }
+  },
+  {
+    "id": "MEX_debug_disable_lozano_raid_branch",
+    "category_id": "MEX_debug_category",
+    "name": "MEX_debug_disable_lozano_raid_branch",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "lozano_debug_content",
+        "lozano_barracks_raided"
+      ]
+    },
+    "complete_effect": {
+      "clr_country_flag": "lozano_barracks_raided",
+      "mark_focus_tree_layout_dirty": true
+    }
+  },
+  {
+    "id": "MEX_debug_disable_madrazo_raid_branch",
+    "category_id": "MEX_debug_category",
+    "name": "MEX_debug_disable_madrazo_raid_branch",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "madrazo_debug_content",
+        "madrazo_barracks_raided"
+      ]
+    },
+    "complete_effect": {
+      "clr_country_flag": "madrazo_barracks_raided",
+      "mark_focus_tree_layout_dirty": true
+    }
+  },
+  {
+    "id": "MEX_kabuki_sabotage_negotiation_efforts",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Саботировать переговоры",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_crisis",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "MEX_blank_tooltip",
+        "has_completed_focus": "MEX_the_technocratic_counter",
+        "NOT": {
+          "has_country_flag": "MEX_kabuki_negotiations_collapsed"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "MEX_the_technocratic_counter"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_kabuki_deliberate_sabotage",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Умышленный саботаж",
+    "desc": "",
+    "icon": "GFX_decision_generic_insider_attack_indent",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": "pact_strength_decisions_visible",
+        "check_variable": {
+          "MEX_PRI_crisis_number": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "add_stability": -0.05
+    }
+  },
+  {
+    "id": "OST_sabotage_army",
+    "category_id": "OST_UPO_category",
+    "name": "Саботировать их армию",
+    "desc": "Мы можем провести диверсию в их армии, чтобы позволить нашим войскам продвинуться вперед",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "OST"
+    },
+    "visible": {
+      "has_war_with": "OST",
+      "OST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OST_sabotage_army",
+      "OST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "add_timed_idea": {
+            "idea": "UPO_army1",
+            "days": 40
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army2",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army3",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "OST_sabotage_industry",
+    "category_id": "OST_UPO_category",
+    "name": "Саботировать их промышленность",
+    "desc": "Мы можем воспользоваться нашими агентами, чтобы вывести из строя их промышленные мощности",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "OST"
+    },
+    "visible": {
+      "has_war_with": "OST",
+      "OST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OST_sabotage_industry",
+      "OST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "DST_sabotage_army",
+    "category_id": "DST_UPO_category",
+    "name": "Саботировать их армию",
+    "desc": "Мы можем провести диверсию в их армии, чтобы позволить нашим войскам продвинуться вперед",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "DST"
+    },
+    "visible": {
+      "has_war_with": "DST",
+      "DST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision DST_sabotage_army",
+      "DST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "add_timed_idea": {
+            "idea": "UPO_army1",
+            "days": 40
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army2",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army3",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "DST_sabotage_industry",
+    "category_id": "DST_UPO_category",
+    "name": "Саботировать их промышленность",
+    "desc": "Мы можем воспользоваться нашими агентами, чтобы вывести из строя их промышленные мощности",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "DST"
+    },
+    "visible": {
+      "has_war_with": "DST",
+      "DST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision DST_sabotage_industry",
+      "DST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "MST_sabotage_army",
+    "category_id": "MST_UPO_category",
+    "name": "Саботировать их армию",
+    "desc": "Мы можем провести диверсию в их армии, чтобы позволить нашим войскам продвинуться вперед",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "MST"
+    },
+    "visible": {
+      "has_war_with": "MST",
+      "MST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision MST_sabotage_army",
+      "MST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "add_timed_idea": {
+            "idea": "UPO_army1",
+            "days": 40
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army2",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army3",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "MST_sabotage_industry",
+    "category_id": "MST_UPO_category",
+    "name": "Саботировать их промышленность",
+    "desc": "Мы можем воспользоваться нашими агентами, чтобы вывести из строя их промышленные мощности",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "MST"
+    },
+    "visible": {
+      "has_war_with": "MST",
+      "MST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision MST_sabotage_industry",
+      "MST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "JST_sabotage_army",
+    "category_id": "JST_UPO_category",
+    "name": "Саботировать их армию",
+    "desc": "Мы можем провести диверсию в их армии, чтобы позволить нашим войскам продвинуться вперед",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "JST"
+    },
+    "visible": {
+      "has_war_with": "JST",
+      "JST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JST_sabotage_army",
+      "JST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "add_timed_idea": {
+            "idea": "UPO_army1",
+            "days": 40
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army2",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army3",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "JST_sabotage_industry",
+    "category_id": "JST_UPO_category",
+    "name": "Саботировать их промышленность",
+    "desc": "Мы можем воспользоваться нашими агентами, чтобы вывести из строя их промышленные мощности",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "JST"
+    },
+    "visible": {
+      "has_war_with": "JST",
+      "JST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JST_sabotage_industry",
+      "JST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "PRU_disable_debug",
+    "category_id": "PRU_debug_category",
+    "name": "Отключить дебаг",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision PRU_disable_debug",
+      "set_country_flag": "PRU_disabled_debug"
+    }
+  },
+  {
+    "id": "BRY_sablin_goodboy_economy_1",
+    "category_id": "BRY_dream_of_freedom",
+    "name": "Реформы социалистической экономики: первая стадия",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRY_sablins_ideology_not_locked",
+      "custom_trigger_tooltip": {
+        "tooltip": "BRY_sablin_more_good_boy_tt",
+        "check_variable": {
+          "BRY_sablin_good_boy": {
+            "_op": ">",
+            "value": 5
+          }
+        }
+      },
+      "NOT": {
+        "has_idea": [
+          "BRY_goodboy_economy_stage1",
+          "BRY_goodboy_economy_stage2"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRY_sablin_leninist",
+      "NOT": {
+        "has_idea": [
+          "BRY_goodboy_economy_stage1",
+          "BRY_goodboy_economy_stage2",
+          "BRY_goodboy_economy_stage_final"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRY_sablin_goodboy_economy_1",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.5
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "BRY_sablin_goodboy_economy_2",
+    "category_id": "BRY_dream_of_freedom",
+    "name": "Реформы социалистической экономики: вторая стадия",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRY_sablins_ideology_not_locked",
+      "custom_trigger_tooltip": {
+        "tooltip": "BRY_sablin_more_good_boy_tt",
+        "check_variable": {
+          "BRY_sablin_good_boy": {
+            "_op": ">",
+            "value": 9
+          }
+        }
+      },
+      "has_idea": "BRY_goodboy_economy_stage1",
+      "NOT": {
+        "has_idea": "BRY_goodboy_economy_stage2"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRY_sablin_leninist",
+      "NOT": {
+        "has_idea": [
+          "BRY_goodboy_economy_stage2",
+          "BRY_goodboy_economy_stage_final"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRY_sablin_goodboy_economy_2",
+      "set_temp_variable": {
+        "gdp_growth_temp": 1.5
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "BRY_sablin_badboy_economy_1",
+    "category_id": "BRY_dream_of_freedom",
+    "name": "Реформы коммунистической экономики: первая стадия",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRY_sablins_ideology_not_locked",
+      "custom_trigger_tooltip": {
+        "tooltip": "BRY_sablin_more_bad_boy_tt",
+        "check_variable": {
+          "BRY_sablin_bad_boy": {
+            "_op": ">",
+            "value": 5
+          }
+        }
+      },
+      "NOT": {
+        "has_idea": [
+          "BRY_badboy_economy_stage1",
+          "BRY_badboy_economy_stage2"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRY_sablin_bukharinist",
+      "NOT": {
+        "has_idea": [
+          "BRY_badboy_economy_stage1",
+          "BRY_badboy_economy_stage2",
+          "BRY_badboy_economy_stage_final"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRY_sablin_badboy_economy_1",
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.75
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "BRY_sablin_badboy_economy_2",
+    "category_id": "BRY_dream_of_freedom",
+    "name": "Реформы коммунистической экономики: вторая стадия",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRY_sablins_ideology_not_locked",
+      "custom_trigger_tooltip": {
+        "tooltip": "BRY_sablin_more_bad_boy_tt",
+        "check_variable": {
+          "BRY_sablin_bad_boy": {
+            "_op": ">",
+            "value": 9
+          }
+        }
+      },
+      "has_idea": "BRY_badboy_economy_stage1",
+      "NOT": {
+        "has_idea": "BRY_badboy_economy_stage2"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRY_sablin_bukharinist",
+      "NOT": {
+        "has_idea": [
+          "BRY_badboy_economy_stage2",
+          "BRY_badboy_economy_stage_final"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRY_sablin_badboy_economy_2",
+      "set_temp_variable": {
+        "gdp_growth_temp": 1.75
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "BRY_sablin_goodboy_army_1",
+    "category_id": "BRY_dream_of_freedom",
+    "name": "Реформы социалистической армии: первая стадия",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_red",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRY_sablins_ideology_not_locked",
+      "custom_trigger_tooltip": {
+        "tooltip": "BRY_sablin_more_good_boy_tt",
+        "check_variable": {
+          "BRY_sablin_good_boy": {
+            "_op": ">",
+            "value": 5
+          }
+        }
+      },
+      "NOT": {
+        "has_idea": [
+          "BRY_goodboy_army_stage1",
+          "BRY_goodboy_army_stage2"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRY_sablin_leninist",
+      "NOT": {
+        "has_idea": [
+          "BRY_goodboy_army_stage1",
+          "BRY_goodboy_army_stage2",
+          "BRY_goodboy_army_stage_final"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRY_sablin_goodboy_army_1",
+      "TNO_improve_training_policy_effectiveness_low": true,
+      "TNO_improve_conscription_policy_effectiveness_low": true
+    }
+  },
+  {
+    "id": "BRY_sablin_goodboy_army_2",
+    "category_id": "BRY_dream_of_freedom",
+    "name": "Реформы социалистической армии: вторая стадия",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_red",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRY_sablins_ideology_not_locked",
+      "custom_trigger_tooltip": {
+        "tooltip": "BRY_sablin_more_good_boy_tt",
+        "check_variable": {
+          "BRY_sablin_good_boy": {
+            "_op": ">",
+            "value": 9
+          }
+        }
+      },
+      "has_idea": "BRY_goodboy_army_stage1",
+      "NOT": {
+        "has_idea": "BRY_goodboy_army_stage2"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRY_sablin_leninist",
+      "NOT": {
+        "has_idea": [
+          "BRY_goodboy_army_stage2",
+          "BRY_goodboy_army_stage_final"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRY_sablin_goodboy_army_2",
+      "TNO_improve_conscription_policy_effectiveness_med": true,
+      "TNO_improve_training_policy_effectiveness_med": true
+    }
+  },
+  {
+    "id": "BRY_sablin_badboy_army_1",
+    "category_id": "BRY_dream_of_freedom",
+    "name": "Реформы коммунистической армии: первая стадия",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_red",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRY_sablins_ideology_not_locked",
+      "custom_trigger_tooltip": {
+        "tooltip": "BRY_sablin_more_bad_boy_tt",
+        "check_variable": {
+          "BRY_sablin_bad_boy": {
+            "_op": ">",
+            "value": 5
+          }
+        }
+      },
+      "NOT": {
+        "has_idea": [
+          "BRY_badboy_army_stage1",
+          "BRY_badboy_army_stage2"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRY_sablin_bukharinist",
+      "NOT": {
+        "has_idea": [
+          "BRY_badboy_army_stage1",
+          "BRY_badboy_army_stage2",
+          "BRY_badboy_army_stage_final"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRY_sablin_badboy_army_1",
+      "TNO_improve_conscription_policy_effectiveness_low": true,
+      "TNO_improve_training_policy_effectiveness_low": true
+    }
+  },
+  {
+    "id": "BRY_sablin_badboy_army_2",
+    "category_id": "BRY_dream_of_freedom",
+    "name": "Реформы коммунистической армии: вторая стадия",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_red",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "BRY_sablins_ideology_not_locked",
+      "custom_trigger_tooltip": {
+        "tooltip": "BRY_sablin_more_bad_boy_tt",
+        "check_variable": {
+          "BRY_sablin_bad_boy": {
+            "_op": ">",
+            "value": 9
+          }
+        }
+      },
+      "has_idea": "BRY_badboy_army_stage1",
+      "NOT": {
+        "has_idea": "BRY_badboy_army_stage2"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRY_sablin_bukharinist",
+      "NOT": {
+        "has_idea": [
+          "BRY_badboy_army_stage2",
+          "BRY_badboy_army_stage_final"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRY_sablin_badboy_army_2",
+      "TNO_improve_conscription_policy_effectiveness_med": true,
+      "TNO_improve_training_policy_effectiveness_med": true
+    }
+  },
+  {
+    "id": "CHT_disable_militarist_decisions",
+    "category_id": "CHT_a_quiet_dinner_category",
+    "name": "Закрыть решения военных",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "CHT_increase_loyalist_influence"
+      }
+    },
+    "visible": {
+      "has_country_flag": "CHT_increase_militarist_influence"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_disable_militarist_decisions",
+      "clr_country_flag": "CHT_increase_militarist_influence"
+    }
+  },
+  {
+    "id": "CHT_disable_loyalist_decisions",
+    "category_id": "CHT_a_quiet_dinner_category",
+    "name": "Закрыть решения лоялистов",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "CHT_increase_militarist_influence"
+      }
+    },
+    "visible": {
+      "has_country_flag": "CHT_increase_loyalist_influence"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_disable_loyalist_decisions",
+      "clr_country_flag": "CHT_increase_loyalist_influence"
+    }
+  },
+  {
+    "id": "RUS_debug_smuta_disable",
+    "category_id": "RUS_generic_debug",
+    "name": "Смута - Отключить",
+    "desc": "",
+    "icon": "GFX_decision_generic_chess_king",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_Smuta_Enabled"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_debug_smuta_disable",
+      "RUS_Smuta_Disable": true
+    }
+  },
+  {
+    "id": "KEM_disable_yuriy_decisions",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Скрыть решения влияния Юрия",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KEM_increase_lydia_influence"
+      }
+    },
+    "visible": {
+      "has_country_flag": "KEM_increase_yuriy_influence",
+      "NOT": {
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_disable_yuriy_decisions",
+      "clr_country_flag": "KEM_increase_yuriy_influence"
+    }
+  },
+  {
+    "id": "KEM_disable_lydia_decisions",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Скрыть решения влияния Лидии",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KEM_increase_yuriy_influence"
+      }
+    },
+    "visible": {
+      "has_country_flag": "KEM_increase_lydia_influence",
+      "NOT": {
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_disable_lydia_decisions",
+      "clr_country_flag": "KEM_increase_lydia_influence"
+    }
+  },
+  {
+    "id": "NOV_sabotage_feniks",
+    "category_id": "NOV_USA_vs_Japan_category",
+    "name": "Саботировать \"Феникс\"",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "NOV_sabotage_sibir",
+    "category_id": "NOV_USA_vs_Japan_category",
+    "name": "Саботировать \"Сибирь\"",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "OMS_disable_decision_batov_i",
+    "category_id": "OMS_DECCAT_insurgency",
+    "name": "Установить контроль над Златоустом",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "OMS_disable_decision_batov_i_tt",
+        "AND": {
+          "573": {
+            "check_variable": {
+              "THIS.base_status": 2
+            }
+          },
+          "871": {
+            "check_variable": {
+              "THIS.base_status": 2
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "OMS_denounce_the_warlords"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "OMS_disable_decision_batov_ii",
+    "category_id": "OMS_DECCAT_insurgency",
+    "name": "Военные маневры на Урале",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_hat",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "OMS_disable_decision_batov_ii_tt",
+        "AND": {
+          "573": {
+            "check_variable": {
+              "THIS.base_status": {
+                "_op": "<",
+                "value": 3
+              }
+            }
+          },
+          "871": {
+            "check_variable": {
+              "THIS.base_status": {
+                "_op": "<",
+                "value": 3
+              }
+            }
+          },
+          "756": {
+            "check_variable": {
+              "THIS.base_status": {
+                "_op": "<",
+                "value": 3
+              }
+            }
+          },
+          "863": {
+            "check_variable": {
+              "THIS.base_status": {
+                "_op": "<",
+                "value": 3
+              }
+            }
+          }
+        }
+      },
+      "AND": {
+        "divisions_in_state": [
+          {
+            "size": {
+              "_op": ">",
+              "value": 4
+            },
+            "state": 573
+          },
+          {
+            "size": {
+              "_op": ">",
+              "value": 4
+            },
+            "state": 871
+          },
+          {
+            "size": {
+              "_op": ">",
+              "value": 4
+            },
+            "state": 581
+          },
+          {
+            "size": {
+              "_op": ">",
+              "value": 4
+            },
+            "state": 863
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "OMS_denounce_the_warlords"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "OMS_disable_decision_batov_iii",
+    "category_id": "OMS_DECCAT_insurgency",
+    "name": "Переназначить операции ДВБ на границу",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_target",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "OMS_disable_decision_batov_iii_tt",
+          "AND": {
+            "573": {
+              "check_variable": {
+                "THIS.insurgency_strength": {
+                  "_op": "<",
+                  "value": 0.25
+                }
+              }
+            },
+            "871": {
+              "check_variable": {
+                "THIS.insurgency_strength": {
+                  "_op": "<",
+                  "value": 0.25
+                }
+              }
+            },
+            "756": {
+              "check_variable": {
+                "THIS.insurgency_strength": {
+                  "_op": "<",
+                  "value": 0.25
+                }
+              }
+            },
+            "863": {
+              "check_variable": {
+                "THIS.insurgency_strength": {
+                  "_op": "<",
+                  "value": 0.25
+                }
+              }
+            }
+          }
+        },
+        {
+          "tooltip": "OMS_disable_decision_batov_iii_tt_ex",
+          "AND": {
+            "573": {
+              "has_state_flag": "OMS_deployed_commissar"
+            },
+            "871": {
+              "has_state_flag": "OMS_deployed_commissar"
+            },
+            "756": {
+              "has_state_flag": "OMS_deployed_commissar"
+            },
+            "863": {
+              "has_state_flag": "OMS_deployed_commissar"
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "OMS_denounce_the_warlords"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_WRS_Zhukov_Sabotage_Agents",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Военный саботаж со стороны Жукова!",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission Complete RUS_Decision_Smuta_Expansion_WRS_Zhukov_Sabotage_Agents",
+      "custom_effect_tooltip": "RUS_Decision_Smuta_Expansion_WRS_Zhukov_Sabotage_Fail_Tt",
+      "hidden_effect": {
+        "add_command_power": -15
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_WRS_Zhukov_Sabotage_Sympathizers",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Политический саботаж со стороны Жукова!",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission Complete RUS_Decision_Smuta_Expansion_WRS_Zhukov_Sabotage_Sympathizers",
+      "custom_effect_tooltip": "RUS_Decision_Smuta_Expansion_WRS_Zhukov_Sabotage_Fail_Tt"
+    }
+  },
+  {
+    "id": "ANG_Disrupt_Comunication",
+    "category_id": "ANG_Sabotage_Others",
+    "name": "Перерезать кабель",
+    "desc": "Саботируя важнейшие коммуникационные ретрансляторы, мы можем серьезно повлиять на тактику между Мюллером и Хюттигом.",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 14.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_sabotagingtheothers"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "COG": {
+        "add_timed_idea": {
+          "idea": "ANG_Disrupted_Comms",
+          "days": 15
+        },
+        "TNO_worsen_security_policy_effectiveness_monthly_low": true
+      },
+      "GRO": {
+        "add_timed_idea": {
+          "idea": "ANG_Disrupted_Comms",
+          "days": 15
+        },
+        "TNO_worsen_security_policy_effectiveness_monthly_low": true
+      },
+      "add_to_variable": [
+        {
+          "ANG_Muller_Sus": 2
+        },
+        {
+          "ANG_Huttig_Sus": 3
+        }
+      ],
+      "custom_effect_tooltip": [
+        "ANG_Raise_Muller_Sus_Low",
+        "ANG_Raise_Huttig_Sus_Medium"
+      ],
+      "ANG_Sus_Clamp_Check": true
+    }
+  },
+  {
+    "id": "ANG_Support_Rebels",
+    "category_id": "ANG_Sabotage_Others",
+    "name": "Поддержка повстанцев",
+    "desc": "Мы можем отправлять оружие и припасы группам повстанцев в других рейхскомиссариатах, чтобы разжигать пожары на их \"задних дворах\".",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 29.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_sabotagingtheothers"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Botch_Bombing_Runs",
+    "category_id": "ANG_Sabotage_Others",
+    "name": "Случайные бомбардировки",
+    "desc": "Инциденты с дружественным огнем - это совсем не то, что нам нужно. Наши бомбардировщики могут просто ударить слишком близко к позициям союзников на линии фронта.",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 24.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_sabotagingtheothers"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      },
+      "COG": {
+        "add_manpower": -50
+      },
+      "GRO": {
+        "add_manpower": -50
+      },
+      "add_to_variable": [
+        {
+          "ANG_Muller_Sus": 6
+        },
+        {
+          "ANG_Huttig_Sus": 6
+        }
+      ],
+      "custom_effect_tooltip": [
+        "ANG_Raise_Muller_Sus_High",
+        "ANG_Raise_Huttig_Sus_High"
+      ],
+      "ANG_Sus_Clamp_Check": true
+    }
+  },
+  {
+    "id": "UKR_resistance_disable",
+    "category_id": "UKR_debug_category",
+    "name": "Дебаг - Отключить сопротивление",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_ai": false
+    },
+    "visible": {},
+    "complete_effect": {
+      "every_owned_state": {
+        "force_disable_resistance": [
+          {
+            "clear": true,
+            "occupier": "UKR",
+            "occupied": "FUK"
+          },
+          {
+            "clear": true,
+            "occupier": "UKR",
+            "occupied": "UKS"
+          },
+          {
+            "clear": true,
+            "occupier": "UKR",
+            "occupied": "BOV"
+          },
+          {
+            "clear": true,
+            "occupier": "UKR",
+            "occupied": "UKR"
+          }
+        ],
+        "add_core_of": "FROM",
+        "cancel_resistance": true
+      }
+    }
+  },
+  {
+    "id": "UKR_german_sabotage",
+    "category_id": "UKR_ukraine_must_survive_category",
+    "name": "German Sabotage",
+    "desc": "Germania is not silent as its breadbasket breaks free. No, it sends agents into our country, sabotaging industry, assassinating officers, and enticing the weak-willed to rebel against us.",
+    "icon": "GFX_decision_generic_assassination",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_disable_flash_animation",
+    "category_id": "USA_coalition_unity",
+    "name": "Отключить анимацию выборов",
+    "desc": "ТНО теперь содержит анимацию для отображения результатов президентских выборов, которая включает в себя мигающие изображения. Для тех игроков, которые страдают от эпилепсии, это решение позволит вам увидеть анимацию без какого-либо мигания.",
+    "icon": "GFX_decision_USA_congress",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_animation_in_progress"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "US_animation_disabled"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "US_animation_disabled"
+    }
+  },
+  {
+    "id": "USA_disable_quadweekly_printing",
+    "category_id": "USA_debug_decisions_category",
+    "name": "Disable Quadweekly Raw Pop Printing",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "USA_debug_decisions",
+        "USA_debug_quadweekly_printing"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_disable_quadweekly_printing",
+      "clr_country_flag": "USA_debug_quadweekly_printing"
+    }
+  },
+  {
+    "id": "NPP_FP_sabotage_infrastructure_in_vietnam",
+    "category_id": "NPP_FP_covert_ops_category",
+    "name": "NPP_FP_sabotage_infrastructure_in_vietnam",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "NPP_FP_Invest_In_Canada",
+        "has_country_flag": "NPP_FP_operations_ready"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NPP_FP_sabotage_infrastructure_in_vietnam",
+      "VIN": {
+        "country_event": {
+          "id": "USA_NPP_FP_Sabotage_1"
+        }
+      },
+      "custom_effect_tooltip": "USA.NPP.FP.Sabotage.1",
+      "clr_country_flag": "NPP_FP_operations_ready"
+    }
+  },
+  {
+    "id": "NPP_FP_sabotage_infrastructure_in_philippines",
+    "category_id": "NPP_FP_covert_ops_category",
+    "name": "NPP_FP_sabotage_infrastructure_in_philippines",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "NPP_FP_Invest_In_Canada",
+        "has_country_flag": "NPP_FP_operations_ready"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NPP_FP_sabotage_infrastructure_in_philippines",
+      "PHI": {
+        "country_event": {
+          "id": "USA_NPP_FP_Sabotage_1"
+        }
+      },
+      "custom_effect_tooltip": "USA.NPP.FP.Sabotage.1",
+      "clr_country_flag": "NPP_FP_operations_ready"
+    }
+  },
+  {
+    "id": "NPP_FP_sabotage_factory_in_vietnam",
+    "category_id": "NPP_FP_covert_ops_category",
+    "name": "NPP_FP_sabotage_factory_in_vietnam",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "NPP_FP_Invest_In_Canada",
+        "has_country_flag": "NPP_FP_operations_ready"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NPP_FP_sabotage_factory_in_vietnam",
+      "VIN": {
+        "country_event": {
+          "id": "USA_NPP_FP_Sabotage_2"
+        }
+      },
+      "custom_effect_tooltip": "USA.NPP.FP.Sabotage.2",
+      "clr_country_flag": "NPP_FP_operations_ready"
+    }
+  },
+  {
+    "id": "NPP_FP_sabotage_factory_in_philippines",
+    "category_id": "NPP_FP_covert_ops_category",
+    "name": "NPP_FP_sabotage_factory_in_philippines",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "NPP_FP_Invest_In_Canada",
+        "has_country_flag": "NPP_FP_operations_ready"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NPP_FP_sabotage_factory_in_philippines",
+      "VIN": {
+        "country_event": {
+          "id": "USA_NPP_FP_Sabotage_2"
+        }
+      },
+      "custom_effect_tooltip": "USA.NPP.FP.Sabotage.2",
+      "clr_country_flag": "NPP_FP_operations_ready"
+    }
+  },
+  {
+    "id": "RUS_sabotage_uprisings",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Start an Uprising in [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_SWRW_sabotaging_tt",
+        "NOT": {
+          "has_country_flag": "RUS_SWRW_sabotaging"
+        }
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 1499
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_sabotaging",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -2500
+      },
+      "hidden_effect": {
+        "add_command_power": -25,
+        "add_political_power": -50
+      }
+    }
+  },
+  {
+    "id": "RUS_sabotage_strikes",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Instigate Strikes in [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_factory_generic_red",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_SWRW_sabotaging_tt",
+        "NOT": {
+          "has_country_flag": "RUS_SWRW_sabotaging"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_sabotaging"
+    }
+  },
+  {
+    "id": "RUS_sabotage_bombing_runs",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Intensify Bombing Runs in [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_SWRW_sabotaging_tt",
+        "NOT": {
+          "has_country_flag": "RUS_SWRW_sabotaging"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_sabotaging",
+      "hidden_effect": {
+        "add_command_power": -25,
+        "add_political_power": -50
+      }
+    }
+  },
+  {
+    "id": "Sabotage_TNS",
+    "category_id": "FUK_BoP_category",
+    "name": "Sabotage the Germans Troops",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_TNSCW_selected": true,
+      "has_global_flag": "Transnistrian_War"
+    },
+    "complete_effect": {
+      "OGG": {
+        "add_timed_idea": {
+          "idea": "FUK_sabotage_effort",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_Speer_TNS",
+    "category_id": "FUK_BoP_category",
+    "name": "Sabotage the Germans Troops",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_OGGCW_selected": true,
+      "has_global_flag": "Transnistrian_Uprising"
+    },
+    "complete_effect": {
+      "OGG": {
+        "add_timed_idea": {
+          "idea": "FUK_sabotage_effort",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_CPU",
+    "category_id": "FUK_BoP_category",
+    "name": "Sabotage Hungarian Supply Lines",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_CRPUS_selected": true,
+      "has_global_flag": "Carpatian_War"
+    },
+    "complete_effect": {
+      "HUN": {
+        "add_timed_idea": {
+          "idea": "FUK_sabotage_effort",
+          "days": 50
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Sabotage Kaukasien Supply Lines",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "FUK_sabotage_effort",
+          "days": 40
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_FUK_CAU_GW",
+    "category_id": "FUK_BoP_category",
+    "name": "Sabotage Kaukasien Supply Lines",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_GLBCW_selected": true,
+      "has_global_flag": "Global_Caucasia_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10,
+        "add_political_power": -25
+      },
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "FUK_sabotage_effort",
+          "days": 39
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_OGG",
+    "category_id": "GER_Bop_category",
+    "name": "Start Sabotage Behind Enemy Lines",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_TNSCW_selected": true,
+      "has_global_flag": "Transnistrian_War"
+    },
+    "complete_effect": {
+      "TNS": {
+        "add_timed_idea": {
+          "idea": "GER_sabotage_effort",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_Speer_OGG",
+    "category_id": "GER_Bop_category",
+    "name": "Start Sabotage Behind Enemy Lines",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_OGGCW_selected": true,
+      "has_global_flag": "Transnistrian_Uprising"
+    },
+    "complete_effect": {
+      "TNS": {
+        "add_timed_idea": {
+          "idea": "GER_sabotage_effort",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_effort_HUN",
+    "category_id": "GER_Bop_category",
+    "name": "Initiate Sabotage Activities",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_CRPHW_selected": true,
+      "has_global_flag": "Carpatian_Hot_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -5,
+        "add_political_power": -15
+      },
+      "FUK": {
+        "add_timed_idea": {
+          "idea": "GER_sabotage_effort",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_effort_GER_AZR_CAU",
+    "category_id": "GER_Bop_category",
+    "name": "Sabotage the Rebels",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -5,
+        "add_political_power": -15
+      },
+      "AZR": {
+        "add_timed_idea": {
+          "idea": "GER_sabotage_effort",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_GER_CAU_GW",
+    "category_id": "GER_Bop_category",
+    "name": "Sabotage the Rebels",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_GLBCW_selected": true,
+      "has_global_flag": "Global_Caucasia_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10,
+        "add_political_power": -25
+      },
+      "GEO": {
+        "add_timed_idea": {
+          "idea": "GER_sabotage_effort",
+          "days": 49
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_FUK_sabotage",
+    "category_id": "JAP_BoP_category",
+    "name": "Initiate Sabotage Activities",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_CRPHW_selected": true,
+      "has_global_flag": "Carpatian_Hot_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -5,
+        "add_political_power": -15
+      },
+      "HUN": {
+        "add_timed_idea": {
+          "idea": "JAP_sabotage_effort",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_JAP_CAU_GW",
+    "category_id": "JAP_BoP_category",
+    "name": "Sabotage the Rebels",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_GLBCW_selected": true,
+      "has_global_flag": "Global_Caucasia_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10,
+        "add_political_power": -25
+      },
+      "AZR": {
+        "add_timed_idea": {
+          "idea": "JAP_sabotage_effort",
+          "days": 56
+        }
+      }
+    }
+  },
+  {
+    "id": "YGR_show_sabotation_decisions",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Show Sabotation decisions!",
+    "desc": "",
+    "icon": "GFX_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_Smuggling_enabled",
+          "YGR_sabotaging_enabled"
+        ],
+        "NOT": {
+          "has_country_flag": "YGR_show_sabotation_decisions"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_show_sabotation_decisions",
+      "set_country_flag": "YGR_show_sabotation_decisions"
+    }
+  },
+  {
+    "id": "YGR_hide_sabotation_decisions",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Hide Sabotation decisions!",
+    "desc": "",
+    "icon": "GFX_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_Smuggling_enabled",
+          "YGR_sabotaging_enabled",
+          "YGR_show_sabotation_decisions"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_hide_weapon_smuggling",
+      "clr_country_flag": "YGR_show_sabotation_decisions"
+    }
+  },
+  {
+    "id": "YGR_sabotage_production",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Disrupt [FROM.GetNameDef] production!",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_sabotaging_enabled",
+          "YGR_show_sabotation_decisions"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "RUS_national_unification"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_disrupt_supply_lines",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.037
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  }
+]

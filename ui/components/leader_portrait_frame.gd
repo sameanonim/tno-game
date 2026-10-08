@@ -150,7 +150,12 @@ func display_leader(leader_data: Variant, country_tag: String = "", animate_tele
 	if tex == null:
 		tex = _resolve_portrait_texture(l_portrait_path, country_tag, l_name)
 
-	if tex != null:
+	if texture_rect == null:
+		texture_rect = get_node_or_null("PortraitRect")
+	if _shader_mat == null and texture_rect != null:
+		_setup_shader()
+
+	if tex != null and texture_rect != null:
 		texture_rect.texture = tex
 		if _shader_mat != null:
 			_shader_mat.set_shader_parameter("is_classified", false)
@@ -231,6 +236,10 @@ func play_glitch_burst(intensity: float = 0.25, duration: float = 0.2) -> void:
 # ПОИСК, ЗАГРУЗКА И КЭШИРОВАНИЕ ТЕКСТУР
 # ==============================================================================
 
+# ==============================================================================
+# ПОИСК, ЗАГРУЗКА И КЭШИРОВАНИЕ ТЕКСТУР
+# ==============================================================================
+
 func _resolve_portrait_texture(path: String, tag: String, leader_name: String) -> Texture2D:
 	var cache_key = "%s_%s_%s" % [tag, leader_name, path]
 	if _texture_cache.has(cache_key):
@@ -238,15 +247,40 @@ func _resolve_portrait_texture(path: String, tag: String, leader_name: String) -
 
 	var loaded_tex: Texture2D = null
 
-	# 1. Прямой путь, если указан корректный ресурс
+	# 1. Прямой путь, если указан
 	if not path.is_empty() and path != "res://icon.svg":
-		loaded_tex = _load_portrait_file(path)
+		var clean_p = path.replace("\\", "/")
+		var paths_to_try: Array[String] = [clean_p]
+		var base_fn = clean_p.get_file()
+		var cleaned_base = base_fn.replace("Portrait_", "").replace("_TNO", "").replace("_tno", "")
+		if cleaned_base != base_fn:
+			paths_to_try.append(clean_p.get_base_dir().path_join(cleaned_base))
+			paths_to_try.append("assets/gfx/leaders/%s/%s" % [tag, cleaned_base])
+			paths_to_try.append("assets/gfx/leaders/%s/%s" % [tag, cleaned_base.to_lower()])
 
-	# 2. Поиск в каталоге ui/assets/portraits/
+		for p_item in paths_to_try:
+			if p_item.begins_with("res://"):
+				loaded_tex = _load_portrait_file(p_item)
+			elif p_item.begins_with("gfx/") or p_item.begins_with("assets/"):
+				loaded_tex = _load_portrait_file("res://" + p_item)
+				if loaded_tex == null:
+					loaded_tex = _load_portrait_file("res://assets/" + p_item)
+			else:
+				loaded_tex = _load_portrait_file("res://assets/gfx/leaders/" + p_item)
+				if loaded_tex == null:
+					loaded_tex = _load_portrait_file("res://" + p_item)
+			if loaded_tex != null:
+				break
+
+	# 2. Поиск в каталогах лидеров (assets/gfx/leaders/<TAG>/, data/countries/<TAG>/, ui/assets/portraits/)
 	if loaded_tex == null:
-		loaded_tex = _find_in_portraits_directory(tag, leader_name)
+		loaded_tex = _find_in_all_portraits_directories(tag, leader_name)
 
-	# 3. Сохранение в кэш
+	# 3. Поиск по базе data/countries/<TAG>/leaders/index.json или country.json
+	if loaded_tex == null and not tag.is_empty():
+		loaded_tex = _find_from_country_leader_data(tag, leader_name)
+
+	# 4. Сохранение в кэш
 	if loaded_tex != null:
 		_texture_cache[cache_key] = loaded_tex
 		return loaded_tex
@@ -256,7 +290,9 @@ func _resolve_portrait_texture(path: String, tag: String, leader_name: String) -
 
 func _load_portrait_file(p_path: String) -> Texture2D:
 	if ResourceLoader.exists(p_path):
-		return load(p_path) as Texture2D
+		var res = load(p_path)
+		if res is Texture2D:
+			return res
 	elif FileAccess.file_exists(p_path):
 		var img = Image.load_from_file(p_path)
 		if img != null and not img.is_empty():
@@ -264,55 +300,257 @@ func _load_portrait_file(p_path: String) -> Texture2D:
 	return null
 
 
-func _find_in_portraits_directory(tag: String, leader_name: String) -> Texture2D:
-	var search_dir := "res://ui/assets/portraits"
-	if not DirAccess.dir_exists_absolute(search_dir):
-		return null
+func _find_in_all_portraits_directories(tag: String, leader_name: String) -> Texture2D:
+	var clean_tag = tag.to_upper().strip_edges()
+	var tag_variants: Array[String] = [clean_tag, tag.to_lower()]
+	if clean_tag == "TYU": tag_variants.append("TYM")
+	elif clean_tag == "TYM": tag_variants.append("TYU")
+	elif clean_tag == "SVE": tag_variants.append("SVR")
+	elif clean_tag == "SVR": tag_variants.append("SVE")
+	elif clean_tag == "WRS": tag_variants.append("WRRF")
 
-	var clean_name = leader_name.replace(" ", "_").replace(".", "").to_lower()
-	var tag_lower = tag.to_lower()
+	var search_dirs: Array[String] = []
+	for tv in tag_variants:
+		search_dirs.append("res://assets/gfx/leaders/" + tv)
+		search_dirs.append("res://data/countries/" + tv + "/leaders/portraits")
+	search_dirs.append("res://ui/assets/portraits")
+	search_dirs.append("res://assets/gfx/leaders")
 
-	# Кандидаты имен файлов
-	var potential_names = [
-		"Portrait_%s_%s.png" % [tag, leader_name.replace(" ", "_")],
-		"Portrait_%s_%s.png" % [tag.to_upper(), leader_name.replace(" ", "_")],
-		"%s_%s.png" % [tag, leader_name.replace(" ", "_")],
-		"%s.png" % leader_name.replace(" ", "_"),
-		"Portrait_%s.png" % leader_name.replace(" ", "_")
-	]
+	var name_en = _transliterate_ru_to_en(leader_name).replace(" ", "_").replace(".", "").strip_edges()
+	var name_raw = leader_name.replace(" ", "_").replace(".", "").strip_edges()
+	var id_candidate = _current_leader_id.replace(" ", "_")
+	if id_candidate.to_upper() == clean_tag or id_candidate.length() <= 3:
+		id_candidate = ""
 
-	for p_name in potential_names:
-		var full_p = search_dir.path_join(p_name)
-		var tex = _load_portrait_file(full_p)
-		if tex != null:
-			return tex
+	var lead_norm = leader_name.to_lower().strip_edges()
+	var aliases: Array[String] = []
+	if "гитлер" in lead_norm or "hitler" in lead_norm:
+		aliases.append_array(["GER_adolf_hitler", "adolf_hitler", "hitler"])
+	elif "карбышев" in lead_norm or "karbyshev" in lead_norm:
+		aliases.append_array(["OMS_Dmitry_Karbyshev", "dmitry_karbyshev", "karbyshev"])
+	elif "язов" in lead_norm or "yazov" in lead_norm:
+		aliases.append_array(["OMS_Dmitry_Yazov", "dmitry_yazov", "yazov"])
+	elif "тухачевский" in lead_norm or "tukhachevsky" in lead_norm:
+		aliases.append_array(["WRS_Mikhail_Tukhachevsky", "mikhail_tukhachevsky", "tukhachevsky"])
+	elif "егоров" in lead_norm or "yegorov" in lead_norm:
+		aliases.append_array(["WRS_Alexander_Yegorov", "alexander_yegorov", "yegorov"])
+	elif "жуков" in lead_norm or "zhukov" in lead_norm:
+		aliases.append_array(["WRS_Georgy_Zhukov", "georgy_zhukov", "zhukov"])
+	elif "батов" in lead_norm or "batov" in lead_norm:
+		aliases.append_array(["SVR_Pavel_Batov", "pavel_batov", "batov"])
+	elif "рокоссовский" in lead_norm or "rokossovsky" in lead_norm:
+		aliases.append_array(["SVR_Konstantin_Rokossovsky", "konstantin_rokossovsky", "rokossovsky"])
+	elif "пастернак" in lead_norm or "pasternak" in lead_norm:
+		aliases.append_array(["TOM_Boris_Pasternak", "boris_pasternak", "pasternak"])
+	elif "покрышкин" in lead_norm or "pokryshkin" in lead_norm:
+		aliases.append_array(["NOV_Alexander_Pokryshkin", "alexander_pokryshkin", "pokryshkin"])
+	elif "вознесенский" in lead_norm or "voznesensky" in lead_norm:
+		aliases.append_array(["KOM_Nikolai_Voznesensky", "nikolai_voznesensky", "voznesensky"])
+	elif "никсон" in lead_norm or "nixon" in lead_norm:
+		aliases.append_array(["USA_Richard_Nixon", "richard_nixon", "nixon"])
+	elif "ино" in lead_norm or "ino" in lead_norm:
+		aliases.append_array(["JAP_Ino_Hiroya", "ino_hiroya", "hiroya_ino"])
+	elif "чиано" in lead_norm or "ciano" in lead_norm:
+		aliases.append_array(["ITA_Galeazzo_Ciano", "galeazzo_ciano", "ciano"])
+	elif "борман" in lead_norm or "bormann" in lead_norm:
+		aliases.append_array(["GER_martin_bormann", "martin_bormann", "bormann"])
+	elif "шпеер" in lead_norm or "speer" in lead_norm:
+		aliases.append_array(["GER_albert_speer", "albert_speer", "speer"])
+	elif "геринг" in lead_norm or "goring" in lead_norm or "goering" in lead_norm:
+		aliases.append_array(["GER_hermann_goring", "hermann_goring", "goring"])
+	elif "гейдрих" in lead_norm or "heydrich" in lead_norm:
+		aliases.append_array(["GER_reinhard_heydrich", "reinhard_heydrich", "heydrich"])
+	elif "гиммлер" in lead_norm or "himmler" in lead_norm:
+		aliases.append_array(["BRG_Heinrich_Himmler", "heinrich_himmler", "himmler"])
+	elif "владимир" in lead_norm or "vladimir" in lead_norm:
+		aliases.append_array(["VYT_Vladimir_III", "vladimir_iii"])
+	elif "власов" in lead_norm or "vlasov" in lead_norm:
+		aliases.append_array(["SAM_Andrey_Vlasov", "andrey_vlasov", "vlasov"])
+	elif "каганович" in lead_norm or "kaganovich" in lead_norm:
+		aliases.append_array(["TYM_Lazar_Kaganovich", "TYU_Lazar_Kaganovich", "lazar_kaganovich"])
+	elif "саблин" in lead_norm or "sablin" in lead_norm:
+		aliases.append_array(["BRY_Valery_Sablin", "valery_sablin"])
+	elif "ягода" in lead_norm or "yagoda" in lead_norm:
+		aliases.append_array(["IRK_Genrikh_Yagoda", "genrikh_yagoda"])
+	elif "родзаевский" in lead_norm or "rodzaevsky" in lead_norm:
+		aliases.append_array(["AMR_Konstantin_Rodzaevsky", "konstantin_rodzaevsky"])
+	elif "матковский" in lead_norm or "matkovsky" in lead_norm:
+		aliases.append_array(["MAG_Mikhail_Matkovsky", "mikhail_matkovsky"])
 
-	# Быстрый перебор по совпадению подстроки
-	var dir = DirAccess.open(search_dir)
-	if dir != null:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		var count := 0
-		while not file_name.is_empty() and count < 250:
-			count += 1
-			if not dir.current_is_dir() and file_name.ends_with(".png"):
-				var fn_low = file_name.to_lower()
-				if not clean_name.is_empty() and clean_name in fn_low:
-					var full_p = search_dir.path_join(file_name)
-					var tex = _load_portrait_file(full_p)
-					if tex != null:
-						dir.list_dir_end()
-						return tex
-				elif not tag_lower.is_empty() and ("portrait_" + tag_lower) in fn_low:
-					var full_p = search_dir.path_join(file_name)
-					var tex = _load_portrait_file(full_p)
-					if tex != null:
-						dir.list_dir_end()
-						return tex
-			file_name = dir.get_next()
-		dir.list_dir_end()
+	var candidates: Array[String] = []
+	var add_c = func(fn: String):
+		if not fn.is_empty() and not candidates.has(fn):
+			candidates.append(fn)
+
+	for al in aliases:
+		add_c.call(al + ".png")
+		add_c.call(al.to_lower() + ".png")
+		add_c.call("Portrait_" + al + ".png")
+		for tv in tag_variants:
+			add_c.call("%s_%s.png" % [tv, al])
+			add_c.call("%s_%s.png" % [tv.to_lower(), al.to_lower()])
+
+	for tv in tag_variants:
+		add_c.call("%s_%s.png" % [tv, name_en])
+		add_c.call("Portrait_%s_%s.png" % [tv, name_en])
+		add_c.call("%s_%s.png" % [tv, name_raw])
+		add_c.call("Portrait_%s_%s.png" % [tv, name_raw])
+		add_c.call("%s_%s.png" % [tv, name_en.to_lower()])
+
+	if not id_candidate.is_empty():
+		add_c.call(id_candidate + ".png")
+		add_c.call("Portrait_" + id_candidate + ".png")
+
+	add_c.call(name_en + ".png")
+	add_c.call(name_raw + ".png")
+	add_c.call("Portrait_" + name_en + ".png")
+
+	# Точный поиск по каталогам
+	for s_dir in search_dirs:
+		if not DirAccess.dir_exists_absolute(s_dir):
+			continue
+		for c_fn in candidates:
+			var full_p = s_dir.path_join(c_fn)
+			var tex = _load_portrait_file(full_p)
+			if tex != null:
+				return tex
+
+	# Нечеткий перебор в каталоге тега (только по специфичным ключам)
+	var search_keys: Array[String] = []
+	for al in aliases:
+		if al.length() >= 4 and not search_keys.has(al.to_lower()):
+			search_keys.append(al.to_lower())
+
+	if name_en.length() >= 4 and not search_keys.has(name_en.to_lower()):
+		search_keys.append(name_en.to_lower())
+	if not name_raw.is_empty() and name_raw.length() >= 4 and not search_keys.has(name_raw.to_lower()):
+		search_keys.append(name_raw.to_lower())
+	if not id_candidate.is_empty() and id_candidate.length() >= 4:
+		search_keys.append(id_candidate.to_lower())
+
+	for s_dir in search_dirs:
+		if not DirAccess.dir_exists_absolute(s_dir):
+			continue
+		var dir = DirAccess.open(s_dir)
+		if dir != null:
+			dir.list_dir_begin()
+			var fn = dir.get_next()
+			var count := 0
+
+			while not fn.is_empty() and count < 150:
+				count += 1
+				if not dir.current_is_dir() and fn.ends_with(".png"):
+					var fn_low = fn.to_lower()
+					for k in search_keys:
+						if k.length() >= 4 and (("_" + k) in fn_low or fn_low.begins_with(k) or (k + ".") in fn_low):
+							var full_p = s_dir.path_join(fn)
+							var tex = _load_portrait_file(full_p)
+							if tex != null:
+								dir.list_dir_end()
+								return tex
+				fn = dir.get_next()
+			dir.list_dir_end()
 
 	return null
+
+
+func _find_from_country_leader_data(tag: String, leader_name: String) -> Texture2D:
+	var clean_tag = tag.to_upper().strip_edges()
+	var tag_variants: Array[String] = [clean_tag]
+	if clean_tag == "TYU": tag_variants.append("TYM")
+	elif clean_tag == "TYM": tag_variants.append("TYU")
+	elif clean_tag == "SVE": tag_variants.append("SVR")
+	elif clean_tag == "SVR": tag_variants.append("SVE")
+	elif clean_tag == "WRS": tag_variants.append("WRRF")
+	elif clean_tag == "WRRF": tag_variants.append("WRS")
+
+	# 0. Поиск в канонической базе досье GameSession
+	if has_node("/root/GameSession"):
+		var gs = get_node("/root/GameSession")
+		if gs.has_method("get_country_dossier"):
+			for tv in tag_variants:
+				var dos = gs.get_country_dossier(tv)
+				if not dos.is_empty():
+					var dos_p = str(dos.get("portrait_path", ""))
+					if not dos_p.is_empty() and dos_p != "res://icon.svg":
+						var tex = _load_portrait_file(dos_p)
+						if tex != null:
+							return tex
+
+	# 1. Поиск в country.json с проверкой имени лидера
+	var target_lead_clean = leader_name.to_lower().strip_edges()
+	var translit_clean = _transliterate_ru_to_en(leader_name).to_lower().strip_edges()
+
+	for tv in tag_variants:
+		var c_path = "res://data/countries/%s/country.json" % tv
+		if FileAccess.file_exists(c_path):
+			var f = FileAccess.open(c_path, FileAccess.READ)
+			if f != null:
+				var json = JSON.new()
+				if json.parse(f.get_as_text()) == OK and json.data is Dictionary:
+					var l_list = json.data.get("leaders", [])
+					if l_list is Array and not l_list.is_empty():
+						for l_entry in l_list:
+							if l_entry is Dictionary:
+								var entry_name = str(l_entry.get("name_text", "")).to_lower()
+								var entry_id = str(l_entry.get("id", "")).to_lower()
+								var is_match := false
+								if not target_lead_clean.is_empty() and (target_lead_clean in entry_name or target_lead_clean in entry_id):
+									is_match = true
+								elif not translit_clean.is_empty() and (translit_clean in entry_name or translit_clean in entry_id):
+									is_match = true
+								elif target_lead_clean.is_empty() or target_lead_clean == "unknown":
+									is_match = l_entry.has("country_leader")
+
+								if is_match:
+									var p_dict = l_entry.get("portraits", {}).get("civilian", {})
+									var p_large = str(p_dict.get("large", ""))
+									if not p_large.is_empty() and p_large != "GFX_leader_unknown":
+										var tex = _load_portrait_file("res://assets/" + p_large)
+										if tex == null:
+											tex = _load_portrait_file("res://" + p_large)
+										if tex == null:
+											# Проверка по id лидера (например OMS_Dmitry_Karbyshev)
+											var l_id = str(l_entry.get("id", ""))
+											if not l_id.is_empty():
+												tex = _load_portrait_file("res://assets/gfx/leaders/%s/%s.png" % [tv, l_id])
+										if tex == null:
+											# Проверка с очисткой префиксов Portrait_ и государства
+											var b_fn = p_large.get_file().replace("Portrait_", "").replace("_TNO", "").replace("_tno", "")
+											var fu = b_fn.find("_")
+											var stripped = b_fn.substr(fu + 1) if fu != -1 else b_fn
+											tex = _load_portrait_file("res://assets/gfx/leaders/%s/%s_%s" % [tv, tv, stripped])
+											if tex == null:
+												tex = _load_portrait_file("res://assets/gfx/leaders/%s/%s" % [tv, stripped])
+										if tex != null:
+											f.close()
+											return tex
+				f.close()
+
+	return null
+
+
+static func _transliterate_ru_to_en(txt: String) -> String:
+	var ru_to_en = {
+		"а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "yo",
+		"ж": "zh", "з": "z", "и": "i", "й": "y", "к": "k", "л": "l", "м": "m",
+		"н": "n", "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u",
+		"ф": "f", "х": "kh", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "shch",
+		"ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya",
+		"А": "A", "Б": "B", "В": "V", "Г": "G", "Д": "D", "Е": "E", "Ё": "Yo",
+		"Ж": "Zh", "З": "Z", "И": "I", "Й": "Y", "К": "K", "Л": "L", "М": "M",
+		"Н": "N", "О": "O", "П": "P", "Р": "R", "С": "S", "Т": "T", "У": "U",
+		"Ф": "F", "Х": "Kh", "Ц": "Ts", "Ч": "Ch", "Ш": "Sh", "Щ": "Shch",
+		"Ъ": "", "Ы": "Y", "Ь": "", "Э": "E", "Ю": "Yu", "Я": "Ya"
+	}
+	var res := ""
+	for i in range(txt.length()):
+		var ch = txt[i]
+		if ru_to_en.has(ch):
+			res += ru_to_en[ch]
+		else:
+			res += ch
+	return res
 
 
 func _set_classified_state() -> void:

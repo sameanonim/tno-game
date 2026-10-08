@@ -1,0 +1,1841 @@
+[
+  {
+    "id": "RUS_coring_integrate_gayny",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Гайнов",
+    "desc": "",
+    "icon": "GFX_decision_gayny_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 866
+    },
+    "visible": {
+      "owns_state": 866,
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "866": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "398": {
+                "is_core_of": "ROOT"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ONG_guard_GAY",
+    "category_id": "ONG_anti_commie_guard",
+    "name": "Направить Гвардию в Гайны",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "GAY": {
+          "has_war_with": "WRS"
+        },
+        "AND": {
+          "KOM": {
+            "OR": {
+              "has_government": [
+                "communist",
+                "socialist"
+              ]
+            }
+          },
+          "GAY": {
+            "has_war_with": "KOM"
+          }
+        }
+      }
+    },
+    "visible": {
+      "WRS": {
+        "exists": true
+      },
+      "GAY": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_guard_GAY",
+      "GAY": {
+        "country_event": {
+          "id": "ONG.2",
+          "days": 3
+        }
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -185
+      }
+    }
+  },
+  {
+    "id": "ONG_faction_GAY",
+    "category_id": "ONG_faction",
+    "name": "Удмуртская республика",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ONG_diplomats_sent"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_faction_GAY",
+      "set_country_flag": "ONG_diplomats_sent"
+    }
+  },
+  {
+    "id": "SAM_gayny_artsezo",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Гайны под контроль Внутреннего круга",
+    "desc": "",
+    "icon": "GFX_decision_generic_chess_king",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "866": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 866
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_gayny_artsezo",
+      "add_to_variable": [
+        {
+          "SAM_artsezo_ruled_states": 1
+        },
+        {
+          "SAM_inner_circle_influence": 1
+        }
+      ],
+      "866": {
+        "set_state_flag": "SAM_artsezo_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_inner_circle_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_inner_circle_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_gayny_military",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Гайны под контроль Военной администрации",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "866": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 866
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_gayny_military",
+      "add_to_variable": [
+        {
+          "SAM_military_ruled_states": 1
+        },
+        {
+          "SAM_military_influence": 1
+        }
+      ],
+      "866": {
+        "set_state_flag": "SAM_military_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_military_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_military_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_military_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_gayny_civilian",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Гайны под контроль Гражданской администрации",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "866": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 866
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_gayny_civilian",
+      "add_to_variable": [
+        {
+          "SAM_civilian_ruled_states": 1
+        },
+        {
+          "SAM_civilian_influence": 1
+        }
+      ],
+      "866": {
+        "set_state_flag": "SAM_civilian_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_civilian_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_civilian_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_civilian_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_gayny_strip_away",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Лишить права владения Гайны",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "866": {
+        "OR": {
+          "has_state_flag": [
+            "SAM_artsezo_ruled",
+            "SAM_military_ruled",
+            "SAM_civilian_ruled"
+          ]
+        }
+      },
+      "owns_state": 866
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_gayny_strip_away",
+      "custom_effect_tooltip": "SAM_strip_away_tt",
+      "if": {
+        "limit": {
+          "866": {
+            "has_state_flag": "SAM_artsezo_ruled"
+          }
+        },
+        "SAM_artsezo_increase_inner_circle_tension_high": true,
+        "subtract_from_variable": [
+          {
+            "SAM_artsezo_ruled_states": 1
+          },
+          {
+            "SAM_inner_circle_influence": 1
+          }
+        ],
+        "custom_effect_tooltip": "SAM_artsezo_decrease_inner_circle_influence_low_tt"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "866": {
+              "has_state_flag": "SAM_military_ruled"
+            }
+          },
+          "SAM_artsezo_increase_military_tension_high": true,
+          "subtract_from_variable": [
+            {
+              "SAM_military_ruled_states": 1
+            },
+            {
+              "SAM_military_influence": 1
+            }
+          ],
+          "custom_effect_tooltip": "SAM_artsezo_decrease_military_influence_low_tt"
+        },
+        {
+          "limit": {
+            "866": {
+              "has_state_flag": "SAM_civilian_ruled"
+            }
+          },
+          "SAM_artsezo_increase_civilian_tension_high": true,
+          "subtract_from_variable": [
+            {
+              "SAM_civilian_ruled_states": 1
+            },
+            {
+              "SAM_civilian_influence": 1
+            }
+          ],
+          "custom_effect_tooltip": "SAM_artsezo_decrease_civilian_influence_low_tt"
+        }
+      ],
+      "hidden_effect": {
+        "866": {
+          "clr_state_flag": [
+            "SAM_civilian_ruled",
+            "SAM_military_ruled",
+            "SAM_artsezo_ruled"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "SAM_civilian_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_military_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_GAY",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [GAY.GetFlag] [GAY.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "GAY": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_GAY",
+      "set_temp_variable": {
+        "TargetTag": "GAY"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "GAY.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "GAY"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "GAY"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_GAY": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_GAY_Generic",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Атаковать [GAY.GetFlag] [GAY.GetName]",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "is_central_russian_nation": true,
+      "is_neighbor_of": "GAY",
+      "has_war": false,
+      "NOT": {
+        "has_non_aggression_pact_with": "GAY"
+      },
+      "RUS_Smuta_ScriptedTrigger_Expansion_GAY_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_GAY_Generic",
+      "if": {
+        "limit": {
+          "has_country_flag": "tukha_in_power"
+        },
+        "custom_effect_tooltip": "WRS_SMUTA_SEND_ULTIMATUM_tt",
+        "hidden_effect": {
+          "GAY": {
+            "country_event": {
+              "id": "tukha.15"
+            }
+          }
+        }
+      },
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Y": -0.7
+        },
+        "RUS_Smuta_Supplies_Add_Y": true,
+        "set_country_flag": "RUS_Smuta_preparing_expansion"
+      }
+    }
+  },
+  {
+    "id": "FUK_project_sagaydachnyi",
+    "category_id": "FUK_project_CossackSpirit_category",
+    "name": "Project SAGAYDACHNYI!",
+    "desc": "",
+    "icon": "GFX_decision_UKR_unra",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "FUK_doing_CossackSpirit_project_tt",
+        "NOT": {
+          "has_country_flag": "FUK_doing_CossackSpirit_project"
+        }
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_project_sagaydachnyi",
+      "set_country_flag": [
+        "FUK_doing_CossackSpirit_project",
+        "FUK_CossackSpirits_7_IN_PROGRESS"
+      ],
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "GAY_Pavlov_side",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Go With the Lord",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GAY_candidate_mechanic"
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": "GAY_candidate_mechanic",
+          "NOT": {
+            "OR": {
+              "has_country_flag": [
+                "GAY_izvekov_selected",
+                "GAY_antipin_selected",
+                "GAY_pavlov_selected"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": [
+        "GAY_pavlov_selected",
+        "GAY_selected_candidate"
+      ],
+      "custom_effect_tooltip": "GAY_pavlov_route_tt"
+    }
+  },
+  {
+    "id": "GAY_hold_sermon",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Hold Sermon",
+    "desc": "",
+    "icon": "GFX_decision_holy_icons",
+    "cost": 13,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_pavlov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_pavlov_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_hold_sermon",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_pavlov_power_temp": 2
+      },
+      "GAY_add_pavlov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_our_values",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Remind Them of Our Values",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 18,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_pavlov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_pavlov_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_our_values",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_pavlov_power_temp": 3
+      },
+      "GAY_add_pavlov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_provide_charity",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Provide Charity",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_pavlov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_pavlov_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_provide_charity",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_pavlov_power_temp": 5.5
+      },
+      "GAY_add_pavlov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_stamp_down",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Stamp Down on Divisionists",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_pavlov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_pavlov_selected"
+          ],
+          "check_variable": {
+            "GAY_pavlov_power": {
+              "_op": ">",
+              "value": 55
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_provide_charity",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_pavlov_power_temp": 7.5
+      },
+      "GAY_add_pavlov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_Antipin_sides",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Go With the Army",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GAY_candidate_mechanic"
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": "GAY_candidate_mechanic",
+          "NOT": {
+            "OR": {
+              "has_country_flag": [
+                "GAY_izvekov_selected",
+                "GAY_antipin_selected",
+                "GAY_pavlov_selected"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": [
+        "GAY_antipin_selected",
+        "GAY_selected_candidate"
+      ],
+      "custom_effect_tooltip": "GAY_antipin_route_tt"
+    }
+  },
+  {
+    "id": "GAY_rouse_the_faithful",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Stir the Faithful",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 13,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_antipin_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_antipin_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_rouse_the_faithful",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_antipin_power_temp": 2
+      },
+      "GAY_add_antipin_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      },
+      "custom_effect_tooltip": "GAY_raising_militia_tt"
+    }
+  },
+  {
+    "id": "GAY_righteous_cause",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Show Them Our Righteousness",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 22,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_antipin_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_antipin_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_righteous_cause",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_antipin_power_temp": 3.5
+      },
+      "GAY_add_antipin_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_hold_excerise",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Hold an Exercise",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_antipin_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_antipin_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_hold_excerise",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_antipin_power_temp": 5
+      },
+      "GAY_add_antipin_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_sway_the_military",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Sway the Army",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_antipin_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_antipin_selected"
+          ],
+          "check_variable": {
+            "GAY_antipin_power": {
+              "_op": ">",
+              "value": 60
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_sway_the_military",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_antipin_power_temp": 7.5
+      },
+      "GAY_add_antipin_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_izvekov_side",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Go With the People",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GAY_candidate_mechanic"
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": "GAY_candidate_mechanic",
+          "NOT": {
+            "OR": {
+              "has_country_flag": [
+                "GAY_izvekov_selected",
+                "GAY_antipin_selected",
+                "GAY_pavlov_selected"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": [
+        "GAY_izvekov_selected",
+        "GAY_selected_candidate"
+      ],
+      "custom_effect_tooltip": "GAY_izvekov_route_tt"
+    }
+  },
+  {
+    "id": "GAY_hold_a_speech",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Hold a Speech",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_izvekov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "GAY_candidate_mechanic",
+          "GAY_izvekov_selected"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_hold_a_speech",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_izvekov_power_temp": 2
+      },
+      "GAY_add_izvekov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_rally_the_people",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Rally the People",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_izvekov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_izvekov_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_rally_the_people",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_izvekov_power_temp": 3
+      },
+      "GAY_add_izvekov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_spread_ideals_of_democracy",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Spread the Ideals of Democracy",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_izvekov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_izvekov_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_spread_ideals_of_democracy",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_izvekov_power_temp": 4.5
+      },
+      "GAY_add_izvekov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_denounce_the_army",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Denounce the Army",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_izvekov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_izvekov_selected"
+          ],
+          "check_variable": {
+            "GAY_izvekov_power": {
+              "_op": ">",
+              "value": 50
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_denounce_the_army",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_izvekov_power_temp": 6.5
+      },
+      "GAY_add_izvekov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_centralize_power",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Centralize Power",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "OR": {
+          "has_country_flag": [
+            "GAY_pavlov_selected",
+            "GAY_izvekov_selected",
+            "GAY_antipin_selected"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": "GAY_candidate_mechanic",
+          "OR": {
+            "has_country_flag": [
+              "GAY_pavlov_selected",
+              "GAY_izvekov_selected",
+              "GAY_antipin_selected"
+            ]
+          },
+          "if": {
+            "has_country_flag": "GAY_pavlov_selected",
+            "check_variable": {
+              "GAY_pavlov_power": {
+                "_op": ">",
+                "value": 70
+              }
+            }
+          },
+          "else": {
+            "has_country_flag": "GAY_izvekov_selected",
+            "check_variable": {
+              "GAY_izvekov_power": {
+                "_op": ">",
+                "value": 70
+              }
+            }
+          },
+          "else_if": {
+            "has_country_flag": "GAY_antipin_selected",
+            "check_variable": {
+              "GAY_antipin_power": {
+                "_op": ">",
+                "value": 70
+              }
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_centralize_power",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "if": {
+        "has_country_flag": "GAY_pavlov_selected",
+        "set_temp_variable": {
+          "GAY_pavlov_power_temp": 7
+        },
+        "GAY_add_pavlov_power": true
+      },
+      "else": {
+        "has_country_flag": "GAY_izvekov_selected",
+        "set_temp_variable": {
+          "GAY_izvekov_power_temp": 7
+        },
+        "GAY_add_izvekov_power": true
+      },
+      "else_if": {
+        "has_country_flag": "GAY_antipin_selected",
+        "set_temp_variable": {
+          "GAY_antipin_power_temp": 7
+        },
+        "GAY_add_antipin_power": true
+      },
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  },
+  {
+    "id": "GAY_influence_increase_pavlov",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Pavlov is making moves...",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "OR": {
+            "has_country_flag": [
+              "GAY_candidate_mechanic",
+              "GAY_pavlov_selected"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GAY_pavlov_selected"
+      },
+      "has_country_flag": [
+        "GAY_selected_candidate",
+        "GAY_candidate_mechanic"
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GAY_influence_increase_antipin",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Antipin is making moves...",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "OR": {
+            "has_country_flag": [
+              "GAY_candidate_mechanic",
+              "GAY_antipin_selected"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GAY_antipin_selected"
+      },
+      "has_country_flag": [
+        "GAY_selected_candidate",
+        "GAY_candidate_mechanic"
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GAY_influence_increase_izvekov",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Izvekov is making moves...",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "OR": {
+            "has_country_flag": [
+              "GAY_candidate_mechanic",
+              "GAY_izvekov_selected"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GAY_izvekov_selected"
+      },
+      "has_country_flag": [
+        "GAY_selected_candidate",
+        "GAY_candidate_mechanic"
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GAY_purge_kostroma",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Kostroma's witches",
+    "desc": "There goes a rumor, that Kostroma became a safeheaven for witches, time to change that. Every suspicious woman in the region will undergo swimming test.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_kostroma",
+      "add_war_support": -0.005,
+      "856": {
+        "add_manpower": -2321
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_viatka",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Viatka's liberals",
+    "desc": "It came to out attention that there are some priests in Viatka who teach to much about love and devotion and to little about divine cleansing, let us purge them and their followers.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_viatka",
+      "add_war_support": -0.005,
+      "400": {
+        "add_manpower": -8121
+      },
+      "752": {
+        "add_manpower": -1220
+      },
+      "399": {
+        "add_manpower": -1991
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_samara",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Samara's collaborators",
+    "desc": "Samara is the place where traitorous fascist collaborators once resided. We will track down their remains and force them march in the wide fields... ...in Spanish shoes, till they expire!",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_samara",
+      "add_war_support": -0.005,
+      "850": {
+        "add_manpower": -11012
+      },
+      "251": {
+        "add_manpower": -2091
+      },
+      "755": {
+        "add_manpower": -1580
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_perm",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Perm's nazis",
+    "desc": "We have already got rid from most of the nazis residing in Perm, but some reports indecate that few remain, we will crusify them on their crooked crosses.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_perm",
+      "add_war_support": -0.005,
+      "753": {
+        "add_manpower": -2833
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_tyumen",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Tyumen Bolsheviks",
+    "desc": "Godless Bolshevik sympathizers still remain in these lands, it is time to change that.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_tyumen",
+      "add_war_support": -0.005,
+      "572": {
+        "add_manpower": -8240
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_omsk",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Omsk",
+    "desc": "While the methods used by the Black are godly, while their ideology is close to true cristian morals, they are still astray and must be delt with.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_omsk",
+      "add_war_support": -0.005,
+      "571": {
+        "add_manpower": -2666
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_yugra",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Yugra",
+    "desc": "Thy shall not steal!",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_yugra",
+      "add_war_support": -0.005,
+      "756": {
+        "add_manpower": -1302
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_gayny",
+    "category_id": "GAY_purges_category",
+    "name": "Purge our brethen",
+    "desc": "Some priests close to Antipin have deviated from the godly path and doubt out latest policies. Send them to hell!",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_gayny",
+      "add_war_support": -0.005,
+      "866": {
+        "add_manpower": -791
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_intelectuals",
+    "category_id": "GAY_purges_category",
+    "name": "Intelectuals to be Purged",
+    "desc": "Blessed are the ignorant. Knowledge is a poison. An intenectual today, an atheist tommorow. Antipin solution to this is killing all the students with grades 2 standart deviations above from the mean(or more).",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started",
+      "578": {
+        "is_controlled_by": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_intelectuals",
+      "add_stability": -0.005,
+      "add_manpower": -2111,
+      "578": {
+        "add_manpower": -8350
+      },
+      "887": {
+        "add_manpower": -1208
+      },
+      "577": {
+        "add_manpower": -900
+      },
+      "TNO_worsen_admin_efficiency_med": true,
+      "TNO_improve_academic_base_high": true
+    }
+  },
+  {
+    "id": "GAY_purge_atheists",
+    "category_id": "GAY_purges_category",
+    "name": "Purge the atheists",
+    "desc": "Atheists are just ungratefull acne on the face of earth, and must be dealt with accordingly.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started",
+      "566": {
+        "is_controlled_by": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_atheists",
+      "add_manpower": -15006,
+      "566": {
+        "add_manpower": -50350
+      },
+      "567": {
+        "add_manpower": -13590
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_heretics",
+    "category_id": "GAY_purges_category",
+    "name": "Purge the herecy",
+    "desc": "Heretics do not deserve to be crusified, being close to our symbol would be to generous. Antipin decided to kill them via Scaphism.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started",
+      "329": {
+        "is_controlled_by": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_heretics",
+      "add_manpower": -4422,
+      "329": {
+        "add_manpower": -23350
+      },
+      "if": {
+        "limit": {
+          "814": {
+            "is_controlled_by": "GAY"
+          },
+          "2400": {
+            "is_controlled_by": "GAY"
+          },
+          "2402": {
+            "is_controlled_by": "GAY"
+          }
+        },
+        "2400": {
+          "add_manpower": -8408
+        },
+        "2402": {
+          "add_manpower": -11302
+        },
+        "814": {
+          "add_manpower": -13706
+        }
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_heathens",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Heathens",
+    "desc": "Heathens shall be buried alive, being a fertilizer is the best thing they can do for us anyway.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started",
+      "569": {
+        "is_controlled_by": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_heathens",
+      "add_manpower": -12422,
+      "569": {
+        "add_manpower": -43750
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_sinners",
+    "category_id": "GAY_purges_category",
+    "name": "Purge the sinners",
+    "desc": "Dante was a heretical Catholic, but in his divine comedy he described the sins well. If anybody will be caught, or suspected to be comminting one of the sins described there, will meet a slow and painfull death on a cross.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started",
+      "561": {
+        "is_controlled_by": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_sinners",
+      "add_manpower": -5332,
+      "561": {
+        "add_manpower": -7350
+      },
+      "IF": {
+        "limit": {
+          "1364": {
+            "is_controlled_by": "GAY"
+          }
+        },
+        "561": {
+          "add_manpower": -9268
+        }
+      },
+      "else": {
+        "add_war_support": -0.005
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_unloyal",
+    "category_id": "GAY_purges_category",
+    "name": "Purge the unloyal",
+    "desc": "The unloyal individuals will be hanged, or executed by a firing squad.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started",
+      "563": {
+        "is_controlled_by": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_unloyal",
+      "add_stability": -0.005,
+      "add_manpower": -8815,
+      "563": {
+        "add_manpower": -26930
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_skeptics",
+    "category_id": "GAY_purges_category",
+    "name": "Purge the skeptics",
+    "desc": "A skeptic, like an intelectual is a potential atheist. A skeptic is potentially unloyal. Any skeptic must meet a death by drinking a poison.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started",
+      "562": {
+        "is_controlled_by": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_skeptics",
+      "add_manpower": -3815,
+      "562": {
+        "add_manpower": -7999
+      },
+      "889": {
+        "add_manpower": -2719
+      }
+    }
+  },
+  {
+    "id": "GAY_purge_agnostics",
+    "category_id": "GAY_purges_category",
+    "name": "Purge Agnostics",
+    "desc": "Agnostics do not reject the god directly, but they neither reject ideology of our enemies. They are not with us, and therefore against us, and therefore must be purged in the name of God almighty and our Lord Jesus Christ.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GAY_purges_started"
+    },
+    "visible": {
+      "has_country_flag": "GAY_purges_started",
+      "570": {
+        "is_controlled_by": "GAY"
+      },
+      "654": {
+        "is_controlled_by": "GAY"
+      },
+      "40": {
+        "is_controlled_by": "GAY"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_purge_agnostics",
+      "add_stability": -0.005,
+      "add_manpower": -22035,
+      "570": {
+        "add_manpower": -88191
+      },
+      "40": {
+        "add_manpower": -21100
+      },
+      "654": {
+        "add_manpower": -3119
+      }
+    }
+  },
+  {
+    "id": "GAY_load_starting_tree",
+    "category_id": "GAY_debug_category",
+    "name": "Load Starting Tree",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "GAY_oosg_warlord"
+    }
+  },
+  {
+    "id": "GAY_load_smuta_tree",
+    "category_id": "GAY_debug_category",
+    "name": "Load Smuta Tree",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "GAY_warlord_war"
+    }
+  },
+  {
+    "id": "GAY_load_pav_regional",
+    "category_id": "GAY_debug_category",
+    "name": "Load Pavlov's Regional Tree",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "GAY_pavlov_regional",
+      "set_cosmetic_tag": "GAY_regional_unifier_despotism"
+    }
+  },
+  {
+    "id": "GAY_load_izv_regional",
+    "category_id": "GAY_debug_category",
+    "name": "Load Izvekov's Regional Tree",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "GAY_izvekov_regional",
+      "set_cosmetic_tag": "GAY_regional_unifier_conservatism"
+    }
+  },
+  {
+    "id": "GAY_load_ant_regional",
+    "category_id": "GAY_debug_category",
+    "name": "Load Antipin's Regional Tree",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "GAY_antipin_regional",
+      "set_cosmetic_tag": "GAY_regional_unifier_ultranationalism"
+    }
+  },
+  {
+    "id": "GAY_load_pav_superregional",
+    "category_id": "GAY_debug_category",
+    "name": "Load Pavlov's Superregional Tree",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "GAY_Pavlov_superregional",
+      "set_cosmetic_tag": "GAY_RUS_despotism"
+    }
+  },
+  {
+    "id": "GAY_load_izv_superregional",
+    "category_id": "GAY_debug_category",
+    "name": "Load Izvekov's Superregional Tree",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "GAY_Izvekov_superregional",
+      "set_cosmetic_tag": "GAY_RUS_conservatism"
+    }
+  },
+  {
+    "id": "GAY_load_ant_superregional",
+    "category_id": "GAY_debug_category",
+    "name": "Load Antipin's Superregional Tree",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "GAY_Antipin_superregional",
+      "set_cosmetic_tag": "GAY_RUS_ultranationalism"
+    }
+  },
+  {
+    "id": "GAY_load_candidate",
+    "category_id": "GAY_debug_category",
+    "name": "Load the Candidate Mechanic",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": "GAY_candidate_mechanic",
+      "GAY_initialize_candidate": true
+    }
+  },
+  {
+    "id": "GAY_cancel_candidate",
+    "category_id": "GAY_debug_category",
+    "name": "Disable the Candidate Mechanic",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "GAY_candidate_mechanic"
+    },
+    "complete_effect": {
+      "clr_country_flag": "GAY_candidate_mechanic",
+      "hidden_effect": {
+        "load_focus_tree": "GAY_izvekov_regional",
+        "remove_mission": [
+          "GAY_influence_increase_pavlov",
+          "GAY_influence_increase_antipin",
+          "GAY_influence_increase_izvekov"
+        ],
+        "clr_country_flag": [
+          "GAY_selected_candidate",
+          "GAY_izvekov_selected",
+          "GAY_antipin_selected",
+          "GAY_pavlov_selected",
+          "GAY_candidate_mechanic"
+        ]
+      }
+    }
+  }
+]

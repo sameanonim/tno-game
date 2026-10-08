@@ -1,0 +1,1222 @@
+{
+  "tree_id": "TNO_Tyumen_Rebuilding",
+  "tag": "TYM",
+  "directives_count": 37,
+  "directives": [
+    {
+      "id": "TYM_the_clock_breaks",
+      "name": "Время пришло",
+      "desc": "На землях народной республики воцарилась нехарактерная для нее тишина. Отдаленные удары и грохот больше не являются обычным явлением, сирены воздушной тревоги не кричали свои жуткие предупреждающие крики в течение нескольких недель, и ни один самолет не был замечен в небе в течение продолжительного времени. Террористический поход бомбардировщиков, который так долго терроризировал Россию, наконец-то закончился.\n\nТеперь, когда бомбы больше не падают, мы должны наверстать упущенное. Необходимо будет решить множество проблем, самая насущная из которых - восстановление страны. В конце концов, революция не может даже надеяться продолжаться, пока мы не встанем на ноги по-настоящему!",
+      "icon": "GFX_focus_generic_the_future_frozen",
+      "cost_turns": 1,
+      "x": 19,
+      "y": 0,
+      "prerequisites": [],
+      "mutually_exclusive": [],
+      "available": {
+        "always": false
+      },
+      "completion_reward": {
+        "custom_effect_tooltip": "TYM_the_clock_breaks_tt"
+      }
+    },
+    {
+      "id": "TYM_rebuilding_a_nation",
+      "name": "Восстановить страну",
+      "desc": "Длительный период осады серьезно подорвал наши экономические и политические институты. Мы были поставлены на грань вымирания, но теперь, когда мы наконец-то спаслись от бомбежек, пришло время начать восстанавливать государство.\n\nПредседатель Каганович мудро составил план ремонта наших поврежденных заводов, вывода правительства из чрезвычайного положения и восстановления нашей бюрократии, обратившись к тюменцам с просьбой вернуть их в лоно после борьбы за выживание. Вскоре Коммунистическая партия прочно оттянет наше государство от края пропасти, и тяжелая работа по расширению сможет наконец начаться.",
+      "icon": "GFX_focus_MAG_building_the_wastes",
+      "cost_turns": 1,
+      "x": 14,
+      "y": 1,
+      "prerequisites": [
+        "TYM_the_clock_breaks"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "country_event": {
+          "id": "TYM.112",
+          "days": 18
+        },
+        "hidden_effect": [
+          {
+            "country_event": {
+              "id": "TYM.119",
+              "days": 2
+            }
+          },
+          {
+            "if": {
+              "limit": {
+                "has_dynamic_modifier": {
+                  "modifier": "TYM_survival_programs"
+                }
+              },
+              "remove_dynamic_modifier": {
+                "modifier": "TYM_survival_programs"
+              }
+            }
+          }
+        ],
+        "every_owned_state": {
+          "limit": {
+            "OR": {
+              "state": [
+                403,
+                572
+              ]
+            }
+          },
+          "add_building_construction": [
+            {
+              "type": "infrastructure",
+              "level": 1,
+              "instant_build": true
+            },
+            {
+              "type": "offices",
+              "level": 1,
+              "instant_build": true
+            }
+          ],
+          "add_extra_state_shared_building_slots": 2
+        },
+        "build_railway": {
+          "level": 1,
+          "fallback": true,
+          "start_province": 1387,
+          "target_province": 12106
+        },
+        "TNO_improve_admin_efficiency_low": true,
+        "set_temp_variable": [
+          {
+            "gdp_growth_temp": 1.25
+          },
+          {
+            "inflation_temp": 0.75
+          },
+          {
+            "temp_econ_spending_amount": 0.005
+          }
+        ],
+        "econ_gdp_growth_change": true,
+        "econ_inflation_change": true,
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_rebuilding_the_factories",
+      "name": "Отстроить фабрики",
+      "desc": "Начав процесс восстановления Тюмени, мы должны признать тот факт, что не все можно сделать сразу. Наши ограниченные ресурсы требуют тщательного определения приоритетов наиболее необходимых секторов общества, и в конечном счете нам придется пойти на жертвы.\n\nЧтобы быстро восстановить экономику в ее прежнем состоянии, мы должны установить прочную основу, и приоритетное восстановление нашей разрушенной промышленности - это лучший путь для этого. Время для сосредоточения внимания на гражданской инфраструктуре наступит после того, как мы создадим платформу для работы, и лучший способ сделать это - восстановить промышленный потенциал государства и медленно вернуть жизнеспособность нашей экономике.",
+      "icon": "GFX_focus_RUS_siberian_factories",
+      "cost_turns": 1,
+      "x": 11,
+      "y": 2,
+      "prerequisites": [
+        "TYM_rebuilding_a_nation"
+      ],
+      "mutually_exclusive": [
+        "TYM_rebuilding_the_communes"
+      ],
+      "available": {},
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "industry",
+          "bonus": 1,
+          "uses": 1,
+          "category": "industry"
+        },
+        "TNO_improve_industrial_equipment_med": true,
+        "TNO_improve_poverty_low": true,
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.005
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_the_military_industrial_complex",
+      "name": "Военно-промышленный комплекс",
+      "desc": "Поскольку мы так долго оборонялись от немцев, у нас было очень мало возможностей сосредоточиться на военном развитии. Как учил нас Маркс, рабочим жизненно необходимо иметь оружие, и нигде беззащитность не является более опасной, чем в России, где нас со всех сторон окружают кровожадные бандиты. Пока мы находимся в меньшей опасности, чем когда продолжались бомбардировки, наращивание наших вооруженных сил жизненно важно.\n\nС возобновлением работы наших заводов, нет лучшего времени, чтобы полностью посвятить наши ресурсы военному развитию. Постоянный поток оружия и снарядов обеспечит государству рабочих его безопасность еще на какое-то время.",
+      "icon": "GFX_focus_RUS_industry_for_the_defence_of_socialism",
+      "cost_turns": 1,
+      "x": 13,
+      "y": 3,
+      "prerequisites": [
+        "TYM_rebuilding_the_factories"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "random_owned_controlled_state": [
+          {
+            "add_building_construction": {
+              "type": "barracks",
+              "level": 1,
+              "instant_build": true
+            },
+            "add_extra_state_shared_building_slots": 1
+          },
+          {
+            "add_building_construction": {
+              "type": "barracks",
+              "level": 1,
+              "instant_build": true
+            },
+            "add_extra_state_shared_building_slots": 1
+          }
+        ],
+        "set_temp_variable": [
+          {
+            "temp_econ_GDP_boost_flat": 0.06
+          },
+          {
+            "temp_econ_spending_amount": 0.01
+          }
+        ],
+        "econ_GDP_boost_once_flat": true,
+        "army_funding_minimal_increase_low": true,
+        "army_funding_maximal_increase_low": true,
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_armored_production",
+      "name": "Производство бронетехники",
+      "desc": "Военное производство продолжает расти по мере того, как все больше и больше наших заводов вновь открываются. Хотя это хорошая новость, мы не можем ограничиться тем, чтобы просто сравняться с нашими врагами в производстве. Мы должны превзойти их, создав новое и лучшее оружие, чтобы полностью сокрушить их на поле боя. Так распорядился председатель Каганович.\n\nТюмень примет только самое лучшее оружие войны, а что может быть прекраснее примера современной военной мощи, чем бронетехника? Дешевый, эффективный и хорошо защищенный новый бронетанковый кулак Тюмени станет тем авангардом, который нам нужен для распространения коммунистической идеи по всей России.",
+      "icon": "GFX_focus_generic_industry_tanks_green",
+      "cost_turns": 1,
+      "x": 13,
+      "y": 4,
+      "prerequisites": [
+        "TYM_the_military_industrial_complex"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "TYM_armored_production_idea",
+          "days": 720
+        }
+      }
+    },
+    {
+      "id": "TYM_civil_infrastructure",
+      "name": "Гражданская инфраструктура",
+      "desc": "Наша долгая борьба с беспощадными бомбардировками Люфтваффе нанесла серьезный ущерб гражданскому обществу Тюмени. Нормальная жизнь была серьезно нарушена этими условиями; дома, школы и медицинские учреждения понесли серьезный ущерб. Нет более важного ресурса для нации, чем ее народ, и мало что можно сделать, когда общество находится в таком плачевном состоянии.\n\nХотя председатель Каганович предпочел бы сосредоточиться на военных начинаниях, он неохотно согласился обратить внимание Тюмени на восстановление сельского хозяйства и условий жизни гражданского населения. Как только ситуация вернется к статус-кво, может начаться настоящая реконструкция.",
+      "icon": "GFX_focus_generic_modernize_the_infrastructures",
+      "cost_turns": 1,
+      "x": 10,
+      "y": 3,
+      "prerequisites": [
+        "TYM_rebuilding_the_factories"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "random_owned_controlled_state": [
+          {
+            "add_extra_state_shared_building_slots": 2,
+            "add_building_construction": {
+              "type": "infrastructure",
+              "level": 2,
+              "instant_build": true
+            },
+            "add_resource": {
+              "type": "power",
+              "amount": 2
+            },
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.015
+            },
+            "econ_state_value_change_multiply": true
+          },
+          {
+            "add_extra_state_shared_building_slots": 1,
+            "add_building_construction": [
+              {
+                "type": "infrastructure",
+                "level": 1,
+                "instant_build": true
+              },
+              {
+                "type": "offices",
+                "level": 1,
+                "instant_build": true
+              }
+            ],
+            "add_resource": {
+              "type": "power",
+              "amount": 1
+            },
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.025
+            },
+            "econ_state_value_change_multiply": true
+          }
+        ],
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.005
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_swords_to_plowshares",
+      "name": "Swords to Plowshares",
+      "desc": "Значительную часть военной техники Тюмени составляет запас времен Великой Отечественной войны. После многих лет бомбежек и беспорядков он, к сожалению, устарел и в большинстве лишь частично функционирует из-за отсутствия технического обслуживания. Необходимость замены всего этого вооружения значительно затрудняет наше военное развитие.\n\nТо, что это снаряжение больше не пригодно для боя, не значит, что оно полностью бесполезно. Проявив изобретательность, Коммунистическая партия решила перепрофилировать старую военную технику для сельского хозяйства, еще одной насущной потребности государства. Каждый грузовик, который служит этой цели, экономит правительству ресурсы, которые оно использовало бы для специализированных сельскохозяйственных инструментов. Это всего лишь еще одно напоминание о том, что наше руководство обладает творческим потенциалом и стремлением умело преодолевать любые трудности!",
+      "icon": "GFX_focus_generic_agriculture_situation",
+      "cost_turns": 1,
+      "x": 11,
+      "y": 4,
+      "prerequisites": [
+        "TYM_civil_infrastructure"
+      ],
+      "mutually_exclusive": [],
+      "available": {
+        "has_equipment": [
+          {
+            "infantry_equipment": {
+              "_op": ">",
+              "value": 149
+            }
+          },
+          {
+            "support_equipment": {
+              "_op": ">",
+              "value": 49
+            }
+          }
+        ]
+      },
+      "completion_reward": {
+        "add_equipment_to_stockpile": [
+          {
+            "type": "support_equipment",
+            "amount": -50,
+            "producer": "TYM"
+          },
+          {
+            "type": "infantry_equipment",
+            "amount": -150,
+            "producer": "TYM"
+          }
+        ],
+        "TNO_improve_agriculture_med": true
+      }
+    },
+    {
+      "id": "TYM_all_roads_lead_to_siberia",
+      "name": "Все дороги ведут в Сибирь",
+      "desc": "Ревизионистская бухаринская администрация проводила широкомасштабную индустриализацию сибирских территорий Советского Союза. К сожалению, до земель, контролируемых нами сейчас, это не дошло. Западная Сибирь сравнительно слабо развита, с инфраструктурой, не сравнимой с регионами дальше на востоке. Если ничего не изменится, мы обречены отстать, и государство рабочих останется на краю истории.\n\nКоммунистическая партия не может знать поражений, и мы будем бороться за исправление ошибок Бухарина до последнего вздоха. Западная Сибирь сегодня, может быть, и захолустье, но если триумф Октябрьской революции чему-то нас и научил, так это тому, что судьбы людей могут измениться молниеносно за короткий промежуток времени. Под верным руководством авангардных масс даже пустошь может стать центром мира и процветания, если у нее будет достаточно времени. Возрождение Западной Сибири произойдет гораздо быстрее.",
+      "icon": "GFX_focus_NOV_siberian_roads",
+      "cost_turns": 1,
+      "x": 9,
+      "y": 4,
+      "prerequisites": [
+        "TYM_civil_infrastructure"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "TYM_siberian_roadways",
+          "days": 365
+        }
+      }
+    },
+    {
+      "id": "TYM_seamless_industrialization",
+      "name": "Seamless Industrialization",
+      "desc": "Индустриализация - это первый и самый необходимый шаг к величию любой нации. Для того чтобы обеспечить нашу гегемонию над Россией, быстрое наращивание промышленного потенциала идеально, но у всего есть цена: перенаселенные города, нехватка продовольствия, ущерб окружающей среде и снижение уровня жизни исторически поражали индустриализирующиеся экономики. \n\nЗСНР кардинально отличается от других экономик тем, что ее возглавляют наиболее сознательные, авангардные рабочие, которые заботятся о широком слое населения. Мы можем без эксплуатации капиталистов провести более справедливую индустриализацию, которая не принесет в жертву благосостояние людей на алтарь роста. Полный вперед! Под руководством председателя вероятность поражения несущественна.",
+      "icon": "GFX_focus_generic_standardizing_heavy_industry",
+      "cost_turns": 1,
+      "x": 10,
+      "y": 5,
+      "prerequisites": [
+        "TYM_swords_to_plowshares",
+        "TYM_all_roads_lead_to_siberia"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "set_temp_variable": [
+          {
+            "gdp_growth_temp": 2
+          },
+          {
+            "inflation_temp": 1.5
+          },
+          {
+            "temp_econ_spending_amount": 0.005
+          }
+        ],
+        "econ_gdp_growth_change": true,
+        "econ_inflation_change": true,
+        "TNO_improve_max_workhours_policy_effectiveness_monthly_low": true,
+        "TNO_improve_regulations_policy_effectiveness_monthly_low": true,
+        "econ_spend_money_once_effect_raw_money": true,
+        "TNO_improve_poverty_low": true
+      }
+    },
+    {
+      "id": "TYM_red_storm",
+      "name": "Красный шторм",
+      "desc": "После возвращения Западной Сибири ЗСНР смогла взять передышку. По сравнению с нашими войнами против предательской хунты Свердловска и фашистскими психами из Омска, этот период относительного мира кажется даже слишком хорошим, чтобы быть правдой. Но давайте не будем заблуждаться: это всего лишь короткая передышка от войн, которые мы вели в прошлом, и тех, с которыми мы столкнемся в будущем. Мы не вне шторма, а в его эпицентре.\n\nЧто бы мы ни делали, буря войны будет наступать, и мы должны быть готовы к худшему. В ближайшие дни наш промышленный сектор должен быть прочным и высокопроизводительным, нам предстоит еще много работы, но когда придет время войны, реакционеры, угрожающие России, узнают, что эта буря - это ярость рабочих, которая уничтожит их.",
+      "icon": "GFX_focus_generic_industrial_progress_red",
+      "cost_turns": 1,
+      "x": 13,
+      "y": 5,
+      "prerequisites": [
+        "TYM_armored_production"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_timed_idea": {
+          "idea": "TYM_red_storm_rising",
+          "days": 720
+        },
+        "TNO_improve_unemployment_policy_effectiveness_med": true
+      }
+    },
+    {
+      "id": "TYM_the_five_year_plan",
+      "name": "Пятилетний план",
+      "desc": "Настойчиво проводимая Николаем Бухариным новая экономическая политика была успешна в отдельных частях Союза, но она не смогла поднять большинство регионов страны, что привело к краху в противостоянии фашистам. Сейчас, нам как никогда нужно подняться, и сделать это в крайне сжатые сроки. Следование старым советским руководящим принципам промышленного развития в нынешнее время, когда ЗСНР все еще крайне уязвима, было бы самоубийством.\n\nНекогда отвергнутый пятилетний план, часть политического плана большевистской оппозиции, является единственным решением наших промышленных проблем. Огромная государственная мобилизация всех наших производительных сил на развитие, предложенная Иосифом Сталиным, спасла бы Советский Союз в 1941 году, теперь же, этот план вернется и воплотится на пути обьединения России.",
+      "icon": "GFX_focus_generic_city_planning",
+      "cost_turns": 1,
+      "x": 14,
+      "y": 6,
+      "prerequisites": [
+        "TYM_seamless_industrialization",
+        "TYM_wives_for_soldiers",
+        "TYM_red_storm",
+        "TYM_breakup_the_unit"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "custom_effect_tooltip": "TYM_the_five_year_plan_tt",
+        "set_country_flag": "TYM_better_five_year_plan_start",
+        "add_political_power": 60
+      }
+    },
+    {
+      "id": "TYM_rebuilding_the_communes",
+      "name": "Восстановить коммуны",
+      "desc": "Реструктуризация инфраструктуры ЗСНР для ведения войны потребует неустанных усилий всего населения. Быстрая индустриализация в стиле планов Иосифа Сталина, безусловно, улучшила бы ситуацию на этом фронте, но наш маленький кусочек СССР может быть не готов к таким радикальным изменениям. Реформа сельского хозяйства и поддержка гражданского населения необходимы для того, чтобы дальнейшее развитие не привело к негативным последствиям и обнищанию населения.\n\nНовые, более крупные колхозы! Широкое распространение сельскохозяйственной техники! Массовое жилищное строительство! Коммунистическая партия будет отвечать всем требованиям народа и даже больше, и выгоды для промышленности в будущем будут действительно плодотворными.",
+      "icon": "GFX_focus_generic_public_housing",
+      "cost_turns": 1,
+      "x": 16,
+      "y": 2,
+      "prerequisites": [
+        "TYM_rebuilding_a_nation"
+      ],
+      "mutually_exclusive": [
+        "TYM_rebuilding_the_factories"
+      ],
+      "available": {},
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "construction_tech",
+          "bonus": 1,
+          "uses": 1,
+          "category": "construction_tech"
+        },
+        "TNO_improve_poverty_med": true,
+        "random_owned_controlled_state": [
+          {
+            "add_building_construction": {
+              "type": "schools",
+              "level": 1,
+              "instant_build": true
+            },
+            "add_resource": {
+              "type": "power",
+              "amount": 1
+            },
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.02
+            },
+            "econ_state_value_change_multiply": true
+          },
+          {
+            "add_building_construction": {
+              "type": "hospitals",
+              "level": 1,
+              "instant_build": true
+            },
+            "add_resource": {
+              "type": "power",
+              "amount": 1
+            },
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.02
+            },
+            "econ_state_value_change_multiply": true
+          }
+        ],
+        "TNO_improve_healthcare_med": true,
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.005
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_repopulation_programs",
+      "name": "Программа возрождения",
+      "desc": "История не пощадила русских. Война и нужда оставили огромную дыру в демографической структуре, где должны быть миллионы и миллионы людей. В столь ужасных перспективах, было ли бы логично обвинять страдающих женщин страны в том, что они не хотят рожать детей в таком мире? Теперь, когда все стало лучше, мы столкнулись с другой проблемой: нам просто не хватает людей для наших будущих экономических целей.\n\nМы прежде всего партия труда, и нет более благородного труда, чем материнство. Субсидии семьям и матерям-одиночкам, награды тем \"матерям-героиням\", которые мужественно воспитывают 10 и более детей, и контроль над абортами вернут нас туда, где мы должны быть с точки зрения численности населения.",
+      "icon": "GFX_focus_YUN_every_woman_a_worker",
+      "cost_turns": 1,
+      "x": 15,
+      "y": 3,
+      "prerequisites": [
+        "TYM_rebuilding_the_communes"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_ideas": "TYM_repopulation_program",
+        "TNO_worsen_gender_rights_policy_effectiveness_monthly_low": true,
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.002
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_family_building",
+      "name": "Family Building",
+      "desc": "Покинутый Бухариным в трудную минуту, русский народ, в некотором смысле, нация сирота. Однако есть также очень много настоящих сирот, тех, кто потерял своих родителей из-за разрушительных действий войны, голода или просто оказался брошен. К сожалению, детские дома Тюмени и многих других наших городов переполнены такими детьми. Теперь, когда у нас есть время и ресурсы, чтобы справиться с этой отвратительной ситуацией, мы должны это сделать, иначе мы будем не то что не коммунистами, а даже не людьми.\n\nЗСНР создаст систему усыновления, которая станет гордостью мира, объединяя семьи без детей и детей без семей. Скоро наши сиротские приюты опустеют, и мы сделаем первый шаг к преодолению травмы, нанесенной нашим самым уязвимым людям этой долгой войной.",
+      "icon": "GFX_focus_generic_family_building",
+      "cost_turns": 1,
+      "x": 15,
+      "y": 4,
+      "prerequisites": [
+        "TYM_repopulation_programs"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "country_event": {
+          "id": "TYM.15",
+          "days": 1
+        }
+      }
+    },
+    {
+      "id": "TYM_wives_for_soldiers",
+      "name": "Жены для солдат",
+      "desc": "Наши меры по увеличению количества населения увенчались средним успехом, но мы можем пойти ещё дальше. Зачем ограничиваться лишь материальной поддержкой семей, когда государству в силах вмешаться напрямую в область демографии? На данный момент мы не можем ждать, чтобы кто-то своим ходом нашёл свою пару и создал семейную ячейку.\n\nНовая госпрограмма автоматически найдёт для одинокого гражданина его потенциального партнёра, а для гражданок будет выдан увеличенный паёк при условии их добровольного участия. Однако все прелести брака зарегистрированные в программе мужчины узнают только после присоединения к действующей армии. Партия надеется, что с разрушением всех барьеров, стоящих между потенциальными партнёрами, образуются тысячи семей с несколькими детьми в ближайшем будущем.",
+      "icon": "GFX_focus_generic_wedding",
+      "cost_turns": 1,
+      "x": 15,
+      "y": 5,
+      "prerequisites": [
+        "TYM_family_building"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_war_support": 0.07,
+        "add_manpower": 1250,
+        "if": [
+          {
+            "limit": {
+              "has_idea": "tno_gender_rights_women_in_the_workplace"
+            },
+            "TNO_worsen_gender_rights_policy_effectiveness_high": true
+          },
+          {
+            "limit": {
+              "has_idea": "tno_gender_rights_traditional_roles"
+            },
+            "TNO_improve_gender_rights_policy_effectiveness_med": true
+          },
+          {
+            "limit": {
+              "NOT": {
+                "has_idea": [
+                  "TYM_repopulation_program",
+                  "TYM_repopulation_program_2"
+                ]
+              }
+            },
+            "add_ideas": "TYM_repopulation_program"
+          },
+          {
+            "limit": {
+              "has_idea": "TYM_repopulation_program"
+            },
+            "swap_ideas": {
+              "remove_idea": "TYM_repopulation_program",
+              "add_idea": "TYM_repopulation_program_2"
+            }
+          },
+          {
+            "limit": {
+              "has_idea": "TYM_repopulation_program_2"
+            },
+            "swap_ideas": {
+              "remove_idea": "TYM_repopulation_program_2",
+              "add_idea": "TYM_repopulation_program_3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "TYM_enforced_farming",
+      "name": "Enforced Farming",
+      "desc": "Бурное промышленное развитие вызывает соответствующее увеличение численности населения, которое, в свою очередь, требует значительно большего количества продовольствия. Это понятно, но есть одна проблема: Западная Сибирь далека от того, чтобы быть житницей России. Сельскохозяйственное производство никогда не было специализацией этого региона, но трудно представить себе будущий путь для ЗСНР, если не уделить этому внимание.\n\nМы должны использовать каждый дюйм земли, которой владеем. Квоты на зерно будут повышены. Оставлять свои поля без дела будет запрещено. Крестьянство может протестовать, но в конце концов оно получит соответствующую компенсацию. Задача прокормить страну - одна из самых благородных.",
+      "icon": "GFX_focus_RUS_siberian_farms",
+      "cost_turns": 1,
+      "x": 18,
+      "y": 3,
+      "prerequisites": [
+        "TYM_rebuilding_the_communes"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_war_support": -0.025,
+        "TNO_improve_agriculture_med": true,
+        "set_temp_variable": [
+          {
+            "gdp_growth_temp": 0.75
+          },
+          {
+            "inflation_temp": 0.5
+          },
+          {
+            "temp_econ_GDP_boost_flat": 0.02
+          }
+        ],
+        "econ_gdp_growth_change": true,
+        "econ_inflation_change": true,
+        "econ_GDP_boost_once_flat": true
+      }
+    },
+    {
+      "id": "TYM_land_redistribution",
+      "name": "Перераспределение земли",
+      "desc": "Есть ряд крестьян, готовых внести свой вклад в наше зарождающееся сельскохозяйственное развитие, но они не могут работать без земли. Неравномерное распределение сельских земель препятствует достижению наших целей и ведет к большим страданиям безземельного крестьянства. Как и во многих социальных проблемах, ответственность за исправление ситуации лежит на Коммунистической партии.\n\nКоллективные хозяйства, политика Сталина и части большевистской оппозиции, подавленная правительством Бухарина, является ключом к преодолению наших бед. Государство будет управлять хозяйствами, на которых работают все крестьяне в районе, что позволит модернизировать и эффективно управлять ими в широких перспективах. Безземельные крестьяне познают справедливость, и в города потечет больше продовольствия, чем когда-либо прежде.",
+      "icon": "GFX_focus_RUS_the_soviet_land_surveys",
+      "cost_turns": 1,
+      "x": 17,
+      "y": 4,
+      "prerequisites": [
+        "TYM_enforced_farming"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "random_owned_controlled_state": [
+          {
+            "add_extra_state_shared_building_slots": 3,
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.03
+            },
+            "econ_state_value_change_multiply": true
+          },
+          {
+            "add_extra_state_shared_building_slots": 2,
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.02
+            },
+            "econ_state_value_change_multiply": true
+          },
+          {
+            "add_extra_state_shared_building_slots": 2,
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.02
+            },
+            "econ_state_value_change_multiply": true
+          }
+        ],
+        "TNO_improve_poverty_med": true,
+        "set_temp_variable": [
+          {
+            "gdp_growth_temp": 0.1
+          },
+          {
+            "temp_econ_spending_amount": 0.001
+          }
+        ],
+        "econ_gdp_growth_change": true,
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_communal_loyalty",
+      "name": "Communal Loyalty",
+      "desc": "Государство может направить творческие силы своих граждан на потрясающие подвиги. Однако оно не всесильно. В то время как внимание правительства сосредоточено на тяжелой промышленности и коллективном сельском хозяйстве, оно не сможет удовлетворить все потребности коммун. В такие времена люди должны взять дело в свои руки.\n\nПропаганда, поощряющая самодостаточность и сотрудничество между гражданами, является первым шагом к формированию духа революционного самопожертвования. Людей нужно учить тому, что каждый вносит свой вклад в коллективное благополучие, будь то строительство колодцев, обучение своих соотечественников грамоте, организация труда или любой другой ряд задач. Социалистическое государство не может работать, пока народ не научится работать сообща во всем.",
+      "icon": "GFX_focus_generic_settle_new_lands",
+      "cost_turns": 1,
+      "x": 19,
+      "y": 4,
+      "prerequisites": [
+        "TYM_enforced_farming"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_stability": 0.1,
+        "add_tech_bonus": {
+          "name": "construction_tech",
+          "bonus": 0.5,
+          "uses": 1,
+          "category": "construction_tech"
+        },
+        "random_owned_controlled_state": [
+          {
+            "add_building_construction": {
+              "type": "offices",
+              "level": 1,
+              "instant_build": true
+            },
+            "add_extra_state_shared_building_slots": 1,
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.01
+            },
+            "econ_state_value_change_multiply": true
+          },
+          {
+            "add_building_construction": {
+              "type": "schools",
+              "level": 1,
+              "instant_build": true
+            },
+            "add_extra_state_shared_building_slots": 1,
+            "set_temp_variable": {
+              "state_value_multiplier_temp": 1.01
+            },
+            "econ_state_value_change_multiply": true
+          }
+        ],
+        "TNO_improve_security_policy_effectiveness_med": true,
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.002
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_breakup_the_unit",
+      "name": "Единая семья",
+      "desc": "Марксистская теория говорит нам, что нуклеарная семья исчезнет с упразднением частной собственности по мере того, как ее место займут общественные институты. Хотя в прошлом мы предпринимали усилия по реформированию семейных отношений, всегда есть место для дальнейшей революции. Следующей целью Коммунистической партии должна стать сама семейная ячейка.\n\nПередача ответственности за воспитание детей всей общине даст родителям свободу для работы или отдыха. Ценности коллективной солидарности легче привить, когда разрушаются семейные барьеры, разделяющие детей. Учитывая размеры и ресурсы нашей армии, возможно, было бы неплохо дать ей какую-то роль в этих новых яслях.",
+      "icon": "GFX_focus_generic_break_up_families",
+      "cost_turns": 1,
+      "x": 18,
+      "y": 5,
+      "prerequisites": [
+        "TYM_land_redistribution",
+        "TYM_communal_loyalty"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "country_event": {
+          "id": "TYM.16",
+          "days": 1
+        },
+        "TNO_improve_education_policy_effectiveness_monthly_low": true
+      }
+    },
+    {
+      "id": "TYM_rebuilding_an_army",
+      "name": "Восстановить армию",
+      "desc": "К сожалению, военная история Западно-Сибирской Народной Республики не имела больших успехов. Республика, столкнувшись с предательством изнутри, развалилась еще до того, как смогла начать восстановление остальной России. Теперь, когда мы дошли до Тюмени и ее окрестностей, ясно, что нам придется пересмотреть нашу тактику.\n\nВооруженные силы являются, возможно, самым важным компонентом революции, и решение нашей военной проблемы также отражает то, что необходимо для обеспечения возрождения Советского государства: индустриализация и централизация. Красная Армия будет перестроена в силу, способную бросить вызов сильнейшим мира сего, и которая вскоре восстановит пролетарскую власть во всей стране.",
+      "icon": "GFX_focus_YUN_new_officers",
+      "cost_turns": 1,
+      "x": 24,
+      "y": 1,
+      "prerequisites": [
+        "TYM_the_clock_breaks"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "random_owned_controlled_state": {
+          "add_building_construction": {
+            "type": "barracks",
+            "level": 1,
+            "instant_build": true
+          },
+          "add_extra_state_shared_building_slots": 1
+        },
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.01
+        },
+        "econ_spend_money_once_effect_raw_money": true,
+        "TNO_improve_training_policy_effectiveness_monthly_low": true,
+        "TNO_improve_conscription_policy_effectiveness_monthly_low": true,
+        "army_experience": 15,
+        "hidden_effect": {
+          "if": {
+            "limit": {
+              "has_dynamic_modifier": {
+                "modifier": "TYM_survival_programs"
+              }
+            },
+            "remove_dynamic_modifier": {
+              "modifier": "TYM_survival_programs"
+            }
+          }
+        },
+        "country_event": {
+          "id": "TYM.17",
+          "days": 1
+        }
+      }
+    },
+    {
+      "id": "TYM_the_red_armor",
+      "name": "Красная броня",
+      "desc": "Старый советский союз, ослабленный ревизионистской некомпетентностью, был совершенно не готов к нападению вооруженной по последнему слову армии фашистов. Некоторые из самых унизительных поражений были нанесены танковыми бригадами Рейха, которые захватили большую часть страны с разрушительной силой.\n\nГотовясь к возвращению Западно-Сибирской Народной Республики, мы можем извлечь один урок из опыта нашего врага: современная бронетехника - это чрезвычайно мощное оружие в умелых руках. Механизация Красной армии превратит ее в силу, способную быстро расширять нашу территорию. Решительные действия будут иметь решающее значение в этой войне, и сосредоточение внимания на танках позволяет нам сосредоточиться именно на этом.",
+      "icon": "GFX_focus_generic_socialist_tank_1",
+      "cost_turns": 1,
+      "x": 22,
+      "y": 2,
+      "prerequisites": [
+        "TYM_rebuilding_an_army"
+      ],
+      "mutually_exclusive": [
+        "TYM_the_red_army"
+      ],
+      "available": {},
+      "completion_reward": {
+        "country_event": {
+          "id": "TYM.18",
+          "days": 1
+        },
+        "if": {
+          "limit": {
+            "has_dlc": "No Step Back"
+          },
+          "add_equipment_to_stockpile": [
+            {
+              "type": "MBT_chassis_0",
+              "amount": 150,
+              "producer": "TYM"
+            },
+            {
+              "type": "IFV_chassis_1",
+              "amount": 200,
+              "producer": "TYM"
+            }
+          ]
+        },
+        "else": {
+          "add_equipment_to_stockpile": [
+            {
+              "type": "MBT_equipment_0",
+              "amount": 150,
+              "producer": "TYM"
+            },
+            {
+              "type": "IFV_equipment_1",
+              "amount": 200,
+              "producer": "TYM"
+            }
+          ]
+        },
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.05
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_revisit_the_doctrines",
+      "name": "Пересмотреть доктрины",
+      "desc": "Наши критики часто обвиняют нас в чрезмерной приверженности доктрине. В то время как приверженность теориям Маркса в высшей степени необходима, война - другое дело. Наша реконструкция армии для включения в нее бронетехники идет полным ходом, но наша тактика не соответствует меняющейся ситуации.\n\nТанк - мощный инструмент, но нам понадобится стратегия, чтобы не терять их понапрасну под огнем противника. Мы слишком хорошо видели во время Великой Отечественной войны, как немцы очень эффективно использовали быстрое развертывание танков, чтобы сокрушить и вывести нас из строя, прежде чем мы даже успели отреагировать. Возможно, нам нужен свой собственный \"блицкриг\"...",
+      "icon": "GFX_focus_generic_communist_ensure_loyalty",
+      "cost_turns": 1,
+      "x": 21,
+      "y": 3,
+      "prerequisites": [
+        "TYM_the_red_armor"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_doctrine_cost_reduction": {
+          "name": "land_doc_bonus",
+          "cost_reduction": 0.75,
+          "uses": 2,
+          "category": "land_doctrine"
+        },
+        "TNO_improve_training_policy_effectiveness_low": true,
+        "TNO_improve_conscription_policy_effectiveness_low": true
+      }
+    },
+    {
+      "id": "TYM_study_modern_designs",
+      "name": "Изучить современное проектирование",
+      "desc": "Длительная изоляция России отрезала ее от последних военных событий, что вполне понятно, учитывая общее состояние хаоса. У нас не было ни возможности, ни капитала, чтобы начать совершенствовать нашу танковую технику. Однако остальной мир добился значительных улучшений в этом отношении.\n\nК счастью для нас, нам не нужно начинать нашу исследовательскую программу полностью с нуля. Трофейные немецкие и тайно подаренные американские и японские танки стоят брошенными в наших арсеналах с 1950-х годов. Это только вопрос их обратного проектирования, прежде чем у нас будут собственные проекты, которые мы сможем продемонстрировать.",
+      "icon": "GFX_focus_generic_tour_the_panzer_fleet",
+      "cost_turns": 1,
+      "x": 23,
+      "y": 3,
+      "prerequisites": [
+        "TYM_the_red_armor"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_tech_bonus": {
+          "name": "armor",
+          "bonus": 1,
+          "uses": 1,
+          "category": "armor"
+        }
+      }
+    },
+    {
+      "id": "TYM_homebrew_armored_power",
+      "name": "Наш бронированный кулак",
+      "desc": "Мы составили планы, заложили теоретические основы, внимательно изучили результаты передовой зарубежной инженерии. Мы наладили производственные мощности, необходимые для современной армии после многих лет непрерывного труда. У наших рабочих есть необходимое оборудование, и они полны рвения служить пролетарскому государству.\n\nУ нас есть все необходимое, чтобы начать нашу танковую программу. Наши заводы готовы произвести столько, сколько нам нужно, чтобы полностью освободить Западную Сибирь от предателей, которые так долго преследовали ее. Осталось только начать.",
+      "icon": "GFX_focus_generic_military_engineering",
+      "cost_turns": 1,
+      "x": 22,
+      "y": 4,
+      "prerequisites": [
+        "TYM_study_modern_designs",
+        "TYM_revisit_the_doctrines"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_ideas": "TYM_homebrew_tanks",
+        "custom_effect_tooltip": "TYM_tanks_tt",
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.05
+        },
+        "econ_spend_money_once_effect_raw_money": true,
+        "hidden_effect": {
+          "random_owned_controlled_state": {
+            "create_unit": {
+              "division": "division_template = \"Tankovaya Divisiya\" start_experience_factor = 0.5 start_equipment_factor = 0.90",
+              "owner": "TYM"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "TYM_our_own_designs",
+      "name": "Наш собственный дизайн",
+      "desc": "Хотя мы добились замечательного прогресса в наших программах развития брони, реальность такова, что Тюмень - все еще слаборазвитое государство, и наши конструкторы - всего лишь люди. С новыми конструкциями танков возник ряд неотложных проблем, которые необходимо решить, чтобы они были эффективными.\n\nЭта техника была сделана под большим влиянием иностранных моделей, которые не обязательно подходят для географических и промышленных условий России. Нам необходимо изменить их в соответствии с нашими потребностями и создать для этого систематический метод изучения и сбора данных.",
+      "icon": "GFX_focus_TYM_our_own_designs",
+      "cost_turns": 1,
+      "x": 23,
+      "y": 5,
+      "prerequisites": [
+        "TYM_homebrew_armored_power"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "TYM_homebrew_tanks",
+          "add_idea": "TYM_homebrew_tanks_2"
+        },
+        "TNO_improve_training_policy_effectiveness_low": true
+      }
+    },
+    {
+      "id": "TYM_study_the_performance",
+      "name": "Изучить эффективность",
+      "desc": "К этому моменту мы добились больших успехов в проектировании танков и их теоретическом применении. Теперь, когда мы вступили в стадию строительства, нам необходимо перейти к практическим областям. Поэтому крайне важно точно оценивать их способности в этой области.\n\nЧто может быть лучше для исследования характеристик наших танков, чем проведение боевых испытаний? Наблюдение за тем, как они двигаются и сражаются в контролируемой среде, даст нашим инженерам крайне необходимые данные об их способностях и позволит нам вносить любые изменения, которые потребуются, основываясь на четких цифрах.",
+      "icon": "GFX_focus_generic_study_history",
+      "cost_turns": 1,
+      "x": 23,
+      "y": 6,
+      "prerequisites": [
+        "TYM_our_own_designs"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "country_event": {
+          "id": "TYM.19",
+          "days": 1
+        },
+        "TNO_improve_training_policy_effectiveness_med": true
+      }
+    },
+    {
+      "id": "TYM_our_own_stratagem",
+      "name": "Наши собственные стратегии",
+      "desc": "Одной из величайших трагедий падения Советского Союза было развеяние величайших талантов России на ветру. Генерал Михаил Тухачевский, известный как \"Красный Наполеон\" за его вклад в двадцатые и тридцатые годы, это всего лишь один из них. Перед его предполагаемой смертью после крушения ЗРРФ, он внес большие новшества в область военной доктрины, с его \"теорией глубокой операции\", которая акцентируется на движении множества формирований для достижения победы через все поля боя, уделяя этому особое внимание.\n\nВ битве, где ресурсы ограничены и исход сражения лежит на острие ножа, превосходная тактика становится жизненно важна. Только перенацеливание труда великих Советских людей поможет нам достичь победы.",
+      "icon": "GFX_focus_generic_adapting_their_strategies",
+      "cost_turns": 1,
+      "x": 21,
+      "y": 5,
+      "prerequisites": [
+        "TYM_homebrew_armored_power"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "add_doctrine_cost_reduction": {
+          "name": "land_doc_bonus",
+          "cost_reduction": 0.75,
+          "uses": 1,
+          "category": "land_doctrine"
+        },
+        "country_event": {
+          "id": "TYM.20",
+          "days": 1
+        },
+        "TNO_improve_military_supervision_policy_effectiveness_low": true
+      }
+    },
+    {
+      "id": "TYM_study_the_results",
+      "name": "Изучить результаты",
+      "desc": "Теперь, когда мы провели закрытые испытания, следующий шаг для нашей расцветающей танковой программы это испытания в боевых условиях. В бою, события происходят так что их нельзя предсказать только лишь системами наблюдения произведенными в безопасной среде полигона, и танковые бригады будут действовать резко по другому в реальном бою.\n\nК лучшему это или к худшему, есть множество возможностей вступить в бой в раздробленной России. Бандиты изводили сёла годами, охотясь на крестьян и вызывая административные проблемы. Отправка наших танков против них обеспечит относительно низкий риск потерь, тем более мы давно должны были начать освобождение людей от давних угнетателей.",
+      "icon": "GFX_focus_generic_study_logistics",
+      "cost_turns": 1,
+      "x": 21,
+      "y": 6,
+      "prerequisites": [
+        "TYM_our_own_stratagem"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "country_event": {
+          "id": "TYM.21",
+          "days": 1
+        },
+        "TNO_improve_military_supervision_policy_effectiveness_med": true
+      }
+    },
+    {
+      "id": "TYM_the_red_army",
+      "name": "Красная Армия",
+      "desc": "Сердце любой армии, это не сложно устроенное оружие или возвышенные стратегии, это человек. Со времен Великой Отечественной войны, русские силы выстояли против гораздо более современного Вермахта, просто будучи хорошо обученными и дисциплинированными, даже при нехватке ресурсов.\n\nТанки имели своё место, но уделять слишком много внимания новым технологиям ставя их выше сплочённости и эффективности наших солдат, расходуя ресурсы, которые мы не можем позволить себе тратить, явно не стоит. Армия, сосредоточенная на пехоте, с профессиональными, хорошо экипированными солдатами и техникой в роли поддержки, это путь к новому Советскому Союзу.",
+      "icon": "GFX_focus_generic_socialist_recruitment",
+      "cost_turns": 1,
+      "x": 26,
+      "y": 2,
+      "prerequisites": [
+        "TYM_rebuilding_an_army"
+      ],
+      "mutually_exclusive": [
+        "TYM_the_red_armor"
+      ],
+      "available": {},
+      "completion_reward": {
+        "country_event": {
+          "id": "TYM.22",
+          "days": 1
+        },
+        "add_equipment_to_stockpile": [
+          {
+            "type": "infantry_equipment",
+            "amount": 750,
+            "producer": "TYM"
+          },
+          {
+            "type": "support_equipment",
+            "amount": 250,
+            "producer": "TYM"
+          },
+          {
+            "type": "anti_tank_equipment",
+            "amount": 250,
+            "producer": "TYM"
+          }
+        ],
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.025
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    },
+    {
+      "id": "TYM_be_brave",
+      "name": "Быть храбрыми",
+      "desc": "В условиях, с которыми мы были вынуждены работать, наши солдаты часто недостаточно обучены, имеют плохой моральный дух. Солдаты часто сражаются исключительно за потенциальную зарплату, бросая свои посты при первых признаках опасности. Поскольку мы занимаемся профессионализацией нашей армии, реформирование ее культуры является ключевым моментом.\n\nДостойным преемникам Красной Армии нужно соответствовать ей в сплоченности. Мы создадим чувство братства и патриотизма в наших солдатах как в коллективе. Маркс научил нас, что анархия гипер-индивидуализма - это не способ управлять обществом. Это также путь к катастрофе для любой разумной армии.",
+      "icon": "GFX_focus_TYM_be_brave",
+      "cost_turns": 1,
+      "x": 25,
+      "y": 3,
+      "prerequisites": [
+        "TYM_the_red_army"
+      ],
+      "mutually_exclusive": [
+        "TYM_be_strong"
+      ],
+      "available": {},
+      "completion_reward": {
+        "add_ideas": "TYM_the_red_army_morale",
+        "TNO_improve_training_policy_effectiveness_monthly_low": true
+      }
+    },
+    {
+      "id": "TYM_reform_the_NKVD",
+      "name": "Реформа НКВД",
+      "desc": "Режим Бухарина, скомпрометированный ревизионизмом и оппортунизмом, не желал и не мог должным образом подавить контрреволюционные настроения среди населения. В этом отношении за военными особенно плохо следили, и окончательными последствиями стали низложение самого Бухарина и полный распад Советского Союза.\n\nНовая Красная Армия не повторит таких ошибок. Воссозданный НКВД будет уделять особое внимание военным и обеспечит их политическую лояльность, а также судебное преследование преступлений совершенных солдатами, пока они будут возвращать страну. Мы никогда не должны забывать, что армия обладает одним из величайших контрреволюционных потенциалов, и поэтому мы должны предпринимать шаги, чтобы держать ее под как можно большим партийным контролем.",
+      "icon": "GFX_focus_RUS_nkvd",
+      "cost_turns": 1,
+      "x": 25,
+      "y": 4,
+      "prerequisites": [
+        "TYM_be_brave"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "TNO_improve_security_policy_effectiveness_med": true,
+        "TNO_improve_military_supervision_policy_effectiveness_med": true,
+        "swap_ideas": {
+          "remove_idea": "TYM_the_red_army_morale",
+          "add_idea": "TYM_the_red_army_morale_2"
+        },
+        "country_event": {
+          "id": "TYM.23",
+          "days": 1
+        }
+      }
+    },
+    {
+      "id": "TYM_not_once_step_back",
+      "name": "Ни шагу назад",
+      "desc": "Во время Великой Отечественной войны Советский Союз распался в тот день, когда его солдаты предпочли бежать, а не защищаться до последнего солдата! Они говорили о Родине и ее бесконечной земле... достаточно населения и хлеба до Урала, чтобы всех прокормить, говорили они. Какими глупыми были эти разговоры! Отступление за отступлением, трусливые красноармейцы не разглядели, за что сражаются, прежде чем встали за тысячу километров от Москвы. Теперь мы слишком хорошо видим конец России из Тюмени.\n\nЭто пораженческое и трусливое отношение без сомнения обрекло Союз! Людям не хватало решимости, офицерам не хватало стойкости, а всей армии не хватало мужества! При адекватном руководстве мы увидели бы железную Россию с индустриальной основой из лояльных, непоколебимых людей.\n\nС этой мыслью мы требуем от Красной Армии: ни при каких обстоятельствах не допускать несанкционированные отступления! При Кагановиче мы построим новую Россию!",
+      "icon": "GFX_focus_generic_military_discipline",
+      "cost_turns": 1,
+      "x": 25,
+      "y": 5,
+      "prerequisites": [
+        "TYM_reform_the_NKVD"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "TYM_the_red_army_morale_2",
+          "add_idea": "TYM_the_red_army_morale_3"
+        }
+      }
+    },
+    {
+      "id": "TYM_the_red_tide",
+      "name": "The Red Tide",
+      "desc": "Солдаты Красной Армии не могут быть просто самыми многочисленными, как нацистские собаки хотели изобразить \"азиатские орды\", они также должны быть самыми сильными, самыми рьяными и лучше всего подготовленными во всей Евразии! Это - солдат Красной Армии, чьей обязанностью было и остается защищать свою Родину от ужасов фашизма и опасностей реакционной мысли и раскола!\n\nТакже обязанность каждого здорового россиянина - занять место солдата Красной Армии в военное время. Поскольку он должен точно так же обеспечивать Родину в обмен на то, чем его обеспечивает она. При этом он также должен стать самым упорным, стойким под давлением, олицетворением Советского Человека.\n\nЕсли мы хотим вернуть славу Советского Союза и вернуть неприкосновенность Родины, мы должны начать с наших воинов. Под нашей новой дисциплиной построим новый СССР!",
+      "icon": "GFX_focus_YUN_every_man_a_soldier",
+      "cost_turns": 1,
+      "x": 25,
+      "y": 6,
+      "prerequisites": [
+        "TYM_not_once_step_back"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "TNO_improve_conscription_policy_effectiveness_monthly_med": true,
+        "add_manpower": 2500,
+        "add_doctrine_cost_reduction": {
+          "name": "land_doc_bonus",
+          "cost_reduction": 0.75,
+          "uses": 1,
+          "category": "land_doctrine"
+        }
+      }
+    },
+    {
+      "id": "TYM_be_strong",
+      "name": "Быть смелыми",
+      "desc": "Мы, Русский народ, нас высмеивали и обвиняли в том, что мы слабые, что мы только действуя ордами, можем выступить против наших многочисленных врагов. Мы должны показать миру, в чем сила Русского человека, когда он используется в полную силу. Этим мы начнем нашу новую кампанию, один из простых девизов, но тот, который наполнит наших солдат патриотическим порывом, не похожим ни на один другой: Будь Сильным!\n\nСлишком долго славянский человек был растоптан, его земли разорены, а его народ истреблен. Но это больше скоро перестанет быть правдой. Солдаты наших армий будут образцом силы, образцом добродетели, и поэтому они будут экипированы.\n\nЛучшее оборудование, имеющееся в нашем арсенале или то, что можно купить в расколотой России, которую мы стремимся собрать, будет передано нашим солдатам. В то время как лучшее русское снаряжение не является лучшим в мире, наши солдаты, несомненно, будут олицетворением Нового Советского Человека.",
+      "icon": "GFX_focus_generic_experimental_training_methods",
+      "cost_turns": 1,
+      "x": 27,
+      "y": 3,
+      "prerequisites": [
+        "TYM_the_red_army"
+      ],
+      "mutually_exclusive": [
+        "TYM_be_brave"
+      ],
+      "available": {},
+      "completion_reward": {
+        "add_ideas": "TYM_the_red_army_strength",
+        "TNO_improve_training_policy_effectiveness_med": true
+      }
+    },
+    {
+      "id": "TYM_reform_the_guard",
+      "name": "Реформировать гвардию",
+      "desc": "Гвардия является одним из многих политических эксцессов системы, пережитком старой системы, который сгнил от неспособности, а не приспособился к меняющимся временам. Если он не сможет эволюционировать, мы заставим. Красная Гвардия, формирующая систему парамилитаристских организаций, больше политических, чем боевых, это едва ли боеспособная сила, и в ситуации когда они будут брошены в бой они в лучшем случае будут бороться.\n\nМы должны изменить это путем всесторонней переоценки Красной Гвардии. Хотя политический аспект важен и их вклад в стабильность страны заметен, у нас есть основания полагать что многим из руководителей низшего звена гвардии вообще не нужно быть лидерами, особенно такой уважаемой, пусть и политической организации.\n\nГниющие элементы Гвардии будут ампутированы и безжалостно расследованы, а на эти должности будут поставлены способные люди. Гвардия также будет обучаться более актуальным тактикам, с лучшим снаряжением и регулярной оплатой для повышения лояльности.",
+      "icon": "GFX_focus_generic_new_training_programs",
+      "cost_turns": 1,
+      "x": 27,
+      "y": 4,
+      "prerequisites": [
+        "TYM_be_strong"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "swap_ideas": {
+          "remove_idea": "TYM_the_red_army_strength",
+          "add_idea": "TYM_the_red_army_strength_2"
+        },
+        "TNO_improve_military_supervision_policy_effectiveness_med": true
+      }
+    },
+    {
+      "id": "TYM_russias_finest",
+      "name": "Лучшие в России",
+      "desc": "Естественно, если наша армия хочет вытянуть Россию с края пропасти, она должна быть лучшей в ней. Каждый солдат должен быть образцом Советского Человека, хорошо обученным в физических и умственных упражнениях. Физические требования возрастут, а вероятность ошибок солдат уменьшится. С этого момента каждый солдат служащий будущему Союза должен быть идеальным солдатом: сильным, умным и трудолюбивым.\n\nВокруг нас сидят армии крестьян, наемные армии и армии лжепророков. Ничто из этого не может сравниться с по-настоящему закаленной в боях, дисциплинированной и обученной армии, действующей как винтики гигантской машины которая будет катиться по всей России от Владивостока до Прибалтики.\n\nВ грядущих испытаниях каждый солдат столкнется с трудностями и будет вынужден противостоять жертвам и даже испытать их на себе. Наша работа состоит в том чтобы когда настанет это время, нашим солдатам не составит труда разбить врага и прославить наш Союз!",
+      "icon": "GFX_focus_generic_accept_no_substitutes",
+      "cost_turns": 1,
+      "x": 27,
+      "y": 5,
+      "prerequisites": [
+        "TYM_reform_the_guard"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "TNO_improve_training_policy_effectiveness_high": true,
+        "swap_ideas": {
+          "remove_idea": "TYM_the_red_army_strength_2",
+          "add_idea": "TYM_the_red_army_strength_3"
+        },
+        "country_event": {
+          "id": "TYM.24",
+          "days": 1
+        }
+      }
+    },
+    {
+      "id": "TYM_power_to_the_mighty",
+      "name": "Власть сильным",
+      "desc": "Нашей целью всегда было предоставить России поистине меритократическое общество, в котором власть дает только пустыня. Мы считаем, что лучше всего внедрять этот идеал в нашу армию, где коррумпированные генералы все еще занимают руководящие должности, которые мы так высоко оцениваем. Мы должны продвигать новую модель, основанную на идеалах равенства, братства и повышения только лучших солдат. Мы никогда не сможем стать настоящими наследниками Советского Союза, если этот Союз не только продолжит, но и расширит наследие бывшего.\n\nКаждый солдат будет оцениваться, его решимость измеряться, а его способности отслеживаться. Отслеживая способности наших людей, мы можем убедиться, что для дополнительного обучения офицеров отбираются только сливки армейского состава. Обучение и подготовка наших солдат в сочетании с руководством истинной меритократии станут движущей силой, которая приведет наших солдат в Москву!",
+      "icon": "GFX_focus_generic_red_army",
+      "cost_turns": 1,
+      "x": 27,
+      "y": 6,
+      "prerequisites": [
+        "TYM_russias_finest"
+      ],
+      "mutually_exclusive": [],
+      "available": {},
+      "completion_reward": {
+        "army_experience": 20,
+        "add_doctrine_cost_reduction": {
+          "name": "land_doc_bonus",
+          "cost_reduction": 0.75,
+          "uses": 1,
+          "category": "land_doctrine"
+        }
+      }
+    }
+  ]
+}

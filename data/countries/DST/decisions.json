@@ -1,0 +1,445 @@
+[
+  {
+    "id": "DEN_bop_landstorm",
+    "category_id": "DEN_balance_of_power_category",
+    "name": "DEN_bop_landstorm",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": "DEN_bop_increase_very_high_cost",
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_completed_focus": [
+          "DEN_military_preparations",
+          "DEN_encourage_paramilitary"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "DEN_conservatives_support",
+          "DEN_conspire_with_the_officer_corps",
+          "DEN_start_the_rearmament"
+        ]
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_medium_increase_effect": true,
+      "add_war_support": 0.05,
+      "add_manpower": 2500,
+      "DEN_improve_haeren_NS": true,
+      "add_to_variable": {
+        "DEN_haeren_army_core_defence": 0.05,
+        "tooltip": "army_core_defence_factor_tt"
+      },
+      "unlock_decision_tooltip": "DEN_deploy_landstormen",
+      "division_template": {
+        "name": "Landstormen Militia",
+        "is_locked": true,
+        "priority": 1,
+        "template_counter": 54,
+        "regiments": {
+          "militia": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 2
+            }
+          ]
+        },
+        "support": [],
+        "override_model": "DEN_militia_alt_0_entity"
+      },
+      "hidden_effect": {
+        "set_country_flag": "DEN_can_deploy_landstorm_flag"
+      }
+    }
+  },
+  {
+    "id": "DEN_deploy_landstormen",
+    "category_id": "DEN_military_category",
+    "name": "DEN_deploy_landstormen",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "has_manpower": {
+        "_op": ">",
+        "value": 9999
+      },
+      "FROM": {
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "has_country_flag": "DEN_can_deploy_landstorm_flag",
+      "NOT": {
+        "has_country_flag": "DEN_landstormen_deployed"
+      },
+      "FROM": {
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -50
+      },
+      "set_country_flag": "DEN_landstormen_deployed"
+    }
+  },
+  {
+    "id": "DEN_recall_landstormen",
+    "category_id": "DEN_military_category",
+    "name": "DEN_recall_landstormen",
+    "desc": "",
+    "icon": "GFX_decision_eng_blackshirt_march",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "DEN_landstormen_deployed"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_template": "Landstormen Militia"
+        },
+        "delete_units": {
+          "division_template": "Landstormen Militia",
+          "disband": false
+        }
+      },
+      "set_country_flag": "DEN_recall_landstormen"
+    }
+  },
+  {
+    "id": "CAM_Ngoc_Thanh_managedstate_debug",
+    "category_id": "CAM_Debug_Category",
+    "name": "CAM_Ngoc_Thanh_managedstate_debug",
+    "desc": "",
+    "icon": "GFX_decision_ENG_britain",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CAM_Ngoc_Thanh_managedstate_debug",
+      "set_politics": {
+        "ruling_party": "despotism"
+      },
+      "add_country_leader_role": {
+        "character": "CAM_Son_Ngoc_Thanh",
+        "promote_leader": true,
+        "country_leader": {
+          "desc": "POLITICS_SON_NGOC_THANH_MANSTATE_DESC",
+          "ideology": "despotism_managerial_state_subtype",
+          "expire": "1994.4.20",
+          "id": -1
+        }
+      },
+      "remove_ideas": [],
+      "add_ideas": [],
+      "set_popularities": {
+        "communist": 1,
+        "socialist": 3,
+        "paternalism": 7,
+        "paternalism_1": 30,
+        "despotism": 44,
+        "fascism": 15,
+        "national_socialism": 0,
+        "ultranationalism": 0
+      }
+    }
+  },
+  {
+    "id": "GER_Bormann_EconMech_continue_nordstern",
+    "category_id": "GER_Bormann_EconMech_category",
+    "name": "Закончить Нордштерн",
+    "desc": "Ещё один проект Гитлера, город Нордштерн, должен был стать жемчужиной Норвегии - втрое больше соседнего Тронхейма, в нём разместится более трёхсот тысяч человек и будет функционировать как самая северная база Кригсмарине, а Тронхеймс-фьорд станет домом для довольно большого количества военных кораблей, чтобы превратить Северное море в германское озеро. В то время как проект остался наполовину законченным из-за недавних военных действий в Рейхе, теперь пришло время осуществить мечту фюрера.",
+    "icon": "GFX_decision_generic_submarines",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 6
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "BOR_EconMech_enable_decisions",
+        "NOT": {
+          "has_country_flag": "BOR_EconMech_OilCrisis"
+        }
+      }
+    },
+    "visible": {
+      "OR": [
+        {
+          "AND": {
+            "is_in_faction_with": "NOR",
+            "NOR": {
+              "OR": {
+                "has_government": [
+                  "national_socialism",
+                  "fascism",
+                  "despotism"
+                ]
+              }
+            }
+          },
+          "owns_state": 94
+        },
+        {
+          "has_country_flag": "BOR_EconMech_specific_show",
+          "is_ai": true
+        },
+        {
+          "has_country_flag": [
+            "BOR_EconMech_pakt_decisions1",
+            "BOR_EconMech_decisions_debug"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_EconMech_continue_nordstern",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "infiltrate_DST",
+    "category_id": "DST_UPO_category",
+    "name": "Проникнуть в Генеральный Округ Латвия",
+    "desc": "Мы можем увеличить наше присутствие в Остланде в 3 раза, и с каждым уровнем результаты нашей деятельности будут продуктивнее",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "DST",
+      "has_manpower": {
+        "_op": ">",
+        "value": 1000
+      }
+    },
+    "visible": {
+      "has_war_with": "DST"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision infiltrate_DST",
+      "DST": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_country_flag": "infiltration_1"
+            }
+          },
+          "set_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_1"
+            },
+            "set_country_flag": "infiltration_2",
+            "clr_country_flag": "infiltration_1"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "set_country_flag": "infiltration_3",
+            "clr_country_flag": "infiltration_2"
+          }
+        ]
+      },
+      "add_manpower": -1000
+    }
+  },
+  {
+    "id": "DST_poison_water",
+    "category_id": "DST_UPO_category",
+    "name": "Отравить их запасы воды",
+    "desc": "Отравляя запасы воды в армии наших противников, мы можем сократить их людские ресурсы",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "DST"
+    },
+    "visible": {
+      "has_war_with": "DST",
+      "DST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision DST_poison_water",
+      "DST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "add_manpower": -5000,
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "add_manpower": -10000,
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "add_manpower": -15000,
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "DST_sabotage_army",
+    "category_id": "DST_UPO_category",
+    "name": "Саботировать их армию",
+    "desc": "Мы можем провести диверсию в их армии, чтобы позволить нашим войскам продвинуться вперед",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "DST"
+    },
+    "visible": {
+      "has_war_with": "DST",
+      "DST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision DST_sabotage_army",
+      "DST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "add_timed_idea": {
+            "idea": "UPO_army1",
+            "days": 40
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army2",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "add_timed_idea": {
+              "idea": "UPO_army3",
+              "days": 40
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "DST_sabotage_industry",
+    "category_id": "DST_UPO_category",
+    "name": "Саботировать их промышленность",
+    "desc": "Мы можем воспользоваться нашими агентами, чтобы вывести из строя их промышленные мощности",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war_with": "DST"
+    },
+    "visible": {
+      "has_war_with": "DST",
+      "DST": {
+        "OR": {
+          "has_country_flag": [
+            "infiltration_1",
+            "infiltration_2",
+            "infiltration_3"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision DST_sabotage_industry",
+      "DST": {
+        "if": {
+          "limit": {
+            "has_country_flag": "infiltration_1"
+          },
+          "clr_country_flag": "infiltration_1"
+        },
+        "else_if": [
+          {
+            "limit": {
+              "has_country_flag": "infiltration_2"
+            },
+            "clr_country_flag": "infiltration_2"
+          },
+          {
+            "limit": {
+              "has_country_flag": "infiltration_3"
+            },
+            "clr_country_flag": "infiltration_3"
+          }
+        ]
+      }
+    }
+  }
+]

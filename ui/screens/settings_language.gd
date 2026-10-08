@@ -320,6 +320,6 @@ func _play_relay_click(pitch_hz: float = 880.0, duration_sec: float = 0.035) -> 
 		var decay = exp(-t * 95.0)
 		var tone = sin(2.0 * PI * pitch_hz * t)
 		# Добавление механического высокочастотного шума в момент соприкосновения контактов
-		var contact_noise = (randf() * 2.0 - 1.0) * exp(-t * 220.0) * 0.4
+		var contact_noise = (0.0 * 2.0 - 1.0) * exp(-t * 220.0) * 0.4
 		var sample = (tone * 0.6 + contact_noise) * decay
 		playback.push_frame(Vector2(sample, sample))

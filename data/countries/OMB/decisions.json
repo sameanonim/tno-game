@@ -1,0 +1,2386 @@
+[
+  {
+    "id": "COG_recall_charles_tombeur_to_active_service",
+    "category_id": "political_actions",
+    "name": "Вернуть Шарля Тобёра, 1-го барона де Табора на службу",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CONGO_belgian_officer_corps",
+      "OR": {
+        "is_subject_of": "BEL",
+        "has_completed_focus": "CONGO_dominion_of_congo"
+      },
+      "has_war": true
+    },
+    "visible": {
+      "tag": "COG",
+      "has_completed_focus": "CONGO_belgian_officer_corps",
+      "OR": {
+        "is_subject_of": "BEL",
+        "has_completed_focus": "CONGO_dominion_of_congo"
+      },
+      "NOT": {
+        "has_country_flag": "COG_recalled_charles_tombeur_flag"
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -25
+    }
+  },
+  {
+    "id": "targeted_race_for_the_bomb",
+    "category_id": "political_actions",
+    "name": "Ядерная гонка",
+    "desc": "Нельзя допустить, чтобы кто-то разработал атомную бомбу быстрее нас. Мы обязаны сделать все возможное, чтобы не допустить угрозы нашему технологическому превосходству.",
+    "icon": "generic_research",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_tech": "atomic_research",
+      "NOT": [
+        {
+          "has_global_flag": "first_nuke_dropped"
+        },
+        {
+          "has_idea": "race_for_the_bomb"
+        }
+      ]
+    },
+    "visible": {
+      "has_tech": "atomic_research",
+      "NOT": [
+        {
+          "has_global_flag": "first_nuke_dropped"
+        },
+        {
+          "has_idea": "race_for_the_bomb"
+        }
+      ],
+      "FROM": {
+        "NOT": {
+          "is_in_faction_with": "ROOT"
+        },
+        "is_special_project_completed": "sp:sp_nuclear_reactor",
+        "any_owned_state": {
+          "nuclear_reactor": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "racing_for_the_bomb",
+      "add_ideas": "race_for_the_bomb"
+    }
+  },
+  {
+    "id": "develop_bombay_tungsten_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разрабатывать залежи вольфрама в регионе [429.GetName]",
+    "desc": "",
+    "icon": "tungsten",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 429,
+      "controls_state": 429,
+      "has_tech": "excavation3",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_completed_focus": "RAJ_exploit_the_frontier",
+      "owns_state": 429,
+      "controls_state": 429,
+      "429": {
+        "NOT": {
+          "has_state_flag": "bombay_tungsten_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AST_specialize_on_jungle_combat",
+    "category_id": "AST_special_forces_cat",
+    "name": "Специализация на боевых действиях в джунглях",
+    "desc": "",
+    "icon": "GFX_generic_industry",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "AST_establish_training_camps",
+      "NOT": {
+        "has_country_flag": "AST_special_forces_active"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        {
+          "localization_key": "generic_enables_tech_tt",
+          "TECH_EFFECT": "tech_effect|jungle_training_tech",
+          "TECH_NAME": "jungle_training_tech"
+        },
+        "generic_skip_one_line_tt",
+        "AST_you_can_switch_sf"
+      ],
+      "hidden_effect": {
+        "set_technology": {
+          "jungle_training_tech": 1
+        }
+      },
+      "set_country_flag": "AST_special_forces_active"
+    }
+  },
+  {
+    "id": "AST_specialize_on_desert_combat",
+    "category_id": "AST_special_forces_cat",
+    "name": "Специализация на боевых действиях в пустыне",
+    "desc": "",
+    "icon": "GFX_generic_industry",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "AST_establish_training_camps",
+      "NOT": {
+        "has_country_flag": "AST_special_forces_active"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        {
+          "localization_key": "generic_enables_tech_tt",
+          "TECH_EFFECT": "tech_effect|desert_training_tech",
+          "TECH_NAME": "desert_training_tech"
+        },
+        "generic_skip_one_line_tt",
+        "AST_you_can_switch_sf"
+      ],
+      "hidden_effect": {
+        "set_technology": {
+          "desert_training_tech": 1
+        }
+      },
+      "set_country_flag": "AST_special_forces_active"
+    }
+  },
+  {
+    "id": "AST_switch_combat_specialization",
+    "category_id": "AST_special_forces_cat",
+    "name": "Смена боевой специализации",
+    "desc": "",
+    "icon": "GFX_generic_industry",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "AST_special_forces_active"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_tech": "jungle_training_tech"
+        },
+        "custom_effect_tooltip": {
+          "localization_key": "generic_enables_tech_tt",
+          "TECH_EFFECT": "tech_effect|desert_training_tech",
+          "TECH_NAME": "desert_training_tech"
+        },
+        "hidden_effect": {
+          "set_technology": {
+            "jungle_training_tech": 0,
+            "desert_training_tech": 1
+          }
+        }
+      },
+      "else_if": {
+        "limit": {
+          "has_tech": "desert_training_tech"
+        },
+        "custom_effect_tooltip": {
+          "localization_key": "generic_enables_tech_tt",
+          "TECH_EFFECT": "tech_effect|jungle_training_tech",
+          "TECH_NAME": "jungle_training_tech"
+        },
+        "hidden_effect": {
+          "set_technology": {
+            "jungle_training_tech": 1,
+            "desert_training_tech": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_order_bombers_in_USB",
+    "category_id": "war_measures",
+    "name": "Купить бомбардировщики у нейтрального блока",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USB_available_factories_tt",
+        "check_variable": {
+          "USB.USB_factories_available": {
+            "_op": ">",
+            "value": 5
+          }
+        }
+      },
+      "any_neighbor_country": {
+        "tag": "USB"
+      }
+    },
+    "visible": {
+      "country_exists": "USB",
+      "not": {
+        "has_war_with": "USB"
+      },
+      "USB": {
+        "is_in_faction": false
+      }
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "USB.USB_factories_available": -6
+      },
+      "USB": {
+        "add_offsite_building": {
+          "type": "industrial_complex",
+          "level": 5
+        },
+        "if": {
+          "limit": {
+            "has_dlc": "By Blood Alone",
+            "NOT": {
+              "has_country_flag": "USB_bomber_template_active"
+            }
+          },
+          "create_equipment_variant": {
+            "name": "B-13 Raven",
+            "type": "medium_plane_airframe_1",
+            "allow_without_tech": true,
+            "modules": {
+              "fixed_main_weapon_slot": "medium_bomb_bay",
+              "fixed_auxiliary_weapon_slot_1": "bomb_locks",
+              "engine_type_slot": "engine_2_2x",
+              "special_type_slot_1": "lmg_defense_turret"
+            }
+          },
+          "set_country_flag": "USB_bomber_template_active"
+        }
+      }
+    }
+  },
+  {
+    "id": "form_gran_colombia",
+    "category_id": "form_gran_colombia_category",
+    "name": "Возродить наследие Боливара",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "controls_state": [
+        490,
+        491,
+        304
+      ],
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "form_country_ecuador_required_states_tt",
+          "controls_state": [
+            305,
+            649
+          ]
+        },
+        {
+          "tooltip": "form_country_colombia_required_states_tt",
+          "controls_state": [
+            486,
+            306,
+            493
+          ]
+        },
+        {
+          "tooltip": "form_country_venezuela_required_states_tt",
+          "controls_state": [
+            489,
+            307,
+            488
+          ]
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_global_flag": "form_gran_colombia_flag"
+      }
+    },
+    "complete_effect": {
+      "set_cosmetic_tag": "GCO_UNIFIED",
+      "490": {
+        "add_core_of": "ROOT"
+      },
+      "491": {
+        "add_core_of": "ROOT"
+      },
+      "304": {
+        "add_core_of": "ROOT"
+      },
+      "685": {
+        "add_core_of": "ROOT"
+      },
+      "695": {
+        "add_core_of": "ROOT"
+      },
+      "687": {
+        "add_core_of": "ROOT"
+      },
+      "custom_effect_tooltip": [
+        "form_country_ecuador_coring_states_tt",
+        "form_country_colombia_coring_states_tt",
+        "form_country_venezuela_coring_states_tt"
+      ],
+      "hidden_effect": [
+        {
+          "305": {
+            "add_core_of": "ROOT"
+          },
+          "649": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "486": {
+            "add_core_of": "ROOT"
+          },
+          "306": {
+            "add_core_of": "ROOT"
+          },
+          "493": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "489": {
+            "add_core_of": "ROOT"
+          },
+          "307": {
+            "add_core_of": "ROOT"
+          },
+          "488": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "news_event": {
+            "id": "wtt_news.55",
+            "hours": 6
+          },
+          "set_global_flag": "form_gran_colombia_flag"
+        }
+      ]
+    }
+  },
+  {
+    "id": "integrate_northern_gran_colombia",
+    "category_id": "form_united_central_america_category",
+    "name": "Включить Панаму",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": 304
+    },
+    "visible": {
+      "has_global_flag": "form_united_central_america_flag",
+      "NOT": {
+        "has_global_flag": "integrated_panama_flag"
+      }
+    },
+    "complete_effect": {
+      "304": {
+        "add_core_of": "ROOT"
+      },
+      "685": {
+        "add_core_of": "ROOT"
+      },
+      "hidden_effect": {
+        "set_global_flag": "integrated_panama_flag"
+      }
+    }
+  },
+  {
+    "id": "FRA_order_bombers_in_USA",
+    "category_id": "FRA_weapons_purchases_category",
+    "name": "Заказать бомбардировщики",
+    "desc": "",
+    "icon": "generic_air",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "OR": {
+        "original_tag": "FRA",
+        "has_completed_focus": "PHI_aircraft_requisition"
+      },
+      "USA_can_sell_weapons_trigger": true
+    },
+    "complete_effect": {
+      "USA": {
+        "add_offsite_building": {
+          "type": "industrial_complex",
+          "level": 5
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_exploit_the_gombos_treaty",
+    "category_id": "GER_price_controls_cat",
+    "name": "Нажиться на торговом соглашении Гёмбёша",
+    "desc": "Торговое соглашение, которое венгерский премьер-министр Дьюла Гёмбёш подписал с нами в 1934 году, важно для стимулирования венгерской экономики и восстановления после Великой депрессии, но у него есть и значительные недостатки. По этому соглашению мы можем продавать пшеницу по хорошей цене, но заработанные деньги должны оставлять в Германии и тратить только на покупку немецких промышленных товаров. Мы можем вывести все средства со счета, открытого в своей стране, и помочь таким образом экономике государства, однако подобный шаг грозит потерей возможного союзника.",
+    "icon": "GFX_decision_generic_fundraising",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "HUN": {
+        "has_idea": "HUN_gombos_trade_treaty",
+        "NOT": {
+          "is_in_faction_with": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_dlc": "Gotterdammerung",
+      "NOT": {
+        "OR": {
+          "is_in_faction_with": "HUN",
+          "has_guaranteed": "HUN"
+        }
+      },
+      "HUN": {
+        "exists": true,
+        "has_capitulated": false
+      }
+    },
+    "complete_effect": {
+      "GER_modify_industrial_modifier": true,
+      "add_to_variable": {
+        "GER_industrial_consumer_goods_factor": -0.15,
+        "tooltip": "consumer_goods_factor_tt"
+      },
+      "custom_effect_tooltip": [
+        "GER_exploit_the_gombos_treaty_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "GER_reduce_mefo_bills_penalty": true,
+      "HUN": {
+        "country_event": {
+          "id": "wuw_GER_diplomacy.56",
+          "hours": 2
+        }
+      },
+      "effect_tooltip": {
+        "HUN": {
+          "add_opinion_modifier": {
+            "target": "ROOT",
+            "modifier": "GER_stole_our_money_opm"
+          },
+          "remove_ideas": "HUN_gombos_trade_treaty"
+        }
+      }
+    }
+  },
+  {
+    "id": "HOL_draw_up_combined_staff_plan",
+    "category_id": "HOL_secret_staff_talks",
+    "name": "Составить план общей численности",
+    "desc": "Наше выживание зависит от слаженного сотрудничества нашей армии с войсками потенциального союзника. Мы можем отправить военную группировку для разработки совместного плана, что намного упростит сотрудничество с самого начала вторжения враждебной державы.",
+    "icon": "hol_draw_up_staff_plans",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "HOL_secret_staff_talks",
+      "has_war": false,
+      "OR": {
+        "is_in_faction": false,
+        "is_in_faction_with": "FROM"
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "mtg_netherlands.32",
+          "hours": 6
+        }
+      },
+      "effect_tooltip": {
+        "FROM": {
+          "army_experience": -5
+        }
+      },
+      "custom_effect_tooltip": [
+        "mtg_netherlands.33_tt",
+        "HOL_request_equipment_tt_2"
+      ]
+    }
+  },
+  {
+    "id": "HUN_place_a_habsburg_on_the_lombardo_venetian_throne",
+    "category_id": "HUN_the_empire_category",
+    "name": "Посадить Габсбурга на ломбардо-венецианский престол",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "wuw_HUN_restore_the_lombardo_venetian_kingdom",
+      "has_government": "neutrality",
+      "is_subject": false,
+      "OR": {
+        "AND": {
+          "LBV": {
+            "exists": false
+          },
+          "AND": {
+            "OR": [
+              {
+                "160": {
+                  "is_controlled_by": "ROOT"
+                },
+                "any_country": {
+                  "is_subject_of": "ROOT",
+                  "controls_state": 160
+                }
+              },
+              {
+                "159": {
+                  "is_controlled_by": "ROOT"
+                },
+                "any_country": {
+                  "is_subject_of": "ROOT",
+                  "controls_state": 159
+                }
+              }
+            ]
+          }
+        },
+        "LBV": {
+          "is_subject_of": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "HUN",
+      "has_completed_focus": "wuw_HUN_restore_the_lombardo_venetian_kingdom",
+      "NOT": {
+        "has_country_flag": "HUN_created_lombardo_venetian_habsburg_monarchy"
+      }
+    },
+    "complete_effect": {
+      "LBV": [
+        {
+          "every_core_state": {
+            "limit": {
+              "OR": {
+                "is_controlled_by": "ROOT",
+                "any_country": {
+                  "is_subject_of": "ROOT",
+                  "controls_state": "PREV"
+                }
+              },
+              "NOT": [
+                {
+                  "is_core_of": "ROOT"
+                },
+                {
+                  "is_owned_and_controlled_by": "LBV"
+                },
+                {
+                  "state": 163
+                }
+              ]
+            },
+            "transfer_state_to": "LBV"
+          }
+        },
+        {
+          "drop_cosmetic_tag": true
+        }
+      ],
+      "IF": {
+        "limit": {
+          "LBV": {
+            "NOT": {
+              "is_subject_of": "ROOT"
+            }
+          }
+        },
+        "puppet": "LBV"
+      },
+      "hidden_effect": {
+        "set_country_flag": "HUN_created_lombardo_venetian_habsburg_monarchy"
+      }
+    }
+  },
+  {
+    "id": "ITA_demand_recognition_of_the_bashkimi_kombetar",
+    "category_id": "ITA_diplomacy_balkan_decision_category",
+    "name": "Придать официальный статус Башкими Комбетар",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "ALB": {
+        "exists": true,
+        "is_subject_of": "ITA"
+      },
+      "802": {
+        "OR": {
+          "is_controlled_by": [
+            "ALB",
+            "ITA",
+            "YUG"
+          ]
+        }
+      },
+      "YUG": {
+        "exists": true,
+        "OR": {
+          "is_subject_of": "ITA",
+          "is_in_faction_with": "ITA"
+        }
+      }
+    },
+    "visible": {
+      "ITA": {
+        "OR": {
+          "has_government": [
+            "neutrality",
+            "fascism"
+          ]
+        }
+      },
+      "ALB": {
+        "exists": true,
+        "is_subject_of": "ITA"
+      },
+      "NOT": {
+        "has_country_flag": "ITA_bashkimi_kombetar"
+      }
+    },
+    "complete_effect": {
+      "YUG": {
+        "country_event": {
+          "id": "BBA_italy_interaction_events.29",
+          "hours": 8,
+          "random_hours": 4
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "ITA_bashkimi_kombetar"
+      }
+    }
+  },
+  {
+    "id": "war_propaganda_bombing",
+    "category_id": "propaganda_efforts",
+    "name": "Поддержать боевой дух",
+    "desc": "Хотя вокруг нас падают бомбы, наши храбрые рабочие продолжают трудиться. Именно благодаря их несгибаемому духу мы одержим победу.",
+    "icon": "GFX_decision_generic_air",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "has_bombing_war_support": {
+        "_op": "<",
+        "value": 0
+      }
+    },
+    "visible": {
+      "has_war_with_non_exiled_country": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "Antarctica_GUI_AAJ_Decision_Air_Assault_Combat_Exercises",
+    "category_id": "Antarctica_GUI_AAJ",
+    "name": "Air Assault Combat Exercises",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAJ_Decision_Air_Assault_Combat_Exercises",
+      "hidden_effect": [
+        {
+          "add_command_power": -40
+        },
+        {
+          "add_to_variable": {
+            "Antarctica_Equipment": -10
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "ENG_DEC_combat_poverty",
+    "category_id": "ENG_DECCAT_United_Englands_Inner_Politics",
+    "name": "Бороться с бедностью",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 125,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_leader": {
+        "character": "ENG_Harold_Macmillan",
+        "ruling_only": true
+      }
+    },
+    "complete_effect": {
+      "ENG_Macmillan_Add_Liberal_Love_3": true,
+      "TNO_improve_poverty_med": true,
+      "ENG_Macmillan_Add_Democratization_3": true
+    }
+  },
+  {
+    "id": "USA_CIA_GER_BOR_economic_sabotage_combined",
+    "category_id": "USA_BoP_category",
+    "name": "Парализовать немецкую экономику",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_30_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.029
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "has_global_flag": "german_civil_war_bormannvic",
+      "has_country_flag": [
+        "USA_CIA_GER_BOR_economic_sabotage_second_success_flag",
+        "USA_CIA_GER_BOR_economic_sabotage_infrastructure_second_success_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_CIA_GER_BOR_economic_sabotage_combined_success_flag"
+      },
+      "GER": {
+        "has_country_flag": "BOR_EconomyMechanic_Active"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_GER_BOR_final_economic_fuckery",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_GER_BOR_economic_sabotage_combined_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.03
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "Bombing_runs_USA_CAU_GW",
+    "category_id": "USA_BoP_category",
+    "name": "Bombing Campaigns Against Enemy",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_GLBCW_selected": true,
+      "has_global_flag": "Global_Caucasia_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -20
+      },
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "USA_Plane_Bombing",
+          "days": 42
+        }
+      }
+    }
+  },
+  {
+    "id": "ELS_SalvadoranCoup_CombatTheCombatants",
+    "category_id": "ELS_SalvadoranCoup_category",
+    "name": "Борьба с боевиками",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "GER_Speer_ICW_create_the_iranische_bombergruppe",
+    "category_id": "GER_BoP_category",
+    "name": "Создать Иранскую Бомбардировочную Группу",
+    "desc": "Мы сформируем специальную бомбардировочную группу Люфтваффе с единственной целью - разрушать тылы наших врагов. На Люфтваффе нельзя экономить; самые современные штурмовики всегда будут наготове, способные вылететь в любой квадрат на зов помощи нашего иранского корпуса. Однако наиболее решающими будут новоприбывшие стратегические бомбардировщики. С их бомбовой нагрузкой более двадцати тонн мы сможем безнаказанно уничтожать целые регионы, если это понадобится.",
+    "icon": "GFX_decision_market_helicopter",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "GER_iran_volunteers"
+    },
+    "visible": {
+      "TNO_fopo_iran_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Speer_ICW_create_the_iranische_bombergruppe",
+      "hidden_effect": {
+        "add_command_power": -20
+      }
+    }
+  },
+  {
+    "id": "SGR_OC_combat_andersdenkende",
+    "category_id": "SGR_reich_in_crisis_category",
+    "name": "Усилить тотальный контроль",
+    "desc": "Нефтяной кризис напрягает Рейх до предела, и как в народе, так и в партии начинают появляться злокачественные опухоли. Народ яростно протестует, а партия пререкается сама с собой. И то, и другое просто неприемлемо. Мы будем держать Рейх под тотальным контролем в эти трудные и непростые времена, а тот, кто попытается вырваться из нашей хватки, узнает что ждет проклятых предателей.\n\nНельзя допустить раскола НСДАП во время национального кризиса!",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "SGR_OC_the_true_ideology"
+    },
+    "visible": {
+      "has_country_flag": "SGR_OC_the_true_ideology"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_OC_combat_andersdenkende",
+      "SGR_OC_social_tension_better_med": true,
+      "increase_conservative_leaning_small": true,
+      "TNO_improve_political_parties_policy_effectiveness_med": true
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_ss_bomb_zanu_headquarters",
+    "category_id": "GRO_REICHSSTAAT_die_grossafrikanishen_ss_einsatzgruppen",
+    "name": "Подорвать штабквартиры ЗАНУ (Зимбабве)",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_REICHSSTAAT_ss_weapon_supply_enough_for_mission_tt",
+        "check_variable": {
+          "GRO_REICHSSTAAT_ss_weapon_supply": {
+            "_op": ">",
+            "value": 100
+          }
+        }
+      }
+    },
+    "visible": {
+      "GRO_is_in_control_of_simbabwe": true,
+      "has_completed_focus": "GRO_salt_the_earth"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "GNG_Colombia_Withdraw",
+    "category_id": "GNG_Research_Team_category",
+    "name": "Завершить тестирование продукта в Колумбии",
+    "desc": "Мы выполнили достаточно задач и вполне удовлетворены результатами испытаний в Колумбии. Пора отзывать группу, чтобы не тратить лишние ресурсы.",
+    "icon": "GFX_decision_GNG_PTRG",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_country_flag": "GNG_PTRG_Colombia"
+    },
+    "complete_effect": {
+      "GNG": {
+        "GNG_PTRG_Colombia_END": true
+      }
+    }
+  },
+  {
+    "id": "Iberian_Wars_aerial_bombing_open",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Открыть операции воздушной бомбардировки",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": false,
+      "is_iberianwar_mainland_nation": true,
+      "NOT": {
+        "has_country_flag": "IBR_aerial_bombing_opened"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_aerial_bombing_open",
+      "set_country_flag": "IBR_aerial_bombing_opened"
+    }
+  },
+  {
+    "id": "Iberian_Wars_aerial_bombing_close",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Закрыть операции воздушной бомбардировки",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_indent_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_iberianwar_mainland_nation": true,
+      "has_country_flag": "IBR_aerial_bombing_opened",
+      "is_ai": false
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_aerial_bombing_close",
+      "clr_country_flag": "IBR_aerial_bombing_opened"
+    }
+  },
+  {
+    "id": "Iberian_Wars_military_operations_aerial_bombing_state",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Воздушная бомбардировка гос-ва [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "IBR_wars_bombing_active_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": "IBR_aerial_bombing_opened",
+      "is_in_array": {
+        "enemies": "FROM.controller"
+      },
+      "FROM": {
+        "any_neighbor_state": {
+          "is_controlled_by": "ROOT"
+        },
+        "anti_air_building": {
+          "_op": "<",
+          "value": 2
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_military_operations_aerial_bombing_state",
+      "set_country_flag": "IBR_wars_bombing_active_flag",
+      "FROM": {
+        "add_state_modifier": {
+          "modifier": {
+            "army_attack_factor": 0.05
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ita_test_the_bomb",
+    "category_id": "ITA_nuclear_program",
+    "name": "Испытать оружие",
+    "desc": "",
+    "icon": "GFX_decision_generic_nuke",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "ITA_funding_sent",
+      "NOT": {
+        "check_variable": {
+          "var": "ITA_nuclearprogress",
+          "value": 1,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "ITA_testing_bomb",
+        "check_variable": {
+          "var": "ITA_nuclearprogress",
+          "value": 1,
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "ITA_testing_bomb",
+      "clr_country_flag": "ITA_funding_sent",
+      "set_temp_variable": {
+        "ITA_nuke_test_days": 120
+      },
+      "if": [
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_fast_nuke"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": -10
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_Edoardo_Amaldi"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": -10
+          }
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_moderate_nuke"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": 0
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_slow_nuke"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": 10
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_stagnant_nuke"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": 30
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_Paolo_Moci"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": -10
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_Emilio_Segre"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": 20
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_Bruno_Pontecorvo"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": 15
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_Ettore_Majorana"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": 0
+          }
+        },
+        {
+          "limit": {
+            "ITA": {
+              "has_country_flag": "ITA_Franco_Rasetti"
+            }
+          },
+          "add_to_temp_variable": {
+            "ITA_nuke_test_days": 10
+          }
+        }
+      ],
+      "set_variable": {
+        "var": "italynukedaytimes",
+        "value": "ITA_nuke_test_days"
+      },
+      "activate_mission": "ITA_test_nuke"
+    }
+  },
+  {
+    "id": "MEX_kabuki_combating_the_far_right",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Бороться с ультраправыми",
+    "desc": "",
+    "icon": "GFX_decision_generic_riot_police",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "MEX_kabuki_combating_the_far_right_tt",
+        "NOT": {
+          "has_country_flag": "MEX_kabuki_dfs_autonomy_increased_precedent"
+        }
+      }
+    },
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_rallying_the_party",
+        "check_variable": {
+          "MEX_PRI_selected_group": 2
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "PRM_load_post_bombing_tree",
+    "category_id": "PRM_debug_category",
+    "name": "Загрузить послебомбардировочное древо",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRM_load_post_bombing_tree",
+      "load_focus_tree": {
+        "tree": "PRM_AB_bombing",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "OMS_load_post_bombing_tree",
+    "category_id": "OMS_debug_category",
+    "name": "Отладка - Загрузить пост-бомбардировочное дерево",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OMS_load_post_bombing_tree",
+      "load_focus_tree": {
+        "tree": "OMS_post_bombing_tree",
+        "keep_completed": true
+      }
+    }
+  },
+  {
+    "id": "SVR_load_post_bombing_tree",
+    "category_id": "SVR_debug_category",
+    "name": "Загрузить пост-бомбардировочное древо и древо расширения",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SVR_load_post_bombing_tree",
+      "load_focus_tree": {
+        "tree": "sverdlovsk_after_bombing",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "VYT_load_post_bombing_tree",
+    "category_id": "VYT_debug",
+    "name": "Загрузить древо после бомбардировки",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VYT_load_post_bombing_tree",
+      "load_focus_tree": {
+        "tree": "VYT_post_bombing_tree",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "WRS_load_WRS_bombings_end",
+    "category_id": "WRS_debug_decisions_category",
+    "name": "Загрузить древо конца бомбардировок",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WRS_load_bombings_end",
+      "load_focus_tree": "WRS_bombings_end"
+    }
+  },
+  {
+    "id": "MAG_DEC_econmic_development_werbell_establish_combat_platform",
+    "category_id": "MAG_DECCAT_economic_development_werbell",
+    "name": "Создать платформу боевого отряда",
+    "desc": "Одним из наших главных приоритетов должно стать строительство объектов, которые позволят нашей Магаданской базе помогать нам проводить наёмнические операции. Как только они будут построены, мы, наконец, будем готовы к созданию боевых подразделений. Наёмники, приписанные к ним, будут отправляться в зоны конфликтов. Это должно гарантировать нам стабильный источник дохода при низком риске. Хотя небольшие потери неизбежны, мужчины и женщины, которые записываются в эти подразделения, являются непревзойдёнными профессионалами, знающими, на что они подписались.",
+    "icon": "GFX_decision_MAG_werbell_combat_unit",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_econ_werbell_phase": 1
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.04
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "MAG_DEC_econ_werbell_2_establish_combat_unit_fobs",
+    "category_id": "MAG_DECCAT_economic_development_werbell",
+    "name": "Создание боевых подразделений на ПОБ",
+    "desc": "Создав ряд передовых оперативных баз для наших боевых подразделений, мы сможем расширить наши наёмные операции по всему миру.",
+    "icon": "GFX_decision_MAG_werbell_combat_unit",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "MAG_WA_a_global_reach"
+    },
+    "visible": {
+      "check_variable": {
+        "MAG_econ_werbell_phase": 2
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.12
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "MAG_DEC_econ_werbell_3_pacific_combat_unit_fobs",
+    "category_id": "MAG_DECCAT_economic_development_werbell",
+    "name": "Тихоокеанское боевое подразделение ПОБ",
+    "desc": "С расширением нашего влияния на Тихом океане мы сможем развернуть силы в глубине территории Сферы и Южной Америки, открывая возможности для ещё более выгодных наёмничьих контрактов.",
+    "icon": "GFX_decision_MAG_werbell_combat_unit",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_econ_werbell_phase": 3
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.24
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "MAG_DEC_econ_werbell_4_atlantic_combat_unit_fobs",
+    "category_id": "MAG_DECCAT_economic_development_werbell",
+    "name": "Атлантическое боевое подразделение ПОБ",
+    "desc": "Создание передовых оперативных баз для наших наёмников в глубине Атлантики представляет нам бесчисленные возможности, открывая для нас ранее труднодоступные рынки. Африка, Ближний Восток и даже Европа жаждут профессиональных солдат удачи, которые будут делать для них грязную работу. В соответствии с нашим именем, теперь мы сможем действовать без каких-либо границ, стоящих на нашем пути.",
+    "icon": "GFX_decision_MAG_werbell_combat_unit",
+    "cost": 120,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_econ_werbell_phase": 4
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "SAM_kombinats_acquire_mines",
+    "category_id": "SAM_kombinats_category",
+    "name": "Расширить шахты",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_kombinats_resources": {
+            "_op": "<",
+            "value": 0.125
+          }
+        },
+        {
+          "SAM_kombinats_political_power": {
+            "_op": ">",
+            "value": -0.99
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_kombinats_more_resources",
+      "SAM_bunyachenko_acquire_mines": true,
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "SAM_kombinats_acquire_construction",
+    "category_id": "SAM_kombinats_category",
+    "name": "Привлечь строительные компании",
+    "desc": "",
+    "icon": "GFX_decision_generic_building",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_kombinats_construction": {
+            "_op": "<",
+            "value": 0.125
+          }
+        },
+        {
+          "SAM_kombinats_political_power": {
+            "_op": ">",
+            "value": -0.99
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_kombinats_acquire_construction",
+      "SAM_bunyachenko_acquire_construction": true,
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.05
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "SAM_kombinats_acquire_factories",
+    "category_id": "SAM_kombinats_category",
+    "name": "Приобрести фабрики",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_kombinats_max_efficiency": {
+            "_op": "<",
+            "value": 0.125
+          }
+        },
+        {
+          "SAM_kombinats_political_power": {
+            "_op": ">",
+            "value": -0.99
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_kombinats_acquire_factories",
+      "SAM_bunyachenko_acquire_factories": true,
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.05
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "SAM_kombinats_acquire_scientists",
+    "category_id": "SAM_kombinats_category",
+    "name": "Привлечь учёных",
+    "desc": "",
+    "icon": "GFX_decision_generic_research",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_kombinats_research_speed": {
+            "_op": "<",
+            "value": 0.05
+          }
+        },
+        {
+          "SAM_kombinats_political_power": {
+            "_op": ">",
+            "value": -0.99
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_kombinats_acquire_scientists",
+      "SAM_bunyachenko_acquire_scientists": true,
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.05
+      },
+      "econ_gdp_growth_change": true
+    }
+  },
+  {
+    "id": "SAM_kombinats_prioritize_mines",
+    "category_id": "SAM_kombinats_category",
+    "name": "Сконцентрироваться на шахтах",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_kombinats_construction": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "SAM_kombinats_max_efficiency": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "SAM_kombinats_resources": {
+            "_op": "<",
+            "value": 0.124
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_kombinats_prioritize_mines",
+      "SAM_bunyachenko_prioritize_mines": true
+    }
+  },
+  {
+    "id": "SAM_kombinats_prioritize_construction",
+    "category_id": "SAM_kombinats_category",
+    "name": "Сконцентрироваться на строительстве",
+    "desc": "",
+    "icon": "GFX_decision_generic_building",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_kombinats_resources": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "SAM_kombinats_max_efficiency": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "SAM_kombinats_construction": {
+            "_op": "<",
+            "value": 0.124
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_kombinats_prioritize_construction",
+      "SAM_bunyachenko_prioritize_construction": true
+    }
+  },
+  {
+    "id": "SAM_kombinats_prioritize_factories",
+    "category_id": "SAM_kombinats_category",
+    "name": "Приоритет развития фабрик",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_kombinats_resources": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "SAM_kombinats_construction": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "SAM_kombinats_max_efficiency": {
+            "_op": "<",
+            "value": 0.124
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_kombinats_prioritize_factories",
+      "SAM_bunyachenko_prioritize_factories": true
+    }
+  },
+  {
+    "id": "SAM_kombinats_bring_under_government_control",
+    "category_id": "SAM_kombinats_category",
+    "name": "Национализировать комбинаты",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "SAM_kombinats_resources": {
+            "_op": ">",
+            "value": 0.01
+          }
+        },
+        {
+          "SAM_kombinats_construction": {
+            "_op": ">",
+            "value": 0.01
+          }
+        },
+        {
+          "SAM_kombinats_max_efficiency": {
+            "_op": ">",
+            "value": 0.01
+          }
+        },
+        {
+          "SAM_kombinats_research_speed": {
+            "_op": ">",
+            "value": 0.01
+          }
+        },
+        {
+          "SAM_kombinats_political_power": {
+            "_op": "<",
+            "value": -0.08
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_kombinats_bring_under_government_control",
+      "SAM_bunyachenko_bring_under_government_control": true,
+      "set_temp_variable": [
+        {
+          "money_reserves_temp": 0.25
+        },
+        {
+          "gdp_growth_temp": -0.1
+        },
+        {
+          "econ_centralization_temp": 2.5
+        }
+      ],
+      "econ_money_reserves_change_raw_money": true,
+      "econ_gdp_growth_change": true,
+      "econ_centralization_change": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_CHT_LessonFromBolshevik_1",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Урок номер 1: Выбиваем бюджет",
+    "desc": "Чтобы чем-то управлять, у человека должны быть деньги. Чтобы иметь деньги, нужно иметь возможность получать их из какого-то источника. Чтобы получить деньги из какого-то источника, нужно обладать силой. Очень простые, но связные и правдивые предложения.",
+    "icon": "GFX_decision_generic_economy_graph",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_CHT_LessonFromBolshevik_2"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHT_lessons_from_the_bolsheviks"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_CHT_LessonFromBolshevik_1",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "set_temp_variable": [
+        {
+          "Y": 40
+        },
+        {
+          "Y": 0.2
+        },
+        {
+          "money_reserves_temp": 0.04
+        }
+      ],
+      "RUS_Smuta_Chaos_Add_Y": true,
+      "RUS_Smuta_Supplies_Add_Y": true,
+      "econ_money_reserves_change_raw_money": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_CHT_LessonFromBolshevik_2",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Урок номер 2: Муштровать солдат",
+    "desc": "Чтобы поддерживать дисциплину, солдат должен временами больше бояться своего командира, чем врага. И поэтому мы избавимся от худших примеров и будем поощрять стальную дисциплину в наших рядах.",
+    "icon": "GFX_decision_generic_forced_labor",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_CHT_LessonFromBolshevik_1"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHT_lessons_from_the_bolsheviks"
+    },
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "Y": 50
+        },
+        {
+          "Y": 10
+        }
+      ],
+      "RUS_Smuta_Chaos_Add_Y": true,
+      "RUS_Smuta_Chaos_Mission_Cost_Add_Y": true,
+      "add_manpower": -134
+    }
+  },
+  {
+    "id": "VYT_scavenge_bombed_factories_decision",
+    "category_id": "VYT_economic_strength_category",
+    "name": "Обыскать разбомбленные фабрики",
+    "desc": "Люфтваффе уничтожило практически всю промышленность Западной России, но в руинах всё ещё можно найти снаряжение.\n\nСостояние нашей экономики должно быть как минимум очень плохое.",
+    "icon": "GFX_decision_generic_factory_red",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VYT_scavenge_bombed_factories_decision",
+      "VYT_increase_economic_strength_low": true,
+      "set_temp_variable": {
+        "money_reserves_temp": 0.04
+      },
+      "econ_money_reserves_change_raw_money": true
+    }
+  },
+  {
+    "id": "SAF_Tac_Bomber_shipment",
+    "category_id": "USA_Air_Power_category",
+    "name": "Разместить эскадрилью тактических бомбардировщиков",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SAF_our_american_allies"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_Tac_Bomber_shipment",
+      "add_equipment_to_stockpile": {
+        "type": "tac_bomber_equipment",
+        "amount": 50,
+        "producer": "USA"
+      }
+    }
+  },
+  {
+    "id": "ANG_Bomber_Production_Funding",
+    "category_id": "ANG_SKL_RD_Decisions",
+    "name": "Финансировать бомбардировщики",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ANG_SKL_Industrial_Mission_Activated"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "ANG_Market_requirement_4",
+        "check_variable": {
+          "ANG_Liquid_Cash": {
+            "_op": ">",
+            "value": 3
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ANG_bomber_buildup"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ANG_Market_Cost_4",
+      "subtract_from_variable": {
+        "ANG_Liquid_Cash": 4
+      },
+      "add_ideas": "ANG_bomber_production",
+      "set_country_flag": "ANG_SKL_Industrial_Mission_Activated"
+    }
+  },
+  {
+    "id": "ANG_Sell_bombers",
+    "category_id": "ANG_The_Market",
+    "name": "Продать старые бомбардировщики",
+    "desc": "Наши коллеги выразили заинтересованность в покупке старых бомбардировщиков. Из-за характера подобных сделок конечная цена будет низкой, и передача денег займёт некоторое время, но в итоге мы получим 5 миллиона долларов за 50 наших самолётов.",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ANG_Pre_War_Market_Flag"
+      },
+      "has_equipment": {
+        "jet_tac_bomber_equipment_2": {
+          "_op": ">",
+          "value": 24
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ANG_sell_our_stock"
+    },
+    "complete_effect": {
+      "set_country_flag": "ANG_Pre_War_Market_Flag",
+      "custom_effect_tooltip": "ANG_German_Displeasure_Down_Small",
+      "add_to_variable": [
+        {
+          "ANG_German_Displeasure": -4
+        },
+        {
+          "ANG_Liquid_Cash": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "ANG_Conduct_Bombing_Raids",
+    "category_id": "ANG_Native_Situation_Decisions",
+    "name": "Забомбить напалмом",
+    "desc": "Мы можем использовать наше превосходство в воздухе, чтобы стереть в порошок любую горячую точку повстанцев. Бомбардировки остановят атаки местных жителей сейчас, но позже могут привести к большей радикализации.",
+    "icon": "",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ANG_Reducing_Native_Militancy"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ANG_stoptheterror"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": [
+        "ANG_Native_Militancy_Down_High",
+        "ANG_Native_Unrest_Up_Low"
+      ],
+      "add_to_variable": [
+        {
+          "ANG_Native_Unrest": 3
+        },
+        {
+          "ANG_Native_Militancy": -12
+        }
+      ],
+      "set_country_flag": "ANG_Reducing_Native_Militancy"
+    }
+  },
+  {
+    "id": "ANG_Personally_Lead_Bombing_Run",
+    "category_id": "ANG_Better_TMW_Decisions",
+    "name": "Показать мастерство Шенка",
+    "desc": "Рейхскомиссар Шенк может лично возглавить бомбардировку, произведя впечатление на своих коллег и снизив их подозрения, даже если наш рейхскомиссар \"промахнется\" по всем своим целям.",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 49.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Botch_Bombing_Runs",
+    "category_id": "ANG_Sabotage_Others",
+    "name": "Случайные бомбардировки",
+    "desc": "Инциденты с дружественным огнем - это совсем не то, что нам нужно. Наши бомбардировщики могут просто ударить слишком близко к позициям союзников на линии фронта.",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 24.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_sabotagingtheothers"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      },
+      "COG": {
+        "add_manpower": -50
+      },
+      "GRO": {
+        "add_manpower": -50
+      },
+      "add_to_variable": [
+        {
+          "ANG_Muller_Sus": 6
+        },
+        {
+          "ANG_Huttig_Sus": 6
+        }
+      ],
+      "custom_effect_tooltip": [
+        "ANG_Raise_Muller_Sus_High",
+        "ANG_Raise_Huttig_Sus_High"
+      ],
+      "ANG_Sus_Clamp_Check": true
+    }
+  },
+  {
+    "id": "FUK_combat_internal_fascism",
+    "category_id": "FUK_power_struggle_category",
+    "name": "Борьба с внутренним фашизмом",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_end_trade",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UKR_FUK_power_struggle_active_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "UKR_FUK_power_struggle",
+      "NOT": {
+        "has_completed_focus": "FUK_personal_dictatorship_of_the_skoropadsky_family"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_combat_internal_fascism",
+      "set_temp_variable": {
+        "var_collaborator_support_temp": -8
+      },
+      "FUK_collaborator_support_change": true,
+      "set_country_flag": "UKR_FUK_power_struggle_active_decision"
+    }
+  },
+  {
+    "id": "NOV_order_a_bombing_run",
+    "category_id": "NOV_nazi_partisans_category",
+    "name": "Order a Bombing Run",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "anti_nazi_operation_active"
+      }
+    },
+    "visible": {
+      "has_country_flag": "NOV_nazi_partisans_decisions",
+      "has_completed_focus": "NOV_airforce_patrols"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -5
+      },
+      "set_country_flag": "anti_nazi_operation_active"
+    }
+  },
+  {
+    "id": "OMS_2WRW_expropriate_assets_non_combatants_decision",
+    "category_id": "OMS_2WRW_great_trial_category",
+    "name": "Expropriate Assets From Non-Combatants",
+    "desc": "The non-combatants will have to learn to live with less. Cars, fuel, food, metals and even the clothes they wear is better needed at the front lines. Our commissars will scour cities to make sure that our patriotic laborers contribute to the war effort.",
+    "icon": "GFX_decision_generic_",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMS_2WRW_has_home_front_decisions"
+      }
+    },
+    "visible": {
+      "has_country_flag": "OMS_2WRW_show_home_front_decisions"
+    },
+    "complete_effect": {
+      "add_war_support": -0.05,
+      "add_stability": -0.05,
+      "hidden_effect": {
+        "add_political_power": -25,
+        "set_country_flag": "OMS_2WRW_has_home_front_decisions"
+      }
+    }
+  },
+  {
+    "id": "RUS_sabotage_bombing_runs",
+    "category_id": "RUS_War_Overview_Deccat",
+    "name": "Intensify Bombing Runs in [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "RUS_SWRW_sabotaging_tt",
+        "NOT": {
+          "has_country_flag": "RUS_SWRW_sabotaging"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "WRW_deccat": 1
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "RUS_SWRW_sabotaging",
+      "hidden_effect": {
+        "add_command_power": -25,
+        "add_political_power": -50
+      }
+    }
+  },
+  {
+    "id": "Bomb_TNS",
+    "category_id": "FUK_BoP_category",
+    "name": "Airstrikes on German-Romanian positions",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_TNSCW_selected": true,
+      "has_global_flag": "Transnistrian_War"
+    },
+    "complete_effect": {
+      "OGG": {
+        "add_timed_idea": {
+          "idea": "FUK_Plane_Bombing",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Bomb_Speer_TNS",
+    "category_id": "FUK_BoP_category",
+    "name": "Airstrikes on German-Romanian positions",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_OGGCW_selected": true,
+      "has_global_flag": "Transnistrian_Uprising"
+    },
+    "complete_effect": {
+      "OGG": {
+        "add_timed_idea": {
+          "idea": "FUK_Plane_Bombing",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Bomb_CPU",
+    "category_id": "FUK_BoP_category",
+    "name": "Airstrikes on Enemy Bases",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_CRPUS_selected": true,
+      "has_global_flag": "Carpatian_War"
+    },
+    "complete_effect": {
+      "HUN": {
+        "add_timed_idea": {
+          "idea": "FUK_Plane_Bombing",
+          "days": 50
+        }
+      }
+    }
+  },
+  {
+    "id": "Bomb_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Bombing Against a Numerical Enemy",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "FUK_Plane_Bombing",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "Bombing_runs_FUK_CAU_GW",
+    "category_id": "FUK_BoP_category",
+    "name": "Bombing Against a Numerical Enemy",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_GLBCW_selected": true,
+      "has_global_flag": "Global_Caucasia_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -20
+      },
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "FUK_Plane_Bombing",
+          "days": 42
+        }
+      }
+    }
+  },
+  {
+    "id": "Bomb_OGG",
+    "category_id": "GER_Bop_category",
+    "name": "Start of Luftwaffe Local Bombing Campaigns",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_TNSCW_selected": true,
+      "has_global_flag": "Transnistrian_War"
+    },
+    "complete_effect": {
+      "TNS": {
+        "add_timed_idea": {
+          "idea": "GER_Plane_Bombing",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "Bomb_Speer_OGG",
+    "category_id": "GER_Bop_category",
+    "name": "Start of Luftwaffe Local Bombing Campaigns",
+    "desc": "",
+    "icon": "GFX_decision_generic_fighter_plane",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_OGGCW_selected": true,
+      "has_global_flag": "Transnistrian_Uprising"
+    },
+    "complete_effect": {
+      "TNS": {
+        "add_timed_idea": {
+          "idea": "GER_Plane_Bombing",
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_bombing_runs_HUN",
+    "category_id": "GER_Bop_category",
+    "name": "Carpet Bombing of Industry",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_CRPHW_selected": true,
+      "has_global_flag": "Carpatian_Hot_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "FUK": {
+        "add_timed_idea": {
+          "idea": "GER_Plane_Bombing",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_bombing_runs_GER_AZR_CAU",
+    "category_id": "GER_Bop_category",
+    "name": "Carpet Bombing of the Rebels",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "AZR": {
+        "add_timed_idea": {
+          "idea": "GER_Plane_Bombing",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "Bombing_runs_GER_CAU_GW",
+    "category_id": "GER_Bop_category",
+    "name": "Luftwaffe Terror Bombing",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_GLBCW_selected": true,
+      "has_global_flag": "Global_Caucasia_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "GEO": {
+        "add_timed_idea": {
+          "idea": "GER_Plane_Bombing",
+          "days": 39
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_bombing_runs_FUK",
+    "category_id": "JAP_BoP_category",
+    "name": "Carpet Bombing of Facilities",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_CRPHW_selected": true,
+      "has_global_flag": "Carpatian_Hot_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "HUN": {
+        "add_timed_idea": {
+          "idea": "JAP_Plane_Bombing",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "Bombing_runs_JAP_CAU_GW",
+    "category_id": "JAP_BoP_category",
+    "name": "Participate in Bombing Campaigns",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_GLBCW_selected": true,
+      "has_global_flag": "Global_Caucasia_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "AZR": {
+        "add_timed_idea": {
+          "idea": "JAP_Plane_Bombing",
+          "days": 35
+        }
+      }
+    }
+  }
+]

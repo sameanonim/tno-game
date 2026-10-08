@@ -139,6 +139,9 @@ func display_country(state: CountryState) -> void:
 	# Национальные духи
 	_populate_national_spirits()
 
+	# Кабинет министров
+	_populate_cabinet_members()
+
 	# Матрица законов
 	_populate_societal_laws()
 
@@ -265,6 +268,113 @@ func _populate_national_spirits() -> void:
 		hbox.add_child(lbl)
 
 		spirits_container.add_child(panel)
+
+
+func _populate_cabinet_members() -> void:
+	if current_state == null:
+		return
+
+	var right_col = get_node_or_null("VBox/ContentHBox/RightCol")
+	if right_col == null:
+		return
+
+	var cabinet_section = right_col.get_node_or_null("CabinetSection")
+	if cabinet_section == null:
+		cabinet_section = VBoxContainer.new()
+		cabinet_section.name = "CabinetSection"
+		cabinet_section.add_theme_constant_override("separation", 6)
+		var laws_sec = right_col.get_node_or_null("LawsSection")
+		if laws_sec != null:
+			right_col.add_child(cabinet_section)
+			right_col.move_child(cabinet_section, laws_sec.get_index())
+		else:
+			right_col.add_child(cabinet_section)
+
+	for c in cabinet_section.get_children():
+		cabinet_section.remove_child(c)
+		c.queue_free()
+
+	var title_lbl := Label.new()
+	title_lbl.text = _tr("TNO_POL_CABINET_TITLE", "КАБИНЕТ МИНИСТРОВ И СОВЕТНИКИ")
+	title_lbl.add_theme_font_size_override("font_size", 13)
+	title_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_CYAN)
+	cabinet_section.add_child(title_lbl)
+
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, 92)
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	cabinet_section.add_child(scroll)
+
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 8)
+	scroll.add_child(hbox)
+
+	var members = current_state.cabinet_members
+	if members.is_empty():
+		var empty_lbl := Label.new()
+		empty_lbl.text = _tr("TNO_POL_CABINET_EMPTY", "[ КАБИНЕТ НЕ СФОРМИРОВАН / ВАКАНТНО ]")
+		empty_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_MUTED)
+		empty_lbl.add_theme_font_size_override("font_size", 11)
+		hbox.add_child(empty_lbl)
+		return
+
+	var fallback_tex = preload("res://icon.svg")
+
+	for m in members:
+		var card := PanelContainer.new()
+		card.custom_minimum_size = Vector2(210, 80)
+		var sb = StyleBoxFlat.new()
+		sb.bg_color = Color(0.04, 0.08, 0.09, 0.95)
+		sb.border_color = TNOTheme.COLOR_BORDER_DIM
+		sb.set_border_width_all(1)
+		sb.set_corner_radius_all(2)
+		card.add_theme_stylebox_override("panel", sb)
+
+		var chbox := HBoxContainer.new()
+		chbox.add_theme_constant_override("separation", 8)
+		card.add_child(chbox)
+
+		# Портрет министра в рамке
+		var port_tex: Texture2D = null
+		if not m.portrait_path.is_empty() and m.portrait_path != "res://icon.svg":
+			if ResourceLoader.exists(m.portrait_path):
+				port_tex = load(m.portrait_path) as Texture2D
+
+		var img_rect := TextureRect.new()
+		img_rect.custom_minimum_size = Vector2(50, 68)
+		img_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		img_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		img_rect.texture = port_tex if port_tex != null else fallback_tex
+		chbox.add_child(img_rect)
+
+		var mvbox := VBoxContainer.new()
+		mvbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		mvbox.add_theme_constant_override("separation", 2)
+		chbox.add_child(mvbox)
+
+		var m_role_lbl := Label.new()
+		m_role_lbl.text = m.title.to_upper() if not m.title.is_empty() else "МИНИСТР"
+		m_role_lbl.add_theme_font_size_override("font_size", 9)
+		m_role_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_BORDER_AMBER)
+		mvbox.add_child(m_role_lbl)
+
+		var m_name_lbl := Label.new()
+		m_name_lbl.text = m.leader_name
+		m_name_lbl.add_theme_font_size_override("font_size", 11)
+		m_name_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_PRIMARY)
+		m_name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		mvbox.add_child(m_name_lbl)
+
+		var m_stat_lbl := Label.new()
+		var loc = get_node_or_null("/root/LocalizationManager")
+		var stat_tmpl = loc.tr_key("POL_CABINET_STAT", "Влияние: %d%% | Лоял: %d%%") if loc != null else "Влияние: %d%% | Лоял: %d%%"
+		m_stat_lbl.text = stat_tmpl % [int(m.cabinet_influence), int(m.loyalty)]
+		m_stat_lbl.add_theme_font_size_override("font_size", 9)
+		m_stat_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_MUTED)
+		mvbox.add_child(m_stat_lbl)
+
+		hbox.add_child(card)
 
 
 # ==============================================================================

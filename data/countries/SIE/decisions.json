@@ -1,0 +1,3808 @@
+[
+  {
+    "id": "ETH_coup_haile_selassie_imru",
+    "category_id": "democratic_on_the_rise",
+    "name": "Спровоцировать дворцовый переворот",
+    "desc": "Демократически настроенный $ETH_ras_imru_haile_selassie$ правит страной в отсутствие императора. Несомненно, массы считают его истинным героем [ROOT.GetNameRuGen] после того, как он возглавлял страну во время войны. Сейчас все громче раздаются призывы демократизации [ROOT.GetNameRuGen]. Возможно, пришли времена, когда в государстве [ROOT.GetNameDef] действительно назрела необходимость перемен.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.35
+      },
+      "ETH_haile_selassie": {
+        "has_trait": "imperator_absentis"
+      },
+      "has_idea": "ETH_prince_regent_idea"
+    },
+    "visible": {
+      "ETH_haile_selassie": {
+        "has_trait": "imperator_absentis"
+      },
+      "democratic": {
+        "_op": ">",
+        "value": 0.3
+      },
+      "has_idea": "ETH_prince_regent_idea"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ETH_palace_coup_tt",
+      "hidden_effect": {
+        "ETH_ras_imru_haile_selassie": {
+          "unit_leader_event": {
+            "id": "BBA_ethiopia_imperial_events.20",
+            "hours": 2,
+            "random_hours": 4
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_discredit_haile_selassie",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Дискредитировать лидера, [ETH.GetLeader] недостоин править",
+    "desc": "Рассказав эфиопам о том, как Хайле Селассие позорно бежал и сейчас ведет роскошную жизнь в далекой стране, мы, возможно, сумеем переманить часть народа на нашу сторону и навредить репутации бывшего императора.",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "ITA_the_new_emperor_of_ethiopia"
+    },
+    "visible": {
+      "any_controlled_state": {
+        "is_owned_by": "ETH"
+      }
+    },
+    "complete_effect": {
+      "ETH": {
+        "add_legitimacy": -10
+      },
+      "hidden_effect": {
+        "ETH": {
+          "country_event": {
+            "id": "BBA_italo_ethiopian_war_events.510",
+            "hours": 1
+          }
+        }
+      },
+      "every_controlled_state": {
+        "limit": {
+          "is_owned_by": "ETH"
+        },
+        "add_compliance": 5
+      },
+      "custom_effect_tooltip": "ITA_discredit_haile_selassie_cd_tt"
+    }
+  },
+  {
+    "id": "GER_reichskommissariat_kaukasien",
+    "category_id": "GER_reichskommissariats",
+    "name": "Рейхскомиссариат Кавказ",
+    "desc": "",
+    "icon": "ger_reichskommissariats",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "231": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "230": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "229": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "826": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "232": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "821": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "828": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "827": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "233": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "234": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "235": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "237": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "236": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "238": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "RKK": {
+        "exists": false
+      }
+    },
+    "complete_effect": {
+      "GER_improve_rosenbergs_trait_effect": true,
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "GER_reichskommissariat_kaukasien_effect_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "231": {
+        "IF": {
+          "limit": {
+            "OWNER": {
+              "NOT": {
+                "original_tag": "GER"
+              }
+            }
+          },
+          "OWNER": {
+            "set_country_flag": [
+              "GER_RK_capital_state_trasferred_RKK_victim_flag",
+              "GER_reichskommissariats_puppet_flag"
+            ]
+          }
+        },
+        "transfer_state_to": "RKK",
+        "set_state_flag": "GER_RK_capital_state_trasferred_RKK_flag",
+        "add_compliance": 25
+      },
+      "set_autonomy": {
+        "target": "RKK",
+        "autonomy_state": "autonomy_integrated_puppet"
+      },
+      "hidden_effect": {
+        "every_state": [
+          {
+            "limit": {
+              "GER_is_RKK_state": true,
+              "NOT": {
+                "state": 231
+              },
+              "OR": {
+                "is_owned_by": "ROOT",
+                "owner": {
+                  "is_subject_of": "ROOT"
+                }
+              }
+            },
+            "transfer_state_to": "RKK",
+            "add_compliance": 25
+          },
+          {
+            "limit": {
+              "GER_is_RKK_state": true,
+              "NOT": [
+                {
+                  "state": 231
+                },
+                {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              ]
+            },
+            "add_contested_owner": "RKK",
+            "set_state_controller_to": "RKK",
+            "add_claim_by": "RKK",
+            "add_compliance": 25
+          }
+        ],
+        "RKK": {
+          "add_manpower": 50000,
+          "add_equipment_to_stockpile": [
+            {
+              "type": "infantry_equipment",
+              "amount": 5000,
+              "producer": "GER"
+            },
+            {
+              "type": "support_equipment",
+              "amount": 500,
+              "producer": "GER"
+            }
+          ],
+          "inherit_technology": "GER",
+          "add_offsite_building": {
+            "type": "arms_factory",
+            "level": 3
+          },
+          "load_oob": "RK_OOB"
+        }
+      },
+      "country_event": {
+        "id": "wuw_GER_reichskommissariats.6",
+        "hours": 0
+      }
+    }
+  },
+  {
+    "id": "GER_reichskommissariat_ostasien",
+    "category_id": "GER_reichskommissariats",
+    "name": "Рейхскомиссариат Остазия",
+    "desc": "",
+    "icon": "ger_reichskommissariats",
+    "cost": 35,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "613": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "598": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "597": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "743": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "614": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "608": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "609": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "610": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "716": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "745": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "527": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "525": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "328": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "715": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "714": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "761": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "657": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "717": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "408": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "409": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "655": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "537": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "555": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "536": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "533": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "282": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "534": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "532": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "535": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "531": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "530": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "529": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "528": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "526": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "524": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "596": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "595": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "593": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "592": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "594": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "591": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "728": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "729": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "326": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "599": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "600": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "602": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "749": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "606": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "620": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "607": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "750": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "603": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "748": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "605": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "755": [
+          {
+            "is_controlled_by_ROOT_or_subject": true
+          },
+          {
+            "is_controlled_by_ROOT_or_subject": true
+          }
+        ],
+        "622": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "615": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "746": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "621": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "611": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "612": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "819": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "817": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "330": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "820": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "756": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "616": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "283": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "754": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "604": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "753": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "752": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "751": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "747": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "325": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "671": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "670": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "286": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "741": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "868": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "869": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "289": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "645": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "623": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "327": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "624": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "628": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "625": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "626": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "627": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "647": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "648": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "646": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "638": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "632": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "744": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1025": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1026": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1027": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1028": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1029": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1030": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1031": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1032": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1033": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1034": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1035": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1036": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1037": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1038": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1039": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1040": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1041": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1043": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1044": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1045": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1046": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1017": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1018": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1019": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1020": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1066": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1067": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1068": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1069": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_create_asian_reichskommissariat",
+      "ROA": {
+        "exists": false
+      }
+    },
+    "complete_effect": {
+      "GER_improve_rosenbergs_trait_effect": true,
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "GER_reichskommissariat_ostasien_effect_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "743": {
+        "IF": {
+          "limit": {
+            "OWNER": {
+              "NOT": {
+                "original_tag": "GER"
+              }
+            }
+          },
+          "OWNER": {
+            "set_country_flag": [
+              "GER_RK_capital_state_trasferred_ROA_victim_flag",
+              "GER_reichskommissariats_puppet_flag"
+            ]
+          }
+        },
+        "transfer_state_to": "ROA",
+        "set_state_flag": "GER_RK_capital_state_trasferred_ROA_flag",
+        "add_compliance": 25
+      },
+      "set_autonomy": {
+        "target": "ROA",
+        "autonomy_state": "autonomy_integrated_puppet"
+      },
+      "hidden_effect": {
+        "every_state": [
+          {
+            "limit": {
+              "GER_is_ROA_state": true,
+              "NOT": {
+                "state": 743
+              },
+              "OR": {
+                "is_owned_by": "ROOT",
+                "owner": {
+                  "is_subject_of": "ROOT"
+                }
+              }
+            },
+            "transfer_state_to": "ROA",
+            "add_compliance": 25
+          },
+          {
+            "limit": {
+              "GER_is_ROA_state": true,
+              "NOT": [
+                {
+                  "state": 743
+                },
+                {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              ]
+            },
+            "add_contested_owner": "ROA",
+            "set_state_controller_to": "ROA",
+            "add_claim_by": "ROA",
+            "add_compliance": 25
+          }
+        ],
+        "ROA": {
+          "add_manpower": 90000,
+          "add_equipment_to_stockpile": [
+            {
+              "type": "infantry_equipment",
+              "amount": 9000,
+              "producer": "GER"
+            },
+            {
+              "type": "support_equipment",
+              "amount": 900,
+              "producer": "GER"
+            }
+          ],
+          "inherit_technology": "GER",
+          "add_offsite_building": {
+            "type": "arms_factory",
+            "level": 6
+          },
+          "load_oob": "RK_OOB"
+        }
+      },
+      "country_event": {
+        "id": "wuw_GER_reichskommissariats.26",
+        "hours": 0
+      }
+    }
+  },
+  {
+    "id": "GER_reichskommissariat_australasien",
+    "category_id": "GER_reichskommissariats",
+    "name": "Рейхскомиссариат Австралазия",
+    "desc": "",
+    "icon": "ger_reichskommissariats",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "979": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1024": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1023": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1021": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "523": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "737": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1070": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1071": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "634": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "669": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "668": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "738": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "721": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "667": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "673": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "334": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "333": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "335": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "672": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "336": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1059": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1060": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1061": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1062": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1063": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1064": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1065": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "724": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "711": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "712": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "684": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "725": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "639": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "643": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "633": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "642": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "734": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "635": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1072": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "636": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "726": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "641": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "284": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "723": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1079": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1080": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1081": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "872": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "520": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "870": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "522": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "871": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "519": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "517": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "518": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "285": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "521": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "674": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "873": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1047": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1048": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1049": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1050": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1051": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1052": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1053": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1054": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1055": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1056": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "1057": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_create_asian_reichskommissariat",
+      "RAA": {
+        "exists": false
+      }
+    },
+    "complete_effect": {
+      "GER_improve_rosenbergs_trait_effect": true,
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "GER_reichskommissariat_australasien_effect_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "979": {
+        "IF": {
+          "limit": {
+            "OWNER": {
+              "NOT": {
+                "original_tag": "GER"
+              }
+            }
+          },
+          "OWNER": {
+            "set_country_flag": [
+              "GER_RK_capital_state_trasferred_RAA_victim_flag",
+              "GER_reichskommissariats_puppet_flag"
+            ]
+          }
+        },
+        "transfer_state_to": "RAA",
+        "set_state_flag": "GER_RK_capital_state_trasferred_RAA_flag",
+        "add_compliance": 25
+      },
+      "set_autonomy": {
+        "target": "RAA",
+        "autonomy_state": "autonomy_integrated_puppet"
+      },
+      "hidden_effect": {
+        "every_state": [
+          {
+            "limit": {
+              "GER_is_RAA_state": true,
+              "NOT": {
+                "state": 979
+              },
+              "OR": {
+                "is_owned_by": "ROOT",
+                "owner": {
+                  "is_subject_of": "ROOT"
+                }
+              }
+            },
+            "transfer_state_to": "RAA",
+            "add_compliance": 25
+          },
+          {
+            "limit": {
+              "GER_is_RAA_state": true,
+              "NOT": [
+                {
+                  "state": 979
+                },
+                {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              ]
+            },
+            "add_contested_owner": "RAA",
+            "set_state_controller_to": "RAA",
+            "add_claim_by": "RAA",
+            "add_compliance": 25
+          }
+        ],
+        "RAA": {
+          "add_manpower": 70000,
+          "add_equipment_to_stockpile": [
+            {
+              "type": "infantry_equipment",
+              "amount": 7000,
+              "producer": "GER"
+            },
+            {
+              "type": "support_equipment",
+              "amount": 700,
+              "producer": "GER"
+            }
+          ],
+          "inherit_technology": "GER",
+          "add_offsite_building": {
+            "type": "arms_factory",
+            "level": 3
+          },
+          "load_oob": "RK_OOB"
+        }
+      },
+      "country_event": {
+        "id": "wuw_GER_reichskommissariats.27",
+        "hours": 0
+      }
+    }
+  },
+  {
+    "id": "ITA_bop_concesions_to_the_bourgeoisie",
+    "category_id": "ITA_balance_of_power_category",
+    "name": "Уступки буржуазии",
+    "desc": "",
+    "icon": "GFX_decision_generic_fundraising",
+    "cost": "ITA_bop_concesions_to_the_bourgeoisie_cost",
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_government": [
+          "communism",
+          "democratic"
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_common_ground"
+    },
+    "complete_effect": {
+      "add_popularity": {
+        "ideology": "democratic",
+        "popularity": 0.1
+      },
+      "ITA_bop_medium_increase_effect": true
+    }
+  },
+  {
+    "id": "liberate_sierra_leone",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [SIE.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": 700
+        },
+        "SIE": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "BRI_Enable_Easier_Mann",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Включить легкую битву за Мэн",
+    "desc": "",
+    "icon": "GFX_decision_ENG_mann_green",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRI_Show_Lower_Difficulty_Decisions",
+      "NOT": {
+        "has_country_flag": [
+          "BRI_Enabled_Supermajority_Mode",
+          "BRI_Enabled_Easier_Mann",
+          "BRI_Enabled_Harder_Mann"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Enable_Easier_Mann",
+      "custom_effect_tooltip": "BRI_Enable_Easier_Mann_tt",
+      "set_country_flag": "BRI_Enabled_Easier_Mann"
+    }
+  },
+  {
+    "id": "BRI_Disable_Easier_Mann",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить легкую битву за Мэн",
+    "desc": "",
+    "icon": "GFX_decision_ENG_mann_green",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Lower_Difficulty_Decisions",
+        "BRI_Enabled_Easier_Mann"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Supermajority_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Easier_Mann",
+      "clr_country_flag": "BRI_Enabled_Easier_Mann"
+    }
+  },
+  {
+    "id": "BRI_Enable_Easier_Civil_War",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Включить легкую гражданку",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRI_Show_Lower_Difficulty_Decisions",
+      "NOT": {
+        "has_country_flag": [
+          "BRI_Enabled_Supermajority_Mode",
+          "BRI_Enabled_Easier_Civil_War",
+          "BRI_Enabled_Harder_Civil_War"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Enable_Easier_Civil_War",
+      "custom_effect_tooltip": "BRI_Enable_Easier_Civil_War_tt",
+      "set_country_flag": "BRI_Enabled_Easier_Civil_War"
+    }
+  },
+  {
+    "id": "BRI_Disable_Easier_Civil_War",
+    "category_id": "BRI_Difficulty_Category",
+    "name": "Отключить легкую гражданку",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "BRI_Show_Lower_Difficulty_Decisions",
+        "BRI_Enabled_Easier_Civil_War"
+      ],
+      "NOT": {
+        "has_country_flag": "BRI_Enabled_Supermajority_Mode"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision BRI_Disable_Easier_Civil_War",
+      "clr_country_flag": "BRI_Enabled_Easier_Civil_War"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Military_Lossiemouth",
+    "category_id": "SCO_paranoia_category",
+    "name": "Странные полёты в Лоссимуте",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "SCO_Paranoia_Lossiemouth_Bug_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Внедриться в учения",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Lossiemouth_Force_Resignations",
+            "SCO_Paranoia_Lossiemouth_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Lossiemouth"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Lossiemouth_Bug_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Lossiemouth_Investigate_Them",
+    "category_id": "SCO_paranoia_category",
+    "name": "Изучить полёты",
+    "desc": "",
+    "icon": "GFX_decision_generic_investigate",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Lossiemouth_Force_Resignations",
+            "SCO_Paranoia_Lossiemouth_Bug_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Lossiemouth"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: SCO_Paranoia_Lossiemouth_Investigate_Them"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Lossiemouth_Force_Resignations",
+    "category_id": "SCO_paranoia_category",
+    "name": "Отставка офицера Вооружённых Сил",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Lossiemouth_Bug_Them",
+            "SCO_Paranoia_Lossiemouth_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Lossiemouth"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Lossiemouth_Force_Resignations"
+    }
+  },
+  {
+    "id": "GER_Bormann_EconMech_reactivate_siegfried_line",
+    "category_id": "GER_Bormann_EconMech_category",
+    "name": "Восстановить линию Зигфрида",
+    "desc": "Напряжённость в отношениях с мятежным государством СС в Бургундии продолжает расти, поскольку любые попытки связаться с режимом Гиммлера оказываются почти невозможными. Рейху ничего не остаётся, кроме как рассматривать военные действия с Орденсштаатом Бургундией как реальную возможность. В результате наша граница должна быть надёжно защищена, чтобы в случае конфликта Вермахт не оказался на задворках.\n\nОсновы такой безопасности существовали на протяжении десятилетий на линии Зигфрида, но после поражения Франции во Второй мировой войне необходимость поддержания дорогостоящего оборонительного укрепления быстро уменьшилась.\n\nВ конце концов, это будет дорого стоить, чтобы возобновить линию Зигфрида, но всё же это то, что может оказаться необходимым в ближайшем будущем.",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 5
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "BOR_EconMech_enable_decisions",
+        "NOT": {
+          "has_country_flag": "BOR_EconMech_OilCrisis"
+        }
+      }
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_country_flag": "BOR_EconMech_domestic_show",
+          "is_ai": true
+        },
+        {
+          "has_country_flag": [
+            "BOR_EconMech_siegfried_line_unlocked",
+            "BOR_EconMech_decisions_debug"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_EconMech_reactivate_siegfried_line",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "GER_Bormann_EconMech_expand_siegfried_line",
+    "category_id": "GER_Bormann_EconMech_category",
+    "name": "Расширить линию Зигфрида",
+    "desc": "Линия Зигфрида была вновь укомплектована и возвращена к самым основным оперативным стандартам. Однако эта линия не отвечает потребностям современной войны и потребует больших усилий по её оживлению, чтобы она могла найти хорошее применение в случае открытого конфликта.\n\nКак только линия укрепится современным оборонительным вооружением и защитными сооружениями, мы будем готовы к любому безрассудному шагу бургундцев.",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "BOR_EconMech_siegfried_line_completed",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 7
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "BOR_EconMech_enable_decisions",
+        "NOT": {
+          "has_country_flag": "BOR_EconMech_OilCrisis"
+        }
+      }
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_country_flag": "BOR_EconMech_domestic_show",
+          "is_ai": true
+        },
+        {
+          "has_country_flag": [
+            "BOR_EconMech_siegfried_line_expansion_unlocked",
+            "BOR_EconMech_decisions_debug"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_EconMech_expand_siegfried_line",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "GER_Bormann_Foreign_Policy_Kaukasien",
+    "category_id": "GER_Bormann_Foreign_Policy_category",
+    "name": "Страна тумана",
+    "desc": "Кавказия... странное место. Ещё до печальной кончины покойного Гитлера оттуда поступало мало новостей, но много нефти. Теперь, с твёрдой рукой Бормана, пришло время изменить это. Давайте посмотрим, что на самом деле происходит на Кавказе.",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "has_country_flag": [
+          "BOR_speidel_okw",
+          "BOR_schorner_okw"
+        ]
+      },
+      "MCW": {
+        "is_in_faction_with": "GER"
+      },
+      "UKR": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_Foreign_Policy_Kaukasien",
+      "set_country_flag": "GER_Bormann_Kaukasien_Tree",
+      "if": {
+        "limit": {
+          "CAU": {
+            "has_country_leader": {
+              "character": "CAU_paul_pleiger",
+              "ruling_only": true
+            },
+            "NOT": {
+              "has_country_flag": [
+                "CAU_caucasian_revolt",
+                "CAU_caucasian_anarchy"
+              ]
+            }
+          }
+        },
+        "if": {
+          "limit": {
+            "CAU": {
+              "has_country_flag": "CAU_policy_business_bormann"
+            }
+          },
+          "set_country_flag": "GER_BOR_KAU_business_plot_bormann"
+        },
+        "else": {
+          "set_country_flag": "GER_BOR_KAU_business_plot_goering"
+        }
+      },
+      "else_if": {
+        "limit": {
+          "CAU": {
+            "NOT": {
+              "has_country_flag": [
+                "CAU_caucasian_revolt",
+                "CAU_caucasian_anarchy"
+              ]
+            }
+          }
+        },
+        "set_country_flag": "GER_BOR_KAU_josias"
+      },
+      "else": {
+        "set_country_flag": "GER_BOR_KAU_revolt"
+      },
+      "hidden_effect": {
+        "reload_GER_bormann_post_cw_tree": true
+      },
+      "custom_effect_tooltip": "GER_new_options_focus_tree_linebreak"
+    }
+  },
+  {
+    "id": "SGR_Kaukasien_investment",
+    "category_id": "SGR_Zollverein_members_investment_category",
+    "name": "Инвестиции в Кавказию",
+    "desc": "Богатые природные ресурсы и дешевая рабочая сила в кавказском регионе привели к довольно нездоровым отношениям между Кавказией и Германией. Условия труда в РК Кавказии, как известно, зверские - немецкая админинстрация с самого захвата региона начала эксплуатацию местного населения по-полной. Мы должны решить эту проблему ужасных условий труда, если мы хотим способствовать какому-либо конкретному экономическому росту региона.",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SGR_phase2",
+      "NOT": {
+        "has_global_flag": "SGR_natsoc_collapse"
+      },
+      "has_completed_focus": "GER_sapientia"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_Kaukasien_investment",
+      "custom_effect_tooltip": "SGR_eastern_investment_cost",
+      "set_country_flag": "SGR_kaukasien_active",
+      "CAU": {
+        "TNO_improve_poverty_med": true,
+        "TNO_improve_academic_base_low": true,
+        "TNO_improve_industrial_equipment_med": true,
+        "TNO_improve_industrial_expertise_med": true,
+        "TNO_improve_agriculture_low": true
+      }
+    }
+  },
+  {
+    "id": "SGR_Kaukasien_Question",
+    "category_id": "SGR_state_of_the_reich_category",
+    "name": "Кавказский Вопрос",
+    "desc": "В клубящемся темном тумане Кавказа лежит наш самый разрозненный и таинственный Рейхскомиссариат. Как ключевой производитель нефти, эта территория должна быть полностью стабилизирована, если мы хотим, чтобы она продолжала служить интересам Рейха.",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "AND": {
+        "POL": {
+          "is_in_faction_with": "GER"
+        },
+        "OSL": {
+          "is_in_faction_with": "GER"
+        },
+        "NOR": {
+          "is_in_faction_with": "GER"
+        },
+        "UKR": {
+          "is_in_faction_with": "GER"
+        }
+      }
+    },
+    "visible": {
+      "CAU": {
+        "NOT": {
+          "is_in_faction_with": "GER"
+        }
+      },
+      "has_country_flag": "SGR_pakt_open"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_Kaukasien_Question",
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_global_flag": "SGR_natsoc_collapse"
+          },
+          "CAU": {
+            "has_country_leader": {
+              "character": "CAU_paul_pleiger",
+              "ruling_only": true
+            }
+          }
+        },
+        "set_country_flag": "SGR_CAU_tree1",
+        "reload_GER_speer_post_cw_tree": true
+      },
+      "else_if": [
+        {
+          "limit": {
+            "NOT": {
+              "has_global_flag": "SGR_natsoc_collapse"
+            }
+          },
+          "set_country_flag": "SGR_CAU_tree2",
+          "reload_GER_speer_post_cw_tree": true
+        },
+        {
+          "limit": {
+            "has_global_flag": "SGR_natsoc_collapse"
+          },
+          "declare_war_on": {
+            "target": "CAU",
+            "type": "puppet_wargoal_focus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "collab_regime_in_kaukasien",
+    "category_id": "SGR_collab_regimes_category",
+    "name": "Создание Кавказской Федерации",
+    "desc": "",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision collab_regime_in_kaukasien"
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_kameroon",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Камеруне",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_kameroon": true,
+      "GRO_stabilized_kameroon": true,
+      "GRO_has_stationed_troops_kameroon": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_kameroon",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.30"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_ubangi_schari",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Убанги-Шари",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_ubangi_schari": true,
+      "GRO_stabilized_ubangi_schari": true,
+      "GRO_has_stationed_troops_ubangi_schari": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_ubangi_schari",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.31"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_kongo",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Конго",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_kongo": true,
+      "GRO_stabilized_kongo": true,
+      "GRO_has_stationed_troops_kongo": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_kongo",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.32"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_angola",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Анголе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_angola": true,
+      "GRO_stabilized_angola": true,
+      "GRO_has_stationed_troops_angola": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_angola",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.33"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_sambia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Замбии",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_sambia": true,
+      "GRO_stabilized_sambia": true,
+      "GRO_has_stationed_troops_sambia": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_sambia",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.34"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_botswana",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Ботсване",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_botswana": true,
+      "GRO_stabilized_botswana": true,
+      "GRO_has_stationed_troops_botswana": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_botswana",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.35"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_simbabwe",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Зимбабве",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_simbabwe": true,
+      "GRO_stabilized_simbabwe": true,
+      "GRO_has_stationed_troops_simbabwe": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_simbabwe",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.36"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_mosambik",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Мозамбике",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_mosambik": true,
+      "GRO_stabilized_mosambik": true,
+      "GRO_has_stationed_troops_mosambik": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_mosambik",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.37"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_sansibar",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Занзибаре",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_sansibar": true,
+      "GRO_stabilized_sansibar": true,
+      "GRO_has_stationed_troops_sansibar": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_sansibar",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.38"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_ruanda_burundi",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Руанда-Урунди",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_ruanda_burundi": true,
+      "GRO_stabilized_ruanda_burundi": true,
+      "GRO_has_stationed_troops_ruanda_burundi": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_ruanda_burundi",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.39"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_uganda",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Уганде",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_uganda": true,
+      "GRO_stabilized_uganda": true,
+      "GRO_has_stationed_troops_uganda": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_uganda",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.40"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_tanganika",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Танганьике",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_tanganika": true,
+      "GRO_stabilized_tanganika": true,
+      "GRO_has_stationed_troops_tanganika": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_tanganika",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.41"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_act_in_namibia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Действие в Намбии",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GRO_is_in_control_of_namibia": true,
+      "GRO_stabilized_namibia": true,
+      "GRO_has_stationed_troops_namibia": true
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GRO_REICHSSTAAT_act_in_namibia",
+      "country_event": {
+        "id": "GRO_REICHSSTAAT.42"
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_kameroon",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Камерунскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_kameroon_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_kameroon_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^0": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^0",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_ubangi_schari",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Убанги-Шарийскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_ubangi_schari_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_ubangi_schari_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^1": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^1",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_kongo",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Конгскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_kongo_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_kongo_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^2": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^2",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_angola",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Ангольскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_angola_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_angola_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^3": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^3",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_sambia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Замбийскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^4": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^4",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_botswana",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Ботсванскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_botswana_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_botswana_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^5": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^5",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_simbabwe",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Зимбабвийскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_simbabwe_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_simbabwe_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^6": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^6",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_mosambik",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Мозамбикскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_mosambik_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_mosambik_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^7": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^7",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_sansibar",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Занзибарскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_sansibar_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_sansibar_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^8": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^8",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_ruanda_burundi",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Руанда-Урундийскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_ruanda_burundi_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_ruanda_burundi_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^9": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^9",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_uganda",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Угандскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_uganda_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_uganda_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^10": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^10",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_tanganika",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Танганьикскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_tanganika_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_tanganika_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^11": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^11",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_stabilize_namibia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Помощь Намбийскому Колониальному Администратору",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^12": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^12",
+        "max": 1,
+        "min": 0
+      }
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_kameroon",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Камеруне",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_kameroon_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_kameroon_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^0": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^0",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_ubangi_schari",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Убанги-Шари",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_ubangi_schari_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_ubangi_schari_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^1": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^1",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_kongo",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Конго",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_kongo_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_kongo_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^2": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^2",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_angola",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Анголе",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_angola_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_angola_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^3": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^3",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_sambia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Замбии",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_sambia_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^4": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^4",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_botswana",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Ботсване",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_botswana_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_botswana_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^5": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^5",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_simbabwe",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Зимбабве",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_simbabwe_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_simbabwe_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^6": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^6",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_mosambik",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Мозамбике",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_mosambik_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_mosambik_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^7": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^7",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_sansibar",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Занзибаре",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_sansibar_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_sansibar_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^8": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^8",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_ruanda_burundi",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Руанда-Урунди",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_ruanda_burundi_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_ruanda_burundi_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^9": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^9",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_uganda",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Уганде",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_uganda_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_uganda_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^10": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^10",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_tanganika",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Танганьике",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_tanganika_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_tanganika_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^11": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^11",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GRO_REICHSSTAAT_support_garrison_namibia",
+    "category_id": "GRO_REICHSSTAAT_stabilisierung_des_reichsstaates",
+    "name": "Отправить припасы в гарнизон в Намбии",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+    },
+    "visible": {
+      "has_country_flag": "GRO_REICHSSTAAT_namibia_flag"
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "GRO_REICHSSTAAT_rebel_stability^12": 0.05
+      },
+      "clamp_variable": {
+        "var": "GRO_REICHSSTAAT_rebel_stability^12",
+        "max": 1,
+        "min": 0
+      },
+      "add_command_power": -20
+    }
+  },
+  {
+    "id": "GNG_besiege_GFT_neighbourhoods",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Осада жилых кварталов  ФРГ",
+    "desc": "ФРГ превратили несколько жилых комплексов в неприступные крепости. Взятие их измором потребует времени, но гарантирует успех.",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_GFT",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_GFT"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_guangdong_or_anarchy",
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_besiege_CCL_neighbourhoods",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Осада жилых кварталов  ККТ",
+    "desc": "ККТ превратили несколько жилых комплексов в неприступные крепости. Взятие их измором потребует времени, но гарантирует успех.",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GNG_isnt_reallocating_from_CCL",
+        "NOT": {
+          "has_country_flag": "GNG_reallocating_from_CCL"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_guangdong_or_anarchy",
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_enable_easier_legco",
+    "category_id": "GNG_difficulty_category",
+    "name": "Включить Проще LegCo",
+    "desc": "",
+    "icon": "GFX_decision_GNG_legco",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "GNG_show_lower_difficulty_decisions",
+      "NOT": {
+        "has_country_flag": [
+          "GNG_enable_bailout_mode",
+          "GNG_enabled_easier_legco"
+        ]
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GNG_easier_legco_mode_tt",
+      "set_country_flag": "GNG_enabled_easier_legco"
+    }
+  },
+  {
+    "id": "GNG_disable_easier_legco",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Проще LegCo",
+    "desc": "",
+    "icon": "GFX_decision_GNG_legco",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_lower_difficulty_decisions",
+        "GNG_enabled_easier_legco"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enable_bailout_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enabled_easier_legco"
+    }
+  },
+  {
+    "id": "GNG_enable_easier_riots",
+    "category_id": "GNG_difficulty_category",
+    "name": "Включить Проще Беспорядки",
+    "desc": "",
+    "icon": "GFX_decision_GNG_rioters",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "GNG_show_lower_difficulty_decisions",
+      "NOT": {
+        "has_country_flag": [
+          "GNG_enable_bailout_mode",
+          "GNG_enable_easier_riots"
+        ]
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GNG_easier_riots_mode_tt",
+      "set_country_flag": "GNG_enable_easier_riots"
+    }
+  },
+  {
+    "id": "GNG_disable_easier_riots",
+    "category_id": "GNG_difficulty_category",
+    "name": "Отключить Проще Беспорядки",
+    "desc": "",
+    "icon": "GFX_decision_GNG_rioters",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "GNG_show_lower_difficulty_decisions",
+        "GNG_enable_easier_riots"
+      ],
+      "NOT": {
+        "has_country_flag": "GNG_enable_bailout_mode"
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "GNG_enable_easier_riots"
+    }
+  },
+  {
+    "id": "IBR_invest_kaukasien_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Инвестировать в РК Кавказия",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_investments",
+      "CAU": {
+        "is_in_faction_with": "GER"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_kaukasien_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.023
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  },
+  {
+    "id": "IBR_invite_Siemens_decision",
+    "category_id": "IBR_pakt_diplomacy_category",
+    "name": "Привлечь инвестиции Сименс",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_pakt_invite_corporations"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SAF_develop_cape",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Инвестировать в Капскую Провинцию",
+    "desc": "",
+    "icon": "GFX_decision_SAF_develop_cape",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 681
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_develop_cape",
+      "add_to_variable": {
+        "SAF_diamond_count": -18
+      },
+      "set_temp_variable": {
+        "temp_state_value_addition": 0.2
+      },
+      "681": {
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 1,
+          "instant_build": true
+        },
+        "econ_state_value_change_addition_specified_state": true
+      },
+      "SAF_gain_mothly_diamonds_1": true,
+      "hidden_effect": {
+        "681": {
+          "add_state_modifier": {
+            "modifier": {
+              "state_GDP_growth_factor_modifier": 0.05
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "SAF_increase_state_gdp_growth_tt_cape"
+    }
+  },
+  {
+    "id": "SAF_develop_orange",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Инвестировать в Оранжевое Свободное Государство",
+    "desc": "",
+    "icon": "GFX_decision_SAF_develop_orange",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 275
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_develop_orange",
+      "add_to_variable": {
+        "SAF_diamond_count": -18
+      },
+      "set_temp_variable": {
+        "temp_state_value_addition": 0.25
+      },
+      "275": {
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 1,
+          "instant_build": true
+        },
+        "econ_state_value_change_addition_specified_state": true
+      },
+      "SAF_gain_mothly_diamonds_1": true,
+      "hidden_effect": {
+        "275": {
+          "add_state_modifier": {
+            "modifier": {
+              "state_GDP_growth_factor_modifier": 0.05
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "SAF_increase_state_gdp_growth_tt_orange"
+    }
+  },
+  {
+    "id": "SAF_subsidize_transvaal_farms",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Субсидировать фермы в Трансваале",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 940
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_subsidize_transvaal_farms",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "hidden_effect": {
+        "940": {
+          "add_state_modifier": {
+            "modifier": {
+              "state_GDP_growth_factor_modifier": 0.05
+            }
+          }
+        }
+      },
+      "custom_effect_tooltip": "SAF_increase_state_gdp_growth_tt_transvaal"
+    }
+  },
+  {
+    "id": "SAF_develop_bechuan",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Развитие Бечуаналендской инфраструктуры",
+    "desc": "",
+    "icon": "GFX_decision_SAF_develop_bechuan_roads",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_controlled_state": {
+        "is_bechuanaland_state": true
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_develop_bechuan",
+      "add_to_variable": {
+        "SAF_diamond_count": -8
+      },
+      "add_manpower": 450,
+      "set_temp_variable": {
+        "temp_state_value_addition": 0.005
+      },
+      "random_controlled_state": {
+        "limit": {
+          "is_bechuanaland_state": true,
+          "infrastructure": {
+            "_op": "<",
+            "value": 9
+          }
+        },
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 1,
+          "instant_build": true
+        },
+        "econ_state_value_change_addition_specified_state": true
+      }
+    }
+  },
+  {
+    "id": "SAF_develop_electric_grid",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Расширить электросеть",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_develop_electric_grid",
+      "add_to_variable": {
+        "SAF_diamond_count": -8
+      },
+      "random_owned_controlled_state": {
+        "add_building_construction": {
+          "type": "thermoelectric_plant",
+          "level": 1,
+          "instant_build": true
+        }
+      }
+    }
+  },
+  {
+    "id": "SAF_fund_orange_militias",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Инвестировать в Оранжевое ополчение",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_full_control_of_state": 275,
+      "NOT": {
+        "has_country_flag": "SAF_pro_anc"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_global_flag": "south_african_war_happening"
+        },
+        {
+          "has_country_flag": "SAF_pro_anc"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_fund_orange_militias",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "add_manpower": 10000,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 5000,
+        "producer": "SAF"
+      }
+    }
+  },
+  {
+    "id": "SAF_expand_diamond_mines",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Расширить алмазные шахты",
+    "desc": "",
+    "icon": "GFX_decision_generic_expand_mines",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SAF_pro_anc"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "SAF_pro_anc"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_expand_diamond_mines",
+      "add_to_variable": {
+        "SAF_diamond_count": -30
+      },
+      "random_owned_state": [
+        {
+          "add_building_construction": {
+            "type": "infrastructure",
+            "level": 1,
+            "instant_build": true
+          }
+        },
+        {
+          "add_building_construction": {
+            "type": "infrastructure",
+            "level": 1,
+            "instant_build": true
+          }
+        }
+      ],
+      "SAF_gain_mothly_diamonds_1": true,
+      "add_timed_idea": {
+        "idea": "SAF_expand_diamond_mines_misc_income",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "SAF_raise_work_times",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Увеличить рабочие часы",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "SAF_anti_anc"
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "SAF_pro_anc"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_raise_work_times",
+      "tno_max_workhours_worsen": true,
+      "SAF_gain_mothly_diamonds_2": true
+    }
+  },
+  {
+    "id": "SAF_lower_worker_pensions",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Урезать пенсии рабочих",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 125,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "SAF_anti_anc"
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "SAF_pro_anc"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_lower_worker_pensions",
+      "tno_pensions_worsen": true,
+      "SAF_gain_mothly_diamonds_1": true
+    }
+  },
+  {
+    "id": "SAF_buy_OFN_guns",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Купить оружие у ОСН",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_guns",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_buy_OFN_guns",
+      "add_to_variable": {
+        "SAF_diamond_count": -8
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 1250,
+        "producer": "USA"
+      },
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": 0.1
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "SAF_attract_OFN_business",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Привлечь американские компании",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_business",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_attract_OFN_business",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true,
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": 0.15
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "SAF_ask_for_OFN_stationing",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Запросить базирование у ОСН",
+    "desc": "",
+    "icon": "GFX_decision_generic_ofn_stationing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_ask_for_OFN_stationing",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "add_equipment_to_stockpile": [
+        {
+          "type": "infantry_equipment",
+          "amount": 2500,
+          "producer": "USA"
+        },
+        {
+          "type": "anti_tank_equipment",
+          "amount": 1000,
+          "producer": "USA"
+        }
+      ],
+      "add_manpower": 15000,
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": 0.3
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "SAF_cut_off_trade_with_the_pakt",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Прекратить торговлю с Пактом",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_end_trade",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_global_flag": "german_civil_war"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_global_flag": [
+          "south_african_war_happening",
+          "german_civil_war"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_cut_off_trade_with_the_pakt",
+      "add_manpower": 10000,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 3750,
+        "producer": "USA"
+      },
+      "SAF_gain_5_diamonds": true,
+      "SAF_end_pakt_trade": true,
+      "set_temp_variable": {
+        "gdp_growth_temp": -1
+      },
+      "econ_gdp_growth_change": true,
+      "set_country_flag": "SAF_ended_pakt_trade"
+    }
+  },
+  {
+    "id": "SAF_buy_Pakt_guns",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Купить оружие у Пакта",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_guns",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_global_flag": "german_civil_war",
+        "custom_trigger_tooltip": {
+          "tooltip": "SAF_displeasure_50",
+          "check_variable": {
+            "var": "SAF_Pakt_Displeasure",
+            "value": 0.5,
+            "compare": "greater_than_or_equals"
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "var": "SAF_Pakt_Displeasure",
+          "value": 0.5,
+          "compare": "greater_than_or_equals"
+        },
+        "has_global_flag": [
+          "german_civil_war",
+          "south_african_war_happening"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_buy_Pakt_guns",
+      "add_to_variable": {
+        "SAF_diamond_count": -8
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 1250,
+        "producer": "GER"
+      },
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": -0.075
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "SAF_attract_Pakt_business",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Привлечь немецкие компании",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_business",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_global_flag": "german_civil_war",
+        "custom_trigger_tooltip": {
+          "tooltip": "SAF_displeasure_50",
+          "check_variable": {
+            "var": "SAF_Pakt_Displeasure",
+            "value": 0.5,
+            "compare": "greater_than_or_equals"
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "var": "SAF_Pakt_Displeasure",
+          "value": 0.5,
+          "compare": "greater_than_or_equals"
+        },
+        "has_global_flag": [
+          "german_civil_war",
+          "south_african_war_happening"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_attract_Pakt_business",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "set_temp_variable": {
+        "gdp_growth_temp": 0.1
+      },
+      "econ_gdp_growth_change": true,
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": -0.1
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "SAF_buy_Pakt_research",
+    "category_id": "SAF_diamonds_from_sierra_leon",
+    "name": "Купить разработки у Пакта",
+    "desc": "",
+    "icon": "GFX_decision_generic_pakt_research",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_global_flag": "german_civil_war",
+        "custom_trigger_tooltip": {
+          "tooltip": "SAF_displeasure_100",
+          "check_variable": {
+            "var": "SAF_Pakt_Displeasure",
+            "value": 1,
+            "compare": "greater_than_or_equals"
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "check_variable": {
+          "var": "SAF_Pakt_Displeasure",
+          "value": 1,
+          "compare": "greater_than_or_equals"
+        },
+        "has_global_flag": [
+          "german_civil_war",
+          "south_african_war_happening"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAF_buy_Pakt_research",
+      "add_to_variable": {
+        "SAF_diamond_count": -12
+      },
+      "TNO_improve_research_facilities_med": true,
+      "if": {
+        "limit": {
+          "NOT": {
+            "OR": {
+              "has_war_with": [
+                "ANG",
+                "GRO",
+                "COG"
+              ]
+            }
+          }
+        },
+        "set_temp_variable": {
+          "SAF_Pakt_Displeasure_temp": -0.15
+        },
+        "SAF_pakt_anger_change": true
+      }
+    }
+  },
+  {
+    "id": "COG_vacation_siemens",
+    "category_id": "COG_welcome_in_the_heart_of_afrika",
+    "name": "Пригласить магната",
+    "desc": "Эрнст фон Сименс возглавляет Siemens AG, электронного гиганта, который приносит энергию, телефоны и многие другие технологические чудеса во все страны Пакта. Медные рудники Центральафрики, несомненно, заинтересуют его.",
+    "icon": "GFX_decision_generic_invitation",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false,
+      "check_variable": {
+        "cog_vip_id": 0
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_vacation_siemens",
+      "country_event": {
+        "id": "COG_misc.22",
+        "days": 7
+      },
+      "set_variable": {
+        "cog_vip_id": 8
+      },
+      "custom_effect_tooltip": "COG_investors_pleased_tt"
+    }
+  },
+  {
+    "id": "GER_endsieg_elite_pioniere_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Elite pioniere stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_elite_pioniere_stratagem",
+        "days": 35
+      },
+      "if": {
+        "limit": {
+          "country_exists": "SGV"
+        },
+        "SGV": {
+          "add_timed_idea": {
+            "idea": "OMS_elite_pioniere_stratagem",
+            "days": 40
+          }
+        }
+      },
+      "else": {
+        "OMS": {
+          "add_timed_idea": {
+            "idea": "OMS_elite_pioniere_stratagem",
+            "days": 40
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_endsieg_sondereinsatzkommando_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Sondereinsatzkommando stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_sondereinsatzkommando_stratagem",
+        "days": 35
+      }
+    }
+  },
+  {
+    "id": "GER_endsieg_schwerdpunk_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Schwerdpunk stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_schwerdpunk_stratagem",
+        "days": 35
+      }
+    }
+  },
+  {
+    "id": "GER_endsieg_feuersturm_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Feuersturm stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_feuersturm_stratagem",
+        "days": 35
+      },
+      "if": {
+        "limit": {
+          "country_exists": "SGV"
+        },
+        "SGV": {
+          "add_timed_idea": {
+            "idea": "OMS_feuersturm_stratagem",
+            "days": 40
+          }
+        }
+      },
+      "else": {
+        "OMS": {
+          "add_timed_idea": {
+            "idea": "OMS_feuersturm_stratagem",
+            "days": 40
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_endsieg_festung_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Festung stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_festung_stratagem",
+        "days": 35
+      }
+    }
+  },
+  {
+    "id": "GER_endsieg_luftuberlegenheit_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Luftuberlegenheit stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_luftuberlegenheit_stratagem",
+        "days": 35
+      }
+    }
+  },
+  {
+    "id": "GER_endsieg_bewegungskrieg_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Bewegungskrieg stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_bewegungskrieg_stratagem",
+        "days": 35
+      }
+    }
+  },
+  {
+    "id": "GER_endsieg_verzogerungsgefecht_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Verzogerungsgefecht stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_verzogerungsgefecht_stratagem",
+        "days": 35
+      },
+      "if": {
+        "limit": {
+          "country_exists": "SGV"
+        },
+        "SGV": {
+          "add_timed_idea": {
+            "idea": "OMS_verzogerungsgefecht_stratagem",
+            "days": 40
+          }
+        }
+      },
+      "else": {
+        "OMS": {
+          "add_timed_idea": {
+            "idea": "OMS_verzogerungsgefecht_stratagem",
+            "days": 40
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_endsieg_ostlegionen_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Ostlegionen stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "MCW": {
+        "add_timed_idea": {
+          "idea": "GER_ostlegionen_stratagem",
+          "days": 35
+        }
+      },
+      "OST": {
+        "add_timed_idea": {
+          "idea": "GER_ostlegionen_stratagem",
+          "days": 35
+        }
+      },
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "GER_ostlegionen_stratagem",
+          "days": 35
+        }
+      },
+      "if": [
+        {
+          "limit": {
+            "country_exists": "UKR"
+          },
+          "UKR": {
+            "add_timed_idea": {
+              "idea": "GER_ostlegionen_stratagem",
+              "days": 35
+            }
+          }
+        },
+        {
+          "limit": {
+            "country_exists": "FUK",
+            "FUK": {
+              "is_in_faction_with": "GER"
+            }
+          },
+          "FUK": {
+            "add_timed_idea": {
+              "idea": "GER_ostlegionen_stratagem",
+              "days": 35
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "GER_endsieg_volksturm_stratagem",
+    "category_id": "GER_2WRW_endsieg",
+    "name": "Volksturm stratagem",
+    "desc": "",
+    "icon": "GFX",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "original_tag": "GER",
+        "GER": {
+          "OR": {
+            "has_war_with": [
+              "OMS",
+              "SGV"
+            ]
+          }
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "GER"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "GER_volksturm_stratagem",
+        "days": 35
+      }
+    }
+  }
+]

@@ -1,0 +1,121 @@
+[
+  {
+    "id": "FFR_enable_reconstruction_debug",
+    "category_id": "FFR_debug_category",
+    "name": "FFR_enable_reconstruction_debug",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision FFR_enable_reconstruction_debug",
+      "set_country_flag": "FFR_reconstruction_debug"
+    }
+  },
+  {
+    "id": "debug_show_FFR_debug_decisions",
+    "category_id": "global_debug_decisions",
+    "name": "debug_show_FFR_debug_decisions",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "hide_debug_decisions"
+        },
+        "original_tag": "FFR"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision debug_show_FFR_debug_decisions",
+      "set_country_flag": "FFR_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_FFRWA_CA_Crisis",
+    "category_id": "global_debug_decisions",
+    "name": "Trigger WAC - Scenario 1",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_africa_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_1": true
+    }
+  },
+  {
+    "id": "WA_FFRWA_CA_Crisis_but_more",
+    "category_id": "global_debug_decisions",
+    "name": "Trigger WAC - Scenario 3",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent_2",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": [
+        "TT_debug_decisions",
+        "TT_africa_debug_decisions"
+      ]
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_3": true
+    }
+  },
+  {
+    "id": "MAG_WA_support_waw_ffr",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт французским остаткам",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FFR": {
+        "exists": true,
+        "is_faction_leader": true
+      },
+      "has_global_flag": "west_african_war_ongoing",
+      "NOT": {
+        "OR": {
+          "CAO": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "FFR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "SEN": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_waw_ffr",
+      "FFR": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  }
+]

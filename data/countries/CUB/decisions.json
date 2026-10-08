@@ -1,0 +1,197 @@
+[
+  {
+    "id": "develop_cuba_steel",
+    "category_id": "prospect_for_resources",
+    "name": "Расширение добычи железа на Кубе",
+    "desc": "",
+    "icon": "steel",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation3",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "owns_state": 315,
+      "controls_state": 315
+    },
+    "visible": {
+      "owns_state": 315,
+      "controls_state": 315,
+      "315": {
+        "NOT": {
+          "has_state_flag": "cuba_steel_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MEX_decision_integrate_cuba",
+    "category_id": "MEX_category_territorial_integration",
+    "name": "Интегрировать государство [CUB.GetNameDef]",
+    "desc": "",
+    "icon": "generic_nationalism",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": 315,
+      "has_completed_focus": "MEX_focus_integrate_the_caribbean"
+    },
+    "visible": {
+      "has_completed_focus": "MEX_focus_liberate_the_caribbean",
+      "NOT": {
+        "315": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_AAC_Dry_Scuba_Kit",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_AAC_Dry_Scuba_Kit$",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      },
+      "set_temp_variable": {
+        "tempIntel": {
+          "_op": ">",
+          "value": 5
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "AAC_intel_on_AAO_tt",
+        "check_variable": {
+          "var": "Antarctica_Intel_on_AAO_Value",
+          "value": "tempIntel",
+          "compare": "greater_than_or_equals"
+        }
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_AAC_Dry_Scuba_Kit"
+        }
+      ],
+      "check_variable": {
+        "AAC_Marine_Active_Category": 2
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_AAC_Dry_Scuba_Kit",
+      "add_to_variable": {
+        "AAC_unlocked_body_kit": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "add_political_power": -40,
+        "set_temp_variable": {
+          "tempEq": -7
+        },
+        "Antarctica_change_equipment": true
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_AAC_Dry_Scuba_Kit"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_CUB_Cigars",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_CUB_Cigars$",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_CUB_Cigars"
+        }
+      ],
+      "has_idea": "AAC_Diplo_Deal_CUB_Cuban_Cigar_Shipment",
+      "check_variable": {
+        "AAC_Marine_Active_Category": 4
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_CUB_Cigars",
+      "add_to_variable": {
+        "AAC_unlocked_creature_comforts": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "set_temp_variable": {
+          "tempEq": -5
+        },
+        "Antarctica_change_equipment": true
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_CUB_Cigars"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "IBR_invest_cuba_decision",
+    "category_id": "IBR_ofn_diplomacy_category",
+    "name": "Инвестировать в Кубу",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_OFN_latinamerica_investments",
+      "AND": {
+        "NOT": [
+          {
+            "CUB": {
+              "check_variable": {
+                "ECON_SPHERE_LEADER": "MEX"
+              }
+            }
+          },
+          {
+            "CUB": {
+              "check_variable": {
+                "ECON_SPHERE_LEADER": "USA"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_invest_cuba_decision",
+      "set_temp_variable": {
+        "IBR_foreign_misc_costs_temp": 0.03
+      },
+      "IBR_foreign_misc_costs_change": true
+    }
+  }
+]

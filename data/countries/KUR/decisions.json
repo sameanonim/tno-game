@@ -1,0 +1,2710 @@
+[
+  {
+    "id": "develop_kursk_steel_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Разработка месторождений железа под Курском",
+    "desc": "",
+    "icon": "steel",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_tech": "excavation2",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 8
+      },
+      "owns_state": 220,
+      "controls_state": 220
+    },
+    "visible": {
+      "owns_state": 220,
+      "controls_state": 220,
+      "220": {
+        "NOT": {
+          "has_state_flag": {
+            "flag": "kursk_steel_developed",
+            "value": 5
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "check_variable": {
+            "var": "SOV_kursk_steel_duration",
+            "value": 30,
+            "compare": "less_than"
+          }
+        },
+        "set_variable": {
+          "var": "SOV_kursk_steel_duration",
+          "value": 30
+        }
+      }
+    }
+  },
+  {
+    "id": "develop_kursk_steel_deposits_2",
+    "category_id": "prospect_for_resources",
+    "name": "Расширение добычи железа под Курском",
+    "desc": "",
+    "icon": "steel",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_tech": "excavation3",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 11
+      },
+      "owns_state": 220,
+      "controls_state": 220
+    },
+    "visible": {
+      "owns_state": 220,
+      "controls_state": 220,
+      "220": {
+        "NOT": {
+          "has_state_flag": {
+            "flag": "kursk_steel_developed_2",
+            "value": 5
+          }
+        },
+        "has_state_flag": {
+          "flag": "kursk_steel_developed",
+          "value": 5
+        }
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "check_variable": {
+            "var": "SOV_kursk_steel_duration_2",
+            "value": 30,
+            "compare": "less_than"
+          }
+        },
+        "set_variable": {
+          "var": "SOV_kursk_steel_duration_2",
+          "value": 30
+        }
+      }
+    }
+  },
+  {
+    "id": "develop_kursk_steel_deposits_3",
+    "category_id": "prospect_for_resources",
+    "name": "Разработка открытым способом месторождений железа под Курском",
+    "desc": "",
+    "icon": "steel",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_tech": "excavation4",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 14
+      },
+      "owns_state": 220,
+      "controls_state": 220
+    },
+    "visible": {
+      "owns_state": 220,
+      "controls_state": 220,
+      "220": {
+        "NOT": {
+          "has_state_flag": {
+            "flag": "kursk_steel_developed_3",
+            "value": 5
+          }
+        },
+        "has_state_flag": {
+          "flag": "kursk_steel_developed_2",
+          "value": 5
+        }
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "check_variable": {
+            "var": "SOV_kursk_steel_duration_3",
+            "value": 30,
+            "compare": "less_than"
+          }
+        },
+        "set_variable": {
+          "var": "SOV_kursk_steel_duration_3",
+          "value": 30
+        }
+      }
+    }
+  },
+  {
+    "id": "release_turkish_kurdistan",
+    "category_id": "form_transcaucasus_category",
+    "name": "Усмирить анатолийских курдов",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "controls_state": [
+        352,
+        353,
+        350
+      ]
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "GEO",
+          "ARM",
+          "AZR"
+        ]
+      },
+      "has_global_flag": "form_transcaucasia_flag",
+      "NOT": {
+        "has_global_flag": "anatolian_kurds_subjugated_flag"
+      },
+      "has_dlc": "No Step Back"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "release_anatolian_kurdistan_tt",
+      "hidden_effect": {
+        "set_global_flag": "anatolian_kurds_subjugated_flag",
+        "KUR": {
+          "transfer_state": [
+            350,
+            352,
+            353
+          ],
+          "if": {
+            "limit": {
+              "ROOT": {
+                "controls_state": 344
+              }
+            },
+            "add_state_core": 344,
+            "transfer_state": 344
+          },
+          "load_oob": "KUR_liberation_troops"
+        },
+        "puppet": "KUR",
+        "if": {
+          "limit": {
+            "has_war_with": "TUR"
+          },
+          "KUR": {
+            "add_to_war": {
+              "targeted_alliance": "ROOT",
+              "enemy": "TUR",
+              "hostility_reason": "asked_to_join"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "KUR_syrian_border_skrimish_decision",
+    "category_id": "KUR_syrian_border_skrimish_cat",
+    "name": "Освободить западных курдов",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "680": {
+        "owner": {
+          "NOT": {
+            "has_war_with": "IRQ",
+            "is_in_faction_with": "IRQ",
+            "has_non_aggression_pact_with": "IRQ",
+            "is_puppet_of": "IRQ"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "IRQ_kurdish_reject_ankara_treaty",
+      "676": {
+        "is_controlled_by": "IRQ"
+      }
+    },
+    "complete_effect": {
+      "activate_mission": "IRQ_march_on_syrian_kurdistan_mission",
+      "custom_effect_tooltip": "generic_skip_one_line_tt",
+      "start_border_war": {
+        "change_state_after_war": false,
+        "combat_width": 180,
+        "minimum_duration_in_days": 40,
+        "attacker": {
+          "on_win": "IRQ_political_events.77",
+          "on_lose": "IRQ_political_events.78",
+          "on_cancel": "IRQ_political_events.78",
+          "state": 676,
+          "num_provinces": 2,
+          "leader_score": {
+            "base": 1,
+            "modifier": [
+              {
+                "skill": {
+                  "_op": ">",
+                  "value": 2
+                },
+                "factor": 5
+              },
+              {
+                "skill": {
+                  "_op": ">",
+                  "value": 3
+                },
+                "factor": 10
+              }
+            ]
+          },
+          "dig_in_factor": 0,
+          "terrain_factor": 0
+        },
+        "defender": {
+          "state": 680,
+          "num_provinces": 2,
+          "on_lose": "IRQ_political_events.77",
+          "on_win": "IRQ_political_events.78",
+          "on_cancel": "IRQ_political_events.78"
+        }
+      }
+    }
+  },
+  {
+    "id": "IRQ_march_on_syrian_kurdistan_mission",
+    "category_id": "KUR_syrian_border_skrimish_cat",
+    "name": "Внедрение в Западный Курдистан",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "PER_support_kurds_in_iraq",
+    "category_id": "PER_gulf_decisions_cat",
+    "name": "Сплотить курдов в регионе [FROM.OWNER.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "PER_communist_destabilize_iraq",
+      "FROM": {
+        "NOT": {
+          "has_dynamic_modifier": {
+            "modifier": "KUR_resistance_modifier"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      },
+      "set_country_flag": "PER_orchestrating_rebellions"
+    }
+  },
+  {
+    "id": "PER_send_weapons_to_kurds",
+    "category_id": "PER_gulf_decisions_cat",
+    "name": "Отправить оружие курдам в регионе [FROM.OWNER.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "PER_communist_destabilize_iraq",
+      "FROM": {
+        "has_dynamic_modifier": {
+          "modifier": "KUR_resistance_modifier"
+        }
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 1999
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "PER_communist_destabilize_iraq",
+      "NOT": {
+        "FROM": {
+          "OWNER": {
+            "has_country_flag": "PER_kurds_armed_and_ready"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "PER_kurdish_revolt_mission",
+    "category_id": "PER_gulf_decisions_cat",
+    "name": "Назревает курдское восстание",
+    "desc": "",
+    "icon": "generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "PER",
+      "has_country_flag": "PER_kurdish_rebellion_growing",
+      "676": {
+        "has_dynamic_modifier": {
+          "modifier": "KUR_resistance_modifier"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "PER_kur_azr_revolt_mission",
+    "category_id": "PER_kur_azr_independence_cat",
+    "name": "Сепаратисты готовятся к войне за независимость",
+    "desc": "",
+    "icon": "generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "PER",
+      "NOT": {
+        "OR": {
+          "has_completed_focus": "PER_appease_the_seperatists",
+          "has_country_flag": "PER_kur_azr_indy_war_started"
+        }
+      },
+      "any_owned_state": {
+        "OR": {
+          "is_core_of": [
+            "KUR",
+            "AZR"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_peace_deal_for_south_sakhalin_and_kuril_islands",
+    "category_id": "SOV_diplomacy_asia_decision_category",
+    "name": "Предложить мир в обмен на территории [537.GetName] и [555.GetName]",
+    "desc": "Мы предложим [JAP.GetAdjective]ому правительству прекратить все враждебные действия, если они согласятся вернуть нам наши бывшие территории — [537.GetName] и [555.GetName].",
+    "icon": "eng_trade_unions_support",
+    "cost": "SOV_peace_deal_cost",
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        537,
+        555
+      ],
+      "JAP": [
+        {
+          "owns_state": 537
+        },
+        {
+          "owns_state": 555
+        }
+      ],
+      "surrender_progress": {
+        "_op": "<",
+        "value": 0.01
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "JAP": {
+        "country_event": {
+          "id": "NSB_soviet_foreign_politics_events.260",
+          "hours": 4,
+          "random_hours": 2
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept",
+      "effect_tooltip": {
+        "JAP": {
+          "white_peace": "FROM"
+        },
+        "537": {
+          "add_core_of": "ROOT"
+        },
+        "555": {
+          "add_core_of": "ROOT"
+        },
+        "transfer_state": [
+          537,
+          555
+        ]
+      }
+    }
+  },
+  {
+    "id": "TUR_kurdish_resistance_escalation_mission",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Курдское сопротивление приводит к росту антиправительственных настроений",
+    "desc": "Повстанцы-курды снова наращивают противодействие правительству на юго-востоке страны.",
+    "icon": "tur_unifying_the_country",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "350": {
+          "is_core_of": "TUR"
+        },
+        "352": {
+          "is_core_of": "TUR"
+        },
+        "353": {
+          "is_core_of": "TUR"
+        },
+        "800": {
+          "is_core_of": "TUR"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "TUR_counter_the_rebels_in_diyarbakir",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Противодействовать повстанцам в Диярбакыре",
+    "desc": "Повстанцы в Диярбакыре обычно менее активны, чем в других регионах, — возможно, из-за того, что сам Диярбакыр относительно развит.",
+    "icon": "faction_tur_kurdish",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "TUR_acted_against_kurd_rebels_recently_flag"
+      },
+      "has_full_control_of_state": 350
+    },
+    "visible": {
+      "AND": {
+        "NOT": {
+          "350": {
+            "is_core_of": "TUR"
+          }
+        },
+        "has_full_control_of_state": 350
+      },
+      "NOT": {
+        "AND": {
+          "OR": {
+            "has_completed_focus": [
+              "TUR_permit_regional_elections",
+              "TUR_a_common_destiny_for_all_of_turkey"
+            ]
+          },
+          "350": {
+            "AND": {
+              "compliance": {
+                "_op": ">",
+                "value": 70
+              },
+              "resistance": {
+                "_op": "<",
+                "value": 30
+              }
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -15,
+      "350": {
+        "save_global_event_target_as": "TUR_kurdish_state_event_target"
+      },
+      "random_list": {
+        "55": {
+          "modifier": [
+            {
+              "factor": 0.25,
+              "350": {
+                "resistance": {
+                  "_op": ">",
+                  "value": 30
+                }
+              }
+            },
+            {
+              "add": 5,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            },
+            {
+              "add": 10,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 2
+              }
+            },
+            {
+              "add": 15,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 3
+              }
+            },
+            {
+              "add": 25,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 4
+              }
+            },
+            {
+              "add": 100,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": {
+                  "_op": ">",
+                  "value": 4
+                }
+              }
+            }
+          ],
+          "country_event": {
+            "id": "bftb_turkey.110",
+            "days": 1
+          },
+          "TUR_placate_kurdish_state_effect": true,
+          "effect_tooltip": {
+            "350": {
+              "add_compliance": 10,
+              "add_resistance": -15
+            }
+          },
+          "hidden_effect": {
+            "if": {
+              "limit": {
+                "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+              },
+              "clr_country_flag": "TUR_failed_against_kurd_rebels_flag"
+            }
+          }
+        },
+        "45": {
+          "modifier": {
+            "factor": 1.2,
+            "350": {
+              "compliance": {
+                "_op": ">",
+                "value": 25
+              }
+            }
+          },
+          "country_event": {
+            "id": "bftb_turkey.111",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.05,
+            "350": {
+              "add_compliance": -5,
+              "add_resistance": 10
+            }
+          },
+          "hidden_effect": {
+            "set_country_flag": {
+              "flag": "TUR_failed_against_kurd_rebels_flag",
+              "value": 1
+            },
+            "if": {
+              "limit": {
+                "NOT": {
+                  "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+                }
+              },
+              "set_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            },
+            "else_if": {
+              "limit": {
+                "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+              },
+              "modify_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "set_country_flag": [
+        "TUR_acted_against_kurd_rebels_recently_flag",
+        {
+          "flag": "TUR_acted_against_kurd_rebels_recently_flag",
+          "value": 1,
+          "days": 30
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_counter_the_rebels_in_erzurum",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Противодействовать повстанцам в Эрзуруме",
+    "desc": "Эрзурум — колыбель курдского политического активизма, но насилием на этой почве он не отличается. С другой стороны, мир меняется постоянно...",
+    "icon": "faction_tur_kurdish",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "TUR_acted_against_kurd_rebels_recently_flag"
+      },
+      "has_full_control_of_state": 353
+    },
+    "visible": {
+      "AND": {
+        "NOT": {
+          "353": {
+            "is_core_of": "TUR"
+          }
+        },
+        "has_full_control_of_state": 353
+      },
+      "NOT": {
+        "AND": {
+          "OR": {
+            "has_completed_focus": [
+              "TUR_permit_regional_elections",
+              "TUR_a_common_destiny_for_all_of_turkey"
+            ]
+          },
+          "353": {
+            "AND": {
+              "compliance": {
+                "_op": ">",
+                "value": 70
+              },
+              "resistance": {
+                "_op": "<",
+                "value": 30
+              }
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -15,
+      "353": {
+        "save_global_event_target_as": "TUR_kurdish_state_event_target"
+      },
+      "random_list": {
+        "55": {
+          "modifier": [
+            {
+              "factor": 0.25,
+              "353": {
+                "resistance": {
+                  "_op": ">",
+                  "value": 30
+                }
+              }
+            },
+            {
+              "add": 5,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            },
+            {
+              "add": 10,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 2
+              }
+            },
+            {
+              "add": 15,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 3
+              }
+            },
+            {
+              "add": 25,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 4
+              }
+            },
+            {
+              "add": 100,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": {
+                  "_op": ">",
+                  "value": 4
+                }
+              }
+            }
+          ],
+          "country_event": {
+            "id": "bftb_turkey.110",
+            "days": 1
+          },
+          "TUR_placate_kurdish_state_effect": true,
+          "effect_tooltip": {
+            "353": {
+              "add_compliance": 10,
+              "add_resistance": -15
+            }
+          },
+          "hidden_effect": {
+            "if": {
+              "limit": {
+                "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+              },
+              "clr_country_flag": "TUR_failed_against_kurd_rebels_flag"
+            }
+          }
+        },
+        "45": {
+          "modifier": {
+            "factor": 1.2,
+            "353": {
+              "compliance": {
+                "_op": ">",
+                "value": 25
+              }
+            }
+          },
+          "country_event": {
+            "id": "bftb_turkey.111",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.05,
+            "353": {
+              "add_compliance": -5,
+              "add_resistance": 10
+            }
+          },
+          "hidden_effect": {
+            "set_country_flag": {
+              "flag": "TUR_failed_against_kurd_rebels_flag",
+              "value": 1
+            },
+            "if": {
+              "limit": {
+                "NOT": {
+                  "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+                }
+              },
+              "set_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            },
+            "else_if": {
+              "limit": {
+                "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+              },
+              "modify_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "set_country_flag": {
+        "flag": "TUR_acted_against_kurd_rebels_recently_flag",
+        "value": 1,
+        "days": 30
+      }
+    }
+  },
+  {
+    "id": "TUR_counter_the_rebels_in_van",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Противодействовать повстанцам в Ване",
+    "desc": "Ван — один из наших самых восточных регионов, он практически во всём отличается от регионов западных окраин.",
+    "icon": "faction_tur_kurdish",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "TUR_acted_against_kurd_rebels_recently_flag"
+      },
+      "has_full_control_of_state": 800
+    },
+    "visible": {
+      "AND": {
+        "NOT": {
+          "800": {
+            "is_core_of": "TUR"
+          }
+        },
+        "has_full_control_of_state": 800
+      },
+      "NOT": {
+        "AND": {
+          "OR": {
+            "has_completed_focus": [
+              "TUR_permit_regional_elections",
+              "TUR_a_common_destiny_for_all_of_turkey"
+            ]
+          },
+          "800": {
+            "AND": {
+              "compliance": {
+                "_op": ">",
+                "value": 70
+              },
+              "resistance": {
+                "_op": "<",
+                "value": 30
+              }
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -15,
+      "800": {
+        "save_global_event_target_as": "TUR_kurdish_state_event_target"
+      },
+      "random_list": {
+        "55": {
+          "modifier": [
+            {
+              "factor": 0.25,
+              "800": {
+                "resistance": {
+                  "_op": ">",
+                  "value": 30
+                }
+              }
+            },
+            {
+              "add": 5,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            },
+            {
+              "add": 10,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 2
+              }
+            },
+            {
+              "add": 15,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 3
+              }
+            },
+            {
+              "add": 25,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 4
+              }
+            },
+            {
+              "add": 100,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": {
+                  "_op": ">",
+                  "value": 4
+                }
+              }
+            }
+          ],
+          "country_event": {
+            "id": "bftb_turkey.110",
+            "days": 1
+          },
+          "TUR_placate_kurdish_state_effect": true,
+          "effect_tooltip": {
+            "800": {
+              "add_compliance": 10,
+              "add_resistance": -15
+            }
+          },
+          "hidden_effect": {
+            "if": {
+              "limit": {
+                "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+              },
+              "clr_country_flag": "TUR_failed_against_kurd_rebels_flag"
+            }
+          }
+        },
+        "45": {
+          "modifier": {
+            "factor": 1.2,
+            "800": {
+              "compliance": {
+                "_op": ">",
+                "value": 25
+              }
+            }
+          },
+          "country_event": {
+            "id": "bftb_turkey.111",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.05,
+            "800": {
+              "add_compliance": -5,
+              "add_resistance": 10
+            }
+          },
+          "hidden_effect": {
+            "set_country_flag": {
+              "flag": "TUR_failed_against_kurd_rebels_flag",
+              "value": 1
+            },
+            "if": {
+              "limit": {
+                "NOT": {
+                  "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+                }
+              },
+              "set_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            },
+            "else_if": {
+              "limit": {
+                "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+              },
+              "modify_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "set_country_flag": {
+        "flag": "TUR_acted_against_kurd_rebels_recently_flag",
+        "value": 1,
+        "days": 30
+      }
+    }
+  },
+  {
+    "id": "TUR_counter_the_rebels_in_hakkari",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Противодействовать мятежникам в Хаккари",
+    "desc": "Повстанцы в Хаккяри обычно более организованы, чем в других регионах, и сражаться с ними среди многочисленных гор и холмов труднее.",
+    "icon": "faction_tur_kurdish",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "TUR_acted_against_kurd_rebels_recently_flag"
+      },
+      "has_full_control_of_state": 352
+    },
+    "visible": {
+      "AND": {
+        "NOT": {
+          "352": {
+            "is_core_of": "TUR"
+          }
+        },
+        "has_full_control_of_state": 352
+      },
+      "NOT": {
+        "AND": {
+          "OR": {
+            "has_completed_focus": [
+              "TUR_permit_regional_elections",
+              "TUR_a_common_destiny_for_all_of_turkey"
+            ]
+          },
+          "352": {
+            "AND": {
+              "compliance": {
+                "_op": ">",
+                "value": 70
+              },
+              "resistance": {
+                "_op": "<",
+                "value": 30
+              }
+            }
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -15,
+      "352": {
+        "save_global_event_target_as": "TUR_kurdish_state_event_target"
+      },
+      "random_list": {
+        "55": {
+          "modifier": [
+            {
+              "factor": 0.25,
+              "352": {
+                "resistance": {
+                  "_op": ">",
+                  "value": 30
+                }
+              }
+            },
+            {
+              "add": 5,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            },
+            {
+              "add": 10,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 2
+              }
+            },
+            {
+              "add": 15,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 3
+              }
+            },
+            {
+              "add": 25,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 4
+              }
+            },
+            {
+              "add": 100,
+              "has_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": {
+                  "_op": ">",
+                  "value": 4
+                }
+              }
+            }
+          ],
+          "country_event": {
+            "id": "bftb_turkey.110",
+            "days": 1
+          },
+          "TUR_placate_kurdish_state_effect": true,
+          "effect_tooltip": {
+            "352": {
+              "add_compliance": 10,
+              "add_resistance": -15
+            }
+          },
+          "hidden_effect": {
+            "if": {
+              "limit": {
+                "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+              },
+              "clr_country_flag": "TUR_failed_against_kurd_rebels_flag"
+            }
+          }
+        },
+        "45": {
+          "modifier": {
+            "factor": 1.2,
+            "352": {
+              "compliance": {
+                "_op": ">",
+                "value": 25
+              }
+            }
+          },
+          "country_event": {
+            "id": "bftb_turkey.111",
+            "days": 1
+          },
+          "effect_tooltip": {
+            "add_stability": -0.05,
+            "352": {
+              "add_compliance": -5,
+              "add_resistance": 10
+            }
+          },
+          "hidden_effect": {
+            "set_country_flag": {
+              "flag": "TUR_failed_against_kurd_rebels_flag",
+              "value": 1
+            },
+            "if": {
+              "limit": {
+                "NOT": {
+                  "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+                }
+              },
+              "set_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            },
+            "else_if": {
+              "limit": {
+                "has_country_flag": "TUR_failed_against_kurd_rebels_flag"
+              },
+              "modify_country_flag": {
+                "flag": "TUR_failed_against_kurd_rebels_flag",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "set_country_flag": {
+        "flag": "TUR_acted_against_kurd_rebels_recently_flag",
+        "value": 1,
+        "days": 30
+      }
+    }
+  },
+  {
+    "id": "TUR_offer_conscription_exceptions_to_kurdish_groups",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Предложить освободить курдские группы от призыва",
+    "desc": "Многие курдские группы не требуют полной независимости — лишь определённой степени автономности. Мы, чтобы добиться мира, можем предоставить её, освободив население от призыва.",
+    "icon": "generic_military",
+    "cost": 120,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "AND": {
+          "is_core_of": "KUR",
+          "NOT": {
+            "is_core_of": "TUR"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "TUR_peace_at_home",
+      "NOT": {
+        "AND": {
+          "350": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "353": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "352": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "800": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "AND": {
+            "is_core_of": "KUR",
+            "NOT": {
+              "is_core_of": "TUR"
+            }
+          }
+        },
+        "save_event_target_as": "TUR_kurdish_state_event_target",
+        "hidden_effect": {
+          "event_target:TUR_kurdish_state_event_target": {
+            "add_dynamic_modifier": {
+              "modifier": "conscription_exemptions_granted"
+            },
+            "TUR_integrate_kurdish_state_forced_effect": true
+          }
+        }
+      },
+      "effect_tooltip": {
+        "event_target:TUR_kurdish_state_event_target": {
+          "add_ideas": "conscription_exemptions_granted",
+          "TUR_integrate_kurdish_state_forced_effect": true
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_integrate_diyarbakir",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Интегрировать Диярбакыр",
+    "desc": "$TUR_integrate_kurdish_state_desc$",
+    "icon": "faction_tur_kurdish",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {
+      "350": {
+        "AND": {
+          "compliance": {
+            "_op": ">",
+            "value": 70
+          },
+          "resistance": {
+            "_op": "<",
+            "value": 30
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "TUR_permit_regional_elections",
+          "TUR_a_common_destiny_for_all_of_turkey"
+        ]
+      },
+      "350": {
+        "AND": {
+          "NOT": {
+            "is_core_of": "TUR"
+          },
+          "is_owned_by": "TUR"
+        }
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "any_owned_state": {
+              "AND": {
+                "is_core_of": "KUR",
+                "NOT": {
+                  "is_core_of": "TUR"
+                },
+                "compliance": {
+                  "_op": ">",
+                  "value": 70
+                },
+                "resistance": {
+                  "_op": "<",
+                  "value": 30
+                }
+              }
+            }
+          }
+        },
+        "custom_effect_tooltip": "TUR_no_current_integration_targets_available_tt"
+      },
+      "else": {
+        "350": {
+          "save_event_target_as": "TUR_kurdish_state_event_target"
+        },
+        "event_target:TUR_kurdish_state_event_target": {
+          "TUR_integrate_kurdish_state_effect": true
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_integrate_hakkari",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Интегрировать Хаккяри",
+    "desc": "$TUR_integrate_kurdish_state_desc$",
+    "icon": "faction_tur_kurdish",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {
+      "352": {
+        "AND": {
+          "compliance": {
+            "_op": ">",
+            "value": 70
+          },
+          "resistance": {
+            "_op": "<",
+            "value": 30
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "TUR_permit_regional_elections",
+          "TUR_a_common_destiny_for_all_of_turkey"
+        ]
+      },
+      "352": {
+        "AND": {
+          "NOT": {
+            "is_core_of": "TUR"
+          },
+          "is_owned_by": "TUR"
+        }
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "any_owned_state": {
+              "AND": {
+                "is_core_of": "KUR",
+                "NOT": {
+                  "is_core_of": "TUR"
+                },
+                "compliance": {
+                  "_op": ">",
+                  "value": 70
+                },
+                "resistance": {
+                  "_op": "<",
+                  "value": 30
+                }
+              }
+            }
+          }
+        },
+        "custom_effect_tooltip": "TUR_no_current_integration_targets_available_tt"
+      },
+      "else": {
+        "352": {
+          "save_event_target_as": "TUR_kurdish_state_event_target"
+        },
+        "event_target:TUR_kurdish_state_event_target": {
+          "TUR_integrate_kurdish_state_effect": true
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_integrate_tunceli",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Интегрировать Эрзурум",
+    "desc": "$TUR_integrate_kurdish_state_desc$",
+    "icon": "faction_tur_kurdish",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {
+      "353": {
+        "AND": {
+          "compliance": {
+            "_op": ">",
+            "value": 70
+          },
+          "resistance": {
+            "_op": "<",
+            "value": 30
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "TUR_permit_regional_elections",
+          "TUR_a_common_destiny_for_all_of_turkey"
+        ]
+      },
+      "353": {
+        "AND": {
+          "NOT": {
+            "is_core_of": "TUR"
+          },
+          "is_owned_by": "TUR"
+        }
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "any_owned_state": {
+              "AND": {
+                "is_core_of": "KUR",
+                "NOT": {
+                  "is_core_of": "TUR"
+                },
+                "compliance": {
+                  "_op": ">",
+                  "value": 70
+                },
+                "resistance": {
+                  "_op": "<",
+                  "value": 30
+                }
+              }
+            }
+          }
+        },
+        "custom_effect_tooltip": "TUR_no_current_integration_targets_available_tt"
+      },
+      "else": {
+        "353": {
+          "save_event_target_as": "TUR_kurdish_state_event_target"
+        },
+        "event_target:TUR_kurdish_state_event_target": {
+          "TUR_integrate_kurdish_state_effect": true
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_integrate_van",
+    "category_id": "TUR_kurdish_state_management_category",
+    "name": "Интегрировать Ван",
+    "desc": "$TUR_integrate_kurdish_state_desc$",
+    "icon": "faction_tur_kurdish",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": {
+      "800": {
+        "AND": {
+          "compliance": {
+            "_op": ">",
+            "value": 70
+          },
+          "resistance": {
+            "_op": "<",
+            "value": 30
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "TUR_permit_regional_elections",
+          "TUR_a_common_destiny_for_all_of_turkey"
+        ]
+      },
+      "800": {
+        "AND": {
+          "NOT": {
+            "is_core_of": "TUR"
+          },
+          "is_owned_by": "TUR"
+        }
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "any_owned_state": {
+              "AND": {
+                "is_core_of": "KUR",
+                "NOT": {
+                  "is_core_of": "TUR"
+                },
+                "compliance": {
+                  "_op": ">",
+                  "value": 70
+                },
+                "resistance": {
+                  "_op": "<",
+                  "value": 30
+                }
+              }
+            }
+          }
+        },
+        "custom_effect_tooltip": "TUR_no_current_integration_targets_available_tt"
+      },
+      "else": {
+        "800": {
+          "save_event_target_as": "TUR_kurdish_state_event_target"
+        },
+        "event_target:TUR_kurdish_state_event_target": {
+          "TUR_integrate_kurdish_state_effect": true
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_kurdish_pacification_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kurdish_pacification_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kurdish",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "AND": {
+          "is_core_of": "KUR",
+          "NOT": {
+            "is_core_of": "TUR"
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "AND": {
+            "is_core_of": "KUR",
+            "NOT": {
+              "is_core_of": "TUR"
+            }
+          }
+        },
+        "save_event_target_as": "TUR_kurdish_state_event_target"
+      },
+      "random_list": {
+        "95": {
+          "modifier": {
+            "factor": 0.25
+          },
+          "event_target:TUR_kurdish_state_event_target": {
+            "TUR_pacify_kurdish_state_effect": true
+          }
+        },
+        "5": {
+          "modifier": {
+            "factor": 0.5
+          },
+          "event_target:TUR_kurdish_state_event_target": {
+            "TUR_pacify_kurdish_state_effect": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_kurdish_agitation_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kurdish_agitation_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kurdish",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "AND": {
+          "is_core_of": "KUR",
+          "NOT": {
+            "is_core_of": "TUR"
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "AND": {
+            "is_core_of": "KUR",
+            "NOT": {
+              "is_core_of": "TUR"
+            }
+          }
+        },
+        "save_event_target_as": "TUR_kurdish_state_event_target"
+      },
+      "random_list": {
+        "95": {
+          "modifier": {
+            "factor": 0.25
+          },
+          "event_target:TUR_kurdish_state_event_target": {
+            "TUR_agitate_kurdish_state_effect": true
+          }
+        },
+        "5": {
+          "modifier": {
+            "factor": 0.5
+          },
+          "event_target:TUR_kurdish_state_event_target": {
+            "TUR_agitate_kurdish_state_effect": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_kurdish_integration_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kurdish_integration_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kurdish",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "AND": {
+          "is_core_of": "KUR",
+          "NOT": {
+            "is_core_of": "TUR"
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "AND": {
+            "is_core_of": "KUR",
+            "NOT": {
+              "is_core_of": "TUR"
+            }
+          }
+        },
+        "save_event_target_as": "TUR_kurdish_state_event_target"
+      },
+      "random_list": {
+        "95": {
+          "modifier": [
+            {
+              "factor": 100,
+              "event_target:TUR_kurdish_state_event_target": {
+                "compliance": {
+                  "_op": ">",
+                  "value": 70
+                }
+              }
+            },
+            {
+              "factor": 0,
+              "event_target:TUR_kurdish_state_event_target": {
+                "compliance": {
+                  "_op": "<",
+                  "value": 70
+                }
+              }
+            }
+          ],
+          "event_target:TUR_kurdish_state_event_target": {
+            "TUR_integrate_kurdish_state_effect": true
+          }
+        },
+        "5": {
+          "modifier": {
+            "factor": 100,
+            "event_target:TUR_kurdish_state_event_target": {
+              "compliance": {
+                "_op": "<",
+                "value": 70
+              }
+            }
+          },
+          "event_target:TUR_kurdish_state_event_target": {
+            "add_compliance": 70
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_kurdish_exemptions_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kurdish_exemptions_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kurdish",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "AND": {
+          "is_core_of": "KUR",
+          "NOT": {
+            "is_core_of": "TUR"
+          }
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "AND": {
+          "350": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "353": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "352": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          },
+          "800": {
+            "is_core_of": [
+              "KUR",
+              "TUR"
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "AND": {
+            "is_core_of": "KUR",
+            "NOT": {
+              "is_core_of": "TUR"
+            }
+          }
+        },
+        "save_event_target_as": "TUR_kurdish_state_event_target",
+        "event_target:TUR_kurdish_state_event_target": {
+          "add_dynamic_modifier": {
+            "modifier": "conscription_exemptions_granted"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_kursk",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Kursk",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 1435
+    },
+    "visible": {
+      "owns_state": 1435,
+      "1435": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "RUS_SWRW_ongoing"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_kurchatov_resignation_mission",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Отставка Курчатова",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+    },
+    "visible": {
+      "KOM": {
+        "has_country_flag": "KOM_KURCHATOV_SUCCESSION"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_kurchatov_resignation_AI_mission",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Призывы оппозиции",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+    },
+    "visible": {
+      "KOM": {
+        "has_country_flag": "KOM_KURCHATOV_SUCCESSION"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_approach_zhdanov",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Обратиться к Верховному лидеру",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": {
+        "custom_trigger_tooltip": [
+          {
+            "tooltip": "Zhdanov_Chelo_Success_tt",
+            "check_variable": {
+              "KOM_ultravis_paralead_alignment": 6
+            }
+          },
+          {
+            "tooltip": "Zhdanov_Karda_Success_tt",
+            "check_variable": {
+              "KOM_ultravis_paralead_alignment": 2
+            }
+          }
+        ]
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_foreign",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Побеседовать с Наркоматом иностранных дел",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "Foreign_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_forcom_alignment": 6
+              }
+            },
+            {
+              "tooltip": "Foreign_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_forcom_alignment": 2
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "has_country_flag": "PLAYER_CHELO_POV",
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_finance",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Достичь компромисса с Наркоматом финансов",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "Finance_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_fincom_alignment": 6
+              }
+            },
+            {
+              "tooltip": "Finance_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_fincom_alignment": 4
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "has_country_flag": "PLAYER_KARDA_POV",
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_science",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Поразить Наркомат науки",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "Science_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_scicom_alignment": 6
+              }
+            },
+            {
+              "tooltip": "Science_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_scicom_alignment": 4
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_industry",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "План для Наркомата промышленности",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "Industry_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_indcom_alignment": 6
+              }
+            },
+            {
+              "tooltip": "Industry_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_indcom_alignment": 4
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_records",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Обратится к Наркомату центрального учёта",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "Records_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_reccom_alignment": 6
+              }
+            },
+            {
+              "tooltip": "Records_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_reccom_alignment": 4
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_army",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Проконсультироваться с Советской Армией",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "Army_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_army_alignment": 6
+              }
+            },
+            {
+              "tooltip": "Army_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_army_alignment": 2
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_reformer",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Побеседовать со старыми реформаторами",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "Reformer_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_reformist_alignment": 2
+              }
+            },
+            {
+              "tooltip": "Reformer_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_reformist_alignment": 4
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_SC",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Найти поддержку в УРОО",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "SC_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_sc_alignment": 6
+              }
+            },
+            {
+              "tooltip": "SC_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_sc_alignment": 4
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "KOM_approach_space",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Обратиться к Совету по космической программе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_ultravis_influence_move_tt",
+        "NOT": {
+          "has_country_flag": "KOM_ultravis_influence_move"
+        }
+      },
+      "NOT": [
+        {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "Space_Chelo_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_kosmos_alignment": 6
+              }
+            },
+            {
+              "tooltip": "Space_Karda_Success_tt",
+              "check_variable": {
+                "KOM_ultravis_kosmos_alignment": 4
+              }
+            }
+          ]
+        },
+        {
+          "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_ultravis_influence_move"
+    }
+  },
+  {
+    "id": "MAG_WA_support_kurdistan",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт государству [KUR.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "KUR": {
+        "exists": true
+      },
+      "MAG_WA_iraqi_civil_war_active": true,
+      "NOT": {
+        "OR": {
+          "BIR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "IRQ": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "IRP": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "SNI": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_kurdistan",
+      "KUR": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_kurt_saxon_leadership_play",
+    "category_id": "USA_coalition_unity",
+    "name": "Выдвинуть Курта Саксона",
+    "desc": "Курт Саксон:\nПоддержка его руководства $USA_NPP_Leader_Trait_Mediocre$\nПользуется наибольшей поддержкой от $USA_NPP_Leader_Region_South$",
+    "icon": "GFX_decision_USA_npp_s",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": [
+        "USA_show_NPP_screen",
+        "USA_show_leadership_plays",
+        "USA_Sovereigntist_Caucus_Active"
+      ],
+      "NOT": {
+        "check_variable": {
+          "NPP_S_LEADER": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_kurt_saxon_leadership_play",
+      "set_temp_variable": {
+        "tempNPPleaderChange": 0
+      },
+      "USA_start_s_caucus_leadership_play": true
+    }
+  },
+  {
+    "id": "NOV_deport_the_kurzeme_germans",
+    "category_id": "NOV_deport_germans_decision_category",
+    "name": "Deport the Baltic Germans",
+    "desc": "",
+    "icon": "GFX_decision_diplo_ostland",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "NOV_fate_of_the_germans",
+      "190": {
+        "is_owned_by": "UPO"
+      },
+      "1399": {
+        "is_owned_by": "UPO"
+      },
+      "1397": {
+        "is_owned_by": "UPO"
+      },
+      "1396": {
+        "is_owned_by": "UPO"
+      },
+      "13": {
+        "is_owned_by": "UPO"
+      },
+      "UPO": {
+        "is_puppet_of": "RUS"
+      }
+    },
+    "complete_effect": {
+      "190": {
+        "set_variable": {
+          "190.nationality": 169
+        },
+        "add_manpower": -150000,
+        "set_temp_variable": {
+          "state_value_multiplier_temp": 0.75
+        },
+        "econ_state_value_change_multiply": true
+      },
+      "1399": {
+        "set_variable": {
+          "1399.nationality": 169
+        },
+        "add_manpower": -35000,
+        "set_temp_variable": {
+          "state_value_multiplier_temp": 0.8
+        },
+        "econ_state_value_change_multiply": true
+      },
+      "1397": {
+        "set_variable": {
+          "1397.nationality": 169
+        },
+        "add_manpower": -250000,
+        "set_temp_variable": {
+          "state_value_multiplier_temp": 0.66
+        },
+        "econ_state_value_change_multiply": true
+      },
+      "1396": {
+        "set_variable": {
+          "1396.nationality": 168
+        },
+        "add_manpower": -100000,
+        "set_temp_variable": {
+          "state_value_multiplier_temp": 0.9
+        },
+        "econ_state_value_change_multiply": true
+      },
+      "13": {
+        "set_variable": {
+          "13.nationality": 168
+        },
+        "add_manpower": -50000,
+        "set_temp_variable": {
+          "state_value_multiplier_temp": 0.9
+        },
+        "econ_state_value_change_multiply": true
+      },
+      "custom_effect_tooltip": "NOV_deport_the_kurzeme_germans_tt"
+    }
+  },
+  {
+    "id": "VOR_military_conscripted_kurgan",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Kurgan to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "572": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "754": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        572,
+        754
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_kurgan",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "572": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "754": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_kurgan",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Kurgan to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "572": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "754": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        572,
+        754
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_kurgan",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "572": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "754": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_kurgan",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Kurgan",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "572": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "754": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        572,
+        754
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_kurgan",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "572": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "754": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "572": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "754": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "572": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "754": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

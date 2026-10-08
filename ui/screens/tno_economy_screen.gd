@@ -69,6 +69,42 @@ signal state_modified()
 @onready var btn_currency_reform: Button = $VBox/BottomHBox/SocietalSection/VBox/BtnBox/BtnCurrencyReform
 
 var current_state: CountryState = null
+var gdp_history: Array[float] = []
+var debt_ratio_history: Array[float] = []
+var inflation_history: Array[float] = []
+
+
+func record_history(gdp: float, debt_ratio: float, inflation: float) -> void:
+	# Добавляем точку если значение изменилось или история пуста
+	if gdp_history.is_empty() or absf(gdp_history.back() - gdp) > 0.001 or absf(debt_ratio_history.back() - debt_ratio) > 0.01:
+		gdp_history.append(gdp)
+		if gdp_history.size() > 8:
+			gdp_history.pop_front()
+		debt_ratio_history.append(debt_ratio)
+		if debt_ratio_history.size() > 8:
+			debt_ratio_history.pop_front()
+		inflation_history.append(inflation)
+		if inflation_history.size() > 8:
+			inflation_history.pop_front()
+
+
+static func format_sparkline(history: Array[float]) -> String:
+	if history.size() < 2:
+		return "─"
+	var min_val: float = history[0]
+	var max_val: float = history[0]
+	for v in history:
+		if v < min_val: min_val = v
+		if v > max_val: max_val = v
+	var diff: float = max_val - min_val
+	var sparks: Array[String] = [" ", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+	var res := ""
+	for v in history:
+		var idx: int = 0
+		if diff > 0.0001:
+			idx = clampi(int(round(((v - min_val) / diff) * 7.0)), 0, 7)
+		res += sparks[idx]
+	return res
 
 
 func _ready() -> void:
@@ -107,6 +143,11 @@ func _apply_tno_styling() -> void:
 		TNOTheme.apply_button_style(btn_austerity, TNOTheme.COLOR_BORDER_AMBER, Color(0.15, 0.08, 0.08, 0.9))
 	if btn_currency_reform != null:
 		TNOTheme.apply_button_style(btn_currency_reform, TNOTheme.COLOR_BORDER_CYAN, Color(0.05, 0.12, 0.12, 0.9))
+
+	# Стилизация слайдеров бюджета
+	for sl in [slider_mil, slider_civ, slider_admin, slider_rd]:
+		if sl != null:
+			TNOTheme.apply_slider_style(sl, TNOTheme.COLOR_BORDER_CYAN)
 
 
 func _connect_controls() -> void:
@@ -182,6 +223,7 @@ func _connect_controls() -> void:
 func setup(state: CountryState) -> void:
 	current_state = state
 	if current_state != null:
+		record_history(current_state.gdp_billions, current_state.get_debt_to_gdp_ratio() * 100.0, current_state.inflation_rate * 100.0)
 		if slider_mil != null:
 			slider_mil.value = current_state.military_spending_share
 		if slider_civ != null:
@@ -262,13 +304,15 @@ func _refresh_metrics() -> void:
 	lbl_gdp_val.text = "$%.2f B" % current_state.gdp_billions
 	var growth_pct = current_state.real_gdp_growth * 100.0
 	var sign_g = "+" if growth_pct >= 0 else ""
-	lbl_gdp_growth.text = "%s%.2f%% %s" % [sign_g, growth_pct, _tr("ECON_REAL_GROWTH", "(РЕАЛЬНЫЙ РОСТ)")]
+	var gdp_spark = format_sparkline(gdp_history)
+	lbl_gdp_growth.text = "%s%.2f%% %s | %s" % [sign_g, growth_pct, _tr("ECON_REAL_GROWTH", "(РЕАЛЬНЫЙ РОСТ)"), gdp_spark]
 	lbl_gdp_growth.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_GREEN if growth_pct >= 0 else TNOTheme.COLOR_TEXT_RED)
 
 	# Госдолг
 	lbl_debt_val.text = "$%.2f B" % current_state.national_debt_billions
 	var ratio = current_state.get_debt_to_gdp_ratio() * 100.0
-	lbl_debt_ratio.text = "%s: %.1f%%" % [_tr("ECON_DEBT_RATIO", "ДОЛГ/ВВП"), ratio]
+	var debt_spark = format_sparkline(debt_ratio_history)
+	lbl_debt_ratio.text = "%s: %.1f%% | %s" % [_tr("ECON_DEBT_RATIO", "ДОЛГ/ВВП"), ratio, debt_spark]
 
 	# Кредитный рейтинг / Казна
 	var eco_type = EconomyEngine.get_economy_type(current_state)
@@ -314,7 +358,8 @@ func _refresh_metrics() -> void:
 
 	# Банк
 	lbl_rate_val.text = "%.2f%%" % (current_state.central_bank_rate * 100.0)
-	lbl_inflation_val.text = "%s: %.2f%%" % [_tr("ECON_INFLATION", "ГОДОВАЯ ИНФЛЯЦИЯ"), (current_state.inflation_rate * 100.0)]
+	var inf_spark = format_sparkline(inflation_history)
+	lbl_inflation_val.text = "%s: %.2f%% | %s" % [_tr("ECON_INFLATION", "ГОДОВАЯ ИНФЛЯЦИЯ"), (current_state.inflation_rate * 100.0), inf_spark]
 	lbl_reserves_val.text = "%s: $%.2f B" % [_tr("ECON_RESERVES", "РЕЗЕРВЫ КАЗНАЧЕЙСТВА"), current_state.liquid_reserves_billions]
 
 	if btn_print_money != null:

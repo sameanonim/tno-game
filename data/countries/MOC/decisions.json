@@ -1,0 +1,5155 @@
+[
+  {
+    "id": "AFG_demand_end_to_democratic_influence",
+    "category_id": "AFG_foreign_intervention_category",
+    "name": "Потребовать прекращения демократического влияния в Афганистане",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "AFG": {
+        "democratic": {
+          "_op": ">",
+          "value": 0.4
+        }
+      }
+    },
+    "visible": {
+      "AFG": {
+        "NOT": {
+          "has_government": "ROOT"
+        }
+      },
+      "OR": {
+        "has_government": [
+          "communism",
+          "fascism"
+        ]
+      },
+      "any_other_country": {
+        "has_country_flag": "AFG_requested_our_aid"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "GER_democratic_shield_send_support",
+    "category_id": "political_actions",
+    "name": "Отправить военную поддержку государству [FROM.GetName]",
+    "desc": "Наши единомышленники оказались втянуты в войну. Как защитники демократии, мы обязаны позаботиться, чтобы они победили в этой борьбе со злом!",
+    "icon": "ger_military_buildup",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "GER_democratic_shield",
+      "ROOT": {
+        "has_government": "democratic"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_democratic_shield",
+      "ROOT": {
+        "has_government": "democratic"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -25,
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "anti_democratic_raids",
+    "category_id": "political_actions",
+    "name": "Антидемократические рейды",
+    "desc": "Мы должны разобраться с демократическими элементами у себя дома ради долгосрочной стабильности в стране. Влияние демократов настолько велико, что рискует стать потенциальной проблемой для правительства.",
+    "icon": "generic_civil_support",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "if": [
+        {
+          "limit": {
+            "NOT": {
+              "AND": {
+                "has_dlc": "Thunder at Our Gates",
+                "original_tag": "SIA"
+              }
+            }
+          },
+          "democratic": {
+            "_op": ">",
+            "value": 0.1
+          }
+        },
+        {
+          "limit": {
+            "tag": "SPR"
+          },
+          "NOT": {
+            "has_idea": "SPR_political_violence"
+          }
+        }
+      ]
+    },
+    "visible": {
+      "OR": {
+        "NOT": {
+          "has_government": "democratic"
+        },
+        "AND": [
+          {
+            "original_tag": "RAJ",
+            "has_idea": "idea_RAJ_kingmaker"
+          },
+          {
+            "original_tag": "SIA",
+            "has_dlc": "Thunder at Our Gates"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_stability": -0.1,
+      "if": {
+        "limit": {
+          "original_tag": "SIA",
+          "has_completed_focus": "SIA_for_the_preservation_of_siamese_independence",
+          "is_ai": true
+        },
+        "SIA_increase_military_approval": true,
+        "SIA_decrease_civilian_approval": true,
+        "add_war_support": -0.02
+      }
+    }
+  },
+  {
+    "id": "ban_democratic_party",
+    "category_id": "political_actions",
+    "name": "Запрет демократических партий",
+    "desc": "Центристские партии слишком давно ставят палки в колеса нашему правительству. Их настойчивость в отношении «прав» человека подрывает наши усилия по созданию лучшей нации для всего нашего населения.",
+    "icon": "generic_civil_support",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "democratic": {
+        "_op": "<",
+        "value": 0.2
+      },
+      "IF": {
+        "limit": {
+          "tag": "SPR"
+        },
+        "NOT": {
+          "has_idea": "SPR_political_violence"
+        }
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "democratic": {
+        "_op": ">",
+        "value": 0
+      },
+      "IF": [
+        {
+          "limit": {
+            "has_dlc": "Battle for the Bosporus"
+          },
+          "NOT": {
+            "original_tag": "GRE"
+          }
+        },
+        {
+          "limit": {
+            "has_dlc": "Trial of Allegiance"
+          },
+          "NOT": {
+            "original_tag": "CHL"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_temp_variable": {
+          "var": "ban_ideology_var",
+          "value": "party_popularity@democratic"
+        },
+        "multiply_temp_variable": [
+          {
+            "var": "ban_ideology_var",
+            "value": -1
+          },
+          {
+            "var": "ban_ideology_var",
+            "value": 0.66
+          }
+        ],
+        "add_popularity": {
+          "ideology": "democratic",
+          "popularity": "ban_ideology_var"
+        },
+        "set_country_flag": "banned_democratic_flag"
+      },
+      "remove_democratic_spirits_effect": true,
+      "custom_effect_tooltip": "ban_democratic_party_tt",
+      "add_stability": "ban_ideology_var"
+    }
+  },
+  {
+    "id": "institute_press_censorship_democratic_state",
+    "category_id": "political_actions",
+    "name": "Цензура прессы",
+    "desc": "В это опасное время мы не можем позволить, чтобы выражения недовольства вносили раскол в наш народ. Ограничение свободы прессы необходимо для того, чтобы никто не смог заглушить голос истины.",
+    "icon": "generic_political_discourse",
+    "cost": 150,
+    "fire_only_once": false,
+    "available": {
+      "if": [
+        {
+          "limit": {
+            "tag": "SPR"
+          },
+          "NOT": {
+            "has_idea": "SPR_political_violence"
+          }
+        },
+        {
+          "limit": {
+            "tag": "TUR",
+            "has_dlc": "Battle for the Bosporus"
+          },
+          "NOT": {
+            "has_completed_focus": "TUR_privatize_the_anadolu_agency"
+          }
+        },
+        {
+          "limit": {
+            "original_tag": "BUL",
+            "has_dlc": "Battle for the Bosporus"
+          },
+          "NOT": {
+            "has_country_flag": {
+              "flag": "BUL_freedom_of_press_flag",
+              "days": {
+                "_op": "<",
+                "value": 365
+              }
+            },
+            "focus_progress": {
+              "focus": "BUL_freedom_of_press",
+              "progress": {
+                "_op": ">",
+                "value": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_government": "democratic",
+      "if": {
+        "limit": {
+          "has_dlc": "Battle for the Bosporus"
+        },
+        "NOT": {
+          "original_tag": "GRE"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHI_stir_democratic_sentiments_in_asia_decison",
+    "category_id": "CHI_republican_interests_cat",
+    "name": "Разжечь республиканские настроения в [FROM.GetNameRuPrep]",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "CHI_spreading_the_light_of_freedom"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "SEA_china_democratic.6",
+          "hours": 6,
+          "random_hours": 12
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "add_timed_idea": {
+          "idea": "CHI_republican_agitation",
+          "days": 720
+        },
+        "add_stability": -0.05
+      }
+    }
+  },
+  {
+    "id": "CHI_press_warlord_to_become_puppet_democratic",
+    "category_id": "CHI_integrate_the_warlords_democratic_sea_cat",
+    "name": "Потребовать, чтобы [FROM.GetLeader] принял[FROM.GetVerbGendEndA_RU] власть центрального правительства",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": "FROM.press_warlord_to_become_puppet_political_power_cost",
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "democratic": {
+          "_op": ">",
+          "value": 0.4
+        }
+      },
+      "NOT": {
+        "has_country_flag": "is_pressing_warlord"
+      }
+    },
+    "visible": {
+      "is_subject": false,
+      "has_government": "democratic",
+      "has_completed_focus": "CHI_demand_regional_adherence"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "SEA_china_democratic.17",
+          "hours": 2,
+          "random_hours": 16
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "effect_tooltip": {
+        "set_autonomy": {
+          "target": "FROM",
+          "autonomy_state": "autonomy_sea_warlord_subject",
+          "freedom_level": 0.2,
+          "end_wars": false,
+          "end_civil_wars": false
+        }
+      },
+      "set_country_flag": {
+        "flag": "is_pressing_warlord",
+        "days": 90,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "CHI_warlord_autonomy_drift_demcoratic_decision",
+    "category_id": "CHI_integrate_the_warlords_democratic_sea_cat",
+    "name": "Стремление к интеграции [FROM.GetFlag] [FROM.GetNameRuGen]",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_idea": "idea_CHI_central_government_integration_pressure_democratic"
+        }
+      }
+    },
+    "visible": {
+      "any_subject_country": {
+        "OR": {
+          "has_autonomy_state": [
+            "autonomy_sea_warlord_subject",
+            "autonomy_sea_integrated_warlord_subject"
+          ]
+        }
+      },
+      "has_completed_focus": "CHI_demand_regional_adherence"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -50
+      },
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "idea_CHI_central_government_integration_pressure_democratic",
+          "days": 365
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_warlord_democratic_drift_minquan_decision",
+    "category_id": "CHI_integrate_the_warlords_democratic_sea_cat",
+    "name": "Потребовать, чтобы [FROM.GetLeader] соблюдал[FROM.GetVerbGendEndA_RU] принцип миньцюань",
+    "desc": "",
+    "icon": "GFX_decision_SWI_swiss_democratic_tradition_campaign",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_idea": "idea_CHI_central_government_minquan_pressure_democratic"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHI_demand_regional_adherence"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -25,
+        "add_command_power": -25
+      },
+      "FROM": {
+        "country_event": {
+          "id": "SEA_china_democratic.20",
+          "days": 1
+        },
+        "set_country_flag": "CHI_currently_being_asked_about_minquan"
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "FROM": {
+          "add_timed_idea": {
+            "idea": "idea_CHI_central_government_minquan_pressure_democratic",
+            "days": 365
+          },
+          "clr_country_flag": "CHI_currently_being_asked_about_minquan"
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_develop_warlord_industry_decision",
+    "category_id": "CHI_integrate_the_warlords_democratic_sea_cat",
+    "name": "Развить программы благосостояния и гражданского строительства в [FROM.GetNameRuPrep]",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "CHI_demand_regional_adherence"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "CHI_integrating_states_democratic",
+    "category_id": "CHI_integrate_the_warlords_democratic_sea_cat",
+    "name": "Стремление к повторной интеграции в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "is_fully_controlled_by": "CHI"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHI_zhonghua_minzu_focus"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "CHI_internal_party_support_democratic",
+    "category_id": "CHI_seek_japanese_support",
+    "name": "Поддержка внутренней партии",
+    "desc": "",
+    "icon": "generic_political_discourse",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "CHI_seek_japanese_support",
+          "CHI_sea_seek_japanese_support"
+        ]
+      },
+      "JAP": {
+        "has_government": "democratic"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "DEN_bop_occupation_allow_democratism",
+    "category_id": "DEN_occupation_category",
+    "name": "DEN_bop_occupation_allow_democratism",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": "DEN_decision_medium_cost",
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "is_subject": true
+      },
+      "OVERLORD": {
+        "OR": {
+          "has_government": [
+            "democratic",
+            "neutrality"
+          ]
+        }
+      },
+      "power_balance_value": {
+        "id": "DEN_occupation_balance",
+        "value": {
+          "_op": "<",
+          "value": -0.3
+        }
+      }
+    },
+    "visible": {
+      "is_subject": true,
+      "has_country_flag": "banned_democratic_flag"
+    },
+    "complete_effect": {
+      "DEN_bop_occupation_very_low_decrease_effect": true,
+      "if": [
+        {
+          "limit": {
+            "has_country_flag": "banned_democratic_flag"
+          },
+          "set_country_flag": "DEN_allow_democratic_flag",
+          "clr_country_flag": "banned_democratic_flag"
+        },
+        {
+          "limit": {
+            "has_elections": false
+          },
+          "set_politics": {
+            "elections_allowed": true
+          }
+        },
+        {
+          "limit": {
+            "is_subject": true
+          },
+          "OVERLORD": {
+            "add_opinion_modifier": {
+              "modifier": "DEN_cooperative_subject",
+              "target": "DEN"
+            }
+          }
+        }
+      ],
+      "add_popularity": {
+        "ideology": "democratic",
+        "popularity": 0.05
+      }
+    }
+  },
+  {
+    "id": "ETH_coup_haile_selassie_imru",
+    "category_id": "democratic_on_the_rise",
+    "name": "Спровоцировать дворцовый переворот",
+    "desc": "Демократически настроенный $ETH_ras_imru_haile_selassie$ правит страной в отсутствие императора. Несомненно, массы считают его истинным героем [ROOT.GetNameRuGen] после того, как он возглавлял страну во время войны. Сейчас все громче раздаются призывы демократизации [ROOT.GetNameRuGen]. Возможно, пришли времена, когда в государстве [ROOT.GetNameDef] действительно назрела необходимость перемен.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.35
+      },
+      "ETH_haile_selassie": {
+        "has_trait": "imperator_absentis"
+      },
+      "has_idea": "ETH_prince_regent_idea"
+    },
+    "visible": {
+      "ETH_haile_selassie": {
+        "has_trait": "imperator_absentis"
+      },
+      "democratic": {
+        "_op": ">",
+        "value": 0.3
+      },
+      "has_idea": "ETH_prince_regent_idea"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ETH_palace_coup_tt",
+      "hidden_effect": {
+        "ETH_ras_imru_haile_selassie": {
+          "unit_leader_event": {
+            "id": "BBA_ethiopia_imperial_events.20",
+            "hours": 2,
+            "random_hours": 4
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "prepare_for_democratic_civil_war",
+    "category_id": "democratic_on_the_rise",
+    "name": "Подготовка к гражданской войне",
+    "desc": "У нас нет времени на постепенное изменение мировоззрения населения. Ради него же мы должны быстро разрешить этот вопрос, даже если такое решение будет стоить кому-то жизни. В отличие от мирного референдума, гражданская война нанесет сокрушительный удар по армии, промышленности и инфраструктуре нашей страны, но быстрее решит проблему и позволит нам в дальнейшем активнее навязывать свою волю.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.1
+      },
+      "num_of_controlled_states": {
+        "_op": ">",
+        "value": 1
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "preparation_for_democratic_civil_war"
+        },
+        {
+          "has_government": "democratic"
+        }
+      ],
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "set_country_flag": "preparation_for_democratic_civil_war"
+    }
+  },
+  {
+    "id": "expand_civil_democratic_support",
+    "category_id": "democratic_on_the_rise",
+    "name": "Расширение гражданской поддержки",
+    "desc": "Мы должны бороться за рост поддержки среди населения и стимулировать граждан на открытую критику курса, проводимого действующим правительством. Чем сильнее расшатаны позиции власти, чем чаще вспыхивают гражданские беспорядки, тем проще нам будет добиться поставленной цели. Это особенно верно в том случае, если нашей целью является не законная передача власти, а... более жесткая смена режима.",
+    "icon": "generic_civil_support",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": [
+        {
+          "has_country_flag": [
+            "preparation_for_democratic_civil_war",
+            "open_up_political_discourse_democratic"
+          ]
+        },
+        {
+          "has_idea_with_trait": [
+            "democratic_reformer",
+            "social_reformer"
+          ]
+        }
+      ],
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "army_support_for_democratic_civil_war",
+    "category_id": "democratic_on_the_rise",
+    "name": "Расширение военной поддержки",
+    "desc": "Без полноценной поддержки вооруженных сил можно оставить все надежды на победу в идеологической борьбе. Мы должны гарантировать лояльность хотя бы нескольких тщательно отобранных подразделений.",
+    "icon": "generic_army_support",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "preparation_for_democratic_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ensure_general_loyalty_for_democratic_civil_war",
+    "category_id": "democratic_on_the_rise",
+    "name": "Лояльность низшего офицерского состава",
+    "desc": "Вполне вероятно, что некоторые генералы втайне поддерживают демократическую идеологию. Нужно выявить их и заручиться их поддержкой прежде, чем начнется конфликт.",
+    "icon": "generic_army_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "military_support_for_democratic_civil_war",
+      "command_power": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_country_flag": "preparation_for_democratic_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "any_army_leader": {
+        "is_field_marshal": false,
+        "NOT": {
+          "has_trait": "hidden_sympathies"
+        }
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "decisions.1"
+      }
+    }
+  },
+  {
+    "id": "ensure_marshal_loyalty_for_democratic_civil_war",
+    "category_id": "democratic_on_the_rise",
+    "name": "Лояльность верховного командования",
+    "desc": "Вполне вероятно, что некоторые фельдмаршалы в тайне поддерживают демократическую идеологию. Нужно выявить их и заручиться их поддержкой прежде, чем начнется конфликт.",
+    "icon": "generic_army_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "military_support_for_democratic_civil_war",
+      "command_power": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_country_flag": "preparation_for_democratic_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "any_army_leader": [
+        {
+          "NOT": {
+            "has_trait": "hidden_sympathies"
+          }
+        },
+        {
+          "is_field_marshal": true,
+          "NOT": {
+            "has_unit_leader_flag": "hidden_sympathies_marshal"
+          }
+        }
+      ],
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "decisions.2"
+      }
+    }
+  },
+  {
+    "id": "siphon_equipment_stockpiles_for_democratic_civil_war",
+    "category_id": "democratic_on_the_rise",
+    "name": "Переброска снаряжения",
+    "desc": "Мы можем обеспечить себя небольшим арсеналом на будущее, прибегнув к хищениям со складов.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "military_support_for_democratic_civil_war",
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 1000
+        }
+      },
+      "command_power": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "preparation_for_democratic_civil_war",
+        "military_support_for_democratic_civil_war"
+      ],
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "add_command_power": -2,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -1000
+      },
+      "set_country_flag": "siphoned_equipment_stockpiles_for_civil_war"
+    }
+  },
+  {
+    "id": "formulate_surprise_attack_plan_for_democratic_civil_war",
+    "category_id": "democratic_on_the_rise",
+    "name": "Подготовка плана внезапного нападения",
+    "desc": "Наш враг не имеет ни малейшего представления, что его ждет. Мы должны гарантировать, что подобное положение вещей сохранится, и наиболее полно использовать фактор внезапности в наших планах.",
+    "icon": "generic_army_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "military_support_for_democratic_civil_war",
+      "command_power": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_country_flag": "preparation_for_democratic_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "add_command_power": -2,
+      "custom_effect_tooltip": "formulate_surprise_attack_plan_for_civil_war_tt",
+      "set_country_flag": "formulated_surprise_attack_plan_for_civil_war"
+    }
+  },
+  {
+    "id": "ignite_the_democratic_civil_war_single_state",
+    "category_id": "democratic_on_the_rise",
+    "name": "Разжигание гражданской войны",
+    "desc": "",
+    "icon": "generic_ignite_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_stability": {
+        "_op": "<",
+        "value": 0.5
+      },
+      "democratic": {
+        "_op": ">",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "has_country_flag": "preparation_for_democratic_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true,
+      "check_variable": {
+        "num_owned_states": 1
+      }
+    },
+    "complete_effect": {
+      "set_politics": {
+        "ruling_party": "democratic",
+        "elections_allowed": true
+      },
+      "clr_country_flag": [
+        "preparation_for_democratic_civil_war",
+        "military_support_for_democratic_civil_war",
+        "civil_support_for_democratic_civil_war"
+      ]
+    }
+  },
+  {
+    "id": "ignite_the_democratic_civil_war",
+    "category_id": "democratic_on_the_rise",
+    "name": "Разжигание гражданской войны",
+    "desc": "Момент настал. Все необходимые приготовления проведены. Пути назад нет.",
+    "icon": "generic_ignite_civil_war",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_stability": {
+        "_op": "<",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "has_country_flag": "preparation_for_democratic_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true,
+      "check_variable": {
+        "num_owned_states": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_government": "fascism"
+          },
+          "set_variable": {
+            "var": "civil_war_size_var",
+            "value": "party_popularity@fascism"
+          }
+        },
+        {
+          "limit": {
+            "has_government": "communism"
+          },
+          "set_variable": {
+            "var": "civil_war_size_var",
+            "value": "party_popularity@communism"
+          }
+        },
+        {
+          "limit": {
+            "has_government": "neutrality"
+          },
+          "set_variable": {
+            "var": "civil_war_size_var",
+            "value": "party_popularity@neutrality"
+          }
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "var": "civil_war_size_var",
+              "value": 0.3,
+              "compare": "less_than"
+            }
+          },
+          "set_variable": {
+            "var": "civil_war_size_var",
+            "value": 0.3
+          }
+        }
+      ],
+      "subtract_from_variable": {
+        "var": "civil_war_size_var",
+        "value": "army_support_var"
+      },
+      "start_civil_war": {
+        "ruling_party": "democratic",
+        "ideology": "ROOT",
+        "size": "civil_war_size_var",
+        "keep_unit_leaders_trigger": {
+          "has_trait": "hidden_sympathies"
+        }
+      },
+      "clr_country_flag": [
+        "preparation_for_democratic_civil_war",
+        "military_support_for_democratic_civil_war",
+        "civil_support_for_democratic_civil_war"
+      ]
+    }
+  },
+  {
+    "id": "rebuild_the_nation_democratic",
+    "category_id": "democratic_on_the_rise",
+    "name": "Возродить нацию",
+    "desc": "Гражданская война завершилась. Теперь мы должны восстановить нашу разрушенную страну.",
+    "icon": "generic_construction",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_government": "democratic",
+      "has_country_flag": "won_ideology_civil_war"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "open_up_political_discourse_democratic",
+    "category_id": "democratic_on_the_rise",
+    "name": "Начало политических дебатов",
+    "desc": "Мы должны начать работу по примирению конфликтующих точек зрения в нашем правительстве. Возможно, со временем это даст нам возможность мирным образом изменить политический строй нашей державы.",
+    "icon": "generic_political_discourse",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "fascism": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "democratic": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "communism": {
+        "_op": "<",
+        "value": 0.9
+      },
+      "neutrality": {
+        "_op": "<",
+        "value": 0.9
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "set_country_flag": "open_up_political_discourse_democratic"
+    }
+  },
+  {
+    "id": "discredit_government_democratic",
+    "category_id": "democratic_on_the_rise",
+    "name": "Дискредитация правительства",
+    "desc": "Обратив внимание людей на многочисленные недостатки текущего правительства, мы можем подвести их к мысли об идеологической причине сложившейся ситуации.",
+    "icon": "generic_political_discourse",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "fascism": {
+        "_op": "<",
+        "value": 0.8
+      },
+      "democratic": {
+        "_op": "<",
+        "value": 0.8
+      },
+      "communism": {
+        "_op": "<",
+        "value": 0.8
+      },
+      "neutrality": {
+        "_op": "<",
+        "value": 0.8
+      },
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      }
+    },
+    "visible": {
+      "has_country_flag": "open_up_political_discourse_democratic",
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "add_stability": -0.01,
+      "if": [
+        {
+          "limit": {
+            "has_government": "fascism"
+          },
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": -0.1
+          }
+        },
+        {
+          "limit": {
+            "has_government": "communism"
+          },
+          "add_popularity": {
+            "ideology": "communism",
+            "popularity": -0.1
+          }
+        },
+        {
+          "limit": {
+            "has_government": "neutrality"
+          },
+          "add_popularity": {
+            "ideology": "neutrality",
+            "popularity": -0.1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "hold_the_democratic_national_referendum",
+    "category_id": "democratic_on_the_rise",
+    "name": "Проведение всенародного референдума",
+    "desc": "Заручившись достаточной поддержкой, мы можем провести референдум об изменении политического строя без излишнего кровопролития.",
+    "icon": "generic_political_discourse",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.5
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "OR": {
+        "democratic": {
+          "_op": ">",
+          "value": 0.6
+        },
+        "has_country_flag": "open_up_political_discourse_democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true,
+      "if": {
+        "limit": {
+          "NOR_AAT": true
+        },
+        "original_tag": "NOR",
+        "has_country_flag": "NOR_included_in_generic_political"
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "political.20"
+      }
+    }
+  },
+  {
+    "id": "GER_aid_hun_democratic_civil_war",
+    "category_id": "GER_aid_hun_rom_democratic_civil_war",
+    "name": "Вмешательство в гражданскую войну в Венгрии",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "HUN": {
+        "NOT": [
+          {
+            "has_government": "democratic"
+          },
+          {
+            "has_war_with": "GER"
+          }
+        ],
+        "has_civil_war": true,
+        "exists": true,
+        "any_enemy_country": {
+          "original_tag": "HUN",
+          "has_government": "democratic"
+        }
+      }
+    },
+    "visible": {
+      "HUN": {
+        "has_civil_war": true
+      },
+      "GER": {
+        "has_government": "democratic"
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "HUN": {
+            "is_in_faction_with": "GER"
+          }
+        },
+        "remove_from_faction": "HUN",
+        "random_country": {
+          "limit": {
+            "original_tag": "HUN",
+            "has_government": "democratic",
+            "has_war_with": "HUN"
+          },
+          "GER": {
+            "add_to_faction": "PREV"
+          }
+        }
+      },
+      "random_country": {
+        "limit": {
+          "original_tag": "HUN",
+          "has_government": "democratic",
+          "has_war_with": "HUN"
+        },
+        "GER": {
+          "add_to_war": {
+            "targeted_alliance": "PREV",
+            "enemy": "HUN",
+            "hostility_reason": "asked_to_join"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_aid_rom_democratic_civil_war",
+    "category_id": "GER_aid_hun_rom_democratic_civil_war",
+    "name": "Вмешательство в гражданскую войну в Румынии",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "ROM": {
+        "NOT": [
+          {
+            "has_government": "democratic"
+          },
+          {
+            "has_war_with": "GER"
+          }
+        ],
+        "has_civil_war": true,
+        "exists": true,
+        "any_enemy_country": {
+          "original_tag": "ROM",
+          "has_government": "democratic"
+        }
+      }
+    },
+    "visible": {
+      "ROM": {
+        "has_civil_war": true
+      },
+      "GER": {
+        "has_government": "democratic"
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "ROM": {
+            "is_in_faction_with": "GER"
+          }
+        },
+        "remove_from_faction": "ROM",
+        "random_country": {
+          "limit": {
+            "original_tag": "ROM",
+            "has_government": "democratic",
+            "has_war_with": "ROM"
+          },
+          "GER": {
+            "add_to_faction": "PREV"
+          }
+        }
+      },
+      "random_country": {
+        "limit": {
+          "original_tag": "ROM",
+          "has_government": "democratic",
+          "has_war_with": "ROM"
+        },
+        "GER": {
+          "add_to_war": {
+            "targeted_alliance": "PREV",
+            "enemy": "ROM",
+            "hostility_reason": "asked_to_join"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_influence_middle_east_democratic_decision",
+    "category_id": "GER_influence_countries_cat",
+    "name": "$GER_influence_baltics_decision$",
+    "desc": "",
+    "icon": "GFX_decision_SWI_expand_covert_operations",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "FROM": {
+          "country_event": {
+            "id": "wuw_GER_diplomacy.10",
+            "days": 1
+          }
+        }
+      },
+      "effect_tooltip": {
+        "FROM": {
+          "add_timed_idea": {
+            "idea": "GER_democratic_influence",
+            "days": 730
+          },
+          "add_opinion_modifier": {
+            "target": "GER",
+            "modifier": "GER_german_influence"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_influence_balkans_democratic_decision",
+    "category_id": "GER_influence_countries_cat",
+    "name": "$GER_influence_baltics_decision$",
+    "desc": "",
+    "icon": "GFX_decision_SWI_expand_covert_operations",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "FROM": {
+          "country_event": {
+            "id": "wuw_GER_diplomacy.10",
+            "days": 1
+          }
+        }
+      },
+      "effect_tooltip": {
+        "FROM": {
+          "add_timed_idea": {
+            "idea": "GER_democratic_influence",
+            "days": 730
+          },
+          "add_opinion_modifier": {
+            "target": "GER",
+            "modifier": "GER_german_influence"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "DEBUG_set_democratic_bop",
+    "category_id": "ITA_balance_of_power_category",
+    "name": "DEBUG_set_democratic_bop",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true
+    },
+    "complete_effect": {
+      "set_power_balance": {
+        "id": "ITA_power_balance",
+        "right_side": "ITA_democratic_side"
+      }
+    }
+  },
+  {
+    "id": "ITA_bop_cooperation_with_christian_democrats",
+    "category_id": "ITA_balance_of_power_category",
+    "name": "Сотрудничество с христианскими демократами",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 70,
+    "fire_only_once": true,
+    "available": {
+      "has_government": "democratic"
+    },
+    "visible": {
+      "has_completed_focus": "ITA_italian_socialism"
+    },
+    "complete_effect": {
+      "add_popularity": {
+        "ideology": "democratic",
+        "popularity": 0.05
+      },
+      "ITA_bop_low_increase_effect": true
+    }
+  },
+  {
+    "id": "JAP_democratic_core_asian_state",
+    "category_id": "JAP_west_pacific_treaty_org_economic_integration_cat",
+    "name": "Интегрировать регион [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "FROM": [
+        {
+          "NOT": {
+            "has_state_flag": "JAP_coring_this_asian_state_in_progress_flag"
+          }
+        },
+        {
+          "compliance": {
+            "_op": ">",
+            "value": 50
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "JAP_greater_east_asian_federation"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "FROM": {
+          "set_state_flag": {
+            "flag": "JAP_coring_this_asian_state_in_progress_flag",
+            "value": 1,
+            "days": 31
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "LAT_empower_democrats",
+    "category_id": "LAT_delay_perkonkrust_decisions",
+    "name": "Усилить демократов",
+    "desc": "Хоть демократы нам не по нраву, это ярые противники «Перконкрустса», и они далеко не так опасны для нашей нации, как эта организация. Поддержка демократов возрастет, но для борьбы с деятельностью «Перконкрустса» хороши любые средства.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_active_mission": "LAT_perkonkrust_uprising"
+    },
+    "visible": {
+      "has_active_mission": "LAT_perkonkrust_uprising"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -50
+      }
+    }
+  },
+  {
+    "id": "MAN_coring_democratic",
+    "category_id": "MAN_coring_decisions",
+    "name": "[FROM.GetName] проходит процесс интеграции",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "FROM": [
+        {
+          "NOT": {
+            "has_state_flag": "MAN_coring_state_in_progress_flag"
+          }
+        },
+        {
+          "compliance": {
+            "_op": ">",
+            "value": 45
+          }
+        }
+      ]
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "MAN_tsr_proclaim_the_republic_of_china",
+          "MAN_tsr_division_of_power"
+        ]
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "FROM": {
+          "set_state_flag": {
+            "flag": "MAN_coring_state_in_progress_flag",
+            "value": 1,
+            "days": 31
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "MTG_abandon_treaty_democratic",
+    "category_id": "MTG_naval_treaties",
+    "name": "Выход из морских соглашений",
+    "desc": "Попытка сдержать гонку морских вооружений провалилась. Нам нужно разрешение на перевооружение, чтобы мы могли противостоять будущим угрозам.",
+    "icon": "generic",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "threat": {
+          "_op": ">",
+          "value": 0.2
+        },
+        "has_global_flag": "MTG_second_london_conference"
+      }
+    },
+    "visible": {
+      "has_naval_treaty_trigger": true,
+      "OR": {
+        "has_government": [
+          "democratic",
+          "neutrality"
+        ]
+      },
+      "NOT": {
+        "AND": {
+          "original_tag": "JAP",
+          "has_government": "neutrality"
+        }
+      }
+    },
+    "complete_effect": {
+      "remove_naval_treaty_effect": true,
+      "every_other_country": {
+        "limit": {
+          "has_naval_treaty_trigger": true
+        },
+        "country_event": "MTG_naval_treaty.7"
+      },
+      "if": [
+        {
+          "limit": {
+            "has_global_flag": {
+              "flag": "MTG_naval_treaty_signatories",
+              "value": {
+                "_op": "<",
+                "value": 3
+              }
+            }
+          },
+          "random_other_country": {
+            "limit": {
+              "has_naval_treaty_trigger": true
+            },
+            "remove_naval_treaty_effect": true
+          },
+          "clr_global_flag": "MTG_naval_treaty_signatories",
+          "hidden_effect": {
+            "news_event": "mtg_news.60"
+          }
+        },
+        {
+          "limit": {
+            "has_global_flag": "MTG_naval_treaty_signatories"
+          },
+          "modify_global_flag": {
+            "flag": "MTG_naval_treaty_signatories",
+            "value": -1
+          }
+        },
+        {
+          "limit": {
+            "not": {
+              "any_other_country": {
+                "OR": {
+                  "has_idea": [
+                    "MTG_naval_treaty_cheating_reduced",
+                    "MTG_naval_treaty_adherent_reduced"
+                  ]
+                }
+              }
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "OR": {
+                "has_idea": [
+                  "MTG_naval_treaty_cheating",
+                  "MTG_naval_treaty_adherent"
+                ]
+              }
+            },
+            "activate_mission": "MTG_escalator_clause_invocation_mission",
+            "custom_effect_tooltip": "MTG_escalator_clause_tt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "NOR_prepare_state_historical",
+    "category_id": "NOR_democratic_preparation_decisions_category",
+    "name": "NOR_prepare_state_historical",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_NOR_prepare_state_dem_0",
+        "trigger": {
+          "FROM": {
+            "NOT": {
+              "has_variable": "NOR_state_preparation"
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_NOR_prepare_state_dem_1",
+        "trigger": {
+          "FROM": {
+            "check_variable": {
+              "NOR_state_preparation": 1
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_NOR_prepare_state_dem_2",
+        "trigger": {
+          "FROM": {
+            "check_variable": {
+              "NOR_state_preparation": 2
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_NOR_prepare_state_dem_3",
+        "trigger": {
+          "FROM": {
+            "check_variable": {
+              "NOR_state_preparation": 3
+            }
+          }
+        }
+      }
+    ],
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "check_variable": {
+          "NOR_state_preparation": {
+            "_op": "<",
+            "value": 3
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_broken_gun_policies",
+      "has_war": false,
+      "OR": {
+        "ROOT": {
+          "has_country_flag": "NOR_going_dem_historical"
+        },
+        "FROM": {
+          "has_state_flag": "NOR_preparing_state"
+        }
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "NOR_start_state_preparation": true
+      }
+    }
+  },
+  {
+    "id": "NOR_focus_on_training",
+    "category_id": "NOR_democratic_preparation_decisions_category",
+    "name": "NOR_focus_on_training",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "ROOT": {
+          "has_country_flag": "NOR_ongoing_countrywide_program"
+        }
+      },
+      "has_equipment": {
+        "convoy": {
+          "_op": ">",
+          "value": "NOR_prep_his_program_min_convoy"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_rearm_for_defense"
+    },
+    "complete_effect": {
+      "ROOT": {
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_public_investment_drive",
+    "category_id": "NOR_democratic_preparation_decisions_category",
+    "name": "NOR_public_investment_drive",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "ROOT": {
+          "has_country_flag": "NOR_ongoing_countrywide_program"
+        }
+      },
+      "has_equipment": {
+        "convoy": {
+          "_op": ">",
+          "value": "NOR_prep_his_program_min_convoy"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_coastal_defense"
+    },
+    "complete_effect": {
+      "ROOT": {
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_modernize_armed_forces_decision",
+    "category_id": "NOR_democratic_preparation_decisions_category",
+    "name": "NOR_modernize_armed_forces_decision",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "custom_trigger_tooltip": {
+          "tooltip": "NOR_country_prep_modernize_armed_forces_TT",
+          "check_variable": {
+            "var": "NOR_country_preparedness",
+            "value": {
+              "_op": ">",
+              "value": 15
+            }
+          }
+        },
+        "longest_war_length": {
+          "_op": ">",
+          "value": 3
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_rearm_for_defense",
+      "OR": {
+        "has_idea": [
+          "NOR_obsolete_armed_forces_ns_1",
+          "NOR_obsolete_armed_forces_ns_2"
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -25,
+      "add_equipment_to_stockpile": {
+        "type": "convoy_1",
+        "amount": -100
+      }
+    }
+  },
+  {
+    "id": "NOR_naval_expanion",
+    "category_id": "NOR_democratic_preparation_decisions_category",
+    "name": "NOR_naval_expanion",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "ROOT": {
+          "has_country_flag": "NOR_ongoing_countrywide_program"
+        }
+      },
+      "has_equipment": {
+        "convoy": {
+          "_op": ">",
+          "value": "NOR_prep_his_program_min_convoy"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_patrol_our_coast",
+      "OR": {
+        "has_country_flag": "NOR_going_dem_historical"
+      }
+    },
+    "complete_effect": {
+      "ROOT": {
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_prepare_state_alt_dem",
+    "category_id": "NOR_allied_democratic_preparation_decisions_category",
+    "name": "NOR_prepare_state_alt_dem",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_NOR_prepare_state_dem_0",
+        "trigger": {
+          "FROM": {
+            "NOT": {
+              "has_variable": "NOR_state_preparation"
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_NOR_prepare_state_dem_1",
+        "trigger": {
+          "FROM": {
+            "check_variable": {
+              "NOR_state_preparation": 1
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_NOR_prepare_state_dem_2",
+        "trigger": {
+          "FROM": {
+            "check_variable": {
+              "NOR_state_preparation": 2
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_NOR_prepare_state_dem_3",
+        "trigger": {
+          "FROM": {
+            "check_variable": {
+              "NOR_state_preparation": 3
+            }
+          }
+        }
+      }
+    ],
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "check_variable": {
+          "NOR_state_preparation": {
+            "_op": "<",
+            "value": 3
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_vote_of_no_confidence",
+      "NOT": {
+        "has_country_flag": "NOR_preps_system_has_been_reset"
+      },
+      "has_war": false,
+      "OR": {
+        "ROOT": {
+          "has_country_flag": "NOR_going_dem_allied"
+        },
+        "FROM": {
+          "has_state_flag": "NOR_preparing_state"
+        }
+      }
+    },
+    "complete_effect": {
+      "FROM": {
+        "NOR_start_state_preparation": true
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_naval_expansion",
+    "category_id": "NOR_allied_democratic_preparation_decisions_category",
+    "name": "NOR_alt_dem_naval_expansion",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "ROOT": {
+          "has_country_flag": "NOR_ongoing_countrywide_program"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_patrol_our_coast",
+      "NOT": {
+        "has_country_flag": "NOR_preps_system_has_been_reset"
+      },
+      "has_war": false
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "NOR_country_preparedness": 1
+        },
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_military_industry_expansion",
+    "category_id": "NOR_allied_democratic_preparation_decisions_category",
+    "name": "NOR_alt_dem_military_industry_expansion",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "ROOT": {
+          "has_country_flag": "NOR_ongoing_countrywide_program"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_prepare_for_war",
+      "NOT": {
+        "has_country_flag": "NOR_preps_system_has_been_reset"
+      },
+      "has_war": false
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "NOR_country_preparedness": 1
+        },
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_economic_relief_measures",
+    "category_id": "NOR_allied_democratic_preparation_decisions_category",
+    "name": "NOR_alt_dem_economic_relief_measures",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "ROOT": {
+          "has_country_flag": "NOR_ongoing_countrywide_program"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_restore_public_trust_in_the_storting"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "NOR_country_preparedness": 1
+        },
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_modernize_armed_forces_decision",
+    "category_id": "NOR_allied_democratic_preparation_decisions_category",
+    "name": "NOR_alt_dem_modernize_armed_forces_decision",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "custom_trigger_tooltip": {
+          "tooltip": "NOR_country_prep_modernize_armed_forces_TT",
+          "check_variable": {
+            "var": "NOR_country_preparedness",
+            "value": {
+              "_op": ">",
+              "value": 15
+            }
+          }
+        },
+        "longest_war_length": {
+          "_op": ">",
+          "value": 3
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_reform_the_army",
+      "OR": {
+        "has_idea": [
+          "NOR_obsolete_armed_forces_ns_1",
+          "NOR_obsolete_armed_forces_ns_2"
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -25,
+      "add_equipment_to_stockpile": {
+        "type": "convoy_1",
+        "amount": -100
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_focus_on_training",
+    "category_id": "NOR_allied_democratic_preparation_decisions_category",
+    "name": "NOR_alt_dem_focus_on_training",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "ROOT": {
+          "has_country_flag": "NOR_ongoing_countrywide_program"
+        }
+      },
+      "has_equipment": {
+        "convoy": {
+          "_op": ">",
+          "value": "NOR_prep_his_program_min_convoy"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_rearm_for_defense"
+    },
+    "complete_effect": {
+      "ROOT": {
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_public_investment_drive",
+    "category_id": "NOR_allied_democratic_preparation_decisions_category",
+    "name": "NOR_alt_dem_public_investment_drive",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "ROOT": {
+          "has_country_flag": "NOR_ongoing_countrywide_program"
+        }
+      },
+      "has_equipment": {
+        "convoy": {
+          "_op": ">",
+          "value": "NOR_prep_his_program_min_convoy"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_coastal_defense"
+    },
+    "complete_effect": {
+      "ROOT": {
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_modernize_armed_forces_decision_wartime",
+    "category_id": "NOR_allied_democratic_deploy_prep_decisions_category",
+    "name": "NOR_alt_dem_modernize_armed_forces_decision",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "custom_trigger_tooltip": {
+          "tooltip": "NOR_country_prep_modernize_armed_forces_TT",
+          "check_variable": {
+            "var": "NOR_country_preparedness",
+            "value": {
+              "_op": ">",
+              "value": 15
+            }
+          }
+        },
+        "longest_war_length": {
+          "_op": ">",
+          "value": 3
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_reform_the_army",
+      "OR": {
+        "has_idea": [
+          "NOR_obsolete_armed_forces_ns_1",
+          "NOR_obsolete_armed_forces_ns_2"
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -25,
+      "add_equipment_to_stockpile": {
+        "type": "convoy_1",
+        "amount": -100
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_expedite_training",
+    "category_id": "NOR_allied_democratic_deploy_prep_decisions_category",
+    "name": "NOR_alt_dem_expedite_training",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "NOR_country_preparedness": 1
+        },
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_prioritize_production",
+    "category_id": "NOR_allied_democratic_deploy_prep_decisions_category",
+    "name": "NOR_alt_dem_prioritize_production",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "NOR_country_preparedness": 1
+        },
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_offensive_push",
+    "category_id": "NOR_allied_democratic_deploy_prep_decisions_category",
+    "name": "NOR_alt_dem_offensive_push",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "NOR_country_preparedness": 1
+        },
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_focus_on_defense",
+    "category_id": "NOR_allied_democratic_deploy_prep_decisions_category",
+    "name": "NOR_alt_dem_focus_on_defense",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "subtract_from_variable": {
+          "NOR_country_preparedness": 1
+        },
+        "set_country_flag": "NOR_ongoing_countrywide_program"
+      }
+    }
+  },
+  {
+    "id": "NOR_alt_dem_integrate_militias",
+    "category_id": "NOR_allied_democratic_deploy_prep_decisions_category",
+    "name": "NOR_alt_dem_integrate_militias",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_country_division": {
+        "division_has_majority_template": "militia"
+      }
+    },
+    "visible": {
+      "any_country_division": {
+        "division_has_majority_template": "militia"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_equipment_to_stockpile": {
+          "type": "convoy_1",
+          "amount": -50,
+          "producer": "NOR"
+        },
+        "army_experience": -80
+      }
+    }
+  },
+  {
+    "id": "NORDIC_create_democratic_alliance",
+    "category_id": "NORDIC_debug_decisions_category",
+    "name": "NORDIC_create_democratic_alliance",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "clr_global_flag": [
+        "NORDIC_democratic_alliance_formed",
+        "NORDIC_communist_alliance_formed",
+        "NORDIC_monarchist_alliance_formed"
+      ],
+      "NORDIC_remove_all_mods": true,
+      "dismantle_faction": true,
+      "create_faction": "test_faction",
+      "every_country": {
+        "limit": {
+          "NORDIC_is_nordic": true
+        },
+        "set_politics": {
+          "ruling_party": "democratic",
+          "elections_allowed": false,
+          "last_election": "1915.12.01",
+          "election_frequency": 1234
+        },
+        "set_political_party": {
+          "ideology": "democratic",
+          "popularity": 100
+        },
+        "PREV": {
+          "add_to_faction": "PREV"
+        }
+      },
+      "complete_national_focus": "NORDIC_form_joint_alliance"
+    }
+  },
+  {
+    "id": "SIA_demand_independence",
+    "category_id": "SIA_asian_democratic_compact_cat",
+    "name": "Потребовать независимости [FROM.GetNameRuGen] от [FROM.OVERLORD.GetNameRuGen]",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "demand_release_cooldown"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "demand_release_cooldown",
+        "value": 1,
+        "days": 5
+      },
+      "FROM": {
+        "overlord": {
+          "set_variable": {
+            "SIA_adc_demand_country_to_be_released": "PREV"
+          },
+          "country_event": {
+            "id": "siam_adc.1",
+            "hours": 2
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "SIA_demand_independence_LAO",
+    "category_id": "SIA_asian_democratic_compact_cat",
+    "name": "Потребовать освобождения [LAO.GetNameRuGen]",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "demand_release_cooldown"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "1068": {
+          "controller": {
+            "NOT": [
+              {
+                "original_tag": "LAO"
+              },
+              {
+                "tag": "ROOT"
+              },
+              {
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        },
+        "1069": {
+          "controller": {
+            "NOT": [
+              {
+                "original_tag": "LAO"
+              },
+              {
+                "tag": "ROOT"
+              },
+              {
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        },
+        "670": {
+          "controller": {
+            "NOT": [
+              {
+                "original_tag": "LAO"
+              },
+              {
+                "tag": "ROOT"
+              },
+              {
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "clear_array": "SIA_lao_owners",
+      "every_state": {
+        "limit": {
+          "OR": {
+            "state": [
+              1068,
+              1069,
+              670
+            ]
+          },
+          "NOT": {
+            "is_controlled_by": "ROOT"
+          },
+          "controller": {
+            "NOT": {
+              "original_tag": "LAO"
+            }
+          }
+        },
+        "if": {
+          "limit": {
+            "NOT": {
+              "is_in_array": {
+                "array": "ROOT.SIA_lao_owners",
+                "value": "THIS.controller"
+              }
+            }
+          },
+          "add_to_array": {
+            "array": "ROOT.SIA_lao_owners",
+            "value": "THIS.controller"
+          }
+        }
+      },
+      "custom_effect_tooltip": "SIA_demand_independence_LAO_tt",
+      "hidden_effect": {
+        "for_each_scope_loop": {
+          "array": "SIA_lao_owners",
+          "set_variable": {
+            "SIA_adc_demand_country_to_be_released": "LAO"
+          },
+          "country_event": {
+            "id": "siam_adc.1",
+            "hours": 2
+          }
+        }
+      },
+      "set_country_flag": {
+        "flag": "demand_release_cooldown",
+        "value": 1,
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SIA_demand_independence_CAM",
+    "category_id": "SIA_asian_democratic_compact_cat",
+    "name": "Потребовать освобождения [CAM.GetNameRuGen]",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "demand_release_cooldown"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "1067": {
+          "controller": {
+            "NOT": [
+              {
+                "tag": "ROOT"
+              },
+              {
+                "original_tag": "CAM",
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        },
+        "741": {
+          "controller": {
+            "NOT": [
+              {
+                "tag": "ROOT"
+              },
+              {
+                "original_tag": "CAM",
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "clear_array": "SIA_cam_owners",
+      "every_state": {
+        "limit": {
+          "OR": {
+            "state": [
+              1067,
+              741
+            ]
+          },
+          "NOT": {
+            "is_controlled_by": "ROOT"
+          },
+          "controller": {
+            "NOT": {
+              "original_tag": "CAM"
+            }
+          }
+        },
+        "if": {
+          "limit": {
+            "NOT": {
+              "is_in_array": {
+                "array": "ROOT.SIA_cam_owners",
+                "value": "THIS.controller"
+              }
+            }
+          },
+          "add_to_array": {
+            "array": "ROOT.SIA_cam_owners",
+            "value": "THIS.controller"
+          }
+        }
+      },
+      "custom_effect_tooltip": "SIA_demand_independence_CAM_tt",
+      "for_each_scope_loop": {
+        "array": "SIA_cam_owners",
+        "set_variable": {
+          "SIA_adc_demand_country_to_be_released": "CAM"
+        },
+        "country_event": {
+          "id": "siam_adc.1",
+          "hours": 2
+        }
+      },
+      "set_country_flag": {
+        "flag": "demand_release_cooldown",
+        "value": 1,
+        "days": 5
+      }
+    }
+  },
+  {
+    "id": "SIA_demand_independence_VIN",
+    "category_id": "SIA_asian_democratic_compact_cat",
+    "name": "Потребовать освобождения [VIN.GetNameRuGen]",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "demand_release_cooldown"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "671": {
+          "controller": {
+            "NOT": [
+              {
+                "tag": "ROOT"
+              },
+              {
+                "original_tag": "VIN",
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        },
+        "286": {
+          "controller": {
+            "NOT": [
+              {
+                "tag": "ROOT"
+              },
+              {
+                "original_tag": "VIN",
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        },
+        "1066": {
+          "controller": {
+            "NOT": [
+              {
+                "tag": "ROOT"
+              },
+              {
+                "original_tag": "VIN",
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        },
+        "1017": {
+          "controller": {
+            "NOT": [
+              {
+                "tag": "ROOT"
+              },
+              {
+                "original_tag": "VIN",
+                "has_war_with": "ROOT"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "clear_array": "SIA_vin_owners",
+      "every_state": {
+        "limit": {
+          "OR": {
+            "state": [
+              671,
+              1017,
+              286,
+              1066
+            ]
+          },
+          "controller": {
+            "NOT": {
+              "original_tag": "VIN"
+            }
+          },
+          "NOT": {
+            "is_controlled_by": "ROOT"
+          }
+        },
+        "if": {
+          "limit": {
+            "NOT": {
+              "is_in_array": {
+                "array": "ROOT.SIA_vin_owners",
+                "value": "THIS.controller"
+              }
+            }
+          },
+          "add_to_array": {
+            "array": "ROOT.SIA_vin_owners",
+            "value": "THIS.controller"
+          }
+        }
+      },
+      "custom_effect_tooltip": "SIA_demand_independence_VIN_tt",
+      "hidden_effect": {
+        "for_each_scope_loop": {
+          "array": "SIA_vin_owners",
+          "set_variable": {
+            "SIA_adc_demand_country_to_be_released": "VIN"
+          },
+          "country_event": {
+            "id": "siam_adc.1",
+            "hours": 2
+          }
+        },
+        "set_country_flag": {
+          "flag": "demand_release_cooldown",
+          "value": 1,
+          "days": 5
+        }
+      }
+    }
+  },
+  {
+    "id": "SIA_invite_to_adc",
+    "category_id": "SIA_asian_democratic_compact_cat",
+    "name": "Пригласить [FROM.GetNameRuAcc] в наш альянс",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "all_allied_country": {
+        "is_in_faction_with": "SIA",
+        "NOT": {
+          "has_war_with": "FROM"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "FROM": {
+        "set_country_flag": "SIA_weight_towards_accepting_invite_to_alliance",
+        "country_event": {
+          "id": "generic.5"
+        }
+      }
+    }
+  },
+  {
+    "id": "restore_radiotjanst_to_democratic",
+    "category_id": "SWE_politics",
+    "name": "restore_radiotjanst_to_democratic",
+    "desc": "",
+    "icon": "decision_generic_political_discourse",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_idea": [
+          "SWE_radiotjanst_fascism",
+          "SWE_radiotjanst_communism",
+          "SWE_radiotjanst_unaligned"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_swiss_democratic_tradition_campaign",
+    "category_id": "SWI_federal_council_decisions_category",
+    "name": "Кампания за демократические традиции Швейцарии",
+    "desc": "Мы можем напомнить народу Швейцарии о наших давних демократических традициях, о том, что мы — старейшая и, быть может, единственная демократическая страна в Европе.",
+    "icon": "GFX_decision_SWI_swiss_democratic_tradition_campaign",
+    "cost": "SWI_president_initiative_cost",
+    "fire_only_once": false,
+    "available": {
+      "SWI_president_initiative_available_trigger": true
+    },
+    "visible": {
+      "if": {
+        "limit": {
+          "has_variable": "SWI_confederation_president"
+        },
+        "var:SWI_confederation_president": {
+          "OR": {
+            "has_trait": [
+              "SWI_cantonal_conservative",
+              "SWI_radical_democrat"
+            ]
+          }
+        }
+      },
+      "else": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "SWI_president_initiative_complete_effect": true
+    }
+  },
+  {
+    "id": "SWI_concessions_to_democrats",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Уступки [ROOT.GetAdjective]ой [FROM.GetRulingIdeology_RU_lower_ShortAdj]ой партии",
+    "desc": "[SWI_concessions_to_political_party_desc]",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "ROOT.party_popularity_100@democratic": {
+          "_op": "<",
+          "value": 10
+        }
+      },
+      "NOT": {
+        "has_government": "democratic"
+      }
+    },
+    "complete_effect": {
+      "SWI_concessions_to_party_effects": true
+    }
+  },
+  {
+    "id": "SWI_offer_democratic_to_trade_gold",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Открыть банки для демократической нации",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [
+      {
+        "has_completed_focus": "SWI_allied_gold"
+      },
+      {
+        "original_tag": "SWI",
+        "has_completed_focus": "SWI_allied_gold"
+      }
+    ],
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland_trade.8",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "custom_effect_tooltip": "if_they_accept_tt",
+        "SWI_increase_gold_trade": true
+      }
+    }
+  },
+  {
+    "id": "SWI_seize_democratic_gold",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Конфисковать золото демократической нации",
+    "desc": "",
+    "icon": "GFX_decision_gre_investment_decisions",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SWI_abandon_neutrality"
+    },
+    "complete_effect": {
+      "FROM": {
+        "SWI_seize_gold": true,
+        "country_event": {
+          "id": "BBA_switzerland_trade.12",
+          "hours": 4
+        }
+      },
+      "effect_tooltip": {
+        "create_wargoal": {
+          "target": "FROM",
+          "type": "topple_government"
+        }
+      }
+    }
+  },
+  {
+    "id": "SWI_purchase_democratic_planes_fighters",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Закупить истребители у [FROM.GetNameRuGen]",
+    "desc": "Защита неба над [ROOT.GetNameRuInst] не может ждать, пока мы обретем возможность сами производить свои самолеты, так что пока нам придется полагаться на поставки истребителей из [FROM.GetNameRuGen].",
+    "icon": "GFX_decision_generic_air",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "var:SWI.SWI_democratic_planes_seller": {
+        "SWI_country_is_happy": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_purchase_american_planes"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWI_purchase_democratic_planes_cas",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Закупить бомбардировщики у [FROM.GetNameRuGen]",
+    "desc": "Наши производственные мощности пока ограничены, и в деле снабжения наших ВВС бомбардировщиками, необходимыми для поддержки войск, нам приходится полагаться на [FROM.GetNameRuAcc].",
+    "icon": "GFX_decision_generic_air",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 4
+      },
+      "var:SWI.SWI_democratic_planes_seller": {
+        "SWI_country_is_happy": true
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWI_purchase_american_planes"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_arsenal_of_democracy_decision",
+    "category_id": "USA_aid_britain",
+    "name": "Арсенал демократии",
+    "desc": "Пусть мы пока предпочитаем держаться в стороне от конфликта, мы все же можем поддержать наших друзей, предоставив им новый арсенал. Нужно помочь нашему народу понять, почему эта мера необходима.",
+    "icon": "generic_industry",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_leader": {
+        "ruling_only": true,
+        "character": "USA_franklin_delano_roosevelt"
+      },
+      "has_country_flag": "mers_el_kebir_raid",
+      "ENG": {
+        "has_defensive_war": true
+      }
+    },
+    "visible": {
+      "has_war": false
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ENG_DEC_reinforce_democratic_institutions",
+    "category_id": "ENG_DECCAT_SLP_Politics",
+    "name": "Укрепить демократические институты",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "add_stability": 0.05,
+      "ENG_SLP_Add_Reformer_Love_5": true,
+      "ENG_SLP_Add_Reform_Progress_5": true
+    }
+  },
+  {
+    "id": "USA_CIA_slander_democrats",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ПОТОЛОК",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_30_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.029
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_NorthAmerica": true,
+        "is_ai": true
+      },
+      "USA_NPP_ruling_party": true
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_fuckery_democrats",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@NorthAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_damage_democrats",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.03
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "IBR_pre_election_help_save_iberian_democracy",
+    "category_id": "IBR_caudillos_category",
+    "name": "\"Помогите спасти иберийскую демократию!\"",
+    "desc": "Выйдите в эфир, чтобы осудить непримиримость Институционального действия. Только голос народа может их одолеть!",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBRDemUnion",
+      "NOT": {
+        "has_country_flag": "IBR_Elections_Happening"
+      },
+      "OR": {
+        "check_variable": [
+          {
+            "IBR_pre_election_conservatives_influence": {
+              "_op": ">",
+              "value": "IBR_pre_election_opposition_influence"
+            }
+          },
+          {
+            "IBR_pre_election_conservatives_influence": "IBR_pre_election_opposition_influence"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_pre_election_help_save_iberian_democracy",
+      "set_temp_variable": [
+        {
+          "IBR_pre_election_conservatives_influence_temp": "IBR_pre_election_conservatives_influence"
+        },
+        {
+          "IBR_pre_election_category_temp": 0
+        },
+        {
+          "IBR_pre_election_influence_change_temp": "IBR_pre_election_conservatives_influence_temp"
+        }
+      ],
+      "divide_temp_variable": {
+        "IBR_pre_election_conservatives_influence_temp": 8
+      },
+      "round_temp_variable": "IBR_pre_election_conservatives_influence_temp",
+      "IBR_pre_election_change_influence": true
+    }
+  },
+  {
+    "id": "IBR_pre_election_arriba_democracia",
+    "category_id": "IBR_caudillos_category",
+    "name": "Да здравствует демократия!",
+    "desc": "Граждане Иберии уже дважды голосовали на выборах в Совет, но этот раз - особенный. Их голос не будет фильтроваться через созвездие корпоративистов, он будет полным. Он будет принадлежать им.",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBRDemUnion",
+      "NOT": {
+        "has_country_flag": "IBR_Elections_Happening"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_pre_election_arriba_democracia",
+      "set_temp_variable": [
+        {
+          "IBR_pre_election_category_temp": 0
+        },
+        {
+          "IBR_pre_election_influence_change_temp": 3
+        },
+        {
+          "IBR_pre_election_category_temp": 0
+        },
+        {
+          "IBR_pre_election_change_min_temp_var": -0.1
+        },
+        {
+          "IBR_pre_election_category_temp": 1
+        },
+        {
+          "IBR_pre_election_change_min_temp_var": -0.1
+        }
+      ],
+      "IBR_pre_election_change_influence": true,
+      "IBR_pre_election_change_min": [
+        true,
+        true
+      ]
+    }
+  },
+  {
+    "id": "IBR_democratic_council_deliberation_mission_cosmetic",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Заседание Иберийского парламента.",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_deliberation_mission",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Иберийский парламент заседает.",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_rally_CD",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Сплотить  партию",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "IBR_council_active_law_flag",
+        "IBRCentrist70Victory"
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_rally_AP",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Сплотить  §.партию",
+    "desc": "",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "IBR_council_active_law_flag",
+        "IBRRight70Victory"
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_PCE_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке [IBR_Get_PCE_LL_Names_logos]",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_PCP_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке [IBR_Get_PCP_FEPU_Names_logos]",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_FPS_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  ФСП",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_EC_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  ЛК",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_EEH_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  БНО",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_CD_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  Центра",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag",
+      "NOT": {
+        "has_country_flag": "IBRCentrist70Victory"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_EDC_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  ХДС",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_PDC_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  ДПК",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_AP_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  §.Альянса",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag",
+      "NOT": {
+        "has_country_flag": "IBRRight70Victory"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_EAJ_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  §.БНП",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_democratic_council_negotiate_Ind_support",
+    "category_id": "IBR_Iberian_Democratic_Council_category",
+    "name": "Договориться о поддержке  §.независимых",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_council_active_law_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_load_democratic_expansion_tree",
+    "category_id": "KOM_debug_category",
+    "name": "Загрузить древо Смуты демократов",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision remove KOM_load_democratic_expansion_tree",
+      "load_focus_tree": "KOM_democratic_smuta"
+    }
+  },
+  {
+    "id": "regional_democratic_encourage_political_thought",
+    "category_id": "regional_development_decision_category",
+    "name": "Поощрение политического мышления",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 65,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "OR": {
+        "has_government": [
+          "paternalism",
+          "progressivism",
+          "liberalism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision regional_democratic_encourage_political_thought"
+    }
+  },
+  {
+    "id": "regional_democratic_expand_state_welfare_programs",
+    "category_id": "regional_development_decision_category",
+    "name": "Расширения гос.программ соц.обеспечения",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 65,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "has_development_program_ongoing_tt",
+        "NOT": {
+          "has_country_flag": "TNO_RUS_development_program_ongoing"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "paternalism",
+          "progressivism",
+          "liberalism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision regional_democratic_expand_state_welfare_programs",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.25
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "TNO_RUS_development_program_ongoing"
+    }
+  },
+  {
+    "id": "regional_democratic_advance_developmental_subsidies",
+    "category_id": "regional_development_decision_category",
+    "name": "Субсидирование развития",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "has_development_program_ongoing_tt",
+        "NOT": {
+          "has_country_flag": "TNO_RUS_development_program_ongoing"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "paternalism",
+          "progressivism",
+          "liberalism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision regional_democratic_advance_developmental_subsidies",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.35
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "TNO_RUS_development_program_ongoing"
+    }
+  },
+  {
+    "id": "KOM_campaign_for_the_democratic_coalition",
+    "category_id": "KOM_horrifying_politics_category",
+    "name": "Повысить доверие к демократии",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "progressivism",
+          "liberalism",
+          "liberal_conservatism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_arctic_russia",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Арктической России",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 150
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_central_russia",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Центральной России",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 133
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_ural_region",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Уральском Регионе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 138
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_transvolga",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Заволжье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 40
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_southern_urals",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Южном Урале",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 209
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_trans_urals",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Зауралье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 14
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_western_siberia",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Западной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 151
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_northern_siberia",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Северной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 147
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_central_siberia",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Центральной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 207
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_eastern_siberia",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Восточной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 149
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_trans_baikal",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Забайкалье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 211
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_campaign_far_east",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания на Дальнем Востоке",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 148
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_authdem_campaign_ai",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "KOM_authdem_campaign_ai",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_libcon_campaign_ai",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания ПСД",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_socdem_campaign_ai",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания ДСНП",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_liberal_campaign_ai",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания СМР",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MAG_WA_support_iraqi_democrats",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт коституционалистскому Ираку",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "IRP": {
+        "exists": true
+      },
+      "MAG_WA_iraqi_civil_war_active": true,
+      "NOT": {
+        "OR": {
+          "BIR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "IRQ": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "IRP": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "SNI": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "KUR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_iraqi_democrats",
+      "IRP": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "NOV_meet_with_democratic_activists",
+    "category_id": "NOV_The_Election_category",
+    "name": "Встретиться с демократическими активистами",
+    "desc": "Если кампания Шукшина увенчается успехом, то оппозиция по отношению к силовикам должна объединиться. Покрышкин, вероятно, уже использует идеологические разногласия между нашими союзниками, поэтому мы должны действовать быстро. Шукшин организует многочисленные встречи с демократическими защитниками, призывая к сплоченности и единому фронту. Если мы действительно хотим сделать нашу страну демократической, мы не должны позволить нашему последнему шансу быть разорванным в клочья.",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_election_action_in_progress"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": "NOV_shukshin_campaigning"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_meet_with_democratic_activists",
+      "set_country_flag": "NOV_election_action_in_progress",
+      "NOV_raise_shukshin_support_low": true
+    }
+  },
+  {
+    "id": "SAM_appease_democrats",
+    "category_id": "SAM_unity_party_category",
+    "name": "Успокоить демократов",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "SAM_democrat_faction_strength": {
+          "_op": "<",
+          "value": 33.33
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "SAM_democrat_faction_strength": {
+          "_op": "<",
+          "value": 33.33
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_appease_democrats",
+      "SAM_zykov_increase_democrat_low": true,
+      "add_stability": 0.02
+    }
+  },
+  {
+    "id": "SAM_persuade_others_democrats",
+    "category_id": "SAM_unity_party_category",
+    "name": "Договориться с другой фракцией",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "SAM_democrat_faction_strength": {
+          "_op": ">",
+          "value": 33.33
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "SAM_democrat_faction_strength": {
+          "_op": ">",
+          "value": 33.33
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_persuade_others_democrats",
+      "SAM_zykov_increase_democrat_low": true,
+      "add_stability": -0.03
+    }
+  },
+  {
+    "id": "SAM_democrat_decrease_poverty",
+    "category_id": "SAM_unity_party_category",
+    "name": "Начать борьбу с нищетой",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "SAM_civ_influence_tt",
+          "check_variable": {
+            "SAM_democrat_faction_strength": {
+              "_op": ">",
+              "value": 34.99
+            }
+          }
+        },
+        {
+          "tooltip": "WRS_reform_timer_tt",
+          "has_country_flag": {
+            "flag": "WRS_reformed_flag",
+            "days": {
+              "_op": ">",
+              "value": 364
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "SAM_democrat_faction_strength": {
+          "_op": ">",
+          "value": 33.33
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_democrat_decrease_poverty",
+      "custom_effect_tooltip": "SAM_democrat_decrease_poverty_tt",
+      "SAM_zykov_increase_democrat_high": true,
+      "TNO_improve_poverty_low": true,
+      "set_country_flag": "WRS_reformed_flag"
+    }
+  },
+  {
+    "id": "SAM_democrat_lower_draft_law",
+    "category_id": "SAM_unity_party_category",
+    "name": "Понизить годы службы",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "SAM_civ_influence_high_tt",
+          "check_variable": {
+            "SAM_democrat_faction_strength": {
+              "_op": ">",
+              "value": 39.99
+            }
+          }
+        },
+        {
+          "tooltip": "WRS_reform_timer_tt",
+          "has_country_flag": {
+            "flag": "WRS_reformed_flag",
+            "days": {
+              "_op": ">",
+              "value": 364
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "SAM_democrat_faction_strength": {
+          "_op": ">",
+          "value": 33.33
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_democrat_lower_draft_law",
+      "custom_effect_tooltip": "SAM_democrat_lower_draft_law_tt",
+      "SAM_zykov_increase_democrat_high": true,
+      "swap_ideas": {
+        "remove_idea": "tno_conscription_extensive_conscription",
+        "add_idea": "tno_conscription_broadened_conscription"
+      },
+      "set_country_flag": "WRS_reformed_flag"
+    }
+  },
+  {
+    "id": "SBA_Promote_Direct_Democracy_Decision",
+    "category_id": "SBA_general_assembly_category",
+    "name": "Расширить свободы",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "SVR_Limit_LPR_Campaigning",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Ограничить агитацию ЛПР",
+    "desc": "",
+    "icon": "",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_campaigning_for_authdem"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SVR_Limit_LPR_Campaigning",
+      "TNO_improve_press_rights_policy_effectiveness_monthly_low": true
+    }
+  },
+  {
+    "id": "SVR_Suppress_Opposition_Voting",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Подавить голоса оппозиции",
+    "desc": "",
+    "icon": "",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_campaigning_for_authdem"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SVR_Suppress_Opposition_Voting"
+    }
+  },
+  {
+    "id": "SVR_Encourage_Minorities_Voting",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Поощрять голосование меньшинств",
+    "desc": "",
+    "icon": "",
+    "cost": 70,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_campaigning_for_conservative"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SVR_Encourage_Minorities_Voting"
+    }
+  },
+  {
+    "id": "SVR_campaign_arctic_russia",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Арктической России",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 150
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_central_russia",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Центральной России",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 133
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_ural_region",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Уральском Регионе",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 138
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_transvolga",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Заволжье",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 40
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_southern_urals",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Южном Урале",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 209
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_trans_urals",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Зауралье",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 14
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_western_siberia",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Западной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 151
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_northern_siberia",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Северной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 147
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_central_siberia",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Центральной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 207
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_eastern_siberia",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Восточной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 149
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_trans_baikal",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Забайкалье",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 211
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_campaign_far_east",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания на Дальнем Востоке",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 148
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "SVR_authdem_campaign_ai",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания УКГС",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SVR_conservative_campaign_ai",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания ЛПР",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VYT_elections_timeout",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания выборов",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "VYT_Suppress_Minorities_Voting",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Подавить голосование меньшинств",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_campaigning_for_authdem"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VYT_Suppress_Minorities_Voting"
+    }
+  },
+  {
+    "id": "VYT_Encourage_Rural_Voting",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Поощрить голосование сельских жителей",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_campaigning_for_conservative"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VYT_Encourage_Rural_Voting"
+    }
+  },
+  {
+    "id": "VYT_Encourage_Minorities_Voting",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Поощрить голосование меньшинств",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_campaigning_for_liberal"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VYT_Encourage_Minorities_Voting"
+    }
+  },
+  {
+    "id": "VYT_campaign_arctic_russia",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Арктической России",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 150
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_central_russia",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Центральной России",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 133
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_ural_region",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Уральском Регионе",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 138
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_transvolga",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Заволжье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 40
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_southern_urals",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Южном Урале",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 209
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_trans_urals",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Зауралье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 14
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_western_siberia",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Западной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 151
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_northern_siberia",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Северной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 147
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_central_siberia",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Центральной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 207
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_eastern_siberia",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Восточной Сибири",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 149
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_trans_baikal",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Забайкалье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 211
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_far_east",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания на Дальнем Востоке",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 148
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_authdem_campaign_ai",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания НТС",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VYT_conservative_campaign_ai",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания ВНС",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "VYT_liberal_campaign_ai",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания К-Д",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_POLLS_ENABLE"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_LBJ_sweet_talk_democrats",
+    "category_id": "USA_LBJ_great_society_category",
+    "name": "Красноречие  демократов",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_d",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_LBJ_sweet_talk_democrats",
+      "USA_add_10_DC_RDC_approval": true,
+      "USA_add_10_LD_RDC_approval": true,
+      "custom_effect_tooltip": [
+        "USA_rural_voters_header_tt",
+        "USA_rural_dem_shift",
+        "USA_nativists_voters_header_tt",
+        "USA_rural_dem_shift",
+        "USA_urban_voters_header_tt",
+        "USA_rural_dem_shift",
+        "USA_union_voters_header_tt",
+        "USA_rural_dem_shift"
+      ],
+      "set_temp_variable": {
+        "USA_week_change_rural_dem": 2
+      },
+      "add_to_variable": [
+        {
+          "Demographic_Shift_rural_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_urban_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_union_dem_Weeks": "USA_week_change_rural_dem"
+        },
+        {
+          "Demographic_Shift_nativists_dem_Weeks": "USA_week_change_rural_dem"
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_LBJ_calming_the_democrats",
+    "category_id": "USA_LBJ_massive_burdens_decisions_category",
+    "name": "Успокоить  республиканцев",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_LBJ_calming_the_democrats",
+      "USA_add_15_RR_RDC_approval": true,
+      "USA_add_5_HR_RDC_approval": true
+    }
+  },
+  {
+    "id": "USA_WAL_get_democrats_on_side",
+    "category_id": "USA_WAL_new_deal",
+    "name": "Убедить  демократов",
+    "desc": "",
+    "icon": "",
+    "cost": 95,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "USA_wal64_WALLACE_SHALL_LEAD_THE_WAY"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_WAL_get_democrats_on_side_tt",
+      "add_to_variable": [
+        {
+          "WAL_New_Deal_D_RD_Support_healthcare": 5
+        },
+        {
+          "WAL_New_Deal_D_RD_Support_SS": 5
+        }
+      ],
+      "USA_WAL_clamp_senator_vars": true
+    }
+  },
+  {
+    "id": "USA_bill_WAL_blackmail_democrats",
+    "category_id": "USA_bill_decisions_category",
+    "name": "Шантажировать консерваторов",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 200,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "bill_id": 1
+      },
+      "has_government": "paternalism",
+      "NOT": {
+        "has_country_flag": "WAL_blackmailed_dems"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "WAL_blackmailed_dems"
+      }
+    }
+  },
+  {
+    "id": "SWRW_2GCW_democrats_winning",
+    "category_id": "SWRW_2GCW_Regional_Winning_category",
+    "name": "Unify Germany",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "REG": {
+        "controls_state": [
+          1025,
+          4,
+          59,
+          775,
+          1810,
+          64,
+          776,
+          85
+        ]
+      }
+    },
+    "visible": {
+      "tag": "REG"
+    },
+    "complete_effect": {
+      "set_capital": {
+        "state": 64,
+        "remember_old_capital": false
+      },
+      "GER": {
+        "every_core_state": {
+          "remove_core_of": "GER"
+        }
+      },
+      "HRC": {
+        "every_core_state": {
+          "remove_core_of": "HRC"
+        }
+      },
+      "SRH": {
+        "every_core_state": {
+          "remove_core_of": "SRH"
+        }
+      },
+      "RPR": {
+        "every_core_state": {
+          "remove_core_of": "RPR"
+        }
+      },
+      "GMA": {
+        "every_core_state": {
+          "remove_core_of": "GMA"
+        }
+      },
+      "REG": {
+        "add_state_core": [
+          61,
+          776,
+          1813,
+          1814,
+          60,
+          65,
+          64,
+          63,
+          56,
+          1373,
+          1810,
+          1809,
+          51,
+          55,
+          1815,
+          57,
+          188,
+          59,
+          774,
+          58,
+          775,
+          42,
+          8,
+          1812,
+          1811,
+          72,
+          28,
+          50,
+          68,
+          1026,
+          54,
+          53,
+          52,
+          153,
+          86,
+          152,
+          4,
+          1025,
+          1772,
+          62,
+          98,
+          770,
+          87,
+          85,
+          5,
+          97
+        ],
+        "every_owned_state": {
+          "add_core_of": "REG"
+        },
+        "set_capital": {
+          "state": 64,
+          "remember_old_capital": false
+        },
+        "set_global_flag": "SGCW_MainRegional_unification"
+      }
+    }
+  },
+  {
+    "id": "HUN_Democratic_age",
+    "category_id": "HUN_unify_category",
+    "name": "HUN_Democratic_age",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "HUD",
+      "has_war": false,
+      "has_global_flag": "HUN_civil_war"
+    },
+    "visible": {
+      "tag": "HUD"
+    },
+    "complete_effect": {
+      "HUD": {
+        "set_capital": {
+          "state": 1290,
+          "remember_old_capital": false
+        }
+      },
+      "every_state": {
+        "limit": {
+          "is_owned_by": "HUD"
+        },
+        "HUD": {
+          "add_state_core": "PREV"
+        }
+      },
+      "HUS": {
+        "every_core_state": {
+          "remove_core_of": "HUS"
+        }
+      },
+      "HUN": {
+        "every_core_state": {
+          "remove_core_of": "HUN"
+        }
+      },
+      "if": [
+        {
+          "limit": {
+            "has_global_flag": "german_civil_war_speervic"
+          },
+          "GER": {
+            "set_temp_variable": [
+              {
+                "Victory_ID": 105
+              },
+              {
+                "Victory_Outcome": 0
+              },
+              {
+                "Victory_Points": 0
+              }
+            ],
+            "Cold_War_GUI_AddVictory": true
+          }
+        },
+        {
+          "limit": {
+            "OR": {
+              "RUS": {
+                "has_global_flag": "RUS_generic_democratic_unifier"
+              },
+              "has_global_flag": [
+                "RUS_shukshin_unification",
+                "RUS_generic_authoritarian_unifier"
+              ]
+            }
+          },
+          "econ_join_sphere_RUS": true,
+          "RUS": {
+            "give_guarantee": "HUD",
+            "set_temp_variable": [
+              {
+                "Victory_ID": 105
+              },
+              {
+                "Victory_Outcome": 0
+              },
+              {
+                "Victory_Points": 0
+              }
+            ],
+            "Cold_War_GUI_AddVictory": true
+          }
+        }
+      ],
+      "clr_global_flag": "HUN_civil_war",
+      "set_global_flag": "HUD_winner",
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "news_event": "Global_Conflicts.10"
+      }
+    }
+  },
+  {
+    "id": "promote_upper_party_democratic_association",
+    "category_id": "QIN_CCPStruggle",
+    "name": "Promote Upper Party Democratic Association",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_voting",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "QIN",
+        "PC_20": true
+      }
+    },
+    "visible": {
+      "tag": "QIN"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "CCP_PC": 10
+      },
+      "random_list": {
+        "60": {
+          "custom_effect_tooltip": "CCP_promote_upper_party_democratic_association_1_tt",
+          "add_to_variable": {
+            "CCP_Party_Support": 10
+          }
+        },
+        "40": {
+          "custom_effect_tooltip": "CCP_promote_upper_party_democratic_association_2_tt",
+          "subtract_from_variable": {
+            "CCP_Party_Support": 15
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GAY_spread_ideals_of_democracy",
+    "category_id": "GAY_candidate_mechanic_category",
+    "name": "Spread the Ideals of Democracy",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "NOT": {
+          "has_country_flag": "GAY_candidate_action_in_progress"
+        },
+        "has_country_flag": "GAY_izvekov_selected"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "AND": {
+          "has_country_flag": [
+            "GAY_candidate_mechanic",
+            "GAY_izvekov_selected"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GAY_spread_ideals_of_democracy",
+      "set_country_flag": "GAY_candidate_action_in_progress",
+      "set_temp_variable": {
+        "GAY_izvekov_power_temp": 4.5
+      },
+      "GAY_add_izvekov_power": true,
+      "hidden_effect": {
+        "GAY_ideologies_var": true
+      }
+    }
+  }
+]

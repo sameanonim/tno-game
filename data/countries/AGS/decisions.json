@@ -1,0 +1,803 @@
+[
+  {
+    "id": "debug_clr_dreadnought_flags",
+    "category_id": "debug_decisions",
+    "name": "debug_clr_dreadnought_flags",
+    "desc": "",
+    "icon": "GFX_decision_generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "USA": {
+          "OR": {
+            "has_civil_war": true,
+            "has_capitulated": true,
+            "has_opinion": {
+              "target": "FROM",
+              "value": {
+                "_op": "<",
+                "value": 50
+              }
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "generic_purchase_dreadnoughts_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_permit_confederate_flags",
+    "category_id": "USA_honor_the_confederacy",
+    "name": "Разрешить боевые знамена Конфедерации",
+    "desc": "",
+    "icon": "generic_nationalism",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "has_cosmetic_tag": "USA_CSA"
+    },
+    "visible": {
+      "has_country_flag": {
+        "flag": "USA_CSA_legitimacy",
+        "value": {
+          "_op": ">",
+          "value": 2
+        }
+      }
+    },
+    "complete_effect": {
+      "add_stability": 0.1,
+      "add_war_support": 0.1,
+      "add_popularity": {
+        "ideology": "fascism",
+        "popularity": 0.05
+      },
+      "if": {
+        "limit": {
+          "not": {
+            "has_country_flag": "USA_CSA_legitimacy"
+          }
+        },
+        "set_country_flag": {
+          "flag": "USA_CSA_legitimacy",
+          "value": 1
+        }
+      },
+      "else": {
+        "modify_country_flag": {
+          "flag": "USA_CSA_legitimacy",
+          "value": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "BRA_adhemar_spend_excess_money",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "Переместить избыточные средства",
+    "desc": "Тайник Адемара стал настолько велик, что может привлечь недоброе внимание. Он разошлет деньги своим друзьям и союзникам, а возможно, и жителям Бразилии.",
+    "icon": "GFX_decision_generic_investigate_no",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRA_adhemar_too_much_money",
+        "check_variable": {
+          "BRA_adhemar_wealth": {
+            "_op": "<",
+            "value": 200
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "BRA_adhemar_increase_personal_legacy",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "Финансировать программы наследия",
+    "desc": "Адемар будет использовать свое личное состояние, дабы приумножить свое наследие, поддерживая благотворительные начинания и продвигая рекламу для улучшения общественного мнения.",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRA_adhemar_slush_fund_temporarily_disabled"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_adhemar_increase_personal_legacy",
+      "BRA_adhemar_add_legacy_minor": true,
+      "hidden_effect": {
+        "set_temp_variable": {
+          "slush_amount": 5.0
+        },
+        "BRA_adhemar_spend_slush_fund": true
+      }
+    }
+  },
+  {
+    "id": "BRA_adhemar_support_congressional",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "Финансировать кампанию в Конгрессе",
+    "desc": "Адемар будет использовать свое личное состояние для финансирования кампаний в конгрессе для ПСП, обеспечивая партии сильное присутствие в законодательном органе.",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRA_adhemar_slush_fund_temporarily_disabled"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRA_adhemar_moneybags_category_allowed"
+    },
+    "complete_effect": {
+      "BRA_boost_PSP_candidates_nationwide_low": true,
+      "hidden_effect": {
+        "set_temp_variable": {
+          "slush_amount": 10.0
+        },
+        "BRA_adhemar_spend_slush_fund": true
+      }
+    }
+  },
+  {
+    "id": "BRA_adhemar_cash_in_media",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "Подкупить СМИ",
+    "desc": "Адемар позаботится о том, чтобы его друзья в СМИ получили хорошую компенсацию за поддержку его последних инициатив.",
+    "icon": "GFX_decision_generic_propaganda",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRA_adhemar_slush_fund_temporarily_disabled"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRA_adhemar_moneybags_category_allowed"
+    },
+    "complete_effect": {
+      "add_political_power": 35,
+      "hidden_effect": {
+        "set_temp_variable": {
+          "slush_amount": 5.0
+        },
+        "BRA_adhemar_spend_slush_fund": true
+      }
+    }
+  },
+  {
+    "id": "BRA_adhemar_cash_in_supporters",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "Поглотить средства сторонников",
+    "desc": "Адемар воспользуется системой конвертов и попросит своих сторонников помочь ему пополнить фонд, дабы он мог продолжать эффективно управлять страной.",
+    "icon": "GFX_decision_generic_invitation",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "legacy_needed": 2
+      },
+      "BRA_adhemar_legacy_above": true,
+      "NOT": {
+        "has_country_flag": "BRA_adhemar_slush_fund_temporarily_disabled"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRA_adhemar_moneybags_category_allowed"
+    },
+    "complete_effect": {
+      "BRA_adhemar_subtract_legacy_minor": true,
+      "set_temp_variable": {
+        "slush_amount": 1.0
+      },
+      "BRA_adhemar_add_slush_fund": true
+    }
+  },
+  {
+    "id": "BRA_adhemar_make_headway_with_the_nikkei",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "Подкупить сообщества японцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRA_adhemar_slush_fund_temporarily_disabled"
+      }
+    },
+    "visible": {
+      "has_country_flag": "BRA_adhemar_nikkei_activated"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_adhemar_make_headway_with_the_nikkei",
+      "add_popularity": {
+        "ideology": "conservatism",
+        "popularity": -0.01
+      },
+      "BRA_adhemar_add_legacy_minor": true,
+      "BRA_boost_PSP_candidates_sao_paulo_low": true,
+      "hidden_effect": {
+        "set_temp_variable": {
+          "slush_amount": 5.0
+        },
+        "BRA_adhemar_spend_slush_fund": true
+      }
+    }
+  },
+  {
+    "id": "BRA_adhemar_pay_workers_overtime",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "Оплата сверхурочных работ для строителей",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "BRA_adhemar_slush_fund_temporarily_disabled"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_adhemar_pay_workers_overtime",
+      "hidden_effect": {
+        "random_list": {
+          "1": [
+            {
+              "modifier": {
+                "factor": 0,
+                "NOT": {
+                  "is_in_array": {
+                    "BRA_active_megaprojects": "TRANS_AMAZONIAN_HIGHWAY_MEGAPROJECT"
+                  }
+                }
+              },
+              "set_variable": {
+                "BRA_develop_selected_project": "TRANS_AMAZONIAN_HIGHWAY_MEGAPROJECT"
+              },
+              "add_to_variable": [
+                {
+                  "BRA_megaprojects_max_prog^TRANS_AMAZONIAN_HIGHWAY_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_min_prog^TRANS_AMAZONIAN_HIGHWAY_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_build_speed^TRANS_AMAZONIAN_HIGHWAY_MEGAPROJECT": 1
+                }
+              ],
+              "clamp_variable": {
+                "var": "BRA_megaprojects_min_prog^TRANS_AMAZONIAN_HIGHWAY_MEGAPROJECT",
+                "min": 0,
+                "max": 100
+              }
+            },
+            {
+              "modifier": {
+                "factor": 0,
+                "NOT": {
+                  "is_in_array": {
+                    "BRA_active_megaprojects": "ITAIPU_HYDROELECTIC_DAM_MEGAPROJECT"
+                  }
+                }
+              },
+              "set_variable": {
+                "BRA_develop_selected_project": "ITAIPU_HYDROELECTIC_DAM_MEGAPROJECT"
+              },
+              "add_to_variable": [
+                {
+                  "BRA_megaprojects_build_speed^ITAIPU_HYDROELECTIC_DAM_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_min_prog^ITAIPU_HYDROELECTIC_DAM_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_build_speed^ITAIPU_HYDROELECTIC_DAM_MEGAPROJECT": 1
+                }
+              ],
+              "clamp_variable": {
+                "var": "BRA_megaprojects_min_prog^ITAIPU_HYDROELECTIC_DAM_MEGAPROJECT",
+                "min": 0,
+                "max": 100
+              }
+            },
+            {
+              "modifier": {
+                "factor": 0,
+                "NOT": {
+                  "is_in_array": {
+                    "BRA_active_megaprojects": "SUS_HEALTHCARE_MEGAPROJECT"
+                  }
+                }
+              },
+              "set_variable": {
+                "BRA_develop_selected_project": "SUS_HEALTHCARE_MEGAPROJECT"
+              },
+              "add_to_variable": [
+                {
+                  "BRA_megaprojects_build_speed^SUS_HEALTHCARE_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_min_prog^SUS_HEALTHCARE_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_build_speed^SUS_HEALTHCARE_MEGAPROJECT": 1
+                }
+              ],
+              "clamp_variable": {
+                "var": "BRA_megaprojects_min_prog^SUS_HEALTHCARE_MEGAPROJECT",
+                "min": 0,
+                "max": 100
+              }
+            },
+            {
+              "modifier": {
+                "factor": 0,
+                "NOT": {
+                  "is_in_array": {
+                    "BRA_active_megaprojects": "RIO_NITEROI_BRIDGE_MEGAPROJECT"
+                  }
+                }
+              },
+              "set_variable": {
+                "BRA_develop_selected_project": "RIO_NITEROI_BRIDGE_MEGAPROJECT"
+              },
+              "add_to_variable": [
+                {
+                  "BRA_megaprojects_build_speed^RIO_NITEROI_BRIDGE_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_min_prog^RIO_NITEROI_BRIDGE_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_build_speed^RIO_NITEROI_BRIDGE_MEGAPROJECT": 1
+                }
+              ],
+              "clamp_variable": {
+                "var": "BRA_megaprojects_min_prog^RIO_NITEROI_BRIDGE_MEGAPROJECT",
+                "min": 0,
+                "max": 100
+              }
+            },
+            {
+              "modifier": {
+                "factor": 0,
+                "NOT": {
+                  "is_in_array": {
+                    "BRA_active_megaprojects": "RIO_SAO_PAULO_LINE_MEGAPROJECT"
+                  }
+                }
+              },
+              "set_variable": {
+                "BRA_develop_selected_project": "RIO_SAO_PAULO_LINE_MEGAPROJECT"
+              },
+              "add_to_variable": [
+                {
+                  "BRA_megaprojects_build_speed^RIO_SAO_PAULO_LINE_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_min_prog^RIO_SAO_PAULO_LINE_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_build_speed^RIO_SAO_PAULO_LINE_MEGAPROJECT": 1
+                }
+              ],
+              "clamp_variable": {
+                "var": "BRA_megaprojects_min_prog^RIO_SAO_PAULO_LINE_MEGAPROJECT",
+                "min": 0,
+                "max": 100
+              }
+            },
+            {
+              "modifier": {
+                "factor": 0,
+                "NOT": {
+                  "is_in_array": {
+                    "BRA_active_megaprojects": "ADHEMAR_LAND_REFORM_MEGAPROJECT"
+                  }
+                }
+              },
+              "set_variable": {
+                "BRA_develop_selected_project": "ADHEMAR_LAND_REFORM_MEGAPROJECT"
+              },
+              "add_to_variable": [
+                {
+                  "BRA_megaprojects_build_speed^ADHEMAR_LAND_REFORM_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_min_prog^ADHEMAR_LAND_REFORM_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_build_speed^ADHEMAR_LAND_REFORM_MEGAPROJECT": 1
+                }
+              ],
+              "clamp_variable": {
+                "var": "BRA_megaprojects_min_prog^ADHEMAR_LAND_REFORM_MEGAPROJECT",
+                "min": 0,
+                "max": 100
+              }
+            },
+            {
+              "modifier": {
+                "factor": 0,
+                "NOT": {
+                  "is_in_array": {
+                    "BRA_active_megaprojects": "ADHEMAR_NUCLEAR_BASE_MEGAPROJECT"
+                  }
+                }
+              },
+              "set_variable": {
+                "BRA_develop_selected_project": "ADHEMAR_NUCLEAR_BASE_MEGAPROJECT"
+              },
+              "add_to_variable": [
+                {
+                  "BRA_megaprojects_build_speed^ADHEMAR_NUCLEAR_BASE_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_min_prog^ADHEMAR_NUCLEAR_BASE_MEGAPROJECT": 1
+                },
+                {
+                  "BRA_megaprojects_build_speed^ADHEMAR_NUCLEAR_BASE_MEGAPROJECT": 1
+                }
+              ],
+              "clamp_variable": {
+                "var": "BRA_megaprojects_min_prog^ADHEMAR_NUCLEAR_BASE_MEGAPROJECT",
+                "min": 0,
+                "max": 100
+              }
+            }
+          ]
+        }
+      },
+      "set_temp_variable": {
+        "slush_amount": 20.0
+      },
+      "BRA_adhemar_spend_slush_fund": true,
+      "custom_effect_tooltip": "BRA_adhemar_pay_workers_overtime_tt",
+      "clr_country_flag": "BRA_viewing_megaproject"
+    }
+  },
+  {
+    "id": "BRA_adhemar_example_spend_money",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "BRA_adhemar_example_spend_money",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "slush_amount": 0.25
+      },
+      "BRA_adhemar_can_spend_slush_fund": true,
+      "NOT": {
+        "has_country_flag": "BRA_adhemar_slush_fund_temporarily_disabled"
+      }
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "slush_amount": 0.25
+      },
+      "BRA_adhemar_spend_slush_fund": true
+    }
+  },
+  {
+    "id": "BRA_adhemar_example_get_money",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "BRA_adhemar_example_get_money",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "slush_amount": 0.5
+      },
+      "BRA_adhemar_add_slush_fund": true
+    }
+  },
+  {
+    "id": "BRA_adhemar_example_get_legacy_small",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "BRA_adhemar_example_get_legacy_small",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "BRA_adhemar_add_legacy_minor": true
+    }
+  },
+  {
+    "id": "BRA_adhemar_example_get_legacy_large",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "BRA_adhemar_example_get_legacy_large",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "legacy_needed": -1
+      },
+      "BRA_adhemar_legacy_below": true
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "BRA_adhemar_add_legacy_major": true
+    }
+  },
+  {
+    "id": "BRA_adhemar_example_harm_legacy_small",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "BRA_adhemar_example_harm_legacy_small",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "BRA_adhemar_subtract_legacy_minor": true
+    }
+  },
+  {
+    "id": "BRA_adhemar_example_harm_legacy_large",
+    "category_id": "BRA_adhemar_moneybags_category",
+    "name": "BRA_adhemar_example_harm_legacy_large",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "legacy_needed": 2
+      },
+      "BRA_adhemar_legacy_above": true
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "BRA_adhemar_subtract_legacy_major": true
+    }
+  },
+  {
+    "id": "HGR_incorporate_AGS",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [AGS.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_AGS_req_tt",
+        "AGS": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_AGS_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "AGS": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_AGS",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_AGS_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[AGS.GetFlag]Содействовать межотраслевому сотрудничеству",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_AGS"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_AGS_influence_true",
+        "HGR_AGS_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "AGS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_AGS_decision_a_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "AGS": {
+        "increase_Heydrich_influence_small": true,
+        "add_stability": 0.05
+      }
+    }
+  },
+  {
+    "id": "HGR_AGS_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[AGS.GetFlag]Узаконить лидерство Штайнера",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_AGS"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_AGS_influence_true",
+        "HGR_AGS_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "AGS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_AGS_decision_a_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "HGR_increase_ss_hardliner_opinion_low": true,
+      "AGS": {
+        "increase_Heydrich_influence_medium": true,
+        "add_political_power": 50
+      }
+    }
+  },
+  {
+    "id": "HGR_AGS_decision_b_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[AGS.GetFlag]Поощрять превосходство СС",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_AGS"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_AGS_influence_true",
+        "HGR_AGS_decision_set_c"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "AGS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_AGS_decision_b_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "HGR_increase_ss_moderate_opinion_med": true,
+      "HGR_decrease_militarist_opinion_low": true,
+      "AGS": {
+        "increase_Heydrich_influence_medium": true,
+        "add_stability": -0.05
+      }
+    }
+  },
+  {
+    "id": "HGR_AGS_decision_b_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[AGS.GetFlag]Вдохновлять восстания Вермахта",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_AGS"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_AGS_influence_true",
+        "HGR_AGS_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "AGS": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_AGS_decision_b_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "HGR_increase_militarist_opinion_med": true,
+      "HGR_decrease_ss_moderate_opinion_low": true,
+      "AGS": {
+        "increase_Heydrich_influence_medium": true,
+        "add_stability": -0.05
+      }
+    }
+  }
+]

@@ -1,0 +1,458 @@
+[
+  {
+    "id": "PER_kur_azr_revolt_mission",
+    "category_id": "PER_kur_azr_independence_cat",
+    "name": "Сепаратисты готовятся к войне за независимость",
+    "desc": "",
+    "icon": "generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "PER",
+      "NOT": {
+        "OR": {
+          "has_completed_focus": "PER_appease_the_seperatists",
+          "has_country_flag": "PER_kur_azr_indy_war_started"
+        }
+      },
+      "any_owned_state": {
+        "OR": {
+          "is_core_of": [
+            "KUR",
+            "AZR"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_build_national_academy_of_sciences_integrated_republic_AZR",
+    "category_id": "SOV_national_academy_of_sciences_dec_cat",
+    "name": "Построить: [AZR.GetAdjective]ую $SOV_build_national_academy_of_sciences_integrated_republic_default$",
+    "desc": "Мы построим в государстве [AZR.GetNameDef] Национальную академию наук — она несомненно ускорит исследования в нашей стране.",
+    "icon": "GFX_decision_SOV_academy_of_sciences",
+    "cost": "SOV_national_academy_of_sciences_construction_cost",
+    "fire_only_once": true,
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SOV_national_academies_of_sciences",
+      "NOT": [
+        {
+          "has_country_flag": "SOV_national_academy_of_sciences_built_AZR_flag"
+        },
+        {
+          "country_exists": "AZR"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AZR_withdraw_from_the_war",
+    "category_id": "SWRW_Azerbaijan_category",
+    "name": "Withdraw from the War",
+    "desc": "",
+    "icon": "GFX_decision_diplo_kaukasien",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "1552": {
+        "is_controlled_by": "AZR"
+      },
+      "1554": {
+        "is_controlled_by": "AZR"
+      },
+      "229": {
+        "is_controlled_by": "AZR"
+      }
+    },
+    "visible": {
+      "has_war_with": "CAU",
+      "original_tag": "AZR"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: AZR_withdraw_from_the_war",
+      "white_peace": "CAU",
+      "AZR": {
+        "transfer_state": [
+          1552,
+          1554,
+          229
+        ]
+      }
+    }
+  },
+  {
+    "id": "Guns_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Ensure Arms Supplies",
+    "desc": "",
+    "icon": "GFX_decision_market_infantry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 1699
+          }
+        },
+        {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 119
+          }
+        },
+        {
+          "anti_tank_equipment": {
+            "_op": ">",
+            "value": 399
+          }
+        }
+      ]
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Guns_AZR_FUK",
+      "hidden_effect": {
+        "add_command_power": -20,
+        "add_political_power": -20
+      }
+    }
+  },
+  {
+    "id": "Advisors_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Send Military Advisors",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "AZR": {
+        "add_timed_idea": {
+          "idea": "FUK_military_advisors",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "Technicians_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Send Technical Aid",
+    "desc": "",
+    "icon": "GFX_decision_generic_tools",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "AZR": {
+        "add_timed_idea": {
+          "idea": "FUK_technician_aid",
+          "days": 40
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Sabotage Kaukasien Supply Lines",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "FUK_sabotage_effort",
+          "days": 40
+        }
+      }
+    }
+  },
+  {
+    "id": "Raids_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Border Provocations against Reichskommissariat",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "FUK_ukrainian_border_provocations",
+          "days": 30
+        }
+      }
+    }
+  },
+  {
+    "id": "Bomb_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Bombing Against a Numerical Enemy",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "FUK_Plane_Bombing",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "Volunteers_AZR_FUK",
+    "category_id": "FUK_BoP_category",
+    "name": "Send Volunteer Forces",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "FUK": {
+        "set_temp_variable": [
+          {
+            "target": "AZR"
+          },
+          {
+            "number": 3
+          }
+        ],
+        "TNO_set_num_volunteers": true
+      }
+    }
+  },
+  {
+    "id": "Guns_GER_AZR_CAU",
+    "category_id": "GER_Bop_category",
+    "name": "Send Weapons to Our Local Forces",
+    "desc": "",
+    "icon": "GFX_decision_market_infantry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": [
+        {
+          "artillery_equipment": {
+            "_op": ">",
+            "value": 149
+          }
+        },
+        {
+          "anti_tank_equipment": {
+            "_op": ">",
+            "value": 449
+          }
+        },
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 1349
+          }
+        }
+      ]
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -30,
+        "add_political_power": -30
+      }
+    }
+  },
+  {
+    "id": "Advisors_GER_AZR_CAU",
+    "category_id": "GER_Bop_category",
+    "name": "Send Military Advisors",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "GER_military_advisors",
+          "days": 30
+        }
+      }
+    }
+  },
+  {
+    "id": "Technician_aid_GER_AZR_CAU",
+    "category_id": "GER_Bop_category",
+    "name": "Send Technical Assistance",
+    "desc": "",
+    "icon": "GFX_decision_generic_tools",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "CAU": {
+        "add_timed_idea": {
+          "idea": "GER_technician_aid",
+          "days": 40
+        }
+      }
+    }
+  },
+  {
+    "id": "Sabotage_effort_GER_AZR_CAU",
+    "category_id": "GER_Bop_category",
+    "name": "Sabotage the Rebels",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -5,
+        "add_political_power": -15
+      },
+      "AZR": {
+        "add_timed_idea": {
+          "idea": "GER_sabotage_effort",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_bombing_runs_GER_AZR_CAU",
+    "category_id": "GER_Bop_category",
+    "name": "Carpet Bombing of the Rebels",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -10
+      },
+      "AZR": {
+        "add_timed_idea": {
+          "idea": "GER_Plane_Bombing",
+          "days": 35
+        }
+      }
+    }
+  },
+  {
+    "id": "Volunteers_GER_AZR_CAU",
+    "category_id": "GER_Bop_category",
+    "name": "Send Volunteer Forces",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "TNO_fopo_AZRCW_selected": true,
+      "has_global_flag": "azr_vs_cau_War"
+    },
+    "complete_effect": {
+      "GER": {
+        "set_temp_variable": [
+          {
+            "target": "CAU"
+          },
+          {
+            "number": 2
+          }
+        ],
+        "TNO_set_num_volunteers": true
+      }
+    }
+  }
+]

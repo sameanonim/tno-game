@@ -238,14 +238,23 @@ func _draw_frontline_demarcation(front: Frontline) -> void:
 		return
 
 	# Рисуем линию соприкосновения
+	var cur_time = Time.get_ticks_msec() / 1000.0
 	for i in range(points.size() - 1):
 		var p1 = points[i]
 		var p2 = points[i + 1]
 		var dir = (p2 - p1).normalized()
 		var normal := Vector2(-dir.y, dir.x)
 
+		# Пульсирующий неоновый оттенок рубежа
+		var pulse = 0.70 + 0.30 * sin(cur_time * 4.0 + float(i) * 0.5)
+		var base_col = COL_RED_ALERT if front.tension >= 50.0 else (COL_AMBER_ASSAULT if front.tension >= 25.0 else COL_BLUE_DEFENSE)
+		var glow_col = Color(base_col.r, base_col.g, base_col.b, 0.35 * pulse)
+		var core_col = Color(base_col.r, base_col.g, base_col.b, 0.90 * pulse)
+
+		# Внешнее неоновое свечение рубежа
+		draw_line(p1, p2, glow_col, 4.5)
 		# Базовая неоновая линия рубежа
-		draw_line(p1, p2, Color(COL_BLUE_DEFENSE.r, COL_BLUE_DEFENSE.g, COL_BLUE_DEFENSE.b, 0.75), 2.0)
+		draw_line(p1, p2, core_col, 2.0)
 
 		# Зубцы укрепленного рубежа обороны (LOD: скрываем при сильном удалении)
 		if zoom_level >= lod_secondary_threshold:
@@ -253,7 +262,7 @@ func _draw_frontline_demarcation(front: Frontline) -> void:
 			var num_ticks = int(seg_len / 20.0)
 			for t in range(num_ticks):
 				var tick_pos = p1 + dir * (float(t) * 20.0 + 10.0)
-				draw_line(tick_pos, tick_pos + normal * 7.0, COL_BLUE_DEFENSE, 1.5)
+				draw_line(tick_pos, tick_pos + normal * 7.0, core_col, 1.5)
 
 
 func _draw_axis(axis: OperationalAxis, _front: Frontline) -> void:
@@ -271,7 +280,9 @@ func _draw_axis(axis: OperationalAxis, _front: Frontline) -> void:
 
 	# Вычисляем начальную точку удара
 	var start_pos = target_points[0] - Vector2(75.0, 35.0)
-	if province_centroids.has(1) and not axis.target_region_ids.has(1):
+	if axis.origin_region_id > 0 and province_centroids.has(axis.origin_region_id):
+		start_pos = province_centroids[axis.origin_region_id]
+	elif province_centroids.has(1) and not axis.target_region_ids.has(1):
 		start_pos = province_centroids[1]
 
 	_draw_axis_arrow(start_pos, target_points[0], axis.progress, int(axis.posture), axis.name)

@@ -1,0 +1,562 @@
+[
+  {
+    "id": "CHL_integrate_french_guyana",
+    "category_id": "CHL_monarchist_decisions",
+    "name": "Интегрировать Французскую Гвиану",
+    "desc": "",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_return_to_the_continent",
+      "controls_state": 310
+    },
+    "visible": {
+      "original_tag": "CHL",
+      "has_completed_focus": "CHL_return_to_the_continent",
+      "NOT": {
+        "has_country_flag": "CHL_integrated_french_guyana_flag"
+      },
+      "310": {
+        "NOT": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "PRC_assaulting_guyuan",
+    "category_id": "PRC_border_wars_cat",
+    "name": "Штурмует регион [1045.GetName]",
+    "desc": "",
+    "icon": "border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_CIA_support_protestors_guy_unrest",
+    "category_id": "USA_BoP_category",
+    "name": "Операция КОЛЧАН",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_SouthAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_GUY_Anti_Burnham"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_support_protestors_guy_unrest_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "modifier": {
+            "has_game_rule": {
+              "rule": "GUY_BURNHAM",
+              "option": "GUY_BURNHAM_STAY_INDIE"
+            },
+            "factor": 0
+          },
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_support_protestors_guy_unrest_success"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "modifier": {
+            "has_game_rule": {
+              "rule": "GUY_BURNHAM",
+              "option": "GUY_BURNHAM_FAIL"
+            },
+            "factor": 0
+          },
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": [
+            {
+              "country_event": {
+                "id": "USA_CIA.2",
+                "days": 14
+              }
+            },
+            {
+              "country_event": {
+                "id": "GUY_US.26",
+                "days": 14
+              }
+            }
+          ]
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_CIA_support_burnham_guy_unrest",
+    "category_id": "USA_BoP_category",
+    "name": "Операция §*ИСКУШЕНИЕ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_SouthAmerica": true,
+        "is_ai": true
+      },
+      "has_country_flag": "USA_GUY_Pro_Burnham"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_support_burnham_guy_unrest_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "modifier": {
+            "has_game_rule": {
+              "rule": "GUY_BURNHAM",
+              "option": "GUY_BURNHAM_FAIL"
+            },
+            "factor": 0
+          },
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_support_burnham_guy_unrest_success"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "modifier": {
+            "has_game_rule": {
+              "rule": "GUY_BURNHAM",
+              "option": "GUY_BURNHAM_STAY_OFN"
+            },
+            "factor": 0
+          },
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": [
+            {
+              "country_event": {
+                "id": "USA_CIA.2",
+                "days": 14
+              }
+            },
+            {
+              "country_event": {
+                "id": "GUY_US.23",
+                "days": 14
+              }
+            }
+          ]
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "debug_trigger_venezuelan_invasion_of_guyana_proxy",
+    "category_id": "global_debug_decisions",
+    "name": "Начать Венесуэльское вторжение в Гайану",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "show_mt_proxys"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision debug_trigger_venezuelan_invasion_of_guyana_proxy",
+      "VEN": {
+        "if": {
+          "limit": {
+            "country_exists": "CLC",
+            "NOT": {
+              "CLC": {
+                "has_cosmetic_tag": "CLC_andi"
+              }
+            }
+          },
+          "create_faction_from_template": {
+            "name": "Bolivarian_Alliance",
+            "icon": "GFX_Unitarian_Bolivarian_Alliance_Member",
+            "template": "faction_template_generic"
+          },
+          "add_to_faction": "CLC",
+          "CLC": {
+            "set_faction_leader": true,
+            "set_country_flag": "UBA_MEMBER"
+          }
+        },
+        "set_party_name": [
+          {
+            "ideology": "socialist",
+            "long_name": "VEN_socialist_2_party_long",
+            "name": "VEN_socialist_2_party"
+          },
+          {
+            "ideology": "fascism",
+            "long_name": "VEN_vidal_long",
+            "name": "VEN_vidal"
+          },
+          {
+            "ideology": "despotism",
+            "long_name": "VEN_vidal_long",
+            "name": "VEN_vidal"
+          },
+          {
+            "ideology": "paternalism",
+            "long_name": "VEN_vidal_long",
+            "name": "VEN_vidal"
+          },
+          {
+            "ideology": "ultranationalism",
+            "long_name": "VEN_vidal_long",
+            "name": "VEN_vidal"
+          },
+          {
+            "ideology": "socialist",
+            "long_name": "VNS_communist_party_long",
+            "name": "VNS_communist_party"
+          },
+          {
+            "ideology": "communist",
+            "long_name": "VNS_communist_party_long",
+            "name": "VNS_communist_party"
+          }
+        ],
+        "add_country_leader_role": [
+          {
+            "character": "VEN_Domingo_Alberto_Rangel",
+            "promote_leader": true,
+            "country_leader": {
+              "desc": "POLITICS_VEN_DOMINGO_ALBERTO_RANGEL",
+              "expire": "1994.4.20",
+              "ideology": "socialist_subtype",
+              "traits": [],
+              "id": -1
+            }
+          },
+          {
+            "character": "VEN_Americo_Silva",
+            "promote_leader": true,
+            "country_leader": {
+              "desc": "POLITICS_VEN_AMERICO_SILVA",
+              "expire": "1994.4.20",
+              "ideology": "socialist_subtype",
+              "traits": [],
+              "id": -1
+            }
+          }
+        ],
+        "set_politics": {
+          "ruling_party": "fascism",
+          "elections_allowed": true,
+          "last_election": "1964.12.1",
+          "election_frequency": 48
+        },
+        "VEN_Juan_Dios_Moncada_Vidal": [
+          {
+            "promote_character": "fascism_revolutionary_nationalism_subtype"
+          },
+          {
+            "set_portraits": {
+              "civilian": {
+                "large": "gfx/leaders/VEN/Portrait_Venezuela_Juan_de_Dios_Moncada_Vidal_Bolivarian.png"
+              }
+            }
+          }
+        ],
+        "remove_all_ministers": true,
+        "add_ideas": [
+          "VEN_democracys_decimated_corpse",
+          "VEN_drowned_in_pitch_black",
+          "VEN_bolivar_anew",
+          [
+            "VEN_drowned_in_pitch_black",
+            "VEN_bolivar_anew"
+          ]
+        ],
+        "remove_ideas": [
+          "VEN_black_gold_raw_gold",
+          "VEN_game_of_the_three_kings",
+          "VEN_democracys_fraying_lifeline",
+          "VEN_the_crimson_spectre",
+          "OFN_Observer",
+          "VEN_the_crimson_spectre",
+          [
+            "VEN_vanguards_of_the_flag",
+            "VEN_the_crimson_spectre",
+            "VEN_black_gold_raw_gold",
+            "VEN_black_gold_raw_gold_alt"
+          ]
+        ],
+        "econ_leave_sphere": true,
+        "set_popularities": {
+          "ultranationalism": 3,
+          "fascism": 33,
+          "despotism": 12,
+          "paternalism": 19,
+          "conservatism": 3,
+          "liberal_conservatism": 3,
+          "liberalism": 5,
+          "progressivism": 7,
+          "communist": 15
+        },
+        "remove_dynamic_modifier": {
+          "modifier": "VEN_CrimsonSpectre_dynamic_modifier"
+        },
+        "set_cosmetic_tag": "VEN_bolivarian"
+      },
+      "GUY": {
+        "country_event": {
+          "id": "ESQ_scripted.6"
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_Mission_Smuta_CHT_ChitaModelSobchakIsACoolGuy",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Экспорт Читинской модели...",
+    "desc": "Анатолий Собчак - один из наших главных активистов в гражданском секторе. Он также амбициозный человек - так дайте ему поработать над благоустройством наших территорий за пределами своего родного города Читы.",
+    "icon": "GFX_decision_generic_building",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "VEN_debug_fire_moncada_invasion_guyana",
+    "category_id": "VEN_debug",
+    "name": "Начать вторжение Монкады в Гайану",
+    "desc": "надеюсь больше никаких баланс-правок/фиксов этой прокси не будет",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "tag": "VEN",
+      "is_ai": false
+    },
+    "visible": {
+      "tag": "VEN"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VEN_debug_fire_invasion_guyana",
+      "if": {
+        "limit": {
+          "country_exists": "CLC",
+          "NOT": {
+            "CLC": {
+              "has_cosmetic_tag": "CLC_andi"
+            }
+          }
+        },
+        "create_faction_from_template": {
+          "name": "Bolivarian_Alliance",
+          "icon": "GFX_Unitarian_Bolivarian_Alliance_Member",
+          "template": "faction_template_generic"
+        },
+        "add_to_faction": "CLC",
+        "CLC": {
+          "set_faction_leader": true,
+          "set_country_flag": "UBA_MEMBER"
+        }
+      },
+      "set_party_name": [
+        {
+          "ideology": "socialist",
+          "long_name": "VEN_socialist_2_party_long",
+          "name": "VEN_socialist_2_party"
+        },
+        {
+          "ideology": "fascism",
+          "long_name": "VEN_vidal_long",
+          "name": "VEN_vidal"
+        },
+        {
+          "ideology": "despotism",
+          "long_name": "VEN_vidal_long",
+          "name": "VEN_vidal"
+        },
+        {
+          "ideology": "paternalism",
+          "long_name": "VEN_vidal_long",
+          "name": "VEN_vidal"
+        },
+        {
+          "ideology": "ultranationalism",
+          "long_name": "VEN_vidal_long",
+          "name": "VEN_vidal"
+        },
+        {
+          "ideology": "socialist",
+          "long_name": "VNS_communist_party_long",
+          "name": "VNS_communist_party"
+        },
+        {
+          "ideology": "communist",
+          "long_name": "VNS_communist_party_long",
+          "name": "VNS_communist_party"
+        }
+      ],
+      "add_country_leader_role": [
+        {
+          "character": "VEN_Domingo_Alberto_Rangel",
+          "promote_leader": true,
+          "country_leader": {
+            "desc": "POLITICS_VEN_DOMINGO_ALBERTO_RANGEL",
+            "expire": "1994.4.20",
+            "ideology": "socialist_subtype",
+            "traits": [],
+            "id": -1
+          }
+        },
+        {
+          "character": "VEN_Americo_Silva",
+          "promote_leader": true,
+          "country_leader": {
+            "desc": "POLITICS_VEN_AMERICO_SILVA",
+            "expire": "1994.4.20",
+            "ideology": "socialist_subtype",
+            "traits": [],
+            "id": -1
+          }
+        }
+      ],
+      "set_politics": {
+        "ruling_party": "fascism",
+        "elections_allowed": true,
+        "last_election": "1964.12.1",
+        "election_frequency": 48
+      },
+      "VEN_Juan_Dios_Moncada_Vidal": [
+        {
+          "promote_character": "fascism_revolutionary_nationalism_subtype"
+        },
+        {
+          "set_portraits": {
+            "civilian": {
+              "large": "gfx/leaders/VEN/Portrait_Venezuela_Juan_de_Dios_Moncada_Vidal_Bolivarian.png"
+            }
+          }
+        }
+      ],
+      "remove_all_ministers": true,
+      "add_ideas": [
+        "VEN_democracys_decimated_corpse",
+        "VEN_drowned_in_pitch_black",
+        "VEN_bolivar_anew",
+        [
+          "VEN_drowned_in_pitch_black",
+          "VEN_bolivar_anew"
+        ]
+      ],
+      "remove_ideas": [
+        "VEN_black_gold_raw_gold",
+        "VEN_game_of_the_three_kings",
+        "VEN_democracys_fraying_lifeline",
+        "VEN_the_crimson_spectre",
+        "OFN_Observer",
+        "VEN_the_crimson_spectre",
+        [
+          "VEN_vanguards_of_the_flag",
+          "VEN_the_crimson_spectre",
+          "VEN_black_gold_raw_gold",
+          "VEN_black_gold_raw_gold_alt"
+        ]
+      ],
+      "econ_leave_sphere": true,
+      "set_popularities": {
+        "ultranationalism": 3,
+        "fascism": 33,
+        "despotism": 12,
+        "paternalism": 19,
+        "conservatism": 3,
+        "liberal_conservatism": 3,
+        "liberalism": 5,
+        "progressivism": 7,
+        "communist": 15
+      },
+      "remove_dynamic_modifier": {
+        "modifier": "VEN_CrimsonSpectre_dynamic_modifier"
+      },
+      "set_cosmetic_tag": "VEN_bolivarian",
+      "GUY": {
+        "country_event": {
+          "id": "ESQ_scripted.6"
+        }
+      }
+    }
+  }
+]

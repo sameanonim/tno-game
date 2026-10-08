@@ -1,0 +1,759 @@
+[
+  {
+    "id": "MEN_move_the_capital_to_kalgan_decision",
+    "category_id": "political_actions",
+    "name": "Перенести столицу в Калган",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "1039": {
+        "is_owned_and_controlled_by": "ROOT"
+      },
+      "capital_scope": {
+        "NOT": {
+          "state": 1039
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "MEN_moved_capital_to_zhangbei",
+      "capital_scope": {
+        "NOT": {
+          "state": 1039
+        }
+      }
+    },
+    "complete_effect": {
+      "swap_ideas": {
+        "remove_idea": "MEN_stretched_administration_idea_2",
+        "add_idea": "MEN_stretched_administration_idea_3"
+      },
+      "set_capital": {
+        "state": 1039,
+        "remember_old_capital": true
+      },
+      "add_victory_points": {
+        "province": 6904,
+        "value": 2
+      },
+      "hidden_effect": {
+        "set_country_flag": "MEN_moved_capital_to_kalgan"
+      }
+    }
+  },
+  {
+    "id": "ott_absorb_the_tunis_and_algerian_eyalets",
+    "category_id": "form_ottoman_empire_category",
+    "name": "Поглотить эялеты Тунис и Алжир",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "TUR_abdulmejid_ii",
+            "ruling_only": true
+          },
+          {
+            "character": "TUR_durrushehvar_i",
+            "ruling_only": true
+          }
+        ]
+      },
+      "controls_state": [
+        458,
+        665,
+        459,
+        460,
+        513
+      ]
+    },
+    "visible": {
+      "original_tag": "TUR",
+      "NOT": {
+        "has_global_flag": "ottoman_tunisia_flag"
+      },
+      "has_completed_focus": "TUR_reclaiming_our_lost_empire"
+    },
+    "complete_effect": {
+      "458": {
+        "add_core_of": "ROOT"
+      },
+      "665": {
+        "add_core_of": "ROOT"
+      },
+      "459": {
+        "add_core_of": "ROOT"
+      },
+      "460": {
+        "add_core_of": "ROOT"
+      },
+      "513": {
+        "add_core_of": "ROOT"
+      },
+      "hidden_effect": {
+        "set_global_flag": "ottoman_tunisia_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_generalgouvernement",
+    "category_id": "GER_reichskommissariats",
+    "name": "Учредить Генерал-губернаторство",
+    "desc": "",
+    "icon": "ger_reichskommissariats",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "has_completed_focus": "GER_reassert_eastern_claims",
+      "NOT": {
+        "has_subject": "POL"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "88": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "90": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "92": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "10": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "GEN": {
+        "exists": false
+      }
+    },
+    "complete_effect": {
+      "GER_improve_rosenbergs_trait_effect": true,
+      "custom_effect_tooltip": [
+        "generic_skip_one_line_tt",
+        "GER_generalgouvernement_effect_tt",
+        "generic_skip_one_line_tt"
+      ],
+      "88": {
+        "IF": {
+          "limit": {
+            "OWNER": {
+              "NOT": {
+                "original_tag": "GER"
+              }
+            }
+          },
+          "OWNER": {
+            "set_country_flag": [
+              "GER_RK_capital_state_trasferred_GEN_victim_flag",
+              "GER_reichskommissariats_puppet_flag"
+            ]
+          }
+        },
+        "transfer_state_to": "GEN",
+        "set_state_flag": "GER_RK_capital_state_trasferred_GEN_flag",
+        "add_compliance": 25
+      },
+      "set_autonomy": {
+        "target": "GEN",
+        "autonomy_state": "autonomy_integrated_puppet"
+      },
+      "hidden_effect": {
+        "every_state": [
+          {
+            "limit": {
+              "GER_is_GEN_state": true,
+              "NOT": {
+                "state": 88
+              },
+              "OR": {
+                "is_owned_by": "ROOT",
+                "owner": {
+                  "is_subject_of": "ROOT"
+                }
+              }
+            },
+            "transfer_state_to": "GEN",
+            "add_compliance": 25
+          },
+          {
+            "limit": {
+              "GER_is_GEN_state": true,
+              "NOT": [
+                {
+                  "state": 88
+                },
+                {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              ]
+            },
+            "add_contested_owner": "GEN",
+            "set_state_controller_to": "GEN",
+            "add_claim_by": "GEN",
+            "add_compliance": 25
+          }
+        ],
+        "GEN": {
+          "add_manpower": 50000,
+          "add_equipment_to_stockpile": [
+            {
+              "type": "infantry_equipment",
+              "amount": 5000,
+              "producer": "GER"
+            },
+            {
+              "type": "support_equipment",
+              "amount": 500,
+              "producer": "GER"
+            }
+          ],
+          "inherit_technology": "GER",
+          "add_offsite_building": {
+            "type": "arms_factory",
+            "level": 2
+          },
+          "load_oob": "RK_OOB"
+        }
+      },
+      "country_event": {
+        "id": "wuw_GER_reichskommissariats.12",
+        "hours": 0
+      }
+    }
+  },
+  {
+    "id": "GER_expand_generalgouvernement_adminsitrative_area",
+    "category_id": "GER_reichskommissariats",
+    "name": "Расширить территорию Генерал-губернаторства",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_completed_focus": [
+          "GER_heed_von_neuraths_concerns",
+          "GER_reorganize_the_wehrmacht"
+        ]
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "GER_reichskommissariat_highlighted_required_states",
+        "89": {
+          "is_controlled_by_ROOT_or_subject": true
+        },
+        "91": {
+          "is_controlled_by_ROOT_or_subject": true
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "GER_uplift_the_rosenberg_office",
+      "GEN": {
+        "exists": true
+      },
+      "NOT": {
+        "has_country_flag": "GER_handed_over_austrian_galicia_to_gen"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "GER_gen_expanding_effect_tt",
+      "hidden_effect": [
+        {
+          "every_state": [
+            {
+              "limit": {
+                "GER_is_east_GEN_state": true,
+                "OR": {
+                  "is_owned_by": "ROOT",
+                  "owner": {
+                    "is_subject_of": "ROOT"
+                  }
+                }
+              },
+              "transfer_state_to": "GEN",
+              "add_compliance": 20
+            },
+            {
+              "limit": {
+                "GER_is_east_GEN_state": true,
+                "NOT": {
+                  "OR": {
+                    "is_owned_by": "ROOT",
+                    "any_country": {
+                      "is_subject_of": "ROOT",
+                      "owns_state": "PREV"
+                    }
+                  }
+                }
+              },
+              "add_contested_owner": "GEN",
+              "set_state_controller_to": "GEN",
+              "add_claim_by": "GEN",
+              "add_compliance": 20
+            }
+          ]
+        },
+        {
+          "set_country_flag": "GER_handed_over_austrian_galicia_to_gen"
+        }
+      ]
+    }
+  },
+  {
+    "id": "liberate_algeria",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [ALG.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": [
+            459,
+            460,
+            513,
+            514
+          ]
+        },
+        "ALG": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ALG_return",
+    "category_id": "ALG_return",
+    "name": "ALG_return",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "ALG_return",
+      "OR": {
+        "AND": [
+          {
+            "FRA": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FRS": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FFR": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FFR": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FRD": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FRM": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FIT": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FMM": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FRV": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          },
+          {
+            "FGR": [
+              {
+                "has_war": false
+              },
+              {
+                "exists": true
+              },
+              {
+                "owns_state": 787
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "visible": {
+      "tag": "CPV"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ALG_return",
+      "ALG": {
+        "country_event": {
+          "id": "ALG_skeleton.8"
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_increase_exploitation_algeria",
+    "category_id": "ITA_ENI_exploitation",
+    "name": "[Get.GetAlgeria_ENI_invest]",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "OR": {
+          "AND": [
+            {
+              "check_variable": {
+                "ITA_ENI_algeria_stage": 2
+              },
+              "has_country_flag": "ILG_low_turnout_algeria"
+            },
+            {
+              "check_variable": {
+                "ITA_ENI_algeria_stage": 4
+              },
+              "has_country_flag": "ILG_medium_turnout_algeria"
+            }
+          ],
+          "check_variable": {
+            "ITA_ENI_algeria_stage": 5
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_yves_war_mission",
+    "category_id": "IBR_yves_war_algeria_category",
+    "name": "Покончить алжирской независимостью",
+    "desc": "У нас есть узкое окно возможностей, чтобы свергнуть новый режим в Алжире, пока угроза иностранного вмешательства не вынудит нас отступить.",
+    "icon": [
+      "GFX_decision_generic_decision",
+      "GFX_decision_generic_clock"
+    ],
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "SLG": {
+        "is_subject_of": "IBR"
+      }
+    },
+    "visible": {
+      "IBR": {
+        "has_war_with": "SLG"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_yves_war_mission"
+    }
+  },
+  {
+    "id": "IBR_debug_trees_Algeria_SAF_GCW_full",
+    "category_id": "IBR_debug_trees",
+    "name": "Загрузить фокусы Алжирского конфликта, немецкой гражданки и Южноафриканской войны",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "tag": "IBR",
+      "is_ai": false
+    },
+    "visible": {
+      "tag": "IBR"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_debug_trees_Algeria_SAF_GCW_full",
+      "set_country_flag": "IBR_started_germany_in_flames",
+      "set_global_flag": "algeria_crisis",
+      "country_event": {
+        "id": "IBR_south_africa.5"
+      }
+    }
+  },
+  {
+    "id": "ita_alg_send_advisors",
+    "category_id": "ITA_algerian_war_category",
+    "name": "Направить советников",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "ILG": {
+        "has_war_with": "SLG"
+      },
+      "AND": {
+        "country_exists": [
+          "SLG",
+          "ILG"
+        ]
+      }
+    },
+    "complete_effect": {
+      "ILG": {
+        "army_experience": 5,
+        "add_doctrine_cost_reduction": {
+          "name": "land_doc_bonus",
+          "cost_reduction": 0.25,
+          "uses": 1,
+          "category": "land_doctrine"
+        }
+      }
+    }
+  },
+  {
+    "id": "ita_alg_send_blackshirts",
+    "category_id": "ITA_algerian_war_category",
+    "name": "Направить чернорубашечников",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "ILG": {
+        "has_war_with": "SLG"
+      },
+      "AND": {
+        "country_exists": [
+          "SLG",
+          "ILG"
+        ]
+      }
+    },
+    "complete_effect": {
+      "ILG": {
+        "add_manpower": 10000
+      },
+      "ITA": {
+        "add_manpower": -10000
+      }
+    }
+  },
+  {
+    "id": "ita_alg_send_old_guns",
+    "category_id": "ITA_algerian_war_category",
+    "name": "Отправить старое вооружение",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "ILG": {
+        "has_war_with": "SLG"
+      },
+      "AND": {
+        "country_exists": [
+          "SLG",
+          "ILG"
+        ]
+      }
+    },
+    "complete_effect": {
+      "ITA": {
+        "add_equipment_to_stockpile": [
+          {
+            "type": "infantry_equipment_0",
+            "amount": -1000,
+            "producer": "ITA"
+          },
+          {
+            "type": "support_equipment_1",
+            "amount": -500,
+            "producer": "ITA"
+          }
+        ]
+      },
+      "ILG": {
+        "add_equipment_to_stockpile": [
+          {
+            "type": "infantry_equipment_0",
+            "amount": 1000,
+            "producer": "ITA"
+          },
+          {
+            "type": "support_equipment_1",
+            "amount": 500,
+            "producer": "ITA"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ita_alg_send_new_guns",
+    "category_id": "ITA_algerian_war_category",
+    "name": "Отправить новое вооружение",
+    "desc": "",
+    "icon": "",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "ILG": {
+        "has_war_with": "SLG"
+      },
+      "AND": {
+        "country_exists": [
+          "SLG",
+          "ILG"
+        ]
+      }
+    },
+    "complete_effect": {
+      "ITA": {
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment_2",
+          "amount": -2500,
+          "producer": "ITA"
+        }
+      },
+      "ILG": {
+        "add_equipment_to_stockpile": {
+          "type": "infantry_equipment_2",
+          "amount": 2500,
+          "producer": "ITA"
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_MEN_Kalgan_supply_network_d",
+    "category_id": "JAP_foreign_policy_category",
+    "name": "Расширить ж/д сети вокруг Калгана",
+    "desc": "Войны выигрываются и проигрываются в том числе из-за логистики, особенно когда сражения проходят на просторах равнин. Калган - это ворота в Мэнцзян, и улучшив там железнодорожное сообщение, мы обеспечим адекватное снабжение наших союзников.",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "TNO_fopo_mengjiang_conflict_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_MEN_Kalgan_supply_network",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.005
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  }
+]

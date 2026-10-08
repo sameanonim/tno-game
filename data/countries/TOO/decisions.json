@@ -1,0 +1,213 @@
+[
+  {
+    "id": "MAN_divert_machine_tools",
+    "category_id": "MAN_war_preparations",
+    "name": "Перенаправить станки",
+    "desc": "Полностью контролируя железные дороги, мы можем сделать так, что несколько грузов со станками «потеряются» из-за «организационной ошибки».",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "MAN_request_control_of_the_railways",
+          "MAN_tsr_request_control_of_the_railways"
+        ]
+      },
+      "not": {
+        "has_country_flag": {
+          "flag": "MAN_machine_tools",
+          "value": 4
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SIA_use_abandoned_french_tools",
+    "category_id": "SIA_new_territories_administration_cat",
+    "name": "Использовать брошенные инструменты французов",
+    "desc": "От французских оккупантов осталось тяжелое оборудование. Оно не должно лежать без дела.",
+    "icon": "GFX_decision_generic_confiscation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "add_tech_bonus": {
+        "name": "SIA_use_abandoned_french_tools",
+        "ahead_reduction": 1,
+        "uses": 1,
+        "category": "cat_production"
+      }
+    }
+  },
+  {
+    "id": "BRA_debug_debug_tools",
+    "category_id": "BRA_debug_decisions",
+    "name": "Включить/отключить дебаговые настройки ИИ",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_debug_debug_tools",
+      "if": {
+        "limit": {
+          "has_country_flag": "BRA_debug_tools"
+        },
+        "clr_country_flag": "BRA_debug_tools"
+      },
+      "else": {
+        "set_country_flag": "BRA_debug_tools"
+      }
+    }
+  },
+  {
+    "id": "GNG_debug_tools",
+    "category_id": "GNG_debug_category",
+    "name": "Средства отладки графического интерфейса",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "GNG_show_debug_decisions"
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_country_flag": "GNG_debug_tools"
+        },
+        "clr_country_flag": "GNG_debug_tools"
+      },
+      "else": {
+        "set_country_flag": "GNG_debug_tools"
+      }
+    }
+  },
+  {
+    "id": "JAP_kaya_hardliners_demand_JAP_prepare_our_tools",
+    "category_id": "JAP_faction_relations",
+    "name": "Увеличить бюджет министерства исследований",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "JAP_prepare_our_tools"
+    },
+    "visible": [],
+    "complete_effect": {
+      "TNO_improve_research_facilities_med": true,
+      "research_funding_maximal_increase_med": true,
+      "set_temp_variable": [
+        {
+          "temp_hl_approval_change": 0.03
+        },
+        {
+          "temp_hl_inf_change": 0.025
+        },
+        {
+          "temp_econ_spending_amount": 0.1
+        }
+      ],
+      "JAP_change_hardliner_approval": true,
+      "JAP_change_hardliner_influence": true,
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "OMO_2022_crystals_sibplan_crystal_tools",
+    "category_id": "OMO_2022_crystals_of_ponykind",
+    "name": "Использовать инструменты на основе кристаллов",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "OMO_2022_crystals_regional_sibplan"
+    },
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "temp_crystals": -110
+        },
+        {
+          "temp_econ_spending_amount": 0.05
+        }
+      ],
+      "OMO_2022_change_crystal_stockpile_decision": true,
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_copy_american_cartoons",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Copy American Cartoons",
+    "desc": "During the war-torn 1950s and 1960s, sometimes the only source of happiness for Russian children were smuggled tapes of American cartoons, which has left quite the impression amongst young Russians, who are now in the workforce and fathering their first children. The NMG will seek to strategically buy off some of the rights, especially those 'classic' ones that are much cheaper than recent animations.",
+    "icon": "GFX_decision_generic_USA_aid",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_copy_american_cartoons",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 10
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_copy_japanese_cartoons",
+    "category_id": "NOV_VRPP_media_category",
+    "name": "Copy Japanese Cartoons",
+    "desc": "Japanese cartoons have recently become sensational amongst Asian and Russian youths. These so-called 'anime' often features fictional, fantasy settings and advanced cinematography not seen in Western hand-drawn animated films. If we can secure exclusive rights to some of these works, the NMG can benefit greatly.",
+    "icon": "GFX_decision_generic_JAP_aid",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_copy_japanese_cartoons",
+      "set_temp_variable": [
+        {
+          "temp_total": "Nov_Media_Budget"
+        },
+        {
+          "temp_storer": 0
+        },
+        {
+          "temp_budget": "temp_storer"
+        }
+      ],
+      "divide_temp_variable": {
+        "temp_total": 10
+      },
+      "subtract_from_temp_variable": {
+        "temp_storer": "temp_total"
+      },
+      "NOV_VRPP_Budget_Change": true
+    }
+  }
+]

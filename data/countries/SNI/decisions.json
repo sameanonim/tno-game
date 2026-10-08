@@ -1,0 +1,518 @@
+[
+  {
+    "id": "expand_bosnia_coal_mines",
+    "category_id": "prospect_for_resources",
+    "name": "Расширить угольные шахты в регионе [104.GetName]",
+    "desc": "",
+    "icon": "coal",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 104,
+      "controls_state": 104,
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "owns_state": 104,
+      "controls_state": 104,
+      "104": {
+        "NOT": {
+          "has_state_flag": "bosnia_coal_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "AUS_hand_bosnia_to_our_cro_puppet",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Передать регионы [104.GetName] и [804.GetName] государству [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ott_enlarge_the_vilayet_of_bosnia",
+    "category_id": "form_ottoman_empire_category",
+    "name": "Увеличить вилайет Боснию",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "has_country_leader": [
+          {
+            "character": "TUR_abdulmejid_ii",
+            "ruling_only": true
+          },
+          {
+            "character": "TUR_durrushehvar_i",
+            "ruling_only": true
+          }
+        ]
+      },
+      "controls_state": [
+        104,
+        804,
+        103
+      ]
+    },
+    "visible": {
+      "original_tag": "TUR",
+      "NOT": {
+        "has_global_flag": "ottoman_bosnia_flag"
+      },
+      "has_completed_focus": "TUR_reclaiming_our_lost_empire"
+    },
+    "complete_effect": {
+      "104": {
+        "add_core_of": "ROOT"
+      },
+      "804": {
+        "add_core_of": "ROOT"
+      },
+      "103": {
+        "add_core_of": "ROOT"
+      },
+      "hidden_effect": {
+        "set_global_flag": "ottoman_bosnia_flag",
+        "163": {
+          "add_core_of": "ROOT"
+        }
+      }
+    }
+  },
+  {
+    "id": "GER_occupy_bosnia_decision",
+    "category_id": "GER_the_fading_eagle_category",
+    "name": "Оккупировать Боснию",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "fascism",
+      "BOS": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false,
+        "all_owned_state": {
+          "is_controlled_by": "BOS"
+        }
+      }
+    },
+    "visible": {
+      "any_country_with_original_tag": {
+        "original_tag_to_check": "ITA",
+        "is_subject_of": "ROOT"
+      },
+      "BOS": {
+        "is_in_faction_with": "ROOT",
+        "is_subject": false
+      },
+      "NOT": {
+        "has_country_flag": "GER_demanded_bosnian_subjugation_flag"
+      }
+    },
+    "complete_effect": {
+      "BOS": {
+        "country_event": {
+          "id": "GOT_GER_fading_eagle.01",
+          "hours": 6
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "BOS"
+      },
+      "hidden_effect": {
+        "set_country_flag": "GER_demanded_bosnian_subjugation_flag"
+      }
+    }
+  },
+  {
+    "id": "ROM_claim_bosnia",
+    "category_id": "ROM_dividing_yugo",
+    "name": "Заявить претензии: [104.GetName]",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_ROM_claim_yugo_4",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_3",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_2",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ROM",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ROM"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ROM_claim_yugo_1",
+        "trigger": {
+          "104": {
+            "NOT": {
+              "has_state_flag": [
+                "strongest_claimant_GER",
+                "strongest_claimant_ROM",
+                "strongest_claimant_ITA",
+                "strongest_claimant_HUN"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_4",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_3",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_ITA_claim_yugo_2",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_ITA",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_ITA"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_4",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_3",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_HUN_claim_yugo_2",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_HUN",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_HUN"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_4",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 3,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_3",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 2,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      },
+      {
+        "key": "GFX_decision_GER_claim_yugo_2",
+        "trigger": {
+          "104": {
+            "104": {
+              "check_variable": {
+                "var": "claim_strength_GER",
+                "value": 1,
+                "compare": "greater_than_or_equals"
+              }
+            },
+            "has_state_flag": "strongest_claimant_GER"
+          }
+        }
+      }
+    ],
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "104": {
+        "has_anyone_else_claimed_ROM": true
+      },
+      "OR": {
+        "GER": {
+          "has_country_flag": "invited_to_split_yugo"
+        },
+        "ITA": {
+          "has_country_flag": "invited_to_split_yugo"
+        },
+        "HUN": {
+          "has_country_flag": "invited_to_split_yugo"
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "invited_to_split_yugo",
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "claiming_a_yugoslav_state_flag"
+        }
+      },
+      "104": {
+        "owner": {
+          "OR": {
+            "tag": "YUG",
+            "is_subject_of": "YUG"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "claiming_a_yugoslav_state_flag"
+      }
+    }
+  },
+  {
+    "id": "SGR_RND_korsimat_prepare_the_sniper",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Центральазия - Орлиный глаз\"",
+    "desc": "Наша основная задача в Центральной Азии - найти способ легитимизировать переворот Курширмата, а также избавиться от Вели Каюм-хана. Для этого мы наймем охотника из степей, чтобы тот отправился в \"отпуск\" в Самарканд, осмотрел там достопримечательности и остановился в очень неприметном здании, выходящем на довольно большую площадь, где, по странному стечению обстоятельств, Каюм-хан будет выступить с речью. Одновременно мы должны убедиться, что люди Курширмата заверят других членов Легиона, что это мероприятие совершенно безопасно.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "always": false
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_RND_korsimat_prepare_the_sniper",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GNG_OC_Send_Volunteers_to_SNI",
+    "category_id": "GNG_Research_Team_category",
+    "name": "Отправить исследовательскую группу в [SNI.GetFlag] [SNI.GetNameDef]",
+    "desc": "Чтобы получить необходимые данные для наших исследований, было бы разумно отправить ИГТП в [SNI.GetNameDef], где группа сможет в боевых условиях протестировать новое снаряжение.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "NOT": [
+        {
+          "ITA": {
+            "is_in_faction_with": "JAP"
+          }
+        },
+        {
+          "has_global_flag": "OC_Iraq_CW_over"
+        }
+      ],
+      "has_country_flag": "GNG_PTRG_OC",
+      "SNI": [
+        {
+          "exists": true
+        },
+        {
+          "has_war": true
+        }
+      ],
+      "GNG_not_sending_volunteers_OC": true
+    },
+    "complete_effect": {
+      "set_country_flag": "GNG_OC_is_sending_volunteers_SNI",
+      "custom_effect_tooltip": "GNG_OC_sending_volunteers",
+      "hidden_effect": {
+        "set_country_flag": "may_send_volunteers",
+        "set_temp_variable": [
+          {
+            "target": "SNI"
+          },
+          {
+            "number": 1
+          }
+        ],
+        "TNO_set_num_volunteers": true
+      }
+    }
+  },
+  {
+    "id": "KOM_persuade_comrade_oplesnin",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Убедить товарища Оплесина",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_green",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 7
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "UKR_encourage_rebellion_in_transnistria",
+    "category_id": "UKR_ukraine_must_survive_category",
+    "name": "Encourage Rebellion in Transnistria",
+    "desc": "With the length of our front line with the invaders, we need to exploit all opportunities available. One of these is Transnistria - Ukrainian land. We must enable rebellion in the region to slow down a southern attack.",
+    "icon": "GFX_decision_diplo_romania",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UKR_ukraine_must_survive_doing_decision"
+      }
+    },
+    "visible": {
+      "has_country_flag": "UKR_ukraine_must_survive_preparation_phase"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision UKR_encourage_rebellion_in_transnistria",
+      "country_event": {
+        "id": "UKR_ukraine_romania_interaction.2"
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.025
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "UKR_ukraine_must_survive_doing_decision"
+    }
+  }
+]

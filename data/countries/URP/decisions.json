@@ -1,0 +1,535 @@
+[
+  {
+    "id": "formulate_surprise_attack_plan_for_democratic_civil_war",
+    "category_id": "democratic_on_the_rise",
+    "name": "Подготовка плана внезапного нападения",
+    "desc": "Наш враг не имеет ни малейшего представления, что его ждет. Мы должны гарантировать, что подобное положение вещей сохранится, и наиболее полно использовать фактор внезапности в наших планах.",
+    "icon": "generic_army_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "military_support_for_democratic_civil_war",
+      "command_power": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_country_flag": "preparation_for_democratic_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "democratic_reformer",
+          "social_reformer"
+        ]
+      },
+      "NOT": {
+        "has_government": "democratic"
+      },
+      "check_has_focus_tree_to_switch_to_democratic": true
+    },
+    "complete_effect": {
+      "add_command_power": -2,
+      "custom_effect_tooltip": "formulate_surprise_attack_plan_for_civil_war_tt",
+      "set_country_flag": "formulated_surprise_attack_plan_for_civil_war"
+    }
+  },
+  {
+    "id": "formulate_surprise_attack_plan_for_fascist_civil_war",
+    "category_id": "fascism_on_the_rise",
+    "name": "Подготовка плана внезапного нападения",
+    "desc": "Наш враг не имеет ни малейшего представления, что его ждет. Мы должны гарантировать, что подобное положение вещей сохранится, и наиболее полно использовать фактор внезапности в наших планах.",
+    "icon": "generic_army_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "military_support_for_fascist_civil_war",
+      "command_power": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_country_flag": "preparation_for_fascist_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "fascist_demagogue",
+          "syncretic_revanchist"
+        ]
+      },
+      "NOT": {
+        "has_government": "fascism"
+      },
+      "check_has_focus_tree_to_switch_to_fascism": true
+    },
+    "complete_effect": {
+      "add_command_power": -2,
+      "custom_effect_tooltip": "formulate_surprise_attack_plan_for_civil_war_tt",
+      "set_country_flag": "formulated_surprise_attack_plan_for_civil_war"
+    }
+  },
+  {
+    "id": "formulate_surprise_attack_plan_for_communist_civil_war",
+    "category_id": "communism_on_the_rise",
+    "name": "Подготовка плана внезапного нападения",
+    "desc": "Наш враг не имеет ни малейшего представления, что его ждет. Мы должны гарантировать, что подобное положение вещей сохранится, и наиболее полно использовать фактор внезапности в наших планах.",
+    "icon": "generic_army_support",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "military_support_for_communist_civil_war",
+      "command_power": {
+        "_op": ">",
+        "value": 2
+      }
+    },
+    "visible": {
+      "has_country_flag": "preparation_for_communist_civil_war",
+      "OR": {
+        "has_idea_with_trait": [
+          "communist_revolutionary",
+          "ambitious_union_boss"
+        ],
+        "AND": {
+          "has_idea_with_trait": "ARG_communist_insurrectionist",
+          "original_tag": "IRQ"
+        }
+      },
+      "NOT": {
+        "has_government": "communism"
+      },
+      "check_has_focus_tree_to_switch_to_communism": true
+    },
+    "complete_effect": {
+      "add_command_power": -2,
+      "custom_effect_tooltip": "formulate_surprise_attack_plan_for_civil_war_tt",
+      "set_country_flag": "formulated_surprise_attack_plan_for_civil_war"
+    }
+  },
+  {
+    "id": "PRC_usurp_control_over_yanan_decision",
+    "category_id": "PRC_border_wars_cat",
+    "name": "$PRC_usurp_control_over_yanan$",
+    "desc": "",
+    "icon": "GFX_decision_generic_fortification",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 622,
+      "has_border_war": false,
+      "has_war": false,
+      "has_civil_war": false,
+      "is_subject": false,
+      "NOT": {
+        "any_allied_country": {
+          "controls_state": 1032
+        }
+      },
+      "1032": {
+        "controller": {
+          "is_literally_china": true,
+          "NOT": {
+            "tag": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "PRC_usurp_control_over_yanan_flag",
+      "NOT": {
+        "controls_state": 1032
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -15,
+        "add_political_power": -15
+      },
+      "activate_mission": "PRC_assaulting_yanan",
+      "custom_effect_tooltip": "generic_skip_one_line_tt",
+      "start_border_war": {
+        "change_state_after_war": false,
+        "combat_width": 180,
+        "minimum_duration_in_days": 40,
+        "attacker": {
+          "on_win": "SEA_PRC_border_war_events.5",
+          "on_lose": "SEA_PRC_border_war_events.6",
+          "on_cancel": "SEA_PRC_border_war_events.6",
+          "state": 622,
+          "num_provinces": 2,
+          "leader_score": {
+            "base": 1,
+            "modifier": [
+              {
+                "skill": {
+                  "_op": ">",
+                  "value": 2
+                },
+                "factor": 5
+              },
+              {
+                "skill": {
+                  "_op": ">",
+                  "value": 3
+                },
+                "factor": 10
+              }
+            ]
+          },
+          "dig_in_factor": 0,
+          "terrain_factor": 0
+        },
+        "defender": {
+          "state": 1032,
+          "num_provinces": 2,
+          "on_lose": "SEA_PRC_border_war_events.5",
+          "on_win": "SEA_PRC_border_war_events.6",
+          "on_cancel": "SEA_PRC_border_war_events.6"
+        }
+      },
+      "clr_country_flag": "PRC_usurp_control_over_yanan_flag",
+      "PRC_this_might_anger_china": true,
+      "PRC_current_china_leader_gets_small_antagonize_strategy": true
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Survival_Repurpose_Vehicle_Fuel",
+    "category_id": "Antarctica_GUI_AAG_Survival",
+    "name": "Перепрофилирование транспортного топлива",
+    "desc": "",
+    "icon": "GFX_decision_market_motorized",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "Antarctica_GUI_AAG_Survival_Mech_Enabled",
+        "Antarctica_GUI_AAG_Survival_Consolidated_Forces"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Survival_Repurpose_Vehicle_Fuel",
+      "set_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess",
+      "hidden_effect": {
+        "add_political_power": -75,
+        "add_to_variable": {
+          "Antarctica_Militarization": -2
+        }
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Nuclear_Repurpose_Electronic_Components",
+    "category_id": "Antarctica_GUI_AAG_Nuclear",
+    "name": "Проверка радио оборудов.",
+    "desc": "",
+    "icon": "GFX_decision_generic_electronics",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_country_flag": "Antarctica_GUI_AAG_Nuclear_Mechanic_Enabled",
+      "check_variable": {
+        "Antarctica_GUI_AAG_Nuclear_Electronics": {
+          "_op": "<",
+          "value": 100
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Nuclear_Repurpose_Electronic_Components",
+      "hidden_effect": {
+        "add_to_variable": {
+          "Antarctica_Equipment": -10
+        }
+      }
+    }
+  },
+  {
+    "id": "SGR_Konjunkturpaket",
+    "category_id": "SGR_Zollverein_members_investment_category",
+    "name": "Принять Пакт о стабилизации",
+    "desc": "Последние два десятиетия немецкий народ самодовольно почивал на спинах рабов, и в результате не смог развить надежную самодостаточную экономику. Чтобы обеспечить выживание Рейха, необходимо разработать планы по созданию устойчивой экономической среды в Европе. Отныне рабы будут рассматриваться не как необходимость, а скорее как устаревшая практика, которая в конечном итоге будет постепенно выведена из строя путем включения трудолюбивого немецкого народа в промышленное производство.",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SGR_phase2",
+      "NOT": {
+        "has_global_flag": "SGR_natsoc_collapse"
+      },
+      "has_completed_focus": "GER_industria"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_Konjunkturpaket",
+      "custom_effect_tooltip": "SGR_konjunkturpaket_cost",
+      "set_country_flag": "SGR_konjunkturpaket_active",
+      "TNO_improve_poverty_med": true,
+      "TNO_improve_academic_base_med": true,
+      "TNO_improve_industrial_equipment_med": true,
+      "TNO_improve_industrial_expertise_med": true,
+      "TNO_improve_agriculture_low": true
+    }
+  },
+  {
+    "id": "regional_left_repurpose_soviet_infrastructure",
+    "category_id": "regional_development_decision_category",
+    "name": "Обновить советскую инфраструктуру",
+    "desc": "",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 55,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "has_development_program_ongoing_tt",
+        "NOT": {
+          "has_country_flag": "TNO_RUS_development_program_ongoing"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "communist",
+          "socialist"
+        ]
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision regional_left_repurpose_soviet_infrastructure",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.18
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "TNO_RUS_development_program_ongoing"
+    }
+  },
+  {
+    "id": "ANG_Sell_Surplus_Fuel_small",
+    "category_id": "ANG_The_Market",
+    "name": "Продать топливо",
+    "desc": "Увеличив наши запасы топлива как за счет законных, так и... не очень законных средств, можно начать продавать его на мировом рынке. Это принесет даже больше прибыли, чем весь черный рынок!",
+    "icon": "GFX_oil_texticon",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ANG_Pre_War_Market_Flag"
+      },
+      "has_fuel": {
+        "_op": ">",
+        "value": 9999
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ANG_investigate_new_sources"
+    },
+    "complete_effect": {
+      "set_country_flag": "ANG_Pre_War_Market_Flag",
+      "custom_effect_tooltip": "ANG_Liquid_Cash_Gain_3",
+      "add_to_variable": {
+        "ANG_Liquid_Cash": 3
+      }
+    }
+  },
+  {
+    "id": "ANG_Sell_Surplus_Fuel_Lots",
+    "category_id": "ANG_The_Market",
+    "name": "Продать много топлива",
+    "desc": "Наша нефтяная и топливная промышленность растет с каждым днем, а вместе с ними и максимальное количество продукции, которую можно экспортировать в остальной мир. Пусть экономика Зюдвестафрики растет семимильными шагами!",
+    "icon": "GFX_oil_texticon",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ANG_Pre_War_Market_Flag"
+      },
+      "has_fuel": {
+        "_op": ">",
+        "value": 19999
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ANG_investigate_new_sources"
+    },
+    "complete_effect": {
+      "set_country_flag": "ANG_Pre_War_Market_Flag",
+      "custom_effect_tooltip": "ANG_Liquid_Cash_Gain_6",
+      "add_to_variable": {
+        "ANG_Liquid_Cash": 6
+      }
+    }
+  },
+  {
+    "id": "ANG_Repurpose_German_Assets",
+    "category_id": "ANG_Free_Angolan_War_Decisions",
+    "name": "Использовать немецкие фабрики",
+    "desc": "Если наши колонизаторы и наслаждались чем-то, так это жизнью в роскоши и избытке. Промышленность по всей Анголе была создана немцами, чтобы превратить богатые ресурсы континента в предметы роскоши и ненужные товары. Хотя такое убранство, несомненно, должно вызвать обильное слюноотделение у любого гражданина среднего и высшего класса, в настоящее время оно бесполезно. Однако, хорошенько поработав, можно реквизировать эти отрасли промышленности и преобразовать их для собственного использования. Нам нужно оружие, и ничего больше!",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 29.9
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "ANG_Free"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -30
+      },
+      "set_temp_variable": {
+        "temp_econ_GDP_boost_flat": 0.125
+      },
+      "econ_GDP_boost_once_flat": true
+    }
+  },
+  {
+    "id": "UKR_UCW_reorganize_industry_for_miltary_purposes",
+    "category_id": "UKR_ucw_supply_category",
+    "name": "Конверсия промышленности",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "UKR_UCW_generic_show"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision UKR_UCW_reorganize_industry_for_miltary_purposes",
+      "set_temp_variable": {
+        "UCW_supply_temp": -5
+      },
+      "UCW_supply_left_change": true
+    }
+  },
+  {
+    "id": "USA_spend_surplus_on_social_spending",
+    "category_id": "USA_coalition_unity",
+    "name": "Потратиться на соц расходы",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": [
+      {
+        "custom_trigger_tooltip": [
+          {
+            "tooltip": "USA_social_spending_greater_than",
+            "check_variable": {
+              "econ_social_expenditures_slider_pct": {
+                "_op": ">",
+                "value": 55
+              }
+            }
+          },
+          {
+            "tooltip": "USA_has_surplus",
+            "check_variable": {
+              "deficit": {
+                "_op": "<",
+                "value": 0
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_show_NPP_screen"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_spend_surplus_on_social_spending",
+      "custom_effect_tooltip": "USA_spend_surplus_on_social_spending_tt",
+      "set_temp_variable": {
+        "tempSupport": 0.2
+      },
+      "USA_change_responsible_r_coalition_support": false,
+      "hidden_effect": {
+        "activate_mission": "USA_maintain_surplus_and_social_spending_mission"
+      }
+    }
+  },
+  {
+    "id": "USA_maintain_surplus_and_social_spending_mission",
+    "category_id": "USA_coalition_unity",
+    "name": "Поддерживать профицит и социальные расходы",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_r",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "NOT": [
+          {
+            "custom_trigger_tooltip": {
+              "tooltip": "USA_social_spending_greater_than_mission",
+              "check_variable": {
+                "econ_social_expenditures_slider_pct": {
+                  "_op": ">",
+                  "value": 55
+                }
+              }
+            }
+          },
+          {
+            "custom_trigger_tooltip": {
+              "tooltip": "USA_has_deficit",
+              "check_variable": {
+                "deficit": {
+                  "_op": "<",
+                  "value": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision complete USA_maintain_surplus_and_social_spending",
+      "hidden_effect": {
+        "remove_mission": "USA_maintain_surplus_and_social_spending_mission"
+      }
+    }
+  },
+  {
+    "id": "FUK_repurpose_the_port_city_of_sevastopol",
+    "category_id": "FUK_north_crimean_canal_category",
+    "name": "Repurpose Sevastopol for Trade",
+    "desc": "",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 65,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "FUK_allow_the_crimean_wing_of_the_nsdap",
+      "NOT": {
+        "has_country_flag": "FUK_north_crimean_canal_construction_phase_in_progress"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FUK_repurpose_the_port_city_of_sevastopol",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.24
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "set_country_flag": "FUK_north_crimean_canal_construction_phase_in_progress"
+    }
+  }
+]

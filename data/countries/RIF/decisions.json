@@ -1,0 +1,1415 @@
+[
+  {
+    "id": "CHI_warlord_autonomy_drift_decision",
+    "category_id": "CHI_integrate_the_warlords_sea_cat",
+    "name": "Стремление к интеграции региона [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_completed_focus": "CHI_impair_the_control_yuan"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -25
+      },
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "idea_CHI_central_government_integration_pressure",
+          "days": 365
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_warlord_autonomy_drift_decision_upgrade",
+    "category_id": "CHI_integrate_the_warlords_sea_cat",
+    "name": "$CHI_warlord_autonomy_drift_decision$",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -25,
+        "add_command_power": -25
+      },
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "idea_CHI_central_government_integration_pressure_upgraded",
+          "days": 480
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_warlord_autonomy_drift_demcoratic_decision",
+    "category_id": "CHI_integrate_the_warlords_democratic_sea_cat",
+    "name": "Стремление к интеграции [FROM.GetFlag] [FROM.GetNameRuGen]",
+    "desc": "",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_idea": "idea_CHI_central_government_integration_pressure_democratic"
+        }
+      }
+    },
+    "visible": {
+      "any_subject_country": {
+        "OR": {
+          "has_autonomy_state": [
+            "autonomy_sea_warlord_subject",
+            "autonomy_sea_integrated_warlord_subject"
+          ]
+        }
+      },
+      "has_completed_focus": "CHI_demand_regional_adherence"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -50
+      },
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "idea_CHI_central_government_integration_pressure_democratic",
+          "days": 365
+        }
+      }
+    }
+  },
+  {
+    "id": "CHI_warlord_democratic_drift_minquan_decision",
+    "category_id": "CHI_integrate_the_warlords_democratic_sea_cat",
+    "name": "Потребовать, чтобы [FROM.GetLeader] соблюдал[FROM.GetVerbGendEndA_RU] принцип миньцюань",
+    "desc": "",
+    "icon": "GFX_decision_SWI_swiss_democratic_tradition_campaign",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "NOT": {
+          "has_idea": "idea_CHI_central_government_minquan_pressure_democratic"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHI_demand_regional_adherence"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -25,
+        "add_command_power": -25
+      },
+      "FROM": {
+        "country_event": {
+          "id": "SEA_china_democratic.20",
+          "days": 1
+        },
+        "set_country_flag": "CHI_currently_being_asked_about_minquan"
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "FROM": {
+          "add_timed_idea": {
+            "idea": "idea_CHI_central_government_minquan_pressure_democratic",
+            "days": 365
+          },
+          "clr_country_flag": "CHI_currently_being_asked_about_minquan"
+        }
+      }
+    }
+  },
+  {
+    "id": "CHL_buy_american_rifles",
+    "category_id": "CHL_industrial_decisions",
+    "name": "Купить американские винтовки",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_reapproach_america",
+      "NOT": {
+        "has_dlc": "Arms Against Tyranny"
+      },
+      "USA": {
+        "exists": true,
+        "has_government": "democratic",
+        "NOT": {
+          "has_war_with": "CHL"
+        }
+      },
+      "command_power": {
+        "_op": ">",
+        "value": 10
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHL_reapproach_america",
+      "NOT": {
+        "has_dlc": "Arms Against Tyranny"
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -10
+    }
+  },
+  {
+    "id": "ETH_buy_rifles_from_host",
+    "category_id": "governments_in_exile",
+    "name": "Купить [?ETH.host_nation.GetAdjective]ие винтовки.",
+    "desc": "Мы должны идти на жертвы, ведь только так [ROOT.GetName] снова обретет свободу. Покупка оружия на личные средства монарха — отчаянный шаг, но в тяжелой ситуации нужно действовать решительно.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_securing_arms_deals_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_secure_arms"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": "ETH_buy_arms_from_host_cost"
+      },
+      "set_country_flag": "ETH_securing_arms_deals_flag"
+    }
+  },
+  {
+    "id": "ETH_buy_rifles",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Купить стрелковое оружие",
+    "desc": "Теперь у нас есть выход на международный рынок оружия, и мы должны действовать. Прежде всего нужно приобрести винтовки, чтобы наша пехота могла на равных сражаться с захватчиками.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "IF": [
+        {
+          "limit": {
+            "has_tech": "gw_artillery"
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_artillery"
+          }
+        },
+        {
+          "limit": {
+            "has_tech": "tech_support"
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_support_equipment"
+          }
+        },
+        {
+          "limit": {
+            "has_tech": "interwar_antitank",
+            "SWE": {
+              "has_tech": "interwar_antitank"
+            }
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_anti_tank_guns"
+          }
+        }
+      ],
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "visible": {
+      "has_completed_focus": "ETH_arms_purchases",
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ITA_electrify_state",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "$ETH_electrify_state$",
+    "desc": "$ETH_electrify_state_desc$",
+    "icon": "GFX_decision_generic_electricity",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ITA_develop_ethiopia"
+    },
+    "visible": {
+      "has_completed_focus": "ITA_triumph_in_africa_bba"
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_investments_in_progress_flag"
+    }
+  },
+  {
+    "id": "ETH_electrify_state",
+    "category_id": "ETH_improve_country_category",
+    "name": "Электрификация страны [FROM.GetName]",
+    "desc": "Проведение электросетей в деревни жизненно необходимо для модернизации страны.",
+    "icon": "decision_generic_electricity",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "GER_import_tariffs",
+    "category_id": "GER_price_controls_cat",
+    "name": "Импортные пошлины",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GER_inactivate_price_control_measures_flag"
+      }
+    },
+    "complete_effect": {
+      "GER_modify_industrial_modifier": true,
+      "add_to_variable": {
+        "GER_industrial_consumer_goods_factor": -0.15,
+        "tooltip": "consumer_goods_factor_tt"
+      },
+      "GER_reduce_mefo_bills_penalty": true,
+      "add_timed_idea": {
+        "idea": "GER_import_tariffs_ns",
+        "days": 365
+      }
+    }
+  },
+  {
+    "id": "INS_set_leader_to_sjarifuddin",
+    "category_id": "INS_leaders_cat",
+    "name": "Избрать лидером: $INS_amir_sjarifuddin_harahap$",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "INS_has_changed_leader"
+      },
+      "has_character": "INS_amir_sjarifuddin_harahap",
+      "INS_amir_sjarifuddin_harahap": {
+        "is_country_leader": false
+      }
+    },
+    "visible": {
+      "has_completed_focus": "INSHOL_democracy"
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "INS_has_changed_leader",
+        "days": 120,
+        "value": 1
+      },
+      "if": {
+        "limit": {
+          "INS_amir_sjarifuddin_harahap": {
+            "can_be_country_leader": true
+          }
+        },
+        "promote_character": {
+          "character": "INS_amir_sjarifuddin_harahap",
+          "ideology": "conservatism"
+        }
+      },
+      "else": {
+        "INS_amir_sjarifuddin_harahap": {
+          "add_country_leader_role": {
+            "promote_leader": true,
+            "country_leader": {
+              "ideology": "conservatism",
+              "expire": "1965.1.1.1",
+              "traits": [
+                "INS_compromising_centrist"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "INS_set_leader_to_INS_syarif_muhammad_alkadrie",
+    "category_id": "INS_leaders_cat",
+    "name": "Избрать лидером: $INS_syarif_muhammad_alkadrie$",
+    "desc": "",
+    "icon": "GFX_decision_generic_monarchy",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "INS_has_changed_leader"
+      },
+      "hidden_trigger": {
+        "has_event_target": "INS_syarif_muhammad_alkadrie"
+      },
+      "event_target:INS_syarif_muhammad_alkadrie": {
+        "is_country_leader": false
+      }
+    },
+    "visible": {
+      "has_completed_focus": [
+        "INSHOL_democracy",
+        "INSHOL_princely_authority"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "INS_has_changed_leader",
+        "days": 120,
+        "value": 1
+      },
+      "if": {
+        "limit": {
+          "event_target:INS_syarif_muhammad_alkadrie": {
+            "can_be_country_leader": true,
+            "has_ideology": "conservatism"
+          }
+        },
+        "event_target:INS_syarif_muhammad_alkadrie": {
+          "promote_character": {
+            "character": "event_target:INS_syarif_muhammad_alkadrie",
+            "ideology": "conservatism"
+          }
+        }
+      },
+      "else": {
+        "event_target:INS_syarif_muhammad_alkadrie": {
+          "add_country_leader_role": {
+            "promote_leader": true,
+            "country_leader": {
+              "ideology": "conservatism",
+              "expire": "1965.1.1.1",
+              "traits": [
+                "INS_the_merchant_sultan_of_pontianak"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "INS_set_leader_to_INS_syarif_kasim",
+    "category_id": "INS_leaders_cat",
+    "name": "Избрать лидером: $INS_syarif_kasim$",
+    "desc": "",
+    "icon": "GFX_decision_generic_monarchy",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "INS_has_changed_leader"
+      },
+      "hidden_trigger": {
+        "has_event_target": "INS_syarif_kasim"
+      },
+      "event_target:INS_syarif_kasim": {
+        "is_country_leader": false
+      }
+    },
+    "visible": {
+      "has_completed_focus": [
+        "INSHOL_democracy",
+        "INSHOL_princely_authority"
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": {
+        "flag": "INS_has_changed_leader",
+        "days": 120,
+        "value": 1
+      },
+      "if": {
+        "limit": {
+          "event_target:INS_syarif_kasim": {
+            "can_be_country_leader": true,
+            "has_ideology": "conservatism"
+          }
+        },
+        "event_target:INS_syarif_kasim": {
+          "promote_character": {
+            "character": "event_target:INS_syarif_kasim",
+            "ideology": "conservatism"
+          }
+        }
+      },
+      "else": {
+        "event_target:INS_syarif_kasim": {
+          "add_country_leader_role": {
+            "promote_leader": true,
+            "country_leader": {
+              "ideology": "conservatism",
+              "expire": "1965.1.1.1",
+              "traits": [
+                "INS_the_sultan_schoolmaster_of_siak"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "MAN_warlord_autonomy_drift_decision",
+    "category_id": "MAN_china_matters",
+    "name": "Стремление к интеграции региона [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "MAN_tsr_reclaim_the_empire"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -50,
+        "add_command_power": -25
+      },
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "idea_MAN_central_government_integration_pressure",
+          "days": 365
+        }
+      }
+    }
+  },
+  {
+    "id": "AM_play_kazakh_purification_army",
+    "category_id": "RUS_after_midnight_category",
+    "name": "Исследовать [TMP.GetFlag] [TMP.GetName]",
+    "desc": "Остатки казахских армий и военизированных формирований радикализованы расовой войной Таборицкого. Им нечего терять и охваченные ненавистью, они стали казахстанским аналогом Черной Лиги с еще более радикальной формой этносупрематизма как частью их идеологии. Жизнь поляков и русских на их землях будет короткой и жестокой.[AM_check_if_nation_has_been_visited_TMP]",
+    "icon": "GFX_AM_AKT",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "global.AM_sandbox_mode": 0
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AM_play_kazakh_purification_army",
+      "hidden_effect": {
+        "TMP": [
+          {
+            "change_tag_from": "ROOT"
+          },
+          {
+            "country_event": {
+              "id": "after_midnight.122",
+              "days": 1
+            },
+            "TNO_clean_trees": true,
+            "TNO_visit_check": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_CAN_Rifle_No_9_Mk_I",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_CAN_Rifle_No_9_Mk_I$",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_CAN_Rifle_No_9_Mk_I"
+        }
+      ],
+      "check_variable": {
+        "AAC_Marine_Active_Category": 0
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_CAN_Rifle_No_9_Mk_I",
+      "add_to_variable": {
+        "AAC_unlocked_infantry_weapons": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "set_temp_variable": {
+          "tempEq": -10
+        },
+        "Antarctica_change_equipment": true
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_CAN_Rifle_No_9_Mk_I"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "TNO_ArcadeMode_OpenRift",
+    "category_id": "TNO_ArcadeMode_category",
+    "name": "Открыть разлом",
+    "desc": "\"Квинтилий Вар, верни мне мои легионы!\"",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_ArcadeMode_OpenRift",
+      "country_event": "cau.788"
+    }
+  },
+  {
+    "id": "BRA_adhemaredna_impending_strife",
+    "category_id": "BRA_adhemaredna_category",
+    "name": "Кризис руководства",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRA_adhemaredna_impending_strife_trigger",
+        "check_variable": {
+          "BRA_adhemaredna_cooperation": {
+            "_op": ">",
+            "value": 0.99
+          }
+        },
+        "hidden_trigger": {
+          "has_country_flag": "BRA_adhemaredna_category_allowed"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "IRE_lower_tariffs",
+    "category_id": "IRE_DECCAT_AdWil",
+    "name": "Понизить Тарифы для немцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "IRE_Does_Not_Have_100_Presence": true
+    },
+    "visible": {
+      "check_variable": {
+        "show_IRE_approval": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "IRE_SE_AdWil_GerTrust_plus_30": true,
+      "IRE_Investor_Presence_plus_15": true
+    }
+  },
+  {
+    "id": "IRE_raise_tariff",
+    "category_id": "IRE_DECCAT_AdWil",
+    "name": "Увеличить Тарифы для немцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "IRE_Does_Not_Have_0_Approval": true
+    },
+    "visible": {
+      "check_variable": {
+        "show_IRE_approval": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "IRE_SE_AdWil_GerTrust_minus_5": true,
+      "IRE_Investor_Presence_minus_10": true
+    }
+  },
+  {
+    "id": "debug_open_the_rift",
+    "category_id": "global_debug_decisions",
+    "name": "Открыть разлом",
+    "desc": "\"Квинтилий Вар, верни мне мои легионы!\"",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision debug_open_the_rift",
+      "country_event": "cau.788"
+    }
+  },
+  {
+    "id": "GNG_Rifle_Restock",
+    "category_id": "GNG_Research_Team_category",
+    "name": "Произвести дополнительные винтовки для испытаний",
+    "desc": "Чтобы поддерживать боеспособность нашего испытательного подразделения, нам необходимо произвести и отправить в Малайю дополнительную партию экспериментальных винтовок.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "GNG_PTRG_Malaya"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.01
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "GNG_sacrifice_research_and_development",
+    "category_id": "GNG_Product_Decisions_GUI",
+    "name": "Урезать бюджет  НИОКР",
+    "desc": "Даже в разгар производственного цикла, когда львиная доля ресурсов брошена на выпуск флагманского продукта, мы стараемся поддерживать работу наших исследовательских отделов. Однако в данной ситуации мы не можем позволить себе воевать на два фронта. Мы отзовем дополнительные ресурсы, финансирование и персонал из проектов НИОКР, перенаправив их на спасение текущего релиза.",
+    "icon": "GFX_decision_generic_research_indent",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "GNG_has_not_reached_product_quality_cap": true
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_show_quality_assurance_decisions"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "GNG_research_monthly_base_temp": -0.5
+      },
+      "GNG_research_base_monthly_change_all": true
+    }
+  },
+  {
+    "id": "IBR_DP_rif",
+    "category_id": "IBR_Development_Projects",
+    "name": "Инвестировать в расширение Рифа",
+    "desc": "",
+    "icon": "GFX_decision_generic_building",
+    "cost": 65,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "IBR_DP_MOR",
+        "MOR_Settled_Rif"
+      ],
+      "MOR": {
+        "is_subject_of": "IBR"
+      },
+      "check_variable": {
+        "IBR_Rif_Investments": {
+          "_op": "<",
+          "value": 2
+        }
+      },
+      "OR": {
+        "has_country_flag": "IBR_DP_show_colonial",
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_DP_rif",
+      "custom_effect_tooltip": "IBR_twice_project_tt",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.08
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "IBR_DP_electrification",
+    "category_id": "IBR_Development_Projects",
+    "name": "Электрификация сельских районов",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": 55,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "OR": {
+          "has_state_category": [
+            "rural",
+            "pastoral",
+            "town"
+          ]
+        },
+        "custom_trigger_tooltip": {
+          "tooltip": "IBR_is_mainland_state_tt",
+          "NOT": {
+            "state": [
+              178,
+              697,
+              698,
+              1545,
+              1546,
+              296,
+              702,
+              1548,
+              1549,
+              705
+            ],
+            "has_state_flag": "GDP_regions_western_sahara"
+          }
+        },
+        "thermoelectric_plant": {
+          "_op": "<",
+          "value": 1
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": "IBR_DP_show_metro",
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_DP_electrification",
+      "custom_effect_tooltip": "IBR_repeatable_project_tt",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.08
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "JAP_the_35_wards",
+    "category_id": "JAP_takagi_electrify_tokyo",
+    "name": "Кварталы",
+    "desc": "Город Токио разделен на множество кварталов, каждый со своими особенностями и сильными игроками. Если мы хотим продолжить проект электрификации, мы должны обеспечить полное сотрудничество во всём городе.",
+    "icon": "GFX_decision_generic_power",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "JAP_tokyo_electrifying"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_the_35_wards",
+      "hidden_effect": [
+        {
+          "country_event": {
+            "id": "jappmtakagi.100",
+            "days": 5
+          }
+        },
+        {
+          "country_event": {
+            "id": "jappmtakagi.101",
+            "days": 10
+          }
+        },
+        {
+          "country_event": {
+            "id": "jappmtakagi.102",
+            "days": 15
+          }
+        },
+        {
+          "country_event": {
+            "id": "jappmtakagi.103",
+            "days": 20
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "JAP_proceed_with_planning",
+    "category_id": "JAP_takagi_electrify_tokyo",
+    "name": "Продолжить планирование",
+    "desc": "Заручившись сотрудничеством местных властей внутри кварталов, мы можем приступить к планированию практических деталей проекта.",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "JAP_permissions_granted"
+    },
+    "visible": {
+      "has_country_flag": "JAP_tokyo_electrifying"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_proceed_with_planning",
+      "country_event": {
+        "id": "jappmtakagi.105"
+      }
+    }
+  },
+  {
+    "id": "JAP_flick_the_switch",
+    "category_id": "JAP_takagi_electrify_tokyo",
+    "name": "Запустить электричество",
+    "desc": "Проект завершён, осталось только правильно использовать электросеть.",
+    "icon": "GFX_decision_generic_building",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "JAP_construction_has_completed"
+    },
+    "visible": {
+      "has_country_flag": "JAP_tokyo_electrifying"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_flick_the_switch",
+      "country_event": {
+        "id": "jappmtakagi.107"
+      },
+      "add_ideas": "JAP_takagi_tokyo_nights"
+    }
+  },
+  {
+    "id": "JAP_rural_electrification_efforts",
+    "category_id": "JAP_emergency_reforms",
+    "name": "Провести электрификацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "GDP_growth_real": {
+          "_op": "<",
+          "value": 3
+        }
+      },
+      "NOT": {
+        "has_country_flag": "JAP_reforms_next_stage"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_rural_electrification_efforts",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "JAP_PM_decrease_power_small": true
+      }
+    }
+  },
+  {
+    "id": "MEX_kabuki_promise_tariff_agreements",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Обещать дальнейшие тарифные соглашения",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": [
+          "MEX_rallying_the_party",
+          "MEX_across_the_rio_grande"
+        ],
+        "check_variable": {
+          "MEX_PRI_selected_group": 4
+        }
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "MEX_kabuki_industrialists_pick_ordaz",
+            "MEX_kabuki_industrialists_pick_madrazo",
+            "MEX_kabuki_industrialists_pick_lozano"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "MEX_PRI_increase_ordaz_pop_businessmen_very_low": true,
+      "BFM_increase_usa_influence_low": true,
+      "custom_effect_tooltip": "MEX_kabuki_promise_tariff_agreements_tt"
+    }
+  },
+  {
+    "id": "MEX_clarify_the_governments_position",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Разъяснить позицию правительства",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": [
+          "MEX_doctorsstrike_third_doctorsstrike",
+          "absorb_the_unions"
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_intern_radicalism_decrease_low": true
+    }
+  },
+  {
+    "id": "RUS_nukes_refine_construct_additional_centrifuges",
+    "category_id": "RUS_nuke_development_category",
+    "name": "Строительство дополнительных центрифуг",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RUS_nuclear_program_phase_4"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_nukes_refine_construct_additional_centrifuges",
+      "custom_effect_tooltip": "RUS_nukes_refine_construct_additional_centrifuges_cost_tt",
+      "set_temp_variable": {
+        "debt_temp": 0.5
+      },
+      "econ_national_debt_change": true,
+      "add_timed_idea": {
+        "idea": "RUS_nukes_refine_construct_additional_centrifuges_misc_costs",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "KOM_campaign_for_the_democratic_coalition",
+    "category_id": "KOM_horrifying_politics_category",
+    "name": "Повысить доверие к демократии",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "progressivism",
+          "liberalism",
+          "liberal_conservatism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_expand_voznesentsi_influence",
+    "category_id": "KOM_horrifying_politics_category",
+    "name": "Кампания за ДНСП",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_propaganda",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_expand_center_influence_tt",
+        "check_variable": {
+          "KOMCenterPower": {
+            "_op": ">",
+            "value": 20
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "progressivism",
+          "liberalism",
+          "liberal_conservatism",
+          "conservatism"
+        ]
+      },
+      "NOT": {
+        "OR": {
+          "check_variable": [
+            {
+              "KOM_leader_status^3": 2
+            },
+            {
+              "KOM_leader_status^3": 0
+            }
+          ],
+          "has_country_flag": "KOM_Voznesensky_Exiled"
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_expand_stalina_influence",
+    "category_id": "KOM_horrifying_politics_category",
+    "name": "Кампания за ПСД",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_propaganda",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_expand_center_influence_tt",
+        "check_variable": {
+          "KOMCenterPower": {
+            "_op": ">",
+            "value": 20
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "progressivism",
+          "liberalism",
+          "liberal_conservatism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_expand_morozov_influence",
+    "category_id": "KOM_horrifying_politics_category",
+    "name": "Кампания за СМР",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_propaganda",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "KOM_expand_center_influence_tt",
+        "check_variable": {
+          "KOMCenterPower": {
+            "_op": ">",
+            "value": 20
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "progressivism",
+          "liberalism",
+          "liberal_conservatism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_suppress_the_left",
+    "category_id": "KOM_horrifying_politics_category",
+    "name": "Подавить левых",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "progressivism",
+          "liberalism",
+          "liberal_conservatism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "KOM_suppress_the_right",
+    "category_id": "KOM_horrifying_politics_category",
+    "name": "Подавить правых",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "progressivism",
+          "liberalism",
+          "liberal_conservatism",
+          "conservatism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "TOM_electrify_the_countryside",
+    "category_id": "TOM_Modernist_SibPlan_Category",
+    "name": "Электрифицировать сельскую местность",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_electrify_the_countryside",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.075
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "SAF_Air_Rifles",
+    "category_id": "USA_Air_Lift_category",
+    "name": "Наладить перевозку винтовок",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "Logistics_activity": {
+          "_op": ">",
+          "value": -1
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_our_american_allies"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "Logistics_activity": 1
+      }
+    }
+  },
+  {
+    "id": "UKR_power_struggle_sacrifice_for_greater_good",
+    "category_id": "UKR_power_struggle_category",
+    "name": "Пойти на жертвы ради Высшего блага",
+    "desc": "",
+    "icon": "GFX_decision_generic_lockdown",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "UKR_play_leibbrandt"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_impose_protective_tariffs",
+    "category_id": "USA_coalition_unity",
+    "name": "Ввести защитные тарифы",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_d",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_show_NPP_screen"
+      },
+      "has_country_leader": {
+        "character": "USA_Barry_Goldwater",
+        "ruling_only": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_impose_protective_tariffs",
+      "TNO_worsen_trade_laws_policy_effectiveness_med": true,
+      "set_temp_variable": {
+        "tempSupport": 0.1
+      },
+      "USA_change_labor_d_coalition_support": true
+    }
+  },
+  {
+    "id": "USA_marvin_griffin_leadership_play",
+    "category_id": "USA_coalition_unity",
+    "name": "Выдвинуть Марвина Гриффина",
+    "desc": "Марвин Гриффин:\nПоддержка его руководства $USA_NPP_Leader_Trait_Mediocre$\nПользуется наибольшей поддержкой от $USA_NPP_Leader_Region_South$",
+    "icon": "GFX_decision_USA_npp_n",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": [
+        "USA_show_NPP_screen",
+        "USA_show_leadership_plays"
+      ],
+      "NOT": {
+        "check_variable": {
+          "NPP_N_LEADER": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_marvin_griffin_leadership_play",
+      "set_temp_variable": {
+        "tempNPPleaderChange": 1
+      },
+      "USA_start_n_caucus_leadership_play": true
+    }
+  },
+  {
+    "id": "GLD68_sacrifice_evidence",
+    "category_id": "USA_GLD_Dealing_With_Unions",
+    "name": "Пожертвовать доказательства",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GLD68_sacrifice_evidence_trigger",
+        "check_variable": {
+          "GLD_union_evidence": {
+            "_op": ">",
+            "value": 0
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_sacrifice_enthusiasm",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Смягчить риторику",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "WRS_yakovlev_eliminate_ofn_tariffs",
+    "category_id": "WRS_Tangle_Decisions_Category",
+    "name": "Устранить тарифы ОСН",
+    "desc": "",
+    "icon": "",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "WRS_need_yakovlev_influence_35_tt",
+          "check_variable": {
+            "WRS_Yakovlev_Balance": {
+              "_op": ">",
+              "value": 34.99
+            }
+          }
+        },
+        {
+          "tooltip": "WRS_reform_timer_tt",
+          "has_country_flag": {
+            "flag": "WRS_reformed_flag",
+            "days": {
+              "_op": ">",
+              "value": 364
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "WRS_Yakovlev_Balance": {
+          "_op": ">",
+          "value": 33.33
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WRS_yakovlev_eliminate_ofn_tariffs",
+      "custom_effect_tooltip": "WRS_yakovlev_eliminate_ofn_tariffs_tt",
+      "WRS_zhukovregional_increase_yakovlev_influence_med": true,
+      "WRRFTangle_calcXY": true,
+      "TNO_improve_trade_laws_policy_effectiveness_high": true,
+      "set_country_flag": "WRS_reformed_flag"
+    }
+  }
+]

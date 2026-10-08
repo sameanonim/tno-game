@@ -1,0 +1,1618 @@
+[
+  {
+    "id": "JAP_develop_irkutsk_coal_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Начать разработку залежей угля в Иркутске",
+    "desc": "",
+    "icon": "coal",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "566": {
+        "is_controlled_by_ROOT_or_subject": true
+      },
+      "has_tech": "excavation1"
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "JAP_establish_the_northern_resource_area",
+          "JAP_sea_establish_the_northern_resource_area",
+          "JAP_transformation_of_nature"
+        ]
+      },
+      "566": {
+        "NOT": {
+          "has_state_flag": "irkutsk_coal_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_plan_start_of_uprising_irkutsk",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Организовать секретный штаб, центр — [FROM.GetName].",
+    "desc": "",
+    "icon": [
+      {
+        "key": "SOV_place_hq",
+        "trigger": {
+          "566": {
+            "NOT": {
+              "has_state_flag": "SOV_hq_state_selected"
+            }
+          }
+        }
+      },
+      {
+        "key": "SOV_place_hq_left_opposition",
+        "trigger": {
+          "566": {
+            "has_state_flag": "SOV_hq_state_selected"
+          },
+          "SOV_is_left_opposition": true
+        }
+      },
+      {
+        "key": "SOV_place_hq_right_opposition",
+        "trigger": {
+          "566": {
+            "has_state_flag": "SOV_hq_state_selected"
+          },
+          "SOV_is_right_opposition": true
+        }
+      },
+      {
+        "key": "SOV_place_hq_exiles",
+        "trigger": {
+          "566": {
+            "has_state_flag": "SOV_hq_state_selected"
+          },
+          "SOV_is_exiles": true
+        }
+      }
+    ],
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "SOV_align_state_in_process"
+        },
+        {
+          "has_variable": "SOV_civil_war_start_state"
+        }
+      ]
+    },
+    "visible": {
+      "SOV_display_civil_war_start_state": true,
+      "566": {
+        "is_owned_by": "ROOT"
+      },
+      "has_game_rule": {
+        "rule": "sov_fragmentation_status",
+        "option": "SOV_UTTERLY_FRAGMENTED"
+      }
+    },
+    "complete_effect": {
+      "SOV_start_setting_up_hq_state": true
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_vorkuta",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Воркуты",
+    "desc": "",
+    "icon": "GFX_decision_vorkuta_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 863
+    },
+    "visible": {
+      "owns_state": 863,
+      "NOT": {
+        "863": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_coring_integrate_irkutsk",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Иркутска",
+    "desc": "",
+    "icon": "GFX_decision_irkutsk_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 566
+    },
+    "visible": {
+      "owns_state": 566,
+      "OR": {
+        "AND": [
+          {
+            "NOT": {
+              "566": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "567": {
+                "is_core_of": "ROOT"
+              }
+            }
+          },
+          {
+            "NOT": {
+              "890": {
+                "is_core_of": "ROOT"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MAG_DEC_MAT_upgrade_the_irkutsk_hps",
+    "category_id": "MAG_DECCAT_economic_development_my_man_matty",
+    "name": "Модернизация Иркутской ГЭС",
+    "desc": "Хотя Иркутская гидроэлектростанция сама по себе является чудом российской инженерной мысли, по оценкам нашего Министерства энергетики она не сможет обеспечить достаточную мощность для реализации всех наших долгосрочных экономических планов. Более того, во время анархии на ней практически не проводилось никакого надлежащего технического обслуживания из-за отсутствия запасных частей и опытных инженеров. Если мы столкнёмся с потребностью в энергетических ресурсах сейчас, то вся Восточная Сибирь погрузится во тьму в тот день, когда мы попытаемся провести полную индустриализацию. Закупая запасные части в Америке и привлекая инженеров с западным образованием для обучения нового поколения российских работников электростанций, мы, наконец, сможем возвратить станции к их истинному потенциалу.",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_matty_econ_phase": 2
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.3
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "MAG_DEC_MAT_american_investments_into_irkutsk_hps",
+    "category_id": "MAG_DECCAT_economic_development_my_man_matty",
+    "name": "Американские инвестиции в Иркутскую ГЭС",
+    "desc": "С нашим улучшенным доступом к американским учёным и инженерам у нас есть все шансы превратить сделку по временному привлечению западного экспорта для восстановления Иркутской ГЭС в более долгосрочную. Мы позволим американским компаниям инвестировать в станцию и в обмен на часть текущей прибыли получим постоянный доступ к специалистам с американским образованием, которые позаботятся о том, чтобы электростанция стала такой же мощной, как сама дамба Гувера.",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_matty_econ_phase": 31
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.275
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_restoration_of_Irkutsk_hps",
+    "category_id": "CHT_chessboard_category",
+    "name": "Восстановительные работы на Иркутской ГЭС",
+    "desc": "",
+    "icon": "GFX_decision_generic_dam",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_restoration_of_irkutsk_hps",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.08
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_expand_resource_exploitation_irkutsk",
+    "category_id": "CHT_chessboard_category",
+    "name": "Расширить добычу полезных ископаемых в Иркутской зоне",
+    "desc": "",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_resource_exploitation_yakutia",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_irkutsk_resource_lease",
+    "category_id": "CHT_chessboard_category",
+    "name": "\"Аренда\" иркутских ресурсов Японией",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "AND": {
+        "has_country_flag": "CHT_irkutsk_resources",
+        "NOT": {
+          "has_country_flag": "CHT_split_with_japan"
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_expand_resource_exploitation_yakutia",
+      "give_resource_rights": [
+        {
+          "receiver": "JAP",
+          "state": 564,
+          "resources": [
+            "oil",
+            "aluminium",
+            "rubber",
+            "tungsten",
+            "steel",
+            "chromium",
+            "uranium"
+          ]
+        },
+        {
+          "receiver": "JAP",
+          "state": 566,
+          "resources": [
+            "oil",
+            "aluminium",
+            "rubber",
+            "tungsten",
+            "steel",
+            "chromium",
+            "uranium"
+          ]
+        }
+      ],
+      "custom_effect_tooltip": "CHT_resource_lease_tt",
+      "add_to_variable": [
+        {
+          "CHT_restoration_misc_income": 0.1
+        },
+        {
+          "CHT_restoration_construct_speed": 0.1
+        }
+      ],
+      "force_update_dynamic_modifier": true
+    }
+  },
+  {
+    "id": "CHT_modernize_irkutsk_hps",
+    "category_id": "CHT_chessboard_category",
+    "name": "Модернизировать Иркутскую ГЭС",
+    "desc": "",
+    "icon": "GFX_decision_generic_dam",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "AND": {
+        "check_variable": {
+          "CHT_chessboard_phase": {
+            "_op": ">",
+            "value": 2
+          }
+        },
+        "has_country_flag": "CHT_supported_mikhail"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_modernize_irkutsk_hps",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.07
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "IRK_restoration_of_irkutsk_hps",
+    "category_id": "IRK_five_year_plans",
+    "name": "Восстановление Иркутской ГЭС",
+    "desc": "Во времена, когда территория СССР была ограничена лишь небольшим клочком земли вокруг Иркутска, КРР выяснило? что у нас закончилось оборудование, которое позволяло обслуживать Иркутскую ГЭС на 100%. В результате этого на ГЭС невооружённым взглядом видны шрамы времени, отсутствия ремонта и эксплуатации в далеко не радужных условиях. Но после окончательного освобождения Дальнего Востока мы наконец можем выделить ресурсы на восстановления и расширение ГЭС, но на данный момент восстановление эффективности работы ГЭС будет достаточно, чтобы наша промышленность могла вновь работать на полную мощность.",
+    "icon": "GFX_decision_generic_dam",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "IRK_five_year_plans_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRK_restoration_of_irkutsk_hps",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.08
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "IRK_modernizing_the_irkutsk_hps",
+    "category_id": "IRK_five_year_plans",
+    "name": "Модернизировать Иркутскую ГЭС",
+    "desc": "Турбины, используемые на Иркутской ГЭС, сохранились со времён Сибирского плана. Хотя Иркутская ГЭС не пострадала во время недавних военных действий, последствия падения Москвы и Сибирской войны ощущаются и по сей день. Закупив оборудование на зарубежных рынках и наняв специалистов, которые помогут нам модернизировать станции в соответствии со стандартами этого десятилетия, временная столица Советского Союза войдёт в число важнейших станций по производству электроэнергии во всей Азии. Нет необходимости говорить о том, что это в значительной степени будет способствовать достижению целей нашего пятилетнего плана, обеспечивая изобилие электроэнергии днём и ночью, круглый год, как для простых граждан, так и для государственных предприятий и инвесторов.",
+    "icon": "GFX_decision_generic_power",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "IRK_five_year_plans_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRK_modernizing_the_irkutsk_hps",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.25
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "OMO_2022_crystal_econ_dev_fully_integrate_irkutsk",
+    "category_id": "OMO_2022_crystals_of_ponykind",
+    "name": "Развивать Иркутскую электростанцию",
+    "desc": "",
+    "icon": "GFX_decision_generic_power",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMO_2022_doing_econ_dev"
+      }
+    },
+    "visible": {
+      "has_country_flag": "OMO_2022_econ_decisions_phase_3"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_crystals": -75
+      },
+      "OMO_2022_change_crystal_stockpile_decision": true,
+      "set_country_flag": "OMO_2022_doing_econ_dev"
+    }
+  },
+  {
+    "id": "OMO_2022_vs_irkutsk",
+    "category_id": "OMO_2022_far_eastern_war",
+    "name": "Военный план: [IRK.GetFlag] Красный",
+    "desc": "Ягода и мысли не допускает об идее воссоединения с нашим Союзом, говоря, что Гармонический Коммунизм - это ревизионистская идеология, которую следует уничтожить. Он даже продолжил заявлять о своей легитимности, как законного наследника старого Союза, прямо перед лицом вернувшегося Бухарина.\n\nЕго тирания и невежество должно быть раздавлено во имя расцвета Гармонии и Дружбы по всей России.",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false,
+      "OMO_2022_warplan_decisions_not_cooldown": true,
+      "YAK": {
+        "exists": false
+      }
+    },
+    "visible": {
+      "country_exists": "IRK",
+      "BRY": {
+        "exists": false
+      },
+      "NOT": {
+        "IRK": {
+          "has_war_with": "OMO"
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -30
+      },
+      "set_country_flag": "OMO_2022_far_eastern_war_doing_decision"
+    }
+  },
+  {
+    "id": "OMO_2022_irkutsk_buryatia_integration",
+    "category_id": "OMO_2022_far_eastern_war",
+    "name": "Учиться на их ошибках",
+    "desc": "К сожалению, нам не удалось убедить Ягоду и Саблина прекратить воевать и объединиться в дружбе, и нам пришлось начать вторжение, чтобы завершить их войну. Дружба - это всегда ответ, пусть есть и те, кто этого не понимает.\n\nМы обязаны не допустить подобного вновь. Дружба и Гармония победят!",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "BRY": {
+        "exists": false
+      },
+      "IRK": {
+        "exists": false
+      },
+      "564": {
+        "is_owned_and_controlled_by": "OMO",
+        "NOT": {
+          "is_core_of": "OMO"
+        }
+      },
+      "565": {
+        "is_owned_and_controlled_by": "OMO",
+        "NOT": {
+          "is_core_of": "OMO"
+        }
+      },
+      "566": {
+        "is_owned_and_controlled_by": "OMO",
+        "NOT": {
+          "is_core_of": "OMO"
+        }
+      },
+      "567": {
+        "is_owned_and_controlled_by": "OMO",
+        "NOT": {
+          "is_core_of": "OMO"
+        }
+      },
+      "759": {
+        "is_owned_and_controlled_by": "OMO",
+        "NOT": {
+          "is_core_of": "OMO"
+        }
+      },
+      "890": {
+        "is_owned_and_controlled_by": "OMO",
+        "NOT": {
+          "is_core_of": "OMO"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "OMS_purge_vorkuta",
+    "category_id": "OMS_DECCAT_insurgency",
+    "name": "Начать Операцию: ИЗОГНУТЫЙ КЛЫК",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMS_counter_insurgency_purge_progress"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "863:base_status": 2
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OMS_purge_vorkuta",
+      "hidden_effect": [
+        {
+          "add_command_power": -15
+        },
+        {
+          "863": {
+            "set_state_flag": "OMS_insurgency_purged"
+          }
+        },
+        {
+          "country_event": {
+            "id": "omskbatov.16"
+          }
+        }
+      ],
+      "set_country_flag": "OMS_counter_insurgency_purge_progress",
+      "add_manpower": -2500,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500,
+        "producer": "OMS"
+      }
+    }
+  },
+  {
+    "id": "WSR_prepare_vorkuta_defenses",
+    "category_id": "WSR_war_category",
+    "name": "Подготовить границу у Воркуты",
+    "desc": "",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WSR_prepare_vorkuta_defenses",
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "WSB_fortify_vorkuta_beachhead",
+    "category_id": "WSB_war_category",
+    "name": "Подготовить границу у Воркуты",
+    "desc": "",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision WSB_fortify_vorkuta_beachhead",
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "SAM_vorkuta_artsezo",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Воркуту под контроль Внутреннего круга",
+    "desc": "",
+    "icon": "GFX_decision_generic_chess_king",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "863": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 863
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_vorkuta_artsezo",
+      "add_to_variable": [
+        {
+          "SAM_artsezo_ruled_states": 1
+        },
+        {
+          "SAM_inner_circle_influence": 1
+        }
+      ],
+      "863": {
+        "set_state_flag": "SAM_artsezo_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_inner_circle_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_inner_circle_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_vorkuta_military",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Воркуту под контроль Военной администрации",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "863": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 863
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_vorkuta_military",
+      "add_to_variable": [
+        {
+          "SAM_military_ruled_states": 1
+        },
+        {
+          "SAM_military_influence": 1
+        }
+      ],
+      "863": {
+        "set_state_flag": "SAM_military_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_military_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_military_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_military_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_vorkuta_civilian",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Перевести Воркуту под контроль Гражданской администрации",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "863": {
+          "OR": {
+            "has_state_flag": [
+              "SAM_artsezo_ruled",
+              "SAM_military_ruled",
+              "SAM_civilian_ruled"
+            ]
+          }
+        }
+      },
+      "owns_state": 863
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_vorkuta_civilian",
+      "add_to_variable": [
+        {
+          "SAM_civilian_ruled_states": 1
+        },
+        {
+          "SAM_civilian_influence": 1
+        }
+      ],
+      "863": {
+        "set_state_flag": "SAM_civilian_ruled",
+        "add_dynamic_modifier": {
+          "modifier": "SAM_civilian_ruled_dynamic_modifier"
+        }
+      },
+      "SAM_artsezo_decrease_civilian_tension_low": true,
+      "custom_effect_tooltip": "SAM_artsezo_increase_civilian_influence_low_tt"
+    }
+  },
+  {
+    "id": "SAM_vorkuta_strip_away",
+    "category_id": "SAM_web_of_tensions_category",
+    "name": "Лишить права владения Воркутой",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "863": {
+        "OR": {
+          "has_state_flag": [
+            "SAM_artsezo_ruled",
+            "SAM_military_ruled",
+            "SAM_civilian_ruled"
+          ]
+        }
+      },
+      "owns_state": 863
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SAM_vorkuta_strip_away",
+      "custom_effect_tooltip": "SAM_strip_away_tt",
+      "if": {
+        "limit": {
+          "863": {
+            "has_state_flag": "SAM_artsezo_ruled"
+          }
+        },
+        "SAM_artsezo_increase_inner_circle_tension_high": true,
+        "subtract_from_variable": [
+          {
+            "SAM_artsezo_ruled_states": 1
+          },
+          {
+            "SAM_inner_circle_influence": 1
+          }
+        ],
+        "custom_effect_tooltip": "SAM_artsezo_decrease_inner_circle_influence_low_tt"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "863": {
+              "has_state_flag": "SAM_military_ruled"
+            }
+          },
+          "SAM_artsezo_increase_military_tension_high": true,
+          "subtract_from_variable": [
+            {
+              "SAM_military_ruled_states": 1
+            },
+            {
+              "SAM_military_influence": 1
+            }
+          ],
+          "custom_effect_tooltip": "SAM_artsezo_decrease_military_influence_low_tt"
+        },
+        {
+          "limit": {
+            "863": {
+              "has_state_flag": "SAM_civilian_ruled"
+            }
+          },
+          "SAM_artsezo_increase_civilian_tension_high": true,
+          "subtract_from_variable": [
+            {
+              "SAM_civilian_ruled_states": 1
+            },
+            {
+              "SAM_civilian_influence": 1
+            }
+          ],
+          "custom_effect_tooltip": "SAM_artsezo_decrease_civilian_influence_low_tt"
+        }
+      ],
+      "hidden_effect": {
+        "863": {
+          "clr_state_flag": [
+            "SAM_civilian_ruled",
+            "SAM_military_ruled",
+            "SAM_artsezo_ruled"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "SAM_civilian_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_military_ruled_dynamic_modifier"
+            },
+            {
+              "modifier": "SAM_artsezo_ruled_dynamic_modifier"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_restoration_of_rkutsk_hps",
+    "category_id": "RUS_five_year_plans",
+    "name": "Reconstruction of the Irkutsk Hydropower Station",
+    "desc": "During previous difficult times, we lacked the necessary industrial equipment to effectively maintain the Irkutsk Hydropower Station. Consequently, the station was severely overloaded, and power generation fell short of expectations. However, with the complete liberation of the Far East, we are finally able to restore this industrial gem. Not only will it provide a steady supply of electricity for economic development, but the restoration work itself will also increase government procurement and promote industrial development in the Union.",
+    "icon": "GFX_decision_generic_dam",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "RUS_five_year_plans_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_restoration_of_rkutsk_hps",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.2
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "RUS_modernizing_the_irkutsk_hps",
+    "category_id": "RUS_five_year_plans",
+    "name": "Modernize the irkutsk HPS",
+    "desc": "The turbines used in the irkutsk HPS linger back to the days of the Siberian Plan. While not a direct target in any of the recent wars, the aftershocks caused by the fall of Moscow and the Siberian War can still be felt to this day. By purchasing equipment on the foreign markets and hiring experts to help us modernize the plants to the standards of this decade, the provisory capital of the Soviet Union will be ranked among the most important electricity production stations in all of Asia. Needless to say, this will go a long way to achieve the goals of our Five Year Plan by ensuring plentiful of electricity day and night, all year around for both common citizens, state industries and investors alike.",
+    "icon": "GFX_decision_generic_power",
+    "cost": 85,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "RUS_five_year_plans_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_modernizing_the_irkutsk_hps",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.25
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "SGV_invide_vorkuta",
+    "category_id": "SGV_WSB_forming_nation_category",
+    "name": "Operation 'Pacifying the Mad Dogs'",
+    "desc": "In Vorkutlag, and indeed throughout the region, prisoners have criminally seized power. They are no better than their counterparts, the disorganised bandits of Yugra. Despite this sense of déjà vu, we will under no circumstances forgive that scoundrel Viktor Kolesnikov and his reprisals against the Black League's guards. We will respond in kind, with physical reprisals against all representatives of his regime.",
+    "icon": "GFX_decision_vorkuta_icon",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false,
+      "command_power": {
+        "_op": ">",
+        "value": 14.99
+      },
+      "is_neighbor_of": "VOR",
+      "custom_trigger_tooltip": {
+        "tooltip": "SGV_inviding_neighbor_tt",
+        "NOT": {
+          "has_country_flag": "SGV_inviding_neighbor"
+        }
+      }
+    },
+    "visible": {
+      "country_exists": "VOR",
+      "NOT": {
+        "country_exists": "NTG"
+      },
+      "has_country_flag": [
+        "is_warlord",
+        "SGV_begin_salvation",
+        "SGV_ready_to_conquest_flag",
+        "SGV_deal_with_bogatyr_flag"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_invide_vorkuta",
+      "add_war_support": 0.03,
+      "add_manpower": 4250,
+      "declare_war_on": {
+        "target": "VOR",
+        "type": "annex_everything"
+      },
+      "SVR": {
+        "add_war_support": -0.03,
+        "if": {
+          "limit": {
+            "has_idea": "RUS_shattered_ambitions"
+          },
+          "modify_timed_idea": {
+            "idea": "RUS_shattered_ambitions",
+            "days": -7
+          }
+        }
+      },
+      "add_days_mission_timeout": {
+        "mission": "SGV_countdown_to_the_ash_being_lit",
+        "days": -7
+      },
+      "hidden_effect": {
+        "add_command_power": -15,
+        "VOR": {
+          "add_war_support": -0.06,
+          "division_template": {
+            "name": "Militia Brigade",
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "artillery": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          },
+          "863": {
+            "create_unit": [
+              {
+                "division": "name = \"20-ya Strelkovo-Teritorialnaya Brigada\" division_template = \"Militia Brigade\" start_experience_factor = 0.5 start_equipment_factor = 0.9",
+                "owner": "VOR"
+              },
+              {
+                "division": "name = \"42-ya Strelkovo-Teritorialnaya Brigada\" division_template = \"Militia Brigade\" start_experience_factor = 0.5 start_equipment_factor = 0.9",
+                "owner": "VOR"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "SGV_construct_irkutsk_bunkers",
+    "category_id": "SGV_national_redoubt_program_category",
+    "name": "Assemble the Redoubt in Irkutsk",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 566,
+      "NOT": {
+        "has_country_flag": "OMS_national_redoubt_construction"
+      }
+    },
+    "visible": [
+      {
+        "controls_state": 566,
+        "has_country_flag": [
+          "SGV_national_redoubt_program_start",
+          "OMS_national_redoubt_program_flag"
+        ]
+      },
+      {
+        "has_country_flag": [
+          "OMS_national_redoubt_program_flag",
+          "OMS_a_societal_redoubt_flag"
+        ]
+      }
+    ],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_irkutsk_bunkers",
+      "set_country_flag": "OMS_national_redoubt_construction",
+      "hidden_effect": {
+        "add_command_power": -20,
+        "add_political_power": -20
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": "GDP"
+      },
+      "multiply_temp_variable": {
+        "temp_econ_spending_amount": 0.015
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_start_of_work_in_Vorkuta",
+    "category_id": "VOR_maltsevs_plan_category",
+    "name": "Working in the Heartland of Vorkuta",
+    "desc": "",
+    "icon": "GFX_decision_generic_train",
+    "cost": 24,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "Vor_works_are_underway_tt",
+        "NOT": {
+          "has_country_flag": "Vor_works_are_underway"
+        }
+      }
+    },
+    "visible": {
+      "863": {
+        "is_controlled_by": "VOR"
+      },
+      "has_country_flag": [
+        "VOR_maltsevs_plan_begin",
+        "VOR_maltsevs_plan_phase_1"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_start_of_work_in_Vorkuta",
+      "set_country_flag": "Vor_works_are_underway",
+      "set_temp_variable": [
+        {
+          "inflation_temp": 0.3
+        },
+        {
+          "temp_econ_spending_amount": 0.029
+        }
+      ],
+      "econ_inflation_change": true,
+      "863": {
+        "add_manpower": -530,
+        "add_extra_state_shared_building_slots": 1,
+        "add_resource": {
+          "type": "steel",
+          "amount": 10
+        },
+        "add_victory_points": {
+          "province": 13357,
+          "value": 3
+        },
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 1
+        }
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_military_conscripted_vorkuta",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Vorkuta to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "581": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "863": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        581,
+        863
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_vorkuta",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "581": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "863": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_vorkuta",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Vorkuta to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "581": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "863": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        581,
+        863
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_vorkuta",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "581": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "863": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_vorkuta",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Vorkuta",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "581": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "863": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        581,
+        863
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_vorkuta",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "581": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "863": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "581": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "863": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "581": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "863": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_military_conscripted_irkutsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Irkutsk to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "567": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "566": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "890": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        567,
+        566,
+        890
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_irkutsk",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "567": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "566": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "890": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_irkutsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Irkutsk to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "567": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "566": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "890": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        567,
+        566,
+        890
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_irkutsk",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "567": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "566": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "890": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_irkutsk",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Irkutsk",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "567": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "566": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "890": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        567,
+        566,
+        890
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_irkutsk",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "567": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "566": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "890": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "567": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "566": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "890": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "567": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "566": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "890": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "OMO_stir_the_peasants_of_irkutsk",
+    "category_id": "OMO_wrath_of_god_category",
+    "name": "Расшевелить крестьян Иркутстка",
+    "desc": "",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "OMO_start_uprising"
+        }
+      }
+    },
+    "visible": {
+      "has_war": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OMO_stir_the_peasants_of_irkutsk",
+      "hidden_effect": {
+        "add_command_power": -25
+      },
+      "set_country_flag": "OMO_start_uprising"
+    }
+  }
+]

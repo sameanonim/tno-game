@@ -1,17 +1,40 @@
 # ==============================================================================
-# GODOT 4 ENGINE ARTIFACTS & CACHE
+# GODOT 4 ENGINE & BUILD ARTIFACTS
 # ==============================================================================
+# Engine import cache and internal metadata
 .godot/
 .import/
+*.import
 *.translation
+export_presets.cfg
 
-# Build & Export binaries
+# Preserve essential project icons and font import descriptors
+!icon.svg
+!icon.svg.import
+!addons/godot_mcp_toolkit/icon.svg
+!addons/godot_mcp_toolkit/icon.svg.import
+!assets/fonts/*.import
+
+# Export binaries, builds and platform packages
 export/
+exports/
 build/
+builds/
 bin/
+*.exe
 *.pck
 *.apk
 *.aab
+*.ipa
+*.app/
+*.dmg
+*.msi
+*.deb
+*.rpm
+*.pkg
+*.dll
+*.so
+*.dylib
 /android/
 /ios/
 
@@ -21,7 +44,70 @@ bin/
 [Oo]bj/
 
 # ==============================================================================
-# МЕДИА: ИЗОБРАЖЕНИЯ И ГРАФИКА (IMAGES)
+# БОЛЬШИЕ ФАЙЛЫ ДАННЫХ И БАЗЫ ДАННЫХ (LARGE DATA & DATABASES)
+# ==============================================================================
+# SQLite базы данных (локализация, страны, игровой кэш - сотни МБ/ГБ)
+*.sqlite
+*.sqlite3
+*.db
+*.s3db
+*.sl3
+
+# Журналы транзакций и WAL файлы SQLite (согласно правилам разработки)
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Тяжелые дампы данных и выгрузки локализации (localization_db.json > 360 МБ)
+localization_db.json
+**/localization_db.json
+data/localization/localization_db.json
+data/localization/*.bin
+pipeline/db/*.sqlite
+pipeline/db/*.sqlite3
+pipeline/db/*.db
+pipeline/db/*.dump
+pipeline/tno_exporter.exe
+tno_exporter.exe
+
+# Снапшоты, дампы памяти, дампы крашей и профилировщика
+*.dump
+*.dmp
+*.stackdump
+*.trace
+*.prof
+
+# ==============================================================================
+# АРХИВЫ И СЖАТЫЕ ПАКЕТЫ (ARCHIVES)
+# ==============================================================================
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.bz2
+*.xz
+*.iso
+*.cab
+
+# ==============================================================================
+# МЕДИА: ВИДЕО И АНИМАЦИЯ (VIDEO)
+# ==============================================================================
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.webm
+*.flv
+*.wmv
+*.m4v
+
+# ==============================================================================
+# МЕДИА: ИЗОБРАЖЕНИЯ, ТЕКСТУРЫ И ИСХОДНИКИ (IMAGES & GRAPHICS)
 # ==============================================================================
 # Растровые и текстурные форматы
 *.png
@@ -38,25 +124,30 @@ bin/
 *.exr
 *.ico
 
-# Векторная графика и исходники
+# Векторная графика и исходники графических редакторов (Photoshop, Aseprite и др.)
 *.svg
 *.psd
+*.psb
+*.ai
+*.kra
+*.xcf
+*.clip
 *.ase
 *.aseprite
 
-# Файлы метаданных импорта Godot для изображений
-*.png.import
-*.jpg.import
-*.jpeg.import
-*.webp.import
-*.bmp.import
-*.svg.import
-*.tga.import
-*.dds.import
-
-# Исключение: сохраняем базовую системную иконку проекта Godot
-!icon.svg
-!icon.svg.import
+# ==============================================================================
+# МЕДИА: 3D МОДЕЛИ И СЦЕНЫ (3D ASSETS)
+# ==============================================================================
+*.blend
+*.blend1
+*.fbx
+*.obj
+*.dae
+*.3ds
+*.max
+*.c4d
+*.mb
+*.ma
 
 # ==============================================================================
 # МЕДИА: МУЗЫКА И ЗВУКИ (AUDIO & MUSIC)
@@ -77,32 +168,23 @@ bin/
 *.xm
 *.s3m
 *.it
-
-# Файлы метаданных импорта Godot для аудио
-*.ogg.import
-*.wav.import
-*.mp3.import
-*.flac.import
+*.aiff
 
 # ==============================================================================
-# PYTHON: ТЕСТОВЫЕ, ВРЕМЕННЫЕ СКРИПТЫ, ДИАГНОСТИКА И КЭШ
+# ПОЛЬЗОВАТЕЛЬСКИЕ ДАННЫЕ, СОХРАНЕНИЯ И ЛОГИ (SAVES & LOGS)
 # ==============================================================================
-# Тестовые и диагностические скрипты Python
-test_*.py
-*_test.py
-audit_*.py
-check_*.py
-scan_*.py
-tmp_*.py
+user/
+user://
+savegame.json
+*.save
+*.sav
+*.log
+logs/
+*.crash
 
-# Временные папки и отчеты аудита
-tmp/
-temp/
-scratch/
-audit_*.json
-*.jsonl
-
-# Python bytecode, environment & tools cache
+# ==============================================================================
+# PYTHON PIPELINE, ТЕСТОВЫЙ КЭШ И ВИРТУАЛЬНЫЕ ОКРУЖЕНИЯ
+# ==============================================================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -115,9 +197,17 @@ env/
 ENV/
 *.egg-info/
 pip-wheel-metadata/
+dist/
+
+# Временные скрипты и отчеты аудита
+audit_*.json
+*.jsonl
+tmp/
+temp/
+scratch/
 
 # ==============================================================================
-# ОС И РЕДАКТОРЫ КОДА (OS & IDE)
+# ОПЕРАЦИОННАЯ СИСТЕМА И РЕДАКТОРЫ КОДА (OS & IDE)
 # ==============================================================================
 # Windows
 Thumbs.db
@@ -133,42 +223,20 @@ $RECYCLE.BIN/
 .LSOverride
 ._*
 
-# Редакторы и IDE
+# Linux
+*~
+
+# IDEs & Editors
 .idea/
 .vscode/
 *.swp
 *.swo
-*~
+*.suo
+*.user
+*.tmproj
 
-# Godot
-.godot/
-export_presets.cfg
-*.translation
-
-# Godot export builds
-build/
-builds/
-export/
-exports/
-*.exe
-*.pck
-*.zip
-*.apk
-*.aab
-*.ipa
-*.app/
-
-# Windows / IDE
-Thumbs.db
-desktop.ini
-.vscode/
-.idea/
-*.sqlite
-data/localization/*.bin
-extracted_tno_data/*.json
-.agents/*.md
-.agents/*.json
-audit/*
-patches/*
-audit/defects_registry.md
-.agents/rules/tnogame.md
+# ==============================================================================
+# ВРЕМЕННЫЕ ПАТЧИ И АУДИТ (AUDIT ARTIFACTS)
+# ==============================================================================
+audit/
+patches/

@@ -1,0 +1,4970 @@
+[
+  {
+    "id": "AUS_send_volunteers_to_italy",
+    "category_id": "AUS_supporting_italy_in_ethiopia_category",
+    "name": "Отправить [ITA.GetNameDef] добровольцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_military",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "add_relation_rule_override": {
+        "target": "ITA",
+        "can_send_volunteers": true
+      },
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_idea": "AUS_volunteer_effort"
+          }
+        },
+        "add_ideas": "AUS_volunteer_effort"
+      }
+    }
+  },
+  {
+    "id": "AUS_send_infantry_equipment_to_italy",
+    "category_id": "AUS_supporting_italy_in_ethiopia_category",
+    "name": "Отправить [ITA.GetNameDef] пехотное снаряжение",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "ITA": {
+        "country_event": {
+          "id": "AUS_political_events.12",
+          "hours": 12
+        }
+      },
+      "event_option_tooltip": "AUS_political_events.12.a",
+      "set_country_flag": "AUS_provided_infantry_equipment_for_italy_flag"
+    }
+  },
+  {
+    "id": "AUS_speak_out_against_embargo",
+    "category_id": "AUS_supporting_italy_in_ethiopia_category",
+    "name": "Выразить протест в связи с эмбарго против [ITA.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "any_country": {
+        "is_embargoing": "ITA"
+      },
+      "ROOT": {
+        "NOT": {
+          "is_embargoing": "ITA"
+        }
+      }
+    },
+    "visible": {
+      "any_country": {
+        "is_embargoing": "ITA"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_defeat_italy",
+    "category_id": "ETH_defeat_italy_category",
+    "name": "Победить колонизаторов",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_full_control_of_state": [
+        550,
+        559,
+        844
+      ],
+      "has_war_with": "ITA",
+      "ITA": {
+        "is_in_faction": false
+      }
+    },
+    "visible": {
+      "has_war_with": "ITA"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "550": {
+          "add_compliance": 50
+        },
+        "559": {
+          "add_compliance": 50
+        },
+        "844": {
+          "add_compliance": 50
+        }
+      },
+      "ITA": {
+        "country_event": "ETH_events.1"
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "transfer_state": [
+          550,
+          559,
+          844
+        ],
+        "white_peace": "ITA"
+      }
+    }
+  },
+  {
+    "id": "ETH_coup_haile_selassie_imru",
+    "category_id": "democratic_on_the_rise",
+    "name": "Спровоцировать дворцовый переворот",
+    "desc": "Демократически настроенный $ETH_ras_imru_haile_selassie$ правит страной в отсутствие императора. Несомненно, массы считают его истинным героем [ROOT.GetNameRuGen] после того, как он возглавлял страну во время войны. Сейчас все громче раздаются призывы демократизации [ROOT.GetNameRuGen]. Возможно, пришли времена, когда в государстве [ROOT.GetNameDef] действительно назрела необходимость перемен.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "democratic": {
+        "_op": ">",
+        "value": 0.35
+      },
+      "ETH_haile_selassie": {
+        "has_trait": "imperator_absentis"
+      },
+      "has_idea": "ETH_prince_regent_idea"
+    },
+    "visible": {
+      "ETH_haile_selassie": {
+        "has_trait": "imperator_absentis"
+      },
+      "democratic": {
+        "_op": ">",
+        "value": 0.3
+      },
+      "has_idea": "ETH_prince_regent_idea"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ETH_palace_coup_tt",
+      "hidden_effect": {
+        "ETH_ras_imru_haile_selassie": {
+          "unit_leader_event": {
+            "id": "BBA_ethiopia_imperial_events.20",
+            "hours": 2,
+            "random_hours": 4
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ETH_formal_request_to_host",
+    "category_id": "governments_in_exile",
+    "name": "Составить официальный запрос [?ETH.host_nation.GetAdjective]ому правительству.",
+    "desc": "Нужно обратиться к [?ETH.host_nation.GetAdjective]ому правительству и попросить его поддержать правителя [ROOT.GetLeader] в войне против [ITA.GetNameRuGen]. Так начнется последний этап возрождения нашей нации.",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ETH_reclaiming_ethiopia",
+      "IF": {
+        "limit": {
+          "check_variable": {
+            "ETH.host_nation": "GER"
+          }
+        },
+        "var:ETH.host_nation": {
+          "has_opinion": {
+            "target": "ITA",
+            "value": {
+              "_op": "<",
+              "value": 1
+            }
+          }
+        }
+      },
+      "ITA": {
+        "has_civil_war": false
+      }
+    },
+    "visible": {
+      "is_government_in_exile": true,
+      "NOT": {
+        "has_global_flag": "ethiopia_recognized_flag"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_false_flag_operation_decision",
+    "category_id": "governments_in_exile",
+    "name": "Начать операцию под чужим флагом",
+    "desc": "Принимающую сторону можно убедить в том, что [ITA.GetName] — ненадежный партнер, изобразив атаку на немецкий пограничный пост и обвинив в ней итальянцев.",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ETH_sabotage_italo-german_relations"
+    },
+    "visible": {
+      "is_government_in_exile": true,
+      "var:ETH.host_nation": {
+        "NOT": {
+          "has_war_with": "ITA"
+        },
+        "is_neighbor_of": "ITA",
+        "original_tag": "GER"
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -1000
+      }
+    }
+  },
+  {
+    "id": "ETH_throw_grand_party_for_host",
+    "category_id": "governments_in_exile",
+    "name": "Устроить пышный прием",
+    "desc": "Устроив роскошный прием в своем доме, [ROOT.GetLeader] создаст отличные условия для неформального общения перед официальной встречей.",
+    "icon": "GFX_decision_gre_investment_decisions",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "is_government_in_exile": true
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": 10
+      },
+      "add_legitimacy": 5,
+      "country_event": {
+        "id": "BBA_ethiopia_exile_events.52",
+        "hours": 12
+      }
+    }
+  },
+  {
+    "id": "ETH_take_loans",
+    "category_id": "governments_in_exile",
+    "name": "Личные кредиты",
+    "desc": "Мы можем попытаться увеличить доступные средства, используя императорскую казну в качестве обеспечения.",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 10
+      }
+    },
+    "visible": {
+      "is_government_in_exile": true
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ETH_take_loans_tt",
+      "add_to_variable": {
+        "ETH_treasury": 20
+      },
+      "add_legitimacy": -10
+    }
+  },
+  {
+    "id": "ETH_fundraising_campaign_decision",
+    "category_id": "governments_in_exile",
+    "name": "Кампания по сбору средств",
+    "desc": "После того как президент [ROOT.GetLeader] выступил на радио, число наших сторонников в Америке значительно выросло. Нужно воспользоваться ситуацией и провести кампанию по сбору средств. Это поможет нам наполнить казну и, следовательно, профинансировать освободительную войну.",
+    "icon": "GFX_decision_generic_fundraising",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 20
+      }
+    },
+    "visible": {
+      "is_government_in_exile": true,
+      "has_country_flag": "american_radio_adress_flag"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_recruit_mercenaries_from_host",
+    "category_id": "governments_in_exile",
+    "name": "Вербовать наемников",
+    "desc": "Всегда найдутся люди, готовые воевать за деньги.",
+    "icon": "GFX_decision_generic_military",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_recruiting_mercenaries_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_the_ferengi"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": "ETH_recruit_mercenaries_cost"
+      },
+      "set_country_flag": "ETH_recruiting_mercenaries_flag"
+    }
+  },
+  {
+    "id": "ETH_recruit_aircrews_from_host",
+    "category_id": "governments_in_exile",
+    "name": "Завербовать [?ETH.host_nation.GetAdjective]их пилотов",
+    "desc": "Наверняка здесь найдутся [?ETH.host_nation.GetAdjective]ие пилоты и механики, которые готовы послужить стране [ROOT.GetName], если за это им хорошо заплатят.",
+    "icon": "GFX_decision_generic_air",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_recruiting_mercenaries_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_the_ferengi"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": "ETH_recruit_mercenaries_cost"
+      },
+      "set_country_flag": "ETH_recruiting_mercenaries_flag"
+    }
+  },
+  {
+    "id": "ETH_recruit_merchant_marines_from_host",
+    "category_id": "governments_in_exile",
+    "name": "Приобрести гражданские корабли",
+    "desc": "Чтобы перевезти нашу армию в Африку, нам понадобятся корабли и моряки.",
+    "icon": "GFX_decision_generic_merge_plant_ship",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_recruiting_mercenaries_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_the_ferengi"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": "ETH_recruit_mercenaries_cost"
+      },
+      "set_country_flag": "ETH_recruiting_mercenaries_flag"
+    }
+  },
+  {
+    "id": "ETH_buy_rifles_from_host",
+    "category_id": "governments_in_exile",
+    "name": "Купить [?ETH.host_nation.GetAdjective]ие винтовки.",
+    "desc": "Мы должны идти на жертвы, ведь только так [ROOT.GetName] снова обретет свободу. Покупка оружия на личные средства монарха — отчаянный шаг, но в тяжелой ситуации нужно действовать решительно.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_securing_arms_deals_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_secure_arms"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": "ETH_buy_arms_from_host_cost"
+      },
+      "set_country_flag": "ETH_securing_arms_deals_flag"
+    }
+  },
+  {
+    "id": "ETH_buy_support_equipment_from_host",
+    "category_id": "governments_in_exile",
+    "name": "Приобрести вспомогательное оснащение",
+    "desc": "Винтовки — это еще не все. Солдатам нужны каски, сапоги, гранаты и многое прочее. Мы можем приобрести все это за счет средств из императорской казны.",
+    "icon": "GFX_decision_generic_merge_plant_materiel",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_securing_arms_deals_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_secure_arms"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": "ETH_buy_arms_from_host_cost"
+      },
+      "set_country_flag": "ETH_securing_arms_deals_flag"
+    }
+  },
+  {
+    "id": "ETH_buy_tanks_from_host",
+    "category_id": "governments_in_exile",
+    "name": "Купить лишние [?ETH.host_nation.GetAdjective]ие танки",
+    "desc": "[ROOT.GetAdjective]ая армия испытывает сильную нехватку танков. На рынке есть излишки старой техники, и ситуацию можно слегка улучшить, купив ее за счет средств из императорской казны. Старые танки лучше, чем никаких.",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_securing_arms_deals_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_secure_arms"
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "ETH_treasury": "ETH_buy_arms_from_host_cost"
+      },
+      "set_country_flag": "ETH_securing_arms_deals_flag"
+    }
+  },
+  {
+    "id": "ETH_disband_the_chitet",
+    "category_id": "ETH_chitet_category",
+    "name": "Расформировать читет",
+    "desc": "Когда война закончится, ополченцам придет пора вернуться по домам.",
+    "icon": "GFX_decision_ETH_chitet",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_war": false,
+        "custom_trigger_tooltip": {
+          "tooltip": "ETH_number_levy_units_less_than_five",
+          "check_variable": {
+            "num_armies_with_type@irregular_infantry": {
+              "_op": "<",
+              "value": 5
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ETH_chitet_raised_flag",
+      "is_government_in_exile": false
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_host_country_decision",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Попросить разрешение создать правительство в изгнании в государстве [FROM.GetName].",
+    "desc": "Мы должны готовиться к худшему. Если вся территория страны будет захвачена, нам понадобится база, откуда мы сможем руководить сопротивлением. Нам необходимо обратиться к [FROM.GetAdjective]ому правительству и попросить разрешения создать на его территории правительство в изгнании.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_completed_focus": "ETH_the_emperor_stays"
+        },
+        {
+          "has_country_flag": "ETH_request_sent_flag"
+        },
+        {
+          "FROM": {
+            "is_in_faction_with": "ITA"
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "ETH_rally_around_the_emperor",
+      "NOT": [
+        {
+          "has_country_flag": "ETH_host_confirmed_flag"
+        },
+        {
+          "has_completed_focus": "ETH_the_emperor_stays"
+        },
+        {
+          "has_country_flag": "ETH_refused_forced_peace_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_request_sent_flag",
+      "FROM": {
+        "country_event": {
+          "id": "BBA_italo_ethiopian_war_events.100",
+          "hours": 8,
+          "random_hours": 6
+        }
+      },
+      "custom_effect_tooltip": [
+        "if_they_accept_tt",
+        "ETH_host_country_decision_tt"
+      ]
+    }
+  },
+  {
+    "id": "ETH_buy_rifles",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Купить стрелковое оружие",
+    "desc": "Теперь у нас есть выход на международный рынок оружия, и мы должны действовать. Прежде всего нужно приобрести винтовки, чтобы наша пехота могла на равных сражаться с захватчиками.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "IF": [
+        {
+          "limit": {
+            "has_tech": "gw_artillery"
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_artillery"
+          }
+        },
+        {
+          "limit": {
+            "has_tech": "tech_support"
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_support_equipment"
+          }
+        },
+        {
+          "limit": {
+            "has_tech": "interwar_antitank",
+            "SWE": {
+              "has_tech": "interwar_antitank"
+            }
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_anti_tank_guns"
+          }
+        }
+      ],
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "visible": {
+      "has_completed_focus": "ETH_arms_purchases",
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_buy_artillery",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Закупить артиллерию",
+    "desc": "Наша армия отчаянно нуждается в современной артиллерии. Нам нужно прежде всего закупить тяжелое вооружение.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "ETH_buy_rifles"
+      },
+      "IF": [
+        {
+          "limit": {
+            "has_tech": "tech_support"
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_support_equipment"
+          }
+        },
+        {
+          "limit": {
+            "has_tech": "interwar_antitank",
+            "SWE": {
+              "has_tech": "interwar_antitank"
+            }
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_anti_tank_guns"
+          }
+        }
+      ],
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "visible": {
+      "has_completed_focus": "ETH_arms_purchases",
+      "has_tech": "gw_artillery",
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_buy_support_equipment",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Закупить вспомогательное снаряжение",
+    "desc": "Нам нужно не только оружие, но также средства связи и дополнительное снаряжение в целом. Добыть все это — наша первоочередная задача.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "ETH_buy_rifles"
+      },
+      "IF": [
+        {
+          "limit": {
+            "has_tech": "gw_artillery"
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_artillery"
+          }
+        },
+        {
+          "limit": {
+            "has_tech": "interwar_antitank",
+            "SWE": {
+              "has_tech": "interwar_antitank"
+            }
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_anti_tank_guns"
+          }
+        }
+      ],
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "visible": {
+      "has_completed_focus": "ETH_arms_purchases",
+      "has_tech": "tech_support",
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_buy_anti_tank_guns",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Закупить противотанковые орудия",
+    "desc": "У итальянцев есть бронетехника, а у нас только канистры с бензином и охотничьи ружья. Нам нужна большая партия качественных противотанковых орудий, иначе эту войну мы проиграем.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "ETH_buy_rifles"
+      },
+      "IF": [
+        {
+          "limit": {
+            "has_tech": "gw_artillery"
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_artillery"
+          }
+        },
+        {
+          "limit": {
+            "has_tech": "tech_support"
+          },
+          "NOT": {
+            "has_decision": "ETH_buy_support_equipment"
+          }
+        }
+      ],
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "visible": {
+      "has_completed_focus": "ETH_arms_purchases",
+      "has_tech": "interwar_antitank",
+      "SWE": {
+        "has_tech": "interwar_antitank"
+      },
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "league_of_nations_is_active": true
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_time_based_war_escalation_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Постепенная эскалация войны",
+    "desc": "Чем дольше идет война, тем выше уровень обеспокоенности в мире. Уровень эскалации войны будет увеличиваться на единицу каждые полгода, начиная с октября 1935 года.",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_global_flag": "second_italo_ethiopian_war_flag"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ITA_time_based_war_escalation_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Постепенная эскалация войны",
+    "desc": "",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_global_flag": "second_italo_ethiopian_war_flag"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_christmas_offensive_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Рождественское наступление",
+    "desc": "Наши войска по-прежнему идут вперед, но скорость продвижения падает, и скоро контратака захлебнется.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_hold_the_north_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Удержать север",
+    "desc": "В ходе рождественского наступления нам удалось оттеснить итальянцев, но мы не сумели сбросить их в море. Они соберут новые силы и снова пойдут в наступление. Нам нужно доказать, что мы можем отстоять нашу родину.",
+    "icon": "GFX_decision_border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "count_triggers": {
+        "amount": 2,
+        "NOT": [
+          {
+            "controls_province": 1984
+          },
+          {
+            "controls_province": 2072
+          },
+          {
+            "controls_province": 5097
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_hold_the_north_mission_flag",
+      "add_war_support": -0.1
+    }
+  },
+  {
+    "id": "ETH_hold_the_south_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Удержать юг",
+    "desc": "На южном фронте до сих пор было тихо, но итальянцы наверняка планируют провести там еще одну наступательную операцию. Мы должны остановить их и доказать всему миру, что требования итальянцев и их марионеток в Сомали являются незаконными.",
+    "icon": "GFX_decision_border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "count_triggers": {
+        "amount": 2,
+        "NOT": [
+          {
+            "controls_province": 12812
+          },
+          {
+            "controls_province": 10775
+          },
+          {
+            "controls_province": 13247
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_hold_the_south_mission_flag",
+      "add_war_support": -0.1,
+      "hidden_effect": {
+        "IF": {
+          "limit": {
+            "835": {
+              "is_controlled_by": "ROOT"
+            }
+          },
+          "ETH": {
+            "activate_mission": "ETH_hold_harar_mission"
+          },
+          "ITA": {
+            "activate_mission": "ETH_conquer_harar_mission"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ETH_hold_addis_ababa_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Удержать Аддис-Абебу",
+    "desc": "Если мы отстоим нашу столицу, то, возможно, убедим мировое сообщество в том, что итальянцев нужно остановить силовыми методами.",
+    "icon": "GFX_decision_border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "271": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "ETH": {
+        "add_war_support": -0.2
+      }
+    }
+  },
+  {
+    "id": "ETH_conquer_addis_ababa_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Захватить Аддис-Абебу",
+    "desc": "Мы должны захватить столицу, и тогда [ETH.GetName] капитулирует.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "271": {
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ETH": {
+          "add_war_support": -0.2
+        }
+      }
+    }
+  },
+  {
+    "id": "ETH_hold_harar_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Удержать регион [835.GetName]",
+    "desc": "Мы потеряли юг и теперь нам нужно отстоять Харэр и защитить выход к морю.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "835": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "add_war_support": -0.1
+    }
+  },
+  {
+    "id": "ETH_conquer_harar_mission",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Захватить регион [835.GetName]",
+    "desc": "Эфиопы собирают силы в горах. Нам нужно захватить регион [835.GetCapitalVictoryPointName], пока они не закрепились на своих позициях.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "835": {
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ETH": {
+          "add_war_support": -0.1
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_withdraw_from_ethiopia",
+    "category_id": "ETH_second_italo_ethiopian_war_category",
+    "name": "Выйти из Эфиопии",
+    "desc": "Война с Эфиопией была ошибкой. Пора уладить этот конфликт.",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "date": {
+          "_op": ">",
+          "value": "1937.01.01"
+        },
+        "NOT": [
+          {
+            "has_full_control_of_state": 550
+          },
+          {
+            "has_full_control_of_state": 559
+          },
+          {
+            "has_full_control_of_state": 844
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "ETH": {
+        "country_event": {
+          "id": "BBA_italy_second_italo_ethiopian_war.1",
+          "hours": 1
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "custom_effect_tooltip": "ITA_transfer_lost_states_tt",
+        "white_peace": "ETH",
+        "ITA_manage_italian_defeat_in_ethiopia_effect": true
+      }
+    }
+  },
+  {
+    "id": "ETH_set_up_gideon_force_decision",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Отряд «Гидеон»",
+    "desc": "[?ETH.host_nation.GetAdjective]ое правительство готово выделить средства на создание небольшого экспедиционного корпуса, который вступит в бой с захватчиками. Нужно немедленно воспользоваться этой возможностью!",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 50
+      },
+      "date": {
+        "_op": "<",
+        "value": "1941.6.1"
+      },
+      "IF": {
+        "limit": {
+          "RAJ": {
+            "is_subject_of": "ENG"
+          }
+        },
+        "RAJ": {
+          "all_owned_state": {
+            "is_controlled_by": "RAJ"
+          }
+        }
+      },
+      "if": {
+        "limit": {
+          "RAJ": {
+            "is_ai": false
+          }
+        },
+        "OR": {
+          "RAJ": [
+            {
+              "NOT": {
+                "has_completed_focus": "RAJ_chindits_dlc"
+              }
+            },
+            {
+              "NOT": {
+                "has_completed_focus": "RAJ_chindits"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ETH_the_ferengi",
+      "check_variable": {
+        "ETH.host_nation": "ENG"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_build_local_resistance_force",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Создать войска сопротивления в регионе [FROM.GetName]",
+    "desc": "Мы должны сделать все, что в наших силах, чтобы поддерживать движение сопротивления на оккупированных территориях. Это поможет ослабить [ITA.GetAdjective]ую хватку в регионе и отвлечет противника, пока мы готовимся к неизбежному освобождению [ETH.GetNameRuGen].",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 40
+      },
+      "NOT": {
+        "has_country_flag": "ETH_building_local_resistance_flag"
+      },
+      "FROM": {
+        "compliance": {
+          "_op": "<",
+          "value": 50
+        },
+        "resistance": {
+          "_op": ">",
+          "value": 40
+        }
+      }
+    },
+    "visible": {
+      "is_government_in_exile": true,
+      "NOT": {
+        "has_country_flag": "ETH_started_uprising_flag"
+      }
+    },
+    "complete_effect": {
+      "add_command_power": -25,
+      "set_country_flag": "ETH_building_local_resistance_flag"
+    }
+  },
+  {
+    "id": "ETH_launch_large_scale_uprising",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Крупномасштабное восстание",
+    "desc": "Народ [ETH.GetNameRuGen] жаждет сбросить иго иностранной оккупации. Нужно лишь подтолкнуть его к этому.",
+    "icon": "GFX_decision_revolt",
+    "cost": 150,
+    "fire_only_once": true,
+    "available": {
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 60
+      },
+      "NOT": {
+        "has_country_flag": "ETH_building_local_resistance_flag"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "ETH_has_readied_uprising_tt",
+        "any_owned_state": {
+          "check_variable": {
+            "ETH_resistance_force_strength": {
+              "_op": ">",
+              "value": 0
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "ETH_organize_regional_revolts_flag",
+      "is_government_in_exile": true
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_started_uprising_flag"
+    }
+  },
+  {
+    "id": "ETH_italian_uprising_warning_mission",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "[ETH.GetName] ожидает неизбежного восстания",
+    "desc": "По слухам, [ETH.GetLeader] призывает местных мятежников поднять восстание и напасть на войска страны [ROOT.GetName].",
+    "icon": "GFX_decision_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_italian_control_mission",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "[ITA.GetName] интегрирует территорию региона [?ITA.state_integrated.GetName]",
+    "desc": "[ITA.GetName] пытается установить контроль над нашей территорией с помощью грубой силы. Мы должны оттеснить врага.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "var:ITA.state_integrated": {
+        "NOT": {
+          "is_controlled_by": "ITA"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "ITA_expand_regional_control",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Установить контроль над регионом [FROM.GetName]",
+    "desc": "Мы расширим [ITA.GetAdjective]ий контроль над государством [FROM.GetName].",
+    "icon": "GFX_decision_oppression",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "expanding_regional_control_flag"
+      },
+      "FROM": {
+        "compliance": {
+          "_op": ">",
+          "value": 60
+        },
+        "any_neighbor_state": {
+          "is_owned_by": "ROOT"
+        },
+        "var:ETH.host_nation": {
+          "NOT": {
+            "has_war_with": "ROOT"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ITA_triumph_in_africa_bba"
+    },
+    "complete_effect": {
+      "set_country_flag": "expanding_regional_control_flag",
+      "set_variable": {
+        "state_integrated": "FROM"
+      },
+      "hidden_effect": {
+        "FROM": {
+          "owner": {
+            "activate_mission": "ETH_italian_control_mission"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_discredit_haile_selassie",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "Дискредитировать лидера, [ETH.GetLeader] недостоин править",
+    "desc": "Рассказав эфиопам о том, как Хайле Селассие позорно бежал и сейчас ведет роскошную жизнь в далекой стране, мы, возможно, сумеем переманить часть народа на нашу сторону и навредить репутации бывшего императора.",
+    "icon": "GFX_decision_generic_speech",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "ITA_the_new_emperor_of_ethiopia"
+    },
+    "visible": {
+      "any_controlled_state": {
+        "is_owned_by": "ETH"
+      }
+    },
+    "complete_effect": {
+      "ETH": {
+        "add_legitimacy": -10
+      },
+      "hidden_effect": {
+        "ETH": {
+          "country_event": {
+            "id": "BBA_italo_ethiopian_war_events.510",
+            "hours": 1
+          }
+        }
+      },
+      "every_controlled_state": {
+        "limit": {
+          "is_owned_by": "ETH"
+        },
+        "add_compliance": 5
+      },
+      "custom_effect_tooltip": "ITA_discredit_haile_selassie_cd_tt"
+    }
+  },
+  {
+    "id": "ITA_electrify_state",
+    "category_id": "ETH_italian_occupation_category",
+    "name": "$ETH_electrify_state$",
+    "desc": "$ETH_electrify_state_desc$",
+    "icon": "GFX_decision_generic_electricity",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "ITA_develop_ethiopia"
+    },
+    "visible": {
+      "has_completed_focus": "ITA_triumph_in_africa_bba"
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_investments_in_progress_flag"
+    }
+  },
+  {
+    "id": "ETH_support_resistance_decision",
+    "category_id": "ETH_anti_colonialism_category",
+    "name": "Поддержать [FROM.OWNER.GetAdjective]ое сопротивление в регионе [FROM.GetName]",
+    "desc": "Поддержать бойцов сопротивления, чтобы свергнуть [FROM.Owner.GetAdjective]ое правление.",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "ETH_resistance_support_progress_flag"
+        },
+        {
+          "FROM.owner": {
+            "is_in_faction_with": "ROOT"
+          }
+        }
+      ]
+    },
+    "visible": {
+      "FROM": [
+        {
+          "NOT": {
+            "has_dynamic_modifier": {
+              "modifier": "ETH_state_supporting_resistance_modifier",
+              "scope": "THIS.owner"
+            }
+          }
+        },
+        {
+          "NOT": {
+            "is_core_of": "THIS.owner"
+          }
+        },
+        {
+          "NOT": {
+            "is_owned_by": "ROOT"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_resistance_support_progress_flag"
+    }
+  },
+  {
+    "id": "ETH_arm_resistance_decision",
+    "category_id": "ETH_anti_colonialism_category",
+    "name": "Вооружить людей, оказывающих сопротивление [FROM.OWNER.GetAdjective]ому государству в регионе [FROM.GetName]",
+    "desc": "Вооружить бойцов сопротивления в этом регионе.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "FROM.owner": {
+            "is_in_faction_with": "ROOT"
+          }
+        },
+        {
+          "has_country_flag": "ETH_arm_resistance_flag"
+        }
+      ]
+    },
+    "visible": {
+      "FROM": [
+        {
+          "has_dynamic_modifier": {
+            "modifier": "ETH_state_supporting_resistance_modifier",
+            "scope": "THIS.owner"
+          }
+        },
+        {
+          "NOT": {
+            "is_core_of": "THIS.owner"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -1000
+      },
+      "set_country_flag": "ETH_arm_resistance_flag"
+    }
+  },
+  {
+    "id": "ETH_support_independence_decision",
+    "category_id": "ETH_anti_colonialism_category",
+    "name": "Поддержать [FROM.GetAdjective]ую независимость",
+    "desc": "Поддержать [FROM.GetAdjective]ую независимость",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": {
+            "flag": "ETH_independence_support_progress_flag",
+            "value": {
+              "_op": ">",
+              "value": 0
+            }
+          }
+        },
+        {
+          "is_in_faction_with": "FROM"
+        }
+      ]
+    },
+    "visible": [],
+    "complete_effect": {
+      "FROM": {
+        "add_timed_idea": {
+          "idea": "ETH_ethiopia_supporting_independence_idea",
+          "days": 90
+        }
+      },
+      "set_country_flag": {
+        "flag": "ETH_independence_support_progress_flag",
+        "days": 90,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "ETH_anti_colonialism_decision",
+    "category_id": "ETH_anti_colonialism_category",
+    "name": "Пропаганда против [FROM.GetAdjective]ого правления",
+    "desc": "[FROM.GetAdjective]ому империализму в Африке нужно положить конец. Мир должен очнуться и понять, что эпоха [FROM.GetAdjRuLower]ого колониализма закончилась. Люди [FROM.GetNameRuGen] должны оказать давление на своих лидеров и добиться независимости для африканских колоний.",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "ETH_independence_support_progress_flag"
+        },
+        {
+          "is_in_faction_with": "FROM"
+        }
+      ]
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "ETH_independence_support_progress_flag"
+    }
+  },
+  {
+    "id": "ETH_demand_peace_decision",
+    "category_id": "ETH_anti_colonialism_category",
+    "name": "Потребовать у [?FROM.previous_overlord.GetAdjective]ого народа признать государство [FROM.GetNameDef]",
+    "desc": "Храбрый народ [FROM.GetNameRuGen] восстал против [?FROM.previous_overlord.GetAdjRuLower]ой тирании. Мы должны немедленно сделать все возможное, чтобы вынудить [?FROM.previous_overlord.GetNameRuAcc] покинуть [FROM.GetAdjRuLower]ую территорию.",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_currently_demanding_peace_flag"
+      }
+    },
+    "visible": {
+      "has_country_flag": "ETH_can_intervene_flag"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ETH_demand_peace_decision_tt",
+      "set_country_flag": "ETH_currently_demanding_peace_flag",
+      "hidden_effect": {
+        "FROM": {
+          "country_event": {
+            "id": "BBA_ethiopia_anti_colonialism_events.1",
+            "hours": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ETH_electrify_state",
+    "category_id": "ETH_improve_country_category",
+    "name": "Электрификация страны [FROM.GetName]",
+    "desc": "Проведение электросетей в деревни жизненно необходимо для модернизации страны.",
+    "icon": "decision_generic_electricity",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_improve_communications_in_state",
+    "category_id": "ETH_improve_country_category",
+    "name": "Улучшить инфраструктуру связи в государстве [FROM.GetName]",
+    "desc": "Эффективная связь крайне важна для модернизации страны.",
+    "icon": "GFX_decision_SOV_academy_of_sciences",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": [],
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_invest_in_state_industry",
+    "category_id": "ETH_improve_country_category",
+    "name": "Инвестиции в промышленность региона [FROM.GetName]",
+    "desc": "Если [FROM.GetName] хочет создать эффективную промышленность, потребуются государственные инвестиции — либо прямые, либо от местных правителей.",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 15,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "ETH_local_development_state_grows_mission",
+    "category_id": "ETH_improve_country_category",
+    "name": "Рост в регионе [?ETH.ETH_local_state.GetName]",
+    "desc": "В данный момент [?ETH.ETH_local_state.GetName] процветает. Производство сельскохозяйственной продукции увеличивается, города и деревни растут.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "ETH_bop_is_mekwanint_influence_or_higher": true,
+      "NOT": {
+        "var:ETH.ETH_local_state": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_local_development_industry_grows_mission",
+    "category_id": "ETH_improve_country_category",
+    "name": "Промышленная экспансия в регионе [?ETH.ETH_local_state.GetName]",
+    "desc": "В регионе [?ETH.ETH_local_state.GetName] процветает мелкосерийное производство. Если мы будем и дальше стимулировать его, [ROOT.GetName] только выиграет.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "ETH_bop_is_mekwanint_influence_or_higher": true,
+      "NOT": {
+        "var:ETH.ETH_local_state": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "var:ETH.ETH_local_state": {
+        "free_building_slots": {
+          "building": "industrial_complex",
+          "size": {
+            "_op": "<",
+            "value": 1
+          },
+          "include_locked": false
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_local_development_arms_industry_grows_mission",
+    "category_id": "ETH_improve_country_category",
+    "name": "Производство оружия в регионе [?ETH.ETH_local_state.GetName]",
+    "desc": "Производители оружия в регионе [?ETH.ETH_local_state.GetName] значительно повысили количество выпускаемой продукции. Еще немного, и это принесет пользу всей стране.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "ETH_bop_is_mekwanint_influence_or_higher": true,
+      "NOT": {
+        "var:ETH.ETH_local_state": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "var:ETH.ETH_local_state": {
+        "free_building_slots": {
+          "building": "arms_factory",
+          "size": {
+            "_op": "<",
+            "value": 1
+          },
+          "include_locked": false
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_local_development_improved_production_mission",
+    "category_id": "ETH_improve_country_category",
+    "name": "В регионе [?ETH.ETH_local_state.GetName] формируются местные строительные комитеты",
+    "desc": "Местные комитеты улучшают условия работы, инструменты и методы производства в регионе [?ETH.ETH_local_state.GetName].",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "ETH_bop_is_mekwanint_influence_or_higher": true,
+      "NOT": {
+        "var:ETH.ETH_local_state": {
+          "is_controlled_by": "ROOT"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_prospect_for_resources",
+    "category_id": "ETH_improve_country_category",
+    "name": "Добыча ресурсов",
+    "desc": "[FROM.GetName] — место, располагающее природными ресурсами. Если пробурить скважины поглубже, [ROOT.GetName] станет богаче.",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "excavation2",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 2
+      },
+      "FROM": {
+        "is_controlled_by": "ROOT"
+      },
+      "NOT": {
+        "has_country_flag": "prospecting_ongoing_flag"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "set_country_flag": "prospecting_ongoing_flag"
+    }
+  },
+  {
+    "id": "ETH_japanese_industrial_investments_decision",
+    "category_id": "ETH_improve_country_category",
+    "name": "Японские инвестиции в промышленность",
+    "desc": "Японские предприниматели ищут новые возможности вложить средства в Африку. [FROM.GetName] идеально подходит для инвестиций в промышленность.",
+    "icon": "GFX_decision_generic_factory",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_japanese_investments_flag"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "ETH_max_japanese_investments_tt",
+        "check_variable": {
+          "ETH_japanese_invesment_states": {
+            "_op": "<",
+            "value": 3
+          }
+        }
+      }
+    },
+    "visible": {
+      "JAP": {
+        "exists": true,
+        "is_subject": false,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "check_variable": {
+        "ETH_japanese_invesment_states": {
+          "_op": "<",
+          "value": 3
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_japanese_investments_flag"
+    }
+  },
+  {
+    "id": "ETH_japanese_dockyard_investments_decision",
+    "category_id": "ETH_improve_country_category",
+    "name": "Японские инвестиции в кораблестроение",
+    "desc": "Японские предприниматели ищут новые возможности вложить средства в Африку. [FROM.GetName] идеально подходит для инвестиций в судостроительные заводы.",
+    "icon": "GFX_decision_generic_naval",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_japanese_investments_flag"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "ETH_max_japanese_investments_tt",
+        "check_variable": {
+          "ETH_japanese_invesment_states": {
+            "_op": "<",
+            "value": 3
+          }
+        }
+      }
+    },
+    "visible": {
+      "JAP": {
+        "exists": true,
+        "is_subject": false,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "check_variable": {
+        "ETH_japanese_invesment_states": {
+          "_op": "<",
+          "value": 3
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_japanese_investments_flag"
+    }
+  },
+  {
+    "id": "ETH_japanese_infrastructure_investments_decision",
+    "category_id": "ETH_improve_country_category",
+    "name": "Японские инвестиции в инфраструктуру",
+    "desc": "Японские предприниматели ищут новые возможности вложить средства в Африку. [FROM.GetName] идеально подходит для инвестиций в инфраструктуру.",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_japanese_investments_flag"
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "ETH_max_japanese_investments_tt",
+        "check_variable": {
+          "ETH_japanese_invesment_states": {
+            "_op": "<",
+            "value": 3
+          }
+        }
+      }
+    },
+    "visible": {
+      "JAP": {
+        "exists": true,
+        "is_subject": false,
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "check_variable": {
+        "ETH_japanese_invesment_states": {
+          "_op": "<",
+          "value": 3
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "ETH_japanese_investments_flag"
+    }
+  },
+  {
+    "id": "ETH_recall_balco_safo_decision",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Отозвать из отставки $ETH_balcho_safo$",
+    "desc": "$ETH_balcho_safo$ — ярый противник императорских амбиций и стремлений реформировать и централизовать государство [ROOT.GetName]. При всем при том он герой, сражавшийся при Мэкэлэ и одержавший славную победу при Адуа. Он популярен в народе, и если попросить его снова взять в руки оружие ради [ROOT.GetNameRuGen], мы не только заполучим опытного командира, но и, вероятнее всего, обеспечим приток новых солдат под наши знамена.",
+    "icon": "GFX_decision_generic_military",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_bop_privileges_changed"
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag",
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_decentralization_small_effect": true
+    }
+  },
+  {
+    "id": "ETH_bop_increase_mesafint_privileges",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Увеличить привилегии мэсафынт",
+    "desc": "Местные расы лучше всего подходят для того, чтобы управлять этими регионами. Центральной власти государства [ROOT.capital.GetCapitalVictoryPointName] не стоит утруждать себя незначительными подробностями, однако мы не должны действовать поспешно, иначе они объявят о своей независимости.",
+    "icon": "GFX_decision_gre_investment_decisions",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_bop_privileges_changed"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_power_balance_modifier": {
+        "id": "ETH_centralization_balance",
+        "modifier": "ETH_increase_priviliges_power_balance"
+      },
+      "set_country_flag": {
+        "flag": "ETH_bop_privileges_changed",
+        "days": 365,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "ETH_bop_increase_anarchist_influence",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Повысить поддержку анархистов",
+    "desc": "Нужно убедиться, что у анархистов достаточно влияния, чтобы не дать центральному правительству снова ограничивать права народа. Нам следует начать пропагандистскую кампанию, чтобы народ активней поддерживал наше дело.",
+    "icon": "GFX_decision_SOV_the_workers_dictatorship",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_bop_anarchist_privileges_changed"
+      }
+    },
+    "visible": {
+      "has_government": "communism"
+    },
+    "complete_effect": {
+      "add_power_balance_modifier": {
+        "id": "ETH_centralization_balance",
+        "modifier": "ETH_increase_anarchist_power_balance"
+      },
+      "set_country_flag": {
+        "flag": "ETH_bop_anarchist_privileges_changed",
+        "days": 365,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "ETH_bop_increase_communist_influence",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Повысить поддержку коммунистов",
+    "desc": "Нужно убедиться, что коммунисты влияют на решения центрального правительства. Нам следует начать пропагандистскую кампанию, чтобы народ активней поддерживал наше дело, пока нация не распалась на части.",
+    "icon": "GFX_decision_SOV_secure_the_administration",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_bop_anarchist_communist_changed"
+      }
+    },
+    "visible": {
+      "has_government": "communism"
+    },
+    "complete_effect": {
+      "add_power_balance_modifier": {
+        "id": "ETH_centralization_balance",
+        "modifier": "ETH_increase_communist_power_balance"
+      },
+      "set_country_flag": {
+        "flag": "ETH_bop_anarchist_communist_changed",
+        "days": 365,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "ETH_bop_increase_the_power_of_the_mekwanint",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Увеличить влияние мэкуаннынт",
+    "desc": "Назначенные министры должны обладать большей властью для решения проблем на местах. Нам нужно усилить мэкуаныннт за счет мэсафынт и постепенно передать контроль центральному правительству, которое возглавляет [ROOT.GetLeader]. Это, конечно, разозлит расов, но только так [ROOT.GetName] сможет стать сильной страной.",
+    "icon": "GFX_decision_gre_investment_decisions",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_bop_privileges_changed"
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      }
+    },
+    "complete_effect": {
+      "add_power_balance_modifier": {
+        "id": "ETH_centralization_balance",
+        "modifier": "ETH_withdraw_priviliges_power_balance"
+      },
+      "set_country_flag": {
+        "flag": "ETH_bop_privileges_changed",
+        "days": 365,
+        "value": 1
+      }
+    }
+  },
+  {
+    "id": "ETH_retake_territory_mission",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Отбить территорию",
+    "desc": "[ROOT.GetName] наполовину находится во власти противника. Местные расы недовольны тем, что их территории бросили, и сомневаются в эффективности центральной власти. Говорят, что они хотят заключить сделку с итальянцами. Единственный способ убедить людей в победе — это захватить [ROOT.GetAdjective]ую территорию.",
+    "icon": "GFX_decision_generic_operation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_more_than_half_ethiopian_owned_states": true
+    },
+    "visible": {
+      "has_war": true,
+      "hidden_trigger": {
+        "is_government_in_exile": false
+      }
+    },
+    "complete_effect": {
+      "add_war_support": 0.05,
+      "ETH_BOP_centralization_large_effect": true
+    }
+  },
+  {
+    "id": "ETH_Education_reform_decentralized_BoP",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Локальные реформы образования",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_total_anarchist_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mesafint_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mesafint_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mesafint_total_control_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_decentralization_small_effect": true,
+      "country_event": {
+        "id": "BBA_ethiopia_balance_of_power_events.24",
+        "hours": 1
+      },
+      "add_ideas": "ETH_secular_education",
+      "custom_effect_tooltip": "ETH_Education_reform_decentralized_BoP_tt"
+    }
+  },
+  {
+    "id": "ETH_Education_reform_centralized_BoP",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Государственные реформы образования",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_total_control_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mekwanint_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mekwanint_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mekwanint_total_control_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_centralization_small_effect": true,
+      "country_event": {
+        "id": "BBA_ethiopia_balance_of_power_events.23",
+        "hours": 1
+      },
+      "add_ideas": "ETH_leadership_cult_education"
+    }
+  },
+  {
+    "id": "ETH_road_reform_local_BoP",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Поддержать развитие местных дорог",
+    "desc": "Дорожная сеть [ETH.GetNameRuGen] все сильнее мешает дальнейшему экономическому развитию. Теперь у нас достаточно политического влияния, чтобы настаивать на модернизации дорог. Улучшение дорожной сети между городами и деревнями пойдет на пользу жителям.",
+    "icon": "GFX_decision_rubber",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_influence_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_total_anarchist_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mesafint_influence_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mesafint_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mesafint_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mesafint_total_control_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_decentralization_small_effect": true,
+      "every_owned_state": {
+        "limit": {
+          "is_controlled_by": "ROOT"
+        },
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 1,
+          "instant_build": true
+        }
+      }
+    }
+  },
+  {
+    "id": "ETH_road_reform_highways_BoP",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Поддержать развитие столичных шоссе",
+    "desc": "",
+    "icon": "GFX_decision_rubber",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_influence_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_total_control_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mekwanint_influence_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mekwanint_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mekwanint_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_mekwanint_total_control_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_centralization_small_effect": true,
+      "every_owned_state": {
+        "limit": {
+          "is_capital": true
+        },
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 3,
+          "instant_build": true
+        }
+      },
+      "custom_effect_tooltip": "ETH_road_reform_highways_BoP_tt"
+    }
+  },
+  {
+    "id": "ETH_officer_reforms_centralized_BoP",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Ввести институт политруков",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_government": "communism",
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_total_control_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_centralization_small_effect": true,
+      "country_event": {
+        "id": "BBA_ethiopia_balance_of_power_events.25",
+        "days": 0
+      },
+      "custom_effect_tooltip": "ETH_officer_reforms_centralized_BoP_tt",
+      "add_units_to_division_template": [
+        {
+          "template_name": "Red Guards",
+          "support": {
+            "military_police": 0
+          }
+        },
+        {
+          "template_name": "Mehal Sefari",
+          "support": {
+            "military_police": 0
+          }
+        },
+        {
+          "template_name": "Chitet Sefari",
+          "support": {
+            "military_police": 0
+          }
+        },
+        {
+          "template_name": "Kebur Zabagna",
+          "support": {
+            "military_police": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "ETH_officer_reforms_decentralized_BoP",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Повышение меритократии в армии",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_government": "communism",
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_total_anarchist_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_decentralization_small_effect": true,
+      "country_event": {
+        "id": "BBA_ethiopia_balance_of_power_events.26",
+        "days": 0
+      },
+      "custom_effect_tooltip": "ETH_officer_reforms_decentralized_BoP_tt",
+      "add_ideas": "ETH_meritocratic_officers"
+    }
+  },
+  {
+    "id": "ETH_BoP_purge_communists",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Изгнать коммунистов",
+    "desc": "",
+    "icon": "GFX_decision_SOV_secure_the_administration",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_government": "communism",
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_total_anarchist_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ETH_BoP_purge_communists_tt",
+      "delete_unit_template_and_units": {
+        "division_template": "Red Guards"
+      },
+      "ETH_BOP_decentralization_small_effect": true
+    }
+  },
+  {
+    "id": "ETH_BoP_expand_red_guards",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Увеличить дивизии Красной гвардии",
+    "desc": "",
+    "icon": "GFX_decision_SOV_secure_the_administration",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_government": "communism",
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_total_control_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_centralization_small_effect": true,
+      "custom_effect_tooltip": "ETH_BoP_expand_red_guards_tt",
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_template": "Red Guards"
+          }
+        },
+        "division_template": {
+          "name": "Red Guards",
+          "is_locked": true,
+          "priority": 2,
+          "template_counter": 69,
+          "regiments": {
+            "infantry": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 2
+              }
+            ]
+          }
+        }
+      },
+      "every_owned_state": {
+        "limit": {
+          "is_capital": true
+        },
+        "create_unit": [
+          {
+            "division": "name = \"Red Guards Division\" division_template = \"Red Guards\" start_experience_factor = 0.1 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT"
+          },
+          {
+            "division": "name = \"Red Guards Division\" division_template = \"Red Guards\" start_experience_factor = 0.1 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ETH_BoP_expand_black_lions",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Увеличить дивизии Черных львов",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_government": "communism",
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_anarchist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_total_anarchist_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_decentralization_small_effect": true,
+      "custom_effect_tooltip": "ETH_BoP_expand_black_lions_tt",
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_template": "Black Lions"
+          }
+        },
+        "division_template": {
+          "name": "Black Lions",
+          "is_locked": true,
+          "priority": 2,
+          "template_counter": 60,
+          "regiments": {
+            "infantry": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 2
+              }
+            ]
+          }
+        }
+      },
+      "every_owned_state": {
+        "limit": {
+          "is_capital": true
+        },
+        "create_unit": [
+          {
+            "division": "name = \"Black Lions Division\" division_template = \"Black Lions\" start_experience_factor = 0.1 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT"
+          },
+          {
+            "division": "name = \"Black Lions Division\" division_template = \"Black Lions\" start_experience_factor = 0.1 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ETH_BoP_purge_anarchists",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Изгнать анархистов",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_government": "communism",
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_total_control_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ETH_BoP_purge_anarchists_tt",
+      "delete_unit_template_and_units": {
+        "division_template": "Black Lions"
+      },
+      "country_event": {
+        "id": "BBA_ethiopia_communist_events.06",
+        "hours": 1
+      },
+      "ETH_BOP_centralization_small_effect": true
+    }
+  },
+  {
+    "id": "ETH_freedom_at_gunpoint_dynamic",
+    "category_id": "ETH_freedom_at_gunpoint_category",
+    "name": "Освободить государство [FROM.GetName] от власти державы [FROM.Capital.OWNER.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "ETH_has_active_liberation_goal"
+      }
+    },
+    "visible": {
+      "FROM": {
+        "exists": false,
+        "capital_scope": {
+          "NOT": {
+            "is_owned_by": "ROOT"
+          },
+          "OWNER": {
+            "NOT": {
+              "is_in_faction_with": "ROOT"
+            }
+          }
+        },
+        "NOT": {
+          "is_in_array": {
+            "ETH_has_liberation_goal_array": "THIS"
+          }
+        },
+        "ROOT": {
+          "NOT": {
+            "has_country_flag": "ETH_has_active_liberation_goal"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "FROM": {
+          "capital_scope": {
+            "OWNER": {
+              "set_variable": {
+                "var_ETH_wargoal_target": "THIS"
+              }
+            }
+          }
+        },
+        "set_country_flag": "ETH_has_active_liberation_goal"
+      },
+      "custom_effect_tooltip": "ETH_freedom_at_gunpoint_dynamic_tt"
+    }
+  },
+  {
+    "id": "ETH_freedom_at_gunpoint_offer_peace",
+    "category_id": "ETH_freedom_at_gunpoint_category",
+    "name": "Предложить мир государству [FROM.Capital.OWNER.GetName] в обмен на независимость [FROM.GetAdjective]ой территории",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "FROM": {
+        "capital_scope": {
+          "OWNER": {
+            "has_war_with": "ROOT"
+          }
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_take_DJI",
+    "category_id": "ETH_exploit_french_weakness_category",
+    "name": "Занять Французский Берег Сомали",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "268": {
+        "OWNER": {
+          "any_country": {
+            "original_tag": "FRA",
+            "exists": true,
+            "has_government": "fascism"
+          },
+          "num_divisions_in_states": {
+            "count": 0,
+            "states": [
+              268
+            ],
+            "types": [],
+            "exclude": []
+          }
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "ETH_france_divided_tt",
+        "any_country": [
+          {
+            "original_tag": "FRA",
+            "exists": true,
+            "has_government": "fascism"
+          },
+          {
+            "original_tag": "FRA",
+            "exists": true,
+            "NOT": {
+              "has_government": "fascism"
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "NOT": {
+        "268": {
+          "is_owned_by": "ETH"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_reintegrate_core",
+    "category_id": "ETH_reintegrate_former_territory_category",
+    "name": "Заявить права на регион [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_551",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[551.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 551
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "551": {
+        "is_controlled_by": "ETH"
+      },
+      "is_or_will_be_gojjam": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_886",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[886.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 886
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "886": {
+        "is_controlled_by": "ETH"
+      },
+      "is_or_will_be_gojjam": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_883",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[883.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 883
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "883": {
+        "is_controlled_by": "ETH"
+      },
+      "is_or_will_be_gojjam": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_269",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[269.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 269
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "269": {
+        "is_controlled_by": "ETH"
+      },
+      "is_or_will_be_jimma": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_884",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[884.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 884
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "884": {
+        "is_controlled_by": "ETH"
+      },
+      "is_or_will_be_jimma": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_906",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[906.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 906
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "906": {
+        "is_controlled_by": "ETH"
+      },
+      "is_or_will_be_jimma": true
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_268",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[268.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 268
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "268": {
+        "is_controlled_by": "ETH"
+      },
+      "NOT": [
+        {
+          "has_cosmetic_tag": "jimma"
+        },
+        {
+          "has_cosmetic_tag": "gojjam"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_293",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[293.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 293
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "293": {
+        "is_controlled_by": "ETH"
+      },
+      "NOT": [
+        {
+          "has_cosmetic_tag": "jimma"
+        },
+        {
+          "has_cosmetic_tag": "gojjam"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_659",
+    "category_id": "ETH_italo-ethiopian_empire_decisions",
+    "name": "[659.GetName] войдет в состав империи",
+    "desc": "",
+    "icon": "GFX_decision_border_war",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ETH": {
+        "has_full_control_of_state": 659
+      }
+    },
+    "visible": {
+      "original_tag": "ETH",
+      "659": {
+        "is_controlled_by": "ETH"
+      },
+      "NOT": [
+        {
+          "has_cosmetic_tag": "jimma"
+        },
+        {
+          "has_cosmetic_tag": "gojjam"
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_core_east_african_states",
+    "category_id": "ETH_consolidate_east_africa_category",
+    "name": "Интегрировать регион [FROM.GetName].",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_form_horn_of_africa",
+    "category_id": "ETH_consolidate_east_africa_category",
+    "name": "Провозгласить единство Восточной Африки",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "886": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "883": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "551": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "767": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "549": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "887": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "884": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "885": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "904": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "548": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "903": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "547": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "905": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "844": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "559": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "269": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "268": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      },
+      "550": {
+        "AND": {
+          "is_core_of": "ETH",
+          "is_controlled_by": "ETH"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_build_infrastructure",
+    "category_id": "ETH_improve_the_horn_of_africa_category",
+    "name": "Улучшить инфраструктуру в регионе [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_build_railway",
+    "category_id": "ETH_improve_the_horn_of_africa_category",
+    "name": "Улучшить железнодорожное сообщение с регионом [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_invest_horn_industry",
+    "category_id": "ETH_improve_the_horn_of_africa_category",
+    "name": "Инвестировать в [FROM.GetAdjective]ую промышленность",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": {}
+  },
+  {
+    "id": "ETH_integrate_economies",
+    "category_id": "ETH_improve_the_horn_of_africa_category",
+    "name": "Интегрировать регион [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": [],
+    "visible": [],
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_ethiopia_industrial_financial_events.2",
+          "hours": 2
+        }
+      }
+    }
+  },
+  {
+    "id": "form_united_netherlands",
+    "category_id": "form_united_netherlands_category",
+    "name": "Аннулировать Лондонский договор",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "controls_state": 8,
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "form_eu_netherlands_required_states_tt",
+          "controls_state": [
+            7,
+            35,
+            36
+          ]
+        },
+        {
+          "tooltip": "form_eu_belgium_required_states_tt",
+          "controls_state": [
+            6,
+            34,
+            977,
+            980
+          ]
+        }
+      ]
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "HOL",
+          "BEL",
+          "LUX"
+        ]
+      },
+      "NOT": [
+        {
+          "has_global_flag": "form_united_netherlands_flag"
+        },
+        {
+          "has_global_flag": "HOL_benelux_formed"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_cosmetic_tag": "UNL_UNIFIED",
+      "8": {
+        "add_core_of": "ROOT"
+      },
+      "custom_effect_tooltip": [
+        "form_eu_netherlands_coring_states_tt",
+        "form_eu_belgium_coring_states_tt"
+      ],
+      "hidden_effect": [
+        {
+          "7": {
+            "add_core_of": "ROOT"
+          },
+          "35": {
+            "add_core_of": "ROOT"
+          },
+          "36": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "6": {
+            "add_core_of": "ROOT"
+          },
+          "34": {
+            "add_core_of": "ROOT"
+          },
+          "977": {
+            "add_core_of": "ROOT"
+          },
+          "980": {
+            "add_core_of": "ROOT"
+          }
+        },
+        {
+          "news_event": {
+            "id": "wtt_news.58",
+            "hours": 6
+          },
+          "set_global_flag": "form_united_netherlands_flag"
+        }
+      ]
+    }
+  },
+  {
+    "id": "form_empire_of_axum",
+    "category_id": "form_ethiopian_empire_category",
+    "name": "Восстановить Аксумскую империю",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_all_ethiopian_core_states": true,
+      "controls_state": [
+        550,
+        293
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "ETH_restore_the_empire_of_axum",
+      "NOT": {
+        "has_global_flag": "form_axum_flag"
+      }
+    },
+    "complete_effect": {
+      "set_cosmetic_tag": "empire_of_axum",
+      "659": {
+        "add_core_of": "ROOT"
+      },
+      "550": {
+        "add_core_of": "ROOT"
+      },
+      "293": {
+        "add_core_of": "ROOT"
+      },
+      "906": {
+        "add_core_of": "ROOT"
+      },
+      "268": {
+        "add_core_of": "ROOT"
+      },
+      "883": {
+        "add_core_of": "ROOT"
+      },
+      "551": {
+        "add_core_of": "ROOT"
+      },
+      "886": {
+        "add_core_of": "ROOT"
+      },
+      "992": {
+        "add_core_of": "ROOT"
+      },
+      "hidden_effect": {
+        "set_global_flag": "form_axum_flag"
+      }
+    }
+  },
+  {
+    "id": "ETH_move_capital_to_axum",
+    "category_id": "form_ethiopian_empire_category",
+    "name": "Перенести столицу в Аксум",
+    "desc": "Новой столицей империи должен стать древний город Аксум.",
+    "icon": "generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "controls_all_ethiopian_core_states": true,
+      "842": {
+        "is_owned_by": "ROOT",
+        "is_fully_controlled_by": "ROOT"
+      },
+      "NOT": {
+        "has_country_flag": "ETH_has_moved_capital_flag"
+      }
+    },
+    "visible": {
+      "has_cosmetic_tag": "empire_of_axum"
+    },
+    "complete_effect": {
+      "set_capital": {
+        "state": 842,
+        "remember_old_capital": false
+      },
+      "842": {
+        "add_victory_points": {
+          "province": 13237,
+          "value": 5
+        },
+        "ETH_upgrade_state_category": true
+      }
+    }
+  },
+  {
+    "id": "form_empire_of_solomon",
+    "category_id": "form_ethiopian_empire_category",
+    "name": "Создать Империю Соломона",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_all_ethiopian_core_states": true,
+      "controls_state": [
+        454,
+        453,
+        446
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "ETH_the_one_true_heir_of_solomon",
+      "NOT": {
+        "has_global_flag": "form_empire_of_solomon_flag"
+      }
+    },
+    "complete_effect": {
+      "set_cosmetic_tag": "empire_of_solomon",
+      "453": {
+        "add_core_of": "ROOT"
+      },
+      "446": {
+        "add_core_of": "ROOT"
+      },
+      "907": {
+        "add_core_of": "ROOT"
+      },
+      "447": {
+        "add_core_of": "ROOT"
+      },
+      "457": {
+        "add_core_of": "ROOT"
+      },
+      "456": {
+        "add_core_of": "ROOT"
+      },
+      "hidden_effect": {
+        "news_event": {
+          "id": "bba_news.5",
+          "hours": 8
+        },
+        "set_global_flag": "form_empire_of_solomon_flag"
+      }
+    }
+  },
+  {
+    "id": "ETH_move_capital_to_jerusalem",
+    "category_id": "form_ethiopian_empire_category",
+    "name": "Сделать Иерусалим столицей империи",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "controls_all_ethiopian_core_states": true,
+      "454": {
+        "is_owned_by": "ROOT",
+        "is_fully_controlled_by": "ROOT"
+      },
+      "NOT": {
+        "has_country_flag": "ETH_has_moved_capital_flag"
+      }
+    },
+    "visible": {
+      "454": {
+        "is_owned_and_controlled_by": "ROOT"
+      },
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      },
+      "NOT": [
+        {
+          "has_cosmetic_tag": "gojjam"
+        },
+        {
+          "has_cosmetic_tag": "jimma"
+        }
+      ]
+    },
+    "complete_effect": {
+      "set_capital": {
+        "state": 454,
+        "remember_old_capital": false
+      },
+      "454": {
+        "add_victory_points": {
+          "province": 1086,
+          "value": 9
+        },
+        "ETH_upgrade_state_category": true,
+        "add_core_of": "ROOT"
+      },
+      "custom_effect_tooltip": "ETH_prevents_further_capital_moves_tt",
+      "set_country_flag": "ETH_has_moved_capital_flag"
+    }
+  },
+  {
+    "id": "form_empire_of_zion",
+    "category_id": "form_ethiopian_empire_category",
+    "name": "Сионистская империя",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "controls_all_ethiopian_core_states": true,
+      "controls_state": 689
+    },
+    "visible": {
+      "has_completed_focus": "ETH_jah",
+      "NOT": {
+        "has_global_flag": "form_empire_of_zion_flag"
+      }
+    },
+    "complete_effect": {
+      "set_cosmetic_tag": "empire_of_zion",
+      "custom_effect_tooltip": "create_empire_of_zion_tt",
+      "hidden_effect": {
+        "every_state": {
+          "limit": {
+            "OR": {
+              "region": [
+                170,
+                53
+              ],
+              "state": 695
+            },
+            "is_controlled_by_ROOT_or_subject": true
+          },
+          "remove_claim_by": "ROOT",
+          "add_core_of": "ROOT"
+        },
+        "set_global_flag": "form_empire_of_zion_flag"
+      },
+      "news_event": {
+        "id": "bba_news.6",
+        "hours": 10
+      }
+    }
+  },
+  {
+    "id": "integrate_the_netherlands_antilles",
+    "category_id": "antilles_category",
+    "name": "Интегрировать Нидерландские Антильские острова",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "695": {
+        "is_fully_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "HAI",
+          "DOM",
+          "PUE",
+          "CUB",
+          "JAM",
+          "BAH",
+          "GDL",
+          "BAS"
+        ]
+      },
+      "has_global_flag": "antilles_formed_flag",
+      "NOT": {
+        "has_global_flag": "integrated_curacao_flag"
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "generic_skip_one_line_tt",
+      "IF": {
+        "limit": {
+          "NOT": {
+            "695": {
+              "is_core_of": "ROOT"
+            }
+          }
+        },
+        "695": {
+          "add_core_of": "ROOT"
+        }
+      },
+      "hidden_effect": {
+        "set_global_flag": "integrated_curacao_flag"
+      }
+    }
+  },
+  {
+    "id": "ITA_missiolini_conquer_ethiopia",
+    "category_id": "ITA_missiolinis",
+    "name": "Захватить Эфиопию",
+    "desc": "Чтобы Италия победила, надо расправиться с оставшимися абиссинскими укреплениями.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_global_flag": "second_italo_ethiopian_war_flag"
+      },
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "ITA_defeat_in_ethiopia_flag"
+        }
+      }
+    },
+    "visible": {
+      "ITA_missiolinis_system_available": true,
+      "hidden_trigger": {
+        "NOT": {
+          "has_country_flag": "ITA_defeat_in_ethiopia_flag"
+        }
+      }
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ITA_missiolini_conquer_ethiopia_success_effect": true
+      },
+      "hidden_effect": {
+        "ITA_missiolinis_manage_next_mission": true,
+        "country_event": {
+          "id": "BBA_italy_missiolinis.13",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_missiolini_pacify_ethiopia",
+    "category_id": "ITA_missiolinis",
+    "name": "Усмирить Эфиопию",
+    "desc": "Дуче приказал жестоко подавлять абиссинскую оппозицию силовыми методами и ввести законы, контролирующие население. Он хочет усмирить всю страну и как можно скорее привести ее под итальянское правление.",
+    "icon": "GFX_decision_generic_police_action",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ITA_pacify_ethiopia_goal_tt",
+        "all_of_scopes": {
+          "array": "ITA_initial_ethiopian_states",
+          "OR": {
+            "compliance": {
+              "_op": ">",
+              "value": 60
+            },
+            "controller": {
+              "is_subject_of": "ROOT"
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ITA_missiolini_pacify_ethiopia_success_effect": true
+      },
+      "hidden_effect": {
+        "country_event": {
+          "id": "BBA_italy_missiolinis.23",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ITA_missiolini_pacify_ethiopia_vanilla",
+    "category_id": "ITA_missiolinis",
+    "name": "$ITA_missiolini_pacify_ethiopia$",
+    "desc": "$ITA_missiolini_pacify_ethiopia_desc$",
+    "icon": "GFX_decision_generic_police_action",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "ITA_pacify_ethiopia_goal_tt",
+        "all_of_scopes": {
+          "array": "ITA_initial_ethiopian_states",
+          "OR": {
+            "compliance": {
+              "_op": ">",
+              "value": 60
+            },
+            "controller": {
+              "is_subject_of": "ROOT"
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_global_flag": "second_italo_ethiopian_war_flag"
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ITA_missiolini_pacify_ethiopia_success_effect": true
+      },
+      "hidden_effect": {
+        "country_event": {
+          "id": "BBA_italy_missiolinis.23",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "liberate_ethiopia",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [ETH.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": 271
+        },
+        "ETH": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SS_recruitment_netherlands",
+    "category_id": "SS_recruitment",
+    "name": "Разрешить призыв СС в Нидерландах",
+    "desc": "",
+    "icon": "generic_army_support",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "36": {
+        "CONTROLLER": {
+          "OR": {
+            "original_tag": "GER",
+            "is_subject_of": "GER"
+          }
+        }
+      },
+      "7": {
+        "CONTROLLER": {
+          "OR": {
+            "original_tag": "GER",
+            "is_subject_of": "GER"
+          }
+        }
+      },
+      "35": {
+        "CONTROLLER": {
+          "OR": {
+            "original_tag": "GER",
+            "is_subject_of": "GER"
+          }
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "HOL": [
+          {
+            "is_subject_of": "GER"
+          },
+          {
+            "exists": false
+          }
+        ],
+        "has_war_with": "HOL"
+      }
+    },
+    "complete_effect": {
+      "country_event": "ss_recruitment_event.3"
+    }
+  },
+  {
+    "id": "TUR_commence_an_overhaul_of_our_training_methods",
+    "category_id": "TUR_reforming_our_armed_forces_category",
+    "name": "Радикально изменить наши методы обучения",
+    "desc": "Наши методы обучения и инструктажа неэффективны. Наши ветераны обучались на личном опыте, а вот новобранцам приходится туго.",
+    "icon": "generic_military",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_army_experience": {
+        "_op": ">",
+        "value": 10
+      },
+      "has_completed_focus": "TUR_modernising_the_army"
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_idea": [
+            "TUR_disorganised_armed_forces",
+            "TUR_disorganised_armed_forces_1",
+            "TUR_disorganised_armed_forces_2",
+            "TUR_disorganised_armed_forces_3",
+            "TUR_disorganised_armed_forces_8",
+            "TUR_disorganised_armed_forces_9",
+            "TUR_disorganised_armed_forces_10",
+            "TUR_disorganised_armed_forces_14",
+            "TUR_disorganised_armed_forces_15",
+            "TUR_disorganised_armed_forces_16",
+            "TUR_disorganised_armed_forces_17",
+            "TUR_disorganised_armed_forces_21",
+            "TUR_disorganised_armed_forces_22",
+            "TUR_disorganised_armed_forces_25",
+            "TUR_disorganised_armed_forces_28",
+            "TUR_disorganised_armed_forces_29"
+          ]
+        },
+        {
+          "has_completed_focus": [
+            "TUR_learning_from_the_great_war",
+            "TUR_hava_okulu"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "army_experience": -5,
+      "if": {
+        "limit": {
+          "has_idea": "TUR_disorganised_armed_forces"
+        },
+        "swap_ideas": {
+          "remove_idea": "TUR_disorganised_armed_forces",
+          "add_idea": "TUR_disorganised_armed_forces_4"
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_1"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_1",
+            "add_idea": "TUR_disorganised_armed_forces_5"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_2"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_2",
+            "add_idea": "TUR_disorganised_armed_forces_6"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_3"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_3",
+            "add_idea": "TUR_disorganised_armed_forces_7"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_8"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_8",
+            "add_idea": "TUR_disorganised_armed_forces_12"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_9"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_9",
+            "add_idea": "TUR_disorganised_armed_forces_13"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_10"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_10",
+            "add_idea": "TUR_disorganised_armed_forces_27"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_14"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_14",
+            "add_idea": "TUR_disorganised_armed_forces_11"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_15"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_15",
+            "add_idea": "TUR_disorganised_armed_forces_17"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_16"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_16",
+            "add_idea": "TUR_disorganised_armed_forces_20"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_17"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_17",
+            "add_idea": "TUR_disorganised_armed_forces_26"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_21"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_21",
+            "add_idea": "TUR_disorganised_armed_forces_18"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_22"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_22",
+            "add_idea": "TUR_disorganised_armed_forces_30"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_28"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_28",
+            "add_idea": "TUR_disorganised_armed_forces_24"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_29"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_29",
+            "add_idea": "TUR_disorganised_armed_forces_23"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_25"
+          },
+          "remove_ideas": "TUR_disorganised_armed_forces_25"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_streamline_communication_methods_between_ships",
+    "category_id": "TUR_reforming_our_armed_forces_category",
+    "name": "Улучшить методы связи между кораблями",
+    "desc": "Большая часть оборудования на наших кораблях устарела и ненадёжна.",
+    "icon": "generic_naval",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_navy_experience": {
+        "_op": ">",
+        "value": 10
+      },
+      "has_completed_focus": "TUR_expand_the_golcuk_naval_base"
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_idea": [
+            "TUR_disorganised_armed_forces",
+            "TUR_disorganised_armed_forces_1",
+            "TUR_disorganised_armed_forces_2",
+            "TUR_disorganised_armed_forces_3",
+            "TUR_disorganised_armed_forces_4",
+            "TUR_disorganised_armed_forces_5",
+            "TUR_disorganised_armed_forces_6",
+            "TUR_disorganised_armed_forces_7",
+            "TUR_disorganised_armed_forces_15",
+            "TUR_disorganised_armed_forces_16",
+            "TUR_disorganised_armed_forces_17",
+            "TUR_disorganised_armed_forces_18",
+            "TUR_disorganised_armed_forces_19",
+            "TUR_disorganised_armed_forces_20",
+            "TUR_disorganised_armed_forces_21",
+            "TUR_disorganised_armed_forces_26"
+          ]
+        },
+        {
+          "has_completed_focus": [
+            "TUR_learning_from_the_great_war",
+            "TUR_hava_okulu"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "navy_experience": -5,
+      "if": {
+        "limit": {
+          "has_idea": "TUR_disorganised_armed_forces"
+        },
+        "swap_ideas": {
+          "remove_idea": "TUR_disorganised_armed_forces",
+          "add_idea": "TUR_disorganised_armed_forces_14"
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_1"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_1",
+            "add_idea": "TUR_disorganised_armed_forces_8"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_2"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_2",
+            "add_idea": "TUR_disorganised_armed_forces_9"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_3"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_3",
+            "add_idea": "TUR_disorganised_armed_forces_10"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_4"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_4",
+            "add_idea": "TUR_disorganised_armed_forces_11"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_5"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_5",
+            "add_idea": "TUR_disorganised_armed_forces_12"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_6"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_6",
+            "add_idea": "TUR_disorganised_armed_forces_13"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_7"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_7",
+            "add_idea": "TUR_disorganised_armed_forces_27"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_15"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_15",
+            "add_idea": "TUR_disorganised_armed_forces_28"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_16"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_16",
+            "add_idea": "TUR_disorganised_armed_forces_29"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_17"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_17",
+            "add_idea": "TUR_disorganised_armed_forces_25"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_18"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_18",
+            "add_idea": "TUR_disorganised_armed_forces_30"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_19"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_19",
+            "add_idea": "TUR_disorganised_armed_forces_24"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_20"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_20",
+            "add_idea": "TUR_disorganised_armed_forces_23"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_21"
+          },
+          "swap_ideas": {
+            "remove_idea": "TUR_disorganised_armed_forces_21",
+            "add_idea": "TUR_disorganised_armed_forces_22"
+          }
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_disorganised_armed_forces_26"
+          },
+          "remove_ideas": "TUR_disorganised_armed_forces_26"
+        }
+      ]
+    }
+  },
+  {
+    "id": "AAC_Marine_Equipment_Decision_BRA_M2_Flamethrower",
+    "category_id": "Antarctica_GUI_AAC_Marine",
+    "name": "Закупить $AAC_Marine_Equipment_BRA_M2_Flamethrower$",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AAC_procuring_equipment"
+      }
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "AAC_hide_equipment_decisions"
+        },
+        {
+          "has_idea": "AAC_Marine_Equipment_BRA_M2_Flamethrower"
+        }
+      ],
+      "check_variable": {
+        "AAC_Marine_Active_Category": 2
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_BRA_M2_Flamethrower",
+      "add_to_variable": {
+        "AAC_unlocked_body_kit": 1
+      },
+      "set_country_flag": "AAC_procuring_equipment",
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "has_country_flag": "AAC_coordinating_with_brazil"
+          },
+          "add_political_power": -10,
+          "set_temp_variable": {
+            "tempEq": -1
+          },
+          "Antarctica_change_equipment": true
+        },
+        "else": {
+          "add_political_power": -30,
+          "set_temp_variable": {
+            "tempEq": -5
+          },
+          "Antarctica_change_equipment": true
+        }
+      },
+      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
+      "set_temp_variable": {
+        "equipment_id_temp": "token:AAC_Marine_Equipment_BRA_M2_Flamethrower"
+      },
+      "Antarctica_AAC_Marine_Add_Equipment": true
+    }
+  },
+  {
+    "id": "BRI_Midnight_SaveTheTrapped",
+    "category_id": "BRI_The_Chimes_of_Midnight_category",
+    "name": "Спасти попавших в ловушку",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock_red",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRI_Midnight_GenericShown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete BRI_Midnight_SaveTheTrapped",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Confidence": -10
+        },
+        "BRI_Midnight_ConfidenceAdd": true
+      }
+    }
+  },
+  {
+    "id": "ENG_DEC_SetHMMLRECWFlag",
+    "category_id": "ENG_DECCAT_Debug",
+    "name": "Играть с перспективы СВОЕВ",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ENG_Show_Pre_ECW"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ENG_DEC_SetHMMLRECWFlag",
+      "clr_country_flag": "ENG_Player_Collab",
+      "set_country_flag": "ENG_Player_HMMLR"
+    }
+  },
+  {
+    "id": "ENG_DEC_DebugLondonSetHmmlr",
+    "category_id": "ENG_DECCAT_PreEcwFactions",
+    "name": "ENG_DEC_DebugLondonSetHmmlr",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "ENG_hide_debug_decisions"
+      }
+    },
+    "complete_effect": {
+      "set_variable": [
+        {
+          "1300.ENG_StateStats_HmmlrSupport": 90
+        },
+        {
+          "126.ENG_StateStats_HmmlrSupport": 90
+        },
+        {
+          "125.ENG_StateStats_HmmlrSupport": 90
+        }
+      ]
+    }
+  },
+  {
+    "id": "ENG_DEC_DebugWestSetHmmlr",
+    "category_id": "ENG_DECCAT_PreEcwFactions",
+    "name": "ENG_DEC_DebugWestSetHmmlr",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "ENG_hide_debug_decisions"
+      }
+    },
+    "complete_effect": {
+      "set_variable": [
+        {
+          "132.ENG_StateStats_HmmlrSupport": 90
+        },
+        {
+          "128.ENG_StateStats_HmmlrSupport": 90
+        },
+        {
+          "885.ENG_StateStats_HmmlrSupport": 90
+        }
+      ]
+    }
+  },
+  {
+    "id": "ENG_DEC_DebugSouthSetHmmlr",
+    "category_id": "ENG_DECCAT_PreEcwFactions",
+    "name": "ENG_DEC_DebugSouthSetHmmlr",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "ENG_hide_debug_decisions"
+      }
+    },
+    "complete_effect": {
+      "set_variable": [
+        {
+          "777.ENG_StateStats_HmmlrSupport": 90
+        },
+        {
+          "338.ENG_StateStats_HmmlrSupport": 90
+        },
+        {
+          "127.ENG_StateStats_HmmlrSupport": 90
+        }
+      ]
+    }
+  },
+  {
+    "id": "ENG_DEC_DebugNorthSetHmmlr",
+    "category_id": "ENG_DECCAT_PreEcwFactions",
+    "name": "ENG_DEC_DebugNorthSetHmmlr",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_debug": true,
+      "NOT": {
+        "has_country_flag": "ENG_hide_debug_decisions"
+      }
+    },
+    "complete_effect": {
+      "set_variable": [
+        {
+          "131.ENG_StateStats_HmmlrSupport": 90
+        },
+        {
+          "129.ENG_StateStats_HmmlrSupport": 90
+        },
+        {
+          "130.ENG_StateStats_HmmlrSupport": 90
+        }
+      ]
+    }
+  },
+  {
+    "id": "ENG_DEC_InfiltrateThePalace",
+    "category_id": "ENG_DECCAT_TheKingsSpeech",
+    "name": "Проникнуть во дворец",
+    "desc": "Король планирует произнести свою замечательную речь из Букингемского дворца, мы знаем это наверняка. Если у нас будет достаточно наших людей рядом с королем, у нас будет больше шансов устроить отличное шоу.",
+    "icon": "GFX_decision_category_generic_foreign_policy",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "NOT": {
+          "has_decision": [
+            "ENG_DEC_SendInTheAgents",
+            "ENG_DEC_AntiGovPropaganda"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "ENG_whole_state_under_there"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ELS_SalvadoranCoup_RestructureThePillars",
+    "category_id": "ELS_SalvadoranCoup_category",
+    "name": "Реструктуризация основ",
+    "desc": "",
+    "icon": "",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ELS_SalvadoranCoup_JudgeTheJudges",
+    "category_id": "ELS_SalvadoranCoup_category",
+    "name": "Судить судей",
+    "desc": "",
+    "icon": "",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "add_days_mission_timeout": {
+        "mission": "SalvadoranCoup_Deadline",
+        "days": -20
+      }
+    }
+  },
+  {
+    "id": "GER_Bormann_EconMech_integrate_netherlands",
+    "category_id": "GER_Bormann_EconMech_category",
+    "name": "Интегрировать Нидерланды",
+    "desc": "Программа \"Большая Континентальная Европа\" наконец окупается. Поскольку Нидерланды находятся во всё более тесном экономическом, культурном и политическом союзе, пришло время навсегда интегрировать Вестмарк в Рейх.",
+    "icon": "GFX_decision_GER_reichskommissariats",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "BOR_EconMech_HOL_suficiently_integrated",
+          "if": {
+            "limit": {
+              "is_ai": true
+            },
+            "date": {
+              "_op": ">",
+              "value": "1969.1.1"
+            }
+          },
+          "else": {
+            "HOL": {
+              "check_variable": {
+                "GER_BOR_Econ_RK_integration": 4
+              }
+            }
+          }
+        },
+        {
+          "tooltip": "BOR_EconMech_enable_decisions",
+          "NOT": {
+            "has_country_flag": "BOR_EconMech_OilCrisis"
+          }
+        }
+      ],
+      "NOT": {
+        "has_global_flag": "RUS_SWRW_Victory"
+      }
+    },
+    "visible": {
+      "OR": [
+        {
+          "has_country_flag": "BOR_EconMech_specific_show",
+          "is_ai": true
+        },
+        {
+          "has_country_flag": [
+            "BOR_EconMech_integration_decisions",
+            "BOR_EconMech_decisions_debug"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_EconMech_integrate_netherlands"
+    }
+  },
+  {
+    "id": "GER_Bormann_Foreign_Policy_Netherlands",
+    "category_id": "GER_Bormann_Foreign_Policy_category",
+    "name": "Наши глаза на северо-западе",
+    "desc": "Рейхскомиссариат Нидерланды находился в состоянии германизации при Артур Зейсс-Инкварте в течение последних двух десятилетий. С уходом рейхскомиссара политическая ситуация резко изменилась. Мы должны решить, как поступить с нашими голландскими братьями.",
+    "icon": "GFX_decision_diplo_netherlands",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_Foreign_Policy_Netherlands",
+      "if": {
+        "limit": {
+          "HOL": {
+            "has_country_flag": "HOL_SS_in_power"
+          }
+        },
+        "country_event": "bormann.686"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "HOL": {
+              "has_country_flag": "HOL_volkisch_power"
+            }
+          },
+          "country_event": "bormann.679"
+        },
+        {
+          "limit": {
+            "HOL": {
+              "has_country_flag": "HOL_musserist_rk"
+            }
+          },
+          "country_event": "bormann.678"
+        },
+        {
+          "limit": {
+            "HOL": {
+              "has_country_flag": "HOL_fascist_independence"
+            }
+          },
+          "country_event": "bormann.670"
+        },
+        {
+          "limit": {
+            "HOL": {
+              "has_country_flag": "HOL_biesheuvel_government"
+            }
+          },
+          "country_event": "bormann.656"
+        },
+        {
+          "limit": {
+            "HOL": {
+              "has_country_flag": "HOL_towards_democracy"
+            }
+          },
+          "country_event": "bormann.663"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SGR_Netherlands_Question",
+    "category_id": "SGR_state_of_the_reich_category",
+    "name": "Голландская проблема",
+    "desc": "Наши германские братья в Нидерландах отказались от безопасности Рейха, шокирующе заявляя о своей полной независимости, несмотря на протестующие крики Европы. Мы попытаемся реинтегрировать голландцев обратно в Пакт Единства.",
+    "icon": "GFX_decision_diplo_netherlands",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "HOL": {
+        "NOT": {
+          "is_in_faction_with": "GER"
+        }
+      },
+      "has_country_flag": "SGR_pakt_open"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGR_Netherlands_Question",
+      "if": {
+        "limit": {
+          "HOL": {
+            "has_country_leader": {
+              "character": "HOL_sinclair_de_rochemont",
+              "ruling_only": true
+            }
+          }
+        },
+        "custom_effect_tooltip": "SGR_Netherlands_Question_bypass_tt",
+        "increase_conservative_leaning_small": true,
+        "HOL": [
+          {
+            "save_party_popularities": true
+          },
+          {
+            "apply_party_popularities": true,
+            "join_zollverein": true,
+            "hidden_effect": {
+              "remove_faction_status": true,
+              "add_ideas": "Pakt_Integrated_Reichskommissariat"
+            }
+          }
+        ],
+        "set_autonomy": {
+          "target": "HOL",
+          "autonomy_state": "autonomy_integrated_reichskommissariat"
+        }
+      },
+      "else_if": [
+        {
+          "limit": {
+            "NOT": {
+              "has_global_flag": "SGR_natsoc_collapse",
+              "HOL": {
+                "has_country_leader": {
+                  "character": "HOL_henk_feldmeijer",
+                  "ruling_only": true
+                }
+              }
+            }
+          },
+          "country_event": {
+            "id": "speerholland.1",
+            "days": 2
+          }
+        },
+        {
+          "limit": {
+            "NOT": {
+              "has_global_flag": "SGR_natsoc_collapse"
+            }
+          },
+          "country_event": {
+            "id": "speerholland.7",
+            "days": 2
+          }
+        }
+      ],
+      "else": {
+        "GER": {
+          "declare_war_on": {
+            "target": "HOL",
+            "type": "annex_everything"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "GNG_strike_yakuza_together",
+    "category_id": "GNG_Map_GUI",
+    "name": "Совместный удар по Якудза в регионе [?GNG_map_selected_state.GetName]",
+    "desc": "Триады предложили сделку: мы сажаем членов Якудза за решетку, а они обещают поддерживать порядок на улицах, переняв рэкетирские схемы конкурентов. Кто в здравом уме откажется от такого?",
+    "icon": "GFX_decision_GNG_triads_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GNG_has_not_exceeded_police_control_cap": true,
+      "GNG_has_not_reached_yakuza_lower_cap": true,
+      "GNG_has_not_reached_japanese_government_support_lower_cap": true
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "GNG_disable_all_mechanics_IJA"
+        },
+        {
+          "check_variable": {
+            "GNG_map_selected_state": 0
+          }
+        }
+      ],
+      "OR": {
+        "check_variable": {
+          "GNG_map_group_select": 4
+        },
+        "is_ai": true
+      },
+      "has_country_flag": "GNG_worked_with_stanley_ho"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -30,
+        "add_command_power": -30
+      },
+      "set_temp_variable": {
+        "jap_app_temp": -2.5
+      },
+      "GNG_japanese_app_change": true,
+      "var:GNG_map_selected_state": {
+        "set_temp_variable": [
+          {
+            "tri_spt_temp": 1
+          },
+          {
+            "sar_spt_temp": 1
+          },
+          {
+            "yak_spt_temp": -2
+          }
+        ],
+        "GNG_triad_control_change_specific_state": true,
+        "GNG_police_control_change_specific_state": true,
+        "GNG_yakuza_control_change_specific_state": true
+      }
+    }
+  },
+  {
+    "id": "GNG_aim_nonlethal_rounds_at_head_level_gft",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Стрельба травматическими зарядами на поражение в  ФРГ",
+    "desc": "Выбитый глаз или пробитый череп как наглядное предупреждение - этого должно быть более чем достаточно, чтобы отбить у большинства бунтовщиков желание участвовать в уличных беспорядках.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_chief_executive_we_need_you",
+      "check_variable": {
+        "GNG_selected_riot_group": 1
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "GNG_aim_nonlethal_rounds_at_head_level_ccl",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Стрельба травматическими зарядами на поражение в  ККТ",
+    "desc": "Выбитый глаз или пробитый череп как наглядное предупреждение - этого должно быть более чем достаточно, чтобы отбить у большинства бунтовщиков желание участвовать в уличных беспорядках.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      },
+      "has_country_flag": "GNG_chief_executive_we_need_you",
+      "check_variable": {
+        "GNG_selected_riot_group": 2
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ita_reclaim_ethiopia",
+    "category_id": "ITA_east_african_war_category",
+    "name": "Уничтожить Чёрных Львов",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "IEA_full_collapse",
+      "has_government": "fascism",
+      "NOT": [
+        {
+          "OR": {
+            "has_country_leader": [
+              {
+                "character": "ITA_Galeazzo_Ciano",
+                "ruling_only": true
+              },
+              {
+                "character": "ITA_Junio_Valerio_Borghese",
+                "ruling_only": true
+              }
+            ]
+          }
+        },
+        {
+          "country_exists": "ERT"
+        }
+      ],
+      "country_exists": "ETB"
+    },
+    "visible": {
+      "has_global_flag": "IEA_full_collapse",
+      "has_government": "fascism",
+      "NOT": {
+        "OR": {
+          "has_country_leader": [
+            {
+              "character": "ITA_Galeazzo_Ciano",
+              "ruling_only": true
+            },
+            {
+              "character": "ITA_Junio_Valerio_Borghese",
+              "ruling_only": true
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ita_reclaim_ethiopia",
+      "declare_war_on": {
+        "target": "ETB",
+        "type": "annex_everything"
+      },
+      "hidden_effect": {
+        "ETB": {
+          "if": {
+            "limit": {
+              "has_game_rule": {
+                "rule": "ETH_ETHIOPIAN_CIVIL_WAR_OUTCOME",
+                "option": "ETH_ETHIOPIAN_CIVIL_WAR_OUTCOME_ETB"
+              },
+              "has_idea": "Custom_TNO_war_buff"
+            },
+            "remove_war_buff": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "OMO_2022_crystals_sibplan_extraction_methods",
+    "category_id": "OMO_2022_crystals_of_ponykind",
+    "name": "Простучать сибирскую землю",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "OMO_2022_crystals_regional_sibplan"
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_crystals": -95
+      },
+      "OMO_2022_change_crystal_stockpile_decision": true
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Yazov_TireThemOut",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Взять их измором",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "amount": 5
+      },
+      "OMS_Gauntlet_ScriptedTrigger_EveryCityHealthCap_MoreOrEquals": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "OMS_Gauntlet_NewGuard_ID^0": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "OMS_Gauntlet_City_Status^0": 0
+        },
+        {
+          "OMS_Gauntlet_City_Status^1": 0
+        }
+      ],
+      "has_country_flag": "OMS_Gauntlet_Yazov_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Yazov_TireThemOut",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 0
+          },
+          {
+            "amount": -25
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true
+      }
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Yazov_MoveTheFrontlinesInTara",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Передвинуть фронт к Таре",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": [
+        {
+          "city": 0
+        },
+        {
+          "amount": "OMS_Gauntlet_City_ControlCap^0"
+        }
+      ],
+      "OMS_Gauntlet_ScriptedTrigger_CityControl_Equal": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "OMS_Gauntlet_NewGuard_ID^0": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "OMS_Gauntlet_City_Status^0": 0
+        }
+      ],
+      "has_country_flag": "OMS_Gauntlet_Yazov_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Yazov_MoveTheFrontlinesInTara",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 0
+          },
+          {
+            "amount": -40
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true,
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Yazov_MoveTheFrontlinesInIskilkul",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Передвинуть фронт к Исилькулю",
+    "desc": "",
+    "icon": "GFX_decision_generic_tank",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": [
+        {
+          "city": 1
+        },
+        {
+          "amount": "OMS_Gauntlet_City_ControlCap^1"
+        }
+      ],
+      "OMS_Gauntlet_ScriptedTrigger_CityControl_Equal": true
+    },
+    "visible": {
+      "check_variable": [
+        {
+          "OMS_Gauntlet_NewGuard_ID^0": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        {
+          "OMS_Gauntlet_City_Status^1": 0
+        }
+      ],
+      "has_country_flag": "OMS_Gauntlet_Yazov_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Yazov_MoveTheFrontlinesInIskilkul",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 0
+          },
+          {
+            "amount": -40
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true,
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Pitovranov_ConfigureTheMachine",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Настроить машину",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "amount": 20
+      },
+      "OMS_Gauntlet_ScriptedTrigger_EveryCityHealth_MoreOrEquals": true
+    },
+    "visible": {
+      "check_variable": {
+        "OMS_Gauntlet_NewGuard_ID^3": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "OMS_Gauntlet_Pitovranov_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Pitovranov_ConfigureTheMachine",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 3
+          },
+          {
+            "amount": -40
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true,
+        "add_war_support": -0.2
+      }
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Pitovranov_MobilizeTheLiberators",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Мобилизовать освободителей",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "amount": 15
+      },
+      "OMS_Gauntlet_ScriptedTrigger_EveryCityHealth_MoreOrEquals": true
+    },
+    "visible": {
+      "check_variable": {
+        "OMS_Gauntlet_NewGuard_ID^3": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "OMS_Gauntlet_Pitovranov_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Pitovranov_MobilizeTheLiberators",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 3
+          },
+          {
+            "amount": -40
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true,
+        "add_war_support": -0.2
+      }
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Drozdov_LeaveThemNoChoice",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Не оставить им выбора",
+    "desc": "",
+    "icon": "GFX_decision_generic_bombing",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "set_temp_variable": {
+        "amount": 15
+      },
+      "OMS_Gauntlet_ScriptedTrigger_EveryCityHealthCap_MoreOrEquals": true
+    },
+    "visible": {
+      "check_variable": {
+        "OMS_Gauntlet_NewGuard_ID^4": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "OMS_Gauntlet_Drozdov_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Drozdov_LeaveThemNoChoice",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 4
+          },
+          {
+            "amount": -40
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true,
+        "add_command_power": -20
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Strategies_IncreaseTheDefences",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Укрепить оборону",
+    "desc": "Взаимоисключающее с решением $RUS_Decision_Smuta_Strategies_BreakThroughTheWalls$.",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "has_war": true,
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Strategies_BreakThroughTheWalls"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Strategies_IncreaseTheDefences",
+      "hidden_effect": {
+        "army_experience": -5
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Strategies_PreserveTheRemains",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Сохранить остатки",
+    "desc": "Взаимоисключающее с решением $RUS_Decision_Smuta_Strategies_CommitToTheWarEffort$.",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "has_war": true,
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Strategies_CommitToTheWarEffort"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Strategies_PreserveTheRemains",
+      "hidden_effect": {
+        "add_command_power": -15
+      }
+    }
+  },
+  {
+    "id": "SVR_improve_training_methods",
+    "category_id": "SVR_sverdlovsk_regional_category",
+    "name": "Улучшить методы тренировок",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_completed_focus": "SVR_the_cream_of_the_crop"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SVR_improve_training_methods",
+      "army_experience": -25
+    }
+  },
+  {
+    "id": "TYM_fyp_new_production_methods",
+    "category_id": "TYM_five_year_plan_category",
+    "name": "Модернизирнизация методов производства",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": "TYM_prod_methods_cost?65",
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_new_production_methods",
+      "custom_effect_tooltip": [
+        "TYM_increase_agricultural_strain_low_tt",
+        "TYM_new_production_methods_tt"
+      ],
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "subtract_from_variable": {
+        "industrial_expertise_counter": 10
+      },
+      "TYM_Famine_Check": true
+    }
+  }
+]

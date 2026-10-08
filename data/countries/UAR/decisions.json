@@ -1,0 +1,2969 @@
+[
+  {
+    "id": "AUS_arm_border_guards_decision",
+    "category_id": "AUS_subjugating_the_lands_of_old_category",
+    "name": "Вооружить пограничников на [FROM.OWNER.GetAdjective]ской границе",
+    "desc": "",
+    "icon": "GFX_decision_generic_reorganize_irregulars",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag"
+      },
+      "FROM": {
+        "OWNER": {
+          "is_neighbor_of": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "AUS_no_longer_expansion_target"
+        },
+        "OWNER": {
+          "NOT": {
+            "has_country_flag": "AUS_sent_ultimatum_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "AUS_currently_undertaking_subjugating_lands_of_old_flag",
+      "FROM": {
+        "set_state_flag": "AUS_currently_targets_this_landd_of_old_flag"
+      }
+    }
+  },
+  {
+    "id": "BRA_jaguar_diplomacy_decision",
+    "category_id": "BRA_jaguar_diplomacy_cat",
+    "name": "Обсудить внешнюю политику и торговлю с государством [FROM.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "BRA_jaguar_diplomacy",
+      "NOT": [
+        {
+          "has_country_flag": "BRA_jaguar_diplomacy_in_progress"
+        },
+        {
+          "has_war_with": "FROM"
+        }
+      ],
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 25
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRA_jaguar_diplomacy"
+    },
+    "complete_effect": {
+      "set_country_flag": "BRA_jaguar_diplomacy_in_progress"
+    }
+  },
+  {
+    "id": "CHL_republican_guards_in_exile_mission",
+    "category_id": "CHL_nacista_decisions",
+    "name": "Алессандри формирует республиканскую гвардию в изгнании",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "CHL",
+      "NOT": {
+        "OR": {
+          "has_government": "fascism",
+          "has_completed_focus": "CHL_commence_the_counter_revolution"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHL_mapuche_liberate_guarani",
+    "category_id": "CHL_mapuche_nationalism_decisions",
+    "name": "Освободить [GAR.GetAdjective]ий народ",
+    "desc": "",
+    "icon": "GFX_decision_CHL_mapuche_liberate_guarani",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "GAR": {
+        "exists": false
+      },
+      "OR": [
+        {
+          "controls_state": 301,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 301
+          }
+        },
+        {
+          "controls_state": 688,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 688
+          }
+        },
+        {
+          "controls_state": 957,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 957
+          }
+        },
+        {
+          "controls_state": 510,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 510
+          }
+        },
+        {
+          "controls_state": 504,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 504
+          }
+        },
+        {
+          "controls_state": 944,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 944
+          }
+        },
+        {
+          "controls_state": 503,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 503
+          }
+        },
+        {
+          "controls_state": 502,
+          "any_country": {
+            "is_subject_of": "ROOT",
+            "controls_state": 502
+          }
+        }
+      ]
+    },
+    "visible": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "NOT": {
+        "has_country_flag": "CHL_released_guarani_flag"
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "OR": [
+            {
+              "is_controlled_by": "ROOT",
+              "any_country": {
+                "is_subject_of": "ROOT",
+                "controls_state": "PREV"
+              }
+            },
+            {
+              "state": [
+                301,
+                688,
+                957,
+                510,
+                504,
+                944,
+                503,
+                502
+              ]
+            }
+          ]
+        },
+        "add_core_of": "GAR",
+        "transfer_state_to": "GAR"
+      },
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_subject": "GAR"
+          }
+        },
+        "puppet": "GAR"
+      },
+      "GAR": {
+        "add_stability": 0.15,
+        "add_war_support": 0.1,
+        "add_political_power": 150,
+        "add_manpower": 10000,
+        "hidden_effect": {
+          "division_template": {
+            "name": "Guaraní Warriors",
+            "is_locked": false,
+            "division_names_group": "SPR_INF_01",
+            "priority": 1,
+            "template_counter": 82,
+            "override_model": "CHL_infantry_alt_1_entity",
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "recon": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          }
+        },
+        "random_state": [
+          {
+            "limit": {
+              "is_controlled_by": "GAR"
+            },
+            "create_unit": [
+              {
+                "division": "name = \"1st Guaraní Warriors\" division_template = \"Guaraní Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "GAR"
+              },
+              {
+                "division": "name = \"2nd Guaraní Warriors\" division_template = \"Guaraní Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "GAR"
+              },
+              {
+                "division": "name = \"3rd Guaraní Warriors\" division_template = \"Guaraní Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "GAR"
+              }
+            ]
+          },
+          {
+            "limit": {
+              "is_controlled_by": "GAR"
+            },
+            "create_unit": [
+              {
+                "division": "name = \"4th Guaraní Warriors\" division_template = \"Guaraní Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "GAR"
+              },
+              {
+                "division": "name = \"5th Guaraní Warriors\" division_template = \"Guaraní Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "GAR"
+              },
+              {
+                "division": "name = \"6th Guaraní Warriors\" division_template = \"Guaraní Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+                "owner": "GAR"
+              }
+            ]
+          },
+          {
+            "limit": {
+              "is_controlled_by": "GAR"
+            },
+            "create_unit": {
+              "division": "name = \"7th Guaraní Warriors\" division_template = \"Guaraní Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "GAR"
+            }
+          }
+        ]
+      },
+      "hidden_effect": {
+        "set_country_flag": "CHL_released_guarani_flag"
+      }
+    }
+  },
+  {
+    "id": "DEN_deploy_the_home_guard",
+    "category_id": "DEN_military_category",
+    "name": "DEN_deploy_the_home_guard",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "FROM": {
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_hjemmevaernet",
+      "FROM": {
+        "is_controlled_by": "ROOT"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -25,
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "DEN_remove_the_home_guard",
+    "category_id": "DEN_military_category",
+    "name": "DEN_remove_the_home_guard",
+    "desc": "",
+    "icon": "GFX_decision_eng_blackshirt_march",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true
+    },
+    "visible": {
+      "has_completed_focus": "DEN_hjemmevaernet",
+      "FROM": [
+        {
+          "is_controlled_by": "ROOT"
+        },
+        {
+          "has_state_flag": "DEN_home_guard_deployed_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "FROM": {
+        "remove_dynamic_modifier": {
+          "modifier": "DEN_home_guard_state_modifier"
+        },
+        "clr_state_flag": "DEN_home_guard_deployed_flag"
+      }
+    }
+  },
+  {
+    "id": "DEN_seek_guarantor",
+    "category_id": "DEN_danish_security_category",
+    "name": "DEN_seek_guarantor",
+    "desc": "",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "FROM": {
+          "has_government": "ROOT"
+        },
+        "AND": [
+          {
+            "FROM": {
+              "has_government": "neutrality"
+            },
+            "ROOT": {
+              "has_government": "democratic"
+            }
+          },
+          {
+            "FROM": {
+              "has_government": "democratic"
+            },
+            "ROOT": {
+              "has_government": "neutrality"
+            }
+          }
+        ]
+      },
+      "FROM": {
+        "has_opinion": {
+          "target": "ROOT",
+          "value": {
+            "_op": ">",
+            "value": 24
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_sign_non_aggression_deal",
+      "NOT": [
+        {
+          "has_country_flag": "DEN_has_non_aggression_flag"
+        },
+        {
+          "has_country_flag": "DEN_is_seeking_protection_flag"
+        }
+      ]
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "denmark_protection_event.1",
+          "days": 1
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "DEN_non_aggression_pact_effect": true,
+        "ROOT": {
+          "add_opinion_modifier": {
+            "modifier": "DEN_deepening_partnership",
+            "target": "FROM"
+          }
+        },
+        "FROM": {
+          "add_opinion_modifier": {
+            "modifier": "DEN_deepening_partnership",
+            "target": "ROOT"
+          }
+        },
+        "custom_effect_tooltip": [
+          "DEN_effects_may_vary_science_pact_tt",
+          "DEN_effects_on_transfer_states_tt"
+        ],
+        "DEN_guarantee_tech_sharing": true,
+        "DEN_sell_territory_for_guarantees": true
+      },
+      "hidden_effect": {
+        "set_country_flag": "DEN_is_seeking_protection_flag"
+      }
+    }
+  },
+  {
+    "id": "ENG_utilize_home_guard_in_factories",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Использовать войска местной самообороны на фабриках",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true
+    },
+    "visible": {
+      "has_country_flag": "ENG_home_guard_established_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ENG_raise_the_home_guard_in_state",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Создать войска местной самообороны в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_war": true,
+      "any_owned_state": {
+        "is_core_of": "ROOT",
+        "NOT": {
+          "is_controlled_by": "ROOT"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "ENG_raising_militia_flag"
+      }
+    },
+    "visible": {
+      "is_subject": false,
+      "has_civil_war": false,
+      "has_country_flag": "ENG_home_guard_established_flag"
+    },
+    "complete_effect": {
+      "set_country_flag": "ENG_raising_militia_flag"
+    }
+  },
+  {
+    "id": "ENG_send_the_home_guard_back_home",
+    "category_id": "ENG_homeland_defense_decision_cat",
+    "name": "Отправить войска местной самообороны по домам",
+    "desc": "",
+    "icon": "GFX_decision_SWI_dismiss_council",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "has_country_flag": "ENG_home_guard_established_flag"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "ENG_disband_home_guards_tt",
+      "hidden_effect": {
+        "delete_units": {
+          "division_template": "Home Guard Defense Brigades",
+          "disband": false
+        }
+      }
+    }
+  },
+  {
+    "id": "ETH_BoP_expand_red_guards",
+    "category_id": "ETH_centralization_balance_of_power_category",
+    "name": "Увеличить дивизии Красной гвардии",
+    "desc": "",
+    "icon": "GFX_decision_SOV_secure_the_administration",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_government": "communism",
+      "OR": {
+        "is_power_balance_in_range": [
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_power_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_dominant_range"
+          },
+          {
+            "id": "ETH_centralization_balance",
+            "range": "ETH_communist_total_control_range"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "ETH_BOP_centralization_small_effect": true,
+      "custom_effect_tooltip": "ETH_BoP_expand_red_guards_tt",
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_template": "Red Guards"
+          }
+        },
+        "division_template": {
+          "name": "Red Guards",
+          "is_locked": true,
+          "priority": 2,
+          "template_counter": 69,
+          "regiments": {
+            "infantry": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 2
+              }
+            ]
+          }
+        }
+      },
+      "every_owned_state": {
+        "limit": {
+          "is_capital": true
+        },
+        "create_unit": [
+          {
+            "division": "name = \"Red Guards Division\" division_template = \"Red Guards\" start_experience_factor = 0.1 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT"
+          },
+          {
+            "division": "name = \"Red Guards Division\" division_template = \"Red Guards\" start_experience_factor = 0.1 start_equipment_factor = 1 start_manpower_factor = 1",
+            "owner": "ROOT"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "HUN_secure_the_ragged_guards",
+    "category_id": "HUN_fascist_movements_category",
+    "name": "Склонить «Рондьёш гарду» на свою сторону",
+    "desc": "",
+    "icon": "GFX_decision_generic_army_support",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_government": "fascism"
+        },
+        {
+          "has_global_flag": "arrow_cross_insurgency_happened"
+        }
+      ],
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_establishing_a_new_dynasty",
+          "wuw_HUN_elect_a_democratic_king"
+        ]
+      }
+    },
+    "visible": {
+      "tag": "HUN",
+      "NOT": [
+        {
+          "has_government": "fascism"
+        },
+        {
+          "OR": {
+            "has_country_flag": "HUN_secured_the_ragged_guards_flag",
+            "has_global_flag": "arrow_cross_insurgency_happened"
+          }
+        }
+      ],
+      "OR": {
+        "has_completed_focus": [
+          "wuw_HUN_establishing_a_new_dynasty",
+          "wuw_HUN_elect_a_democratic_king"
+        ]
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "JAP_release_korea",
+    "category_id": "JAP_pacific_guardian",
+    "name": "Независимость Кореи",
+    "desc": "",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "country_exists": "KOR"
+    },
+    "visible": {},
+    "complete_effect": {
+      "add_political_power": 50
+    }
+  },
+  {
+    "id": "JAP_guardian_of_INS",
+    "category_id": "JAP_pacific_guardian",
+    "name": "Принять руководство Индонезией",
+    "desc": "",
+    "icon": "jap_pacific_guardian",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "HOL": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "INS": {
+        "is_puppet_of": "HOL"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "JAP_pacific_guardian"
+    },
+    "complete_effect": {
+      "HOL": {
+        "country_event": {
+          "id": "wtt_japan.1",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_guardian_of_MAL",
+    "category_id": "JAP_pacific_guardian",
+    "name": "Принять руководство Малайей",
+    "desc": "",
+    "icon": "jap_pacific_guardian",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "ENG": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        }
+      },
+      "MAL": {
+        "is_puppet_of": "ENG"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "JAP_pacific_guardian"
+    },
+    "complete_effect": {
+      "ENG": {
+        "country_event": {
+          "id": "wtt_japan.1",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_guardian_of_indochina",
+    "category_id": "JAP_pacific_guardian",
+    "name": "Принять руководство Индокитаем",
+    "desc": "",
+    "icon": "jap_pacific_guardian",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "FRA": {
+        "NOT": {
+          "has_war_with": "ROOT"
+        },
+        "OR": {
+          "has_full_control_of_state": [
+            670,
+            671,
+            286,
+            741,
+            1066,
+            1067,
+            1068,
+            1069
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "JAP_pacific_guardian"
+    },
+    "complete_effect": {
+      "FRA": {
+        "country_event": {
+          "id": "wtt_japan.1",
+          "hours": 3
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_assume_guardianship_over_asian_subject_decison",
+    "category_id": "JAP_pacific_guardian",
+    "name": "Взять [FROM.GetNameRuAcc] под свою опеку",
+    "desc": "",
+    "icon": "GFX_decision_jap_pacific_guardian",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_currently_trying_to_become_a_nations_guardian_flag"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "JAP_free_colonized_asian_countries"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "JAP_currently_trying_to_become_a_nations_guardian_flag",
+          "value": 1,
+          "days": 31
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_invite_demo_or_na_asian_nation_to_faction_decison",
+    "category_id": "JAP_pacific_guardian",
+    "name": "Пригласить [FROM.GetNameRuAcc] в наш альянс",
+    "desc": "",
+    "icon": "GFX_decision_hol_exchange_intelligence_data",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "is_subject": false,
+      "OR": {
+        "is_faction_leader": true,
+        "AND": {
+          "is_faction_leader": false,
+          "any_allied_country": {
+            "is_faction_leader": true,
+            "has_government": "democratic"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "JAP_create_greater_east_asian_treaty_organization"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "SEA_japan_foreign_policy.118",
+          "hours": 6,
+          "random_hours": 12
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "ROOT": {
+          "add_to_faction": "FROM"
+        }
+      }
+    }
+  },
+  {
+    "id": "NOR_move_government_headquarters_decision",
+    "category_id": "NOR_historical_deploy_prep_decisions_category",
+    "name": "NOR_move_government_headquarters_decision",
+    "desc": "",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "is_fully_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "NOR_the_kings_no"
+    },
+    "complete_effect": {
+      "NOR": {
+        "set_country_flag": "NOR_moving_government"
+      }
+    }
+  },
+  {
+    "id": "SPR_secure_the_guardia_de_asalto_mission",
+    "category_id": "SPR_opposition_civil_war_preparations",
+    "name": "Заполучить боевую гвардию",
+    "desc": "",
+    "icon": "eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "SPR",
+      "NOT": {
+        "has_global_flag": "spanish_civil_war"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SPR_secure_the_guardia_civil_mission",
+    "category_id": "SPR_opposition_civil_war_preparations",
+    "name": "Заполучить гражданскую гвардию",
+    "desc": "",
+    "icon": "eng_trade_unions_support",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "tag": "SPR",
+      "NOT": {
+        "has_global_flag": "spanish_civil_war"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SWE_set_up_home_guard_forces",
+    "category_id": "SWE_military_matters",
+    "name": "SWE_set_up_home_guard_forces",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "FROM": {
+        "is_fully_controlled_by": "ROOT"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWE_hemvarnet",
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "has_activated_home_guard"
+        }
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -35
+      }
+    }
+  },
+  {
+    "id": "SWE_activate_home_guard",
+    "category_id": "SWE_military_matters",
+    "name": "SWE_activate_home_guard",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "FROM": {
+        "controller": {
+          "tag": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SWE_hemvarnet",
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "has_activated_home_guard"
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "SWE_activate_home_guard_tt",
+      "FROM": {
+        "while_loop_effect": {
+          "limit": {
+            "check_variable": {
+              "SWE_has_added_home_guard": {
+                "_op": ">",
+                "value": 0
+              }
+            }
+          },
+          "subtract_from_variable": {
+            "SWE_has_added_home_guard": 1
+          },
+          "if": {
+            "limit": {
+              "NOT": {
+                "SWE": {
+                  "has_completed_focus": "SWE_swedish_shooting_movement"
+                }
+              }
+            },
+            "create_unit": {
+              "division": "name = \"Hemvärn\" division_template = \"Hemvärn\" start_experience_factor = 0.1 start_equipment_factor = 0.6 start_manpower_factor = 0.7",
+              "allow_spawning_on_enemy_provs": false,
+              "owner": "ROOT"
+            }
+          },
+          "else": {
+            "create_unit": {
+              "division": "name = \"Hemvärn\" division_template = \"Hemvärn\" start_experience_factor = 0.3 start_equipment_factor = 0.9 start_manpower_factor = 0.9",
+              "allow_spawning_on_enemy_provs": false,
+              "owner": "ROOT"
+            }
+          }
+        },
+        "set_state_flag": "has_activated_home_guard"
+      }
+    }
+  },
+  {
+    "id": "SWE_activate_all_home_guard",
+    "category_id": "SWE_military_matters",
+    "name": "SWE_activate_all_home_guard",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true
+    },
+    "visible": {
+      "has_completed_focus": "SWE_hemvarnet",
+      "any_core_state": [
+        {
+          "check_variable": {
+            "SWE_has_added_home_guard": {
+              "_op": ">",
+              "value": 0
+            }
+          }
+        },
+        {
+          "NOT": {
+            "has_state_flag": "has_activated_home_guard"
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "SWE_activate_all_home_guard_tt",
+      "every_core_state": {
+        "limit": {
+          "NOT": {
+            "has_state_flag": "has_activated_home_guard"
+          }
+        },
+        "set_state_flag": "has_activated_home_guard",
+        "while_loop_effect": {
+          "limit": {
+            "check_variable": {
+              "SWE_has_added_home_guard": {
+                "_op": ">",
+                "value": 0
+              }
+            }
+          },
+          "subtract_from_variable": {
+            "SWE_has_added_home_guard": 1
+          },
+          "if": {
+            "limit": {
+              "NOT": {
+                "SWE": {
+                  "has_completed_focus": "SWE_swedish_shooting_movement"
+                }
+              }
+            },
+            "create_unit": {
+              "division": "name = \"Hemvärn\" division_template = \"Hemvärn\" start_experience_factor = 0.1 start_equipment_factor = 0.6 start_manpower_factor = 0.7",
+              "allow_spawning_on_enemy_provs": false,
+              "owner": "ROOT"
+            }
+          },
+          "else": {
+            "create_unit": {
+              "division": "name = \"Hemvärn\" division_template = \"Hemvärn\" start_experience_factor = 0.3 start_equipment_factor = 0.9 start_manpower_factor = 0.9",
+              "allow_spawning_on_enemy_provs": false,
+              "owner": "ROOT"
+            }
+          }
+        }
+      },
+      "set_division_template_lock": {
+        "division_template": "Hemvärn",
+        "is_locked": false
+      }
+    }
+  },
+  {
+    "id": "SWI_ask_for_guarantees",
+    "category_id": "SWI_absolute_neutrality_decisions_category",
+    "name": "Попросить гарантии у [FROM.GetNameRuGen]",
+    "desc": "",
+    "icon": "GFX_decision_hol_attract_foreign_investors",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SWI_in_breach_of_neutrality"
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "BBA_switzerland.21",
+          "hours": 1
+        },
+        "set_country_flag": "SWI_already_asked_for_guarantees"
+      }
+    }
+  },
+  {
+    "id": "AM_play_bratsk_communal_vanguard",
+    "category_id": "RUS_after_midnight_category",
+    "name": "Исследовать [TMX.GetFlag] [TMX.GetName]",
+    "desc": "Несмотря на тех, кто на Вольной Территории придерживался идеалистических анархистских убеждений, всегда были те, кто был гораздо менее идеологизирован, сосредоточившись на материальной выгоде и безопасности, а не на Истинной Свободе, которую исповедует Анархизм. После падения безумного Регента эти разногласия, всегда тлеющие под поверхностью, вылились в кипение, когда Андроний Мишуренко вступил в борьбу с Вольной Территорией подруги Таратуты, стремясь ассимилировать её в соответствии со своим видением региона. Имея под своим командованием многих из опытных бывших партизан Черной Армии, Мишуренко уверен в своем успехе над идеалистами, но с его небольшими силами ещё неизвестно, сможет ли он победить.[AM_check_if_nation_has_been_visited_TMX]",
+    "icon": "GFX_AM_Bratsk",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "global.AM_sandbox_mode": 0
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision AM_play_bratsk_communal_vanguard",
+      "hidden_effect": {
+        "TMX": [
+          {
+            "change_tag_from": "ROOT"
+          },
+          {
+            "country_event": {
+              "id": "after_midnight.31",
+              "days": 1
+            },
+            "TNO_clean_trees": true,
+            "TNO_visit_check": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "Antarctica_GUI_AAG_Survival_Quarter_Rations",
+    "category_id": "Antarctica_GUI_AAG_Survival",
+    "name": "Переход на четвертной паёк",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_decrease",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "Antarctica_GUI_AAG_Survival_Mech_Enabled",
+        "Antarctica_GUI_AAG_Survival_On_Half_Rations"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Survival_Quarter_Rations",
+      "set_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess",
+      "hidden_effect": {
+        "add_political_power": -125,
+        "add_to_variable": {
+          "Antarctica_Legitimacy": -4
+        }
+      }
+    }
+  },
+  {
+    "id": "ENG_Ideo_Peers_Med_Boost_OldGuard",
+    "category_id": "BRI_Party_of_Contrasts_category",
+    "name": "MВстреча с коллегами по возрождению",
+    "desc": "",
+    "icon": "GFX_decision_generic_chess_king",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "BRI_Party_CategorySelection": 0
+        },
+        "is_ai": true
+      },
+      "has_country_flag": "BRI_Wallop_Active_flag"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ENG_Ideo_Peers_Med_Boost_OldGuard",
+      "add_political_power": -30,
+      "add_stability": -0.025,
+      "set_temp_variable": {
+        "CandidateChange": 0
+      },
+      "BRI_Party_Choice_Update": true
+    }
+  },
+  {
+    "id": "ENG_Ideo_Party_Large_Boost_OldGuard",
+    "category_id": "BRI_Party_of_Contrasts_category",
+    "name": "Поощрять колеблющихся идеологов",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRI_Wallop_Active_flag",
+      "OR": {
+        "check_variable": {
+          "BRI_Party_CategorySelection": 3
+        },
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ENG_Ideo_Party_Large_Boost_OldGuard",
+      "set_temp_variable": {
+        "CandidateChange": 0
+      },
+      "add_political_power": -50,
+      "TNO_worsen_admin_efficiency_med": true,
+      "BRI_Party_Choice_Update": true
+    }
+  },
+  {
+    "id": "ENG_Acts_Compromise_Old_Guard",
+    "category_id": "ENG_DECCAT_Acts",
+    "name": "Компромисс со Старой гвардией",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_foreign_policy",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "RP_act_progress"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "compromise_old_guard_tt",
+      "ENG_Acts_Compromise_Old_Guard": true,
+      "if": {
+        "limit": {
+          "has_country_leader": {
+            "character": "ENG_Margaret_Thatcher",
+            "ruling_only": true
+          }
+        },
+        "ENG_Thatcher_Add_Elite_Love_5": true
+      },
+      "else": {
+        "hidden_effect": {
+          "every_owned_state": {
+            "set_variable": [
+              {
+                "TNO_Britain_ElectionSeason_AP_v": 1
+              },
+              {
+                "TNO_Britain_ElectionSeason_AP_pi": 8
+              }
+            ],
+            "TNO_Britain_ElectionSeason_AddPop_InState": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "ENG_DEC_removing_the_old_guard",
+    "category_id": "ENG_DECCAT_United_Englands_Inner_Politics",
+    "name": "Убрать Старую гвардию",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_leader": {
+        "character": "ENG_Harold_Macmillan",
+        "ruling_only": true
+      }
+    },
+    "complete_effect": {
+      "ENG_Macmillan_Add_Liberal_Love_10": true,
+      "add_stability": -0.15,
+      "hidden_effect": {
+        "ENG_AI_Next_UE_Dec": true
+      },
+      "ENG_Macmillan_Add_Democratization_5": true
+    }
+  },
+  {
+    "id": "CHI_Bribe_Old_Guard",
+    "category_id": "CHI_gov_legitimacy_category",
+    "name": "Подкупить Старую Гвардию",
+    "desc": "\"Особые\" выплаты, удобные пожертвования, щедрые подарки... Если в Старой Гвардии и есть что-то постоянное, то это их сговорчивость с помощью денег. Конечно, наш бюджет немного пострадает, но это быстро и скорый, а главное эффективный способ получить доброжелательность от этих старых придурков.",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "CHI_is_not_in_crisis": true
+    },
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "CHI_faction_visible": 2
+        },
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "add_political_power": 35,
+      "set_temp_variable": [
+        {
+          "faction_opinion_change_oldguard": 10
+        },
+        {
+          "faction_opinion_change_reformist": -2.5
+        },
+        {
+          "temp_econ_spending_amount": 0.1
+        }
+      ],
+      "CHI_Yuan_opinion_change": true,
+      "CHI_Leg_Yuan_Clamp_Everything": true,
+      "CHI_GUI_LegYuan_Setup": true,
+      "econ_spend_money_once_effect_raw_money": true,
+      "CHI_Update_Leg_Yuan_Modifier": true,
+      "TNO_worsen_admin_efficiency_med": true
+    }
+  },
+  {
+    "id": "CHI_Limit_Old_Guard_Influence",
+    "category_id": "CHI_gov_legitimacy_category",
+    "name": "Ограничить влияние Старой Гвардии",
+    "desc": "Поддержка Старой Гвардии всегда была одним из столбов кабинета Гао Цзуну. Однако в некоторых ситуациях наши глубокие связи с глубоко коррумпированной фракцией могут стать весьма проблематичными. С умным политическим маневром и осторожным усилением влияния другой фракции в Законодательный Юане мы можем хотя бы ограничить политическую силу Старой Гвардии в определенной степени. Однако это произойдет за счёт их политической поддержки.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "CHI_faction_visible": 2
+        },
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "check_variable": {
+              "faction_old_guard_influence": {
+                "_op": "<",
+                "value": 0.7
+              }
+            }
+          },
+          "set_temp_variable": {
+            "faction_opinion_change_oldguard": -10
+          },
+          "CHI_Yuan_opinion_change": true
+        },
+        {
+          "limit": {
+            "check_variable": {
+              "faction_old_guard_influence": {
+                "_op": ">",
+                "value": 0.6
+              }
+            }
+          },
+          "set_temp_variable": [
+            {
+              "faction_oldguard_extra": "faction_old_guard_influence"
+            },
+            {
+              "faction_influence_change_japanophile": "faction_oldguard_extra"
+            },
+            {
+              "faction_influence_change_reformist": "faction_oldguard_extra"
+            }
+          ],
+          "clamp_variable": {
+            "var": "faction_old_guard_influence",
+            "max": 0.6,
+            "min": 0
+          },
+          "subtract_from_temp_variable": {
+            "faction_oldguard_extra": 0.6
+          },
+          "divide_temp_variable": {
+            "faction_oldguard_extra": 2
+          },
+          "CHI_Yuan_influence_change": true
+        }
+      ],
+      "else_if": {
+        "limit": {
+          "check_variable": {
+            "faction_old_guard_influence": {
+              "_op": "<",
+              "value": 0.75
+            }
+          }
+        },
+        "set_temp_variable": {
+          "faction_opinion_change_oldguard": -20
+        },
+        "CHI_Yuan_opinion_change": true
+      },
+      "else": {
+        "set_temp_variable": {
+          "faction_opinion_change_oldguard": -30
+        },
+        "CHI_Yuan_opinion_change": true
+      },
+      "set_temp_variable": [
+        {
+          "faction_modifier_change_i_oldguard": -0.1
+        },
+        {
+          "faction_modifier_change_d_oldguard": 0.1
+        }
+      ],
+      "CHI_Yuan_opinion_modify_change": true,
+      "CHI_Leg_Yuan_Clamp_Everything": true,
+      "CHI_GUI_LegYuan_Setup": true,
+      "custom_effect_tooltip": "CHI_Limit_Old_Guard_Influence_complete",
+      "CHI_update_opinion_change_rate": true,
+      "CHI_Update_Leg_Yuan_Modifier": true,
+      "TNO_improve_admin_efficiency_med": true
+    }
+  },
+  {
+    "id": "CHI_Support_Old_Guard_Interests",
+    "category_id": "CHI_gov_legitimacy_category",
+    "name": "Поддержать интересы Старой Гвардии",
+    "desc": "Ни для кого не секрет, что более или менее вся Старая гвардия участвует в той или иной форме \"бизнеса\". Возможно, мы могли бы предоставить этим предприятиям какие-то \"привелегии\" и льготы, и заключить специальные контракты с определенными компаниями... Определенно есть варианты и получше для государственных комиссий, но благодаря им, Старая Гвардия будет счастлива.",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "CHI_faction_visible": 2
+        },
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "add_political_power": 75,
+      "set_temp_variable": [
+        {
+          "faction_influence_change_oldguard": 0.1
+        },
+        {
+          "faction_influence_change_japanophile": -0.05
+        },
+        {
+          "faction_influence_change_reformist": -0.05
+        },
+        {
+          "faction_opinion_change_oldguard": 10
+        },
+        {
+          "faction_opinion_change_reformist": -2.5
+        },
+        {
+          "CHI_calc_cost": "GDP"
+        }
+      ],
+      "CHI_Yuan_influence_change": true,
+      "CHI_Yuan_opinion_change": true,
+      "CHI_Leg_Yuan_Clamp_Everything": true,
+      "CHI_GUI_LegYuan_Setup": true,
+      "multiply_temp_variable": {
+        "CHI_calc_cost": 0.015
+      },
+      "add_to_variable": {
+        "CHI_leg_yuan_misc_costs": "CHI_calc_cost"
+      },
+      "custom_effect_tooltip": "CHI_legyuan_cost_change_tt",
+      "if": {
+        "limit": {
+          "check_variable": {
+            "gdp_growth": {
+              "_op": ">",
+              "value": 8.0
+            }
+          }
+        },
+        "set_temp_variable": {
+          "gdp_growth_temp": 0.05
+        },
+        "econ_gdp_growth_change": true
+      },
+      "else": {
+        "set_temp_variable": {
+          "gdp_growth_temp": 0.1
+        },
+        "econ_gdp_growth_change": true
+      },
+      "CHI_Update_Leg_Yuan_Modifier": true
+    }
+  },
+  {
+    "id": "CHI_Old_Guard_in_Cabinet",
+    "category_id": "CHI_gov_legitimacy_category",
+    "name": "Старая гвардия в кабинете",
+    "desc": "Обременённая определенными правительственными пороками, Старая гвардия предлагает одних из самых старых и самых опытных государственных деятелей и администраторов, а некоторые из членов Гвардии появились ещё до эпохи Ван Цзинвэя. Принятие некоторых из их членов в наше правительство может привести к увеличению \"недокументированных\" расходов, но также может дать нам больше политических и административных знаний.",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 55,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "OR": {
+          "custom_trigger_tooltip": [
+            {
+              "tooltip": "CHI_Old_Guard_in_Cabinet_trigger_tt_1",
+              "has_decision": "CHI_Japanophiles_in_Government"
+            },
+            {
+              "tooltip": "CHI_Old_Guard_in_Cabinet_trigger_tt_2",
+              "has_decision": "CHI_Reformists_in_Cabinet"
+            }
+          ]
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "check_variable": {
+          "CHI_faction_visible": 2
+        },
+        "is_ai": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "faction_influence_change_japanophile": -0.05
+        },
+        {
+          "faction_influence_change_oldguard": 0.1
+        },
+        {
+          "faction_influence_change_reformist": -0.05
+        },
+        {
+          "faction_opinion_change_japanophile": -5
+        },
+        {
+          "faction_opinion_change_oldguard": 10
+        },
+        {
+          "faction_opinion_change_reformist": -5
+        },
+        {
+          "faction_modifier_change_i_japanophile": -0.1
+        },
+        {
+          "faction_modifier_change_i_oldguard": 0.2
+        },
+        {
+          "faction_modifier_change_d_oldguard": -0.2
+        },
+        {
+          "faction_modifier_change_i_reformist": -0.1
+        }
+      ],
+      "CHI_Yuan_influence_change": true,
+      "CHI_Yuan_opinion_change": true,
+      "CHI_Yuan_opinion_modify_change": true,
+      "CHI_Leg_Yuan_Clamp_Everything": true,
+      "CHI_GUI_LegYuan_Setup": true,
+      "CHI_update_opinion_change_rate": true,
+      "CHI_Update_Leg_Yuan_Modifier": true
+    }
+  },
+  {
+    "id": "bormann_rally_the_old_guard",
+    "category_id": "GER_Bormann_CW_category",
+    "name": "Сплотить старую гвардию",
+    "desc": "",
+    "icon": "GFX_decision_GER_reichskommissariats",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "BOR_the_faith_of_our_leaders"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision bormann_rally_the_old_guard",
+      "army_experience": 5,
+      "air_experience": 5,
+      "add_popularity": {
+        "ideology": "national_socialism",
+        "popularity": 0.025
+      }
+    }
+  },
+  {
+    "id": "SGR_Zollverein_Quarterly_Update",
+    "category_id": "SGR_Zollverein_members_investment_category",
+    "name": "Полугодовое обновление бюджета",
+    "desc": "Бюджет и доступные инвестиции для каждой страны-члена Цольверайна обновляются раз в полгода, что позволяет нам использовать этот бюджет для проведения новых инвестиций в проблемные области.",
+    "icon": "GFX_decision_generic_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_global_flag": "SGR_natsoc_collapse"
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "GRO_REICHSSTAAT_ss_bomb_zanu_headquarters",
+    "category_id": "GRO_REICHSSTAAT_die_grossafrikanishen_ss_einsatzgruppen",
+    "name": "Подорвать штабквартиры ЗАНУ (Зимбабве)",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GRO_REICHSSTAAT_ss_weapon_supply_enough_for_mission_tt",
+        "check_variable": {
+          "GRO_REICHSSTAAT_ss_weapon_supply": {
+            "_op": ">",
+            "value": 100
+          }
+        }
+      }
+    },
+    "visible": {
+      "GRO_is_in_control_of_simbabwe": true,
+      "has_completed_focus": "GRO_salt_the_earth"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "GNG_safeguard_triad_business",
+    "category_id": "GNG_Map_GUI",
+    "name": "Защитить бизнес Триад в регионе [?GNG_map_selected_state.GetName]",
+    "desc": "Господин Стэнли Хо уведомил нас, что полиция и Кэмпэйтай суют нос в его легальные дела, и настоятельно рекомендовал свернуть эти расследования. Мы благоразумно прислушаемся к его совету.",
+    "icon": "GFX_decision_GNG_triads_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "GNG_has_not_exceeded_police_control_cap": true,
+      "GNG_has_not_reached_kenpeitai_lower_cap": true,
+      "GNG_has_not_reached_yakuza_lower_cap": true,
+      "GNG_is_not_fully_corrupt": true,
+      "GNG_has_not_reached_japanese_empire_approval_lower_cap": true
+    },
+    "visible": {
+      "NOT": [
+        {
+          "has_country_flag": "GNG_disable_all_mechanics_IJA"
+        },
+        {
+          "check_variable": {
+            "GNG_map_selected_state": 0
+          }
+        }
+      ],
+      "OR": {
+        "check_variable": {
+          "GNG_map_group_select": 4
+        },
+        "is_ai": true
+      },
+      "has_country_flag": "GNG_worked_with_stanley_ho"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_political_power": -40,
+        "set_temp_variable": [
+          {
+            "GNG_corruption_temp_var": 2.5
+          },
+          {
+            "GNG_approval_temp_var": -2
+          }
+        ],
+        "GNG_Corruption_Change": true,
+        "GNG_Japan_approval_change": true
+      },
+      "var:GNG_map_selected_state": {
+        "set_temp_variable": [
+          {
+            "tri_spt_temp": 1.5
+          },
+          {
+            "sar_spt_temp": 1.25
+          },
+          {
+            "ken_spt_temp": -1.25
+          },
+          {
+            "yak_spt_temp": -1.5
+          }
+        ],
+        "GNG_triad_control_change_specific_state": true,
+        "GNG_police_control_change_specific_state": true,
+        "GNG_kenpeitai_control_change_specific_state": true,
+        "GNG_yakuza_control_change_specific_state": true
+      }
+    }
+  },
+  {
+    "id": "MEX_incentivise_fstse_quarreling",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Стимулировать ссоры в НИИПГУ",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": [
+          "MEX_doctorsstrike_second_strike_break",
+          "push_into_irrelevance"
+        ]
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_doctor_intern_radicalism_decrease_high": true,
+      "add_stability": -0.025,
+      "MEX_PRI_increase_corruption_workers_med": true,
+      "hidden_effect": {
+        "add_political_power": -20,
+        "set_temp_variable": {
+          "temp_econ_spending_amount": 0.025
+        },
+        "econ_spend_money_once_effect_raw_money": true
+      }
+    }
+  },
+  {
+    "id": "KEM_assert_kingsguard_influence",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Утвердить влияние Княжеской Дружины",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "KEM_meet_with_industrialists",
+          "KEM_expand_mining_operations"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": "KEM_increase_lydia_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_assert_kingsguard_influence"
+    }
+  },
+  {
+    "id": "MAG_purge_the_old_guard",
+    "category_id": "MAG_regional_factions_category",
+    "name": "Провести чистку старой гвардии",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "MAG_sway_the_corporations",
+          "MAG_investigate_the_reform_wing",
+          "MAG_seek_foreign_support",
+          "MAG_meet_with_emigres",
+          "MAG_investigate_corruption"
+        ]
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "MAG_will_of_the_people"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision MAG_purge_the_old_guard"
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_Decision_Savintsev_WatchOverTheOldGuard",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Следить за старой гвардией",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_cancel",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "OMS_Gauntlet_NewGuard_ID^1": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "has_country_flag": "OMS_Gauntlet_Savintsev_Shown"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete OMS_Gauntlet_Decision_Savintsev_WatchOverTheOldGuard",
+      "hidden_effect": {
+        "set_temp_variable": [
+          {
+            "guard": 1
+          },
+          {
+            "amount": -25
+          }
+        ],
+        "OMS_Gauntlet_NewGuard_Entrenchment_Add": true
+      }
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_PulseNewGuard",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Новая гвардия адаптируется...",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "OMS_Gauntlet_PulseOldGuard_Megafuck",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Старая гвардия готова на всё...",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "ONG_guard_VOL",
+    "category_id": "ONG_anti_commie_guard",
+    "name": "Направить Гвардию в Вологду",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "VOL": {
+          "has_war_with": "WRS"
+        },
+        "AND": {
+          "KOM": {
+            "OR": {
+              "has_government": [
+                "communist",
+                "socialist"
+              ]
+            }
+          },
+          "VOL": {
+            "has_war_with": "KOM"
+          }
+        }
+      }
+    },
+    "visible": {
+      "WRS": {
+        "exists": true
+      },
+      "VOL": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_guard_VOL",
+      "VOL": {
+        "country_event": {
+          "id": "ONG.2",
+          "days": 3
+        }
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -185
+      }
+    }
+  },
+  {
+    "id": "ONG_guard_KOM",
+    "category_id": "ONG_anti_commie_guard",
+    "name": "Направить Гвардию в Коми",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "KOM": {
+        "has_war_with": "WRS"
+      }
+    },
+    "visible": {
+      "WRS": {
+        "exists": true
+      },
+      "KOM": {
+        "exists": true,
+        "NOT": {
+          "has_government": [
+            "communist",
+            "socialist"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_guard_KOM",
+      "KOM": {
+        "country_event": {
+          "id": "ONG.2",
+          "days": 3
+        }
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -185
+      }
+    }
+  },
+  {
+    "id": "ONG_guard_TAR",
+    "category_id": "ONG_anti_commie_guard",
+    "name": "Направить Гвардию в Татарстан",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "TAR": {
+          "has_war_with": "WRS"
+        },
+        "AND": {
+          "KOM": {
+            "OR": {
+              "has_government": [
+                "communist",
+                "socialist"
+              ]
+            }
+          },
+          "TAR": {
+            "has_war_with": "KOM"
+          }
+        }
+      }
+    },
+    "visible": {
+      "WRS": {
+        "exists": true
+      },
+      "TAR": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_guard_TAR",
+      "TAR": {
+        "country_event": {
+          "id": "ONG.2",
+          "days": 3
+        }
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -185
+      }
+    }
+  },
+  {
+    "id": "ONG_guard_GAY",
+    "category_id": "ONG_anti_commie_guard",
+    "name": "Направить Гвардию в Гайны",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "GAY": {
+          "has_war_with": "WRS"
+        },
+        "AND": {
+          "KOM": {
+            "OR": {
+              "has_government": [
+                "communist",
+                "socialist"
+              ]
+            }
+          },
+          "GAY": {
+            "has_war_with": "KOM"
+          }
+        }
+      }
+    },
+    "visible": {
+      "WRS": {
+        "exists": true
+      },
+      "GAY": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_guard_GAY",
+      "GAY": {
+        "country_event": {
+          "id": "ONG.2",
+          "days": 3
+        }
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -185
+      }
+    }
+  },
+  {
+    "id": "ONG_guard_BKR",
+    "category_id": "ONG_anti_commie_guard",
+    "name": "Направить Гвардию в Башкирию",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "OR": {
+        "BKR": {
+          "has_war_with": "WRS"
+        },
+        "AND": {
+          "KOM": {
+            "OR": {
+              "has_government": [
+                "communist",
+                "socialist"
+              ]
+            }
+          },
+          "BKR": {
+            "has_war_with": "KOM"
+          }
+        }
+      }
+    },
+    "visible": {
+      "WRS": {
+        "exists": true
+      },
+      "BKR": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ONG_guard_BKR",
+      "BKR": {
+        "country_event": {
+          "id": "ONG.2",
+          "days": 3
+        }
+      },
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -185
+      }
+    }
+  },
+  {
+    "id": "URL_Guards_initiation",
+    "category_id": "URL_initiation_system",
+    "name": "Посвящение новых гвардейцев",
+    "desc": "Новыми гвардейцами становятся каждые 50 дней.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_upgrade_guards",
+    "category_id": "URL_guard_system",
+    "name": "Улучшение гвардии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "URL_guards_accept_no_substitutes_flag"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "has_country_flag": "URL_guards_accept_no_substitutes_flag",
+      "OR": {
+        "has_idea": [
+          "URL_children_of_vorkuta_speed_offense_training_hostile_weather",
+          "URL_children_of_vorkuta_ascended_1",
+          "URL_children_of_vorkuta_ascended_2",
+          "URL_children_of_vorkuta_ascended_3",
+          "URL_children_of_vorkuta_ascended_4"
+        ]
+      }
+    },
+    "complete_effect": {
+      "army_experience": -25,
+      "add_political_power": -15
+    }
+  },
+  {
+    "id": "ZLT_purchase_yugran_guarantee",
+    "category_id": "ZLT_Expenditures",
+    "name": "Купить защиту у Югры",
+    "desc": "",
+    "icon": "GFX_decision_generic_corruption",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "ZLT_CAN_INVEST_IN_YUGRA"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ZLT_purchase_yugran_guarantee",
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "YGR": {
+        "country_event": {
+          "id": "ZLT.14",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "ANG_Raid_Their_Headquarters",
+    "category_id": "ANG_Native_Situation_Decisions",
+    "name": "Рейды по тылам",
+    "desc": "Повстанцы хранят свое оружие в тайниках, скрытых как под песками пустыни, так и под листвой джунглей. Приложив некоторые усилия, мы можем нанести ущерб их операциям, найдя и уничтожив эти запасы.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": [
+        {
+          "infantry_equipment": {
+            "_op": ">",
+            "value": 249
+          }
+        },
+        {
+          "support_equipment": {
+            "_op": ">",
+            "value": 34
+          }
+        }
+      ],
+      "NOT": {
+        "has_country_flag": "ANG_Reducing_Native_Militancy"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "custom_effect_tooltip": "ANG_Native_Militancy_Down_Medium",
+      "add_to_variable": {
+        "ANG_Native_Militancy": -6
+      },
+      "set_country_flag": "ANG_Reducing_Native_Militancy"
+    }
+  },
+  {
+    "id": "uas_form_the_faction",
+    "category_id": "UAR_formation_category",
+    "name": "uas_form_the_faction",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_war": false,
+      "has_country_flag": "UAR_can_form",
+      "NOT": {
+        "has_global_flag": "UAS_formed"
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "tag": "SYR"
+        },
+        "clr_country_flag": "UAR_can_form"
+      },
+      "create_faction_from_template": {
+        "name": "United_Arab_States",
+        "template": "faction_template_generic"
+      },
+      "add_faction_goal_slot": [
+        {
+          "category": "short_term",
+          "value": -10
+        },
+        {
+          "category": "medium_term",
+          "value": -10
+        },
+        {
+          "category": "long_term",
+          "value": -10
+        }
+      ],
+      "add_ideas": "UAS_Member",
+      "every_country": {
+        "limit": {
+          "is_subject_of": "ROOT"
+        },
+        "add_ideas": "UAS_Member"
+      },
+      "set_global_flag": [
+        "UAS_formed",
+        {
+          "flag": "UAS_formed_cooldown",
+          "days": 387,
+          "value": 1
+        }
+      ],
+      "set_variable": {
+        "global.UAS_leader": "ROOT"
+      }
+    }
+  },
+  {
+    "id": "uas_join_the_faction",
+    "category_id": "UAR_formation_category",
+    "name": "uas_join_the_faction",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_war": false,
+      "NOT": [
+        {
+          "is_in_faction_with": "var:global.UAS_leader"
+        },
+        {
+          "SYR": {
+            "has_government": "paternalism"
+          }
+        }
+      ],
+      "has_global_flag": "UAS_formed",
+      "has_country_flag": "UAR_can_join"
+    },
+    "complete_effect": {
+      "leave_faction": true,
+      "var:global.UAS_leader": {
+        "add_to_faction": "ROOT"
+      },
+      "add_ideas": "UAS_Member",
+      "every_country": {
+        "limit": {
+          "is_subject_of": "ROOT"
+        },
+        "add_ideas": "UAS_Member"
+      },
+      "if": {
+        "limit": {
+          "GER": {
+            "has_country_flag": "uar_will_join_ger_econ_sphere"
+          }
+        },
+        "econ_join_sphere_GER": true,
+        "if": {
+          "limit": {
+            "has_global_flag": "german_civil_war_speervic"
+          },
+          "join_zollverein": true
+        }
+      }
+    }
+  },
+  {
+    "id": "uar_form_the_tag",
+    "category_id": "UAR_formation_category",
+    "name": "uar_form_the_tag",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "UAR_can_form",
+      "has_global_flag": "UAS_formed",
+      "NOT": {
+        "has_global_flag": "UAS_formed_cooldown"
+      },
+      "has_war": false
+    },
+    "complete_effect": {
+      "every_owned_state": {
+        "limit": {
+          "is_core_of": "PREV"
+        },
+        "add_core_of": "UAR"
+      },
+      "random_owned_state": {
+        "UAR": {
+          "transfer_state": "PREV"
+        }
+      },
+      "var:global.UAS_leader": {
+        "add_to_faction": "UAR"
+      },
+      "UAR": [
+        {
+          "add_ideas": "UAS_Member",
+          "set_faction_leader": true,
+          "set_variable": {
+            "global.UAS_leader": "UAR"
+          },
+          "if": {
+            "limit": {
+              "is_in_faction_with": "EGB",
+              "NOT": {
+                "PAL": {
+                  "has_country_flag": "PAL_APR"
+                },
+                "is_in_faction_with": "PAL"
+              }
+            },
+            "UAR_National_Assembly": {
+              "remove_country_leader_role": {
+                "ideology": "socialist_baathism_subtype"
+              },
+              "add_country_leader_role": {
+                "promote_leader": true,
+                "country_leader": {
+                  "ideology": "socialist_left_wing_nationalism_subtype",
+                  "expire": "1999.1.1",
+                  "traits": []
+                }
+              }
+            }
+          },
+          "else_if": [
+            {
+              "limit": {
+                "PAL": {
+                  "has_country_flag": "PAL_APR"
+                },
+                "is_in_faction_with": "PAL"
+              },
+              "set_politics": {
+                "ruling_party": "communist"
+              },
+              "set_capital": {
+                "state": 554
+              }
+            },
+            {
+              "limit": {
+                "BIR": {
+                  "has_country_flag": "PAL_APR"
+                },
+                "is_in_faction_with": "BIR"
+              },
+              "set_politics": {
+                "ruling_party": "communist"
+              },
+              "set_capital": {
+                "state": 291
+              }
+            }
+          ],
+          "else": {
+            "set_capital": {
+              "state": 554
+            }
+          },
+          "annex_country": {
+            "target": "PREV",
+            "transfer_troops": true
+          },
+          "change_tag_from": "PREV"
+        },
+        {
+          "add_ideas": [
+            "UAR_disunited_armies",
+            "UAR_chaotic_politics"
+          ],
+          "if": [
+            {
+              "limit": {
+                "GER": {
+                  "has_country_flag": "uar_will_join_ger_econ_sphere"
+                }
+              },
+              "econ_join_sphere_GER": true,
+              "if": {
+                "limit": {
+                  "has_global_flag": "german_civil_war_speervic"
+                },
+                "join_zollverein": true
+              }
+            },
+            {
+              "limit": {
+                "has_global_flag": [
+                  "OC_over_in_middle_east",
+                  "german_civil_war_bormannvic"
+                ]
+              },
+              "country_event": {
+                "id": "bormann.1213",
+                "days": 4
+              }
+            }
+          ]
+        }
+      ],
+      "every_country": {
+        "limit": {
+          "is_ai": false
+        },
+        "set_temp_variable": {
+          "TNO_temp_super_event": "token:SE_ARAB_UNIFICATION"
+        },
+        "TNO_fire_super_event": true
+      }
+    }
+  },
+  {
+    "id": "uar_join_the_tag",
+    "category_id": "UAR_formation_category",
+    "name": "uar_join_the_tag",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_war": false,
+      "UAR": {
+        "exists": true
+      },
+      "has_country_flag": "UAR_can_join",
+      "OR": [
+        {
+          "NOT": {
+            "tag": "SDS"
+          },
+          "UAR": {
+            "owns_state": 446
+          }
+        },
+        {
+          "NOT": {
+            "tag": "GUL"
+          },
+          "UAR": [
+            {
+              "owns_state": 291
+            },
+            {
+              "owns_state": 919
+            }
+          ]
+        },
+        {
+          "NOT": {
+            "tag": "OMB"
+          },
+          "UAR": {
+            "owns_state": 919
+          }
+        }
+      ]
+    },
+    "complete_effect": {
+      "every_owned_state": {
+        "limit": {
+          "is_core_of": "PREV"
+        },
+        "add_core_of": "UAR"
+      },
+      "UAR": {
+        "annex_country": {
+          "target": "ROOT",
+          "transfer_troops": true
+        }
+      }
+    }
+  },
+  {
+    "id": "uar_dismantle_the_faction",
+    "category_id": "UAR_formation_category",
+    "name": "uar_dismantle_the_faction",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "tag": "UAR",
+      "NOT": {
+        "has_country_flag": "UAR_faction_dismantled"
+      },
+      "exists": true,
+      "num_faction_members": {
+        "_op": "<",
+        "value": 2
+      },
+      "OMB": {
+        "exists": false
+      },
+      "SDS": {
+        "exists": false
+      }
+    },
+    "complete_effect": {
+      "clr_global_flag": "UAS_formed",
+      "dismantle_faction": true,
+      "set_country_flag": "UAR_faction_dismantled"
+    }
+  },
+  {
+    "id": "UKR_UCW_empower_polissian_guard",
+    "category_id": "UKR_ucw_supply_category",
+    "name": "Расширить возможности УНРА",
+    "desc": "",
+    "icon": "GFX_decision_UKR_unra",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UCW_supply_doing_faction_decision"
+      }
+    },
+    "visible": {
+      "original_tag": "FUK",
+      "has_country_flag": "UKR_UCW_faction_show"
+    },
+    "complete_effect": {
+      "set_country_flag": "UCW_supply_doing_faction_decision"
+    }
+  },
+  {
+    "id": "USA_National_Guard_Auxiliary_for_Public_Services",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Использовать подразделение Национальной гвардии для общественных служб",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_bankruptcy_response"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_bankruptcy_prevention_flag"
+      ],
+      "NOT": {
+        "has_country_flag": "USA_crisis_visible_bankruptcy"
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "USA_bankruptcy_response",
+      "add_to_variable": {
+        "USA_bankruptcy_Response_var": 1
+      },
+      "set_temp_variable": [
+        {
+          "USA_temp_upkeep_cost_var": -0.07
+        },
+        {
+          "USA_temp_poverty_rate_var": 0.11
+        },
+        {
+          "USA_temp_equality_var": -0.08
+        },
+        {
+          "USA_temp_var_civilrights_num": -0.08
+        }
+      ],
+      "USA_upkeep_cost_adjust": true,
+      "USA_poverty_rate_adjust": true,
+      "USA_equality_adjust": true,
+      "USA_civil_rights_relations_adjust": true
+    }
+  },
+  {
+    "id": "USA_mobilize_national_guard",
+    "category_id": "USA_draft_mobilization_category",
+    "name": "Мобилизовать национальную гвардию",
+    "desc": "TBD",
+    "icon": "",
+    "cost": 85,
+    "fire_only_once": false,
+    "available": {
+      "tag": "USA",
+      "surrender_progress": {
+        "_op": ">",
+        "value": 0.05
+      }
+    },
+    "visible": {
+      "has_war": true,
+      "NOT": {
+        "has_country_flag": "USA_mobilized_national_guard"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_mobilize_national_guard",
+      "custom_effect_tooltip": "USA_mobilize_national_guard_tooltip",
+      "hidden_effect": {
+        "set_country_flag": "USA_mobilized_national_guard"
+      }
+    }
+  },
+  {
+    "id": "USA_demobilize_national_guard",
+    "category_id": "USA_draft_mobilization_category",
+    "name": "Демобилизовать Национальную гвардию",
+    "desc": "TBD",
+    "icon": "",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "tag": "USA",
+      "NOT": {
+        "has_war": true
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_mobilized_national_guard"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_demobilize_national_guard",
+      "custom_effect_tooltip": "USA_demobilize_national_guard_tooltip"
+    }
+  },
+  {
+    "id": "USA_WFB_ENG_guard_the_channel",
+    "category_id": "USA_WFB_CFN_category",
+    "name": "Охранять канал",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "CFN_selected_reform": 0
+      },
+      "ENG": {
+        "is_in_faction_with": "USA",
+        "has_country_flag": "CFN_founding_member"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_WFB_ENG_guard_the_channel",
+      "add_to_variable": {
+        "ENG.CFN_voting_desire^0": 10
+      },
+      "ENG": {
+        "custom_effect_tooltip": "WFB_opinion_increase_mil_10",
+        "navy_experience": 40
+      }
+    }
+  },
+  {
+    "id": "COG_guard_mines",
+    "category_id": "COG_internal_relations",
+    "name": "'Поощрение' добычи полезных ископаемых",
+    "desc": "",
+    "icon": "GFX_decision_generic_oil_extraction",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_guard_mines",
+      "custom_effect_tooltip": [
+        "Encourage_Mining_Operations_tt",
+        "COG_investors_likes_tt",
+        "COG_raise_native_tension_tt"
+      ],
+      "add_to_variable": [
+        {
+          "cog_native_tensions": 0.05
+        },
+        {
+          "COG_Investor_Happiness": 0.05
+        }
+      ],
+      "cog_hoa_update": true,
+      "country_event": {
+        "id": "COG_focus.999"
+      },
+      "add_timed_idea": {
+        "idea": "COG_guard_mines_misc_costs",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "COG_guard_investments",
+    "category_id": "COG_internal_relations",
+    "name": "Полиция на плантациях",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_guard_investments",
+      "custom_effect_tooltip": [
+        "Police_The_Plantations_tt",
+        "COG_investors_likes_lot_tt",
+        "COG_raise_native_tension_lot_tt"
+      ],
+      "add_to_variable": [
+        {
+          "cog_native_tensions": 0.1
+        },
+        {
+          "COG_Investor_Happiness": 0.1
+        }
+      ],
+      "cog_hoa_update": true,
+      "country_event": {
+        "id": "COG_focus.999"
+      },
+      "add_timed_idea": {
+        "idea": "COG_guard_investments_misc_costs",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "COG_guard_construction",
+    "category_id": "COG_internal_relations",
+    "name": "Охрана для строительных объектов",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 40,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_guard_construction",
+      "custom_effect_tooltip": [
+        "Guard_Construction_Projects_tt",
+        "COG_investors_likes_tt",
+        "COG_raise_native_tension_tt"
+      ],
+      "add_to_variable": [
+        {
+          "cog_native_tensions": 0.05
+        },
+        {
+          "COG_Investor_Happiness": 0.05
+        }
+      ],
+      "cog_hoa_update": true,
+      "country_event": {
+        "id": "COG_focus.999"
+      },
+      "add_timed_idea": {
+        "idea": "COG_guard_construction_misc_costs",
+        "days": 90
+      }
+    }
+  },
+  {
+    "id": "SWRW_OMS_create_black_guard",
+    "category_id": "SWRW_OMS_the_eastern_redoubt_category",
+    "name": "Create The Black Guard",
+    "desc": "With the looming threat of war in Siberia, we need to use the time we still have to raise additional forces in the far east. The Glavkoverkh has decided that the best way of doing so is to establish a new people's Opolcheniye that will proudly protect their Motherland against any enemy incursion.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_manpower": {
+        "_op": ">",
+        "value": 179999
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -20
+      }
+    }
+  },
+  {
+    "id": "SWRW_OMS_create_black_guard2",
+    "category_id": "SWRW_OMS_the_eastern_redoubt_category",
+    "name": "Emergency Black Guard Volunteer Drive",
+    "desc": "With the enemeies of Russia mustering their strength, we need to expand the scope of our defensive armies in the east without threatening the progress of the Great Trial§ against Germany. Though they will only receive the most basic training, they will proudly serve the Motherland and bravely support their more experienced comrade soldiers as they fend off the enemy.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_manpower": {
+        "_op": ">",
+        "value": 179999
+      },
+      "has_country_flag": "OMS_black_guard_1_deployed"
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_global_flag": "OMS_warned_by_JAP"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -20,
+        "set_country_flag": "OMS_has_black_guard_2_deployed"
+      }
+    }
+  },
+  {
+    "id": "SWRW_OMS_create_black_guard3",
+    "category_id": "SWRW_OMS_the_eastern_redoubt_category",
+    "name": "Final Black Guard Volunteer Drive",
+    "desc": "We'll bring forth one last batch of hastily trained soldiers from Siberia to aid us in the final victory in our Great Trial§. Their patriotic duty will be to hold the line against the invaders so that we can bring about our final retribution against the hated Teuton!",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_manpower": {
+        "_op": ">",
+        "value": 179999
+      },
+      "has_country_flag": "OMS_black_guard_2_deployed"
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_global_flag": "OMS_warned_by_JAP"
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -20
+      }
+    }
+  },
+  {
+    "id": "JAP_MEN_Kenpeitai_Rearguard_Operations",
+    "category_id": "JAP_foreign_policy_category",
+    "name": "Операции тыловых корпусов Кэмпэйтая",
+    "desc": "В то время как наши союзники находятся на передовой, мы будем оказывать помощь в охране правопорядка в труднодоступных районах за линией фронта. Хорошо оснащенный и безжалостный, тогда Кэмпэйтай расправится с любым инакомыслием, каким бы оно ни было.",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "TNO_fopo_mengjiang_conflict_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_MEN_Kenpeitai_Operations",
+      "hidden_effect": {
+        "country_event": {
+          "id": "men.32"
+        }
+      },
+      "MEN": {
+        "country_event": {
+          "id": "men.32"
+        },
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_dynamic_modifier": {
+                "modifier": "MEN_japanese_help"
+              }
+            }
+          },
+          "add_dynamic_modifier": {
+            "modifier": "MEN_japanese_help"
+          },
+          "add_to_variable": [
+            {
+              "var": "MEN_japhelp_morale_factor",
+              "value": 0.05
+            },
+            {
+              "var": "MEN_japhelp_defence_factor",
+              "value": 0.1
+            }
+          ],
+          "custom_effect_tooltip": "JAP_MEN_Kenpeitai_Operations_tt"
+        },
+        "else": {
+          "add_to_variable": [
+            {
+              "var": "MEN_japhelp_morale_factor",
+              "value": 0.05
+            },
+            {
+              "var": "MEN_japhelp_defence_factor",
+              "value": 0.1
+            }
+          ],
+          "custom_effect_tooltip": "JAP_MEN_Kenpeitai_Operations_tt"
+        }
+      }
+    }
+  }
+]

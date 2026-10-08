@@ -1,0 +1,528 @@
+[
+  {
+    "id": "USA_CIA_Iberia_AAS_Resources",
+    "category_id": "USA_BoP_category",
+    "name": "Поддержать тайную полицию Иберии",
+    "desc": "",
+    "icon": "GFX_decision_generic_use_force",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_Europe": true,
+          "is_ai": true
+        },
+        "IBR": {
+          "has_country_flag": "IBR_Terrorism_GUI",
+          "NOT": {
+            "AND": {
+              "has_country_flag": [
+                "IBR_CNT_Broken",
+                "IBR_ETA_Broken",
+                "IBR_BTA_Broken",
+                "IBR_FSLP_Broken"
+              ]
+            }
+          }
+        },
+        "NOT": [
+          {
+            "has_global_flag": "IBW_happening"
+          },
+          {
+            "has_global_flag": "Iberian_Divorce"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_IBR_aas_aid",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_Add_AAS_Resources",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ],
+      "add_to_variable": {
+        "IBR.IBR_OFN_Alignment": 1
+      }
+    }
+  },
+  {
+    "id": "GER_Espionage_aid_the_aas",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Кондор\"",
+    "desc": "Для такого ублюдочного государства, как Иберия, Франко и Салазар заслужили некоторое уважение своей силой воли и решимостью сохранить свое государство в живых. Было бы поистине обидно, если Иберия попадет в руки сепаратистов, особенно тех, которые, кажется, склонны к красной идеологии. Чтобы не дать призраку большевизма вернуться в Европу, мы пошлем оперативников для противостояния этим сепаратистам и их коварным заговорам, что даст преимущество иберийским силам. Кроме того, тем самым, возможно, мы наконец сможем убедить иберийцев в том, что Рейх является союзником, а не угрозой.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "NOT": {
+        "has_global_flag": "IBW_happening"
+      },
+      "IBR": {
+        "has_country_flag": "IBR_Terrorism_GUI"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_aid_the_aas",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "IBR_AAS_Funding_decision",
+    "category_id": "IBR_terrorism_category",
+    "name": "Расширить ежеквартальное финансирование",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_political_power": {
+          "_op": ">",
+          "value": 35
+        },
+        "NOT": {
+          "has_idea": "civilian_budget_cuts"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_idea": "civilian_budget_cuts"
+        },
+        "custom_effect_tooltip": "IBR_AAS_decision_budget_cuts",
+        "add_political_power": -35
+      }
+    }
+  },
+  {
+    "id": "IBR_AAS_Military_decision",
+    "category_id": "IBR_terrorism_category",
+    "name": "Перенаправить военные ресурсы",
+    "desc": "",
+    "icon": "GFX_decision_generic_police_redeployment",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 3999
+        }
+      },
+      "has_manpower": {
+        "_op": ">",
+        "value": 3000
+      },
+      "OR": {
+        "has_political_power": {
+          "_op": ">",
+          "value": 35
+        },
+        "NOT": {
+          "has_idea": "military_budget_cuts"
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_idea": "military_budget_cuts"
+        },
+        "custom_effect_tooltip": "IBR_AAS_decision_budget_cuts",
+        "add_political_power": -35
+      }
+    }
+  },
+  {
+    "id": "IBR_AAS_CNT_offensive_decision",
+    "category_id": "IBR_terrorism_category",
+    "name": "Начать наступление на ДИ",
+    "desc": "В связи с критической ситуацией в Каталонии армия готовится к полномасштабному наступлению на Дефенсу Интериор.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "IBR_offensive_decisions_blocked"
+        },
+        {
+          "has_idea": "military_budget_cuts"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_CNT_Broken"
+      },
+      "OR": {
+        "check_variable": [
+          {
+            "IBR_CNT_Activity": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_CNT_Resources": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_CNT_Support": {
+              "_op": ">",
+              "value": 5.99
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "IBR_offensive_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_AAS_ETA_offensive_decision",
+    "category_id": "IBR_terrorism_category",
+    "name": "Начать наступление нв ЭТА",
+    "desc": "В связи с критической ситуацией в Стране Басков армия готовится к полномасштабному наступлению на ЭТА.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "IBR_offensive_decisions_blocked"
+        },
+        {
+          "has_idea": "military_budget_cuts"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_ETA_Broken"
+      },
+      "OR": {
+        "check_variable": [
+          {
+            "IBR_ETA_Activity": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_ETA_Resources": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_ETA_Support": {
+              "_op": ">",
+              "value": 5.99
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "IBR_offensive_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_AAS_FSLP_offensive_decision",
+    "category_id": "IBR_terrorism_category",
+    "name": "Начать наступление на Р-Б",
+    "desc": "В связи с критической ситуацией в Португалии армия готовится к полномасштабному наступлению на Революционные бригады.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "IBR_offensive_decisions_blocked"
+        },
+        {
+          "has_idea": "military_budget_cuts"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_FSLP_Broken"
+      },
+      "OR": {
+        "check_variable": [
+          {
+            "IBR_FSLP_Activity": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_FSLP_Resources": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_FSLP_Support": {
+              "_op": ">",
+              "value": 5.99
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "IBR_offensive_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_AAS_BTA_offensive_decision",
+    "category_id": "IBR_terrorism_category",
+    "name": "Начать наступление нв РБА",
+    "desc": "В связи с критической ситуацией в Астурии армия готовится к полномасштабному наступлению на РБА.",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "IBR_offensive_decisions_blocked"
+        },
+        {
+          "has_idea": "military_budget_cuts"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_BTA_Broken"
+      },
+      "OR": {
+        "check_variable": [
+          {
+            "IBR_BTA_Activity": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_BTA_Resources": {
+              "_op": ">",
+              "value": 5.99
+            }
+          },
+          {
+            "IBR_BTA_Support": {
+              "_op": ">",
+              "value": 5.99
+            }
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "IBR_offensive_decisions_blocked"
+    }
+  },
+  {
+    "id": "IBR_AAS_CNT_AI_dismantlement",
+    "category_id": "IBR_terrorism_category",
+    "name": "IBR_AAS_CNT_AI_dismantlement",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "check_variable": {
+        "var": "IBR_AAS_Resources",
+        "variable": "IBR_CNT_BUYDOWN",
+        "compare": "greater_than_or_equals"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_CNT_Broken"
+      },
+      "is_ai": true
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "IBR_AAS_Resources": "IBR_CNT_BUYDOWN"
+      },
+      "round_variable": "IBR_AAS_Resources",
+      "country_event": {
+        "id": "IBR_terror.100",
+        "days": 3
+      }
+    }
+  },
+  {
+    "id": "IBR_AAS_ETA_AI_dismantlement",
+    "category_id": "IBR_terrorism_category",
+    "name": "IBR_AAS_ETA_AI_dismantlement",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "check_variable": {
+        "var": "IBR_AAS_Resources",
+        "variable": "IBR_ETA_BUYDOWN",
+        "compare": "greater_than_or_equals"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_ETA_Broken"
+      },
+      "is_ai": true
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "IBR_AAS_Resources": "IBR_ETA_BUYDOWN"
+      },
+      "round_variable": "IBR_AAS_Resources",
+      "country_event": {
+        "id": "IBR_terror.200",
+        "days": 3
+      }
+    }
+  },
+  {
+    "id": "IBR_AAS_BTA_AI_dismantlement",
+    "category_id": "IBR_terrorism_category",
+    "name": "IBR_AAS_BTA_AI_dismantlement",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "check_variable": {
+        "var": "IBR_AAS_Resources",
+        "variable": "IBR_BTA_BUYDOWN",
+        "compare": "greater_than_or_equals"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_BTA_Broken"
+      },
+      "is_ai": true
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "IBR_AAS_Resources": "IBR_BTA_BUYDOWN"
+      },
+      "round_variable": "IBR_AAS_Resources",
+      "country_event": {
+        "id": "IBR_terror.300",
+        "days": 3
+      }
+    }
+  },
+  {
+    "id": "IBR_AAS_FSLP_AI_dismantlement",
+    "category_id": "IBR_terrorism_category",
+    "name": "IBR_AAS_FSLP_AI_dismantlement",
+    "desc": "",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "check_variable": {
+        "var": "IBR_AAS_Resources",
+        "variable": "IBR_FSLP_BUYDOWN",
+        "compare": "greater_than_or_equals"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "IBR_FSLP_Broken"
+      },
+      "is_ai": true
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "IBR_AAS_Resources": "IBR_FSLP_BUYDOWN"
+      },
+      "round_variable": "IBR_AAS_Resources",
+      "country_event": {
+        "id": "IBR_terror.400",
+        "days": 3
+      }
+    }
+  }
+]

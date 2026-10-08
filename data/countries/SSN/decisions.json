@@ -1,0 +1,153 @@
+[
+  {
+    "id": "HGR_incorporate_SSN",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [SSN.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_SSN_req_tt",
+        "SSN": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_SSN_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSN": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_SSN",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_SSN_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSN.GetFlag]Вооружить рабов",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSN"
+      },
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSN_influence_true",
+        "HGR_SSN_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSN": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSN_decision_a_1",
+      "set_country_flag": "HGR_took_idealist_action",
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500,
+        "producer": "GER"
+      },
+      "HGR_increase_native_opinion_low": true,
+      "SSL": {
+        "add_popularity": {
+          "ideology": "national_socialism",
+          "popularity": -0.03
+        },
+        "increase_Heydrich_influence_small": true,
+        "add_stability": -0.05
+      }
+    }
+  },
+  {
+    "id": "HGR_SSN_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[SSN.GetFlag]Прислать офицеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_army_experience": {
+        "_op": ">",
+        "value": 19.99
+      },
+      "has_manpower": {
+        "_op": ">",
+        "value": 149
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_idealist_action",
+        "has_decision": "HGR_incorporate_SSN"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_SSN_influence_true",
+        "HGR_SSN_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_idealist_decisions"
+      },
+      "SSN": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_SSN_decision_a_2",
+      "set_country_flag": "HGR_took_idealist_action",
+      "army_experience": -20,
+      "add_manpower": -150,
+      "HGR_increase_native_opinion_med": true,
+      "SSN": {
+        "add_popularity": {
+          "ideology": "national_socialism",
+          "popularity": -0.05
+        },
+        "increase_Heydrich_influence_medium": true,
+        "add_stability": -0.075
+      }
+    }
+  }
+]

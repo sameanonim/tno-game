@@ -1,0 +1,223 @@
+[
+  {
+    "id": "HGR_incorporate_OKL",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "Реинтегрировать [OKL.GetNameDef]",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "HGR_incorporate_OKL_req_tt",
+        "OKL": {
+          "check_variable": {
+            "HGR_Influence_Balance": {
+              "_op": ">",
+              "value": 94
+            }
+          }
+        }
+      },
+      "NOT": {
+        "has_country_flag": "HGR_took_incorporate_action"
+      }
+    },
+    "visible": {
+      "has_country_flag": "HGR_OKL_influence_true",
+      "NOT": {
+        "has_country_flag": "HGR_hide_moderate_decisions"
+      },
+      "OKL": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_incorporate_OKL",
+      "set_country_flag": "HGR_took_incorporate_action"
+    }
+  },
+  {
+    "id": "HGR_OKL_decision_a_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[OKL.GetFlag]Ускорить поставки топлива",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_moderate_action",
+        "has_decision": "HGR_incorporate_OKL"
+      },
+      "has_fuel": {
+        "_op": ">",
+        "value": 499
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_OKL_influence_true",
+        "HGR_OKL_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_moderate_decisions"
+      },
+      "OKL": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_OKL_decision_a_1",
+      "set_country_flag": "HGR_took_moderate_action",
+      "hidden_effect": {
+        "add_fuel": -500
+      },
+      "OKL": {
+        "increase_Heydrich_influence_small": true,
+        "add_fuel": 500
+      }
+    }
+  },
+  {
+    "id": "HGR_OKL_decision_a_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[OKL.GetFlag]Предоставить запчасти",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_moderate_action",
+        "has_decision": "HGR_incorporate_OKL"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_OKL_influence_true",
+        "HGR_OKL_decision_set_a"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_moderate_decisions"
+      },
+      "OKL": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_OKL_decision_a_2",
+      "set_country_flag": "HGR_took_moderate_action",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.01
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "OKL": {
+        "increase_Heydrich_influence_small": true
+      }
+    }
+  },
+  {
+    "id": "HGR_OKL_decision_b_1",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[OKL.GetFlag]Поддержать руководство Люфтваффе",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_moderate_action",
+        "has_decision": "HGR_incorporate_OKL"
+      },
+      "command_power": {
+        "_op": ">",
+        "value": 14
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_OKL_influence_true",
+        "HGR_OKL_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_moderate_decisions"
+      },
+      "OKL": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_OKL_decision_b_1",
+      "set_country_flag": "HGR_took_moderate_action",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "HGR_increase_militarist_opinion_low": true,
+      "OKL": {
+        "increase_Heydrich_influence_medium": true,
+        "air_experience": 25
+      }
+    }
+  },
+  {
+    "id": "HGR_OKL_decision_b_2",
+    "category_id": "HGR_German_Warlord_Influence_Category",
+    "name": "[OKL.GetFlag]Оказать локальную помощь",
+    "desc": "",
+    "icon": "GFX_decision_generic_ignite_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "HGR_took_moderate_action",
+        "has_decision": "HGR_incorporate_OKL"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "HGR_OKL_influence_true",
+        "HGR_OKL_decision_set_b"
+      ],
+      "NOT": {
+        "has_country_flag": "HGR_hide_moderate_decisions"
+      },
+      "OKL": {
+        "exists": true,
+        "NOT": {
+          "is_in_faction_with": [
+            "BRG",
+            "GER"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision HGR_OKL_decision_b_2",
+      "set_country_flag": "HGR_took_moderate_action",
+      "HGR_increase_moderate_opinion_med": true,
+      "OKL": {
+        "increase_Heydrich_influence_small": true,
+        "add_stability": 0.03
+      }
+    }
+  }
+]

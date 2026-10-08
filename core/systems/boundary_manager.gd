@@ -265,6 +265,10 @@ func transfer_province_or_state(state_id: int, new_owner_tag: String) -> Diction
 	var clean_tag = new_owner_tag.strip_edges().to_upper()
 	var old_owner = state_to_owner.get(state_id, "")
 
+	if clean_tag.is_empty():
+		push_warning("[BoundaryManager] Refusing to transfer State %d to empty owner tag!" % state_id)
+		return {"success": false, "changed": false, "state_id": state_id, "owner": old_owner}
+
 	if old_owner == clean_tag:
 		return {"success": true, "changed": false, "state_id": state_id, "owner": clean_tag}
 
@@ -334,6 +338,10 @@ func transfer_province(province_id: int, new_owner_tag: String) -> Dictionary:
 	var clean_tag = new_owner_tag.strip_edges().to_upper()
 	var state_id = province_to_state.get(province_id, 0)
 	var old_owner := ""
+
+	if clean_tag.is_empty():
+		push_warning("[BoundaryManager] Refusing to transfer Province %d to empty owner tag!" % province_id)
+		return {"success": false, "changed": false, "province_id": province_id, "state_id": state_id}
 
 	if regions_db.has(province_id):
 		var reg = regions_db[province_id] as RegionData

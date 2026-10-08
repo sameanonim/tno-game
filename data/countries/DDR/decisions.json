@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ita_address_the_defeat",
+    "category_id": "ITA_italo_turkish_war_category",
+    "name": "ita_address_the_defeat",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_global_flag": [
+        "ita_tur_ita_lose",
+        "italy_turkey_war"
+      ],
+      "NOT": {
+        "has_global_flag": "ita_tur_ita_win"
+      },
+      "AND": {
+        "country_exists": [
+          "TUR",
+          "IME"
+        ]
+      }
+    },
+    "complete_effect": {
+      "country_event": {
+        "id": "ciano.12"
+      },
+      "add_stability": -0.025
+    }
+  },
+  {
+    "id": "USA_speer_radio_address",
+    "category_id": "USA_BoP_category",
+    "name": "Радио Свободная Германия",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Europe": true,
+        "is_ai": true
+      },
+      "country_exists": "SGR",
+      "has_country_flag": "USA_Passed_Speer_Bill"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_speer_radio_address_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_speer_radio_address_flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "GNG_address_the_legislative_council",
+    "category_id": "GNG_Riots_GUI",
+    "name": "Обращение к Законодательному совету",
+    "desc": "Громкое выступление в зале Совета о предпринятых нами мерах по обузданию  ККТ и  ФРГ должно на некоторое время успокоить политиков.",
+    "icon": "GFX_decision_GNG_legco",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      }
+    },
+    "complete_effect": {}
+  }
+]

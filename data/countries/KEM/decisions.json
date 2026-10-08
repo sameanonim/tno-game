@@ -1,185 +1,1786 @@
 [
   {
-    "id": "RUS_Decision_Smuta_Occupation_KEM",
-    "category": "smuta",
-    "category_id": "RUS_DecisionCategory_Smuta",
-    "category_name": "Смута",
-    "title": "Оккупировать",
-    "title_en": "Occupy",
-    "description": "$RUS_Decision_Smuta_Occupation_desc$",
-    "description_en": "$RUS_Decision_Smuta_Occupation_desc$",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "id": "AST_develop_port_kemla_steel_medium_decision",
+    "category_id": "prospect_for_resources",
+    "name": "Построить вторую доменную печь в Порт-Кембле",
+    "desc": "Долгое время Порт-Кембла обходился лишь одной доменной печью, однако спрос вырос настолько, что нам стоит подумать о строительстве второй печи. Это позволит примерно вдвое увеличить выпуск стали в регионе.",
+    "icon": "steel",
+    "cost": 100,
     "fire_only_once": true,
-    "requires_tags": [
-      "KEM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Оккупировать»"
-    }
+    "available": {
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 3
+      },
+      "owns_state": 285,
+      "controls_state": 285,
+      "OR": {
+        "has_completed_focus": [
+          "AST_industrial_expansion",
+          "AST_guaranteed_employment"
+        ]
+      }
+    },
+    "visible": {
+      "285": {
+        "is_owned_and_controlled_by": "ROOT",
+        "NOT": {
+          "has_state_flag": "AST_has_completed_kemla_steel_flag"
+        }
+      }
+    },
+    "complete_effect": {}
   },
   {
-    "id": "RUS_Decision_Smuta_Expansion_KEM_Generic",
-    "category": "smuta",
-    "category_id": "RUS_DecisionCategory_Smuta",
-    "category_name": "Смута",
-    "title": "Атаковать",
-    "title_en": "Attack",
-    "description": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
-    "description_en": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 2,
-    "fire_only_once": true,
-    "requires_tags": [
-      "KEM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Атаковать»"
-    }
-  },
-  {
-    "id": "RUS_Mission_Smuta_CHT_MakeMikhailCool",
-    "category": "smuta",
-    "category_id": "RUS_DecisionCategory_Smuta",
-    "category_name": "Смута",
-    "title": "Доказать легитимность Михаила",
-    "title_en": "Prove Mikhail's Legitimacy",
-    "description": "Формула проста: чем более легитимен Михаил, тем легче нам управлять государством. И поэтому мы должны доказать, что наш претендент вполне законен, иначе пострадаем от последствий.",
-    "description_en": "The formula is simple: the more legitimate Mikhail is the easier it is for us to govern. And so must we prove that he is legitimate or else suffer consequences.",
-    "cost_pc": 20.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "id": "TUR_root_out_kemalists_in_state",
+    "category_id": "TUR_kemalist_state_management_category",
+    "name": "Искоренить кемализм в регионе",
+    "desc": "Мы должны вселить страх в сердца безбожников-кемалистов, что продолжают отравлять нашу страну.",
+    "icon": "generic_arrest",
+    "cost": 100,
     "fire_only_once": false,
-    "requires_tags": [
-      "CHT",
-      "KEM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Доказать легитимность Михаила»",
-      "modify_radicalization": -5.0,
-      "modify_legitimacy": 4.0
+    "available": {
+      "any_owned_state": {
+        "has_dynamic_modifier": {
+          "modifier": "kemalist_schemers"
+        }
+      }
+    },
+    "visible": {
+      "OR": {
+        "AND": {
+          "has_country_leader": {
+            "character": "TUR_adnan_menderes",
+            "ruling_only": true
+          },
+          "has_completed_focus": "TUR_democratic_transition_focus"
+        },
+        "has_completed_focus": "TUR_pivot_to_the_past"
+      },
+      "NOT": {
+        "has_country_flag": "TUR_acted_against_kemalists_recently_flag"
+      }
+    },
+    "complete_effect": {
+      "random_owned_controlled_state": {
+        "limit": {
+          "has_dynamic_modifier": {
+            "modifier": "kemalist_schemers"
+          }
+        },
+        "remove_dynamic_modifier": {
+          "modifier": "kemalist_schemers"
+        }
+      },
+      "if": {
+        "limit": {
+          "TUR_has_kemalist_officers": true
+        },
+        "subtract_from_variable": [
+          {
+            "var": "TUR_kemalist_officers_loyalty",
+            "value": 1
+          },
+          {
+            "var": "TUR_kemalist_power_variable",
+            "value": 1
+          }
+        ],
+        "TUR_kemalist_loyalty_and_power_update_effect": true
+      },
+      "set_country_flag": {
+        "flag": "TUR_acted_against_kemalists_recently_flag",
+        "value": 1,
+        "days": 75
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_infiltration_mission",
+    "category_id": "TUR_the_enemy_within",
+    "name": "Кризис внедрения кемалистов",
+    "desc": "Кемалисты, недовольные отвержением общества, взялись за старое. Они желают монополизировать власть на западе, и их надо остановить.",
+    "icon": "tur_unifying_the_country",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "OR": {
+          "any_owned_state": [
+            {
+              "has_state_flag": "TUR_ideological_battleground_state"
+            },
+            {
+              "has_dynamic_modifier": {
+                "modifier": "kemalist_schemers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": []
+  },
+  {
+    "id": "TUR_thwarting_kemalist_infiltration",
+    "category_id": "TUR_the_enemy_within",
+    "name": "Отражение попыток внедрения кемалистов",
+    "desc": "Не дать кемалистам распространять свою отраву и дальше — не просто гражданский, но божественный долг.",
+    "icon": "tur_unifying_the_country",
+    "cost": "TUR_counter_infiltration_cost?25",
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "visible": {
+      "has_active_mission": "TUR_kemalist_infiltration_mission"
+    },
+    "complete_effect": {
+      "add_days_mission_timeout": {
+        "mission": "TUR_kemalist_infiltration_mission",
+        "days": 30
+      },
+      "hidden_effect": {
+        "if": {
+          "limit": {
+            "NOT": {
+              "has_variable": "TUR_counter_infiltration_cost"
+            }
+          },
+          "set_variable": {
+            "TUR_counter_infiltration_cost": 50
+          }
+        },
+        "else": {
+          "add_to_variable": {
+            "var": "TUR_counter_infiltration_cost",
+            "value": 25
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_entrench_kemalism_in_state",
+    "category_id": "TUR_the_enemy_within",
+    "name": "Укрепить позиции кемализма в регионе",
+    "desc": "Ради своего выживания мы должны приложить все усилия, чтобы идеология кемализма поселилась в сердцах как можно большего числа людей.",
+    "icon": "hol_radio_oranje",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "TUR_spread_kemalism_recently_flag"
+      },
+      "OR": {
+        "has_completed_focus": [
+          "TUR_the_guardians_of_kemalism",
+          "TUR_hunt_down_fifth_columnist_islamists",
+          "TUR_fatherland_first"
+        ]
+      },
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "has_state_flag": "TUR_ideological_battleground_state"
+        },
+        "save_event_target_as": "TUR_kemalist_state_event_target"
+      },
+      "TUR_kemalist_influenced_state_effect": true,
+      "hidden_effect": {
+        "set_country_flag": {
+          "flag": "TUR_spread_kemalism_recently_flag",
+          "value": 1,
+          "days": 45
+        }
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_ideological_entrenchment_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_ideological_entrenchment_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_state_flag": "TUR_ideological_battleground_state"
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_owned_state": {
+        "limit": {
+          "has_state_flag": "TUR_ideological_battleground_state"
+        },
+        "save_event_target_as": "TUR_kemalist_state_event_target"
+      },
+      "random_list": {
+        "50": [
+          {
+            "event_target:TUR_kemalist_state_event_target": {
+              "TUR_kemalist_influenced_state_effect": true
+            }
+          },
+          {
+            "event_target:TUR_kemalist_state_event_target": {
+              "TUR_kemalist_influenced_state_effect": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_make_angry_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_make_angry_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_dynamic_modifier": {
+          "modifier": "kemalist_loyalties"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_list": {
+        "50": [
+          {
+            "TUR_kemalist_turn_hostile_effect": true
+          },
+          {
+            "TUR_kemalist_turn_hostile_effect": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_make_happy_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_make_happy_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "has_dynamic_modifier": {
+          "modifier": "kemalist_schemers"
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "random_list": {
+        "50": [
+          {
+            "TUR_kemalist_turn_ally_effect": true
+          },
+          {
+            "TUR_kemalist_turn_ally_effect": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_loyal_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_loyal_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_minimal_power_loyal",
+            "TUR_kemalist_army_officers_decreased_power_loyal",
+            "TUR_kemalist_army_officers_limited_power_loyal",
+            "TUR_kemalist_army_officers_extended_power_loyal",
+            "TUR_kemalist_army_officers_powerful_loyal"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "OR": {
+            "has_idea": [
+              "TUR_kemalist_army_officers_minimal_power_neutral",
+              "TUR_kemalist_army_officers_minimal_power_disloyal"
+            ]
+          }
+        },
+        "remove_ideas": [
+          "TUR_kemalist_army_officers_minimal_power_neutral",
+          "TUR_kemalist_army_officers_minimal_power_disloyal"
+        ],
+        "add_ideas": "TUR_kemalist_army_officers_minimal_power_loyal"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_decreased_power_neutral",
+                "TUR_kemalist_army_officers_decreased_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_decreased_power_neutral",
+            "TUR_kemalist_army_officers_decreased_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_loyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_limited_power_neutral",
+                "TUR_kemalist_army_officers_limited_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_limited_power_neutral",
+            "TUR_kemalist_army_officers_limited_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_loyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_extended_power_neutral",
+                "TUR_kemalist_army_officers_extended_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_extended_power_neutral",
+            "TUR_kemalist_army_officers_extended_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_loyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_powerful_neutral",
+                "TUR_kemalist_army_officers_powerful_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_powerful_neutral",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_powerful_loyal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_neutral_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_neutral_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_minimal_power_neutral",
+            "TUR_kemalist_army_officers_decreased_power_neutral",
+            "TUR_kemalist_army_officers_limited_power_neutral",
+            "TUR_kemalist_army_officers_extended_power_neutral",
+            "TUR_kemalist_army_officers_powerful_neutral"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "OR": {
+            "has_idea": [
+              "TUR_kemalist_army_officers_minimal_power_loyal",
+              "TUR_kemalist_army_officers_minimal_power_disloyal"
+            ]
+          }
+        },
+        "remove_ideas": [
+          "TUR_kemalist_army_officers_minimal_power_loyal",
+          "TUR_kemalist_army_officers_minimal_power_disloyal"
+        ],
+        "add_ideas": "TUR_kemalist_army_officers_minimal_power_neutral"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_decreased_power_loyal",
+                "TUR_kemalist_army_officers_decreased_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_decreased_power_loyal",
+            "TUR_kemalist_army_officers_decreased_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_neutral"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_limited_power_loyal",
+                "TUR_kemalist_army_officers_limited_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_limited_power_loyal",
+            "TUR_kemalist_army_officers_limited_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_neutral"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_extended_power_loyal",
+                "TUR_kemalist_army_officers_extended_power_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_extended_power_loyal",
+            "TUR_kemalist_army_officers_extended_power_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_neutral"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_powerful_loyal",
+                "TUR_kemalist_army_officers_powerful_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_powerful_loyal",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_powerful_neutral"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_disloyal_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_disloyal_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_minimal_power_disloyal",
+            "TUR_kemalist_army_officers_decreased_power_disloyal",
+            "TUR_kemalist_army_officers_limited_power_disloyal",
+            "TUR_kemalist_army_officers_extended_power_disloyal",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "OR": {
+            "has_idea": [
+              "TUR_kemalist_army_officers_minimal_power_loyal",
+              "TUR_kemalist_army_officers_minimal_power_neutral"
+            ]
+          }
+        },
+        "remove_ideas": [
+          "TUR_kemalist_army_officers_minimal_power_loyal",
+          "TUR_kemalist_army_officers_minimal_power_neutral"
+        ],
+        "add_ideas": "TUR_kemalist_army_officers_minimal_power_disloyal"
+      },
+      "else_if": [
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_decreased_power_loyal",
+                "TUR_kemalist_army_officers_decreased_power_neutral"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_decreased_power_loyal",
+            "TUR_kemalist_army_officers_decreased_power_neutral"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_limited_power_loyal",
+                "TUR_kemalist_army_officers_limited_power_neutral"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_limited_power_loyal",
+            "TUR_kemalist_army_officers_limited_power_neutral"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_disloyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_extended_power_loyal",
+                "TUR_kemalist_army_officers_extended_power_neutral"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_extended_power_loyal",
+            "TUR_kemalist_army_officers_extended_power_neutral"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_disloyal"
+        },
+        {
+          "limit": {
+            "OR": {
+              "has_idea": [
+                "TUR_kemalist_army_officers_powerful_loyal",
+                "TUR_kemalist_army_officers_powerful_disloyal"
+              ]
+            }
+          },
+          "remove_ideas": [
+            "TUR_kemalist_army_officers_powerful_loyal",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ],
+          "add_ideas": "TUR_kemalist_army_officers_powerful_disloyal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_empower_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_empower_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_powerful_loyal",
+            "TUR_kemalist_army_officers_powerful_neutral",
+            "TUR_kemalist_army_officers_powerful_disloyal"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_powerful_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_minimal_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_minimal_power_loyal"
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_powerful_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_powerful_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_minimal_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_minimal_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_minimal_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_minimal_power_disloyal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "TUR_kemalist_officers_depower_debug_decision",
+    "category_id": "category_faction_debug_decisions",
+    "name": "TUR_kemalist_officers_depower_debug_decision",
+    "desc": "",
+    "icon": "faction_tur_kemalist",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "NOT": {
+        "OR": {
+          "has_idea": [
+            "TUR_kemalist_army_officers_minimal_power_loyal",
+            "TUR_kemalist_army_officers_minimal_power_neutral",
+            "TUR_kemalist_army_officers_minimal_power_disloyal"
+          ]
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": {
+      "if": [
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_powerful_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_powerful_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_loyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_loyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_minimal_power_loyal",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_loyal"
+        }
+      ],
+      "else_if": [
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_powerful_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_powerful_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_powerful_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_extended_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_powerful_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_extended_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_limited_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_extended_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_limited_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_limited_power_disloyal"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_neutral"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_minimal_power_neutral",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_neutral"
+        },
+        {
+          "limit": {
+            "has_idea": "TUR_kemalist_army_officers_decreased_power_disloyal"
+          },
+          "add_ideas": "TUR_kemalist_army_officers_minimal_power_disloyal",
+          "remove_ideas": "TUR_kemalist_army_officers_decreased_power_disloyal"
+        }
+      ]
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_kemerovo",
+    "category_id": "RUS_coring_category",
+    "name": "Интеграция Кемерово",
+    "desc": "",
+    "icon": "GFX_decision_kemerovo_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 569
+    },
+    "visible": {
+      "owns_state": 569,
+      "NOT": {
+        "569": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KEM_load_starting_tree",
+    "category_id": "KEM_debug_category",
+    "name": "Загрузить начальное древо",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_load_starting_tree",
+      "load_focus_tree": {
+        "tree": "KEM_start",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "KEM_load_expansion_tree",
+    "category_id": "KEM_debug_category",
+    "name": "Загрузить древо экспансии",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_load_expansion_tree",
+      "load_focus_tree": {
+        "tree": "KEM_expansion",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "KEM_load_regional_tree",
+    "category_id": "KEM_debug_category",
+    "name": "Загрузить региональное древо",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_load_regional_tree",
+      "load_focus_tree": {
+        "tree": "KEM_regional",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "KEM_load_superregional_yuriy_tree",
+    "category_id": "KEM_debug_category",
+    "name": "Загрузить Юрьево региональное древо",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_load_superregional_yuriy_tree",
+      "load_focus_tree": {
+        "tree": "KEM_superregional_yuriy",
+        "keep_completed": false
+      }
+    }
+  },
+  {
+    "id": "KEM_load_superregional_lydia_tree",
+    "category_id": "KEM_debug_category",
+    "name": "Загрузить Лидии региональное древо",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_load_superregional_lydia_tree",
+      "load_focus_tree": {
+        "tree": "KEM_superregional_lydia",
+        "keep_completed": false
+      }
     }
   },
   {
     "id": "IRK_kemerovos_palaces_of_industry",
-    "category": "smuta",
     "category_id": "IRK_five_year_plans",
-    "category_name": "-ая пятилетка",
-    "title": "Дворцы промышленности в Кемерово",
-    "title_en": "Kemerovo's Palaces of Industry",
-    "description": "Могучие заводы Кемерово - это свидетельство советской экономической доблести, которая смогла пережить несколько кровопролитных войн и до сих пор переживает потрясающий подъём. Вернув этот великий город под законный советский контроль, мы сделаем его стержнем наших усилий по индустриализации региона.",
-    "description_en": "The mighty factories of Kemerovo are a testament to Soviet economic prowess, one that managed to survive several bloody wars and still go from strength to stunning strength. With this great city back under rightful Soviet control, we'll make it the lynchpin for our industrialization efforts in the region.",
-    "cost_pc": 125.0,
-    "cost_cap": 1,
-    "cost_money": 0.1,
-    "cooldown_turns": 14,
+    "name": "Дворцы промышленности в Кемерово",
+    "desc": "Могучие заводы Кемерово - это свидетельство советской экономической доблести, которая смогла пережить несколько кровопролитных войн и до сих пор переживает потрясающий подъём. Вернув этот великий город под законный советский контроль, мы сделаем его стержнем наших усилий по индустриализации региона.",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 125,
     "fire_only_once": true,
-    "requires_tags": [
-      "IRK",
-      "KEM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Дворцы промышленности в Кемерово»",
-      "modify_gdp": 0.3
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "IRK_five_year_plans_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_dynamic_modifier": {
+        "modifier": "IRK_building_up_socialism"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRK_kemerovos_palaces_of_industry",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Откладывание соперничества",
+    "desc": "Княжич Юрий и княжна Лидия договорились сотрудничать друг с другом... пока что. Пока длится эта миссия мы можем брать как решения Юрия, так и решения Лидии.",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "KEM_unlock_yuriy_decisions",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Показать решения влияния Юрия",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KEM_increase_lydia_influence"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KEM_increase_yuriy_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_unlock_yuriy_decisions",
+      "set_country_flag": "KEM_increase_yuriy_influence"
+    }
+  },
+  {
+    "id": "KEM_disable_yuriy_decisions",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Скрыть решения влияния Юрия",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KEM_increase_lydia_influence"
+      }
+    },
+    "visible": {
+      "has_country_flag": "KEM_increase_yuriy_influence",
+      "NOT": {
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_disable_yuriy_decisions",
+      "clr_country_flag": "KEM_increase_yuriy_influence"
+    }
+  },
+  {
+    "id": "KEM_meet_with_union_leaders",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Встречи с профсоюзными лидерами",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_country_flag": "KEM_increase_yuriy_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_meet_with_union_leaders"
+    }
+  },
+  {
+    "id": "KEM_sway_sympathetic_generals",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Успокоить сочувствующих генералов",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_country_flag": "KEM_increase_yuriy_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_sway_sympathetic_generals"
+    }
+  },
+  {
+    "id": "KEM_sponsor_cultural_events",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Спонсирование культурных мероприятий",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "OR": {
+        "has_country_flag": "KEM_increase_yuriy_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_sponsor_cultural_events"
+    }
+  },
+  {
+    "id": "KEM_unlock_lydia_decisions",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Показать решения влияния Лидии",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KEM_increase_yuriy_influence"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KEM_increase_lydia_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_unlock_lydia_decisions",
+      "set_country_flag": "KEM_increase_lydia_influence"
+    }
+  },
+  {
+    "id": "KEM_disable_lydia_decisions",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Скрыть решения влияния Лидии",
+    "desc": "",
+    "icon": "GFX_decision_generic_visibility_closed",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KEM_increase_yuriy_influence"
+      }
+    },
+    "visible": {
+      "has_country_flag": "KEM_increase_lydia_influence",
+      "NOT": {
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_disable_lydia_decisions",
+      "clr_country_flag": "KEM_increase_lydia_influence"
+    }
+  },
+  {
+    "id": "KEM_meet_with_industrialists",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Встреча с промышленниками",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "KEM_assert_kingsguard_influence",
+          "KEM_expand_mining_operations"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": "KEM_increase_lydia_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_meet_with_industrialists"
+    }
+  },
+  {
+    "id": "KEM_assert_kingsguard_influence",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Утвердить влияние Княжеской Дружины",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "KEM_meet_with_industrialists",
+          "KEM_expand_mining_operations"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": "KEM_increase_lydia_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_assert_kingsguard_influence"
+    }
+  },
+  {
+    "id": "KEM_expand_mining_operations",
+    "category_id": "KEM_kingdom_of_kemerovo_category",
+    "name": "Расширение горных работ",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": [
+          "KEM_meet_with_industrialists",
+          "KEM_assert_kingsguard_influence"
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": "KEM_increase_lydia_influence",
+        "has_active_mission": "KEM_TheRoyalCourt_Mission_PostponingTheRivarly"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision KEM_expand_mining_operations"
+    }
+  },
+  {
+    "id": "OMS_construct_kem_bunkers",
+    "category_id": "OMS_national_redoubt_program_category",
+    "name": "Construct Fortifications in Kemerovo",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "OMS_national_redoubt_construction"
+      },
+      "has_country_flag": "OMS_a_new_siberian_plan_flag"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision OMS_construct_sverdlovsk_bunkers",
+      "set_country_flag": "OMS_national_redoubt_construction",
+      "hidden_effect": {
+        "add_command_power": -25
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_KEM",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [KEM.GetFlag] [KEM.GetName]",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "KEM": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "KEM"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_KEM",
+      "set_temp_variable": {
+        "TargetTag": "KEM"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "KEM.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "KEM"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "KEM"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_KEM": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_KEM_Generic",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Атаковать [KEM.GetFlag] [KEM.GetName]",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "is_central_siberian_nation": true,
+      "is_neighbor_of": "KEM",
+      "has_war": false,
+      "NOT": {
+        "has_non_aggression_pact_with": "KEM"
+      },
+      "RUS_Smuta_ScriptedTrigger_Expansion_KEM_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_KEM_Generic",
+      "set_temp_variable": {
+        "TargetTag": "KEM"
+      },
+      "RUS_Smuta_Expansion_TargetTag_Generic_Complete": true,
+      "set_country_flag": "RUS_Smuta_preparing_expansion",
+      "if": {
+        "limit": {
+          "tag": "TOM"
+        },
+        "country_event": "TOM.17"
+      }
+    }
+  },
+  {
+    "id": "RUS_Mission_Smuta_CHT_MakeMikhailCool",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Доказать легитимность Михаила",
+    "desc": "Формула проста: чем более легитимен Михаил, тем легче нам управлять государством. И поэтому мы должны доказать, что наш претендент вполне законен, иначе пострадаем от последствий.",
+    "icon": "GFX_decision_generic_chess_king",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHT_a_perfectly_legitimate_claimant"
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Mission Complete RUS_Mission_Smuta_CHT_MakeMikhailCool",
+      "set_temp_variable": [
+        {
+          "Y": -30
+        },
+        {
+          "Y": -12
+        }
+      ],
+      "RUS_Smuta_Chaos_Add_Y": true,
+      "RUS_Smuta_Chaos_Mission_Cost_Add_Y": true
     }
   },
   {
     "id": "TOM_campaign_on_Kemerovo",
-    "category": "smuta",
     "category_id": "TOM_Regional_Campaign",
-    "category_name": "Избирательная кампания",
-    "title": "Кампания в Кемерово",
-    "title_en": "Campaign on Kemerovo",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 30.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "name": "Кампания в Кемерово",
+    "desc": "",
+    "icon": "GFX_decision_generic_podium",
+    "cost": 30,
     "fire_only_once": false,
-    "requires_tags": [
-      "TOM",
-      "KEM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Кампания в Кемерово»"
+    "available": {
+      "NOT": {
+        "has_country_flag": "TOM_Is_Campaigning"
+      }
+    },
+    "visible": {
+      "569": {
+        "TOM_can_have_elections_in_state": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_campaign_on_Kemerovo",
+      "set_country_flag": "TOM_Is_Campaigning"
     }
   },
   {
     "id": "TOM_voting_campaign_in_Kemerovo",
-    "category": "smuta",
     "category_id": "TOM_Regional_Campaign",
-    "category_name": "Избирательная кампания",
-    "title": "Избирательная кампания в Кемерово",
-    "title_en": "Voting Campaign in Kemerovo",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 30.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "name": "Избирательная кампания в Кемерово",
+    "desc": "",
+    "icon": "GFX_decision_generic_voting",
+    "cost": 30,
     "fire_only_once": false,
-    "requires_tags": [
-      "TOM",
-      "KEM"
-    ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Избирательная кампания в Кемерово»"
+    "available": {
+      "NOT": {
+        "has_country_flag": "TOM_Turnout_Decisions"
+      }
+    },
+    "visible": {
+      "569": {
+        "TOM_can_have_elections_in_state": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_voting_campaign_in_Kemerovo",
+      "set_country_flag": "TOM_Turnout_Decisions"
     }
   },
   {
     "id": "TOM_suppress_voting_in_Kemerovo",
-    "category": "smuta",
     "category_id": "TOM_Regional_Campaign",
-    "category_name": "Избирательная кампания",
-    "title": "Подавление голосования в Кемерово",
-    "title_en": "Suppress Voting in Kemerovo",
-    "description": "Оперативная инициатива высшего руководства государства.",
-    "description_en": "",
-    "cost_pc": 30.0,
-    "cost_cap": 1,
-    "cost_money": 0.05,
-    "cooldown_turns": 4,
+    "name": "Подавление голосования в Кемерово",
+    "desc": "",
+    "icon": "GFX_decision_generic_protest",
+    "cost": 30,
     "fire_only_once": false,
-    "requires_tags": [
-      "TOM",
-      "KEM"
+    "available": {
+      "NOT": {
+        "has_country_flag": "TOM_Turnout_Decisions"
+      }
+    },
+    "visible": {
+      "569": {
+        "TOM_can_have_elections_in_state": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TOM_suppress_voting_in_Kemerovo",
+      "set_country_flag": "TOM_Turnout_Decisions"
+    }
+  },
+  {
+    "id": "OMS_cap_the_KEM",
+    "category_id": "OMS_2WRWCE_PostApoc_category",
+    "name": "Retake Kemerovo",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "check_variable": [
+            {
+              "Antarctica_Militarization": {
+                "_op": ">",
+                "value": 20
+              }
+            },
+            {
+              "Antarctica_Legitimacy": {
+                "_op": ">",
+                "value": 20
+              }
+            },
+            {
+              "Antarctica_Equipment": {
+                "_op": ">",
+                "value": 10
+              }
+            }
+          ],
+          "tooltip": "PostApoc_capture_tt"
+        },
+        {
+          "check_variable": {
+            "OMS_team_doing": {
+              "_op": "<",
+              "value": "OMS_team_doing_max"
+            }
+          },
+          "tooltip": "OMS_team_doing_tt"
+        }
+      ],
+      "has_global_flag": "SWRW_postnuke_out_bunker_NOW"
+    },
+    "visible": {
+      "owns_state": 570
+    },
+    "complete_effect": {
+      "add_to_variable": {
+        "OMS_team_doing": 1
+      },
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "Antarctica_Militarization": 20
+          },
+          {
+            "Antarctica_Legitimacy": 20
+          },
+          {
+            "Antarctica_Equipment": 10
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "RUS_kemerovos_palaces_of_industry",
+    "category_id": "RUS_five_year_plans",
+    "name": "Kemerovo's Palaces of Industry",
+    "desc": "The mighty factories of Kemerovo are a testament to Soviet economic prowess, one that managed to survive several bloody wars and still go from strength to stunning strength. With this great city back under rightful Soviet control, we'll make it the lynchpin for our industrialization efforts in the region.",
+    "icon": "GFX_decision_generic_heavy_industry",
+    "cost": 125,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "RUS_five_year_plans_phase": {
+          "_op": ">",
+          "value": 3
+        }
+      },
+      "has_dynamic_modifier": {
+        "modifier": "RUS_building_up_socialism"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_kemerovos_palaces_of_industry",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.4
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "SGV_construct_kemerovo_bunkers",
+    "category_id": "SGV_national_redoubt_program_category",
+    "name": "Assemble the Redoubt in Kemerovo",
+    "desc": "",
+    "icon": "GFX_decision_generic_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 569,
+      "NOT": {
+        "has_country_flag": "OMS_national_redoubt_construction"
+      }
+    },
+    "visible": [
+      {
+        "controls_state": 569,
+        "has_country_flag": [
+          "SGV_national_redoubt_program_start",
+          "OMS_national_redoubt_program_flag"
+        ]
+      },
+      {
+        "has_country_flag": [
+          "OMS_national_redoubt_program_flag",
+          "OMS_a_societal_redoubt_flag"
+        ]
+      }
     ],
-    "requires_russia": true,
-    "requires_germany": false,
-    "requires_usa": false,
-    "requires_general": false,
-    "effects": {
-      "log": "Утверждена инициатива: «Подавление голосования в Кемерово»"
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_kemerovo_bunkers",
+      "set_country_flag": "OMS_national_redoubt_construction",
+      "hidden_effect": {
+        "add_command_power": -20,
+        "add_political_power": -20
+      },
+      "set_temp_variable": {
+        "temp_econ_spending_amount": "GDP"
+      },
+      "multiply_temp_variable": {
+        "temp_econ_spending_amount": 0.015
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "VOR_military_conscripted_kemerovo",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Kemerovo to Military Commissariats",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "569": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "654": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        569,
+        654
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_kemerovo",
+      "add_to_variable": [
+        {
+          "VOR_military_conscripted_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "569": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      },
+      "654": {
+        "set_state_flag": "VOR_military_conscripted_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_militarization_of_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_rural_destination_kemerovo",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Transfer Kemerovo to Collective Farms",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "NOT": {
+        "569": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        },
+        "654": {
+          "OR": {
+            "has_state_flag": [
+              "VOR_military_conscripted_region",
+              "VOR_rural_destination_region"
+            ]
+          }
+        }
+      },
+      "owns_state": [
+        569,
+        654
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_kemerovo",
+      "add_to_variable": [
+        {
+          "VOR_rural_destination_states": 1
+        },
+        {
+          "VOR_unassigned_fief_states": -1
+        }
+      ],
+      "569": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      },
+      "654": {
+        "set_state_flag": "VOR_rural_destination_region",
+        "add_dynamic_modifier": {
+          "modifier": "VOR_settlement_in_villages_administration_dynomod"
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_unassigned_strip_away_kemerovo",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Strip Away Control of Kemerovo",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "569": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "654": {
+        "OR": {
+          "has_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ]
+        }
+      },
+      "owns_state": [
+        569,
+        654
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_kemerovo",
+      "custom_effect_tooltip": "VOR_strip_away_region_tt",
+      "if": {
+        "limit": {
+          "569": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          },
+          "654": {
+            "has_state_flag": "VOR_military_conscripted_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_military_conscripted_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "else_if": {
+        "limit": {
+          "569": {
+            "has_state_flag": "VOR_rural_destination_region"
+          },
+          "654": {
+            "has_state_flag": "VOR_rural_destination_region"
+          }
+        },
+        "add_to_variable": [
+          {
+            "VOR_rural_destination_states": -1
+          },
+          {
+            "VOR_unassigned_fief_states": 1
+          }
+        ]
+      },
+      "hidden_effect": {
+        "569": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        },
+        "654": {
+          "clr_state_flag": [
+            "VOR_military_conscripted_region",
+            "VOR_rural_destination_region"
+          ],
+          "remove_dynamic_modifier": [
+            {
+              "modifier": "VOR_militarization_of_villages_administration_dynomod"
+            },
+            {
+              "modifier": "VOR_settlement_in_villages_administration_dynomod"
+            }
+          ]
+        }
+      }
     }
   }
 ]

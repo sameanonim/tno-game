@@ -1,0 +1,294 @@
+[
+  {
+    "id": "SIA_sway_luang_chawengsaksongkhram_to_seri_thai",
+    "category_id": "political_actions",
+    "name": "Привлечь Луанга Чавенгсаксонгкрама",
+    "desc": "Переманить Луанга Чавенгсаксонгкрама на сторону «Свободного Таиланда». Если мы преуспеем, с началом гражданской войны он встанет на нашу сторону.",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": {
+      "has_completed_focus": "SIA_seri_thai"
+    },
+    "visible": {
+      "has_completed_focus": "SIA_seri_thai",
+      "has_character": "SIA_luang_chawengsaksongkhram"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "CHL_mapuche_liberate_hawaii",
+    "category_id": "CHL_mapuche_nationalism_decisions",
+    "name": "Освободить [HAW.GetAdjective]ий народ",
+    "desc": "",
+    "icon": "GFX_decision_CHL_mapuche_liberate_hawaii",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "OR": {
+        "AND": [
+          {
+            "controls_state": 629,
+            "HAW": {
+              "exists": false
+            }
+          },
+          {
+            "HAW": {
+              "exists": false
+            },
+            "any_country": {
+              "is_subject_of": "ROOT",
+              "controls_state": 629
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "CHL_crusade_against_imperialism",
+      "NOT": {
+        "has_country_flag": "CHL_released_hawaii_flag"
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "OR": {
+            "is_controlled_by": "ROOT",
+            "any_country": {
+              "is_subject_of": "ROOT",
+              "controls_state": "PREV"
+            }
+          },
+          "is_core_of": "HAW"
+        },
+        "transfer_state_to": "HAW"
+      },
+      "IF": {
+        "limit": {
+          "NOT": {
+            "has_subject": "HAW"
+          }
+        },
+        "puppet": "HAW"
+      },
+      "HAW": {
+        "add_stability": 0.15,
+        "add_war_support": 0.1,
+        "add_political_power": 150,
+        "add_manpower": 10000,
+        "hidden_effect": {
+          "division_template": {
+            "name": "Hawaiian Warriors",
+            "is_locked": false,
+            "division_names_group": "USA_INF_01",
+            "template_counter": 86,
+            "override_model": "CHL_infantry_alt_1_entity",
+            "priority": 1,
+            "regiments": {
+              "infantry": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 0,
+                  "y": 2
+                },
+                {
+                  "x": 1,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 2
+                },
+                {
+                  "x": 2,
+                  "y": 0
+                },
+                {
+                  "x": 2,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 2
+                }
+              ]
+            },
+            "support": {
+              "recon": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          }
+        },
+        "random_state": {
+          "limit": {
+            "is_controlled_by": "HAW"
+          },
+          "create_unit": [
+            {
+              "division": "name = \"1st Hawaiian Warriors\" division_template = \"Hawaiian Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "HAW"
+            },
+            {
+              "division": "name = \"2nd Hawaiian Warriors\" division_template = \"Hawaiian Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "HAW"
+            },
+            {
+              "division": "name = \"3rd Hawaiian Warriors\" division_template = \"Hawaiian Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "HAW"
+            },
+            {
+              "division": "name = \"4th Hawaiian Warriors\" division_template = \"Hawaiian Warriors\" start_experience_factor = 0.5 start_equipment_factor = 1",
+              "owner": "HAW"
+            }
+          ]
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "CHL_released_hawaii_flag"
+      }
+    }
+  },
+  {
+    "id": "USA_statehood_for_hawaii",
+    "category_id": "USA_congress",
+    "name": "Сделать Гавайи штатом",
+    "desc": "",
+    "icon": "infiltrate_state",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "629": {
+        "not": {
+          "is_core_of": "ROOT"
+        }
+      },
+      "political_power_daily": {
+        "_op": ">",
+        "value": 0.1
+      }
+    },
+    "visible": {
+      "629": {
+        "is_fully_controlled_by": "USA"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_SAW_reduce_hawkishness",
+    "category_id": "USA_proxy_war_homefront_GUI",
+    "name": "Ястребиность увядает...",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "GER_Bormann_Sphere_Trade_officialize_thaw",
+    "category_id": "GER_Bormann_Sphere_Trade_category",
+    "name": "Официально оформить германо-японскую оттепель",
+    "desc": "Германо-японские отношения находятся на таком высоком уровне, какого не было с тех пор, как Адольф Гитлер объявил японцев почетными арийцами. Аналогичным образом напряжённость между нашими двумя великими империями ниже, чем когда-либо после нашей совместной победы над декадентскими, дегенеративными западными союзниками. В целом, наши страны снова начинают относиться друг к другу как к партнёрам - если не друзьям.\n\nВозможно, нам пора официально отметить потепление в отношениях между нашими двумя великими державами торжественным дипломатическим приемом.",
+    "icon": "GFX_decision_generic_pakt_business",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "GER_BOR_sphere_trading_relations_at_max_tt",
+          "check_variable": {
+            "BOR_Sphere_Trade_japan_opinion": 10
+          }
+        },
+        {
+          "tooltip": "GER_Bormann_Sphere_Trade_open_to_zaibatsus_mission_trigger_tt",
+          "has_country_flag": "GER_BOR_ST_opened_to_zaibatsu"
+        },
+        {
+          "tooltip": "GER_Bormann_Sphere_Trade_encourage_trade_mission_trigger_tt",
+          "has_country_flag": "GER_BOR_ST_encouraged_trade"
+        },
+        {
+          "tooltip": "GER_Bormann_Sphere_Trade_stop_spying_mission_trigger_tt",
+          "has_country_flag": "GER_BOR_ST_stopped_syping"
+        }
+      ]
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Bormann_Sphere_Trade_officialize_thaw",
+      "country_event": "bormann.1821",
+      "hidden_effect": {
+        "JAP": {
+          "country_event": "bormann.1821"
+        }
+      },
+      "set_temp_variable": [
+        {
+          "tension_WT": -25
+        },
+        {
+          "tension_superpower_1": "GER"
+        },
+        {
+          "tension_superpower_2": "JAP"
+        },
+        {
+          "tension_id": 28
+        }
+      ],
+      "TNO_change_tension": true,
+      "BOR_SIG_SL_0_5_2": true,
+      "BOR_SIG_SL_1_5_2": true,
+      "BOR_SIG_SL_4_5_2": true,
+      "BOR_SIG_SL_5_5_2": true,
+      "BOR_SIG_SP_4_20": true,
+      "BOR_SIG_SP_5_20": true
+    }
+  },
+  {
+    "id": "MEX_debug_crisis_hawaiian_missile_crisis",
+    "category_id": "MEX_debug_category",
+    "name": "Включить Алеутский кризис в ГУИ",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "leviathan_debug_content",
+      "check_variable": {
+        "var": "MEX_PRI_crisis_number",
+        "value": 3,
+        "compare": "not_equals"
+      }
+    },
+    "complete_effect": {
+      "set_variable": {
+        "MEX_PRI_crisis_number": 3
+      }
+    }
+  }
+]

@@ -359,6 +359,18 @@ func _ensure_directive_manager_connected() -> void:
 		add_child(italy_empire_manager)
 		italy_empire_manager.initialize(self, player_state)
 
+	if german_civil_war_manager == null:
+		german_civil_war_manager = GermanCivilWarManager.new()
+		german_civil_war_manager.name = "GermanCivilWarManager"
+		add_child(german_civil_war_manager)
+		german_civil_war_manager.initialize(self, map_controller, player_state)
+
+	if germany_campaign_manager == null:
+		germany_campaign_manager = GermanyCampaignManager.new()
+		germany_campaign_manager.name = "GermanyCampaignManager"
+		add_child(germany_campaign_manager)
+		germany_campaign_manager.civil_war_manager = german_civil_war_manager
+
 
 func _on_directive_started(dir: DirectiveResource) -> void:
 	_active_directive = dir
@@ -417,6 +429,9 @@ func transfer_state(state_id: int, new_owner_tag: String) -> bool:
 	if state_id <= 0:
 		return false
 	var clean_tag: String = new_owner_tag.to_upper().strip_edges()
+	if clean_tag.is_empty():
+		push_warning("[TurnManager] Refusing to transfer State %d to empty owner tag!" % state_id)
+		return false
 	var old_owner: String = ""
 
 	# 1. Поиск BoundaryManager, если не привязан
@@ -772,32 +787,37 @@ func end_turn() -> void:
 	for rep in last_military_reports:
 		if rep.get("captured_region_id", -1) > 0:
 			var reg_id: int = int(rep["captured_region_id"])
-			var n_tag: String = str(rep.get("new_owner", "")).to_upper()
-			var p_tag: String = str(rep.get("previous_owner", "")).to_upper()
+			var n_tag: String = str(rep.get("new_owner", "")).to_upper().strip_edges()
+			if n_tag.is_empty():
+				n_tag = str(rep.get("attacker_tag", "")).to_upper().strip_edges()
+			var p_tag: String = str(rep.get("previous_owner", "")).to_upper().strip_edges()
+			if p_tag.is_empty():
+				p_tag = str(rep.get("defender_tag", "")).to_upper().strip_edges()
 			var sid: int = province_to_state.get(reg_id, 0)
 
-			if boundary_manager != null:
-				boundary_manager.transfer_province(reg_id, n_tag)
+			if not n_tag.is_empty():
+				if boundary_manager != null:
+					boundary_manager.transfer_province(reg_id, n_tag)
 
-			if sid > 0:
-				var provs: Array = state_to_provinces.get(sid, [])
-				var all_ours: bool = true
-				for p in provs:
-					var r: RegionData = regions_world_state.get(p, null)
-					if r != null and r.owner_tag.to_upper() != n_tag:
-						all_ours = false
-						break
-				if all_ours:
-					transfer_state(sid, n_tag)
+				if sid > 0:
+					var provs: Array = state_to_provinces.get(sid, [])
+					var all_ours: bool = true
+					for p in provs:
+						var r: RegionData = regions_world_state.get(p, null)
+						if r != null and r.owner_tag.to_upper() != n_tag:
+							all_ours = false
+							break
+					if all_ours:
+						transfer_state(sid, n_tag)
+					else:
+						if map_controller != null and map_controller.has_method("update_province_owner"):
+							map_controller.update_province_owner(reg_id, n_tag)
 				else:
 					if map_controller != null and map_controller.has_method("update_province_owner"):
 						map_controller.update_province_owner(reg_id, n_tag)
-			else:
-				if map_controller != null and map_controller.has_method("update_province_owner"):
-					map_controller.update_province_owner(reg_id, n_tag)
 
-			region_conquered.emit(reg_id, n_tag, p_tag)
-			regions_captured_count += 1
+				region_conquered.emit(reg_id, n_tag, p_tag)
+				regions_captured_count += 1
 
 		if rep.get("battle_incident") != null:
 			var inc: GameEvent = rep["battle_incident"]
@@ -835,7 +855,7 @@ func end_turn() -> void:
 	if russian_unification_manager != null:
 		if player_state != null:
 			russian_unification_manager.player_tag = player_state.country_tag
-		russian_unification_manager.process_turn(current_turn, player_state)
+		russian_unification_manager.process_turn(current_turn, player_state, self)
 
 	# 4.3. Электоральная система и политика США (US Politics)
 	if us_electoral_engine != null:
@@ -854,6 +874,12 @@ func end_turn() -> void:
 	if italy_empire_manager != null:
 		var target_ita_state = player_state if (player_state != null and player_state.country_tag == "ITA") else countries_world_state.get("ITA", null)
 		italy_empire_manager.process_turn(current_turn, target_ita_state, countries_world_state)
+
+	# 4.6. Великогерманский Рейх и Немецкий Кризис (Germany Campaign & GCW)
+	if germany_campaign_manager != null:
+		germany_campaign_manager.process_turn(current_turn)
+	if german_civil_war_manager != null:
+		german_civil_war_manager.process_turn(current_turn)
 
 	# 5. Фаза проверки нарративных событий и кризисов
 	current_state = TurnState.CHECKING_EVENTS
@@ -914,6 +940,12 @@ func _display_next_modal_event() -> void:
 		return
 
 	var next_event: GameEvent = pending_modal_events.pop_front()
+	if next_event == null or next_event.options.is_empty():
+		push_warning("TurnManager: Modal event is null or has no options. Auto-resolving.")
+		_display_next_modal_event()
+		return
+
+	current_state = TurnState.WAITING_FOR_MODAL_EVENT
 	modal_event_opened.emit(next_event)
 
 
@@ -930,10 +962,18 @@ func resolve_modal_event_choice(event: GameEvent, option_index: int) -> void:
 	_display_next_modal_event()
 
 
+## Алиас для обратной совместимости с внешними системами и тестами
+func resolve_modal_event(event: GameEvent, option_index: int = 0) -> void:
+	resolve_modal_event_choice(event, option_index)
+
+
 ## Принудительное снятие блокировки хода при сбое или закрытии внешнего UI
 func force_unlock_turn() -> void:
 	pending_modal_events.clear()
-	current_state = TurnState.IDLE
+	if current_state == TurnState.WAITING_FOR_MODAL_EVENT:
+		_finalize_turn()
+	else:
+		current_state = TurnState.IDLE
 
 
 ## Обработчик победы кандидата на президентских выборах США
@@ -1427,7 +1467,8 @@ func load_game(save_path: String = "user://savegame.json") -> bool:
 				var front = Frontline.from_dict(f_dict)
 				if front != null:
 					MilitaryEngine.register_frontline(front)
-		military_frontlines_processed.emit(MilitaryEngine.get_active_frontlines())
+		var empty_reports: Array[Dictionary] = []
+		military_frontlines_processed.emit(empty_reports)
 
 	# Восстановление состояния BoundaryManager
 	if data.has("boundary_manager_state") and boundary_manager != null:

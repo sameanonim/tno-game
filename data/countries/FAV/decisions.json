@@ -1,0 +1,2002 @@
+[
+  {
+    "id": "DEN_bop_speak_out_in_favor_of_disarmament",
+    "category_id": "DEN_balance_of_power_category",
+    "name": "DEN_bop_speak_out_in_favor_of_disarmament",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_address",
+    "cost": "DEN_bop_decrease_low_cost",
+    "fire_only_once": false,
+    "available": [
+      {
+        "OR": {
+          "NOT": [
+            {
+              "has_completed_focus": "DEN_start_the_rearmament"
+            },
+            {
+              "has_completed_focus": "DEN_overthrow_the_government"
+            }
+          ]
+        }
+      },
+      {
+        "has_army_experience": {
+          "_op": ">",
+          "value": 5
+        },
+        "has_navy_experience": {
+          "_op": ">",
+          "value": 5
+        },
+        "has_air_experience": {
+          "_op": ">",
+          "value": 5
+        }
+      }
+    ],
+    "visible": {
+      "has_completed_focus": "DEN_declare_neutrality",
+      "OR": {
+        "NOT": [
+          {
+            "has_completed_focus": "DEN_start_the_rearmament"
+          },
+          {
+            "has_completed_focus": "DEN_overthrow_the_government"
+          }
+        ]
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_low_decrease_effect": true,
+      "custom_effect_tooltip": "DEN_hurt_military_ability_tt",
+      "army_experience": -5,
+      "navy_experience": -5,
+      "air_experience": -5
+    }
+  },
+  {
+    "id": "DEN_bop_speak_out_in_favor_of_rearmament",
+    "category_id": "DEN_balance_of_power_category",
+    "name": "DEN_bop_speak_out_in_favor_of_rearmament",
+    "desc": "",
+    "icon": "GFX_decision_generic_protection",
+    "cost": "DEN_bop_increase_high_cost",
+    "fire_only_once": false,
+    "available": {
+      "power_balance_value": {
+        "id": "DEN_balance_of_power",
+        "value": {
+          "_op": "<",
+          "value": 0.6
+        }
+      },
+      "NOT": {
+        "has_completed_focus": "DEN_policy_of_disarmament"
+      },
+      "OR": {
+        "has_completed_focus": [
+          "DEN_start_the_rearmament",
+          "DEN_unify_the_right"
+        ]
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DEN_declare_neutrality",
+      "NOT": {
+        "has_completed_focus": "DEN_policy_of_disarmament"
+      }
+    },
+    "complete_effect": {
+      "DEN_bop_medium_increase_effect": true,
+      "add_command_power": 25,
+      "add_war_support": 0.05
+    }
+  },
+  {
+    "id": "HOL_radio_oranje",
+    "category_id": "HOL_request_allied_favors",
+    "name": "Программа «Radio Oranje»",
+    "desc": "Пора запустить на BBC еще одну программу на голландском языке — Radio Orange. Она даст надежду и тем, кто проживает на оккупированной родине, и тем, кто сражается за свободу вместе с нашими союзниками.",
+    "icon": "hol_radio_oranje",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "NOT": [
+        {
+          "controls_state": 7
+        },
+        {
+          "controls_state": 35
+        },
+        {
+          "controls_state": 36
+        }
+      ],
+      "has_capitulated": true,
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 40
+      }
+    },
+    "visible": {
+      "tag": "HOL",
+      "has_completed_focus": "HOL_request_allied_favors"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HOL_obtain_dockyard_access",
+    "category_id": "HOL_request_allied_favors",
+    "name": "Получить доступ к верфям",
+    "desc": "Во время вторжения у нас строились корабли. Мы смогли отбуксировать часть незаконченных корпусов в Англию, но теперь нам нужна британская помощь, чтобы достроить их.",
+    "icon": "generic_naval",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "has_capitulated": true,
+      "num_of_naval_factories": {
+        "_op": "<",
+        "value": 6
+      },
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 80
+      }
+    },
+    "visible": {
+      "tag": "HOL",
+      "has_completed_focus": "HOL_request_allied_favors",
+      "check_variable": {
+        "var": "obtain_dockyard_counter",
+        "value": 3,
+        "compare": "less_than"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HOL_assemble_air_squadron",
+    "category_id": "HOL_request_allied_favors",
+    "name": "Создать эскадрилью",
+    "desc": "Несколько наших солдат выразили желание научиться пилотировать самолеты и по мере сил помогать стране в воздухе. Надо пойти им навстречу и попросить самолеты у союзников.",
+    "icon": "generic_air",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "has_capitulated": true,
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 40
+      }
+    },
+    "visible": {
+      "tag": "HOL",
+      "has_completed_focus": "HOL_request_allied_favors"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HOL_request_infantry_equipment",
+    "category_id": "HOL_request_allied_favors",
+    "name": "Запросить пехотное снаряжение",
+    "desc": "Если мы хотим помогать союзникам в бою, для этого нужно получить от них необходимое оснащение.",
+    "icon": "generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "has_capitulated": true,
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 60
+      }
+    },
+    "visible": {
+      "tag": "HOL",
+      "has_completed_focus": "HOL_request_allied_favors"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HOL_pull_strings_with_british_industrialists",
+    "category_id": "HOL_request_allied_favors",
+    "name": "Использовать связи с британскими промышленниками",
+    "desc": "Англо-голландское промышленное сотрудничество продолжается уже много лет и породило разные мультинациональные корпорации, такие как Philips и Royal Dutch Shell. Возможно, теперь мы сможем воспользоваться их связью с Британией, чтобы снабжать наши войска в изгнании.",
+    "icon": "generic_industry",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "has_capitulated": true,
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 80
+      }
+    },
+    "visible": {
+      "tag": "HOL",
+      "has_completed_focus": "HOL_request_allied_favors",
+      "check_variable": {
+        "var": "british_industrialists_counter",
+        "value": 3,
+        "compare": "less_than"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "HOL_request_aid_for_the_engelandvaarders",
+    "category_id": "HOL_request_allied_favors",
+    "name": "Обратиться за помощью для «Engelandvaarders»",
+    "desc": "Свыше 100 миль Северного моря, отделяющие Англию от Нидерландов, — не преграда для голландцев, стремящихся сражаться вместе с союзниками за освобождение родины. На маленьких лодках-каяках эти Engelandvaarders («английские моряки») преодолевают открытые воды в столь суровых условиях, что в плавании выживает в лучшем случае каждый десятый. Тот, кто решился на такое, уже храбрец из храбрецов, и наш долг — попросить британцев всячески помогать этим героям.",
+    "icon": "hol_engelandvaarders",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "has_capitulated": true,
+      "has_legitimacy": {
+        "_op": ">",
+        "value": 60
+      }
+    },
+    "visible": {
+      "tag": "HOL",
+      "has_completed_focus": "HOL_request_allied_favors"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "IBR_council_call_in_a_favor",
+    "category_id": "IBR_caudillos_category",
+    "name": "Потребовать ответных услуг",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_country_flag": "IBR_legislative_council_rogue",
+      "check_variable": {
+        "IBR_caudillo_popularity_bar": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ITA_hold_down_party_monarchists",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Сдержать монархистов внутри партии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_hold_down_party_monarchists",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "add_popularity": [
+        {
+          "ideology": "despotism",
+          "popularity": -0.02
+        },
+        {
+          "ideology": "paternalism",
+          "popularity": -0.03
+        }
+      ]
+    }
+  },
+  {
+    "id": "ITA_appeal_to_students",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Заручиться поддержкой студентов",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_appeal_to_students",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "add_manpower": 1000
+    }
+  },
+  {
+    "id": "ITA_help_borghese_army",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе в армии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_army",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_army_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_help_borghese_navy",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе во флоте",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_navy",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_navy_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_help_borghese_airforce",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе в ВВС",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_airforce",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_airforce_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_help_borghese_MSVN",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе в ДМНБ",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_MSVN",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_blackshirts_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_help_borghese_carabinieri",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Поддержать влияние Боргезе на карабинеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_carabinieri",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_carabinieri_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_funnel_MSVN_to_Army",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Запустить чернорубашечников в армию",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_funnel_MSVN_to_Army",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -15
+        },
+        {
+          "political_power": -75
+        }
+      ],
+      "ITA_blackshirts_remove_borghese_pop": true,
+      "ITA_army_add_borghese_pop": true,
+      "add_manpower": 1250
+    }
+  },
+  {
+    "id": "ITA_expand_colonial_bureaucracy",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Расширить колониальную бюрократию",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 125,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_expand_colonial_bureaucracy",
+      "add_to_variable": [
+        {
+          "ita_good_boy_points_bank": -20
+        },
+        {
+          "political_power": -125
+        }
+      ],
+      "ITA_LARGER_EMPIRE_1": true
+    }
+  },
+  {
+    "id": "ITA_marches_in_libia",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Марши в Ливии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_marches_in_libia",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "450": {
+        "add_manpower": 600
+      },
+      "448": {
+        "add_manpower": 600
+      }
+    }
+  },
+  {
+    "id": "ITA_marches_in_albania",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Марши в Албании",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_marches_in_albania",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "1295": {
+        "add_manpower": 600
+      },
+      "44": {
+        "add_manpower": 600
+      }
+    }
+  },
+  {
+    "id": "ITA_marches_in_montenegro",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Марши в Черногории",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_marches_in_montenegro",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -5
+        },
+        {
+          "political_power": -25
+        }
+      ],
+      "745": {
+        "add_manpower": 600
+      },
+      "1326": {
+        "add_manpower": 600
+      }
+    }
+  },
+  {
+    "id": "ITA_fuck_sogno_army",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Осудить влияние Соньо в армии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_fuck_sogno_army",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_army_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_fuck_sogno_navy",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Осудить влияние Соньо во флоте",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_fuck_sogno_navy",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_navy_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_fuck_sogno_airforce",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Осудить влияние Соньо в ВВС",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_fuck_sogno_airforce",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_airforce_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_fuck_sogno_MSVN",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Осудить влияние Соньо в ДМНБ",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_fuck_sogno_MSVN",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_blackshirts_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_fuck_sogno_carabinieri",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Осудить влияние Соньо на карабинеров",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_fuck_sogno_carabinieri",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -10
+        },
+        {
+          "political_power": -50
+        }
+      ],
+      "ITA_carabinieri_add_borghese_pop": true
+    }
+  },
+  {
+    "id": "ITA_rally_young_blackshirts",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Обратиться к молодым чернорубашечникам",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_rally_young_blackshirts",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -15
+        },
+        {
+          "political_power": -75
+        }
+      ],
+      "ITA_blackshirts_add_borghese_pop": true,
+      "add_manpower": 750,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 750,
+        "producer": "ITA"
+      }
+    }
+  },
+  {
+    "id": "ITA_appeal_to_fascist_industrialists",
+    "category_id": "ita_Fascisms_Favors",
+    "name": "Заручиться поддержкой фашистских фабрикантов",
+    "desc": "",
+    "icon": "GFX_decision_generic_prospect_for_resources",
+    "cost": 125,
+    "fire_only_once": false,
+    "available": {},
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision ITA_appeal_to_fascist_industrialists",
+      "add_to_variable": [
+        {
+          "ita_bad_boy_points_bank": -20
+        },
+        {
+          "political_power": -125
+        }
+      ],
+      "ITA_casa_point_5_gain": true
+    }
+  },
+  {
+    "id": "JAP_increase_unemployment_subsidies",
+    "category_id": "JAP_political_favors",
+    "name": "Увеличить субсидии по безработице",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "has_country_flag": "JAP_reforms_next_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_increase_unemployment_subsidies",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -100,
+        "JAP_PM_decrease_power_avg": true
+      }
+    }
+  },
+  {
+    "id": "JAP_heathcare_reform",
+    "category_id": "JAP_political_favors",
+    "name": "Реформа здравоохранения",
+    "desc": "",
+    "icon": "GFX_decision_generic_humanitarian_aid_increase",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "has_country_flag": "JAP_reforms_next_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_heathcare_reform",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -50,
+        "JAP_PM_decrease_power_small": true
+      }
+    }
+  },
+  {
+    "id": "JAP_education_reform",
+    "category_id": "JAP_political_favors",
+    "name": "Реформа образования",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "has_country_flag": "JAP_reforms_next_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_education_reform",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -100,
+        "JAP_PM_decrease_power_avg": true
+      }
+    }
+  },
+  {
+    "id": "JAP_labour_protection_laws",
+    "category_id": "JAP_political_favors",
+    "name": "Усилить меры по охране труда",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "JAP_passing_reform"
+        },
+        {
+          "has_completed_focus": "JAP_kaya_destroy_them_and_start_anew"
+        }
+      ]
+    },
+    "visible": {
+      "has_country_flag": "JAP_reforms_next_stage",
+      "NOT": {
+        "has_completed_focus": "JAP_kaya_destroy_them_and_start_anew"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_labour_protection_laws",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -100,
+        "JAP_PM_decrease_power_avg": true
+      }
+    }
+  },
+  {
+    "id": "JAP_pensions_protections_legislation",
+    "category_id": "JAP_political_favors",
+    "name": "Усилить пенсионную защиту",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "has_country_flag": "JAP_reforms_next_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_pensions_protections_legislation",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -100,
+        "JAP_PM_decrease_power_avg": true
+      }
+    }
+  },
+  {
+    "id": "JAP_increase_minimum_wage",
+    "category_id": "JAP_political_favors",
+    "name": "Увеличить МРОТ",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "JAP_passing_reform"
+      }
+    },
+    "visible": {
+      "has_country_flag": "JAP_reforms_next_stage"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_increase_minimum_wage",
+      "set_country_flag": "JAP_passing_reform",
+      "hidden_effect": {
+        "add_political_power": -100,
+        "JAP_PA_support_increase_med": true,
+        "JAP_PM_decrease_power_avg": true
+      }
+    }
+  },
+  {
+    "id": "MEX_kabuki_call_in_favors",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Попросить одолжение",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_concessions",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "MEX_blank_tooltip",
+        "has_completed_focus": "MEX_the_technocratic_counter",
+        "check_variable": {
+          "MEX_kabuki_owed_favors": {
+            "_op": "<",
+            "value": 4
+          }
+        },
+        "NOT": {
+          "has_country_flag": "MEX_kabuki_negotiations_collapsed"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "MEX_the_technocratic_counter"
+    },
+    "complete_effect": {
+      "MEX_SB_kabuki_effect_tension_increase_low": true
+    }
+  },
+  {
+    "id": "MEX_kabuki_promise_favorable_construction_contracts",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Обещать выгодные контракты на строительство",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_the_technocratic_counter",
+        "OR": {
+          "check_variable": {
+            "MEX_PRI_selected_group": 0
+          },
+          "is_ai": true
+        }
+      },
+      "NOT": {
+        "OR": {
+          "has_country_flag": [
+            "MEX_kabuki_workers_pick_ordaz",
+            "MEX_kabuki_workers_pick_madrazo",
+            "MEX_kabuki_workers_pick_lozano"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "MEX_kabuki_promise_favorable_construction_contracts_tt",
+      "MEX_decrease_jap_business_opinion_low": true,
+      "MEX_decrease_usa_business_opinion_low": true
+    }
+  },
+  {
+    "id": "MEX_kabuki_gather_favours_in_dfs_command",
+    "category_id": "MEX_Kabuki_Crisis_category",
+    "name": "Собрать милости в УФБ",
+    "desc": "",
+    "icon": "GFX_decision_category_generic_corruption",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_completed_focus": "MEX_the_technocratic_counter",
+        "OR": {
+          "check_variable": {
+            "MEX_PRI_selected_group": 2
+          },
+          "is_ai": true
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_cut_ties",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Оборвать связи",
+    "desc": "",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_pop_temp": -5
+      },
+      "KOM_zhdanov_influence_change": true,
+      "custom_effect_tooltip": "KOM_cut_ties_tt",
+      "country_event": {
+        "id": "KOM.8",
+        "days": 1
+      }
+    }
+  },
+  {
+    "id": "KOM_form_coalition_tickets",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Сделать билеты коалиции",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 1
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "KOM_discourage_paramilitary_violence",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Воспрепятствовать насилию ополчения",
+    "desc": "",
+    "icon": "GFX_decision_generic_protest",
+    "cost": 5,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 3
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "KOM_encourage_file_sharing",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Поощрять обмен архивами",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 2
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "KOM_hasten_army_recruitment",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Ускорить призыв армии",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 5
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "KOM_support_public_houses",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Поддержать общественные дома",
+    "desc": "",
+    "icon": "GFX_decision_generic_building",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 5
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "KOM_persuade_comrade_oplesnin",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Убедить товарища Оплесина",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_green",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 7
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "KOM_request_insider_information",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Запросить инсайдерскую информацию",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_target",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_CHOSE_CENTER"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "KOM_CHOSE_CENTER"
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "KOM_favors_temp": 10
+      },
+      "KOM_adjust_zhdanov_favors": true
+    }
+  },
+  {
+    "id": "KOM_zhdanov_demand",
+    "category_id": "KOM_leftist_favors_category",
+    "name": "Запросы от Жданова",
+    "desc": "",
+    "icon": [
+      "GFX_decision_generic_civil_support",
+      "GFX_decision_generic_clock"
+    ],
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "KOM_zhdanov_favors_enabled": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision remove KOM_zhdanov_demand",
+      "custom_effect_tooltip": "KOM_zhdanov_demand_select_tt",
+      "if": [
+        {
+          "limit": {
+            "has_country_flag": "KOM_ZHD_DEMAND_FLAG_1"
+          },
+          "custom_effect_tooltip": "KOM_zhdanov_demand_1_tt",
+          "country_event": {
+            "id": "komi_zhdanov_demand.1",
+            "days": 1
+          }
+        },
+        {
+          "limit": {
+            "has_country_flag": "KOM_ZHD_DEMAND_FLAG_2"
+          },
+          "custom_effect_tooltip": "KOM_zhdanov_demand_2_tt",
+          "country_event": {
+            "id": "komi_zhdanov_demand.2",
+            "days": 1
+          }
+        },
+        {
+          "limit": {
+            "has_country_flag": "KOM_ZHD_DEMAND_FLAG_3"
+          },
+          "custom_effect_tooltip": "KOM_zhdanov_demand_3_tt",
+          "country_event": {
+            "id": "komi_zhdanov_demand.3",
+            "days": 1
+          }
+        },
+        {
+          "limit": {
+            "has_country_flag": "KOM_ZHD_DEMAND_FLAG_4"
+          },
+          "custom_effect_tooltip": "KOM_zhdanov_demand_4_tt",
+          "country_event": {
+            "id": "komi_zhdanov_demand.4",
+            "days": 1
+          }
+        },
+        {
+          "limit": {
+            "has_country_flag": "KOM_ZHD_DEMAND_FLAG_5"
+          },
+          "custom_effect_tooltip": "KOM_zhdanov_demand_5_tt",
+          "country_event": {
+            "id": "komi_zhdanov_demand.5",
+            "days": 1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Occupation_FAV",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [FAV.GetFlag] Свободных авиаторов",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "FAV": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "FAV"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_FAV",
+      "set_temp_variable": {
+        "TargetTag": "FAV"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "FAV.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "FAV"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "FAV"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_FAV": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_FAV_Generic",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Атаковать [FAV.GetFlag] Свободных авиаторов",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "is_west_siberian_nation": true,
+      "is_neighbor_of": "FAV",
+      "has_war": false,
+      "NOT": {
+        "has_non_aggression_pact_with": "FAV"
+      },
+      "RUS_Smuta_ScriptedTrigger_Expansion_FAV_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_FAV_Generic",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Y": -0.3
+        },
+        "RUS_Smuta_Supplies_Add_Y": true,
+        "set_country_flag": "RUS_Smuta_preparing_expansion"
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_FAV_OMS_LetsBeFriends",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Отправить предложение [FAV.GetFlag] Свободным Авиаторам",
+    "desc": "Свободные авиаторы, как теперь называют себя остатки Ночных Ведьм, уютно устроились на севере. Хотя их доблестные усилия по отражению бомбардировок Люфтваффе заслуживают похвалы, их средства самообеспечения иссякают. Мы можем направить им предложение и предоставить им доступ ко всему, что им нужно, при условии, что они согласятся интегрироваться на нашу территорию.",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "is_neighbor_of": "FAV",
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "tag": "OMS",
+      "FAV": {
+        "exists": true
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_FAV_SVR_LetsBeFriends",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Отправить предложение [FAV.GetFlag] Свободным Авиаторам",
+    "desc": "Свободные авиаторы, как теперь называют себя остатки Ночных Ведьм, уютно устроились на севере. Хотя их доблестные усилия по отражению бомбардировок Люфтваффе заслуживают похвалы, их средства самообеспечения иссякают. Мы можем направить им предложение и предоставить им доступ ко всему, что им нужно, при условии, что они согласятся интегрироваться на нашу территорию.",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "is_neighbor_of": "FAV",
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "tag": "SVR",
+      "FAV": {
+        "exists": true
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_FAV_TYM_LetsBeFriends",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Отправить предложение [FAV.GetFlag] Свободным Авиаторам",
+    "desc": "Свободные авиаторы, как теперь называют себя остатки Ночных Ведьм, уютно устроились на севере. Хотя их доблестные усилия по отражению бомбардировок Люфтваффе заслуживают похвалы, их средства самообеспечения иссякают. Мы можем направить им предложение и предоставить им доступ ко всему, что им нужно, при условии, что они согласятся интегрироваться на нашу территорию.",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 30,
+    "fire_only_once": true,
+    "available": {
+      "is_neighbor_of": "FAV",
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "tag": "TYM",
+      "FAV": {
+        "exists": true
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "UKR_UCW_favors_industrialists",
+    "category_id": "UKR_ucw_supply_category",
+    "name": "Благосклонность промышленников",
+    "desc": "",
+    "icon": "GFX_decision_generic_factory_blue",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "UCW_supply_doing_faction_decision"
+      }
+    },
+    "visible": {
+      "original_tag": "UKR",
+      "has_country_flag": "UKR_UCW_faction_show"
+    },
+    "complete_effect": {
+      "set_temp_variable": [
+        {
+          "temp_econ_spending_amount": 0.06
+        },
+        {
+          "UCW_supply_temp": 100
+        }
+      ],
+      "econ_spend_money_once_effect_raw_money": true,
+      "add_equipment_to_stockpile": [
+        {
+          "type": "infantry_equipment",
+          "amount": 1000,
+          "producer": "GER"
+        },
+        {
+          "type": "support_equipment",
+          "amount": 50,
+          "producer": "GER"
+        }
+      ],
+      "UCW_supply_left_change": true
+    }
+  },
+  {
+    "id": "USA_grant_favorable_committee_assignments",
+    "category_id": "USA_coalition_unity",
+    "name": "Предоставить благоприятные назначения",
+    "desc": "",
+    "icon": "GFX_decision_USA_rdc_d",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_show_NPP_screen"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_grant_favorable_committee_assignments",
+      "set_temp_variable": [
+        {
+          "tempSupport": -0.1
+        },
+        {
+          "tempSupport": 0.1
+        }
+      ],
+      "USA_change_labor_d_coalition_support": true,
+      "USA_change_dixiecrat_coalition_support": true
+    }
+  },
+  {
+    "id": "USA_RFK_party_above_all_small_favor",
+    "category_id": "USA_RFK_Party_Above_All",
+    "name": "Небольшое одолжение",
+    "desc": "",
+    "icon": "GFX_decision_generic_handshake",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "USA_RFK_working_on_CRA"
+        },
+        {
+          "has_country_flag": "USA_RFK_FR_temp_vote"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_RFK_finished_CRA"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_RFK_party_above_all_small_favor",
+      "set_country_flag": "USA_RFK_FR_temp_vote",
+      "custom_effect_tooltip": [
+        "USA_RFK_party_above_all_small_favor_tt",
+        "USA_RFK_Party_Above_All_Unity_Increase_Small"
+      ],
+      "add_to_variable": [
+        {
+          "temporary_congress_votes": 3
+        },
+        {
+          "rfk_party_above_all_var": 0.5
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_RFK_party_above_all_big_favor",
+    "category_id": "USA_RFK_Party_Above_All",
+    "name": "Большая услуга",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_concessions",
+    "cost": 125,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_country_flag": "USA_RFK_working_on_CRA"
+        },
+        {
+          "has_country_flag": "USA_RFK_FR_temp_vote"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "USA_RFK_finished_CRA"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_RFK_party_above_all_big_favor",
+      "set_country_flag": "USA_RFK_FR_temp_vote",
+      "custom_effect_tooltip": [
+        "USA_RFK_party_above_all_big_favor_tt",
+        "USA_RFK_Party_Above_All_Unity_Increase_Small"
+      ],
+      "add_to_variable": [
+        {
+          "temporary_congress_votes": 5
+        },
+        {
+          "rfk_party_above_all_var": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "USA_WFB_favor_the_centre",
+    "category_id": "USA_WFB_silver_act_draft",
+    "name": "Одолжение  прогрессивистам",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_WFB_favor_the_far_right",
+    "category_id": "USA_WFB_silver_act_draft",
+    "name": "Одолжение  националистам",
+    "desc": "",
+    "icon": "",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_HAR_fatigue_reduction_favor_middle_class",
+    "category_id": "USA_harrington_populace_fatigue_category",
+    "name": "Благосклонность к среднему классу",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_HAR_finished_with_veterans"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "COG_ask_investors_to_produce_small_arms",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить произвести стрелковое оружие",
+    "desc": "Поскольку наша колония окружена и подвержена набегам местных повстанцев, спрос на стрелковое оружие для оснащения наших войск, чтобы продолжать защищать интересы наших любимых благодетелей, возрастает. Поэтому попросить инвесторов о грузовике с огнестрельным оружием, который будет отправлен в нашу сторону, не повредит.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_produce_small_arms",
+      "custom_effect_tooltip": [
+        "Ask_Investors_to_produce_Small_Arms_tt",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.02
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": 500
+      }
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_produce_motorized_equipment",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить инвесторов произвести грузовики",
+    "desc": "Поскольку равнины Центральафрики охватывают обширные участки земли, мы должны обеспечить, чтобы наши транспортные средства были полностью работоспособны и могли доставлять наши товары вовремя. Еще один факт, который мы должны учитывать, заключается в том, что наши войска должны быть очень мобильными, чтобы быстро реагировать на вспышки туземцев. Мы будем звонить начальству и просить для нас новые и блестящие грузовики.",
+    "icon": "GFX_decision_generic_motorized",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_produce_motorized_equipment",
+      "custom_effect_tooltip": [
+        "Ask_Investors_To_Produce_Motorized_Equipment_tt",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.02
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_equipment_to_stockpile": {
+        "type": "motorized_equipment",
+        "amount": 50
+      }
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_produce_tanks",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить инвесторов произвести танки",
+    "desc": "Могучая танковая армия доминирует на поле боя, и появление их в наших гарнизонах значительно облегчило бы дело с туземцами. Тем не менее, подталкивание наших директоров к тому, чтобы они раскошелились на такой дорогой проект, может немного их расстроить, но мы заверим их, что их могучие инвестиции будут использованы с пользой.",
+    "icon": "GFX_decision_market_armor",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_produce_tanks",
+      "custom_effect_tooltip": [
+        "Ask_Investors_To_Produce_Tanks",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.02
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_equipment_to_stockpile": {
+        "type": "MBT_chassis",
+        "amount": 10
+      }
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_increase_steel_production_quotas",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить повысить квоты на сталь",
+    "desc": "Сталь является важным сырьем в наших производственных усилиях, поэтому иметь больше стали было бы для нас огромным благом. Быстрая встреча и некоторые очаровательные слова убедят их направить больше рабов для извлечения стали. Сколько бы ни выкопали их работники, мы несомненно используем это с пользой.",
+    "icon": "GFX_steel_texticon",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "NOT": {
+        "has_country_flag": "COG_Investors_Gone"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "COG_increase_exploitation"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_increase_steel_production_quotas",
+      "custom_effect_tooltip": [
+        "Ask_Investors_to_Raise_Steel_Quotas",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.05
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_timed_idea": {
+        "idea": "COG_Raised_Steel_Quotas",
+        "days": 180
+      }
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_increase_rubber_production_quotas",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить повысить квоты на резину",
+    "desc": "Резина - это важнейший ресурс, позволяющий нам без колебаний заменить шины и повысить экономический статус за счет экспорта. Хотя мы можем содержать самые крупные заводы по производству каучука, это не значит, что мы не можем хотеть большего. Нам просто нужно очаровать наших любимых владельцев недвижимости, чтобы они отдали больше рабов на каучуковые плантации, нравится им это или нет. Наши действия заставят старого доброго Леопольда II улыбнуться в своей могиле.",
+    "icon": "GFX_rubber_texticon",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "has_completed_focus": "COG_increase_exploitation",
+      "NOT": {
+        "has_country_flag": "COG_Investors_Gone"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "COG_increase_exploitation"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_increase_rubber_production_quotas",
+      "custom_effect_tooltip": [
+        "Ask_Investors_to_Raise_Rubber_Quotas",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.05
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_timed_idea": {
+        "idea": "COG_Raised_Rubber_Quotas",
+        "days": 180
+      }
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_contruct_infrastructure",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить построить инфраструктуру",
+    "desc": "Бассейн Конго, несмотря на все наши усилия, остается таким же непроходимым, как и во времена короля Леопольда. К счастью, карманы наших инвесторов так же неисчерпаемы, как и сами джунгли - хорошо оказанная одна или две услуги будут финансировать строительство автомобильных дорог для облегчения транспортировки полезных ископаемых, нефти и людей.",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "NOT": {
+        "has_country_flag": "COG_Investors_Gone"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "COG_the_road_to_cabinda"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_contruct_infrastructure",
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.02
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "custom_effect_tooltip": "COG_investors_displeased_tt",
+      "cog_hoa_update": true,
+      "random_owned_controlled_state": {
+        "add_building_construction": {
+          "type": "infrastructure",
+          "level": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_finance_civil_industry",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить построить гражд. промышленность",
+    "desc": "Индустрия Центральафрики - это, откровенно говоря, конфуз. В нашем промышленном потенциале везде по-прежнему доминируют интересы добычи ресурсов там, где эти ресурсы существуют. Тем не менее, отечественные банковские концерны более чем счастливы спонсировать расширение существующих фабричных цепочек в обмен на несколько небольших взяток.",
+    "icon": "GFX_decision_generic_money",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "has_completed_focus": "COG_the_hub_of_afrika",
+      "NOT": {
+        "has_country_flag": "COG_Investors_Gone"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_finance_civil_industry",
+      "custom_effect_tooltip": [
+        "Ask_Investors_to_Finance_Civil_Industry",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.02
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_timed_idea": {
+        "idea": "COG_Investments_In_Civil_Industry",
+        "days": 25
+      }
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_fund_arms_production",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить финансировать производство оружия",
+    "desc": "Конго не было завоевано философией или силой характера - пули, взрывчатые вещества и оружие необходимы и останутся необходимыми, чтобы защитить нашу территорию от угрозы. Несколько нежных напоминаний корпорациям будут держать их в напряжении, а их кошельки открытыми для общего блага.",
+    "icon": "GFX_decision_generic_money",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "has_completed_focus": "COG_mercenary_industries",
+      "NOT": {
+        "has_country_flag": "COG_Investors_Gone"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_fund_arms_production",
+      "custom_effect_tooltip": [
+        "Ask_Investors_to_Fund_Arms_Production",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.02
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_timed_idea": {
+        "idea": "COG_Investments_In_Arms_Production",
+        "days": 25
+      }
+    }
+  },
+  {
+    "id": "COG_ask_investors_to_fund_research_project",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить финансировать исследования",
+    "desc": "Джунгли нашей территории обещают большие исследовательские возможности - не только для охоты, но и для исследований и разработки новых технологий. Однако взятки местным туземцам - или вооруженным группам, ответственным за изгнание туземцев, - обходятся недешево, а Центральафриканцы, как известно, не работают бесплатно.",
+    "icon": "GFX_decision_generic_money",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "NOT": {
+        "has_country_flag": "COG_Investors_Gone"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "COG_the_global_market"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_ask_investors_to_fund_research_project",
+      "custom_effect_tooltip": [
+        "Ask_Investors_to_Fund_Research_Project",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.05
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true,
+      "add_tech_bonus": {
+        "name": "COG_investors_bonus",
+        "uses": 1,
+        "bonus": 0.25,
+        "category": [
+          "industry",
+          "electronics",
+          "infantry_weapons",
+          "armor"
+        ]
+      }
+    }
+  },
+  {
+    "id": "COG_lower_civ_count",
+    "category_id": "COG_investor_favors",
+    "name": "Попросить инвесторов профинансировать наше развитие",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 60,
+    "fire_only_once": false,
+    "available": {
+      "has_war": false,
+      "NOT": {
+        "has_country_flag": "COG_Investors_Gone"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "COG_clear_the_jungles"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COG_lower_civ_count",
+      "custom_effect_tooltip": [
+        "Ask_Investors_to_Finance_Our_Developments",
+        "COG_investors_displeased_tt"
+      ],
+      "subtract_from_variable": {
+        "COG_investor_happiness": 0.1
+      },
+      "clamp_variable": {
+        "var": "COG_investor_happiness",
+        "min": 0,
+        "max": 1
+      },
+      "cog_hoa_update": true
+    }
+  },
+  {
+    "id": "NOV_VRPP_grant_favourable_loans",
+    "category_id": "NOV_VRPP_megacorp_influence_deccat",
+    "name": "Grant Favourable Loans",
+    "desc": "",
+    "icon": "GFX_decision_category_corruption_generic",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "NOV_DSPR_Switch"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision NOV_VRPP_grant_favourable_loans",
+      "set_temp_variable": {
+        "inflation_temp": 0.2
+      },
+      "econ_inflation_change": true
+    }
+  },
+  {
+    "id": "PRC_Pursuit_Favors_from_Military",
+    "category_id": "PRC_The_Conference",
+    "name": "Добиться благосклонности военных",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Pursuit_Favors_from_Civilian_Administration"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Pursuit_Favors_from_Military"
+    }
+  },
+  {
+    "id": "PRC_Pursuit_Favors_from_Civilian_Administration",
+    "category_id": "PRC_The_Conference",
+    "name": "Добиться благосклонности гражданских",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 35,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "PRC_Pursuit_Favors_from_Military"
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision PRC_Pursuit_Favors_from_Civilian_Administration"
+    }
+  }
+]

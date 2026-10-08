@@ -1,0 +1,136 @@
+[
+  {
+    "id": "BRA_debug_activate_cayenne_referendum",
+    "category_id": "BRA_debug_decisions",
+    "name": "Begin the Cayenne Referendum",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "BRA_show_proxy_options"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: decision BRA_debug_activate_cayenne_referendum",
+      "TNO_fopo_add_cayenne_referendum_tab": true,
+      "TNO_fopo_setup_cayenne_referendum": true
+    }
+  },
+  {
+    "id": "load_cayo_victory_tree",
+    "category_id": "wal_debug_category",
+    "name": "Загрузить древо победы Кайо",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "WAL_Cayos_Coup"
+    }
+  },
+  {
+    "id": "load_cayo_tree_pt2",
+    "category_id": "wal_debug_category",
+    "name": "Загрузить вторую часть древа победы Кайо",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "load_focus_tree": "WAL_Cayo_RunsCountry"
+    }
+  },
+  {
+    "id": "USA_CIA_hinder_adhemar_efforts_to_integrate_cayenne",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ПУМА",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_15_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.014
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_SouthAmerica": true,
+          "is_ai": true
+        },
+        "has_country_flag": "USA_CIA_cayenne_adhemar",
+        "check_variable": {
+          "USA_CIA_cayenne_times_taken": {
+            "_op": "<",
+            "value": 2
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_CIA_hinder_adhemar_efforts_to_integrate_cayenne",
+      "set_temp_variable": {
+        "RegionID": "@SouthAmerica"
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "custom_effect_tooltip": "USA_CIA_BRA_hinder_cayenne_integration",
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          },
+          "set_country_flag": "USA_CIA_adhemar_hinder_cayenne_integration"
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.015
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "FUK_pillars_decay",
+    "category_id": "FUK_power_struggle_category",
+    "name": "Крах столпов",
+    "desc": "",
+    "icon": "GFX_decision_generic_revolt",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": false
+    },
+    "visible": {},
+    "complete_effect": {}
+  }
+]

@@ -1,0 +1,384 @@
+[
+  {
+    "id": "EST_disrupt_vaps_recruitment",
+    "category_id": "EST_fight_vaps_decisions",
+    "name": "Помешать вербовке вапсов",
+    "desc": "Хоть сами вапсы в массе своей — ветераны от среднего до пожилого возраста, у них нет недостатка в сочувствующей молодежи, которая хочет продолжить дело отцов и дедов. Мы должны найти способ нарушить процесс вербовки и удержать молодых людей от соблазнов фашизма.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_active_mission": "EST_vaps_uprising"
+    },
+    "visible": {
+      "has_active_mission": "EST_vaps_uprising"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "add_days_mission_timeout": {
+        "mission": "EST_vaps_uprising",
+        "days": 30
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_Contact_Israeli_Paramilitaries",
+    "category_id": "USA_BoP_category",
+    "name": "Операция САРАНЧА",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 249
+        }
+      }
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_MiddleEast": true,
+          "is_ai": true
+        },
+        "NOT": {
+          "has_global_flag": "ITA_Levant_Finished"
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_IME_1_tt",
+      "subtract_from_variable": {
+        "TNO_Espionage_Agents": 1
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@MiddleEast"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_Contacting_Israeli_Paramilitaries_Flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_Disrupt_Irish_Politics",
+    "category_id": "USA_BoP_category",
+    "name": "Операция ЗМЕЙ",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_Europe": true,
+          "is_ai": true
+        },
+        "IRE": {
+          "has_completed_focus": "IRE_the_worst_case_scenario",
+          "NOT": [
+            {
+              "has_completed_focus": "IRE_lemass_rising_tide"
+            },
+            {
+              "has_completed_focus": "IRE_macentee_austerity"
+            },
+            {
+              "has_completed_focus": "IRE_corish_new_republic"
+            },
+            {
+              "has_country_flag": "CIA_interference_ireland"
+            }
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_CIA_IRELAND_1_tt",
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_Fucking_Irish_Politics_Flag",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "subtract_from_variable": {
+        "TNO_Espionage_Agents": 1
+      }
+    }
+  },
+  {
+    "id": "GER_GCW_disrupt_supply_lines",
+    "category_id": "GER_GCW_mechanic_category",
+    "name": "Нарушить линии снабжения в [FROM.GetName]",
+    "desc": "Линии снабжения нашего врага ежедневно доставляют ему оружие, продовольствие и боеприпасы. Если мы хотим взять верх в этом конфликте, мы должны разорвать линии снабжения противника и погасить его боевой дух.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "GCW_influence_more_than_or_equals_5_tt",
+        "check_variable": {
+          "GCW_influence": {
+            "_op": ">",
+            "value": 4
+          }
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "show_GCW_influence_actions": {
+          "_op": ">",
+          "value": 0
+        }
+      },
+      "FROM": {
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_GCW_disrupt_supply_lines",
+      "GCW_decrease_influence_small": true,
+      "set_country_flag": "GCW_decision_taken"
+    }
+  },
+  {
+    "id": "GER_Espionage_disrupt_ofn_unity_canada",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Эриксон\"",
+    "desc": "Организация Свободных Наций, как они себя называют, долгое время была занозой в боку Рейха. В конце концов, именно в этой организации процветает иудо-большевизм. Чтобы предотвратить рост могущества Америки, мы будем уничтожать дружеские американо-канадские отношения, выпустив несколько записей, некоторые из которых будут поддельными, тем самым напомнив нескольким видным канадцам об их историческом презрении к Америке. Возможно, мы сможем вбить клин между Канадой и Америкой, в результате чего ОСН погрузится в споры и склоки, не имея возможности противостоять мощи Рейха.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_NorthAmerica": true,
+        "is_ai": true
+      },
+      "if": {
+        "limit": {
+          "has_global_flag": "german_civil_war_bormannvic"
+        },
+        "OR": {
+          "has_country_flag": [
+            "BOR_HVA_ofn_unlock",
+            "BOR_HVA_decisions_debug"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_disrupt_ofn_unity_canada",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "GER_Espionage_disrupt_ofn_unity_australia",
+    "category_id": "GER_BoP_category",
+    "name": "Операция \"Острые ощущения\"",
+    "desc": "Австралия и Америка - союзники по обстановке, и не более того. Если бы Австралия не была связана с Великобританией, вряд ли Америка задумалась бы о них. Чтобы усилить раскол между государствами-членами ОСН, нам нужно только напомнить об этом австралийцам. Чтобы еще больше усугубить обиду, мы могли бы подделать документы, показывающие, что Америка рассматривает Австралию как приемлемую уступку японцам, если до этого дойдет. А насколько правдивы такие заявления решать уже не нам.",
+    "icon": "GFX_decision_GER_espionage",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "OR": {
+        "TNO_Espionage_Viewing_Oceania": true,
+        "is_ai": true
+      },
+      "if": {
+        "limit": {
+          "has_global_flag": "german_civil_war_bormannvic"
+        },
+        "OR": {
+          "has_country_flag": [
+            "BOR_HVA_ofn_unlock",
+            "BOR_HVA_decisions_debug"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision GER_Espionage_disrupt_ofn_unity_australia",
+      "hidden_effect": {
+        "subtract_from_variable": [
+          {
+            "TNO_Espionage_Budget": 0.05
+          },
+          {
+            "TNO_Espionage_Expertise": 20
+          },
+          {
+            "TNO_Espionage_Agents": 1
+          }
+        ]
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission"
+    }
+  },
+  {
+    "id": "SAF_disrupt_boer_supplies_decision",
+    "category_id": "SAF_state_of_south_africa",
+    "name": "Нарушить линий поставок на северо-восток",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "SAF_referendum_decisions"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ANG_Disrupt_Comunication",
+    "category_id": "ANG_Sabotage_Others",
+    "name": "Перерезать кабель",
+    "desc": "Саботируя важнейшие коммуникационные ретрансляторы, мы можем серьезно повлиять на тактику между Мюллером и Хюттигом.",
+    "icon": "GFX_decision_generic_phone_call",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "command_power": {
+          "_op": ">",
+          "value": 14.9
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "Ang_good",
+      "has_completed_focus": "ANG_sabotagingtheothers"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "COG": {
+        "add_timed_idea": {
+          "idea": "ANG_Disrupted_Comms",
+          "days": 15
+        },
+        "TNO_worsen_security_policy_effectiveness_monthly_low": true
+      },
+      "GRO": {
+        "add_timed_idea": {
+          "idea": "ANG_Disrupted_Comms",
+          "days": 15
+        },
+        "TNO_worsen_security_policy_effectiveness_monthly_low": true
+      },
+      "add_to_variable": [
+        {
+          "ANG_Muller_Sus": 2
+        },
+        {
+          "ANG_Huttig_Sus": 3
+        }
+      ],
+      "custom_effect_tooltip": [
+        "ANG_Raise_Muller_Sus_Low",
+        "ANG_Raise_Huttig_Sus_Medium"
+      ],
+      "ANG_Sus_Clamp_Check": true
+    }
+  },
+  {
+    "id": "YGR_disrupt_supply_lines",
+    "category_id": "YGR_Smuggling_category",
+    "name": "Disrupt [FROM.GetNameDef] supply lines!",
+    "desc": "",
+    "icon": "GFX_decision_generic_consumer_goods",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_war": true,
+      "hidden_trigger": {
+        "has_country_flag": "YGR_sabotaging_enabled"
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "has_country_flag": [
+          "YGR_sabotaging_enabled",
+          "YGR_show_sabotation_decisions"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "RUS_national_unification"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision YGR_disrupt_supply_lines",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.033
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  }
+]

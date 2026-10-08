@@ -1,0 +1,114 @@
+[
+  {
+    "id": "RUS_Decision_Smuta_Occupation_KMC",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Оккупировать [KMC.GetFlag] Камчатку",
+    "desc": "$RUS_Decision_Smuta_Occupation_desc$",
+    "icon": "GFX_decision_generic_document_building",
+    "cost": "var:Smuta_CoringCost",
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "KMC": {
+        "exists": false
+      },
+      "any_owned_state": {
+        "is_core_of": "KMC"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Occupation_KMC",
+      "set_temp_variable": {
+        "TargetTag": "KMC"
+      },
+      "custom_effect_tooltip": "RUS_Smuta_Occupation_TargetTag_Tt",
+      "add_command_power": "KMC.command_power",
+      "hidden_effect": {
+        "FROM": {
+          "every_owned_state": {
+            "limit": {
+              "is_core_of": "KMC"
+            },
+            "add_core_of": "PREV",
+            "remove_core_of": "KMC"
+          }
+        }
+      },
+      "RUS_Smuta_Occupation_Generic": true,
+      "RUS_Smuta_Occupation_Unique_KMC": true
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Expansion_KMC_Generic",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Атаковать [KMC.GetFlag] Камчатку",
+    "desc": "$RUS_Decision_Smuta_Expansion_UnifiedDesc$",
+    "icon": "GFX_decision_generic_assault",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "set_temp_variable": {
+        "Y": 250
+      },
+      "RUS_Smuta_ScriptedTrigger_Chaos_LessThanY": true
+    },
+    "visible": {
+      "is_far_eastern_nation": true,
+      "is_neighbor_of": "KMC",
+      "has_war": false,
+      "NOT": [
+        {
+          "has_non_aggression_pact_with": "KMC"
+        },
+        {
+          "has_decision": "RUS_Decision_Smuta_Commie_Annex_Kamchatka"
+        }
+      ],
+      "RUS_Smuta_ScriptedTrigger_Expansion_KMC_Generic_NotVisible": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Expansion_KMC_Generic",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Y": -0.3
+        },
+        "RUS_Smuta_Supplies_Add_Y": true,
+        "set_country_flag": "RUS_Smuta_preparing_expansion"
+      }
+    }
+  },
+  {
+    "id": "RUS_Decision_Smuta_Strategies_Werbell_Foxhound_KMC",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Саботировать [KMC.GetFlag] Камчатку",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_hat_skull",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "has_war_with": "KMC",
+      "has_country_flag": "MAG_foxhound"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Strategies_Werbell_Foxhound_KMC",
+      "hidden_effect": {
+        "add_command_power": -15
+      },
+      "KMC": {
+        "add_timed_idea": {
+          "idea": "MAG_WA_Foxhound_Supply_Attack",
+          "days": 45
+        }
+      }
+    }
+  }
+]

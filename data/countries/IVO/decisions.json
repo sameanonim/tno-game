@@ -1,0 +1,251 @@
+[
+  {
+    "id": "liberate_ivory_coast",
+    "category_id": "SAF_anti_colonialist_crusade",
+    "name": "Освободить государство [IVO.GetName]",
+    "desc": "Это займет 6 месяцев.",
+    "icon": "generic_independence",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "SAF",
+      "has_completed_focus": "SAF_anti_colonialist_crusade",
+      "AND": {
+        "SAF": {
+          "controls_state": 779
+        },
+        "IVO": {
+          "exists": false
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "SAF_anti_colonialist_crusade"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "SOV_concessions_japan_vladivostok_SCW",
+    "category_id": "SOV_soviet_civil_war_dec_cat",
+    "name": "Предложить Владивосток Японии",
+    "desc": "Японская армия всегда хотела владеть Владивостоком. Если мы предложим ей этот город в будущем, она будет более склонна выделить нам экспедиционный отряд.",
+    "icon": "generic_political_discourse",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "JAP": {
+        "exists": true
+      },
+      "408": {
+        "CONTROLLER": {
+          "original_tag": "SOV"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "SOV_not_has_conflict_with_japan",
+        "NOT": [
+          {
+            "JAP": {
+              "has_decision": "JAP_test_the_soviets"
+            }
+          },
+          {
+            "has_border_war_with": "JAP"
+          },
+          {
+            "has_war_with": "JAP"
+          }
+        ]
+      }
+    },
+    "visible": {
+      "hidden_trigger": {
+        "SOV_has_selected_hq": true,
+        "OR": {
+          "has_completed_focus": "SOV_concessions_to_foreign_powers",
+          "AND": {
+            "SOV_is_exiles": true,
+            "has_completed_focus": "SOV_unification_of_the_exiles"
+          }
+        }
+      },
+      "NOT": {
+        "has_global_flag": "SOV_soviet_civil_war_over"
+      }
+    },
+    "complete_effect": {
+      "random_list": {
+        "20": [
+          {
+            "SOV_paranoia_very_low_increase_effect": true
+          },
+          {
+            "SOV_paranoia_medium_increase_effect": true
+          }
+        ],
+        "60": {
+          "SOV_paranoia_low_increase_effect": true
+        }
+      },
+      "JAP": {
+        "country_event": {
+          "id": "NSB_soviet_civil_war_common.100",
+          "hours": 1
+        },
+        "custom_effect_tooltip": "SOV_concessions_japan_vladivostok_SCW_accept"
+      }
+    }
+  },
+  {
+    "id": "IBR_debug_trees_trigger_divorce",
+    "category_id": "IBR_debug_trees",
+    "name": "Загрузить древо развода",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "tag": "IBR",
+      "is_ai": false
+    },
+    "visible": {
+      "tag": "IBR"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_debug_trees_trigger_divorce",
+      "custom_effect_tooltip": "IBR_divorce_game_over_tt",
+      "if": {
+        "limit": {
+          "has_country_flag": "IBR_franco_dead"
+        },
+        "country_event": {
+          "id": "IBR_divorce.3",
+          "hours": 6
+        }
+      },
+      "else_if": {
+        "limit": {
+          "has_country_flag": "IBR_Salazar_dead"
+        },
+        "country_event": {
+          "id": "IBR_divorce.2",
+          "hours": 6
+        }
+      },
+      "else": {
+        "country_event": {
+          "id": "IBR_divorce.1",
+          "hours": 6
+        }
+      }
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_vladivostok",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Vladivostok",
+    "desc": "",
+    "icon": "GFX_decision_vladivostok_icon",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 809
+    },
+    "visible": {
+      "owns_state": 809
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_the_open_coastal_city_of_vladivostok",
+    "category_id": "RUS_five_year_plans",
+    "name": "The Open Coastal City of Vladivostok",
+    "desc": "As we advance towards realizing the [RUS.GetLeader] scheme, it's time that we put theory into practice. Vladivostok will be the major port where we will initiate a full-scale experiment in our new economic theory of two systems co-existing in the Soviet Union, reaping the rewards of a more modern economy.",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 809,
+      "custom_trigger_tooltip": {
+        "check_variable": {
+          "RUS_phase_2_count": {
+            "_op": ">",
+            "value": 4
+          }
+        },
+        "tooltip": "RUS_phase_2_finished_decisions_tt"
+      }
+    },
+    "visible": {
+      "owns_state": 809,
+      "check_variable": {
+        "RUS_five_year_plans_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_the_open_coastal_city_of_vladivostok",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.34
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "RUS_the_industrial_harbor_of_vladivostok",
+    "category_id": "RUS_five_year_plans",
+    "name": "The Industrial Harbor of Vladivostok",
+    "desc": "With those seeking to betray the revolution and compromise with capitalism having lost the economic debate, it's time for us to move towards reaching the goals of our Five Year Plan. Through a heavy industrialization scheme that builds upon the successes of the Siberian Plan while also learning from its mistakes, we'll bring more prosperity to our Union.",
+    "icon": "GFX_decision_generic_shipyard",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "owns_state": 809,
+      "custom_trigger_tooltip": {
+        "check_variable": {
+          "RUS_phase_2_count": {
+            "_op": ">",
+            "value": 4
+          }
+        },
+        "tooltip": "RUS_phase_2_finished_decisions_tt"
+      }
+    },
+    "visible": {
+      "owns_state": 809,
+      "check_variable": {
+        "RUS_five_year_plans_phase": {
+          "_op": ">",
+          "value": 1
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_the_industrial_harbor_of_vladivostok",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.12
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "RUS_issue_of_vladivostok",
+    "category_id": "RUS_lord_of_the_east_category",
+    "name": "Negotiations for Vladivostok",
+    "desc": "",
+    "icon": "GFX_decision_vladivostok_icon",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "has_country_flag": "RUS_issue_of_vladivostok"
+    },
+    "complete_effect": {}
+  }
+]

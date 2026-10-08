@@ -1,0 +1,77 @@
+[
+  {
+    "id": "invite_SOV_gaz_organization",
+    "category_id": "foreign_mio_decisions_category",
+    "name": "Invite $SOV_gaz_organization$ to [ROOT.GetNameWithFlag]",
+    "desc": "",
+    "icon": "generic_motorized",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "SOV": {
+        "mio_original_country_available_with_opinion_subject_and_war_requirements_fulfilled": true
+      },
+      "IF": {
+        "limit": {
+          "original_tag": "BUL"
+        },
+        "OR": {
+          "is_subject": false,
+          "is_subject_of": "SOV"
+        },
+        "NOT": {
+          "has_completed_focus": "BUL_nationalization"
+        }
+      }
+    },
+    "visible": {
+      "SOV": {
+        "mio_original_country_exists_and_not_at_war_with_ROOT": true
+      },
+      "IF": {
+        "limit": {
+          "original_tag": "BUL"
+        },
+        "has_completed_focus": "BUL_contract_foreign_companies"
+      },
+      "ELSE": {
+        "always": false
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "set_country_flag": "has_invited_gaz_mio_flag"
+      },
+      "custom_effect_tooltip": "available_mio_tt",
+      "show_mio_tooltip": "SOV_gaz_organization",
+      "if": {
+        "limit": {
+          "original_tag": "BUL",
+          "NOT": {
+            "has_country_flag": "contract_with_soviet_materiel_designer_flag"
+          }
+        },
+        "random_owned_state": {
+          "limit": {
+            "is_fully_controlled_by": "ROOT",
+            "free_building_slots": {
+              "building": "arms_factory",
+              "size": {
+                "_op": ">",
+                "value": 0
+              },
+              "include_locked": true
+            }
+          },
+          "add_extra_state_shared_building_slots": 1,
+          "add_building_construction": {
+            "type": "arms_factory",
+            "level": 1,
+            "instant_build": true
+          }
+        },
+        "set_country_flag": "contract_with_soviet_materiel_designer_flag"
+      }
+    }
+  }
+]

@@ -1,0 +1,649 @@
+[
+  {
+    "id": "JAP_influence_tibetan_people_decision",
+    "category_id": "JAP_the_propaganda_department_decisions",
+    "name": "Повлиять на [TIB.GetAdjRuLower]ий народ",
+    "desc": "",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "JAP_approached_the_tibet_impr_party_flag"
+    },
+    "visible": {
+      "has_completed_focus": "JAP_an_expedition_to_tibet",
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      },
+      "TIB": {
+        "exists": true,
+        "is_subject": false,
+        "NOT": {
+          "has_government": "fascism",
+          "has_idea": "JAP_japanese_influence_growing_tibet_2"
+        }
+      }
+    },
+    "complete_effect": {
+      "TIB": {
+        "country_event": {
+          "id": "SEA_japan_foreign_policy.23",
+          "hours": 12,
+          "random_hours": 24
+        }
+      },
+      "effect_tooltip": {
+        "TIB": {
+          "add_timed_idea": {
+            "idea": "JAP_japanese_influence_growing_tibet_2",
+            "days": 176
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "JAP_coup_the_tibetan_government_decision",
+    "category_id": "JAP_the_propaganda_department_decisions",
+    "name": "Свергнуть [TIB.GetAdjRuLower]ое правительство",
+    "desc": "",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "TIB": {
+        "fascism": {
+          "_op": ">",
+          "value": 0.35
+        },
+        "is_subject": false,
+        "NOT": {
+          "has_government": "fascism"
+        }
+      },
+      "has_country_flag": "JAP_militarized_the_tibet_impr_party_flag"
+    },
+    "visible": {
+      "has_completed_focus": "JAP_an_expedition_to_tibet",
+      "OR": {
+        "has_government": [
+          "neutrality",
+          "fascism"
+        ]
+      },
+      "TIB": {
+        "exists": true,
+        "is_subject": false,
+        "NOT": {
+          "has_government": "fascism"
+        }
+      }
+    },
+    "complete_effect": {
+      "TIB": {
+        "country_event": {
+          "id": "SEA_japan_foreign_policy.26",
+          "hours": 12,
+          "random_hours": 24
+        }
+      },
+      "custom_effect_tooltip": "if_they_accept_tt",
+      "effect_tooltip": {
+        "puppet": "TIB",
+        "TIB": {
+          "set_politics": {
+            "ruling_party": "fascism",
+            "elections_allowed": false
+          },
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": 0.2
+          },
+          "add_manpower": 2500,
+          "army_experience": 50
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "JAP_militarized_the_tibet_impr_party_flag"
+      }
+    }
+  },
+  {
+    "id": "MAN_coring_tibet",
+    "category_id": "MAN_coring_decisions",
+    "name": "[FROM.GetName] проходит процесс интеграции",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "FROM": [
+        {
+          "NOT": {
+            "has_state_flag": "MAN_coring_state_in_progress_flag"
+          }
+        },
+        {
+          "compliance": {
+            "_op": ">",
+            "value": 30
+          }
+        }
+      ]
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "MAN_tsr_reclaim_our_lost_possessions",
+          "MAN_tsr_proclaim_the_peoples_republic"
+        ]
+      }
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "FROM": {
+          "set_state_flag": {
+            "flag": "MAN_coring_state_in_progress_flag",
+            "value": 1,
+            "days": 31
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "PRC_integration_decision_tibet",
+    "category_id": "PRC_integration_decision_cat",
+    "name": "Сделать регион [FROM.GetName] национальным и интегрировать",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": {
+      "controls_state": "FROM",
+      "has_completed_focus": "PRC_reclaim_tibet",
+      "FROM": {
+        "NOT": {
+          "has_state_flag": "PRC_is_integrating_a_state"
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "PRC_reclaim_tibet"
+    },
+    "complete_effect": {
+      "FROM": {
+        "set_state_flag": "PRC_is_integrating_a_state"
+      }
+    }
+  },
+  {
+    "id": "RAJ_akhand_bharat_claim_tib",
+    "category_id": "RAJ_akhand_bharat_cat",
+    "name": "Заявить претензии на [TIB.GetAdjective]ие регионы",
+    "desc": "",
+    "icon": "generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "TIB": {
+          "all_core_state": {
+            "OR": {
+              "is_controlled_by": "ROOT",
+              "state": 601
+            }
+          }
+        },
+        "all_of_scopes": {
+          "array": "claimed_by_akhand_bharat",
+          "is_controlled_by": "ROOT",
+          "tooltip": "RAJ_akhand_bharat_availability_tt"
+        }
+      }
+    },
+    "visible": {
+      "TIB": {
+        "any_core_state": {
+          "NOT": {
+            "is_core_of": "ROOT"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_state": {
+        "limit": {
+          "is_core_of": "TIB"
+        },
+        "ROOT": {
+          "add_to_array": {
+            "array": "claimed_by_akhand_bharat",
+            "value": "PREV"
+          }
+        },
+        "add_core_of": "ROOT"
+      },
+      "for_each_scope_loop": {
+        "array": "claimed_by_akhand_bharat",
+        "if": {
+          "limit": {
+            "is_core_of": "TIB",
+            "owner": {
+              "is_subject_of": "ROOT"
+            }
+          },
+          "ROOT": {
+            "transfer_state": "PREV"
+          }
+        }
+      },
+      "TIB": {
+        "custom_effect_tooltip": "RAJ_akhand_bharat_annex_subject"
+      }
+    }
+  },
+  {
+    "id": "RAJ_instigate_in_tib",
+    "category_id": "RAJ_peasant_uprisings_cat",
+    "name": "Подстрекательство в [TIB.GetNameRuPrep]",
+    "desc": "[TIB.GetName] будет $RAJ_instigate_generic_desc$",
+    "icon": "GFX_decision_eng_propaganda_campaigns",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "any_country": {
+          "original_tag": "TIB",
+          "has_government": "communism"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "RAJ_communist_coup_target_tt",
+        "NOT": {
+          "has_event_target": "RAJ_communist_coup_target"
+        }
+      }
+    },
+    "visible": {
+      "original_tag": "RAJ",
+      "any_country": {
+        "original_tag": "TIB",
+        "exists": true,
+        "NOT": {
+          "TIB": {
+            "has_government": "communism"
+          }
+        }
+      },
+      "NOT": {
+        "any_country": {
+          "original_tag": "TIB",
+          "OR": {
+            "has_government": "communism",
+            "has_country_flag": "banned_communism_flag"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "every_country": {
+        "limit": {
+          "original_tag": "TIB"
+        },
+        "save_global_event_target_as": "RAJ_communist_coup_target",
+        "country_event": {
+          "id": "GOE_RAJ.48",
+          "hours": 2
+        },
+        "event_option_tooltip": "GOE_RAJ.48.a"
+      },
+      "hidden_effect": {
+        "set_country_flag": "instigating_a_coup"
+      }
+    }
+  },
+  {
+    "id": "Iberian_Wars_AI_Compatibility_Show",
+    "category_id": "iberian_wars_military_mechanic",
+    "name": "Показать боевые решения ИИ",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade_indent",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "is_iberianwar_mainland_nation": true,
+      "NOT": {
+        "has_country_flag": "IBR_Wars_AI_mechanic_compatibility"
+      },
+      "is_ai": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Iberian_Wars_AI_Compatibility_Show",
+      "set_country_flag": "IBR_Wars_AI_mechanic_compatibility"
+    }
+  },
+  {
+    "id": "YUN_contact_TIB",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Контактировать с Тибетом",
+    "desc": "",
+    "icon": "",
+    "cost": 5,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "YUN_WI_can_contact_warlord",
+        "OR": {
+          "has_global_flag": "XIK_joins_NPA",
+          "has_full_control_of_state": 964
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "YUN.YUN_WI_Warlord": 6
+      },
+      "NOT": [
+        {
+          "has_country_flag": "YUN_TIB_contacted"
+        },
+        {
+          "has_global_flag": "YUN_ROC_reborn"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: YUN_contact_TIB decision begun",
+      "set_country_flag": "YUN_TIB_contacting"
+    }
+  },
+  {
+    "id": "YUN_NPA_Attack_TIB",
+    "category_id": "YUN_NPA_Crusade",
+    "name": "Освободить Тибет",
+    "desc": "Еще со времен династии Юань государство Тибет занимало особое положение в составе Поднебесной империи, имея куда больше автономии, чем остальные провинции. И все же злоупотребление такой доброй волей обернулось простым предательством - воспользовавшись некомпетентностью Айсинь Гьоро, 13-й Далай Лама бессовестно провозгласил \"независимость\" Тибета в соответствии с замыслом Британской империи. Теперь, когда над Британией таки зашло солнце, настало время положить конец безумию этой феодальной теократии и развеять иллюзии этих монахов.",
+    "icon": "GFX_decision_generic_nationalism",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_war_with": "TIB"
+      }
+    },
+    "visible": {
+      "OR": {
+        "XIK": {
+          "is_in_faction_with": "YUN"
+        },
+        "QIN": {
+          "is_in_faction_with": "YUN"
+        },
+        "is_neighbor_of": "TIB"
+      },
+      "country_exists": "TIB",
+      "has_global_flag": "YUN_NPA_GAW_Crisis",
+      "has_country_flag": "YUN_TIB_contacted",
+      "check_variable": {
+        "YUN.YUN_WI_Warlord": 6
+      }
+    },
+    "complete_effect": {
+      "declare_war_on": {
+        "target": "TIB",
+        "type": "annex_everything"
+      }
+    }
+  },
+  {
+    "id": "Return_Tibet",
+    "category_id": "TMM_Xikang",
+    "name": "Return Tibet to the National Government",
+    "desc": "",
+    "icon": "GFX_decision_category_generic",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "AND": {
+        "tag": "XIK",
+        "has_war": false,
+        "765": {
+          "is_controlled_by": "XIK"
+        },
+        "601": {
+          "is_controlled_by": "XIK"
+        },
+        "322": {
+          "is_controlled_by": "XIK"
+        },
+        "1962": {
+          "is_controlled_by": "XIK"
+        },
+        "2395": {
+          "is_controlled_by": "XIK"
+        },
+        "2396": {
+          "is_controlled_by": "XIK"
+        },
+        "2397": {
+          "is_controlled_by": "XIK"
+        },
+        "2398": {
+          "is_controlled_by": "XIK"
+        }
+      }
+    },
+    "visible": {
+      "AND": {
+        "tag": "XIK"
+      }
+    },
+    "complete_effect": {
+      "QIN": [
+        {
+          "set_state_controller": 322
+        },
+        {
+          "set_state_controller": 601
+        },
+        {
+          "set_state_controller": 765
+        },
+        {
+          "set_state_controller": 1962
+        },
+        {
+          "set_state_controller": 2395
+        },
+        {
+          "set_state_controller": 2396
+        },
+        {
+          "set_state_controller": 2397
+        },
+        {
+          "set_state_controller": 2398
+        }
+      ]
+    }
+  },
+  {
+    "id": "core_tibet",
+    "category_id": "QIN_Management",
+    "name": "Establish administration in Tibet Proper",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "OR": [
+        {
+          "date": {
+            "_op": ">",
+            "value": "1970.03.03"
+          },
+          "has_completed_focus": "dalai_response"
+        },
+        {
+          "AND": {
+            "QIN": {
+              "owns_state": [
+                322,
+                1961,
+                2395,
+                2396
+              ]
+            },
+            "322": {
+              "NOT": {
+                "is_core_of": "QIN"
+              }
+            },
+            "1961": {
+              "NOT": {
+                "is_core_of": "QIN"
+              }
+            },
+            "2395": {
+              "NOT": {
+                "is_core_of": "QIN"
+              }
+            },
+            "2396": {
+              "NOT": {
+                "is_core_of": "QIN"
+              }
+            },
+            "check_variable": [
+              {
+                "var": "State_Stability^2",
+                "value": 75,
+                "compare": "greater_than"
+              },
+              {
+                "var": "State_Tension^2",
+                "value": 10,
+                "compare": "less_than"
+              }
+            ]
+          },
+          "hidden_trigger": {
+            "AND": {
+              "if": {
+                "limit": {
+                  "is_ai": true
+                },
+                "QIN": {
+                  "owns_state": [
+                    322,
+                    1961,
+                    2395,
+                    2396
+                  ]
+                },
+                "322": {
+                  "NOT": {
+                    "is_core_of": "QIN"
+                  }
+                },
+                "1961": {
+                  "NOT": {
+                    "is_core_of": "QIN"
+                  }
+                },
+                "2395": {
+                  "NOT": {
+                    "is_core_of": "QIN"
+                  }
+                },
+                "2396": {
+                  "NOT": {
+                    "is_core_of": "QIN"
+                  }
+                }
+              },
+              "else": {
+                "QIN": {
+                  "owns_state": [
+                    322,
+                    1961,
+                    2395,
+                    2396
+                  ]
+                },
+                "322": {
+                  "NOT": {
+                    "is_core_of": "QIN"
+                  }
+                },
+                "1961": {
+                  "NOT": {
+                    "is_core_of": "QIN"
+                  }
+                },
+                "2395": {
+                  "NOT": {
+                    "is_core_of": "QIN"
+                  }
+                },
+                "2396": {
+                  "NOT": {
+                    "is_core_of": "QIN"
+                  }
+                },
+                "check_variable": [
+                  {
+                    "var": "State_Stability^2",
+                    "value": 75,
+                    "compare": "greater_than"
+                  },
+                  {
+                    "var": "State_Tension^2",
+                    "value": 10,
+                    "compare": "less_than"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visible": {
+      "tag": "QIN",
+      "QIN": {
+        "owns_state": [
+          322,
+          1961,
+          2395,
+          2396
+        ]
+      },
+      "322": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "1961": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2395": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      },
+      "2396": {
+        "NOT": {
+          "is_core_of": "QIN"
+        }
+      }
+    },
+    "complete_effect": {}
+  }
+]

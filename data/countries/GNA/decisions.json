@@ -1,0 +1,414 @@
+[
+  {
+    "id": "BOL_david_toros_resignation",
+    "category_id": "political_actions",
+    "name": "Отставка Дэвида Торо",
+    "desc": "",
+    "icon": "GFX_decision_generic_break_treaty",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "has_government": "neutrality",
+      "has_country_leader": {
+        "ruling_only": true,
+        "character": "BOL_david_toro_ruilova"
+      }
+    },
+    "visible": {
+      "tag": "BOL",
+      "has_government": "neutrality",
+      "NOT": {
+        "has_country_flag": "BOL_david_toro_resigned_flag"
+      },
+      "has_dlc": "Trial of Allegiance"
+    },
+    "complete_effect": {
+      "retire_country_leader": true,
+      "add_country_leader_role": {
+        "character": "BOL_german_busch_beccera",
+        "promote_leader": true,
+        "country_leader": {
+          "ideology": "despotism",
+          "expire": "1965.1.1.1",
+          "traits": [
+            "JUNO_military_socialist",
+            "JUNO_the_general_president"
+          ]
+        }
+      },
+      "hidden_effect": {
+        "set_country_flag": "BOL_david_toro_resigned_flag"
+      }
+    }
+  },
+  {
+    "id": "DEN_demand_country_leader_resignation",
+    "category_id": "DEN_overlord_category",
+    "name": "DEN_demand_country_leader_resignation",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_demand",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "ROOT": {
+        "has_opinion": {
+          "target": "DEN",
+          "value": {
+            "_op": "<",
+            "value": 0
+          }
+        }
+      },
+      "DEN": {
+        "NOT": {
+          "has_government": "ROOT",
+          "is_in_faction_with": "ROOT"
+        }
+      }
+    },
+    "visible": {
+      "has_subject": "DEN",
+      "has_country_flag": "DEN_overlord_can_demand_resignation_flag",
+      "NOT": {
+        "has_country_flag": "DEN_overlord_installed_loyalist_flag"
+      }
+    },
+    "complete_effect": {
+      "DEN": {
+        "country_event": {
+          "id": "denmark_overlord_events.10",
+          "days": 1
+        }
+      },
+      "custom_effect_tooltip": "DEN_deteriorating_subject_relations"
+    }
+  },
+  {
+    "id": "MTG_send_treaty_warning_to_FROM_previous_signatory",
+    "category_id": "MTG_naval_treaties",
+    "name": "Объявить предупреждение государству [From.GetNameDef]",
+    "desc": "",
+    "icon": "generic_naval",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "has_naval_treaty_trigger": true
+    },
+    "complete_effect": {
+      "FROM": {
+        "country_event": {
+          "id": "MTG_naval_treaty.4"
+        }
+      }
+    }
+  },
+  {
+    "id": "MTG_treaty_reduction_signatory_mission",
+    "category_id": "MTG_naval_treaties",
+    "name": "Вернуться к размеру флота, оговоренному соглашением",
+    "desc": "Нам, как участникам морского соглашения, разрешено иметь определенное количество крупных кораблей. Сейчас оно превышено, и люди начинают задаваться вопросом — так ли мы привержены идеям международного ограничения вооружений, как говорим?",
+    "icon": "generic_naval",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "if": {
+        "limit": {
+          "ENG": {
+            "has_naval_treaty_trigger": true
+          }
+        },
+        "naval_strength_comparison": {
+          "other": "ENG",
+          "ratio": {
+            "_op": "<",
+            "value": 1
+          },
+          "sub_unit_def_weights": {
+            "carrier": 0.5,
+            "battleship": 1,
+            "battle_cruiser": 0.8,
+            "heavy_cruiser": 0.5
+          }
+        }
+      },
+      "else_if": {
+        "limit": {
+          "USA": {
+            "has_naval_treaty_trigger": true
+          }
+        },
+        "naval_strength_comparison": {
+          "other": "USA",
+          "ratio": {
+            "_op": "<",
+            "value": 1
+          },
+          "sub_unit_def_weights": {
+            "carrier": 0.5,
+            "battleship": 1,
+            "battle_cruiser": 0.8,
+            "heavy_cruiser": 0.5
+          }
+        }
+      },
+      "else": {
+        "has_navy_size": {
+          "type": "capital_ship",
+          "size": {
+            "_op": "<",
+            "value": 50
+          }
+        }
+      }
+    },
+    "visible": [],
+    "complete_effect": []
+  },
+  {
+    "id": "BRA_lottquadros_impending_resignation",
+    "category_id": "BRA_lottquadros_category",
+    "name": "Кризис лидерства",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRA_lottquadros_impending_resignation_trigger",
+        "check_variable": {
+          "BRA_lottquadros_cooperation": {
+            "_op": ">",
+            "value": 0.99
+          }
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "BRG_designate_mega_farm",
+    "category_id": "BRG_domestic_famine_category",
+    "name": "Назначить [FROM.GetName] как новую Мега-ферму",
+    "desc": "",
+    "icon": "GFX_decision_generic_farm",
+    "cost": 60,
+    "fire_only_once": true,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "BRG_workers_cost_2000",
+        "check_variable": {
+          "FROM.BRG_Skilled_Worker_Pop": {
+            "_op": ">",
+            "value": 1999
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "BRG_raze_the_cities",
+      "FROM": {
+        "NOT": {
+          "nuclear_reactor": {
+            "_op": ">",
+            "value": 0
+          }
+        },
+        "has_state_flag": "BRG_brutalism_tier_1"
+      }
+    },
+    "complete_effect": {
+      "subtract_from_variable": {
+        "FROM.BRG_Skilled_Worker_Pop": 2000
+      }
+    }
+  },
+  {
+    "id": "BRG_fall_ragnachar_mission",
+    "category_id": "pulse_actions",
+    "name": "BRG_fall_ragnachar_mission",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "FRA": {
+        "surrender_progress": {
+          "_op": ">",
+          "value": 0.6
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "FRA": {
+        "set_province_controller": 9737,
+        "set_capital": {
+          "state": 19
+        },
+        "white_peace": {
+          "tag": "BRG",
+          "message": "fra_brg_capitulation_msg"
+        }
+      },
+      "BRG": {
+        "country_event": "BRG_opening.6"
+      },
+      "remove_mission": "BRG_fall_ragnachar_mission"
+    }
+  },
+  {
+    "id": "SCO_Paranoia_Lossiemouth_Force_Resignations",
+    "category_id": "SCO_paranoia_category",
+    "name": "Отставка офицера Вооружённых Сил",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_action",
+    "cost": 40,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "OR": {
+          "has_decision": [
+            "SCO_Paranoia_Lossiemouth_Bug_Them",
+            "SCO_Paranoia_Lossiemouth_Investigate_Them"
+          ]
+        }
+      }
+    },
+    "visible": {
+      "has_active_mission": "SCO_Paranoia_Military_Lossiemouth"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SCO_Paranoia_Lossiemouth_Force_Resignations"
+    }
+  },
+  {
+    "id": "KOM_kurchatov_resignation_mission",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Отставка Курчатова",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+    },
+    "visible": {
+      "KOM": {
+        "has_country_flag": "KOM_KURCHATOV_SUCCESSION"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "KOM_kurchatov_resignation_AI_mission",
+    "category_id": "KOM_kurchatov_succession_category",
+    "name": "Призывы оппозиции",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "KOM_cancel_kurchatov_mechanic"
+    },
+    "visible": {
+      "KOM": {
+        "has_country_flag": "KOM_KURCHATOV_SUCCESSION"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "USA_Hart_Cancer_Prepare_Resignation_Resign",
+    "category_id": "USA_the_desk_of_the_president",
+    "name": "Подготовить заявление об отставке",
+    "desc": "",
+    "icon": "GFX_decision_USA_supreme_court",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": [
+          "USA_chain_bill",
+          "USA_hart_working_on_cancer_focus"
+        ]
+      },
+      "has_country_flag": [
+        "Hart_JJ_Step_3",
+        "Hart_CM_Step_3",
+        "Hart_HH_Step_1"
+      ],
+      "date": {
+        "_op": ">",
+        "value": "1973.01.20"
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "USA_hart_presidency",
+        "USA_hart_cancer_decisions"
+      ],
+      "NOT": {
+        "count_triggers": {
+          "amount": 3,
+          "has_country_flag": [
+            "USA_bankruptcy_fucked",
+            "USA_rural_revolt_fucked",
+            "USA_failed_Race_riots",
+            "USA_whiteflight_fucked"
+          ]
+        }
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "USA_HART_prepare_resign_presidency_tt",
+      "clr_country_flag": "USA_chain_bill",
+      "set_country_flag": "USA_resignation_prepared",
+      "hidden_effect": {
+        "country_event": {
+          "id": "hart.cancertalks.8",
+          "days": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "Magna_International",
+    "category_id": "USA_WAL_foreign_business_category",
+    "name": "Magna_International",
+    "desc": "",
+    "icon": "",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_WAL_canadian_business"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Magna_International",
+      "CAN": {
+        "set_country_flag": "saf_support_rallied"
+      }
+    }
+  },
+  {
+    "id": "USA_debug_nixon_resignation",
+    "category_id": "USA_debug_inaugurations_category",
+    "name": "Вызвать отставку Никсона",
+    "desc": "rip bozo",
+    "icon": "GFX_decision_USA_rdc",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "has_country_flag": "USA_debug_decisions"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_debug_nixon_resignation",
+      "country_event": {
+        "id": "USA.103"
+      }
+    }
+  }
+]

@@ -464,7 +464,9 @@ func update_province_owner(province_id: int, owner_val: Variant, color: Color = 
 	if ownership_lut_image != null:
 		var state_id = province_to_state.get(province_id, 0)
 		if state_id == 0 and provinces_data.has(province_id):
-			state_id = int(provinces_data[province_id].get("state_id", 0))
+			var raw_sid = provinces_data[province_id].get("state_id", 0)
+			if raw_sid != null and (raw_sid is int or raw_sid is float or raw_sid is String):
+				state_id = int(raw_sid)
 			province_to_state[province_id] = state_id
 		var is_frontline = contested_provinces.has(province_id)
 		var is_dmz = dmz_provinces.has(province_id)
@@ -491,7 +493,9 @@ func update_province_owner(province_id: int, owner_val: Variant, color: Color = 
 
 	var sid = province_to_state.get(province_id, 0)
 	if sid == 0 and provinces_data.has(province_id):
-		sid = int(provinces_data[province_id].get("state_id", 0))
+		var raw_sid2 = provinces_data[province_id].get("state_id", 0)
+		if raw_sid2 != null and (raw_sid2 is int or raw_sid2 is float or raw_sid2 is String):
+			sid = int(raw_sid2)
 
 	if country_labels_overlay != null:
 		country_labels_overlay.on_territory_transferred(province_id, sid, old_owner, clean_owner)
@@ -1146,6 +1150,26 @@ func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
 	_clamp_map_position()
 
 
+##
+## Принудительное включение/выключение тактического оверлея ТВД
+##
+func set_tactical_view_active(active: bool) -> void:
+	is_tactical_view_active = active
+	if tactical_overlay != null:
+		tactical_overlay.set_tactical_view_active(active)
+	if map_markers_overlay != null:
+		map_markers_overlay.set_tactical_view_active(active)
+	tactical_view_toggled.emit(active)
+
+
+##
+## Переключение тактического оверлея ТВД
+##
+func toggle_tactical_view() -> bool:
+	set_tactical_view_active(not is_tactical_view_active)
+	return is_tactical_view_active
+
+
 func _clamp_map_position() -> void:
 	var scaled_half = (Vector2(map_size) * scale) * 0.5
 	var margin := Vector2(300.0, 300.0)
@@ -1370,17 +1394,47 @@ func _load_manifest(path: String) -> void:
 		var meta = manifest_data.get("metadata", {})
 		max_province_id = int(meta.get("max_province_id", 0))
 
+		# 1. Загрузка штатов и привязка провинций
+		var states = manifest_data.get("states", {})
+		for k in states.keys():
+			var sid = int(k)
+			var s_info = states[k]
+			states_data[sid] = s_info
+			var s_owner = str(s_info.get("owner", ""))
+			var s_name = str(s_info.get("name", "Регион %d" % sid))
+			var s_provs = s_info.get("provinces", [])
+			for pid_raw in s_provs:
+				var pid = int(pid_raw)
+				province_to_state[pid] = sid
+				if not provinces_data.has(pid):
+					provinces_data[pid] = {"id": pid, "state_id": sid, "owner": s_owner, "state_name": s_name}
+				else:
+					provinces_data[pid]["state_id"] = sid
+					if not s_owner.is_empty():
+						provinces_data[pid]["owner"] = s_owner
+					provinces_data[pid]["state_name"] = s_name
+				if not state_to_provinces.has(sid):
+					state_to_provinces[sid] = []
+				if not state_to_provinces[sid].has(pid):
+					state_to_provinces[sid].append(pid)
+
+		# 2. Загрузка метаданных провинций
 		var provs = manifest_data.get("provinces", {})
 		for k in provs.keys():
 			var pid = int(k)
 			var p_info = provs[k]
-			provinces_data[pid] = p_info
-			if p_info.has("state_id"):
+			if not provinces_data.has(pid):
+				provinces_data[pid] = p_info
+			else:
+				for pk in p_info.keys():
+					provinces_data[pid][pk] = p_info[pk]
+			if p_info.has("state_id") and p_info["state_id"] != null:
 				var sid = int(p_info["state_id"])
 				province_to_state[pid] = sid
 				if not state_to_provinces.has(sid):
 					state_to_provinces[sid] = []
-				state_to_provinces[sid].append(pid)
+				if not state_to_provinces[sid].has(pid):
+					state_to_provinces[sid].append(pid)
 
 
 func _load_supplementary_data() -> void:
@@ -1424,12 +1478,26 @@ func _load_supplementary_data() -> void:
 			var json_r = JSON.new()
 			if json_r.parse(r_text) == OK and json_r.data is Dictionary:
 				for k in json_r.data.keys():
-					var pid = int(k)
-					starting_regions_data[pid] = json_r.data[k]
-					if not provinces_data.has(pid):
-						provinces_data[pid] = json_r.data[k]
-					if json_r.data[k].has("owner_tag"):
-						provinces_data[pid]["owner"] = json_r.data[k]["owner_tag"]
+					var sid = int(k)
+					var s_dict = json_r.data[k]
+					starting_regions_data[sid] = s_dict
+					states_data[sid] = s_dict
+					var s_owner = str(s_dict.get("owner", s_dict.get("owner_tag", "")))
+					var s_name = str(s_dict.get("name", "Регион %d" % sid))
+					for pid_raw in s_dict.get("provinces", []):
+						var pid = int(pid_raw)
+						province_to_state[pid] = sid
+						if not provinces_data.has(pid):
+							provinces_data[pid] = {"id": pid, "state_id": sid, "owner": s_owner, "state_name": s_name}
+						else:
+							provinces_data[pid]["state_id"] = sid
+							if not s_owner.is_empty():
+								provinces_data[pid]["owner"] = s_owner
+							provinces_data[pid]["state_name"] = s_name
+						if not state_to_provinces.has(sid):
+							state_to_provinces[sid] = []
+						if not state_to_provinces[sid].has(pid):
+							state_to_provinces[sid].append(pid)
 
 	# Загрузка расширенных характеристик и инфраструктуры провинций
 	if FileAccess.file_exists(province_features_file_path):

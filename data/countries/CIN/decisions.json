@@ -1,0 +1,865 @@
+[
+  {
+    "id": "ARG_appease_the_allies",
+    "category_id": "ARG_balancing_act_decisions",
+    "name": "Задобрить Союзников",
+    "desc": "",
+    "icon": "GFX_decision_SWI_swiss_democratic_tradition_campaign",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "ARG_balancing_act"
+    },
+    "visible": {
+      "has_completed_focus": "ARG_balancing_act"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ARG_appease_the_axis",
+    "category_id": "ARG_balancing_act_decisions",
+    "name": "Задобрить Ось",
+    "desc": "",
+    "icon": "GFX_decision_ger_reichskommissariats",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {
+      "has_completed_focus": "ARG_balancing_act"
+    },
+    "visible": {
+      "has_completed_focus": "ARG_balancing_act"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "ITA_missiolini_occupy_ticino",
+    "category_id": "ITA_missiolinis",
+    "name": "Оккупировать регион [846.GetName]",
+    "desc": "С тех пор как Ганнибал пересек Альпы со своими слонами, горы служили варварам дорогой в сердце Италии. Мы должны защитить свою северную границу.",
+    "icon": "GFX_decision_infiltrate_state",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "846": {
+        "OR": {
+          "is_fully_controlled_by": "ROOT",
+          "controller": {
+            "is_subject_of": "ROOT",
+            "hidden_trigger": {
+              "has_full_control_of_state": "PREV"
+            }
+          }
+        }
+      }
+    },
+    "visible": {
+      "ITA_missiolinis_system_available": true
+    },
+    "complete_effect": {
+      "effect_tooltip": {
+        "ITA_missiolini_occupy_ticino_success_effect": true
+      },
+      "hidden_effect": {
+        "country_event": {
+          "id": "BBA_italy_missiolinis.133",
+          "hours": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "TNO_socintern_vote_mission",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Голосование в Генеральной Ассамблее",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_global_flag": "TNO_socintern_cancel_vote",
+      "NOT": {
+        "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+      }
+    },
+    "visible": {
+      "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "TNO_show_hide_invitations",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Показать/Скрыть решения о приглашении",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_generic_visibility",
+        "trigger": {
+          "has_country_flag": "COM_hide_invite_decisions"
+        }
+      },
+      {
+        "key": "GFX_decision_generic_visibility_closed",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "COM_hide_invite_decisions"
+          }
+        }
+      }
+    ],
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_idea": "KOM_socintern_member",
+      "has_global_flag": "SOCINTERN_MOTIONS_UNLOCK"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_show_hide_invitations",
+      "if": {
+        "limit": {
+          "has_country_flag": "COM_hide_invite_decisions"
+        },
+        "clr_country_flag": "COM_hide_invite_decisions"
+      },
+      "else": {
+        "set_country_flag": "COM_hide_invite_decisions"
+      }
+    }
+  },
+  {
+    "id": "COM_invite_country",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Предложить членство государству [FROM.GetName]",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "has_idea": "KOM_socintern_member",
+      "NOT": [
+        {
+          "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+        },
+        {
+          "has_global_flag": "COM_cooldown"
+        }
+      ]
+    },
+    "visible": {
+      "NOT": {
+        "has_country_flag": "COM_hide_invite_decisions"
+      },
+      "has_global_flag": "SOCINTERN_MOTIONS_UNLOCK",
+      "FROM": {
+        "NOT": {
+          "has_idea": [
+            "KOM_socintern_member",
+            "ZZZ_anarchy"
+          ]
+        },
+        "comintern_disabled": false,
+        "OR": {
+          "has_government": [
+            "socialist",
+            "communist"
+          ]
+        },
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COM_invite_country [From.GetName]",
+      "clear_global_event_target": "SOCINTERN_INVITED",
+      "hidden_effect": [
+        {
+          "FROM": {
+            "save_global_event_target_as": "SOCINTERN_INVITED"
+          }
+        },
+        {
+          "SocIntern_Refresh_Arrays": true,
+          "every_country": [
+            {
+              "limit": {
+                "has_idea": "KOM_socintern_member",
+                "NOT": {
+                  "tag": "ROOT"
+                }
+              },
+              "activate_mission": "TNO_socintern_vote_mission"
+            },
+            {
+              "limit": {
+                "is_ai": true,
+                "has_idea": "KOM_socintern_member"
+              },
+              "country_event": {
+                "id": "socintern.200",
+                "days": 1,
+                "random_days": 10
+              }
+            }
+          ]
+        }
+      ],
+      "set_global_flag": [
+        "SOCINTERN_VOTE_IN_PROGRESS",
+        "SOCINTERN_VOTE_INVITATION"
+      ],
+      "activate_mission": "TNO_socintern_vote_mission"
+    }
+  },
+  {
+    "id": "TNO_show_hide_associate_invitations",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Показать/Скрыть решения о приглашении партнёров",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_generic_visibility",
+        "trigger": {
+          "has_country_flag": "COM_hide_associate_decisions"
+        }
+      },
+      {
+        "key": "GFX_decision_generic_visibility_closed",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "COM_hide_associate_decisions"
+          }
+        }
+      }
+    ],
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_idea": "KOM_socintern_member",
+      "has_global_flag": "SOCINTERN_MOTIONS_UNLOCK"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_show_hide_associate_invitations",
+      "if": {
+        "limit": {
+          "has_country_flag": "COM_hide_associate_decisions"
+        },
+        "clr_country_flag": "COM_hide_associate_decisions"
+      },
+      "else": {
+        "set_country_flag": "COM_hide_associate_decisions"
+      }
+    }
+  },
+  {
+    "id": "COM_invite_country_associate",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Предложить статус партнёра государству [FROM.GetName]",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "has_idea": "KOM_socintern_member",
+      "NOT": [
+        {
+          "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+        },
+        {
+          "has_global_flag": "COM_cooldown"
+        }
+      ]
+    },
+    "visible": {
+      "has_global_flag": "SOCINTERN_MOTIONS_UNLOCK",
+      "NOT": {
+        "has_country_flag": "COM_hide_associate_decisions"
+      },
+      "FROM": {
+        "NOT": {
+          "has_idea": [
+            "KOM_socintern_member",
+            "KOM_socintern_associate",
+            "ZZZ_anarchy"
+          ]
+        },
+        "comintern_disabled": false,
+        "OR": {
+          "has_government": [
+            "socialist",
+            "communist"
+          ]
+        },
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COM_invite_country_associate [From.GetName]",
+      "hidden_effect": [
+        {
+          "FROM": {
+            "save_global_event_target_as": "SOCINTERN_INVITED"
+          }
+        },
+        {
+          "SocIntern_Refresh_Arrays": true,
+          "every_country": [
+            {
+              "limit": {
+                "has_idea": "KOM_socintern_member",
+                "NOT": {
+                  "tag": "ROOT"
+                }
+              },
+              "activate_mission": "TNO_socintern_vote_mission"
+            },
+            {
+              "limit": {
+                "is_ai": true,
+                "has_idea": "KOM_socintern_member"
+              },
+              "country_event": {
+                "id": "socintern.200",
+                "days": 1,
+                "random_days": 10
+              }
+            }
+          ]
+        }
+      ],
+      "set_global_flag": [
+        "SOCINTERN_VOTE_IN_PROGRESS",
+        "SOCINTERN_VOTE_ASSOCIATESHIP"
+      ],
+      "activate_mission": "TNO_socintern_vote_mission"
+    }
+  },
+  {
+    "id": "TNO_show_hide_interventions",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Показать/Скрыть решения об интервенции",
+    "desc": "",
+    "icon": [
+      {
+        "key": "GFX_decision_generic_visibility",
+        "trigger": {
+          "has_country_flag": "COM_hide_intervention_decisions"
+        }
+      },
+      {
+        "key": "GFX_decision_generic_visibility_closed",
+        "trigger": {
+          "NOT": {
+            "has_country_flag": "COM_hide_intervention_decisions"
+          }
+        }
+      }
+    ],
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "always": true
+    },
+    "visible": {
+      "has_idea": "KOM_socintern_member",
+      "has_global_flag": [
+        "SOCINTERN_MOTIONS_UNLOCK",
+        "COM_SOCINTERN_ILD"
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_show_hide_interventions",
+      "if": {
+        "limit": {
+          "has_country_flag": "COM_hide_intervention_decisions"
+        },
+        "clr_country_flag": "COM_hide_intervention_decisions"
+      },
+      "else": {
+        "set_country_flag": "COM_hide_intervention_decisions"
+      }
+    }
+  },
+  {
+    "id": "COM_intervene_in_country",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Предложить военную помощь государству [FROM.GetName]",
+    "desc": "",
+    "icon": "",
+    "cost": 15,
+    "fire_only_once": false,
+    "available": {
+      "has_idea": "KOM_socintern_member",
+      "NOT": {
+        "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+      }
+    },
+    "visible": {
+      "has_global_flag": [
+        "SOCINTERN_MOTIONS_UNLOCK",
+        "COM_SOCINTERN_ILD"
+      ],
+      "NOT": {
+        "has_country_flag": "COM_hide_intervention_decisions"
+      },
+      "FROM": {
+        "OR": {
+          "has_government": [
+            "socialist",
+            "communist"
+          ]
+        },
+        "has_war": true,
+        "NOT": [
+          {
+            "any_country": {
+              "AND": {
+                "has_war_with": "PREV",
+                "OR": {
+                  "has_government": [
+                    "socialist",
+                    "communist"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "has_country_flag": "ComIntern_Volunteers_Sent"
+          }
+        ],
+        "exists": true
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COM_intervene_in_country [From.GetName]",
+      "clear_global_event_target": "SOCINTERN_VOLUNTEERS",
+      "hidden_effect": [
+        {
+          "FROM": {
+            "save_global_event_target_as": "SOCINTERN_VOLUNTEERS"
+          }
+        },
+        {
+          "SocIntern_Refresh_Arrays": true,
+          "every_country": [
+            {
+              "limit": {
+                "has_idea": "KOM_socintern_member",
+                "NOT": {
+                  "tag": "ROOT"
+                }
+              },
+              "activate_mission": "TNO_socintern_vote_mission"
+            },
+            {
+              "limit": {
+                "is_ai": true,
+                "has_idea": "KOM_socintern_member"
+              },
+              "country_event": {
+                "id": "socintern.200",
+                "days": 1,
+                "random_days": 10
+              }
+            }
+          ]
+        }
+      ],
+      "set_global_flag": [
+        "SOCINTERN_VOTE_IN_PROGRESS",
+        "SOCINTERN_VOTE_VOLUNTEERS"
+      ],
+      "activate_mission": "TNO_socintern_vote_mission"
+    }
+  },
+  {
+    "id": "TNO_found_comecon",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Предложить учреждение СЭВ",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+        },
+        {
+          "has_global_flag": "COMECON_FOUNDED"
+        },
+        {
+          "has_global_flag": "COM_cooldown"
+        }
+      ],
+      "has_idea": "KOM_socintern_member"
+    },
+    "visible": {
+      "has_global_flag": "SOCINTERN_MOTIONS_UNLOCK",
+      "NOT": {
+        "has_global_flag": "COMECON_FOUNDED"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_found_comecon",
+      "set_global_flag": [
+        "SOCINTERN_VOTE_IN_PROGRESS",
+        "SOCINTERN_VOTE_COMECON"
+      ],
+      "activate_mission": "TNO_socintern_vote_mission",
+      "hidden_effect": {
+        "SocIntern_Refresh_Arrays": true,
+        "every_country": [
+          {
+            "limit": {
+              "has_idea": "KOM_socintern_member",
+              "NOT": {
+                "tag": "ROOT"
+              }
+            },
+            "activate_mission": "TNO_socintern_vote_mission"
+          },
+          {
+            "limit": {
+              "is_ai": true,
+              "has_idea": "KOM_socintern_member"
+            },
+            "country_event": {
+              "id": "socintern.200",
+              "days": 1,
+              "random_days": 10
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "TNO_establish_COMECON_scientific_bureau",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Предложить научный отдел СЭВ",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+        },
+        {
+          "has_global_flag": "COM_cooldown"
+        }
+      ],
+      "has_idea": "KOM_socintern_member"
+    },
+    "visible": {
+      "has_global_flag": [
+        "SOCINTERN_MOTIONS_UNLOCK",
+        "COMECON_FOUNDED"
+      ],
+      "NOT": {
+        "has_global_flag": "COMECON_SCIENCE_FOUNDED"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_establish_COMECON_scientific_bureau",
+      "set_global_flag": [
+        "SOCINTERN_VOTE_IN_PROGRESS",
+        "SOCINTERN_VOTE_COMECON_SCIENCE"
+      ],
+      "activate_mission": "TNO_socintern_vote_mission",
+      "hidden_effect": {
+        "SocIntern_Refresh_Arrays": true,
+        "every_country": [
+          {
+            "limit": {
+              "has_idea": "KOM_socintern_member",
+              "NOT": {
+                "tag": "ROOT"
+              }
+            },
+            "activate_mission": "TNO_socintern_vote_mission"
+          },
+          {
+            "limit": {
+              "is_ai": true,
+              "has_idea": "KOM_socintern_member"
+            },
+            "country_event": {
+              "id": "socintern.200",
+              "days": 1,
+              "random_days": 10
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "TNO_increase_COMECON_centralization",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Увеличить централизацию СЭВ",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "NOT": [
+        {
+          "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+        },
+        {
+          "has_global_flag": "COM_cooldown"
+        }
+      ],
+      "has_idea": "KOM_socintern_member"
+    },
+    "visible": {
+      "has_global_flag": [
+        "SOCINTERN_MOTIONS_UNLOCK",
+        "COMECON_FOUNDED",
+        "COMECON_SCIENCE_FOUNDED"
+      ],
+      "NOT": {
+        "has_global_flag": "COMECON_CENTRALIZED"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TNO_increase_COMECON_centralization",
+      "set_global_flag": [
+        "SOCINTERN_VOTE_IN_PROGRESS",
+        "SOCINTERN_VOTE_SPHERIFICATION"
+      ],
+      "activate_mission": "TNO_socintern_vote_mission",
+      "hidden_effect": {
+        "SocIntern_Refresh_Arrays": true,
+        "every_country": [
+          {
+            "limit": {
+              "has_idea": "KOM_socintern_member",
+              "NOT": {
+                "tag": "ROOT"
+              }
+            },
+            "activate_mission": "TNO_socintern_vote_mission"
+          },
+          {
+            "limit": {
+              "is_ai": true,
+              "has_idea": "KOM_socintern_member"
+            },
+            "country_event": {
+              "id": "socintern.200",
+              "days": 1,
+              "random_days": 10
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "COM_propose_mutual_nap",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Предложить пакт о взаимном ненападении",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+        },
+        {
+          "has_global_flag": "COM_cooldown"
+        }
+      ],
+      "has_idea": "KOM_socintern_member"
+    },
+    "visible": {
+      "has_global_flag": "SOCINTERN_MOTIONS_UNLOCK",
+      "NOT": {
+        "has_global_flag": "COM_SOCINTERN_NAP"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COM_propose_mutual_nap",
+      "set_global_flag": [
+        "SOCINTERN_VOTE_IN_PROGRESS",
+        "SOCINTERN_VOTE_NON_AGGRESSION_PACT"
+      ],
+      "activate_mission": "TNO_socintern_vote_mission",
+      "hidden_effect": {
+        "SocIntern_Refresh_Arrays": true,
+        "every_country": [
+          {
+            "limit": {
+              "has_idea": "KOM_socintern_member",
+              "NOT": {
+                "tag": "ROOT"
+              }
+            },
+            "activate_mission": "TNO_socintern_vote_mission"
+          },
+          {
+            "limit": {
+              "is_ai": true,
+              "has_idea": "KOM_socintern_member"
+            },
+            "country_event": {
+              "id": "socintern.200",
+              "days": 1,
+              "random_days": 10
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "COM_establish_international_brigades",
+    "category_id": "TNO_socintern_GUI",
+    "name": "Предложить интернациональные бригады",
+    "desc": "",
+    "icon": "",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "NOT": [
+        {
+          "has_global_flag": "SOCINTERN_VOTE_IN_PROGRESS"
+        },
+        {
+          "has_global_flag": "COM_cooldown"
+        }
+      ],
+      "has_idea": "KOM_socintern_member"
+    },
+    "visible": {
+      "has_global_flag": "SOCINTERN_MOTIONS_UNLOCK",
+      "NOT": {
+        "has_global_flag": "COM_SOCINTERN_ILD"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision COM_establish_international_brigades",
+      "set_global_flag": [
+        "SOCINTERN_VOTE_IN_PROGRESS",
+        "SOCINTERN_VOTE_INTERNATIONAL_BRIGADES"
+      ],
+      "activate_mission": "TNO_socintern_vote_mission",
+      "hidden_effect": {
+        "SocIntern_Refresh_Arrays": true,
+        "every_country": [
+          {
+            "limit": {
+              "has_idea": "KOM_socintern_member",
+              "NOT": {
+                "tag": "ROOT"
+              }
+            },
+            "activate_mission": "TNO_socintern_vote_mission"
+          },
+          {
+            "limit": {
+              "is_ai": true,
+              "has_idea": "KOM_socintern_member"
+            },
+            "country_event": {
+              "id": "socintern.200",
+              "days": 1,
+              "random_days": 10
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "DRL_Rage_Inducing_Hormones",
+    "category_id": "DRL_Lysenkan_Treaty",
+    "name": "Стимулирующие гнев гормоны",
+    "desc": "Новый препарат Лысенко превратит наших людей в берсерков и даст нам преимущество, которого будет достаточно, чтобы превратить наших врагов в пыль!",
+    "icon": "GFX_decision_generic_civil_support",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "has_manpower": {
+          "_op": ">",
+          "value": 500
+        }
+      },
+      "NOT": {
+        "has_war_with": "MGN"
+      }
+    },
+    "visible": {
+      "has_completed_focus": "DRL_lysenkos_instruction"
+    },
+    "complete_effect": {
+      "hidden_effect": {
+        "add_manpower": -500
+      },
+      "add_timed_idea": {
+        "idea": "DRL_Rage_Inducing_Hormones",
+        "days": 180
+      }
+    }
+  },
+  {
+    "id": "USA_less_forceful_policing",
+    "category_id": "USA_bill_assessment",
+    "name": "Разработать менее опасные полицейские тактики",
+    "desc": "",
+    "icon": "GFX_decision_generic_money",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_country_flag": "USA_active_construction"
+      }
+    },
+    "visible": {
+      "has_country_flag": "USA_Crime_bill_building",
+      "NOT": {
+        "has_country_flag": "USA_less_forceful_policing"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision USA_less_forceful_policing",
+      "set_country_flag": "USA_active_construction"
+    }
+  },
+  {
+    "id": "RUS_lote_japan_is_enticing_corps",
+    "category_id": "RUS_lord_of_the_east_category",
+    "name": "The Japanese Are Enticing Our Corporations",
+    "desc": "",
+    "icon": "GFX_decision_corruption_yen",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "OR": {
+        "has_country_flag": [
+          "RUS_issue_of_birobidzhan",
+          "RUS_issue_of_primorsky",
+          "RUS_issue_of_vladivostok"
+        ]
+      }
+    },
+    "complete_effect": {}
+  }
+]

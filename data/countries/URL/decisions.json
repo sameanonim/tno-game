@@ -1,0 +1,876 @@
+[
+  {
+    "id": "RUS_coring_integrate_courland",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Courland",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": [
+        190,
+        1399
+      ]
+    },
+    "visible": {
+      "owns_state": [
+        190,
+        1399
+      ],
+      "1399": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "190": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "RUS_SWRW_ongoing"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_Guards_initiation",
+    "category_id": "URL_initiation_system",
+    "name": "Посвящение новых гвардейцев",
+    "desc": "Новыми гвардейцами становятся каждые 50 дней.",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_lower_standards",
+    "category_id": "URL_initiation_system",
+    "name": "Понижение стандартов обучения",
+    "desc": "Снижая наши стандарты, мы можем гарантировать, что больше посвященных пройдут свои заключительные испытания.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_army_experience": {
+        "_op": ">",
+        "value": 19.99
+      },
+      "NOT": {
+        "has_country_flag": "URL_high_standards"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      }
+    },
+    "complete_effect": {
+      "army_experience": -20
+    }
+  },
+  {
+    "id": "URL_lobby_for_leniency",
+    "category_id": "URL_initiation_system",
+    "name": "Снисходительное лоббирование",
+    "desc": "Благодаря снисходительности наших инструкторов по отношению к новым посвященным, мы можем гарантировать, что большинство из них пройдут наши испытания.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "NOT": {
+        "has_completed_focus": "URL_militias_reach_out_further"
+      },
+      "check_variable": {
+        "global.stfu_urals": 0
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_lobby_for_leniency_improved",
+    "category_id": "URL_initiation_system",
+    "name": "Снисходительное лоббирование",
+    "desc": "Благодаря снисходительности наших инструкторов по отношению к новым посвященным, мы можем гарантировать, что большинство из них пройдут наши испытания.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 50,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "has_completed_focus": "URL_militias_reach_out_further",
+      "check_variable": {
+        "global.stfu_urals": 0
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_reserve_guns_for_training",
+    "category_id": "URL_initiation_system",
+    "name": "Резервное оружие для тренировок",
+    "desc": "Предоставляя большее количество оборудования нашим посвященным, несомненно, увеличит их шансы на прохождение наших испытаний.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_equipment": {
+        "infantry_equipment": {
+          "_op": ">",
+          "value": 499
+        }
+      },
+      "NOT": {
+        "has_country_flag": "URL_comandeered_weapons"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      }
+    },
+    "complete_effect": {
+      "add_equipment_to_stockpile": {
+        "type": "infantry_equipment",
+        "amount": -500,
+        "producer": "URL"
+      },
+      "set_country_flag": "URL_reserved_guns"
+    }
+  },
+  {
+    "id": "URL_raise_standards",
+    "category_id": "URL_initiation_system",
+    "name": "Повышение стандартов обучения",
+    "desc": "Повышая планку качества, которую мы хотим видеть у наших посвященных, мы можем гарантировать, что только самые лучшие пройдут чрез заключительные испытания.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "var": "Ural_initiates",
+        "value": 0,
+        "compare": "greater_than"
+      },
+      "NOT": {
+        "has_country_flag": "URL_low_standards"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "URL_high_standards",
+      "add_to_variable": {
+        "var": "Ural_initiates",
+        "value": "Ural_exploit_army_xp"
+      },
+      "clamp_variable": {
+        "var": "Ural_initiates",
+        "min": 0,
+        "max": "Ural_initiates_cap"
+      },
+      "custom_effect_tooltip": "URL_lower_initates"
+    }
+  },
+  {
+    "id": "URL_commandeer_training_weapons",
+    "category_id": "URL_initiation_system",
+    "name": "Реквизировать учебное оборудования",
+    "desc": "Оборудование, которое наши посвященные используют для обучения, всегда можно было бы лучше использовать в руках наших солдат, хотя это, несомненно, затруднит нашим кандидатам в гвардию пройти испытания.",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "var": "Ural_initiates",
+        "value": 0,
+        "compare": "greater_than"
+      },
+      "NOT": {
+        "has_country_flag": "URL_reserved_guns"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "URL_comandeered_weapons",
+      "add_to_variable": {
+        "var": "Ural_initiates",
+        "value": "Ural_exploit_weapons"
+      },
+      "clamp_variable": {
+        "var": "Ural_initiates",
+        "min": 0,
+        "max": "Ural_initiates_cap"
+      },
+      "custom_effect_tooltip": "URL_lower_initates"
+    }
+  },
+  {
+    "id": "URL_upgrade_militias",
+    "category_id": "URL_militia_system",
+    "name": "Тренировка милиции",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "URL_militias_expand_the_program_flag"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "has_country_flag": "URL_militias_expand_the_program_flag",
+      "OR": {
+        "has_idea": [
+          "URL_militia_program_1",
+          "URL_militia_program_2",
+          "URL_militia_program_3",
+          "URL_militia_program_4",
+          "URL_militia_program_5",
+          "URL_militia_program_6",
+          "URL_militia_program_7",
+          "URL_militia_program_8",
+          "URL_militia_program_9"
+        ]
+      }
+    },
+    "complete_effect": {
+      "army_experience": -15,
+      "add_political_power": -15
+    }
+  },
+  {
+    "id": "URL_upgrade_guards",
+    "category_id": "URL_guard_system",
+    "name": "Улучшение гвардии",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "URL_guards_accept_no_substitutes_flag"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "has_country_flag": "URL_guards_accept_no_substitutes_flag",
+      "OR": {
+        "has_idea": [
+          "URL_children_of_vorkuta_speed_offense_training_hostile_weather",
+          "URL_children_of_vorkuta_ascended_1",
+          "URL_children_of_vorkuta_ascended_2",
+          "URL_children_of_vorkuta_ascended_3",
+          "URL_children_of_vorkuta_ascended_4"
+        ]
+      }
+    },
+    "complete_effect": {
+      "army_experience": -25,
+      "add_political_power": -15
+    }
+  },
+  {
+    "id": "URL_send_instructors_to_orenburg",
+    "category_id": "URL_orenburg_system",
+    "name": "Послать инструкторов в Оренбург",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "URL_orenburg_send_them_instructors_flag"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "has_country_flag": "URL_orenburg_send_them_instructors_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_send_weapons_to_orenburg",
+    "category_id": "URL_orenburg_system",
+    "name": "Послать оружие в Оренбург",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "URL_orenburg_the_gift_of_the_gun_flag"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "has_country_flag": "URL_orenburg_the_gift_of_the_gun_flag"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_send_artisans_to_orenburg",
+    "category_id": "URL_orenburg_system",
+    "name": "Послать ремесленников в Оренбург",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "has_country_flag": "URL_orenburg_teach_their_artisans_flag"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "has_country_flag": "URL_orenburg_teach_their_artisans_flag",
+      "NOT": {
+        "has_country_flag": "stop_teaching"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "URL_restore_order_to_orsk",
+    "category_id": "URL_category_battle_of_the_urals",
+    "name": "Восстановить порядок в Орске",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "DRL": {
+        "has_government": "socialist"
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "DRL": {
+        "has_government": "socialist"
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "URL_break_the_black_mountain",
+    "category_id": "URL_category_battle_of_the_urals",
+    "name": "Сломить Черную Гору",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "DRL": {
+        "exists": false
+      },
+      "MGN": {
+        "NOT": {
+          "has_global_flag": "MGN_NKVD_coup"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "DRL": {
+        "exists": false
+      },
+      "MGN": {
+        "NOT": {
+          "has_global_flag": "MGN_NKVD_coup"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "URL_fortify_the_NKVD_border",
+    "category_id": "URL_category_battle_of_the_urals",
+    "name": "Укрепить границу c НКВД",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 35,
+    "fire_only_once": true,
+    "available": {
+      "MGN": {
+        "exists": true
+      },
+      "has_global_flag": "MGN_NKVD_coup"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "MGN": {
+        "exists": true
+      },
+      "has_global_flag": "MGN_NKVD_coup"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "URL_gather_arms_for_the_NKVD_conflict",
+    "category_id": "URL_category_battle_of_the_urals",
+    "name": "Собрать оружие для конфликта с НКВД",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 35,
+    "fire_only_once": true,
+    "available": {
+      "MGN": {
+        "exists": true
+      },
+      "has_global_flag": "MGN_NKVD_coup"
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "MGN": {
+        "exists": true
+      },
+      "has_global_flag": "MGN_NKVD_coup"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "URL_kick_in_the_NKVD",
+    "category_id": "URL_category_battle_of_the_urals",
+    "name": "Ударить по НКВД",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "country_exists": "DRL"
+      },
+      "has_global_flag": "MGN_NKVD_coup",
+      "has_country_flag": [
+        "URL_preapare_NKVD_1",
+        "URL_preapare_NKVD_2"
+      ]
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "NOT": {
+        "country_exists": "DRL"
+      },
+      "has_global_flag": "MGN_NKVD_coup"
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "URL_resettle_refugees",
+    "category_id": "URL_category_refugees",
+    "name": "Расселение беженцев",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 100,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "has_completed_focus": "URL_the_refugees"
+    },
+    "complete_effect": {
+      "add_timed_idea": {
+        "idea": "URL_refugees_resettled",
+        "days": 180
+      }
+    }
+  },
+  {
+    "id": "URL_prepare_raid",
+    "category_id": "URL_counter_raids",
+    "name": "Подготовка к контр-рейду",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "any_owned_state": {
+        "is_fully_controlled_by": "ROOT",
+        "has_ROOT_at_least_1_div_in_current_state_scope": true,
+        "any_neighbor_state": {
+          "OR": {
+            "is_fully_controlled_by": [
+              "DRL",
+              "MGN"
+            ]
+          }
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "russia_has_loot_tt",
+        "FROM": {
+          "check_variable": {
+            "loot_amount": {
+              "_op": ">",
+              "value": 0
+            }
+          }
+        }
+      },
+      "has_war": false,
+      "FROM": {
+        "has_war": false
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "global.stfu_urals": 0
+      },
+      "NOT": [
+        {
+          "has_country_flag": "URL_preparing_raid"
+        },
+        {
+          "has_war_with": "FROM",
+          "has_border_war_with": "FROM"
+        }
+      ],
+      "FROM": {
+        "exists": true
+      },
+      "has_country_flag": "URL_counter_raids"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision URL_prepare_raid target: [From.GetName]",
+      "hidden_effect": {
+        "add_command_power": -50,
+        "FROM": {
+          "random_owned_controlled_state": {
+            "limit": {
+              "any_neighbor_state": {
+                "is_fully_controlled_by": "ROOT",
+                "has_ROOT_at_least_1_div_in_current_state_scope": true
+              }
+            },
+            "set_variable": {
+              "PREV.defender_state_vs_@ROOT": "id"
+            }
+          }
+        },
+        "random_owned_controlled_state": {
+          "limit": {
+            "has_ROOT_at_least_1_div_in_current_state_scope": true,
+            "any_neighbor_state": {
+              "is_fully_controlled_by": "FROM"
+            }
+          },
+          "set_variable": {
+            "FROM.attacker_state_vs_@ROOT": "id"
+          }
+        },
+        "set_country_flag": "URL_preparing_raid"
+      }
+    }
+  },
+  {
+    "id": "URL_initiate_raid",
+    "category_id": "URL_counter_raids",
+    "name": "Инициировать контр-рейд",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "ROOT": {
+        "var:FROM.attacker_state_vs_@ROOT": {
+          "is_fully_controlled_by": "ROOT"
+        }
+      },
+      "divisions_in_border_state": {
+        "state": "var:FROM.attacker_state_vs_@ROOT",
+        "border_state": "var:FROM.defender_state_vs_@ROOT",
+        "size": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision URL_initiate_raid",
+      "if": [
+        {
+          "limit": {
+            "FROM": {
+              "original_tag": "DRL"
+            }
+          },
+          "start_border_war": {
+            "change_state_after_war": false,
+            "attacker": {
+              "state": "var:FROM.attacker_state_vs_@ROOT",
+              "num_provinces": 4,
+              "on_win": "raiding.1",
+              "on_lose": "raiding.3",
+              "on_cancel": "raiding.2"
+            },
+            "defender": {
+              "state": "var:FROM.defender_state_vs_@ROOT",
+              "num_provinces": 4,
+              "on_win": "raiding.103",
+              "on_lose": "raiding.105",
+              "on_cancel": "raiding.104"
+            }
+          }
+        },
+        {
+          "limit": {
+            "FROM": {
+              "NOT": {
+                "original_tag": [
+                  "ORE",
+                  "URL",
+                  "MGN"
+                ]
+              }
+            }
+          },
+          "add_to_variable": {
+            "ORE_non_ural_raiding": 1
+          }
+        }
+      ],
+      "else_if": {
+        "limit": {
+          "FROM": {
+            "original_tag": "MGN"
+          }
+        },
+        "start_border_war": {
+          "change_state_after_war": false,
+          "attacker": {
+            "state": "var:FROM.attacker_state_vs_@ROOT",
+            "num_provinces": 4,
+            "on_win": "raiding.106",
+            "on_lose": "raiding.108",
+            "on_cancel": "raiding.107"
+          },
+          "defender": {
+            "state": "var:FROM.defender_state_vs_@ROOT",
+            "num_provinces": 4,
+            "on_win": "raiding.109",
+            "on_lose": "raiding.111",
+            "on_cancel": "raiding.110"
+          }
+        }
+      },
+      "hidden_effect": {
+        "remove_targeted_decision": {
+          "target": "FROM",
+          "decision": "URL_initiate_raid"
+        },
+        "activate_targeted_decision": {
+          "target": "FROM",
+          "decision": "URL_raid_in_progress"
+        }
+      }
+    }
+  },
+  {
+    "id": "URL_raid_in_progress",
+    "category_id": "URL_counter_raids",
+    "name": "Контр-рейд в прогрессе",
+    "desc": "",
+    "icon": "GFX_decision_generic_border_war",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_border_war": true
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision URL_raid_in_progress",
+      "hidden_effect": {
+        "clr_country_flag": "URL_preparing_raid",
+        "remove_targeted_decision": {
+          "target": "FROM",
+          "decision": "URL_raid_in_progress"
+        },
+        "activate_targeted_decision": {
+          "target": "FROM",
+          "decision": "URL_prepare_raid"
+        }
+      }
+    }
+  },
+  {
+    "id": "URL_scavenge_for_loot",
+    "category_id": "URL_counter_raids",
+    "name": "Искать добычу",
+    "desc": "",
+    "icon": "GFX_decision_generic_industry",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.025
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "URL_spend_raid_loot_academic_base",
+    "category_id": "URL_counter_raids",
+    "name": "Построить новые школы",
+    "desc": "",
+    "icon": "GFX_decision_generic_political_discourse",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "using_loot"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision URL_spend_raid_loot_academic_base",
+      "custom_effect_tooltip": "spend_loot_2",
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "add_stability": 0.02,
+      "set_country_flag": "using_loot"
+    }
+  },
+  {
+    "id": "URL_spend_raid_loot_research_facilities",
+    "category_id": "URL_counter_raids",
+    "name": "Открыть исследовательские центры",
+    "desc": "",
+    "icon": "GFX_decision_generic_research",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "using_loot"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision URL_spend_raid_loot_research_facilities",
+      "custom_effect_tooltip": "spend_loot_2",
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "add_stability": 0.02,
+      "set_country_flag": "using_loot"
+    }
+  },
+  {
+    "id": "URL_spend_raid_loot_industrial_equipment",
+    "category_id": "URL_counter_raids",
+    "name": "Импортировать оборудование",
+    "desc": "",
+    "icon": "GFX_decision_generic_supply",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "using_loot"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision URL_spend_raid_loot_industrial_equipment",
+      "custom_effect_tooltip": "spend_loot_2",
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "add_stability": 0.02,
+      "set_country_flag": "using_loot"
+    }
+  },
+  {
+    "id": "URL_spend_raid_loot_industrial_expertise",
+    "category_id": "URL_counter_raids",
+    "name": "Тренировать рабочих",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "using_loot"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision URL_spend_raid_loot_industrial_expertise",
+      "custom_effect_tooltip": "spend_loot_2",
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "add_stability": 0.02,
+      "set_country_flag": "using_loot"
+    }
+  },
+  {
+    "id": "URL_spend_raid_loot_agriculture",
+    "category_id": "URL_counter_raids",
+    "name": "Ввести новые сельхоз методы",
+    "desc": "",
+    "icon": "GFX_decision_generic_industrial_farm",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "using_loot"
+      }
+    },
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision URL_spend_raid_loot_agriculture",
+      "custom_effect_tooltip": "spend_loot_2",
+      "subtract_from_variable": {
+        "loot_amount": 2
+      },
+      "add_stability": 0.02,
+      "set_country_flag": "using_loot"
+    }
+  }
+]

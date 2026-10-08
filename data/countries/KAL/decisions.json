@@ -1,0 +1,583 @@
+[
+  {
+    "id": "MEN_move_the_capital_to_kalgan_decision",
+    "category_id": "political_actions",
+    "name": "Перенести столицу в Калган",
+    "desc": "",
+    "icon": "GFX_decision_eng_trade_unions_support",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "1039": {
+        "is_owned_and_controlled_by": "ROOT"
+      },
+      "capital_scope": {
+        "NOT": {
+          "state": 1039
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "MEN_moved_capital_to_zhangbei",
+      "capital_scope": {
+        "NOT": {
+          "state": 1039
+        }
+      }
+    },
+    "complete_effect": {
+      "swap_ideas": {
+        "remove_idea": "MEN_stretched_administration_idea_2",
+        "add_idea": "MEN_stretched_administration_idea_3"
+      },
+      "set_capital": {
+        "state": 1039,
+        "remember_old_capital": true
+      },
+      "add_victory_points": {
+        "province": 6904,
+        "value": 2
+      },
+      "hidden_effect": {
+        "set_country_flag": "MEN_moved_capital_to_kalgan"
+      }
+    }
+  },
+  {
+    "id": "JAP_develop_kalimantan_oil_deposits",
+    "category_id": "prospect_for_resources",
+    "name": "Начать разработку нефтяных месторождений на Калимантане",
+    "desc": "",
+    "icon": "oil",
+    "cost": 25,
+    "fire_only_once": false,
+    "available": {
+      "334": {
+        "is_controlled_by_ROOT_or_subject": true
+      },
+      "has_tech": "excavation3"
+    },
+    "visible": {
+      "OR": {
+        "has_completed_focus": [
+          "JAP_transformation_of_nature",
+          "JAP_sea_exploit_southern_resource_area"
+        ]
+      },
+      "334": {
+        "NOT": {
+          "has_state_flag": "kalimantan_oil_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "expand_the_kirikkale_steel_mills",
+    "category_id": "prospect_for_resources",
+    "name": "Расширить металлургический комбинат в Кырыккале",
+    "desc": "",
+    "icon": "steel",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "has_tech": "construction3",
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 14
+      },
+      "owns_state": 49,
+      "controls_state": 49
+    },
+    "visible": {
+      "owns_state": 49,
+      "controls_state": 49,
+      "49": {
+        "NOT": {
+          "has_state_flag": "ankara_steel_developed"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "restore_kalmyks",
+    "category_id": "form_transcaucasus_category",
+    "name": "Восстановить Калмыцкое ханство",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "controls_state": [
+        237,
+        236
+      ],
+      "NOT": [
+        {
+          "has_government": "communism"
+        },
+        {
+          "has_government": "democratic"
+        }
+      ]
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "GEO",
+          "ARM",
+          "AZR"
+        ]
+      },
+      "has_global_flag": "form_transcaucasia_flag",
+      "NOT": {
+        "has_global_flag": "kalmyk_khanate_restored_flag"
+      },
+      "has_dlc": "No Step Back"
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "release_kalmyk_khanate_tt",
+      "hidden_effect": {
+        "set_global_flag": "kalmyk_khanate_restored_flag",
+        "236": {
+          "add_core_of": "KAL"
+        },
+        "KAL": {
+          "transfer_state": [
+            237,
+            236
+          ],
+          "if": [
+            {
+              "limit": {
+                "ROOT": {
+                  "controls_state": 217
+                }
+              },
+              "add_state_core": 217,
+              "transfer_state": 217
+            },
+            {
+              "limit": {
+                "ROOT": {
+                  "controls_state": 407
+                }
+              },
+              "add_state_core": 407,
+              "transfer_state": 407
+            },
+            {
+              "limit": {
+                "ROOT": {
+                  "controls_state": 406
+                }
+              },
+              "add_state_core": 406,
+              "transfer_state": 406
+            },
+            {
+              "limit": {
+                "ROOT": {
+                  "controls_state": 401
+                }
+              },
+              "add_state_core": 401,
+              "transfer_state": 401
+            },
+            {
+              "limit": {
+                "ROOT": {
+                  "controls_state": 829
+                }
+              },
+              "add_state_core": 829,
+              "transfer_state": 829
+            },
+            {
+              "limit": {
+                "ROOT": {
+                  "controls_state": 238
+                }
+              },
+              "add_state_core": 238,
+              "transfer_state": 238
+            }
+          ],
+          "load_oob": "KAL_khanate_battalions"
+        },
+        "puppet": "KAL",
+        "if": {
+          "limit": {
+            "has_war_with": "SOV"
+          },
+          "KAL": {
+            "add_to_war": {
+              "targeted_alliance": "PREV",
+              "enemy": "SOV",
+              "hostility_reason": "asked_to_join"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "CA_trigger_karakalpak_regime_change_a1",
+    "category_id": "CA_debug_decisions_category",
+    "name": "Каракалпакстан: Демократия",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "KRK": {
+        "Karakalpak_Regime_Change_A1": true
+      }
+    }
+  },
+  {
+    "id": "CA_trigger_karakalpak_regime_change_a2",
+    "category_id": "CA_debug_decisions_category",
+    "name": "Каракалпакстан: Объединенный фронт",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "KRK": {
+        "set_cosmetic_tag": "KRK_United_Socialist"
+      }
+    }
+  },
+  {
+    "id": "CA_trigger_karakalpak_uzbek_unification",
+    "category_id": "CA_debug_decisions_category",
+    "name": "Каракалпакстано-Узбекистанское объединение",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "UZB_KRK_TNO_UNIFICATION_scripted_effect": true
+    }
+  },
+  {
+    "id": "OFN_COG_clean_out_kalemie",
+    "category_id": "OFN_COG_handling_the_rebels",
+    "name": "Очистить Калеми",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "visible": {
+      "has_cosmetic_tag": "COG_USA"
+    },
+    "complete_effect": {
+      "add_command_power": -25,
+      "log": "[GetDateText]: [Root.GetName]: Decision OFN_COG_clean_out_kalemie",
+      "set_country_flag": "OFN_COG_cleaning_out_rebels"
+    }
+  },
+  {
+    "id": "RUS_coring_integrate_kalmykia",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Kalmykia",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 237
+    },
+    "visible": {
+      "owns_state": 237,
+      "237": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "RUS_SWRW_ongoing"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_coring_integrate_makhachkala",
+    "category_id": "RUS_coring_category",
+    "name": "Integrate Makhachkala",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 1564
+    },
+    "visible": {
+      "owns_state": 1564,
+      "1564": {
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": {
+        "has_country_flag": "RUS_SWRW_ongoing"
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "MAG_DEC_MAT_make_reds_build_baikal_highway",
+    "category_id": "MAG_DECCAT_economic_development_my_man_matty",
+    "name": "Заставить красных восстановить Байкальскую магистраль",
+    "desc": "Некоторые из крупнейших городов Сибири всё ещё несут на себе шрамы советской власти, поскольку они являлись командными центрами режима после того, как он позволил России пасть перед Осью во Второй мировой войне. Пренебрежение и некомпетентность, проявленные как во время правления Ягоды, так и мятежниками, стремившимися прийти ему на смену, привели к тому, что вся дорожная сеть М55 пришла в запустение. Так же, как красные заставили бесчисленное количество русских работать на каторжных работах ради своих гнусных целей, мы вернём им должок и заставим их восстановить часть того, что они разрушили.",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "check_variable": {
+        "MAG_matty_econ_phase": 1
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.02
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "CHT_repair_the_baikal_highway",
+    "category_id": "CHT_chessboard_category",
+    "name": "Восстановить Байкальскую магистраль",
+    "desc": "",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 20,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "CHT_chessboard_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision CHT_repair_the_baikal_highway",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.04
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "IRK_repair_the_baikal_highway",
+    "category_id": "IRK_five_year_plans",
+    "name": "Отремонтировать Байкальские дороги",
+    "desc": "Автомагистраль М55, соединяющая временную столицу СССР с остальными частями Дальнего Востока, была сильно повреждена в результате восстания под предводительством ревизионистского агитатора Саблина. Мы уже полностью разбили силы восставших, и благодаря вновь начавшимся дорожным работам мы сможем реабилитировать некоторых их них. Они должны быть рады, что мы даём им шанс вновь влиться в ряды советских пролетариев, ибо многим другим восставшим повезло куда меньше.",
+    "icon": "GFX_decision_generic_workers",
+    "cost": 35,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "check_variable": {
+        "IRK_five_year_plans_phase": {
+          "_op": ">",
+          "value": 0
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IRK_repair_the_baikal_highway",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.04
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "KOM_campaign_trans_baikal",
+    "category_id": "KOM_democratic_politics_category",
+    "name": "Кампания в Забайкалье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "KOM_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 211
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "KOM_is_campaigning"
+    }
+  },
+  {
+    "id": "FST_establish_baikal_line",
+    "category_id": "FST_war_category",
+    "name": "Возвести Байкальскую линию",
+    "desc": "",
+    "icon": "GFX_decision_generic_destroy_fort",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": [],
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision FST_establish_baikal_line",
+      "hidden_effect": {
+        "add_command_power": -10
+      }
+    }
+  },
+  {
+    "id": "SVR_campaign_trans_baikal",
+    "category_id": "SVR_democratic_politics_category",
+    "name": "Кампания в Забайкалье",
+    "desc": "",
+    "icon": "",
+    "cost": 30,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "SVR_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 211
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "SVR_is_campaigning"
+    }
+  },
+  {
+    "id": "VYT_campaign_trans_baikal",
+    "category_id": "VYT_democratic_politics_category",
+    "name": "Кампания в Забайкалье",
+    "desc": "",
+    "icon": "",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_flag": "VYT_is_campaigning"
+      }
+    },
+    "visible": {
+      "any_owned_state": {
+        "region": 211
+      }
+    },
+    "complete_effect": {
+      "set_country_flag": "VYT_is_campaigning"
+    }
+  },
+  {
+    "id": "RUS_reorganise_karakalpakstan",
+    "category_id": "RUS_intervention_category",
+    "name": "Reorganise Karakalpakstan",
+    "desc": "",
+    "icon": "GFX_decision_generic_document",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "has_war": false
+    },
+    "visible": {
+      "750": {
+        "is_owned_by": "RUS",
+        "NOT": {
+          "is_core_of": "RUS"
+        }
+      },
+      "NOT": [
+        {
+          "has_global_flag": "RUS_shukshin_unification"
+        },
+        {
+          "tag": "OMS"
+        },
+        {
+          "tag": "SGV"
+        }
+      ]
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision RUS_reorganise_karakalpakstan",
+      "RUS_Central_Asia_Karakalpakstan_Occupation": true,
+      "hidden_effect": {
+        "KRK": {
+          "remove_ideas": [
+            "CA_Turkes_Kenes_Apathy",
+            "CA_Turkes_Kenes_Infighting"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "VOR_inclusion_of_kalinin",
+    "category_id": "VOR_destination_fief_of_the_region_category",
+    "name": "Share Directions for Rzhev District",
+    "desc": "",
+    "icon": "GFX_decision_generic_form_nation",
+    "cost": 25,
+    "fire_only_once": true,
+    "available": {
+      "controls_state": 247
+    },
+    "visible": {
+      "owns_state": 247,
+      "AND": {
+        "247": {
+          "is_core_of": "ROOT"
+        },
+        "242": {
+          "is_core_of": "ROOT"
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "JAP_MEN_Kalgan_supply_network_d",
+    "category_id": "JAP_foreign_policy_category",
+    "name": "Расширить ж/д сети вокруг Калгана",
+    "desc": "Войны выигрываются и проигрываются в том числе из-за логистики, особенно когда сражения проходят на просторах равнин. Калган - это ворота в Мэнцзян, и улучшив там железнодорожное сообщение, мы обеспечим адекватное снабжение наших союзников.",
+    "icon": "GFX_decision_generic_infrastructure",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": [],
+    "visible": {
+      "TNO_fopo_mengjiang_conflict_selected": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_MEN_Kalgan_supply_network",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.005
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  }
+]

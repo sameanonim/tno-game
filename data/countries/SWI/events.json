@@ -1,0 +1,770 @@
+[
+  {
+    "id": "BBA_switzerland.1",
+    "type": "country_event",
+    "title": "[ROOT.GetAdjective]ие основополагающие принципы",
+    "desc": "[ROOT.GetNameDefCap] ожидает приближения бури: политическая ситуация как внутри, так и снаружи быстро ухудшается, и множатся те, кто призывает разработать основополагающие принципы, которые позволят нам выбрать правильный курс. Вопрос в том, что именно окажется эффективным.\n\n Мы не знаем, как поступят наши соседи, но мы должны решить, какой именно подход позволит государству [ROOT.GetName] выжить.",
+    "picture": "GFX_report_event_SWI_president_talking_flag",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {},
+    "options": [
+      {
+        "name": "Мы должны защитить наши демократические ценности и нейтралитет",
+        "name_key": "BBA_switzerland.1.a",
+        "trigger": [],
+        "effects": {
+          "add_power_balance_modifier": {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_cantons"
+          }
+        }
+      },
+      {
+        "name": "Возможно, нам стоит более активно защищать нашу демократию",
+        "name_key": "BBA_switzerland.1.b",
+        "trigger": [],
+        "effects": {
+          "add_power_balance_modifier": {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_council"
+          }
+        }
+      },
+      {
+        "name": "В данных обстоятельствах мы не можем сохранять нейтралитет",
+        "name_key": "BBA_switzerland.1.c",
+        "trigger": [],
+        "effects": {
+          "add_power_balance_modifier": {
+            "id": "SWI_centralization_bop",
+            "modifier": "SWI_guiding_principles_council"
+          },
+          "add_popularity": {
+            "ideology": "democratic",
+            "popularity": -0.1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.2",
+    "type": "country_event",
+    "title": "Убит представитель нацистской партии в Швейцарии",
+    "desc": "Давид Франкфуртер, еврейский хорват, проживающий в Берне, сдался граубюнденской полиции и признался в убийстве Вильгельма Густлоффа, главы швейцарского отделения НСДАП.\n\nПричиной убийства нападавший назвал нетерпимость нацистской партии к еврейскому народу и роль Густлоффа в ее распространении в государстве [SWI.GetName].\n\nПо результатам того, как мы поведем себя в этом потенциально долгом процессе, [GER.GetNameDef] и остальной мир будут судить о нашей приверженности к беспристрастности и верховенству закона.",
+    "picture": "GFX_report_event_journalists_speech",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "GER": {
+        "has_government": "fascism"
+      }
+    },
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Ему уготован справедливый суд.",
+        "name_key": "BBA_switzerland.2.a",
+        "trigger": [],
+        "effects": {
+          "custom_effect_tooltip": "SWI_frankfurter_trial_will_continue_TT",
+          "hidden_effect": {
+            "set_country_flag": "SWI_prepare_for_trial"
+          }
+        }
+      },
+      {
+        "name": "Замести следы и завербовать его в агенты!",
+        "name_key": "BBA_switzerland.2.b",
+        "trigger": {
+          "has_intelligence_agency": true,
+          "has_dlc": "La Resistance"
+        },
+        "effects": {
+          "SWI_create_david_frankfurter_operative": true,
+          "hidden_effect": {
+            "set_country_flag": "SWI_faked_frankfurters_death"
+          },
+          "if": {
+            "limit": {
+              "SWI_fascist_germany_exists": true
+            },
+            "random_list": {
+              "70": {
+                "var:SWI.SWI_fascist_germany": {
+                  "country_event": {
+                    "id": "BBA_switzerland.9",
+                    "hours": 4
+                  },
+                  "effect_tooltip": {
+                    "add_opinion_modifier": {
+                      "modifier": "SWI_recruited_assasin_as_agent",
+                      "target": "SWI"
+                    }
+                  }
+                }
+              },
+              "30": {
+                "var:SWI.SWI_fascist_germany": {
+                  "country_event": {
+                    "id": "BBA_switzerland.7",
+                    "hours": 4
+                  },
+                  "add_opinion_modifier": {
+                    "modifier": "SWI_suspicions_of_coverup",
+                    "target": "SWI"
+                  }
+                }
+              }
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "Он признался — значит, должен немедленно получить максимальный срок.",
+        "name_key": "BBA_switzerland.2.c",
+        "trigger": [],
+        "effects": {
+          "custom_effect_tooltip": "SWI_frankfurter_immediate_harsh_sentence_TT",
+          "Hidden_effect": {
+            "set_country_flag": "SWI_frankfurter_immediate_harsh_sentence"
+          },
+          "var:SWI.SWI_fascist_germany": {
+            "add_opinion_modifier": {
+              "modifier": "SWI_swift_retribution_for_gustloff",
+              "target": "SWI"
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "target": "SWI",
+              "modifier": "SWI_too_harsh_on_frankfurter"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.3",
+    "type": "country_event",
+    "title": "Близится суд над Давидом Франкфуртером",
+    "desc": "Скоро состоится суд над Давидом Франкфуртером, убившим в феврале представителя нацистской партии в Давосе. Мы обещали ему справедливый и беспристрастный суд, но есть, разумеется, и другие варианты.\n\nМы могли бы тайно освободить его и завербовать для разведопераций; или можно умаслить [?SWI.SWI_fascist_germany.GetNameRuAcc], отменив суд и сразу вынеся приговор.\n\nКак бы мы ни поступили, удовлетворить сразу все стороны будет невозможно.",
+    "picture": "GFX_report_event_SWI_parliament_members",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "ROOT": {
+        "OR": {
+          "has_completed_focus": [
+            "SWI_fortify_border_with_italy",
+            "SWI_fortify_border_with_france",
+            "SWI_fortify_border_with_germany"
+          ]
+        },
+        "has_country_flag": "SWI_prepare_for_trial"
+      }
+    },
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Суд продолжится, как и было запланировано",
+        "name_key": "BBA_switzerland.3.a",
+        "trigger": [],
+        "effects": {
+          "if": {
+            "limit": {
+              "SWI_fascist_germany_exists": true
+            },
+            "effect_tooltip": {
+              "country_event": {
+                "id": "BBA_switzerland.8",
+                "days": 25,
+                "random_days": 10
+              }
+            },
+            "var:SWI.SWI_fascist_germany": {
+              "country_event": {
+                "id": "BBA_switzerland.5",
+                "days": 2,
+                "random_days": 3
+              }
+            },
+            "hidden_effect": {
+              "SWI": {
+                "set_country_flag": "SWI_trial_being_prepared"
+              }
+            }
+          },
+          "else": {
+            "country_event": {
+              "id": "BBA_switzerland.8",
+              "days": 30,
+              "random_days": 10
+            }
+          }
+        }
+      },
+      {
+        "name": "Мы используем его в целях разведки",
+        "name_key": "BBA_switzerland.3.b",
+        "trigger": {
+          "has_intelligence_agency": true,
+          "has_dlc": "La Resistance"
+        },
+        "effects": {
+          "SWI_create_david_frankfurter_operative": true,
+          "hidden_effect": {
+            "set_country_flag": "SWI_faked_frankfurters_death"
+          },
+          "if": {
+            "limit": {
+              "SWI_fascist_germany_exists": true
+            },
+            "random_list": {
+              "30": {
+                "var:SWI.SWI_fascist_germany": {
+                  "country_event": {
+                    "id": "BBA_switzerland.9",
+                    "hours": 4
+                  },
+                  "add_opinion_modifier": {
+                    "modifier": "SWI_recruited_assasin_as_agent",
+                    "target": "SWI"
+                  }
+                }
+              },
+              "70": {
+                "var:SWI.SWI_fascist_germany": {
+                  "country_event": {
+                    "id": "BBA_switzerland.7",
+                    "hours": 4
+                  },
+                  "add_opinion_modifier": {
+                    "modifier": "SWI_suspicions_of_coverup",
+                    "target": "SWI"
+                  }
+                }
+              }
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "С другой стороны, его вина несомненна",
+        "name_key": "BBA_switzerland.3.c",
+        "trigger": [],
+        "effects": {
+          "custom_effect_tooltip": "SWI_frankfurter_immediate_harsh_sentence_TT",
+          "Hidden_effect": {
+            "set_country_flag": "SWI_frankfurter_immediate_harsh_sentence"
+          },
+          "if": {
+            "limit": {
+              "SWI_fascist_germany_exists": true
+            },
+            "var:SWI.SWI_fascist_germany": {
+              "add_opinion_modifier": {
+                "modifier": "SWI_swift_retribution_for_gustloff",
+                "target": "SWI"
+              }
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "target": "SWI",
+              "modifier": "SWI_too_harsh_on_frankfurter"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.4",
+    "type": "country_event",
+    "title": "[?SWI.SWI_fascist_germany.GetLeader] радуется решению [SWI.GetNameRuGen]",
+    "desc": "[?SWI.SWI_fascist_germany.Getleader], лидер [?SWI.SWI_fascist_germany.GetNameRuGen], выражает свою благодарность державе [SWI.GetNameDef] за то, что та быстро разобралось с убийцей Вильяма Густлоффа. Теперь всем очевидно, какую позицию занимает [SWI.GetName] в таких делах. Такое пренебрежение правами человека и демократическими ценностями несомненно улучшит отношение к нам [?SWI.SWI_fascist_germany.GetNameRuGen]. \n\nНесмотря на позитивную оценку главы государства, нам ясно дали понять, что идеальным выходом для нацистской партии в данном случае была бы экстрадиция виновного в [?SWI.SWI_fascist_germany.GetNameRuAcc], даже если сейчас [SWI.GetNameDef] такой вопрос не рассматривает.",
+    "picture": "GFX_report_event_fascist_gathering",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "ROOT": {
+        "OR": {
+          "has_completed_focus": [
+            "SWI_fortify_border_with_italy",
+            "SWI_fortify_border_with_france",
+            "SWI_fortify_border_with_germany"
+          ]
+        },
+        "has_country_flag": "SWI_frankfurter_immediate_harsh_sentence",
+        "SWI_fascist_germany_exists": true
+      }
+    },
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Дело сделано",
+        "name_key": "BBA_switzerland.4.a",
+        "trigger": [],
+        "effects": {
+          "add_popularity": {
+            "ideology": "fascism",
+            "popularity": 0.1
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_sentenced_frankfurter_without_a_trial",
+              "target": "SWI"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.5",
+    "type": "country_event",
+    "title": "[SWI.GetName] решает продолжить суд на убийцей Густлоффа",
+    "desc": "Власти [SWI.GetNameRuGen] объявили, что дело Давида Франкфуртера, признавшегося в убийстве председателя отделения НСДАП в Давосе, будет рассматриваться на справедливой и беспристрастной основе по граубюнденским законам, как и любое другое дело об убийстве.\n\nУчитывая наше влияние на беззащитного соседа и тот факт, что Густлофф был функционером нацистской партии, мы могли бы послать юриста, представляющего интересы вдовы Густлоффа, чтобы тот продавливал суд к решению, выгодному нам. Так мы сможем убедиться, что наказание будет под стать преступлению.\n\nЕсли выражаться более прагматично, такая мера может вынудить [SWI.GetNameRuAcc] наконец занять чью-то сторону, отринув эту тонкую завесу нейтралитета, на который они так любят упирать.",
+    "picture": "GFX_report_event_gre_trial",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Вдова достойна справедливого воздаяния за жуткое преступление!",
+        "name_key": "BBA_switzerland.5.a",
+        "trigger": [],
+        "effects": {
+          "SWI": {
+            "country_event": {
+              "id": "BBA_switzerland.6",
+              "days": 20,
+              "random_days": 5
+            }
+          }
+        }
+      },
+      {
+        "name": "Ни к чему вмешиваться в [SWI.GetAdjective]ие дела",
+        "name_key": "BBA_switzerland.5.b",
+        "trigger": [],
+        "effects": {
+          "hidden_effect": {
+            "SWI": {
+              "set_country_flag": "SWI_Germany_ignored_gustloff_affair"
+            }
+          },
+          "SWI": {
+            "country_event": {
+              "id": "BBA_switzerland.8",
+              "hours": 6
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.6",
+    "type": "country_event",
+    "title": "[GER.GetAdjective]ие представители требуют сурового приговора для Давида Франкфуртера",
+    "desc": "Юрист, представляющий интересы вдовы Густлоффа и, без сомнения, отправленный к нам государством [?SWI.SWI_fascist_germany.GetNameDef], пытается надавить на Федеральный совет, чтобы суд вынес как можно более суровый приговор Давиду Франкфуртеру. Это весьма необычный запрос, и он, очевидно, вызван стремлением [?SWI.SWI_fascist_germany.GetNameRuGen] влиять на нас.\n\nЕсли мы примем их требование, это может сказаться на нашей репутации в мире — но мы, если хотим его отвергнуть, должны быть уверены, что можем себе это позволить.",
+    "picture": "GFX_report_event_canada_patriation",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true
+      }
+    },
+    "options": [
+      {
+        "name": "Это должен решать суд",
+        "name_key": "BBA_switzerland.6.a",
+        "trigger": [],
+        "effects": {
+          "country_event": {
+            "id": "BBA_switzerland.8",
+            "days": 20,
+            "random_days": 5
+          },
+          "FROM": {
+            "add_opinion_modifier": {
+              "modifier": "SWI_rejected_our_request",
+              "target": "SWI"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "Мы подумаем над этим",
+        "name_key": "BBA_switzerland.6.b",
+        "trigger": [],
+        "effects": {
+          "hidden_effect": {
+            "set_country_flag": "SWI_considering_harsh_treatment"
+          },
+          "custom_effect_tooltip": "SWI_frankfurter_german_expectations_TT",
+          "country_event": {
+            "id": "BBA_switzerland.8",
+            "days": 20,
+            "random_days": 5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.7",
+    "type": "country_event",
+    "title": "Франкфуртер таинственным образом убит в тюрьме",
+    "desc": "Власти Граубюндена сообщают, что Давид Франкфуртер, находившийся в заключении после признания в убийстве члена нацистской партии Вильгельма Густлоффа, сегодня утром был найден мертвым в своей камере. Было ли это самоубийством или нападением разъяренного сторонника нацистов, пока неясно, но федеральная полиция обещает все выяснить.\n\nУ нас нет никаких доказательств нарушения, но обстоятельства дела весьма туманны, и некоторые находят подозрительным то, что [SWI.GetAdjective]ое правительство не пускает [?SWI.SWI_fascist_germany.GetAdjective]их представителей осмотреть тело или место преступления.",
+    "picture": "GFX_report_event_journalists_speech",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Ну что ж...",
+        "name_key": "BBA_switzerland.7.a",
+        "trigger": [],
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.79",
+    "type": "country_event",
+    "title": "BBA_switzerland.79.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": false,
+    "fire_only_once": true,
+    "trigger": {
+      "SWI_bba": true,
+      "SWI": {
+        "NOT": {
+          "has_country_flag": "SWI_frankfurter_trial_started"
+        },
+        "has_country_flag": "SWI_prepare_for_trial"
+      },
+      "SWI_fascist_germany_exists": false
+    },
+    "immediate": {
+      "SWI": {
+        "country_event": {
+          "id": "BBA_switzerland.8",
+          "hours": 1
+        }
+      }
+    },
+    "options": []
+  },
+  {
+    "id": "BBA_switzerland.8",
+    "type": "country_event",
+    "title": "Суд над Давидом Франкфуртером",
+    "desc": "Все государство [SWI.GetName] и его соседи пристально следят за судом над Давидом Франкфуртером. Итог процесса решит не только участь убийцы, явившегося с повинной, но и судьбу [SWI.GetNameRuGen] в целом; он покажет, до какой степени держава готова поступиться своими институтами и традициями.\n\nВ суде все указывает на справедливый приговор к тюремному заключению, но влияние совета может изменить решение суда и, возможно, саму суть страны.",
+    "picture": "GFX_report_event_SWI_parliament_members",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": {
+        "SWI_find_fascist_germany": true,
+        "set_country_flag": "SWI_frankfurter_trial_started"
+      }
+    },
+    "options": [
+      {
+        "name": "Пусть суды принимают решение",
+        "name_key": "BBA_switzerland.8.a",
+        "trigger": [],
+        "effects": {
+          "hidden_effect": {
+            "set_country_flag": "SWI_frankfurter_trial_result_fair"
+          },
+          "var:SWI.SWI_fascist_germany": {
+            "country_event": {
+              "id": "BBA_switzerland.11",
+              "days": 1,
+              "random_days": 5
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_light_sentence_for_frankfurter",
+              "target": "SWI"
+            },
+            "if": {
+              "limit": {
+                "SWI": {
+                  "has_country_flag": "SWI_considering_harsh_treatment"
+                }
+              },
+              "add_opinion_modifier": {
+                "modifier": "SWI_they_lied_to_us",
+                "target": "SWI"
+              }
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_fair_trial_for_frankfurter",
+              "target": "SWI"
+            }
+          },
+          "country_event": {
+            "id": "BBA_switzerland.11",
+            "days": 10,
+            "random_days": 5
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "Он оказал услугу демократии. Его надо помиловать!",
+        "name_key": "BBA_switzerland.8.b",
+        "trigger": [],
+        "effects": {
+          "hidden_effect": {
+            "set_country_flag": "SWI_pardoned_frankfurter_at_trial"
+          },
+          "var:SWI.SWI_fascist_germany": {
+            "country_event": {
+              "id": "BBA_switzerland.9",
+              "days": 10,
+              "random_days": 5
+            },
+            "effect_tooltip": {
+              "add_opinion_modifier": {
+                "modifier": "SWI_pardoned_frankfurter_bad",
+                "target": "SWI"
+              },
+              "if": {
+                "limit": {
+                  "SWI": {
+                    "has_country_flag": "SWI_considering_harsh_treatment"
+                  }
+                },
+                "add_opinion_modifier": {
+                  "modifier": "SWI_they_lied_to_us",
+                  "target": "SWI"
+                }
+              }
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_pardoned_frankfurter_good",
+              "target": "SWI"
+            }
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      },
+      {
+        "name": "Мы не можем рисковать, настраивая против себя [?SWI.SWI_fascist_germany.GetNameRuAcc]. Ему нужно дать максимальный срок!",
+        "name_key": "BBA_switzerland.8.c",
+        "trigger": {
+          "has_country_flag": "SWI_considering_harsh_treatment"
+        },
+        "effects": {
+          "hidden_effect": {
+            "set_country_flag": "SWI_frankfurter_trial_result_harsh"
+          },
+          "var:SWI.SWI_fascist_germany": {
+            "country_event": {
+              "id": "BBA_switzerland.13",
+              "days": 5,
+              "random_days": 3
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_slow_retribution_for_gustoff",
+              "target": "SWI"
+            }
+          },
+          "every_other_country": {
+            "limit": {
+              "SWI_is_country_to_balance": true,
+              "has_government": "democratic"
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_too_harsh_on_frankfurter",
+              "target": "SWI"
+            }
+          },
+          "country_event": {
+            "id": "BBA_switzerland.10",
+            "days": 10,
+            "random_days": 5
+          },
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.9",
+    "type": "country_event",
+    "title": "[SWI.GetName] провоцирует наш гнев!",
+    "desc": "Наши агенты в государстве [SWI.GetName] доложили, что, несмотря на свои претензии на беспристрастность и верховенство закона, государство [SWI.GetNameDef] тайком освободило Давида Франкфуртера, признавшегося в убийстве Вильгельма Густлоффа, сымитировав его смерть в тюрьме и завербовав его в разведку.\n\nЭто доказывает, что им нельзя доверять и при первой же возможности их надо уничтожить. Нельзя спускать с рук столь неприкрытое оскорбление государству [?SWI.SWI_fascist_germany.GetNameDef].",
+    "picture": "GFX_report_event_SWI_open_air_gathering",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Они за это заплатят!",
+        "name_key": "BBA_switzerland.9.a",
+        "trigger": [],
+        "effects": {
+          "if": {
+            "limit": {
+              "SWI": {
+                "has_country_flag": "SWI_frankfurter_trial_result_fair"
+              }
+            },
+            "add_opinion_modifier": {
+              "modifier": "SWI_light_sentence_for_frankfurter",
+              "target": "SWI"
+            },
+            "if": {
+              "limit": {
+                "SWI": {
+                  "has_country_flag": "SWI_considering_harsh_treatment"
+                }
+              },
+              "add_opinion_modifier": {
+                "modifier": "SWI_they_lied_to_us",
+                "target": "SWI"
+              }
+            }
+          },
+          "else_if": [
+            {
+              "limit": {
+                "SWI": {
+                  "has_country_flag": "SWI_faked_frankfurters_death"
+                }
+              },
+              "effect_tooltip": {
+                "add_opinion_modifier": {
+                  "modifier": "SWI_recruited_assasin_as_agent",
+                  "target": "SWI"
+                }
+              }
+            },
+            {
+              "limit": {
+                "SWI": {
+                  "has_country_flag": "SWI_pardoned_frankfurter_at_trial"
+                }
+              },
+              "add_opinion_modifier": {
+                "modifier": "SWI_pardoned_frankfurter_bad",
+                "target": "SWI"
+              },
+              "if": {
+                "limit": {
+                  "SWI": {
+                    "has_country_flag": "SWI_considering_harsh_treatment"
+                  }
+                },
+                "add_opinion_modifier": {
+                  "modifier": "SWI_they_lied_to_us",
+                  "target": "SWI"
+                }
+              }
+            }
+          ],
+          "SWI_update_neighbor_opinion_balance": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "BBA_switzerland.10",
+    "type": "country_event",
+    "title": "[?SWI.SWI_fascist_germany.GetNameDefCap] довольствуется решением [SWI.GetNameRuGen]",
+    "desc": "Представители [?SWI.SWI_fascist_germany.GetNameRuGen] и вдова Густлоффа выразили свою благодарность державе [SWI.GetNameDef] за строгий приговор Франкфуртеру. Теперь нет сомнения, чью позицию [SWI.GetNameDef] занимает в подобных делах. [?SWI.SWI_fascist_germany.GetName] непременно пересмотрит свое отношение к [SWI.GetNameRuDat] в лучшую сторону.\n\nНесмотря на позитивную оценку, нам ясно дали понять, что идеальным исходом для нацистской партии в данном случае была бы экстрадиция виновного в [?SWI.SWI_fascist_germany.GetNameRuAcc].",
+    "picture": "GFX_report_event_gre_trial",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "hidden_effect": []
+    },
+    "options": [
+      {
+        "name": "Возможно, это гарантирует нашу безопасность",
+        "name_key": "BBA_switzerland.10.a",
+        "trigger": [],
+        "effects": {}
+      }
+    ]
+  }
+]

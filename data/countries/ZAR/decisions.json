@@ -1,0 +1,584 @@
+[
+  {
+    "id": "SPA_save_the_alcazar_mission",
+    "category_id": "political_actions",
+    "name": "Спасти алькасар!",
+    "desc": "",
+    "icon": "eng_propaganda_campaigns",
+    "cost": 0,
+    "fire_only_once": true,
+    "available": {
+      "controls_province": 858
+    },
+    "visible": {
+      "has_global_flag": "spanish_civil_war",
+      "has_completed_focus": "SPA_save_the_alcazar"
+    },
+    "complete_effect": {
+      "add_war_support": 0.1,
+      "add_stability": 0.1,
+      "add_political_power": 100,
+      "complete_national_focus": "SPA_caudillo_of_spain",
+      "add_days_mission_timeout": {
+        "mission": "SPA_carlist_uprising_mission",
+        "days": 70
+      }
+    }
+  },
+  {
+    "id": "USA_CIA_Align_Iberia_Towards_Salazar",
+    "category_id": "USA_BoP_category",
+    "name": "Поддержать [GetIBR_Portuguese_Caudillo][GetPOR_Caudillo_rod_pad]",
+    "desc": "",
+    "icon": "GFX_decision_generic_chess_king",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "USA_CIA_Mission_Cost_25_Million",
+        "check_variable": {
+          "TNO_Espionage_Budget": {
+            "_op": ">",
+            "value": 0.024
+          }
+        }
+      },
+      "TNO_Espionage_AgentsAvailable": true,
+      "TNO_Espionage_NoSpecialMission": true
+    },
+    "visible": {
+      "AND": {
+        "OR": {
+          "TNO_Espionage_Viewing_Europe": true,
+          "is_ai": true
+        },
+        "NOT": {
+          "IBR": {
+            "has_country_flag": "IBR_caudillo_mechanic_over"
+          },
+          "has_country_flag": [
+            "USA_CIA_Iberia_Franco_Align_success",
+            "USA_CIA_Iberia_Salazar_Align_success"
+          ],
+          "has_global_flag": "IBW_happening"
+        },
+        "IBR": {
+          "has_country_flag": "IBR_caudillo_mechanic_started"
+        }
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "IBR": {
+            "has_country_flag": "IBR_caetano_springboard"
+          }
+        },
+        "custom_effect_tooltip": "USA_CIA_IBR_align_caudillo_salazar_2"
+      },
+      "else": {
+        "custom_effect_tooltip": "USA_CIA_IBR_align_caudillo_salazar"
+      },
+      "set_country_flag": "TNO_Espionage_DoingSpecialMission",
+      "set_temp_variable": {
+        "RegionID": "@Europe"
+      },
+      "random_list": {
+        "TNO_Espionage_MissionSuccess^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionSuccess_tt",
+          "set_country_flag": "USA_CIA_Iberia_Salazar_Align",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.3",
+              "days": 14
+            }
+          }
+        },
+        "TNO_Espionage_MissionFailure^RegionID": {
+          "custom_effect_tooltip": "TNO_Espionage_MissionFailure_tt",
+          "hidden_effect": {
+            "country_event": {
+              "id": "USA_CIA.2",
+              "days": 14
+            }
+          }
+        }
+      },
+      "clr_country_flag": "CIA_AI_EUROPE_IBR_SALAZAR",
+      "subtract_from_variable": [
+        {
+          "TNO_Espionage_Budget": 0.025
+        },
+        {
+          "TNO_Espionage_Agents": 1
+        }
+      ],
+      "add_to_variable": {
+        "IBR.IBR_OFN_Alignment": 1
+      }
+    }
+  },
+  {
+    "id": "IBR_salazar_military_decision",
+    "category_id": "IBR_caudillos_category",
+    "name": "Салазар посещает высшее командование",
+    "desc": "",
+    "icon": "GFX_decision_generic_military_parade",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_caudillos_show_special_f",
+      "NOT": [
+        {
+          "has_country_flag": "IBR_Salazar_dead"
+        },
+        {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_church_decision",
+    "category_id": "IBR_caudillos_category",
+    "name": "Салазар разговаривает с епископами",
+    "desc": "",
+    "icon": "GFX_decision_generic_shake_hands",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_caudillos_show_special_f",
+      "NOT": [
+        {
+          "has_country_flag": "IBR_Salazar_dead"
+        },
+        {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_intellectuals_decision",
+    "category_id": "IBR_caudillos_category",
+    "name": "Салазар выпускает книгу",
+    "desc": "",
+    "icon": "GFX_decision_generic_education",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": "IBR_caudillos_show_special_f",
+      "NOT": [
+        {
+          "has_country_flag": "IBR_Salazar_dead"
+        },
+        {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      ]
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_settlers_generic",
+    "category_id": "IBR_caudillos_category",
+    "name": "Субсидии поселенцам в Гвинее",
+    "desc": "С целью укрепления позиций португальской стороны Союза правительство планирует реализацию программы по улучшению условий жизни европейского населения в наших колониальных владениях к югу от Сахары.\n\nЭта поддержка будет осуществляться в форме субсидий как частным лицам, так и коммерческим структурам, и будет направлена на повышение уровня жизни, стимулирования хозяйственной активности и укрепления экономического развития региона.",
+    "icon": "GFX_decision_generic_money",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_settlers_alignment": {
+            "_op": ">",
+            "value": -10
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "IBR_caudillos_show_generic_f",
+        "IBR_caudillos_generic_colonial_set"
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_in_crisis_tt",
+        "NOT": {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_natives_generic",
+    "category_id": "IBR_caudillos_category",
+    "name": "Реформа колониальных пенсий",
+    "desc": "Во всех наших заморских владениях есть преданные местные жители, чья служба обеспечивает устойчивость и эффективность нашего управления. Будь то полицейские, чиновники или представители иных должностей - их вклад имеет решающее значение для поддержания порядка и функционирования колониальной администрации.\n\nЭти люди должны получать достойное вознаграждение за свою службу. Реформа пенсионного обеспечения позволит укрепить наш авторитет среди местного населения и создать дополнительные стимулы для сотрудничества.",
+    "icon": "GFX_decision_generic_document_concessions",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_native_alignment": {
+            "_op": ">",
+            "value": -5
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "IBR_caudillos_show_generic_f",
+        "IBR_caudillos_generic_colonial_set"
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_in_crisis_tt",
+        "NOT": {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_military_generic",
+    "category_id": "IBR_caudillos_category",
+    "name": "Улучшение системы призыва",
+    "desc": "Федеральная система призыва сталкивается с рядом проблем, негативно сказывающихся на качестве наших вооружённых сил. В условиях нарастающей напряжённости подобное положение дел попросту недопустимо.\n\nДаже частичные, \"экстренные\" решения принесут Иберии ощутимую пользу. И потому любая инициатива, направленная на исправление ситуации, не только укрепит боеспособность армии, но и повысит авторитет её инициатора в глазах военного командования.",
+    "icon": "GFX_decision_generic_military_parade_green",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_military_alignment": {
+            "_op": ">",
+            "value": -20
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "IBR_caudillos_show_generic_f",
+        "IBR_caudillos_generic_military_set"
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_in_crisis_tt",
+        "NOT": {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_bureaucrats_generic",
+    "category_id": "IBR_caudillos_category",
+    "name": "Реформа системы аудита",
+    "desc": "Проверка частных предприятий остаётся наиболее надёжным способом обеспечить соблюдение иберийских промышленных норм и регламентов. К сожалению, возможности Союза в этой сфере страдают от тех же проблем, что и другие элементы государственного управления.\n\nПриведение аудиторской системы в порядок не только укрепит контроль над промышленностью, но и встретит горячую поддержку со стороны бюрократического аппарата - что станет дополнительным преимуществом этой инициативы.",
+    "icon": "GFX_decision_generic_document_target",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_bureaucrat_alignment": {
+            "_op": ">",
+            "value": -15
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "IBR_caudillos_show_generic_f",
+        "IBR_caudillos_generic_council_set"
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_in_crisis_tt",
+        "NOT": {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_foreign_generic",
+    "category_id": "IBR_caudillos_category",
+    "name": "Обновление иммиграционной системы",
+    "desc": "Оптимизация отдельных процедур в сфере иммиграции и таможенного контроля позволит сделать въезд в Иберию более удобным и предсказуемым. Упрощение формальностей не только ускорит обработку заявок, но и укрепит нашу репутацию в глазах иностранцев, способствуя росту деловых, туристических и культурных связей.",
+    "icon": "GFX_decision_generic_checkpoints",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_foreign_alignment": {
+            "_op": ">",
+            "value": -15
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": "IBR_caudillos_show_generic_f",
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_in_crisis_tt",
+        "NOT": {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_church_generic",
+    "category_id": "IBR_caudillos_category",
+    "name": "Подержка католических школ",
+    "desc": "Конкордат, заключённый Португалией с Ватиканом, допускает создание католических учебных заведений по всей стране - и это положение сохраняет силу теперь, когда Португалия стала частью Иберийского союза.\n\nПредоставление субсидий таким учреждениям позволит повысить уровень образования и качество предоставляемых ими услуг. Одновременно эта мера укрепит позиции португальской стороны в отношениях с Церковью и обеспечит ей благожелательное отношение духовенства.",
+    "icon": "GFX_decision_generic_education",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_church_alignment": {
+            "_op": ">",
+            "value": -20
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "IBR_caudillos_show_generic_f",
+        "IBR_caudillos_generic_church_set"
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_in_crisis_tt",
+        "NOT": {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_salazar_businessmen_generic",
+    "category_id": "IBR_caudillos_category",
+    "name": "Инвестиции в вольфрамовую промышленность",
+    "desc": "Португальская часть Союза издавна славится своими запасами вольфрама, поставляемого на мировой рынок. Поддержка предприятий, задействованных в этой отрасли - от добычи и транспортировки до экспорта, - способна стать весьма прибыльным вложением.\n\nНе менее важно и то, что подобная инициатива укрепит наши позиции среди деловых кругов, заручившись поддержкой промышленников и предпринимателей, чьи интересы напрямую связаны с развитием стратегически значимой отрасли.",
+    "icon": "GFX_decision_generic_mining",
+    "cost": 20,
+    "fire_only_once": false,
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_duet_max_rep_tt",
+        "check_variable": {
+          "IBR_business_alignment": {
+            "_op": ">",
+            "value": -15
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_country_flag": [
+        "IBR_caudillos_show_generic_f",
+        "IBR_caudillos_generic_businessmen_set"
+      ],
+      "custom_trigger_tooltip": {
+        "tooltip": "IBR_in_crisis_tt",
+        "NOT": {
+          "has_country_flag": [
+            "IBR_legislative_council_rogue",
+            "IBRDemUnion"
+          ]
+        }
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "IBR_debug_trees_death_salazar_caetano_Tree",
+    "category_id": "IBR_debug_trees",
+    "name": "Загрузить древо фокусов Смерть Салазара - Каэтану",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "tag": "IBR",
+      "is_ai": false
+    },
+    "visible": {
+      "tag": "IBR"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_debug_trees_death_salazar_caetano_Tree",
+      "load_focus_tree": "IBR_death_of_salazar_caetano"
+    }
+  },
+  {
+    "id": "IBR_debug_trees_death_salazar_franco_Tree",
+    "category_id": "IBR_debug_trees",
+    "name": "Загрузить древо фокусов Смерть Салазара - Франко",
+    "desc": "",
+    "icon": "GFX_decision_debug",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "tag": "IBR",
+      "is_ai": false
+    },
+    "visible": {
+      "tag": "IBR"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision IBR_debug_trees_death_salazar_franco_Tree",
+      "load_focus_tree": "IBR_death_of_salazar_franco"
+    }
+  },
+  {
+    "id": "MAG_WA_support_portuguese_salazarists",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт государству [POR.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "POR": {
+        "exists": true
+      },
+      "MAG_WA_iberian_wars_active": true,
+      "NOT": {
+        "OR": {
+          "SPR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "SPS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "POR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "GNS": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "PPR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "RPP": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_portuguese_salazarists",
+      "POR": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "MAG_WA_support_reclamation_zarmaland",
+    "category_id": "MAG_WA_mercenary_contracts_category",
+    "name": "Предложить контракт Зармаганде",
+    "desc": "",
+    "icon": "GFX_decision_generic_arms_trade_increase",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "HAU": {
+        "has_war_with": "ZAR"
+      },
+      "NOT": {
+        "OR": {
+          "HAU": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          },
+          "ZAR": {
+            "has_idea": "MAG_WA_mercenary_contract_idea"
+          }
+        }
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision timeout MAG_WA_support_reclamation_zarmaland",
+      "ZAR": {
+        "country_event": {
+          "id": "westalaska.100"
+        }
+      }
+    }
+  },
+  {
+    "id": "SVR_trial_of_lazar_kaganovich",
+    "category_id": "SVR_sverdlovsk_regional_category",
+    "name": "Суд над Лазарем Кагановичем",
+    "desc": "",
+    "icon": "GFX_decision_generic_decision",
+    "cost": 10,
+    "fire_only_once": true,
+    "available": {
+      "NOT": {
+        "has_decision": "SVR_trial_of_dmitry_yazov"
+      }
+    },
+    "visible": {
+      "has_country_flag": "SVR_kaganovich_loyalists_dealt_with"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision SVR_trial_of_lazar_kaganovich"
+    }
+  }
+]

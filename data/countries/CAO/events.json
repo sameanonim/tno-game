@@ -1,0 +1,1252 @@
+[
+  {
+    "id": "CAO.100",
+    "type": "country_event",
+    "title": "CAO.100.t",
+    "desc": "",
+    "picture": "GFX_report_event_GRO_african_rebels",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAO.100"
+    },
+    "options": [
+      {
+        "name": "CAO.100.a",
+        "name_key": "CAO.100.a",
+        "trigger": {},
+        "effects": {
+          "add_to_array": {
+            "global.cameroon_collapse": "THIS"
+          },
+          "set_global_flag": "global_cameroon_has_collapsed",
+          "remove_ideas": [
+            "CAO_idea_tense_borders",
+            "CAO_idea_political_rivalries"
+          ],
+          "retire_country_leader": true,
+          "promote_character": "CAO_Abel_Kingue",
+          "BFR": {
+            "add_to_array": {
+              "global.cameroon_collapse": "THIS"
+            },
+            "add_state_core": 1187,
+            "transfer_state": 1187,
+            "inherit_technology": "CAO",
+            "load_oob": "BFR_collapse"
+          },
+          "CHR": {
+            "add_to_array": {
+              "global.cameroon_collapse": "THIS"
+            },
+            "add_state_core": [
+              660,
+              1202,
+              1203,
+              1204,
+              1205,
+              1206,
+              1207
+            ],
+            "add_state_claim": [
+              1200,
+              1201
+            ],
+            "transfer_state": [
+              660,
+              1202,
+              1203,
+              1204,
+              1205,
+              1206,
+              1207
+            ],
+            "inherit_technology": "CAO",
+            "load_oob": "CHR_collapse",
+            "country_event": {
+              "id": "CAO.106",
+              "days": 2
+            }
+          },
+          "NNG": [
+            {
+              "add_to_array": {
+                "global.cameroon_collapse": "THIS"
+              },
+              "add_state_core": [
+                1189,
+                558
+              ],
+              "transfer_state": [
+                1189,
+                558
+              ],
+              "inherit_technology": "CAO",
+              "load_oob": "NNG_collapse"
+            },
+            {
+              "declare_war_on": {
+                "target": "BFR",
+                "type": "annex_everything"
+              }
+            }
+          ],
+          "NGA": [
+            {
+              "add_to_array": {
+                "global.cameroon_collapse": "THIS"
+              },
+              "add_state_core": [
+                826,
+                1197
+              ],
+              "add_state_claim": [
+                1198,
+                1199
+              ],
+              "transfer_state": [
+                826,
+                1197
+              ],
+              "inherit_technology": "CAO",
+              "load_oob": "NGA_collapse",
+              "random_list": {
+                "1": [
+                  {
+                    "modifier": {
+                      "factor": 0,
+                      "has_game_rule": {
+                        "rule": "NGA_LEADER_CHOICE",
+                        "option": "NGA_LEADER_CHOICE_DESPOTISM"
+                      }
+                    },
+                    "set_politics": {
+                      "ruling_party": "paternalism",
+                      "elections_allowed": false
+                    },
+                    "add_popularity": {
+                      "ideology": "paternalism",
+                      "popularity": 0.3
+                    }
+                  },
+                  {
+                    "modifier": {
+                      "factor": 0,
+                      "has_game_rule": {
+                        "rule": "NGA_LEADER_CHOICE",
+                        "option": "NGA_LEADER_CHOICE_PATERNALISM"
+                      }
+                    },
+                    "set_politics": {
+                      "ruling_party": "despotism",
+                      "elections_allowed": false
+                    },
+                    "add_popularity": {
+                      "ideology": "despotism",
+                      "popularity": 0.1
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "declare_war_on": [
+                {
+                  "target": "BFR",
+                  "type": "annex_everything"
+                },
+                {
+                  "target": "NNG",
+                  "type": "annex_everything"
+                }
+              ]
+            }
+          ],
+          "if": [
+            {
+              "limit": {
+                "NOT": {
+                  "has_global_flag": "WAC_scenario_3"
+                }
+              },
+              "NNG": {
+                "country_event": {
+                  "id": "CAO.103",
+                  "days": 2
+                }
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "YOR"
+              },
+              "YOR": {
+                "remove_ideas": "YOR_idea_shield_against_socialism",
+                "add_to_array": {
+                  "global.cameroon_collapse": "THIS"
+                },
+                "declare_war_on": [
+                  {
+                    "target": "NGA",
+                    "type": "annex_everything"
+                  },
+                  {
+                    "target": "BFR",
+                    "type": "annex_everything"
+                  },
+                  {
+                    "target": "NNG",
+                    "type": "annex_everything"
+                  }
+                ]
+              },
+              "CAO": {
+                "declare_war_on": {
+                  "target": "YOR",
+                  "type": "annex_everything"
+                }
+              }
+            }
+          ],
+          "every_state": {
+            "limit": {
+              "is_core_of": "CAO",
+              "NOT": {
+                "is_owned_by": "CAO"
+              }
+            },
+            "remove_core_of": "CAO"
+          },
+          "load_oob": "CAO_collapse",
+          "declare_war_on": [
+            {
+              "target": "BFR",
+              "type": "annex_everything"
+            },
+            {
+              "target": "CHD",
+              "type": "annex_everything"
+            },
+            {
+              "target": "NNG",
+              "type": "annex_everything"
+            },
+            {
+              "target": "NGA",
+              "type": "annex_everything"
+            }
+          ],
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasAfricaInterest": true
+              },
+              "news_event": {
+                "id": "CAOnews.1"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "CAO.101",
+    "type": "country_event",
+    "title": "CAO.101.t",
+    "desc": "",
+    "picture": "GFX_report_event_GRO_african_rebels",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAO.101"
+    },
+    "options": [
+      {
+        "name": "CAO.101.a",
+        "name_key": "CAO.101.a",
+        "trigger": {},
+        "effects": {
+          "set_global_flag": "global_cameroon_survived_collapse",
+          "CHF": {
+            "transfer_state": [
+              1206,
+              1207,
+              1202,
+              1203,
+              1204,
+              1205,
+              660,
+              1544,
+              1194,
+              1195
+            ],
+            "add_state_core": [
+              1544,
+              1194,
+              1195,
+              1207
+            ],
+            "TNO_startup_nation": true,
+            "CAO": {
+              "puppet": "CHD"
+            },
+            "set_politics": {
+              "ruling_party": "fascism",
+              "last_election": "1966.6.23",
+              "election_frequency": 48,
+              "elections_allowed": false
+            },
+            "set_popularities": {
+              "socialist": 30,
+              "conservatism": 11,
+              "paternalism": 18,
+              "despotism": 10,
+              "fascism": 31
+            },
+            "set_temp_variable": {
+              "TNO_economy_type_temp": "token:Econ_Type_Planned"
+            },
+            "econ_type_change": true
+          },
+          "NGA": {
+            "transfer_state": [
+              826,
+              1197,
+              1187
+            ],
+            "add_state_core": 1187,
+            "if": [
+              {
+                "limit": {
+                  "NOT": {
+                    "HAU": {
+                      "owns_state": 1189
+                    }
+                  }
+                },
+                "transfer_state": 1189,
+                "add_state_core": 1189
+              },
+              {
+                "limit": {
+                  "NOT": {
+                    "HAU": {
+                      "owns_state": 558
+                    }
+                  }
+                },
+                "transfer_state": 558,
+                "add_state_core": 558
+              },
+              {
+                "limit": {
+                  "CAO": {
+                    "owns_state": 825
+                  }
+                },
+                "transfer_state": 825,
+                "add_state_core": 825
+              },
+              {
+                "limit": {
+                  "CAO": {
+                    "owns_state": 1188
+                  }
+                },
+                "transfer_state": 1188,
+                "add_state_core": 1188
+              }
+            ],
+            "TNO_startup_nation": true,
+            "CAO": {
+              "puppet": "NGA"
+            },
+            "set_politics": {
+              "ruling_party": "socialist",
+              "last_election": "1966.6.23",
+              "election_frequency": 48,
+              "elections_allowed": false
+            },
+            "set_popularities": {
+              "socialist": 35,
+              "conservatism": 8,
+              "paternalism": 27,
+              "fascism": 30
+            },
+            "set_cosmetic_tag": "NGA_CAOPuppet",
+            "set_temp_variable": {
+              "TNO_economy_type_temp": "token:Econ_Type_Planned"
+            },
+            "econ_type_change": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "CAO.102",
+    "type": "country_event",
+    "title": "CAO.102.t",
+    "desc": "",
+    "picture": "GFX_report_event_GRO_african_rebels",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAO.102"
+    },
+    "options": [
+      {
+        "name": "CAO.102.a",
+        "name_key": "CAO.102.a",
+        "trigger": {},
+        "effects": {
+          "if": [
+            {
+              "limit": {
+                "country_exists": "NGA"
+              },
+              "NGA": {
+                "add_state_core": [
+                  1198,
+                  1199
+                ],
+                "transfer_state": [
+                  1198,
+                  1199
+                ],
+                "if": [
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 1187
+                      }
+                    },
+                    "add_state_core": 1187,
+                    "transfer_state": 1187
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 558
+                      }
+                    },
+                    "add_state_core": 558,
+                    "transfer_state": 558
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 1189
+                      }
+                    },
+                    "add_state_core": 1189,
+                    "transfer_state": 1189
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": [
+                          1188,
+                          825
+                        ]
+                      }
+                    },
+                    "add_state_core": [
+                      1188,
+                      825
+                    ],
+                    "transfer_state": [
+                      1188,
+                      825
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "BFR"
+              },
+              "BFR": {
+                "country_event": {
+                  "id": "CAO.105",
+                  "days": 220
+                }
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "CHD"
+              },
+              "CHD": {
+                "add_state_core": [
+                  1544,
+                  1194,
+                  1195,
+                  1200,
+                  1201
+                ],
+                "transfer_state": [
+                  1200,
+                  1201
+                ]
+              },
+              "if": [
+                {
+                  "limit": {
+                    "CAO": {
+                      "owns_state": 660
+                    }
+                  },
+                  "transfer_state": [
+                    660,
+                    1205
+                  ]
+                },
+                {
+                  "limit": {
+                    "CAO": {
+                      "owns_state": 1544
+                    }
+                  },
+                  "transfer_state": [
+                    1194,
+                    1195,
+                    1544
+                  ]
+                }
+              ]
+            }
+          ],
+          "else_if": [
+            {
+              "limit": {
+                "country_exists": "NNG"
+              },
+              "NNG": {
+                "add_state_core": [
+                  1198,
+                  1199
+                ],
+                "transfer_state": [
+                  1198,
+                  1199
+                ],
+                "if": [
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 1187
+                      }
+                    },
+                    "add_state_core": 1187,
+                    "transfer_state": 1187
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 1189
+                      }
+                    },
+                    "add_state_core": 1189,
+                    "transfer_state": 1189
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": [
+                          1188,
+                          825
+                        ]
+                      }
+                    },
+                    "add_state_core": [
+                      1188,
+                      825
+                    ],
+                    "transfer_state": [
+                      1188,
+                      825
+                    ]
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": [
+                          1197,
+                          826
+                        ]
+                      }
+                    },
+                    "add_state_core": [
+                      1197,
+                      826
+                    ],
+                    "transfer_state": [
+                      1197,
+                      826
+                    ]
+                  },
+                  {
+                    "limit": {
+                      "NOT": {
+                        "OR": {
+                          "country_exists": [
+                            "NGA",
+                            "YOR",
+                            "HAU"
+                          ]
+                        }
+                      }
+                    },
+                    "set_cosmetic_tag": "NNG_unified"
+                  }
+                ]
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "YOR"
+              },
+              "YOR": {
+                "add_state_core": [
+                  1198,
+                  1199
+                ],
+                "transfer_state": [
+                  1198,
+                  1199
+                ],
+                "if": [
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 1187
+                      }
+                    },
+                    "add_state_core": 1187,
+                    "transfer_state": 1187
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 558
+                      }
+                    },
+                    "add_state_core": 558,
+                    "transfer_state": 558
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 1189
+                      }
+                    },
+                    "add_state_core": 1189,
+                    "transfer_state": 1189
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": [
+                          1197,
+                          826
+                        ]
+                      }
+                    },
+                    "add_state_core": [
+                      1197,
+                      826
+                    ],
+                    "transfer_state": [
+                      1197,
+                      826
+                    ]
+                  },
+                  {
+                    "limit": {
+                      "NOT": {
+                        "OR": {
+                          "country_exists": [
+                            "NGA",
+                            "NNG",
+                            "HAU"
+                          ]
+                        }
+                      }
+                    },
+                    "set_cosmetic_tag": "YOR_unified"
+                  }
+                ]
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "HAU"
+              },
+              "HAU": {
+                "add_state_core": [
+                  1198,
+                  1199
+                ],
+                "transfer_state": [
+                  1198,
+                  1199
+                ],
+                "if": [
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 1187
+                      }
+                    },
+                    "add_state_core": 1187,
+                    "transfer_state": 1187
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": 558
+                      }
+                    },
+                    "add_state_core": 558,
+                    "transfer_state": 558
+                  },
+                  {
+                    "limit": {
+                      "CAO": {
+                        "owns_state": [
+                          1197,
+                          826
+                        ]
+                      }
+                    },
+                    "add_state_core": [
+                      1197,
+                      826
+                    ],
+                    "transfer_state": [
+                      1197,
+                      826
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "limit": {
+                "country_exists": "CHF"
+              },
+              "CHF": {
+                "add_state_core": [
+                  1206,
+                  1207,
+                  1204,
+                  1203,
+                  1202,
+                  1200,
+                  1201
+                ],
+                "transfer_state": [
+                  1200,
+                  1201
+                ],
+                "set_cosmetic_tag": "CHF_unified"
+              },
+              "if": [
+                {
+                  "limit": {
+                    "CAO": {
+                      "owns_state": 1206
+                    }
+                  },
+                  "transfer_state": [
+                    1202,
+                    1203,
+                    1204,
+                    1206,
+                    1207
+                  ]
+                },
+                {
+                  "limit": {
+                    "CAO": {
+                      "owns_state": 1544
+                    }
+                  },
+                  "transfer_state": [
+                    1194,
+                    1195,
+                    1544
+                  ]
+                }
+              ]
+            },
+            {
+              "limit": {
+                "country_exists": "CHD"
+              },
+              "CHD": {
+                "add_state_core": [
+                  1206,
+                  1205,
+                  1207,
+                  1204,
+                  1203,
+                  1202,
+                  1200,
+                  1201
+                ],
+                "transfer_state": [
+                  1200,
+                  1201
+                ]
+              },
+              "if": [
+                {
+                  "limit": {
+                    "CAO": {
+                      "owns_state": 660
+                    }
+                  },
+                  "transfer_state": [
+                    660,
+                    1205
+                  ]
+                },
+                {
+                  "limit": {
+                    "CAO": {
+                      "owns_state": 1206
+                    }
+                  },
+                  "transfer_state": [
+                    1202,
+                    1203,
+                    1204,
+                    1206,
+                    1207
+                  ]
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "NGA": {
+                "add_state_core": [
+                  1197,
+                  1188,
+                  825,
+                  558,
+                  1198,
+                  1199,
+                  826
+                ],
+                "transfer_state": [
+                  1197,
+                  826,
+                  1198,
+                  1199,
+                  558,
+                  1188,
+                  825
+                ],
+                "if": [
+                  {
+                    "limit": {
+                      "NOT": {
+                        "country_exists": "BFR"
+                      }
+                    },
+                    "add_state_core": 1187,
+                    "transfer_state": 1187
+                  },
+                  {
+                    "limit": {
+                      "NOT": {
+                        "HAU": {
+                          "owns_state": 1189
+                        }
+                      }
+                    },
+                    "add_state_core": 1189,
+                    "transfer_state": 1189
+                  }
+                ],
+                "TNO_startup_nation": true
+              }
+            },
+            {
+              "CHD": {
+                "add_state_core": [
+                  660,
+                  1202,
+                  1203,
+                  1204,
+                  1205,
+                  1206,
+                  1207,
+                  1200,
+                  1201
+                ],
+                "transfer_state": [
+                  660,
+                  1202,
+                  1203,
+                  1204,
+                  1205,
+                  1206,
+                  1207,
+                  1200,
+                  1201
+                ]
+              }
+            }
+          ],
+          "CAO": {
+            "every_state": {
+              "limit": {
+                "NOT": {
+                  "is_owned_by": "CAO"
+                },
+                "is_core_of": "CAO"
+              },
+              "remove_core_of": "CAO"
+            },
+            "add_popularity": {
+              "ideology": "despotism",
+              "popularity": 0.4
+            },
+            "retire_ideology_leader": "paternalism",
+            "set_politics": {
+              "ruling_party": "despotism"
+            },
+            "econ_join_sphere_USA": true,
+            "set_temp_variable": {
+              "TNO_economy_subtype_temp": "token:Econ_Subtype_Dirigisme"
+            },
+            "econ_subtype_change": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "CAO.103",
+    "type": "country_event",
+    "title": "CAO.103.t",
+    "desc": "",
+    "picture": "GFX_report_event_GRO_african_rebels",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAO.103"
+    },
+    "options": [
+      {
+        "name": "CAO.103.a",
+        "name_key": "CAO.103.a",
+        "trigger": {},
+        "effects": {
+          "HAU": {
+            "add_to_array": {
+              "global.cameroon_collapse": "THIS"
+            },
+            "add_state_core": 1189,
+            "transfer_state": 1189,
+            "set_capital": {
+              "state": 1189,
+              "remember_old_capital": false
+            },
+            "load_oob": "HAU_collapse",
+            "TNO_startup_nation": true,
+            "set_country_flag": "HAU_revolted",
+            "declare_war_on": [
+              {
+                "target": "NNG",
+                "type": "annex_everything"
+              },
+              {
+                "target": "NGA",
+                "type": "annex_everything"
+              },
+              {
+                "target": "YOR",
+                "type": "annex_everything"
+              },
+              {
+                "target": "BFR",
+                "type": "annex_everything"
+              },
+              {
+                "target": "CAO",
+                "type": "annex_everything"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "CAO.104",
+    "type": "country_event",
+    "title": "CAO.104.t",
+    "desc": "",
+    "picture": "GFX_report_event_GRO_african_rebels",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAO.104"
+    },
+    "options": [
+      {
+        "name": "CAO.104.a",
+        "name_key": "CAO.104.a",
+        "trigger": {},
+        "effects": {
+          "if": {
+            "limit": {
+              "tag": "CAO",
+              "has_global_flag": "global_cameroon_survived_collapse",
+              "country_exists": "HAU"
+            },
+            "every_country": {
+              "limit": {
+                "has_war_with": "HAU"
+              },
+              "white_peace": "HAU"
+            },
+            "CAO": {
+              "add_popularity": {
+                "ideology": "fascism",
+                "popularity": -0.05
+              }
+            }
+          },
+          "else_if": {
+            "limit": {
+              "tag": "HAU",
+              "has_country_flag": "HAU_invaded",
+              "country_exists": "ZAR"
+            },
+            "every_country": {
+              "limit": {
+                "has_war_with": "HAU"
+              },
+              "white_peace": "HAU"
+            },
+            "NGR": {
+              "add_state_core": [
+                832,
+                1542
+              ],
+              "transfer_state": [
+                832,
+                1542,
+                835,
+                1221,
+                1220
+              ],
+              "TNO_startup_nation": true,
+              "set_politics": {
+                "ruling_party": "despotism"
+              },
+              "set_temp_variable": {
+                "TNO_economy_subtype_temp": "token:Econ_Subtype_Dirigisme"
+              },
+              "econ_subtype_change": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "CAO.105",
+    "type": "country_event",
+    "title": "CAO.105.t",
+    "desc": "",
+    "picture": "GFX_report_event_GRO_african_rebels",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {
+      "country_exists": "BFR"
+    },
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAO.105"
+    },
+    "options": [
+      {
+        "name": "CAO.105.a",
+        "name_key": "CAO.105.a",
+        "trigger": {},
+        "effects": {
+          "every_country": {
+            "limit": {
+              "has_war_with": "BFR"
+            },
+            "white_peace": "BFR"
+          },
+          "BFR": {
+            "set_politics": {
+              "ruling_party": "paternalism"
+            },
+            "add_popularity": {
+              "ideology": "paternalism",
+              "popularity": 0.4
+            }
+          },
+          "hidden_effect": {
+            "every_country": {
+              "limit": {
+                "is_ai": false,
+                "HasAfricaInterest": true
+              },
+              "news_event": {
+                "id": "CAOnews.2"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "CAO.106",
+    "type": "country_event",
+    "title": "CAO.106.t",
+    "desc": "",
+    "picture": "",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": true,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAO.106"
+    },
+    "options": [
+      {
+        "name": "CAO.106.a",
+        "name_key": "CAO.106.a",
+        "trigger": {},
+        "effects": {
+          "CHF": {
+            "add_to_array": {
+              "global.cameroon_collapse": "THIS"
+            },
+            "add_state_core": [
+              660,
+              1205
+            ],
+            "transfer_state": [
+              660,
+              1205
+            ],
+            "inherit_technology": "CAO",
+            "load_oob": "CHF_collapse",
+            "declare_war_on": [
+              {
+                "target": "CHD",
+                "type": "civil_war"
+              },
+              {
+                "target": "CHR",
+                "type": "civil_war"
+              }
+            ]
+          },
+          "CHR": {
+            "add_to_array": {
+              "global.cameroon_collapse": "THIS"
+            },
+            "declare_war_on": [
+              {
+                "target": "CHF",
+                "type": "civil_war"
+              },
+              {
+                "target": "CHD",
+                "type": "civil_war"
+              }
+            ]
+          },
+          "CAO": {
+            "declare_war_on": [
+              {
+                "target": "CHD",
+                "type": "annex_everything"
+              },
+              {
+                "target": "CHF",
+                "type": "annex_everything"
+              },
+              {
+                "target": "CHR",
+                "type": "annex_everything"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "CAOnews.1",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]Коллапс Западноафриканского союза!",
+    "desc": "После того как Западноафриканский союз потерпел сокрушительное поражение от коалиции противников пан-африканистов, это социалистическое государство оказалось на грани краха. Панафриканская мечта, которую так поддерживали потенциальные революционеры, была отвергнута теми, кому она больше всего хотела помочь. Жители чёрного континента отказались от этой идеи. Теперь, для молодого государства, эта мечта вот-вот вступит в свои предсмертные агонии - раз и навсегда.\n\nСегодня мир может увидеть в Союзе огни настоящего африканского ада. Лидер внутренней оппозиции Камеруна Абель Кинг насильно взял бразды правления государством в свои руки. В то время как некоторые клянутся ему в своей верности, вся остальная страна взялась за оружие, а различные этнические меньшинства воспользовались шансом провозгласить свою независимость. Теперь Союз снова марширует на войну. Но на этот раз против самого себя.",
+    "picture": "GFX_news_event_CAO_cameroon_collapse",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAOnews.1"
+    },
+    "options": [
+      {
+        "name": "Панафриканизм. Мечта, такая прекрасная, но такая далёкая.",
+        "name_key": "CAOnews.1.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  },
+  {
+    "id": "CAOnews.2",
+    "type": "news_event",
+    "title": "[Get_newspaper_header]Биафра побеждает!",
+    "desc": "Сегодня утром из региона просочились сообщения об окончательном прекращении огня между нигерийскими ополченцами и боевиками игбо, которые доминируют на Западном берегу дельты Нигера, после чего вскоре последовали официальные заявления. Война была особенно жестокой для жителей региона. Военные преступления и зверства совершались обеими сторонами, причём уничтожение целых деревень, населенных тысячами людей, было обычным явлением на протяжении всего конфликта.\n\nТеперь на горизонте маячит мир. Президент Республики Биафра Чуквуэмека Одумегву Оджукву обещает новую эру африканской демократии от африканцев и для африканцев. Еще одно обещание состоит в том, чтобы открыть порты Биафры для всех тех, кто хотел бы торговать там. Что бы ни случилось дальше с этой страной, похоже, что они наконец-то могут сложить оружие навсегда.",
+    "picture": "GFX_news_event_BFR_biafra_independence",
+    "is_superevent": false,
+    "is_triggered_only": true,
+    "fire_only_once": false,
+    "trigger": {},
+    "immediate": {
+      "log": "[GetDateText]: [Root.GetName]: event CAOnews.2"
+    },
+    "options": [
+      {
+        "name": "Факел демократии был зажжен угасающим пламенем панафриканизма.",
+        "name_key": "CAOnews.2.a",
+        "trigger": {},
+        "effects": {}
+      }
+    ]
+  }
+]

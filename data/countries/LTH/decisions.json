@@ -1,0 +1,419 @@
+[
+  {
+    "id": "JAP_redistribute_wealth_and_collectivize_farms_decision",
+    "category_id": "economy_decisions",
+    "name": "Перераспределить богатство и коллективизировать сельское хозяйство",
+    "desc": "",
+    "icon": "GFX_decision_generic_welfare",
+    "cost": 75,
+    "fire_only_once": false,
+    "available": {
+      "check_variable": {
+        "JAP_economic_redistribtuion_level": {
+          "_op": "<",
+          "value": "JAP_economic_redistribtuion_max"
+        }
+      },
+      "custom_trigger_tooltip": {
+        "tooltip": "JAP_redistribute_wealth_tt",
+        "check_variable": {
+          "JAP_economic_redistribtuion_level": {
+            "_op": "<",
+            "value": "JAP_economic_redistribtuion_max"
+          }
+        }
+      }
+    },
+    "visible": {
+      "has_completed_focus": "JAP_fukumotoism",
+      "check_variable": {
+        "JAP_economic_redistribtuion_level": {
+          "_op": "<",
+          "value": "JAP_economic_redistribtuion_max"
+        }
+      }
+    },
+    "complete_effect": []
+  },
+  {
+    "id": "TUR_repeal_the_wealth_tax",
+    "category_id": "economy_decisions",
+    "name": "Отменить налог на богатство",
+    "desc": "Этот налог на немусульман бесперспективен и мешает делу кемализма. Следует немедленно его отменить.",
+    "icon": "generic_political_rally",
+    "cost": 50,
+    "fire_only_once": true,
+    "available": {
+      "has_idea": "TUR_varlik_vergisi_spirit"
+    },
+    "visible": {
+      "has_idea": "TUR_varlik_vergisi_spirit"
+    },
+    "complete_effect": {
+      "add_stability": 0.05,
+      "remove_ideas": "TUR_varlik_vergisi_spirit"
+    }
+  },
+  {
+    "id": "form_commonwealth",
+    "category_id": "form_commonwealth_category",
+    "name": "Реформировать Унию",
+    "desc": "",
+    "icon": "generic_form_nation",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "is_subject": false,
+      "custom_trigger_tooltip": [
+        {
+          "tooltip": "form_country_lithuania_required_states_tt",
+          "controls_state": [
+            11,
+            189
+          ]
+        },
+        {
+          "tooltip": "form_country_poland_required_states_tt",
+          "controls_state": [
+            86,
+            87,
+            88,
+            90,
+            98,
+            10,
+            97,
+            92,
+            91,
+            89,
+            93,
+            94,
+            95,
+            96,
+            784
+          ]
+        }
+      ],
+      "OR": {
+        "AND": [
+          {
+            "original_tag": "POL",
+            "core_compliance": {
+              "occupied_country_tag": "LIT",
+              "value": {
+                "_op": ">",
+                "value": 80
+              }
+            }
+          },
+          {
+            "original_tag": "LIT",
+            "core_compliance": {
+              "occupied_country_tag": "POL",
+              "value": {
+                "_op": ">",
+                "value": 80
+              }
+            }
+          }
+        ]
+      }
+    },
+    "visible": {
+      "OR": {
+        "original_tag": [
+          "POL",
+          "LIT"
+        ]
+      },
+      "NOT": {
+        "has_global_flag": "form_commonwealth_flag"
+      }
+    },
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "has_cosmetic_tag": "POL_KINGDOM_RUS"
+        },
+        "set_cosmetic_tag": "PLC_UNIFIED_RUS"
+      },
+      "else": {
+        "set_cosmetic_tag": "PLC_UNIFIED"
+      },
+      "POL_basic_form_commonwealth": true
+    }
+  },
+  {
+    "id": "GER_south_east_asian_construction_push_decision",
+    "category_id": "GER_south_east_asian_natural_wealth_cat",
+    "name": "Построить инфраструктуру в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "is_fully_controlled_by": "ROOT"
+      },
+      "num_of_civilian_factories_available_for_projects": {
+        "_op": ">",
+        "value": 0
+      },
+      "NOT": {
+        "FROM": {
+          "has_state_flag": "GER_south_east_asian_resources_boosted_flag"
+        }
+      }
+    },
+    "visible": {
+      "is_subject": false
+    },
+    "complete_effect": {
+      "FROM": {
+        "set_state_flag": "GER_south_east_asian_construction_boosted_flag"
+      }
+    }
+  },
+  {
+    "id": "GER_south_east_asian_resources_push_decision",
+    "category_id": "GER_south_east_asian_natural_wealth_cat",
+    "name": "Расширить добычу ресурсов в регионе [FROM.GetName]",
+    "desc": "",
+    "icon": "GFX_decision_generic_construction",
+    "cost": 100,
+    "fire_only_once": true,
+    "available": {
+      "FROM": {
+        "is_fully_controlled_by": "ROOT"
+      },
+      "NOT": {
+        "FROM": {
+          "has_state_flag": "GER_south_east_asian_construction_boosted_flag"
+        }
+      }
+    },
+    "visible": {
+      "is_subject": false
+    },
+    "complete_effect": {
+      "FROM": {
+        "set_state_flag": "GER_south_east_asian_resources_boosted_flag"
+      }
+    }
+  },
+  {
+    "id": "RAJ_deploy_emergency_healthcare",
+    "category_id": "RAJ_GOE_famine_cat",
+    "name": "Принять срочные медицинские меры",
+    "desc": "",
+    "icon": "GFX_decision_generic_prepare_civil_war",
+    "cost": 10,
+    "fire_only_once": false,
+    "available": {
+      "OR": {
+        "has_completed_focus": "RAJ_quinine",
+        "has_tech": "tech_field_hospital"
+      }
+    },
+    "visible": {
+      "has_country_flag": "RAJ_famine_has_started"
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "TUR_ataturk_health_worsening_crisis",
+    "category_id": "TUR_the_fading_father_category",
+    "name": "Ухудшающееся состояние Ататюрка",
+    "desc": "Мустафа Кемаль Ататюрк стареет, и его приступы болезни будут все сильнее. Сколько еще осталось до того, как Отец Турков заболеет настолько, что уже не сможет оправиться?",
+    "icon": "tur_the_constitutional_arrows",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_country_leader": {
+          "character": "TUR_mustafa_kemal_ataturk",
+          "ruling_only": true
+        }
+      }
+    },
+    "visible": {},
+    "complete_effect": {
+      "if": {
+        "limit": {
+          "NOT": {
+            "has_completed_focus": "TUR_fully_integrate_the_is_bank"
+          }
+        },
+        "country_event": {
+          "id": "bftb_turkey.24"
+        }
+      },
+      "hidden_effect": {
+        "clear_variable": "TUR_ataturk_sickness_factor_var",
+        "clr_country_flag": "TUR_ataturk_getting_sickly"
+      }
+    }
+  },
+  {
+    "id": "IBR_healthcare_legislation",
+    "category_id": "IBR_caudillos_category",
+    "name": "Расширение здравоохранения",
+    "desc": "С самого момента основания Союза наши национальная система здравоохранения всегда страдала от множества проблем. Теперь же, когда правительство начало предпринимать шаги по стандартизации Союза, обеспечение своих граждан медицинской помощью должно стать одной из наших ключевых задач. Однако действовать необходимо осторожно.\n\nЭтот законопроект призван закрыть существующие пробелы в системе здравоохранения до проведения полноценной реформы. Он предусматривает увеличение финансирования и запуск аудиторских процедур, чтобы гарантировать надлежащее распределение средств и их эффективное использование.",
+    "icon": "GFX_decision_generic_document",
+    "cost": 75,
+    "fire_only_once": true,
+    "available": {},
+    "visible": {
+      "has_country_flag": [
+        "IBR_caudillos_show_legislative_f",
+        "IBR_healthcare_legislation"
+      ],
+      "NOT": {
+        "has_country_flag": [
+          "IBR_legislative_council_rogue",
+          "IBRDemUnion"
+        ]
+      }
+    },
+    "complete_effect": {}
+  },
+  {
+    "id": "JAP_expand_the_health_system",
+    "category_id": "JAP_development_plans",
+    "name": "Расширить здравоохранение",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_hospital",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision JAP_expand_the_health_system",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.085
+      },
+      "econ_spend_money_once_effect_raw_money": true,
+      "hidden_effect": {
+        "add_political_power": -30,
+        "JAP_PM_decrease_power_mini": true
+      }
+    }
+  },
+  {
+    "id": "MEX_lozano_healthcare_reform",
+    "category_id": "MEX_DoctorsStrike_GUI_category",
+    "name": "Использовать движение",
+    "desc": "",
+    "icon": "GFX_decision_generic_document_concessions",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {},
+    "visible": {
+      "AND": {
+        "has_country_flag": "coopt_the_movement",
+        "NOT": {
+          "has_country_flag": "lozano_healthcare_reform_completed"
+        }
+      }
+    },
+    "complete_effect": {
+      "MEX_ds_lozano_add_reform": true,
+      "set_country_flag": "lozano_healthcare_reform_completed",
+      "hidden_effect": {
+        "MEX_ds_doctor_intern_radicalism_increase_high": true
+      }
+    }
+  },
+  {
+    "id": "regional_improve_healthcare_network",
+    "category_id": "regional_development_decision_category",
+    "name": "Улучшение системы здравоохранения",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_hospital",
+    "cost": 45,
+    "fire_only_once": false,
+    "available": [],
+    "visible": {
+      "always": true
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision regional_improve_healthcare_network",
+      "set_temp_variable": {
+        "temp_econ_spending_amount": 0.15
+      },
+      "econ_spend_money_once_effect_raw_money": true
+    }
+  },
+  {
+    "id": "OMS_Gauntlet_PulseHealthLoss",
+    "category_id": "TNO_OMS_Gauntlet_DecisionCategory",
+    "name": "Здоровье уменьшается...",
+    "desc": "",
+    "icon": "GFX_decision_generic_clock",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "hidden_trigger": {
+        "always": false
+      }
+    },
+    "visible": {},
+    "complete_effect": {}
+  },
+  {
+    "id": "RUS_Decision_Smuta_Strategies_ControlThePopulace",
+    "category_id": "RUS_DecisionCategory_Smuta",
+    "name": "Обеспечить контроль над населением",
+    "desc": "Взаимоисключающее с решением $RUS_Decision_Smuta_Strategies_RallyTheRecruits$.",
+    "icon": "GFX_decision_generic_building_offices",
+    "cost": 0,
+    "fire_only_once": false,
+    "available": {
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Chaos_Decrease_FuckFuckFUck"
+      }
+    },
+    "visible": {
+      "has_war": true,
+      "NOT": {
+        "has_decision": "RUS_Decision_Smuta_Strategies_RallyTheRecruits"
+      }
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision Complete RUS_Decision_Smuta_Strategies_ControlThePopulace",
+      "hidden_effect": {
+        "set_temp_variable": {
+          "Y": -0.1
+        },
+        "RUS_Smuta_Supplies_Add_Y": true
+      }
+    }
+  },
+  {
+    "id": "TYM_fyp_expand_healthcare_infrastructure",
+    "category_id": "TYM_five_year_plan_category",
+    "name": "Расширение системы здравоохранения для рабочих",
+    "desc": "",
+    "icon": "GFX_decision_generic_building_hospital",
+    "cost": "TYM_health_cost?20",
+    "fire_only_once": false,
+    "available": {},
+    "visible": {},
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: Decision TYM_fyp_expand_healthcare_infrastructure",
+      "custom_effect_tooltip": "TYM_increase_agricultural_strain_low_tt",
+      "add_to_variable": {
+        "TYMAgriculturalStrain": 25
+      },
+      "clamp_variable": {
+        "var": "TYMAgriculturalStrain",
+        "min": 0,
+        "max": 100
+      },
+      "set_temp_variable": {
+        "temp_gdp_paid": 0.005
+      },
+      "econ_spend_money_once_effect_GDP_percent": true,
+      "TYM_Famine_Check": true
+    }
+  }
+]
