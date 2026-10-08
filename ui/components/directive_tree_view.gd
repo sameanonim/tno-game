@@ -13,6 +13,10 @@ signal directive_hovered(directive: DirectiveResource)
 signal directive_selected(directive: DirectiveResource)
 signal directive_initiated(directive: DirectiveResource)
 
+const DirectiveTreeCanvasDrawerScript = preload("res://ui/components/directive_tree_canvas_drawer.gd")
+const DirectiveNodeFactoryScript = preload("res://ui/components/directive_node_factory.gd")
+const DirectiveInspectorFormatterScript = preload("res://ui/components/directive_inspector_formatter.gd")
+
 # --- Конфигурация сетки и геометрии узлов ---
 @export var node_size: Vector2 = Vector2(240, 96)
 @export var grid_step: Vector2 = Vector2(280, 140)
@@ -827,213 +831,28 @@ func _format_directive_title(dir: DirectiveResource) -> String:
 # ==============================================================================
 
 func _create_directive_node(dir: DirectiveResource) -> Control:
-	var btn := Button.new()
-	btn.name = "Node_%s" % dir.id
-	btn.custom_minimum_size = node_size
-	btn.size = node_size
-
-	var is_completed = (player_state != null and player_state.completed_directives.has(dir.id)) \
-		or (focus_stage_controller != null and focus_stage_controller.completed_directive_ids.has(dir.id)) \
-		or dir.status == DirectiveResource.Status.COMPLETED
-	var is_active = (player_state != null and player_state.active_directives.has(dir.id)) or dir.status == DirectiveResource.Status.IN_PROGRESS
-	var dossier = dir.can_be_started(player_state) if player_state != null else {"allowed": false, "reason": ""}
-	var can_start = dossier.get("allowed", false)
-
-	# Проверка на взаимную блокировку выбора
-	var is_mutually_locked := false
-	if player_state != null:
-		if player_state.has_flag("locked_focus_" + dir.id) or player_state.has_flag("mutually_locked_" + dir.id):
-			is_mutually_locked = true
-		for excl_id in dir.mutually_exclusive:
-			if player_state.completed_directives.has(excl_id) or player_state.active_directives.has(excl_id) or player_state.has_flag("locked_focus_" + excl_id):
-				is_mutually_locked = true
-				break
-
-	var border_color = COLOR_PHOSPHOR_LOCKED
-	var bg_color := Color(0.02, 0.04, 0.04, 0.95)
-	var title_color := Color(0.65, 0.75, 0.72)
-
-	if is_completed:
-		border_color = COLOR_PHOSPHOR_CYAN
-		bg_color = Color(0.02, 0.12, 0.14, 0.95)
-		title_color = Color(0.70, 0.95, 1.0)
-	elif is_active:
-		border_color = COLOR_PHOSPHOR_AMBER
-		bg_color = Color(0.12, 0.09, 0.02, 0.95)
-		title_color = Color(1.0, 0.90, 0.60)
-	elif is_mutually_locked:
-		border_color = COLOR_EXCLUSION_RED
-		bg_color = Color(0.12, 0.02, 0.02, 0.95)
-		title_color = Color(0.75, 0.40, 0.40)
-	elif can_start:
-		border_color = COLOR_PHOSPHOR_GREEN
-		bg_color = Color(0.02, 0.09, 0.05, 0.92)
-		title_color = Color(0.85, 1.0, 0.90)
-
-	_apply_terminal_card_style(btn, bg_color, border_color)
-
-	var hbox := HBoxContainer.new()
-	hbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_KEEP_SIZE, 6)
-	hbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hbox.add_theme_constant_override("separation", 10)
-	btn.add_child(hbox)
-
-	# 1. Контейнер иконки директивы с неоновой рамкой
-	var icon_panel := PanelContainer.new()
-	icon_panel.custom_minimum_size = Vector2(46, 46)
-	icon_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var icon_sb = StyleBoxFlat.new()
-	icon_sb.bg_color = Color(0.01, 0.03, 0.02, 0.9)
-	icon_sb.border_color = border_color.lightened(0.15) if (can_start or is_active or is_completed) else Color(0.15, 0.25, 0.22, 0.6)
-	icon_sb.border_width_left = 1
-	icon_sb.border_width_top = 1
-	icon_sb.border_width_right = 1
-	icon_sb.border_width_bottom = 1
-	icon_sb.corner_radius_top_left = 2
-	icon_sb.corner_radius_top_right = 2
-	icon_sb.corner_radius_bottom_left = 2
-	icon_sb.corner_radius_bottom_right = 2
-	icon_panel.add_theme_stylebox_override("panel", icon_sb)
-	hbox.add_child(icon_panel)
-
-	var icon_rect := TextureRect.new()
-	icon_rect.custom_minimum_size = Vector2(42, 42)
-	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_rect.texture = _resolve_directive_texture(dir)
-	icon_panel.add_child(icon_rect)
-
-	# 2. Информационный стек
-	var vbox := VBoxContainer.new()
-	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 3)
-	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hbox.add_child(vbox)
-
-	var title_lbl := Label.new()
-	title_lbl.text = _format_directive_title(dir)
-	title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_lbl.add_theme_font_size_override("font_size", 11)
-	title_lbl.add_theme_color_override("font_color", title_color)
-	vbox.add_child(title_lbl)
-
-	# Статус и псевдографический индикатор ходов
-	var status_lbl := Label.new()
-	status_lbl.add_theme_font_size_override("font_size", 10)
-
-	if is_completed:
-		status_lbl.text = tr("✓ [ ВЫПОЛНЕНО ]")
-		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_CYAN)
-	elif is_active:
-		var spent = dir.turns_to_complete - dir.turns_remaining
-		if directive_manager != null and directive_manager.active_progress.has(dir.id):
-			spent = directive_manager.active_progress[dir.id]
-		spent = clampi(spent, 0, dir.turns_to_complete)
-		var bar = _generate_ascii_bar(spent, dir.turns_to_complete)
-		var turn_fmt = tr("%s %d/%d ХОД")
-		status_lbl.text = turn_fmt % [bar, spent, dir.turns_to_complete]
-		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_AMBER)
-	elif is_mutually_locked:
-		status_lbl.text = tr("✖ [ ЗАБЛОКИРОВАНО ВЫБОРОМ ]")
-		status_lbl.add_theme_color_override("font_color", COLOR_EXCLUSION_RED)
-	elif can_start:
-		status_lbl.text = tr("► [ ГОТОВО К ПУСКУ ]")
-		status_lbl.add_theme_color_override("font_color", COLOR_PHOSPHOR_GREEN)
-	else:
-		status_lbl.text = tr("✖ [ ЗАБЛОКИРОВАНО ]")
-		status_lbl.add_theme_color_override("font_color", Color(0.35, 0.55, 0.48))
-
-	vbox.add_child(status_lbl)
-
-	# Подробная всплывающая подсказка с требованиями
-	btn.tooltip_text = _build_directive_tooltip(dir)
-
-	# Сигналы карточки
-	btn.mouse_entered.connect(func(): _on_node_hovered(dir))
-	btn.pressed.connect(func(): _on_node_clicked(dir))
-
-	return btn
+	var colors = {
+		"locked": COLOR_PHOSPHOR_LOCKED,
+		"cyan": COLOR_PHOSPHOR_CYAN,
+		"amber": COLOR_PHOSPHOR_AMBER,
+		"exclusion": COLOR_EXCLUSION_RED,
+		"green": COLOR_PHOSPHOR_GREEN
+	}
+	return DirectiveNodeFactoryScript.create_directive_node(
+		dir, node_size, player_state, focus_stage_controller,
+		directive_manager, colors, current_country_tag,
+		all_directives, _format_directive_title(dir),
+		Callable(self, "_on_node_hovered"),
+		Callable(self, "_on_node_clicked")
+	)
 
 
 func _build_directive_tooltip(dir: DirectiveResource) -> String:
-	var t = "%s %s\n" % [dir.icon_symbol, dir.title.to_upper()]
-	t += "─".repeat(34) + "\n"
-	if not dir.description.is_empty():
-		t += "%s\n" % dir.description.strip_edges()
-		t += "─".repeat(34) + "\n"
-
-	t += "Срок: %d ходов | CAP: %d | PC: %0.1f | Бюджет: $%0.2f B/ход\n" % [
-		dir.turns_to_complete, dir.cost_initial_cap, dir.cost_initial_pc, dir.cost_per_turn
-	]
-	t += "─".repeat(34) + "\n"
-
-	# 1. Пререквизиты
-	if not dir.prerequisites_groups.is_empty():
-		t += "ПРЕРЕКВИЗИТЫ:\n"
-		for grp in dir.prerequisites_groups:
-			if grp is Array:
-				var grp_ok := false
-				var titles: Array[String] = []
-				for pid in grp:
-					var p_title = all_directives[pid].title if all_directives.has(pid) else str(pid)
-					titles.append(p_title)
-					if player_state != null and player_state.completed_directives.has(str(pid)):
-						grp_ok = true
-				var mark = "✓" if grp_ok else "✖"
-				var join_op := " ИЛИ "
-				t += " %s Требуется: %s\n" % [mark, join_op.join(titles)]
-	elif not dir.prerequisites.is_empty():
-		t += "ПРЕРЕКВИЗИТЫ:\n"
-		for pid in dir.prerequisites:
-			var ok = player_state != null and player_state.completed_directives.has(str(pid))
-			var mark = "✓" if ok else "✖"
-			var p_title = all_directives[pid].title if all_directives.has(pid) else str(pid)
-			t += " %s %s\n" % [mark, p_title]
-
-	# 2. Взаимоисключения
-	if not dir.mutually_exclusive.is_empty():
-		t += "ВЗАИМОИСКЛЮЧЕНИЯ:\n"
-		for excl_id in dir.mutually_exclusive:
-			var excl_title = all_directives[excl_id].title if all_directives.has(excl_id) else str(excl_id)
-			var is_locked = player_state != null and (player_state.completed_directives.has(str(excl_id)) or player_state.active_directives.has(str(excl_id)) or player_state.has_flag("locked_focus_" + str(excl_id)))
-			if is_locked:
-				t += " ✖ Конфликт: [%s] уже выбран!\n" % excl_title
-			else:
-				t += " ⚠ Исключает: [%s]\n" % excl_title
-
-	# 3. AST Условия
-	if not dir.available_ast.is_empty() and player_state != null:
-		t += "ТРЕБОВАНИЯ ОБСТАНОВКИ:\n"
-		var explained = ConditionEvaluator.explain(dir.available_ast, player_state)
-		for cond_info in explained:
-			var mark = "✓" if cond_info["passed"] else "✖"
-			var indent = "  ".repeat(cond_info["depth"])
-			t += "%s %s %s\n" % [indent, mark, cond_info["text"]]
-
-	# 4. Bypass
-	if not dir.bypass_ast.is_empty() and player_state != null:
-		var bp_ok = dir.should_bypass(player_state)
-		t += "АВТОПРОПУСК: %s\n" % ("АКТИВЕН" if bp_ok else "Не выполнен")
-
-	return t
+	return DirectiveNodeFactoryScript.build_directive_tooltip(dir, all_directives, player_state)
 
 
 func _generate_ascii_bar(current: int, total: int) -> String:
-	var total_slots := 6
-	var filled = clampi(int(round((float(current) / maxf(float(total), 1.0)) * total_slots)), 0, total_slots)
-	var s := "["
-	for i in range(total_slots):
-		if i < filled:
-			s += "█"
-		elif i == filled and filled < total_slots:
-			s += "▒"
-		else:
-			s += "░"
-	s += "]"
-	return s
+	return DirectiveNodeFactoryScript.generate_ascii_bar(current, total)
 
 
 # ==============================================================================
@@ -1045,144 +864,29 @@ func _on_graph_canvas_draw() -> void:
 		_draw_canvas_content(graph_canvas)
 
 
-## Процедурная отрисовка ортогональных шин и связей взаимоисключения
 func _draw_canvas_content(canvas: Control) -> void:
-	if canvas == null:
-		return
-
-	for dir_id in all_directives.keys():
-		var dir: DirectiveResource = all_directives[dir_id]
-		if not node_controls.has(dir_id):
-			continue
-
-		var child_ctrl = node_controls[dir_id]
-		if not child_ctrl.visible:
-			continue
-
-		var child_rect := Rect2(child_ctrl.position, node_size)
-		var child_entry := Vector2(child_rect.position.x + child_rect.size.x * 0.5, child_rect.position.y)
-
-		# 1. Отрисовка направленных ортогональных шин пререквизитов с динамическим обходом скрытых нод
-		var visible_prereqs = _find_visible_prerequisites(dir_id)
-		for prereq_id in visible_prereqs:
-			if not node_controls.has(prereq_id):
-				continue
-
-			var parent_ctrl = node_controls[prereq_id]
-			if not parent_ctrl.visible:
-				continue
-
-			var parent_rect := Rect2(parent_ctrl.position, node_size)
-			var parent_exit := Vector2(parent_rect.position.x + parent_rect.size.x * 0.5, parent_rect.position.y + parent_rect.size.y)
-
-			var line_col = COLOR_PHOSPHOR_DIM
-			var line_width := 1.5
-
-			var is_p_done = player_state != null and player_state.completed_directives.has(prereq_id)
-			var is_c_done = player_state != null and player_state.completed_directives.has(dir_id)
-			var is_c_active = (turn_manager != null and "active_directive" in turn_manager and turn_manager.active_directive != null and turn_manager.active_directive.id == dir_id) \
-				or (player_state != null and player_state.active_directives.has(dir_id))
-
-			if is_c_done:
-				line_col = COLOR_PHOSPHOR_CYAN
-				line_width = 2.5
-			elif is_c_active:
-				line_col = COLOR_PHOSPHOR_AMBER
-				line_width = 2.5
-			elif is_p_done:
-				line_col = COLOR_PHOSPHOR_GREEN
-				line_width = 2.0
-
-			_draw_orthogonal_bus(canvas, parent_exit, child_entry, line_col, line_width)
-
-		# 2. Отрисовка взаимоисключающих связей (красный пунктир [X])
-		for excl_id in dir.mutually_exclusive:
-			if not node_controls.has(excl_id) or dir_id > excl_id:
-				continue
-
-			var excl_ctrl = node_controls[excl_id]
-			# Если один из узлов скрыт по allow_branch — линия исключения не рисуется
-			if not excl_ctrl.visible or not child_ctrl.visible:
-				continue
-
-			var a_pos = child_ctrl.position + (node_size * 0.5)
-			var b_pos = excl_ctrl.position + (node_size * 0.5)
-			_draw_exclusive_link(canvas, a_pos, b_pos)
+	DirectiveTreeCanvasDrawerScript.draw_canvas_content(
+		canvas, all_directives, node_controls, node_size,
+		player_state, turn_manager,
+		COLOR_PHOSPHOR_DIM, COLOR_PHOSPHOR_CYAN, COLOR_PHOSPHOR_AMBER,
+		COLOR_PHOSPHOR_GREEN, COLOR_EXCLUSION_RED
+	)
 
 
-## Рекурсивный поиск ближайших видимых предков (если промежуточный узел скрыт директивой allow_branch)
 func _find_visible_prerequisites(dir_id: String, visited: Array[String] = []) -> Array[String]:
-	var result: Array[String] = []
-	if not all_directives.has(dir_id) or visited.has(dir_id):
-		return result
-	visited.append(dir_id)
-
-	var dir: DirectiveResource = all_directives[dir_id]
-	var all_prereqs = _get_all_prereq_ids(dir)
-	for prereq_id in all_prereqs:
-		if node_controls.has(prereq_id) and node_controls[prereq_id].visible:
-			if not result.has(prereq_id):
-				result.append(prereq_id)
-		elif all_directives.has(prereq_id):
-			var ancestor_visible = _find_visible_prerequisites(prereq_id, visited)
-			for a_id in ancestor_visible:
-				if not result.has(a_id):
-					result.append(a_id)
-
-	return result
+	return DirectiveTreeCanvasDrawerScript.find_visible_prerequisites(dir_id, all_directives, node_controls, visited)
 
 
-## Извлечение всех ID пререквизитов (как плоского списка, так и логических групп)
 func _get_all_prereq_ids(dir: DirectiveResource) -> Array[String]:
-	var ids: Array[String] = []
-	if dir == null:
-		return ids
-	for p in dir.prerequisites:
-		var p_str = str(p)
-		if not ids.has(p_str):
-			ids.append(p_str)
-	for grp in dir.prerequisites_groups:
-		if grp is Array:
-			for elem in grp:
-				var elem_str = str(elem)
-				if not ids.has(elem_str):
-					ids.append(elem_str)
-	return ids
+	return DirectiveTreeCanvasDrawerScript.get_all_prereq_ids(dir)
 
 
 func _draw_orthogonal_bus(canvas: Control, from: Vector2, to: Vector2, col: Color, width: float) -> void:
-	var mid_y = from.y + (to.y - from.y) * 0.5
-	var p1 = from
-	var p2 := Vector2(from.x, mid_y)
-	var p3 := Vector2(to.x, mid_y)
-	var p4 = to
-
-	canvas.draw_line(p1, p2, col, width)
-	canvas.draw_line(p2, p3, col, width)
-	canvas.draw_line(p3, p4, col, width)
-
-	# Контактные терминальные площадки
-	canvas.draw_circle(p1, width * 1.3, col)
-	canvas.draw_circle(p4, width * 1.3, col)
-
-	# Направленная стрелка на входе в дочерний узел
-	var arrow_size := 4.0
-	var arrow_p1 = p4
-	var arrow_p2 = p4 + Vector2(-arrow_size, -arrow_size * 1.5)
-	var arrow_p3 = p4 + Vector2(arrow_size, -arrow_size * 1.5)
-	canvas.draw_colored_polygon(PackedVector2Array([arrow_p1, arrow_p2, arrow_p3]), col)
+	DirectiveTreeCanvasDrawerScript.draw_orthogonal_bus(canvas, from, to, col, width)
 
 
 func _draw_exclusive_link(canvas: Control, a: Vector2, b: Vector2) -> void:
-	# Яркая красно-янтарная пунктирная линия
-	canvas.draw_dashed_line(a, b, COLOR_EXCLUSION_RED, 2.5, 8.0)
-
-	var mid = (a + b) * 0.5
-	# Круглый терминальный бейдж с крестом [X]
-	canvas.draw_circle(mid, 9.0, Color(0.18, 0.02, 0.02, 0.98))
-	canvas.draw_arc(mid, 9.0, 0, TAU, 16, COLOR_EXCLUSION_RED, 1.8)
-	canvas.draw_line(mid + Vector2(-5, -5), mid + Vector2(5, 5), COLOR_EXCLUSION_RED, 2.0)
-	canvas.draw_line(mid + Vector2(-5, 5), mid + Vector2(5, -5), COLOR_EXCLUSION_RED, 2.0)
+	DirectiveTreeCanvasDrawerScript.draw_exclusive_link(canvas, a, b, COLOR_EXCLUSION_RED)
 
 
 # ==============================================================================
@@ -1200,143 +904,12 @@ func _on_node_clicked(dir: DirectiveResource) -> void:
 
 
 func _update_inspector(dir: DirectiveResource) -> void:
-	lbl_insp_title.text = "%s %s" % [dir.icon_symbol, _format_directive_title(dir).to_upper()]
-	lbl_insp_desc.text = "[color=#b0d0c0]%s[/color]" % (dir.description if not dir.description.is_empty() else "Описание директивы засекречено или отсутствует.")
-
-	var cost_txt := "ОПЕРАТИВНЫЕ ЗАТРАТЫ:\n"
-	cost_txt += "• Очки кабинета (CAP): %d\n" % dir.cost_initial_cap
-	cost_txt += "• Политический капитал (PC): %0.1f\n" % dir.cost_initial_pc
-	cost_txt += "• Финансирование за ход: $%0.2f B\n" % dir.cost_per_turn
-	cost_txt += "• Расчетный срок реализации: %d ходов" % dir.turns_to_complete
-	lbl_insp_cost.text = cost_txt
-
-	# 1. Требования, пререквизиты и статус ветки
-	var req_txt := ""
-	if not dir.prerequisites_groups.is_empty():
-		req_txt += "[b]ПРЕРЕКВИЗИТЫ (И/ИЛИ):[/b]\n"
-		for grp in dir.prerequisites_groups:
-			if grp is Array:
-				var grp_ok := false
-				var titles: Array[String] = []
-				for pid in grp:
-					var p_title = all_directives[pid].title if all_directives.has(pid) else str(pid)
-					titles.append(p_title)
-					if player_state != null and player_state.completed_directives.has(str(pid)):
-						grp_ok = true
-				var col = "#33ff66" if grp_ok else "#ff5555"
-				var mark = "✓" if grp_ok else "✖"
-				req_txt += "• [color=%s]%s Требуется: %s[/color]\n" % [col, mark, " ИЛИ ".join(titles)]
-	elif not dir.prerequisites.is_empty():
-		req_txt += "[b]ПРЕРЕКВИЗИТЫ:[/b]\n"
-		for pid in dir.prerequisites:
-			var ok = player_state != null and player_state.completed_directives.has(str(pid))
-			var col = "#33ff66" if ok else "#ff5555"
-			var mark = "✓" if ok else "✖"
-			var p_title = all_directives[pid].title if all_directives.has(pid) else str(pid)
-			req_txt += "• [color=%s]%s %s[/color]\n" % [col, mark, p_title]
-
-	if not dir.mutually_exclusive.is_empty():
-		req_txt += "[b]ВЗАИМОИСКЛЮЧЕНИЯ:[/b]\n"
-		for excl_id in dir.mutually_exclusive:
-			var excl_title = all_directives[excl_id].title if all_directives.has(excl_id) else str(excl_id)
-			var is_locked = player_state != null and (player_state.completed_directives.has(str(excl_id)) or player_state.active_directives.has(str(excl_id)) or player_state.has_flag("locked_focus_" + str(excl_id)))
-			if is_locked:
-				req_txt += "• [color=#ff5555]✖ Заблокировано: [%s] уже выбран[/color]\n" % excl_title
-			else:
-				req_txt += "• [color=#ffaa00]⚠ Исключает проект: [%s][/color]\n" % excl_title
-
-	if not dir.available_ast.is_empty() and player_state != null:
-		req_txt += "[b]ТРЕБОВАНИЯ ОБСТАНОВКИ:[/b]\n"
-		var explained = ConditionEvaluator.explain(dir.available_ast, player_state)
-		for cond_info in explained:
-			var col = "#33ff66" if cond_info["passed"] else "#ff5555"
-			var mark = "✓" if cond_info["passed"] else "✖"
-			var indent = "  ".repeat(cond_info["depth"])
-			req_txt += "• %s[color=%s]%s %s[/color]\n" % [indent, col, mark, cond_info["text"]]
-
-	if not dir.bypass_ast.is_empty() and player_state != null:
-		var bp_ok = dir.should_bypass(player_state)
-		var col = "#00e5ff" if bp_ok else "#668877"
-		req_txt += "[b]АВТОПРОПУСК (BYPASS):[/b] [color=%s]%s[/color]\n" % [col, ("АКТИВЕН (будет пропущен)" if bp_ok else "Не выполнен")]
-
-	if req_txt.is_empty():
-		req_txt = "[color=#33ff66]✓ Базовая директива. Особых предварительных условий нет.[/color]"
-	if lbl_insp_reqs != null:
-		lbl_insp_reqs.text = req_txt
-
-	# 2. Вывод опкодов наград
-	var eff_txt := ""
-	for rew in dir.completion_rewards:
-		var op = str(rew.get("opcode", ""))
-		match op:
-			"MOD_PC":
-				var v = float(rew.get("value", 0))
-				var sgn = "+" if v >= 0 else ""
-				eff_txt += "• [color=#44d990][b][★] ПОЛИТИЧЕСКИЙ КАПИТАЛ:[/b] %s%0.1f PC[/color]\n" % [sgn, v]
-			"MOD_STABILITY":
-				var v = float(rew.get("value", 0))
-				var sgn = "+" if v >= 0 else ""
-				eff_txt += "• [color=#44d990][b][✦] СТАБИЛЬНОСТЬ:[/b] %s%0.1f%%[/color]\n" % [sgn, v * 100.0]
-			"MOD_WAR_SUPPORT":
-				var v = float(rew.get("value", 0))
-				var sgn = "+" if v >= 0 else ""
-				eff_txt += "• [color=#ffcc33][b][⚔] ВОЕННАЯ ПОДДЕРЖКА:[/b] %s%0.1f%%[/color]\n" % [sgn, v]
-			"SET_FLAG":
-				eff_txt += "• [color=#8caebd][b][⚑] СЮЖЕТНЫЙ ФЛАГ:[/b] %s[/color]\n" % str(rew.get("flag", ""))
-			"FIRE_EVENT":
-				eff_txt += "• [color=#ff594d][b][⚡] ИНИЦИАЦИЯ СОБЫТИЯ:[/b] %s[/color]\n" % str(rew.get("event_id", ""))
-			"MOD_MANPOWER":
-				var v = int(rew.get("value", 0))
-				var sgn = "+" if v >= 0 else ""
-				eff_txt += "• [color=#00e5ff][b][👥] ЛЮДСКИЕ РЕСУРСЫ:[/b] %s%d чел.[/color]\n" % [sgn, v]
-			"TRANSFER_STATE":
-				eff_txt += "• [color=#00e5ff][b][🗺] ПЕРЕДАЧА СЕКТОРА:[/b] регион #%d[/color]\n" % int(rew.get("state_id", 0))
-			_:
-				eff_txt += "• [color=#00e5ff][b]%s:[/b][/color] %s\n" % [op, str(rew)]
-
-	# Legacy эффекты
-	for k in dir.completion_effects.keys():
-		eff_txt += "• %s: %s\n" % [k, str(dir.completion_effects[k])]
-
-	if eff_txt.is_empty():
-		eff_txt = "[color=#668877]Прямых численных эффектов не предусмотрено (нарративный прогресс).[/color]"
-	lbl_insp_effects.text = eff_txt
-
-	# Кнопка запуска
-	var is_completed = (player_state != null and player_state.completed_directives.has(dir.id)) \
-		or (focus_stage_controller != null and focus_stage_controller.completed_directive_ids.has(dir.id)) \
-		or dir.status == DirectiveResource.Status.COMPLETED
-	var is_active = (turn_manager != null and "active_directive" in turn_manager and turn_manager.active_directive != null and turn_manager.active_directive.id == dir.id) \
-		or (player_state != null and player_state.active_directives.has(dir.id)) \
-		or dir.status == DirectiveResource.Status.IN_PROGRESS
-	var dossier = dir.can_be_started(player_state) if player_state != null else {"allowed": false, "reason": ""}
-	var can_start = dossier.get("allowed", false)
-
-	# Проверка на взаимную блокировку
-	var is_mutually_locked := false
-	if player_state != null:
-		if player_state.has_flag("locked_focus_" + dir.id) or player_state.has_flag("mutually_locked_" + dir.id):
-			is_mutually_locked = true
-		for excl_id in dir.mutually_exclusive:
-			if player_state.completed_directives.has(excl_id) or player_state.active_directives.has(excl_id) or player_state.has_flag("locked_focus_" + excl_id):
-				is_mutually_locked = true
-				break
-
-	if is_completed:
-		btn_insp_start.text = tr("[ ПРОЕКТ УЖЕ ВЫПОЛНЕН ]")
-		btn_insp_start.disabled = true
-	elif is_active:
-		btn_insp_start.text = tr("[ ДИРЕКТИВА В РАБОТЕ ]")
-		btn_insp_start.disabled = true
-	elif is_mutually_locked:
-		btn_insp_start.text = tr("[ ЗАБЛОКИРОВАНО ВЫБОРОМ ]")
-		btn_insp_start.disabled = true
-	elif can_start:
-		btn_insp_start.text = tr("[ УТВЕРДИТЬ ДИРЕКТИВУ ]")
-		btn_insp_start.disabled = false
-	else:
-		btn_insp_start.text = tr("[ УСЛОВИЯ НЕ ВЫПОЛНЕНЫ ]")
-		btn_insp_start.disabled = true
+	DirectiveInspectorFormatterScript.update_inspector(
+		dir, all_directives, player_state, turn_manager,
+		focus_stage_controller, lbl_insp_title, lbl_insp_desc,
+		lbl_insp_cost, lbl_insp_reqs, lbl_insp_effects,
+		btn_insp_start, _format_directive_title(dir)
+	)
 
 
 func _on_start_button_pressed() -> void:
@@ -1373,125 +946,15 @@ func _on_turn_completed(_turn: int, _report: EconomyEngine.EconomicTurnReport) -
 # ==============================================================================
 
 func _apply_terminal_panel_style(panel: PanelContainer, bg: Color, border: Color) -> void:
-	var sb = StyleBoxFlat.new()
-	sb.bg_color = bg
-	sb.border_color = border
-	sb.border_width_left = 1
-	sb.border_width_top = 1
-	sb.border_width_right = 1
-	sb.border_width_bottom = 1
-	sb.corner_radius_top_left = 2
-	sb.corner_radius_top_right = 2
-	sb.corner_radius_bottom_left = 2
-	sb.corner_radius_bottom_right = 2
-	panel.add_theme_stylebox_override("panel", sb)
+	DirectiveNodeFactoryScript.apply_terminal_panel_style(panel, bg, border)
 
 
 func _apply_terminal_card_style(btn: Button, bg: Color, border: Color) -> void:
-	var sb = StyleBoxFlat.new()
-	sb.bg_color = bg
-	sb.border_color = border
-	sb.border_width_left = 1
-	sb.border_width_top = 1
-	sb.border_width_right = 1
-	sb.border_width_bottom = 1
-	sb.corner_radius_top_left = 3
-	sb.corner_radius_top_right = 3
-	sb.corner_radius_bottom_left = 3
-	sb.corner_radius_bottom_right = 3
-	sb.content_margin_left = 8
-	sb.content_margin_top = 6
-	sb.content_margin_right = 8
-	sb.content_margin_bottom = 6
-
-	var sb_hover = sb.duplicate()
-	sb_hover.bg_color = bg.lightened(0.08)
-	sb_hover.border_color = border.lightened(0.25)
-
-	btn.add_theme_stylebox_override("normal", sb)
-	btn.add_theme_stylebox_override("hover", sb_hover)
-	btn.add_theme_stylebox_override("pressed", sb)
-	btn.add_theme_stylebox_override("disabled", sb)
+	DirectiveNodeFactoryScript.apply_terminal_card_style(btn, bg, border)
 
 
-## Разрешает и возвращает аутентичную текстуру иконки фокуса TNO из базы assets/gfx/interface/goals/
 func _resolve_directive_texture(dir: DirectiveResource) -> Texture2D:
-	if dir == null:
-		return load("res://icon.svg")
-	if dir.icon != null:
-		return dir.icon
-
-	# 1. Прямой путь, если указан и файл существует
-	if not dir.icon_path.is_empty() and dir.icon_path != "res://icon.svg":
-		var clean_path = dir.icon_path
-		if not clean_path.begins_with("res://"):
-			clean_path = "res://".path_join(clean_path.replace("\\", "/"))
-		if ResourceLoader.exists(clean_path):
-			var t = load(clean_path)
-			if t is Texture2D:
-				return t
-
-	# 2. Поиск по идентификатору в общей библиотеке целей TNO (assets/gfx/interface/goals/)
-	var candidates: Array[String] = []
-
-	var add_candidate = func(c_str: String):
-		var s = c_str.strip_edges()
-		if not s.is_empty() and not candidates.has(s):
-			candidates.append(s)
-
-	if not dir.icon_path.is_empty():
-		var fb = dir.icon_path.get_file().get_basename()
-		add_candidate.call(fb)
-		var stripped_fb = fb
-		for pfx in ["GFX_focus_", "GFX_goal_", "GFX_Goal_", "GFX_", "focus_", "goal_"]:
-			if stripped_fb.begins_with(pfx):
-				stripped_fb = stripped_fb.substr(pfx.length())
-		add_candidate.call(stripped_fb)
-		add_candidate.call("focus_" + stripped_fb)
-		add_candidate.call(stripped_fb.to_lower())
-
-	var dir_clean = dir.id
-	for pfx in ["dir_", "focus_", "KOM_", "USA_", "GER_", "JAP_", "RUS_"]:
-		if dir_clean.begins_with(pfx):
-			dir_clean = dir_clean.substr(pfx.length())
-	add_candidate.call(dir.id)
-	add_candidate.call(dir.id.trim_prefix("dir_"))
-	add_candidate.call("focus_" + dir.id)
-	add_candidate.call(dir_clean)
-	add_candidate.call("focus_" + dir_clean)
-
-	for c in candidates:
-		var p1 = "res://assets/gfx/interface/goals/%s.png" % c
-		if ResourceLoader.exists(p1):
-			var t = load(p1)
-			if t is Texture2D:
-				return t
-
-	# 3. Поиск в каталоге иконок текущей страны (data/countries/<TAG>/directives/icons/)
-	if not current_country_tag.is_empty():
-		for c in candidates:
-			var p2 = "res://data/countries/%s/directives/icons/%s.png" % [current_country_tag, c]
-			if ResourceLoader.exists(p2):
-				var t = load(p2)
-				if t is Texture2D:
-					return t
-
-	# 4. Тематический fallback по категории директивы и ключевым словам
-	var tag_str = (dir.category + " " + dir.id + " " + dir.title).to_lower()
-	if tag_str.contains("mil") or tag_str.contains("war") or tag_str.contains("army") or tag_str.contains("front") or tag_str.contains("weapon") or tag_str.contains("armor") or tag_str.contains("plan"):
-		var t_mil = load("res://assets/gfx/interface/war_support_icon.png")
-		if t_mil is Texture2D: return t_mil
-	elif tag_str.contains("econ") or tag_str.contains("ind") or tag_str.contains("gold") or tag_str.contains("trade") or tag_str.contains("fact") or tag_str.contains("wpa"):
-		var t_eco = load("res://assets/gfx/interface/industrial_capacity_icon.png")
-		if t_eco is Texture2D: return t_eco
-	elif tag_str.contains("manpower") or tag_str.contains("pop") or tag_str.contains("recruit") or tag_str.contains("union") or tag_str.contains("labor") or tag_str.contains("people"):
-		var t_man = load("res://assets/gfx/interface/manpower_icon.png")
-		if t_man is Texture2D: return t_man
-	elif tag_str.contains("pol") or tag_str.contains("deal") or tag_str.contains("act") or tag_str.contains("law") or tag_str.contains("office") or tag_str.contains("state"):
-		var t_pol = load("res://assets/gfx/interface/pol_power_icon.png")
-		if t_pol is Texture2D: return t_pol
-
-	return load("res://icon.svg")
+	return DirectiveNodeFactoryScript.resolve_directive_texture(dir, current_country_tag)
 
 
 # ==============================================================================

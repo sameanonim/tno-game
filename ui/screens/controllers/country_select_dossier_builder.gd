@@ -551,7 +551,20 @@ static func populate_national_spirits_grid(spirits_grid: Control, tag: String, _
 	}
 
 	if spirit_ids.is_empty():
-		spirit_ids = ["generic_standing_spirit", "generic_economy_factor"]
+		if tag == "GER":
+			spirit_ids = ["Pakt_Leader", "to_banish_want", "the_two_principles", "endsieg"]
+		elif tag == "USA":
+			spirit_ids = ["USA_civil_rights_crisis", "USA_malcolm_x_unrest", "USA_great_society_hopes"]
+		elif tag == "OMS":
+			spirit_ids = ["SIB_terror_bombing", "OMS_great_trial", "OMS_black_brigades", "RUS_warlord_manpower"]
+		elif tag == "WRS":
+			spirit_ids = ["RUS_terror_bombing", "WRS_red_napoleon", "WRS_suvorov_tactics", "RUS_warlord_manpower"]
+		elif tag == "KOM":
+			spirit_ids = ["RUS_terror_bombing", "KOM_syvtyvkartsi", "KOM_clash_of_shadows_c_1", "RUS_syktyvkar_arsenal", "RUS_warlord_manpower"]
+		elif tag == "SVR":
+			spirit_ids = ["SIB_terror_bombing", "SVR_notso_redarmy", "SVR_black_league_influence_tier_1", "RUS_warlord_manpower", "RUS_warlord_econ"]
+		else:
+			spirit_ids = ["SIB_terror_bombing", "RUS_warlord_manpower", "RUS_warlord_econ"]
 
 	for s_id in spirit_ids:
 		var sp_name := ""
