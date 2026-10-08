@@ -54,7 +54,7 @@ func load_all() -> bool:
 	if not index_data.is_empty():
 		is_ready = true
 		_build_dossiers_cache()
-		print("[ContentLoader] Successfully initialized modular index: %d packages available." % index_data.size())
+		TNOLogger.info("ContentLoader", "Successfully initialized modular index: %d packages available." % index_data.size())
 		content_loaded.emit(index_data.size(), 0)
 		return true
 
@@ -70,11 +70,11 @@ func load_all() -> bool:
 	if not countries.is_empty():
 		is_ready = true
 		_build_dossiers_cache()
-		print("[ContentLoader] Initialized from legacy manifest: %d countries, %d trees." % [countries.size(), trees.size()])
+		TNOLogger.info("ContentLoader", "Initialized from legacy manifest: %d countries, %d trees." % [countries.size(), trees.size()])
 		content_loaded.emit(countries.size(), trees.size())
 		return true
 	else:
-		print("[ContentLoader] Notice: Neither index.json nor legacy manifest found. Using defaults.")
+		TNOLogger.warn("ContentLoader", "Notice: Neither index.json nor legacy manifest found. Using defaults.")
 		is_ready = false
 		return false
 
@@ -152,7 +152,7 @@ func load_country_package(country_tag: String) -> CountryState:
 	elif FileAccess.file_exists(profile_json_path):
 		target_json_path = profile_json_path
 	else:
-		print("[ContentLoader] Package not found at %s. Attempting CountryDataImporter fallback." % country_json_path)
+		TNOLogger.warn("ContentLoader", "Package not found at %s. Attempting CountryDataImporter fallback." % country_json_path)
 		var imp_state = CountryDataImporter.load_country(tag)
 		if imp_state != null and not imp_state.country_name.is_empty():
 			_cached_country_states[tag] = imp_state
@@ -244,7 +244,7 @@ func load_country_package(country_tag: String) -> CountryState:
 
 	# Сохраняем в кэш
 	_cached_country_states[tag] = state
-	print("[ContentLoader] Loaded modular package [%s]: %d leaders, %d directives, %d events." % [
+	TNOLogger.info("ContentLoader", "Loaded modular package [%s]: %d leaders, %d directives, %d events." % [
 		tag, loaded_leaders.size(), loaded_directives.size(), loaded_events.size()
 	])
 
@@ -1324,10 +1324,12 @@ func _build_dossiers_cache() -> void:
 
 func _read_json(res_path: String) -> Variant:
 	if not FileAccess.file_exists(res_path):
+		TNOLogger.warn("ContentLoader", "JSON file does not exist: %s" % res_path)
 		return null
 
 	var file = FileAccess.open(res_path, FileAccess.READ)
 	if file == null:
+		TNOLogger.error("ContentLoader", "Cannot open JSON file (code %d): %s" % [FileAccess.get_open_error(), res_path])
 		return null
 
 	var text = file.get_as_text()
@@ -1337,6 +1339,7 @@ func _read_json(res_path: String) -> Variant:
 	var err = json.parse(text)
 	if err == OK:
 		return json.data
+	TNOLogger.error("ContentLoader", "Failed to parse JSON (%s at line %d): %s" % [json.get_error_message(), json.get_error_line(), res_path])
 	return null
 
 

@@ -60,10 +60,10 @@ func _ready() -> void:
 	content_loader = ContentLoader.new()
 	content_loader.name = "ContentLoader"
 	content_loader.content_loaded.connect(func(c_cnt: int, t_cnt: int):
-		print("[GameSession] ContentLoader indexed %d countries, %d trees." % [c_cnt, t_cnt])
+		TNOLogger.info("GameSession", "ContentLoader indexed %d countries, %d trees." % [c_cnt, t_cnt])
 	)
 	content_loader.country_package_loaded.connect(func(tag: String, _st: CountryState):
-		print("[GameSession] Country package loaded: %s" % tag)
+		TNOLogger.debug("GameSession", "Country package loaded: %s" % tag)
 	)
 	add_child(content_loader)
 
@@ -703,10 +703,16 @@ func get_country_dossier(tag: String) -> Dictionary:
 # ==============================================================================
 
 func bootstrap_new_game(config: GameStartConfig) -> void:
+	if config == null:
+		TNOLogger.error("GameSession", "bootstrap_new_game called with null config!")
+		return
 	current_config = config
 	var dossier = get_country_dossier(config.selected_country_tag)
+	if dossier.is_empty():
+		TNOLogger.error("GameSession", "Cannot bootstrap game: no dossier found for tag '%s'!" % config.selected_country_tag)
+		return
 
-	# Создание главного CountryState для игрока
+	TNOLogger.info("GameSession", "Bootstrapping game for [%s] with difficulty %d" % [config.selected_country_tag, config.difficulty])
 	var state = CountryState.new()
 	state.country_tag = dossier["tag"]
 	state.country_name = dossier["name"]

@@ -84,7 +84,7 @@ static var global_oil_crisis_multiplier: float = 3.5
 static func set_oil_crisis(active: bool, price_multiplier: float = 3.5) -> void:
 	global_oil_crisis_active = active
 	global_oil_crisis_multiplier = price_multiplier
-	print("[EconomyEngine] Global Oil Crisis status set to: %s (Multiplier: x%.1f)" % [str(active), price_multiplier])
+	TNOLogger.info("EconomyEngine", "Global Oil Crisis status set to: %s (Multiplier: x%.1f)" % [str(active), price_multiplier])
 
 
 ## Проверка, охвачена ли экономика Нефтяным кризисом
@@ -646,6 +646,9 @@ static func update_societal_development(state: CountryState, turns_per_year: flo
 
 ## Главный пошаговый расчет экономики
 static func process_turn(state: CountryState, regions: Dictionary = {}) -> EconomicTurnReport:
+	if state == null:
+		TNOLogger.error("EconomyEngine", "Cannot process turn: state is null!")
+		return null
 	var cfg = ConfigManager.get_instance()
 	var report := EconomicTurnReport.new()
 	report.gdp_prev = state.gdp_billions

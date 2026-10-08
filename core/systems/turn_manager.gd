@@ -698,13 +698,19 @@ func get_formatted_date() -> String:
 
 ## Главный метод завершения хода (вызывается кнопкой «Завершить ход» в UI)
 func end_turn() -> void:
+	if player_state == null:
+		TNOLogger.error("TurnManager", "Cannot end turn: player_state is null!")
+		return
+
 	if current_state == TurnState.WAITING_FOR_MODAL_EVENT:
 		if pending_modal_events.is_empty():
 			# Автоматическое восстановление, если модальное окно было разрешено без сброса стейта
 			current_state = TurnState.IDLE
 		else:
-			push_warning("TurnManager: Нельзя завершить ход, пока открыт неразрешенный модальный кризис!")
+			TNOLogger.warn("TurnManager", "Нельзя завершить ход, пока открыт неразрешенный модальный кризис!")
 			return
+
+	TNOLogger.info("TurnManager", "Advancing turn %d (%s) for player [%s]" % [current_turn, get_formatted_date(), player_state.country_tag])
 
 	# 1. Сброс и начисление тактических очков (Data-Driven через ConfigManager)
 	var cfg = ConfigManager.get_instance()
