@@ -26,6 +26,7 @@ const RECOMMENDED_CARD_SCENE = preload("res://ui/components/recommended_nation_c
 const RECOMMENDED_CARD_SCRIPT = preload("res://ui/components/recommended_nation_card.gd")
 const LEADER_PORTRAIT_FRAME_SCENE = preload("res://ui/components/leader_portrait_frame.tscn")
 const GAME_SESSION_SCRIPT = preload("res://core/systems/game_session.gd")
+const CountrySelectDossierBuilderScript = preload("res://ui/screens/controllers/country_select_dossier_builder.gd")
 
 # Ноды в соответствии с требуемой иерархией
 @onready var map_background: CountrySelectMapWidget = $MapBackground

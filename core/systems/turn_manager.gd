@@ -42,6 +42,9 @@ enum TurnState {
 signal us_electoral_report_generated(report: Dictionary)
 
 const TurnSerializerScript = preload("res://core/systems/turn_serializer.gd")
+const DemographicsEngineScript = preload("res://core/systems/demographics_engine.gd")
+const TurnTerritoryHandlerScript = preload("res://core/systems/turn_territory_handler.gd")
+const TurnCrisisHandlerScript = preload("res://core/systems/turn_crisis_handler.gd")
 
 @export var player_state: CountryState:
 	get:
@@ -428,112 +431,18 @@ func _on_event_country_annexation_requested(victim_tag: String, annexer_tag: Str
 
 ## Передача суверенитета над штатом новому владельцу с реактивной синхронизацией LUT карты
 func transfer_state(state_id: int, new_owner_tag: String) -> bool:
-	if state_id <= 0:
-		return false
-	var clean_tag: String = new_owner_tag.to_upper().strip_edges()
-	if clean_tag.is_empty():
-		push_warning("[TurnManager] Refusing to transfer State %d to empty owner tag!" % state_id)
-		return false
-	var old_owner: String = ""
-
-	# 1. Поиск BoundaryManager, если не привязан
-	if boundary_manager == null:
-		if has_node("BoundaryManager"):
-			boundary_manager = get_node("BoundaryManager") as BoundaryManager
-		elif get_parent() != null and get_parent().has_node("BoundaryManager"):
-			boundary_manager = get_parent().get_node("BoundaryManager") as BoundaryManager
-
-	# 2. Если есть BoundaryManager - запускаем топологический расчет и демаркацию
-	if boundary_manager != null:
-		old_owner = boundary_manager.state_to_owner.get(state_id, "")
-		boundary_manager.transfer_state(state_id, clean_tag)
-
-	# 3. Синхронизация провинций в regions_world_state
-	var provs = state_to_provinces.get(state_id, [])
-	for pid in provs:
-		if regions_world_state.has(pid):
-			var reg: RegionData = regions_world_state[pid]
-			if old_owner.is_empty():
-				old_owner = reg.owner_tag
-			reg.owner_tag = clean_tag
-			reg.is_dirty = true
-			region_conquered.emit(pid, clean_tag, old_owner)
-
-	# 4. Обновление контролируемых штатов CountryState
-	var target_st: CountryState = null
-	if player_state != null and player_state.country_tag.to_upper() == clean_tag:
-		target_st = player_state
-	elif countries_world_state.has(clean_tag):
-		target_st = countries_world_state[clean_tag]
-
-	if target_st != null:
-		if not target_st.controlled_states.has(state_id):
-			target_st.controlled_states.append(state_id)
-		if not target_st.owned_states.has(state_id):
-			target_st.owned_states.append(state_id)
-
-	var prev_st: CountryState = null
-	if not old_owner.is_empty():
-		if player_state != null and player_state.country_tag.to_upper() == old_owner:
-			prev_st = player_state
-		elif countries_world_state.has(old_owner):
-			prev_st = countries_world_state[old_owner]
-
-	if prev_st != null:
-		prev_st.controlled_states.erase(state_id)
-		prev_st.owned_states.erase(state_id)
-
-	# 5. Реактивное обновление MapController, если он доступен
-	_sync_map_controller_reactive([state_id], clean_tag)
-
-	state_conquered.emit(state_id, clean_tag)
-	state_transferred.emit(state_id, old_owner, clean_tag)
-	return true
+	return TurnTerritoryHandlerScript.transfer_state(self, state_id, new_owner_tag)
 
 
 ## Аннексия целого государства
 func annex_country(victim_tag: String, annexer_tag: String) -> void:
-	var v_tag: String = victim_tag.to_upper().strip_edges()
-	var a_tag: String = annexer_tag.to_upper().strip_edges()
-	var states_to_transfer: Array[int] = []
-
-	if boundary_manager != null and boundary_manager.country_states.has(v_tag):
-		states_to_transfer = boundary_manager.country_states[v_tag].duplicate()
-	else:
-		for pid in regions_world_state.keys():
-			var reg: RegionData = regions_world_state[pid]
-			if reg.owner_tag.to_upper() == v_tag:
-				var sid = province_to_state.get(pid, 0)
-				if sid > 0 and not states_to_transfer.has(sid):
-					states_to_transfer.append(sid)
-
-	for sid in states_to_transfer:
-		transfer_state(sid, a_tag)
-
-	if boundary_manager != null:
-		boundary_manager.cleanup_isolated_enclaves(a_tag)
-
+	TurnTerritoryHandlerScript.annex_country(self, victim_tag, annexer_tag)
 
 
 ## Реактивная синхронизация шейдерной палитры карты
 func _sync_map_controller_reactive(affected_states: Array[int], new_owner_tag: String = "") -> void:
-	if map_controller == null:
-		return
+	TurnTerritoryHandlerScript.sync_map_controller_reactive(self, affected_states, new_owner_tag)
 
-	for sid in affected_states:
-		if map_controller.has_method("set_state_owner"):
-			map_controller.set_state_owner(sid, new_owner_tag)
-		else:
-			var provs: Array = state_to_provinces.get(sid, [])
-			for pid in provs:
-				if map_controller.has_method("set_province_owner"):
-					map_controller.set_province_owner(pid, new_owner_tag)
-				elif map_controller.has_method("update_province_owner"):
-					map_controller.update_province_owner(pid, new_owner_tag)
-
-	if map_controller.has_method("populate_data_lut_from_regions") and not regions_world_state.is_empty():
-		var p_tag: String = player_state.country_tag if player_state != null else "KOM"
-		map_controller.populate_data_lut_from_regions(regions_world_state, p_tag)
 
 
 func _on_event_super_event(super_event_id: String) -> void:
@@ -1060,199 +969,26 @@ func _finalize_turn() -> void:
 
 ## Расчет региональной демографии, естественного прироста и притока рекрутов (TNO Demographic Engine)
 func _process_demographics_and_manpower() -> void:
-	if regions_world_state.is_empty():
-		return
-
-	var country_core_pop: Dictionary = {}
-	var country_non_core_pop: Dictionary = {}
-	var country_unrest_sum: Dictionary = {}
-	var country_regions_count: Dictionary = {}
-
-	for reg_val in regions_world_state.values():
-		if reg_val is RegionData:
-			var reg: RegionData = reg_val
-			var owner: String = reg.owner_tag.to_upper().strip_edges()
-			if owner.is_empty():
-				continue
-			var pop: int = reg.population
-			var is_core: bool = reg.is_core_of(owner) or reg.core_tags.has(owner)
-
-			if is_core:
-				country_core_pop[owner] = country_core_pop.get(owner, 0) + pop
-			else:
-				country_non_core_pop[owner] = country_non_core_pop.get(owner, 0) + pop
-
-			# Пограничные регионы в условиях нестабильности дают меньшую отдачу
-			var border_penalty: float = 1.2 if reg.is_border_region else 1.0
-			country_unrest_sum[owner] = country_unrest_sum.get(owner, 0.0) + (reg.unrest * border_penalty)
-			country_regions_count[owner] = country_regions_count.get(owner, 0) + 1
-
-	for c_tag in countries_world_state.keys():
-		var c_st: CountryState = countries_world_state[c_tag]
-		if c_st == null:
-			continue
-
-		var core_pop: int = country_core_pop.get(c_tag, 0)
-		var non_core_pop: int = country_non_core_pop.get(c_tag, 0)
-		var reg_count: int = country_regions_count.get(c_tag, 0)
-		var avg_unrest: float = (country_unrest_sum.get(c_tag, 0.0) / float(maxi(reg_count, 1))) if reg_count > 0 else 0.0
-
-		c_st.set_flag("core_population", core_pop)
-		c_st.set_flag("total_population", core_pop + non_core_pop)
-		c_st.set_flag("controlled_regions_count", reg_count)
-
-		if core_pop <= 0 and non_core_pop <= 0:
-			continue
-
-		var base_recruit_rate: float = 0.00035
-		var legitimacy_mult: float = 0.5 + (c_st.legitimacy / 100.0) * 0.7
-		var war_support_mult: float = 0.6 + (c_st.war_support_percent / 100.0) * 0.6
-		var warlord_mult: float = 1.25 if c_st.has_flag("is_warlord") else 1.0
-		var draft_evasion_penalty: float = 1.0 - clampf((c_st.radicalization - 50.0) * 0.008, 0.0, 0.5)
-
-		var turn_recruits: int = int(float(core_pop) * base_recruit_rate * legitimacy_mult * war_support_mult * warlord_mult * draft_evasion_penalty)
-
-		var garrison_casualties: int = 0
-		if non_core_pop > 0 and avg_unrest > 25.0:
-			garrison_casualties = int(float(non_core_pop) * (avg_unrest / 100.0) * 0.00008)
-
-		var net_manpower_gain: int = turn_recruits - garrison_casualties
-		c_st.manpower_pool = maxi(c_st.manpower_pool + net_manpower_gain, 0)
-		c_st.set_flag("weekly_manpower_growth", net_manpower_gain)
-		c_st.set_flag("garrison_attrition", garrison_casualties)
+	DemographicsEngineScript.process_turn(regions_world_state, countries_world_state)
 
 
 ## Проверка таймеров саботажа и назревающих переворотов
 func _process_sabotage_and_coups() -> void:
-	for c_tag in countries_world_state.keys():
-		var c_st: CountryState = countries_world_state[c_tag]
-		if c_st == null:
-			continue
-
-		# 1. Таймер саботажа производства
-		if c_st.story_flags.has("sabotage_ic_turns"):
-			var t_left = int(c_st.story_flags["sabotage_ic_turns"]) - 1
-			if t_left <= 0:
-				c_st.story_flags.erase("sabotage_ic_turns")
-				c_st.story_flags.erase("sabotage_ic_modifier")
-			else:
-				c_st.story_flags["sabotage_ic_turns"] = t_left
-
-		# 2. Неминуемый государственный переворот
-		if bool(c_st.story_flags.get("coup_imminent", false)):
-			c_st.story_flags.erase("coup_imminent")
-			var sponsor: String = str(c_st.story_flags.get("coup_sponsor", ""))
-			c_st.story_flags.erase("coup_sponsor")
-			_resolve_coup(c_st, sponsor)
+	TurnCrisisHandlerScript.process_sabotage_and_coups(self)
 
 
 ## Разрешение государственного переворота
 func _resolve_coup(victim: CountryState, sponsor_tag: String) -> void:
-	victim.legitimacy = maxf(victim.legitimacy - 35.0, 5.0)
-	victim.radicalization = minf(victim.radicalization + 30.0, 95.0)
-
-	if not sponsor_tag.is_empty() and countries_world_state.has(sponsor_tag):
-		var sponsor: CountryState = countries_world_state[sponsor_tag]
-		if sponsor != null:
-			victim.ruling_ideology = sponsor.ruling_ideology
-			victim.faction = sponsor.faction
-			if sponsor == player_state:
-				player_state.political_capital += 25.0
-				player_state.legitimacy = clampf(player_state.legitimacy + 5.0, 0.0, 100.0)
-
-	if victim == player_state:
-		var coup_event := GameEvent.new()
-		coup_event.event_id = "crisis_military_coup_%d" % current_turn
-		coup_event.title = "ГОСУДАРСТВЕННЫЙ ПЕРЕВОРОТ!"
-		coup_event.classification = "[КРИЗИС ВЛАСТИ // ЧРЕЗВЫЧАЙНОЕ ПОЛОЖЕНИЕ]"
-		coup_event.description = "Офицеры генштаба и заговорщики окружили правительственный квартал. Прежнее руководство свергнуто."
-		coup_event.is_modal = true
-		coup_event.options = [
-			{
-				"option_id": "opt_accept_junta",
-				"text": "Признать власть Военной Хунты (-20 к легитимности)",
-				"effects": {"modify_legitimacy": -20.0, "modify_radicalization": 15.0}
-			}
-		]
-		pending_modal_events.append(coup_event)
+	TurnCrisisHandlerScript.resolve_coup(self, victim, sponsor_tag)
 
 
 ## Проверка финальных условий победы или поражения игрока
 func _check_game_over_conditions() -> void:
-	if player_state == null:
-		return
-
-	# 1. Аннексия государства игрока
-	if player_state.is_annexed:
-		_trigger_game_over(false, "Ваша держава была аннексирована и стерта с политической карты мира.")
-		return
-
-	# 2. Тотальный крах легитимности и революция
-	if player_state.legitimacy <= 0.0 and player_state.radicalization >= 95.0:
-		_trigger_game_over(false, "Тотальный крах государственности: легитимность рухнула до нуля, в стране бушует восстание и анархия.")
-		return
-
-	# 3. Суверенный фискальный дефолт
-	if player_state.is_in_fiscal_crisis and player_state.get_debt_to_gdp_ratio() >= 2.5 and player_state.liquid_reserves_billions <= -50.0:
-		_trigger_game_over(false, "Фискальный коллапс: национальный долг превысил 250% ВВП при отрицательных резервах. Полное банкротство страны.")
-		return
-
-	# 4. Условия победы и поражения для сверхдержав (Superpowers)
-	var tag: String = player_state.country_tag.to_upper()
-
-	# 4.1. Соединенные Штаты Америки (USA)
-	if tag == "USA" and current_turn >= 260:
-		if player_state.legitimacy >= 75.0 and player_state.radicalization <= 25.0 and player_state.gdp_billions >= 400.0 and not player_state.is_in_fiscal_crisis:
-			_trigger_game_over(true, "Триумф американской демократии: Соединенные Штаты преодолели все кризисы эпохи Холодной Войны, обеспечили процветание народа и стали неоспоримым флагманом свободного мира!")
-			return
-
-	# 4.2. Великая Японская Империя (JAP)
-	if tag == "JAP":
-		if japan_empire_manager != null:
-			if japan_empire_manager.yasuda_phase == JapanEmpireManager.YasudaPhase.STOCK_CRASH and player_state.radicalization >= 90.0 and player_state.legitimacy <= 15.0:
-				_trigger_game_over(false, "Крах Империи: Тотальный экономический коллапс дзайбацу и восстание сокрушили имперский строй.")
-				return
-			if japan_empire_manager.yasuda_phase == JapanEmpireManager.YasudaPhase.RESOLVED and current_turn >= 260:
-				_trigger_game_over(true, "Сфера Сопроцветания спасена! Империя преодолела кризис Ясуда, стабилизировала биржу и экономику и утвердила свое господство в Азии!")
-				return
-
-	# 4.3. Германский Рейх (GER / фракции ГВГ после победы)
-	if tag in ["GER", "BOR", "SPE", "GOR", "HEY"] and current_turn >= 260:
-		var gcw_active: bool = (german_civil_war_manager != null and german_civil_war_manager.is_civil_war_active)
-		if not gcw_active and player_state.legitimacy >= 70.0 and player_state.gdp_billions >= 350.0 and not player_state.is_in_fiscal_crisis:
-			_trigger_game_over(true, "Европейский Гегемон: Власть в Рейхе окончательно консолидирована, экономика реорганизована, господство Германии в Европе непоколебимо.")
-			return
-
-	# 4.4. Королевство Италия (ITA)
-	if tag == "ITA" and current_turn >= 260:
-		if player_state.legitimacy >= 65.0 and player_state.gdp_billions >= 150.0 and not player_state.is_in_fiscal_crisis:
-			_trigger_game_over(true, "Имперский Триумф Рима: Италия преодолела распад Триумвирата, стабилизировала Средиземноморье и стала самостоятельной великой державой!")
-			return
-
-	# 5. Универсальный исторический финал 10-летнего таймфрейма (Turn 520 // 1962–1972)
-	if current_turn >= 520:
-		if player_state.legitimacy >= 40.0 and not player_state.is_in_fiscal_crisis:
-			_trigger_game_over(true, "Исторический финал эпохи: Ваше государство с честью прошло сквозь огонь и хаос 10 лет Холодной Войны (1962–1972), сохранив суверенитет и закрепив свое место в мировой истории!")
-			return
+	TurnCrisisHandlerScript.check_game_over_conditions(self)
 
 
 func _trigger_game_over(victory: bool, reason: String) -> void:
-	game_over.emit(victory, reason)
-	var ev := GameEvent.new()
-	ev.event_id = "game_over_victory" if victory else "game_over_defeat"
-	ev.title = "ВЕЛИКИЙ ТРИУМФ НАЦИИ" if victory else "НАЦИОНАЛЬНАЯ КАТАСТРОФА"
-	ev.classification = "[КОНЕЦ ИГРЫ // ПОБЕДА]" if victory else "[КОНЕЦ ИГРЫ // ПОРАЖЕНИЕ]"
-	ev.description = reason
-	ev.is_modal = true
-	ev.options = [
-		{
-			"option_id": "opt_game_over_ack",
-			"text": "Принять неизбежный финал истории",
-			"effects": {}
-		}
-	]
-	pending_modal_events.clear()
-	modal_event_opened.emit(ev)
+	TurnCrisisHandlerScript.trigger_game_over(self, victory, reason)
 
 
 func _on_rum_final_unification(tag: String, _leader: String, _super_event_id: String) -> void:
@@ -1271,6 +1007,7 @@ func _on_gcw_concluded(victor_tag: String) -> void:
 		_trigger_game_over(true, "Борьба за Рейх завершена вашей триумфальной победой! Германия под вашим полным контролем.")
 	elif player_state != null and player_state.country_tag in ["BOR", "SPE", "GOR", "HEY"]:
 		_trigger_game_over(false, "Гражданская война в Германии проиграна. Власть в Рейхе захватил %s." % victor_tag)
+
 
 
 ## Сохранение текущей игровой сессии в JSON архив
