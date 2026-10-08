@@ -124,7 +124,7 @@ func display_leader(leader_data: Variant, country_tag: String = "", animate_tele
 			direct_texture = d.get("portrait")
 	elif leader_data is CountryState:
 		var cs = leader_data as CountryState
-		l_id = cs.leader_portrait_id if not cs.leader_portrait_id.is_empty() else cs.country_tag
+		l_id = cs.leader_portrait_path if not cs.leader_portrait_path.is_empty() else cs.country_tag
 		l_name = cs.leader_name
 		l_portrait_path = cs.leader_portrait_path
 		l_ideology = cs.ruling_party if not cs.ruling_party.is_empty() else cs.ruling_ideology

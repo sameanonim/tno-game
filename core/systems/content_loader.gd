@@ -501,7 +501,12 @@ func get_country_dossier(tag: String) -> Dictionary:
 		if lore_text.is_empty():
 			lore_text = str(manifest_c.get("lore", manifest_lead.get("lore", "")))
 		if lore_text.is_empty():
-			var loc_mgr = get_node_or_null("/root/LocalizationManager")
+			var loc_mgr = null
+			var main_loop = Engine.get_main_loop()
+			if main_loop is SceneTree and main_loop.root != null and main_loop.root.has_node("LocalizationManager"):
+				loc_mgr = main_loop.root.get_node("LocalizationManager")
+			elif is_inside_tree():
+				loc_mgr = get_node_or_null("/root/LocalizationManager")
 			if loc_mgr != null:
 				var l_val = loc_mgr.tr_key(tag + "_lore", "")
 				if not l_val.is_empty() and not l_val.begins_with("[MISSING"):

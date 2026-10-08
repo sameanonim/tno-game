@@ -527,27 +527,26 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 	return res
 
 
-## Парсинг HoI4 словаря наград в структурированные опкоды DirectiveResource
 static func _parse_hoi4_completion_reward(cr: Dictionary, res: DirectiveResource) -> void:
 	if cr.has("add_political_power"):
 		res.completion_rewards.append({
 			"opcode": "MOD_PC",
-			"value": float(cr["add_political_power"])
+			"value": _safe_val_to_float(cr["add_political_power"])
 		})
 	if cr.has("add_war_support"):
 		res.completion_rewards.append({
 			"opcode": "MOD_WAR_SUPPORT",
-			"value": float(cr["add_war_support"])
+			"value": _safe_val_to_float(cr["add_war_support"])
 		})
 	if cr.has("add_stability"):
 		res.completion_rewards.append({
 			"opcode": "MOD_STABILITY",
-			"value": float(cr["add_stability"])
+			"value": _safe_val_to_float(cr["add_stability"])
 		})
 	if cr.has("add_manpower"):
 		res.completion_rewards.append({
 			"opcode": "MOD_MANPOWER",
-			"value": int(cr["add_manpower"])
+			"value": int(_safe_val_to_float(cr["add_manpower"]))
 		})
 	if cr.has("country_event"):
 		var ev_id := ""
@@ -572,3 +571,17 @@ static func _parse_hoi4_completion_reward(cr: Dictionary, res: DirectiveResource
 		})
 	for k in cr.keys():
 		res.completion_effects[k] = cr[k]
+
+
+static func _safe_val_to_float(val: Variant) -> float:
+	if val is float:
+		return val
+	if val is int:
+		return float(val)
+	if val is Dictionary:
+		return float(val.get("value", 0.0))
+	if val is String:
+		var s = val.strip_edges()
+		if s.is_valid_float():
+			return s.to_float()
+	return 0.0
