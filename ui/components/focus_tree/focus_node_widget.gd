@@ -28,7 +28,7 @@ var is_locked: bool = false
 
 
 func _ready() -> void:
-	custom_minimum_size = Vector2(160, 90)
+	custom_minimum_size = Vector2(130, 110)
 	size = custom_minimum_size
 	mouse_filter = MOUSE_FILTER_STOP
 	mouse_default_cursor_shape = CURSOR_POINTING_HAND
@@ -69,7 +69,7 @@ func _build_ui() -> void:
 
 	# Icon
 	icon_rect = TextureRect.new()
-	icon_rect.custom_minimum_size = Vector2(36, 36)
+	icon_rect.custom_minimum_size = Vector2(56, 56)
 	icon_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon_rect.mouse_filter = MOUSE_FILTER_IGNORE
@@ -80,7 +80,8 @@ func _build_ui() -> void:
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_label.add_theme_font_size_override("font_size", 11)
+	title_label.max_lines_visible = 2
+	title_label.add_theme_font_size_override("font_size", 10)
 	title_label.add_theme_color_override("font_color", Color(0.2, 0.9, 0.5, 1.0))
 	title_label.mouse_filter = MOUSE_FILTER_IGNORE
 	vbox.add_child(title_label)
@@ -115,7 +116,17 @@ func setup(p_data: FocusNodeData, p_manager: FocusTreeManager) -> void:
 
 	# Set texts
 	var raw_title = String(node_data.text_id)
-	title_label.text = raw_title.replace("_", " ").capitalize()
+	var localized_title = tr(raw_title)
+	if localized_title == raw_title and has_node("/root/LocalizationManager"):
+		var lm = get_node("/root/LocalizationManager")
+		if lm.has_method("get_text"):
+			var custom_loc = lm.get_text(raw_title)
+			if not custom_loc.is_empty():
+				localized_title = custom_loc
+	if localized_title != raw_title:
+		title_label.text = localized_title
+	else:
+		title_label.text = raw_title.replace("_", " ").capitalize()
 	cost_label.text = "%d Days" % int(node_data.cost)
 
 	# Load icon

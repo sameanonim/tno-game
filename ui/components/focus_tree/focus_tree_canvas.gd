@@ -14,7 +14,7 @@ Features:
 signal focus_clicked(focus_id: StringName)
 
 @export var manager: FocusTreeManager = null
-@export var grid_cell_size: Vector2 = Vector2(200.0, 150.0)
+@export var grid_cell_size: Vector2 = Vector2(145.0, 140.0)
 @export var grid_origin: Vector2 = Vector2(100.0, 80.0)
 
 # Pan & Zoom State

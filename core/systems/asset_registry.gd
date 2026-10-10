@@ -74,6 +74,18 @@ func resolve_sprite_path(sprite_name: String) -> String:
 	if sprite_name.is_empty():
 		return ""
 
+	# 0. Проверка в глобальном индексном манифесте спрайтов (_sprite_index)
+	if _sprite_index.has(sprite_name):
+		var p_idx = str(_sprite_index[sprite_name])
+		if ResourceLoader.exists(p_idx):
+			return p_idx
+
+	var clean_name: String = sprite_name.replace("GFX_", "")
+	if _sprite_index.has(clean_name):
+		var p_idx_clean = str(_sprite_index[clean_name])
+		if ResourceLoader.exists(p_idx_clean):
+			return p_idx_clean
+
 	# 1. Прямая проверка в манифестах событий/идей/решений
 	if _event_pictures.has(sprite_name):
 		return str(_event_pictures[sprite_name])
@@ -83,7 +95,6 @@ func resolve_sprite_path(sprite_name: String) -> String:
 		return str(_decisions[sprite_name])
 
 	# 2. Проверка альтернативных префиксов
-	var clean_name: String = sprite_name.replace("GFX_", "")
 	if _ideas.has(clean_name):
 		return str(_ideas[clean_name])
 	if _decisions.has(clean_name):
@@ -113,6 +124,16 @@ func resolve_sprite_path(sprite_name: String) -> String:
 	var direct_goal_clean: String = "res://assets/gfx/interface/goals/%s.png" % clean_name
 	if ResourceLoader.exists(direct_goal_clean):
 		return direct_goal_clean
+
+	var ui_goal: String = "res://ui/assets/goals/%s.png" % sprite_name
+	if ResourceLoader.exists(ui_goal):
+		return ui_goal
+	var ui_goal_clean: String = "res://ui/assets/goals/%s.png" % clean_name
+	if ResourceLoader.exists(ui_goal_clean):
+		return ui_goal_clean
+	var ui_goal_focus: String = "res://ui/assets/goals/focus_%s.png" % clean_name.replace("focus_", "")
+	if ResourceLoader.exists(ui_goal_focus):
+		return ui_goal_focus
 
 	return ""
 

@@ -123,7 +123,7 @@ static func get_focus_tree_summary(tag: String, directives_data: Dictionary = {}
 			for t_info in idx_data:
 				var tid = str(t_info.get("tree_id", ""))
 				total_all_dirs += int(t_info.get("total_directives", 0))
-				if chosen_tree_path.is_empty() and (tid.contains("base") or tid.contains("initial") or tid.contains("shared") or tid.contains("1962")):
+				if chosen_tree_path.is_empty() and (bool(t_info.get("is_starting_tree", false)) or tid.contains("game_start") or tid.contains("intro") or tid.contains("base") or tid.contains("initial") or tid.contains("shared") or tid.contains("1962")):
 					chosen_tree_path = str(t_info.get("path", ""))
 					chosen_tree_id = tid
 

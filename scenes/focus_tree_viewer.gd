@@ -49,6 +49,9 @@ func _init_game_state() -> void:
 	manager.focus_progress_updated.connect(func(_id, _c, _t, _r): _update_stats_ui())
 
 
+var sorted_tree_keys: Array = []
+
+
 func _populate_tree_selector() -> void:
 	tree_selector.clear()
 	var json_path = "res://extracted_tno_data/focus_trees.json"
@@ -60,28 +63,38 @@ func _populate_tree_selector() -> void:
 		var demo_tree := _create_demo_tree()
 		loaded_trees[demo_tree.tree_id] = demo_tree
 
+	sorted_tree_keys = loaded_trees.keys()
+	var priority_trees = [&"GER_game_start_tree", &"USA_initial_tree", &"TNO_Japan_shared", &"SAM_Intro_Tree", &"KOM_morozov_regional"]
+	sorted_tree_keys.sort_custom(func(a, b):
+		var prio_a = priority_trees.find(a)
+		var prio_b = priority_trees.find(b)
+		if prio_a != -1 and prio_b != -1:
+			return prio_a < prio_b
+		if prio_a != -1:
+			return true
+		if prio_b != -1:
+			return false
+		return str(a) < str(b)
+	)
+
 	var idx = 0
-	var select_idx = 0
-	for tid in loaded_trees.keys():
+	for tid in sorted_tree_keys:
 		var tree: FocusTreeData = loaded_trees[tid]
 		manager.register_tree(tree)
 		var display_text = "%s (%d focuses)" % [String(tid), tree.nodes.size()]
 		tree_selector.add_item(display_text, idx)
-		if tree.nodes.size() > 10 and select_idx == 0:
-			select_idx = idx
 		idx += 1
 
 	tree_selector.item_selected.connect(_on_tree_selected)
 
 	if tree_selector.item_count > 0:
-		tree_selector.select(select_idx)
-		_on_tree_selected(select_idx)
+		tree_selector.select(0)
+		_on_tree_selected(0)
 
 
 func _on_tree_selected(index: int) -> void:
-	var keys = loaded_trees.keys()
-	if index >= 0 and index < keys.size():
-		var tid = keys[index]
+	if index >= 0 and index < sorted_tree_keys.size():
+		var tid = sorted_tree_keys[index]
 		var tree: FocusTreeData = loaded_trees[tid]
 		manager.set_current_tree(tree)
 		canvas.load_tree(tree)

@@ -541,6 +541,8 @@ class FocusTreeCompiler:
         for fid, node in compiled_nodes.items():
             ax, ay = resolve_pos(fid)
             node["grid_coord"] = [ax, ay]
+            node["raw_grid_coord"] = [node["raw_x"], node["raw_y"]]
+            node["coordinates_resolved"] = True
 
         # 2. Guarantee bidirectional symmetrization of mutually_exclusive references
         for fid, node in compiled_nodes.items():

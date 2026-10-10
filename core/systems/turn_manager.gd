@@ -452,6 +452,11 @@ func _on_event_super_event(super_event_id: String) -> void:
 
 func _on_gcw_erupted() -> void:
 	super_event_requested.emit("SE_GERMAN_CIVIL_WAR")
+	if player_state != null:
+		player_state.set_flag("gcw_active", true)
+		player_state.set_flag("gcw_erupted", true)
+	if focus_stage_controller != null and player_state != null:
+		focus_stage_controller.process_turn(0, player_state)
 
 
 func _on_gcw_hitler_died() -> void:

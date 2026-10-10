@@ -31,6 +31,11 @@ class DirectivesExtractor:
         focus_files = self.vfs.list_files("common/national_focus", glob_pattern="*.txt", recursive=False)
         print(f"    Found {len(focus_files)} national focus files across VFS.")
 
+        # Pass 1: Parse and index all shared_focus blocks
+        shared_pool: Dict[str, Dict[str, Any]] = {}
+        children_map: Dict[str, List[str]] = {}
+        parsed_files: List[Tuple[str, Dict[str, Any]]] = []
+
         for rel_path in focus_files.keys():
             content = self.vfs.read_text(rel_path)
             if not content:
@@ -38,43 +43,128 @@ class DirectivesExtractor:
 
             try:
                 parsed = parse_clausewitz_text(content)
-                focus_tree = parsed.get("focus_tree")
-                if not focus_tree:
-                    continue
+                parsed_files.append((rel_path, parsed))
 
-                tree_list = focus_tree if isinstance(focus_tree, list) else [focus_tree]
-                for tree_item in tree_list:
-                    if not isinstance(tree_item, dict):
-                        continue
-                    tree_id = tree_item.get("id")
-                    if not tree_id:
-                        continue
-
-                    country_trigger = tree_item.get("country", {})
-                    tag = self._deduce_country_tag(tree_id, country_trigger)
-
-                    raw_focuses = tree_item.get("focus", [])
-                    if isinstance(raw_focuses, dict):
-                        raw_focuses = [raw_focuses]
-
-                    directives = []
-                    for f in raw_focuses:
-                        if not isinstance(f, dict):
-                            continue
-                        d_entry = self._process_focus_entry(f)
+                sf_list = parsed.get("shared_focus", [])
+                if isinstance(sf_list, dict):
+                    sf_list = [sf_list]
+                for sf in sf_list:
+                    if isinstance(sf, dict):
+                        d_entry = self._process_focus_entry(sf)
                         if d_entry:
-                            directives.append(d_entry)
+                            fid = d_entry["id"]
+                            shared_pool[fid] = d_entry
 
-                    if directives:
-                        self.trees[tree_id] = {
-                            "tree_id": tree_id,
-                            "tag": tag,
-                            "directives_count": len(directives),
-                            "directives": directives
-                        }
+                            for p in d_entry.get("prerequisites", []):
+                                children_map.setdefault(p, []).append(fid)
+                            rel_id = d_entry.get("relative_position_id")
+                            if rel_id:
+                                children_map.setdefault(rel_id, []).append(fid)
             except Exception as err:
                 if self.config.verbose:
                     print(f"[DIRECTIVES] [WARN] Focus file {rel_path} error: {err}", file=sys.stderr)
+
+        print(f"    Indexed {len(shared_pool)} shared_focus definitions across VFS.")
+
+        # Pass 2: Extract each focus_tree and cascade its shared focuses
+        for rel_path, parsed in parsed_files:
+            focus_tree = parsed.get("focus_tree")
+            if not focus_tree:
+                continue
+
+            tree_list = focus_tree if isinstance(focus_tree, list) else [focus_tree]
+            for tree_item in tree_list:
+                if not isinstance(tree_item, dict):
+                    continue
+                tree_id = tree_item.get("id")
+                if not tree_id:
+                    continue
+
+                country_trigger = tree_item.get("country", {})
+                tag = self._deduce_country_tag(tree_id, country_trigger)
+
+                tree_nodes: Dict[str, Dict[str, Any]] = {}
+
+                # Direct focuses
+                raw_focuses = tree_item.get("focus", [])
+                if isinstance(raw_focuses, dict):
+                    raw_focuses = [raw_focuses]
+                for f in raw_focuses:
+                    if isinstance(f, dict):
+                        d_entry = self._process_focus_entry(f)
+                        if d_entry:
+                            tree_nodes[d_entry["id"]] = d_entry
+
+                # Shared focus roots
+                raw_shared = tree_item.get("shared_focus", [])
+                if not isinstance(raw_shared, list):
+                    raw_shared = [raw_shared]
+
+                roots = []
+                for r in raw_shared:
+                    if isinstance(r, str):
+                        roots.append(r)
+                    elif isinstance(r, dict):
+                        s_id = r.get("id")
+                        if s_id and isinstance(s_id, str):
+                            roots.append(s_id)
+
+                # BFS cascade
+                queue = list(tree_nodes.keys())
+                for r in roots:
+                    if r in shared_pool and r not in tree_nodes:
+                        tree_nodes[r] = dict(shared_pool[r])
+                        queue.append(r)
+
+                seen = set(tree_nodes.keys())
+                while queue:
+                    curr = queue.pop(0)
+                    for child_id in children_map.get(curr, []):
+                        if child_id not in seen and child_id in shared_pool:
+                            seen.add(child_id)
+                            tree_nodes[child_id] = dict(shared_pool[child_id])
+                            queue.append(child_id)
+
+                # Resolve relative coordinates
+                memo_pos: Dict[str, Tuple[int, int]] = {}
+
+                def resolve_pos(fid: str, visited: Optional[Set[str]] = None) -> Tuple[int, int]:
+                    if fid in memo_pos:
+                        return memo_pos[fid]
+                    if visited is None:
+                        visited = set()
+                    if fid in visited or fid not in tree_nodes:
+                        n = tree_nodes.get(fid, {})
+                        return int(n.get("x", 0)), int(n.get("y", 0))
+                    visited.add(fid)
+                    n = tree_nodes[fid]
+                    rx = int(n.get("x", 0))
+                    ry = int(n.get("y", 0))
+                    parent_id = n.get("relative_position_id")
+                    if parent_id and parent_id in tree_nodes:
+                        px, py = resolve_pos(parent_id, visited)
+                        final_pos = (px + rx, py + ry)
+                    else:
+                        final_pos = (rx, ry)
+                    memo_pos[fid] = final_pos
+                    return final_pos
+
+                for fid, node in tree_nodes.items():
+                    ax, ay = resolve_pos(fid)
+                    node["abs_x"] = ax
+                    node["abs_y"] = ay
+                    node["grid_coord"] = [ax, ay]
+                    node["raw_grid_coord"] = [int(node.get("x", 0)), int(node.get("y", 0))]
+                    node["coordinates_resolved"] = True
+
+                if tree_nodes:
+                    self.trees[tree_id] = {
+                        "tree_id": tree_id,
+                        "tag": tag,
+                        "directives_count": len(tree_nodes),
+                        "directives": list(tree_nodes.values()),
+                        "nodes": tree_nodes
+                    }
 
         self._export_artifacts()
         elapsed = time.time() - t0
@@ -192,9 +282,12 @@ class DirectivesExtractor:
             "cost_turns": turns,
             "x": x,
             "y": y,
+            "relative_position_id": focus_dict.get("relative_position_id"),
             "prerequisites": prereqs,
             "mutually_exclusive": mutually_exclusive,
             "available": focus_dict.get("available", {}),
+            "allow_branch": focus_dict.get("allow_branch", {}),
+            "custom_tooltip": focus_dict.get("custom_effect_tooltip", ""),
             "completion_reward": focus_dict.get("completion_reward", {})
         }
 

@@ -460,8 +460,11 @@ func get_directives_for_country(tag: String) -> Array[DirectiveResource]:
 		var chosen_path := ""
 		if idx_data is Array and not idx_data.is_empty():
 			for t_info in idx_data:
+				if bool(t_info.get("is_starting_tree", false)):
+					chosen_path = str(t_info.get("path", ""))
+					break
 				var tid = str(t_info.get("tree_id", "")).to_lower()
-				if tid.contains("base") or tid.contains("initial") or tid.contains("1962"):
+				if tid.contains("game_start") or tid.contains("intro") or tid.contains("base") or tid.contains("initial") or tid.contains("1962"):
 					chosen_path = str(t_info.get("path", ""))
 					break
 			if chosen_path.is_empty():

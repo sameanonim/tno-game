@@ -237,7 +237,7 @@ func load_tree_for_country(country_tag: String, preferred_tree_id: String = "") 
 	if target_path.is_empty() and not available_trees.is_empty():
 		for t in available_trees:
 			var tid = str(t.get("tree_id", "")).to_lower()
-			if bool(t.get("is_starting_tree", false)) or tid.contains("base") or tid.contains("initial") or tid.contains("1962") or tid.contains("pre_election"):
+			if bool(t.get("is_starting_tree", false)) or tid.contains("game_start") or tid.contains("intro") or tid.contains("base") or tid.contains("initial") or tid.contains("1962") or tid.contains("pre_election"):
 				target_path = str(t.get("path", ""))
 				break
 		if target_path.is_empty():

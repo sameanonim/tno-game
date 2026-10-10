@@ -182,8 +182,10 @@ func to_dict() -> Dictionary:
 """Deserializes a FocusTreeData from a plain Dictionary."""
 static func from_dict(data: Dictionary) -> FocusTreeData:
 	var tree := FocusTreeData.new()
-	tree.tree_id = StringName(data.get("tree_id", data.get("id", "")))
-	tree.country_tag = StringName(data.get("country_tag", data.get("tag", "")))
+	var raw_tree_id = data.get("tree_id", data.get("id"))
+	tree.tree_id = StringName(str(raw_tree_id)) if raw_tree_id != null and not str(raw_tree_id).is_empty() else &""
+	var raw_tag = data.get("country_tag", data.get("tag"))
+	tree.country_tag = StringName(str(raw_tag)) if raw_tag != null and not str(raw_tag).is_empty() else &""
 
 	var raw_nodes = data.get("nodes", data.get("focuses", {}))
 	if raw_nodes is Dictionary:
@@ -192,13 +194,14 @@ static func from_dict(data: Dictionary) -> FocusTreeData:
 			if n_dict is Dictionary:
 				var node_data = FocusNodeData.from_dict(n_dict)
 				if node_data.id == &"":
-					node_data.id = StringName(nid)
+					node_data.id = StringName(str(nid))
 				tree.add_node(node_data)
 
 	var raw_branches = data.get("shared_focus_branches", [])
 	if raw_branches is Array:
 		for b in raw_branches:
-			tree.shared_focus_branches.append(StringName(b))
+			if b != null and not str(b).is_empty():
+				tree.shared_focus_branches.append(StringName(str(b)))
 
 	tree.resolve_relative_coordinates()
 	return tree

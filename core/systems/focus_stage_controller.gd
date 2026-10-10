@@ -42,6 +42,7 @@ var tree_flags: Dictionary = {}
 # Кэш состояния видимости веток
 var hidden_branch_nodes: Array[String] = []
 var visible_branch_nodes: Array[String] = []
+var _tree_data_cache: Dictionary = {}
 
 
 func _ready() -> void:
@@ -86,7 +87,7 @@ func _connect_subsystems() -> void:
 # МОДУЛЬ A.1: МЕХАНИЗМ РАЗРЕШЕНИЯ АКТУАЛЬНОГО ДРЕВА (Tree State Resolver)
 # ==============================================================================
 
-## Считывает манифест страны и оценивает AST-условия стадий (priority-based evaluation)
+## Считывает манифест страны и оценивает актуальное дерево на основе сюжетной стадии
 func resolve_active_tree(tag: String, state: CountryState) -> String:
 	var clean_tag = tag.to_upper().strip_edges()
 	if clean_tag.is_empty() and state != null:
@@ -100,7 +101,21 @@ func resolve_active_tree(tag: String, state: CountryState) -> String:
 
 	var eval_state = state if state != null else country_state
 
-	# 1. Приоритетная проверка манифестных переходов (transitions)
+	# 1. Специфические сюжетные резольверы для ключевых наций
+	if clean_tag in ["GER", "SPE", "BOR", "GOR", "HEY"]:
+		var ger_tree = _resolve_germany_active_tree(eval_state)
+		if not ger_tree.is_empty():
+			return ger_tree
+	elif clean_tag == "USA":
+		var usa_tree = _resolve_usa_active_tree(eval_state)
+		if not usa_tree.is_empty():
+			return usa_tree
+	else:
+		var rus_tree = _resolve_russia_active_tree(eval_state)
+		if not rus_tree.is_empty():
+			return rus_tree
+
+	# 2. Проверка манифестных переходов (transitions)
 	for tr in manifest_transitions:
 		var target = str(tr.get("target_tree", tr.get("target", "")))
 		if target.is_empty():
@@ -110,61 +125,219 @@ func resolve_active_tree(tag: String, state: CountryState) -> String:
 			if ConditionEvaluator.evaluate(cond, eval_state):
 				return target
 
-	# 2. Оценка деревьев стадий на основе activation_ast и приоритетов
-	var candidate_list: Array[Dictionary] = []
-	for tid in trees_manifest.keys():
-		var t_meta: Dictionary = trees_manifest[tid]
-		var priority: int = int(t_meta.get("priority", 0))
-
-		# Если приоритет не задан явно, присваиваем вес по категории стадии
-		if not t_meta.has("priority"):
-			var stage = str(t_meta.get("stage_category", "GENERAL")).to_upper()
-			match stage:
-				"FINAL": priority = 100
-				"SUPERREGIONAL": priority = 80
-				"REGIONAL": priority = 60
-				"CRISIS": priority = 50
-				"LEADERSHIP": priority = 40
-				"GENERAL": priority = 20
-				"PROLOGUE": priority = 10
-				_: priority = 0
-
-		var act_ast = t_meta.get("activation_ast", {})
-		var satisfies_conditions := true
-
-		if eval_state != null and not act_ast.is_empty():
-			satisfies_conditions = ConditionEvaluator.evaluate(act_ast, eval_state)
-
-		# Дополнительные контекстные проверки: лидер, идеология, объединение
-		if satisfies_conditions and eval_state != null:
-			if t_meta.has("required_leader") and not str(t_meta["required_leader"]).is_empty():
-				if eval_state.leader_name.to_lower() != str(t_meta["required_leader"]).to_lower():
-					satisfies_conditions = false
-			if satisfies_conditions and t_meta.has("required_ideology") and not str(t_meta["required_ideology"]).is_empty():
-				var req_ideo = str(t_meta["required_ideology"]).to_lower()
-				if not eval_state.ruling_ideology.to_lower().contains(req_ideo) and not eval_state.ruling_party.to_lower().contains(req_ideo):
-					satisfies_conditions = false
-
-		if satisfies_conditions:
-			candidate_list.append({
-				"tree_id": tid,
-				"priority": priority,
-				"is_starting_tree": bool(t_meta.get("is_starting_tree", false)),
-				"stage_category": str(t_meta.get("stage_category", "GENERAL"))
-			})
-
-	if not candidate_list.is_empty():
-		candidate_list.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-			return int(a["priority"]) > int(b["priority"])
-		)
-		return str(candidate_list[0]["tree_id"])
-
 	# 3. Фолбэк на стартовое дерево из манифеста
 	var fallback_start = _select_starting_tree(eval_state)
 	if not fallback_start.is_empty():
 		return fallback_start
 
 	return current_tree_id if not current_tree_id.is_empty() else "tree"
+
+
+## Определение актуального дерева Германии: Агония -> Гражданская война (GCW) -> Послевоенное восстановление
+func _resolve_germany_active_tree(eval_state: CountryState) -> String:
+	if eval_state == null:
+		return _select_starting_tree(null)
+
+	var c_tag = eval_state.country_tag.to_upper()
+	var l_name = eval_state.leader_name.to_lower()
+
+	# 1. Победа в GCW / Послевоенная гегемония
+	if eval_state.has_flag("germany_unified") or eval_state.has_flag("post_cw_phase"):
+		var victor = str(eval_state.get_flag("gcw_victor", "")).to_upper()
+		if victor == "SPE" or c_tag == "SPE" or l_name.contains("speer"):
+			return "GER_speer_post_cw_tree"
+		elif victor == "BOR" or c_tag == "BOR" or l_name.contains("bormann"):
+			return "GER_bormann_post_cw_tree"
+		elif victor == "GOR" or c_tag == "GOR" or l_name.contains("göring") or l_name.contains("goering"):
+			return "GER_Germany_War_Tree"
+		elif victor == "HEY" or c_tag == "HEY" or l_name.contains("heydrich"):
+			return "GER_WW3"
+		return "GER_bormann_post_cw_tree"
+
+	# 2. Гражданская война (GCW Active)
+	var gcw_is_active: bool = eval_state.has_flag("gcw_active") or eval_state.has_flag("gcw_erupted") or c_tag in ["SPE", "BOR", "GOR", "HEY"]
+	if not gcw_is_active and turn_manager != null and turn_manager.has_node("GermanCivilWarManager"):
+		var gcw_mgr = turn_manager.get_node("GermanCivilWarManager")
+		if gcw_mgr != null and "gcw_active" in gcw_mgr and gcw_mgr.gcw_active:
+			gcw_is_active = true
+
+	if gcw_is_active:
+		if c_tag == "SPE" or eval_state.has_flag("successor_speer") or l_name.contains("speer"):
+			return "tno_speer_civil_war"
+		elif c_tag == "BOR" or eval_state.has_flag("successor_bormann") or l_name.contains("bormann"):
+			return "tno_bormann_civil_war"
+		elif c_tag == "GOR" or eval_state.has_flag("successor_goring") or l_name.contains("göring") or l_name.contains("goering"):
+			return "tno_goring_civil_war"
+		elif c_tag == "HEY" or eval_state.has_flag("successor_heydrich") or l_name.contains("heydrich"):
+			return "tno_heydrich_civil_war"
+		return "tno_speer_civil_war"
+
+	# 3. Выбор преемника в Агонии Гитлера
+	if eval_state.has_flag("successor_speer") or eval_state.has_flag("speer_appointed_successor"):
+		return "GER_speer_successor"
+	elif eval_state.has_flag("successor_bormann") or eval_state.has_flag("bormann_appointed_successor"):
+		return "GER_bormann_successor"
+	elif eval_state.has_flag("successor_goring") or eval_state.has_flag("goring_appointed_successor"):
+		return "GER_goring_successor"
+	elif eval_state.has_flag("successor_heydrich") or eval_state.has_flag("heydrich_appointed_successor"):
+		return "GER_heydrich_successor"
+
+	return _select_starting_tree(eval_state)
+
+
+## Определение актуального дерева США: Начальное -> Уотергейт -> Президентские выборы
+func _resolve_usa_active_tree(eval_state: CountryState) -> String:
+	if eval_state == null:
+		return _select_starting_tree(null)
+
+	var l_name = eval_state.leader_name.to_lower()
+
+	# 1. Избранный президент (1964, 1968, 1972)
+	if eval_state.has_flag("president_goldwater") or eval_state.has_flag("president_gld") or eval_state.get_flag("presidential_election_winner_1968", "") == "GOLDWATER" or l_name.contains("голдуотер") or l_name.contains("goldwater"):
+		return "USA_GLD_68"
+	elif eval_state.has_flag("president_hart") or eval_state.get_flag("presidential_election_winner_1968", "") == "HART" or l_name.contains("харт") or l_name.contains("hart"):
+		return "USA_Hart"
+	elif eval_state.has_flag("president_harrington") or eval_state.has_flag("president_har") or eval_state.get_flag("presidential_election_winner_1968", "") == "HARRINGTON" or l_name.contains("харрингтон") or l_name.contains("harrington"):
+		return "USA_HAR_68"
+	elif eval_state.has_flag("president_smith") or eval_state.has_flag("president_mcs") or eval_state.get_flag("presidential_election_winner_1968", "") == "SMITH" or l_name.contains("смит") or l_name.contains("smith"):
+		return "USA_MCS_68"
+	elif eval_state.has_flag("president_lemay") or l_name.contains("лемей") or l_name.contains("lemay"):
+		return "USA_LEMAY"
+	elif eval_state.has_flag("president_strom") or eval_state.has_flag("president_thurmond") or l_name.contains("термонд") or l_name.contains("thurmond"):
+		return "USA_STROM_60"
+	elif eval_state.has_flag("president_johnson") or eval_state.has_flag("president_lbj") or eval_state.get_flag("presidential_election_winner_1964", "") == "LBJ" or l_name.contains("johnson") or l_name.contains("джонсон"):
+		return "USA_LBJ_64"
+	elif eval_state.has_flag("president_kennedy") or eval_state.has_flag("president_rfk") or eval_state.get_flag("presidential_election_winner_1964", "") == "RFK" or l_name.contains("robert f. kennedy") or l_name.contains("кеннеди"):
+		return "USA_RFK_64"
+	elif eval_state.has_flag("president_wallace") or eval_state.has_flag("president_wal") or eval_state.get_flag("presidential_election_winner_1964", "") == "WALLACE" or l_name.contains("уоллес") or (l_name.contains("wallace") and not l_name.contains("bennett")):
+		return "USA_WAL_64"
+	elif eval_state.has_flag("president_bennett") or eval_state.has_flag("president_wfb") or eval_state.get_flag("presidential_election_winner_1964", "") == "BENNETT" or l_name.contains("беннетт") or l_name.contains("bennett"):
+		return "USA_WFB_64"
+
+	# 2. Уотергейт / Отставка Никсона -> Маккормак
+	if eval_state.has_flag("nixon_resigned") or eval_state.has_flag("watergate_resignation") or eval_state.has_flag("mccormack_presidency") or l_name.contains("mccormack") or l_name.contains("маккормак"):
+		return "USA_mccormack"
+
+	return _select_starting_tree(eval_state)
+
+
+## Определение актуального дерева России: Варлорд -> Регионал -> Суперирегионал -> Финал
+func _resolve_russia_active_tree(eval_state: CountryState) -> String:
+	if eval_state == null:
+		return _select_starting_tree(null)
+
+	if eval_state.has_flag("is_national_unifier") or eval_state.has_flag("2wrw_active"):
+		var final_tree = _get_best_candidate_for_category(eval_state, "FINAL")
+		if not final_tree.is_empty():
+			return final_tree
+
+	if eval_state.has_flag("is_superregional_unifier"):
+		var super_tree = _get_best_candidate_for_category(eval_state, "SUPERREGIONAL")
+		if not super_tree.is_empty():
+			return super_tree
+
+	if eval_state.has_flag("is_regional_unifier"):
+		var reg_tree = _get_best_candidate_for_category(eval_state, "REGIONAL")
+		if not reg_tree.is_empty():
+			return reg_tree
+
+	return _select_starting_tree(eval_state)
+
+
+## Поиск наилучшего дерева-кандидата для заданной стадии с учетом лидера и идеологии
+func _get_best_candidate_for_category(eval_state: CountryState, category: String) -> String:
+	var cat_upper = category.to_upper()
+	var cat_lower = category.to_lower()
+	var clean_tag = country_tag.to_upper().strip_edges()
+	if clean_tag.is_empty() and eval_state != null:
+		clean_tag = eval_state.country_tag.to_upper().strip_edges()
+
+	# 1. Сбор пула потенциальных кандидатов
+	var candidate_ids: Array[String] = []
+
+	for tid in trees_manifest.keys():
+		var s_tid = str(tid)
+		var t_meta: Dictionary = trees_manifest[tid]
+		var stage_cat = str(t_meta.get("stage_category", "")).to_upper()
+		if stage_cat == cat_upper or s_tid.to_lower().contains(cat_lower):
+			if not candidate_ids.has(s_tid):
+				candidate_ids.append(s_tid)
+
+	var trees_dir = "res://data/countries/%s/directives/trees" % clean_tag
+	if DirAccess.dir_exists_absolute(trees_dir):
+		var dir = DirAccess.open(trees_dir)
+		if dir != null:
+			dir.list_dir_begin()
+			var fn = dir.get_next()
+			while fn != "":
+				if not dir.current_is_dir() and fn.ends_with(".json") and fn.to_lower().contains(cat_lower):
+					var tid = fn.trim_suffix(".json")
+					if not candidate_ids.has(tid):
+						candidate_ids.append(tid)
+				fn = dir.get_next()
+
+	if candidate_ids.is_empty():
+		return ""
+
+	# 2. Выделение токенов лидера и идеологии
+	var leader_tokens: Array[String] = []
+	var l_name = eval_state.leader_name.to_lower() if eval_state != null else ""
+	var ideol = eval_state.ruling_ideology.to_lower() if eval_state != null else ""
+
+	if not l_name.is_empty():
+		var parts = l_name.split(" ")
+		for p in parts:
+			var cl = p.strip_edges()
+			if cl.length() >= 3:
+				leader_tokens.append(cl)
+
+	# 3. Скоринг кандидатов
+	var best_cand := ""
+	var best_score := -100
+
+	for cand in candidate_ids:
+		var c_lower = cand.to_lower()
+		var score := 0
+
+		if not clean_tag.is_empty() and c_lower.contains(clean_tag.to_lower()):
+			score += 25
+
+		if c_lower.contains(cat_lower):
+			score += 15
+
+		var t_meta: Dictionary = trees_manifest.get(cand, {})
+		if str(t_meta.get("stage_category", "")).to_upper() == cat_upper:
+			score += 15
+
+		var act_ast = t_meta.get("activation_ast", {})
+		if not act_ast.is_empty() and eval_state != null:
+			if ConditionEvaluator.evaluate(act_ast, eval_state):
+				score += 40
+			else:
+				score -= 60
+
+		for token in leader_tokens:
+			if c_lower.contains(token):
+				score += 50
+				break
+
+		if not ideol.is_empty():
+			if (ideol.contains("communist") or ideol.contains("socialist")) and (c_lower.contains("communist") or c_lower.contains("soc") or c_lower.contains("bukharin") or c_lower.contains("suslov") or c_lower.contains("zhdanov") or c_lower.contains("sablin")):
+				score += 20
+			elif (ideol.contains("fascist") or ideol.contains("national_socialism")) and (c_lower.contains("fascist") or c_lower.contains("serov") or c_lower.contains("gumilyov") or c_lower.contains("shafarevich") or c_lower.contains("rodzaevsky")):
+				score += 20
+			elif (ideol.contains("democrat") or ideol.contains("liberal") or ideol.contains("progressivism")) and (c_lower.contains("democrat") or c_lower.contains("stalina") or c_lower.contains("yeltsin")):
+				score += 20
+			elif (ideol.contains("despot") or ideol.contains("authoritarian")) and (c_lower.contains("despot") or c_lower.contains("morozov") or c_lower.contains("vlasov") or c_lower.contains("batov")):
+				score += 20
+			elif ideol.contains("burgund") and c_lower.contains("taboritsky"):
+				score += 30
+
+		if score > best_score:
+			best_score = score
+			best_cand = cand
+
+	return best_cand if best_score > 0 else ""
 
 
 ## Синхронизация текущего дерева: если вычисленное дерево не совпадает, переключает его
@@ -201,10 +374,80 @@ func _load_manifest_for_country(tag: String) -> void:
 					if tr is Dictionary:
 						manifest_transitions.append(tr)
 				var raw_trees = m_data.get("trees", [])
-				for t in raw_trees:
-					if t is Dictionary and t.has("tree_id"):
-						trees_manifest[str(t["tree_id"])] = t
+				if raw_trees is Dictionary:
+					for k in raw_trees.keys():
+						var val = raw_trees[k]
+						if val is Dictionary:
+							var tid = str(val.get("id", val.get("tree_id", k)))
+							val["tree_id"] = tid
+							if not val.has("stage_category"):
+								val["stage_category"] = _infer_stage_category_from_id(tid)
+							trees_manifest[tid] = val
+				elif raw_trees is Array:
+					for t in raw_trees:
+						if t is Dictionary:
+							var tid = str(t.get("tree_id", t.get("id", "")))
+							if not tid.is_empty():
+								t["tree_id"] = tid
+								if not t.has("stage_category"):
+									t["stage_category"] = _infer_stage_category_from_id(tid)
+								trees_manifest[tid] = t
 			file.close()
+
+	# Обогащение из trees_index.json при наличии
+	var index_path = "res://data/countries/%s/directives/trees_index.json" % country_tag
+	if FileAccess.file_exists(index_path):
+		var ifile = FileAccess.open(index_path, FileAccess.READ)
+		if ifile != null:
+			var ijson = JSON.new()
+			if ijson.parse(ifile.get_as_text()) == OK and ijson.data is Array:
+				for item in ijson.data:
+					if item is Dictionary and item.has("tree_id"):
+						var tid = str(item["tree_id"])
+						if trees_manifest.has(tid):
+							var existing: Dictionary = trees_manifest[tid]
+							for k in item.keys():
+								if not existing.has(k):
+									existing[k] = item[k]
+						else:
+							trees_manifest[tid] = item
+			ifile.close()
+
+	# Автоматическое обнаружение файлов из directives/trees
+	var trees_dir = "res://data/countries/%s/directives/trees" % country_tag
+	if DirAccess.dir_exists_absolute(trees_dir):
+		var dir = DirAccess.open(trees_dir)
+		if dir != null:
+			dir.list_dir_begin()
+			var fn = dir.get_next()
+			while fn != "":
+				if not dir.current_is_dir() and fn.ends_with(".json"):
+					var tid = fn.trim_suffix(".json")
+					if not trees_manifest.has(tid):
+						trees_manifest[tid] = {
+							"tree_id": tid,
+							"file": trees_dir + "/" + fn,
+							"stage_category": _infer_stage_category_from_id(tid)
+						}
+				fn = dir.get_next()
+
+
+## Определение категории геополитической стадии по идентификатору дерева
+func _infer_stage_category_from_id(tid: String) -> String:
+	var s = tid.to_lower()
+	if s.contains("start") or s.contains("intro") or s.contains("1962") or s.contains("initial"):
+		return "PROLOGUE"
+	elif s.contains("civil_war") or s.contains("cw"):
+		return "CRISIS"
+	elif s.contains("regional") and not s.contains("superregional"):
+		return "REGIONAL"
+	elif s.contains("superregional"):
+		return "SUPERREGIONAL"
+	elif s.contains("post_cw") or s.contains("final") or s.contains("2wrw"):
+		return "FINAL"
+	elif s.contains("successor"):
+		return "LEADERSHIP"
+	return "GENERAL"
 
 
 ## Высокоуровневая загрузка стадийного дерева нации
@@ -378,6 +621,9 @@ func switch_focus_tree(new_tree_id: String, preserve_history: bool = true) -> vo
 
 ## Загрузка структуры дерева из файловой системы
 func _load_tree_data(tree_id: String) -> Dictionary:
+	if _tree_data_cache.has(tree_id):
+		return _tree_data_cache[tree_id]
+
 	var candidate_paths: Array[String] = []
 
 	var raw_id: String = tree_id.trim_prefix("tree_")
@@ -387,7 +633,7 @@ func _load_tree_data(tree_id: String) -> Dictionary:
 	for check_id in [tree_id, raw_id, prefixed_id]:
 		if trees_manifest.has(check_id):
 			var meta: Dictionary = trees_manifest[check_id]
-			for k in ["path", "file_path", "legacy_path"]:
+			for k in ["path", "file_path", "legacy_path", "file"]:
 				if meta.has(k) and not str(meta[k]).is_empty():
 					var p_str = str(meta[k])
 					if not candidate_paths.has(p_str):
@@ -400,9 +646,21 @@ func _load_tree_data(tree_id: String) -> Dictionary:
 			var p2 = "res://data/countries/%s/directives/trees/%s.json" % [country_tag, tid]
 			var p3 = "res://data/countries/%s/directives/%s.json" % [country_tag, tid]
 			var p4 = "res://data/trees/%s.json" % tid
-			for p in [p1, p2, p3, p4]:
+			var p5 = "res://data/trees/tree_%s.json" % tid
+			for p in [p1, p2, p3, p4, p5]:
 				if not candidate_paths.has(p):
 					candidate_paths.append(p)
+
+	# 3. Для немецких претендентов (SPE, BOR, GOR, HEY) проверяем также GER
+	if country_tag in ["SPE", "BOR", "GOR", "HEY"]:
+		for tid in [tree_id, raw_id, prefixed_id]:
+			if not tid.is_empty():
+				var pg1 = "res://data/countries/GER/directives/tree_%s.json" % tid
+				var pg2 = "res://data/countries/GER/directives/trees/%s.json" % tid
+				var pg3 = "res://data/countries/GER/directives/%s.json" % tid
+				for pg in [pg1, pg2, pg3]:
+					if not candidate_paths.has(pg):
+						candidate_paths.append(pg)
 
 	if tree_id == "tree":
 		candidate_paths.insert(0, "res://data/countries/%s/directives/tree.json" % country_tag)
@@ -416,6 +674,7 @@ func _load_tree_data(tree_id: String) -> Dictionary:
 				var json = JSON.new()
 				if json.parse(f.get_as_text()) == OK and json.data is Dictionary:
 					f.close()
+					_tree_data_cache[tree_id] = json.data
 					return json.data
 				f.close()
 
@@ -542,9 +801,10 @@ func audit_directive_bypasses() -> void:
 
 ## Проверка автоматических условий смены стадии
 func _audit_stage_transitions(_turn: int) -> void:
-	if country_state == null or trees_manifest.is_empty():
+	if country_state == null:
 		return
 
+	# 1. Проверка манифестных переходов (transitions)
 	for tr in manifest_transitions:
 		var target = str(tr.get("target_tree", ""))
 		if target.is_empty() or target == current_tree_id:
@@ -558,23 +818,270 @@ func _audit_stage_transitions(_turn: int) -> void:
 			switch_focus_tree(target, keep)
 			return
 
-	if country_state.has_flag("is_regional_unifier") and current_stage_category != "REGIONAL" and current_stage_category != "SUPERREGIONAL":
-		_try_transition_to_category("REGIONAL")
-	elif country_state.has_flag("is_superregional_unifier") and current_stage_category != "SUPERREGIONAL":
-		_try_transition_to_category("SUPERREGIONAL")
+	# 2. Специфические сюжетные аудиты ключевых кризисов
+	var effective_tag = country_tag.to_upper()
+	if effective_tag.is_empty() and country_state != null:
+		effective_tag = country_state.country_tag.to_upper()
+
+	if effective_tag in ["GER", "SPE", "BOR", "GOR", "HEY"]:
+		if _audit_germany_stage_transitions():
+			return
+	elif effective_tag == "USA":
+		if _audit_usa_stage_transitions():
+			return
+	else:
+		if _audit_russia_stage_transitions():
+			return
 
 
-## Попытка найти подходящее дерево заданной стадии
+## Сюжетный аудит германского кризиса: Агония -> Гражданская война (GCW) -> Послевоенное древо
+func _audit_germany_stage_transitions() -> bool:
+	if country_state == null:
+		return false
+
+	var c_tag = country_state.country_tag.to_upper()
+	var l_name = country_state.leader_name.to_lower()
+
+	# Фаза 3: Победа в GCW / Послевоенное восстановление (Hegemony / Post-CW)
+	if country_state.has_flag("germany_unified") or country_state.has_flag("post_cw_phase"):
+		var victor = str(country_state.get_flag("gcw_victor", "")).to_upper()
+		var target_post_tree := ""
+		if victor == "SPE" or c_tag == "SPE" or l_name.contains("speer"):
+			target_post_tree = "GER_speer_post_cw_tree"
+		elif victor == "BOR" or c_tag == "BOR" or l_name.contains("bormann"):
+			target_post_tree = "GER_bormann_post_cw_tree"
+		elif victor == "GOR" or c_tag == "GOR" or l_name.contains("göring") or l_name.contains("goering"):
+			target_post_tree = "GER_Germany_War_Tree"
+		elif victor == "HEY" or c_tag == "HEY" or l_name.contains("heydrich"):
+			target_post_tree = "GER_WW3"
+		else:
+			target_post_tree = "GER_bormann_post_cw_tree"
+
+		if not target_post_tree.is_empty() and current_tree_id != target_post_tree:
+			print("[FocusStageController] GCW ПОБЕДА: Переключение на послевоенное древо [%s]" % target_post_tree)
+			stage_transition_requested.emit(target_post_tree, "gcw_post_war_victory")
+			switch_focus_tree(target_post_tree, false)
+			return true
+		return false
+
+	# Фаза 2: Взрыв Гражданской Войны (GCW Eruption)
+	var gcw_is_active: bool = country_state.has_flag("gcw_active") or country_state.has_flag("gcw_erupted") or c_tag in ["SPE", "BOR", "GOR", "HEY"]
+	if not gcw_is_active and turn_manager != null and turn_manager.has_node("GermanCivilWarManager"):
+		var gcw_mgr = turn_manager.get_node("GermanCivilWarManager")
+		if gcw_mgr != null and "gcw_active" in gcw_mgr and gcw_mgr.gcw_active:
+			gcw_is_active = true
+
+	if gcw_is_active:
+		var target_cw_tree := ""
+		if c_tag == "SPE" or country_state.has_flag("successor_speer") or l_name.contains("speer"):
+			target_cw_tree = "tno_speer_civil_war"
+		elif c_tag == "BOR" or country_state.has_flag("successor_bormann") or l_name.contains("bormann"):
+			target_cw_tree = "tno_bormann_civil_war"
+		elif c_tag == "GOR" or country_state.has_flag("successor_goring") or l_name.contains("göring") or l_name.contains("goering"):
+			target_cw_tree = "tno_goring_civil_war"
+		elif c_tag == "HEY" or country_state.has_flag("successor_heydrich") or l_name.contains("heydrich"):
+			target_cw_tree = "tno_heydrich_civil_war"
+		else:
+			target_cw_tree = "tno_speer_civil_war"
+
+		if not target_cw_tree.is_empty() and current_tree_id != target_cw_tree:
+			print("[FocusStageController] КРИЗИС GCW: Переключение на древо гражданской войны [%s]" % target_cw_tree)
+			stage_transition_requested.emit(target_cw_tree, "gcw_civil_war_eruption")
+			switch_focus_tree(target_cw_tree, true)
+			return true
+		return false
+
+	# Фаза 1: Выбор преемника в Агонии Гитлера (Hitler Agony Successor Choice)
+	var target_succ_tree := ""
+	if country_state.has_flag("successor_speer") or country_state.has_flag("speer_appointed_successor"):
+		target_succ_tree = "GER_speer_successor"
+	elif country_state.has_flag("successor_bormann") or country_state.has_flag("bormann_appointed_successor"):
+		target_succ_tree = "GER_bormann_successor"
+	elif country_state.has_flag("successor_goring") or country_state.has_flag("goring_appointed_successor"):
+		target_succ_tree = "GER_goring_successor"
+	elif country_state.has_flag("successor_heydrich") or country_state.has_flag("heydrich_appointed_successor"):
+		target_succ_tree = "GER_heydrich_successor"
+
+	if not target_succ_tree.is_empty() and current_tree_id != target_succ_tree and (current_tree_id == "GER_game_start_tree" or current_tree_id.is_empty()):
+		print("[FocusStageController] АГОНИЯ ГИТЛЕРА: Преемник выбран -> Переключение на древо [%s]" % target_succ_tree)
+		stage_transition_requested.emit(target_succ_tree, "hitler_successor_chosen")
+		switch_focus_tree(target_succ_tree, true)
+		return true
+
+	return false
+
+
+## Сюжетный аудит выборов США и кризиса Уотергейта
+func _audit_usa_stage_transitions() -> bool:
+	if country_state == null:
+		return false
+
+	var l_name = country_state.leader_name.to_lower()
+
+	# 1. Проверка избранных президентов (победа на выборах 1964, 1968, 1972)
+	var pres_tree := ""
+	if country_state.has_flag("president_johnson") or country_state.has_flag("president_lbj") or country_state.get_flag("presidential_election_winner_1964", "") == "LBJ" or l_name.contains("johnson") or l_name.contains("джонсон"):
+		pres_tree = "USA_LBJ_64"
+	elif country_state.has_flag("president_kennedy") or country_state.has_flag("president_rfk") or country_state.get_flag("presidential_election_winner_1964", "") == "RFK" or l_name.contains("robert f. kennedy") or l_name.contains("кеннеди"):
+		pres_tree = "USA_RFK_64"
+	elif country_state.has_flag("president_wallace") or country_state.has_flag("president_wal") or country_state.get_flag("presidential_election_winner_1964", "") == "WALLACE" or l_name.contains("уоллес") or (l_name.contains("wallace") and not l_name.contains("bennett")):
+		pres_tree = "USA_WAL_64"
+	elif country_state.has_flag("president_bennett") or country_state.has_flag("president_wfb") or country_state.get_flag("presidential_election_winner_1964", "") == "BENNETT" or l_name.contains("беннетт") or l_name.contains("bennett"):
+		pres_tree = "USA_WFB_64"
+	elif country_state.has_flag("president_goldwater") or country_state.has_flag("president_gld") or country_state.get_flag("presidential_election_winner_1968", "") == "GOLDWATER" or l_name.contains("голдуотер") or l_name.contains("goldwater"):
+		pres_tree = "USA_GLD_68"
+	elif country_state.has_flag("president_hart") or country_state.get_flag("presidential_election_winner_1968", "") == "HART" or l_name.contains("харт") or l_name.contains("hart"):
+		pres_tree = "USA_Hart"
+	elif country_state.has_flag("president_harrington") or country_state.has_flag("president_har") or country_state.get_flag("presidential_election_winner_1968", "") == "HARRINGTON" or l_name.contains("харрингтон") or l_name.contains("harrington"):
+		pres_tree = "USA_HAR_68"
+	elif country_state.has_flag("president_smith") or country_state.has_flag("president_mcs") or country_state.get_flag("presidential_election_winner_1968", "") == "SMITH" or l_name.contains("смит") or l_name.contains("smith"):
+		pres_tree = "USA_MCS_68"
+	elif country_state.has_flag("president_lemay") or l_name.contains("лемей") or l_name.contains("lemay"):
+		pres_tree = "USA_LEMAY"
+	elif country_state.has_flag("president_strom") or country_state.has_flag("president_thurmond") or l_name.contains("термонд") or l_name.contains("thurmond"):
+		pres_tree = "USA_STROM_60"
+
+	if not pres_tree.is_empty():
+		if current_tree_id != pres_tree:
+			print("[FocusStageController] ВЫБОРЫ США: Активен президент [%s] -> Переключение на древо [%s]" % [country_state.leader_name, pres_tree])
+			stage_transition_requested.emit(pres_tree, "us_presidential_election_active")
+			switch_focus_tree(pres_tree, true)
+			return true
+		return false
+
+	# 2. Уотергейт / Отставка Никсона -> Временная администрация Маккормака
+	if country_state.has_flag("nixon_resigned") or country_state.has_flag("watergate_resignation") or country_state.has_flag("mccormack_presidency") or l_name.contains("mccormack") or l_name.contains("маккормак"):
+		if current_tree_id != "USA_mccormack":
+			print("[FocusStageController] КРИЗИС США: Отставка Никсона -> Переключение на древо Маккормака [USA_mccormack]")
+			stage_transition_requested.emit("USA_mccormack", "nixon_resignation_mccormack")
+			switch_focus_tree("USA_mccormack", true)
+			return true
+		return false
+
+	return false
+
+
+## Сюжетный аудит этапов объединения России: Warlord -> Regional -> Superregional -> National Final
+func _audit_russia_stage_transitions() -> bool:
+	if country_state == null:
+		return false
+
+	if country_state.has_flag("is_regional_unifier") and current_stage_category != "REGIONAL" and current_stage_category != "SUPERREGIONAL" and current_stage_category != "FINAL":
+		return _try_transition_to_category("REGIONAL")
+	elif country_state.has_flag("is_superregional_unifier") and current_stage_category != "SUPERREGIONAL" and current_stage_category != "FINAL":
+		return _try_transition_to_category("SUPERREGIONAL")
+	elif (country_state.has_flag("is_national_unifier") or country_state.has_flag("2wrw_active")) and current_stage_category != "FINAL":
+		return _try_transition_to_category("FINAL")
+
+	return false
+
+
+## Попытка найти наиболее подходящее дерево заданной стадии с учетом лидера, идеологии и манифеста
 func _try_transition_to_category(category: String) -> bool:
+	var cat_upper = category.to_upper()
+	var cat_lower = category.to_lower()
+	var clean_tag = country_tag.to_upper().strip_edges()
+	if clean_tag.is_empty() and country_state != null:
+		clean_tag = country_state.country_tag.to_upper().strip_edges()
+
+	# 1. Сбор пула потенциальных кандидатов
+	var candidate_ids: Array[String] = []
+
+	# Из trees_manifest
 	for tid in trees_manifest.keys():
+		var s_tid = str(tid)
 		var t_meta: Dictionary = trees_manifest[tid]
-		if str(t_meta.get("stage_category", "")).to_upper() == category.to_upper():
-			var act_ast = t_meta.get("activation_ast", {})
-			if act_ast.is_empty() or ConditionEvaluator.evaluate(act_ast, country_state):
-				print("[FocusStageController] Геополитический скачок стадии [%s] -> Древо [%s]" % [category, tid])
-				stage_transition_requested.emit(tid, "geopolitical_stage_advance_" + category)
-				switch_focus_tree(tid, true)
-				return true
+		var stage_cat = str(t_meta.get("stage_category", "")).to_upper()
+		if stage_cat == cat_upper or s_tid.to_lower().contains(cat_lower):
+			if not candidate_ids.has(s_tid):
+				candidate_ids.append(s_tid)
+
+	# Из файловой директории страны
+	var trees_dir = "res://data/countries/%s/directives/trees" % clean_tag
+	if DirAccess.dir_exists_absolute(trees_dir):
+		var dir = DirAccess.open(trees_dir)
+		if dir != null:
+			dir.list_dir_begin()
+			var fn = dir.get_next()
+			while fn != "":
+				if not dir.current_is_dir() and fn.ends_with(".json") and fn.to_lower().contains(cat_lower):
+					var tid = fn.trim_suffix(".json")
+					if not candidate_ids.has(tid):
+						candidate_ids.append(tid)
+				fn = dir.get_next()
+
+	if candidate_ids.is_empty():
+		return false
+
+	# 2. Выделение токенов лидера и идеологии
+	var leader_tokens: Array[String] = []
+	var l_name = country_state.leader_name.to_lower() if country_state != null else ""
+	var ideol = country_state.ruling_ideology.to_lower() if country_state != null else ""
+
+	if not l_name.is_empty():
+		var parts = l_name.split(" ")
+		for p in parts:
+			var cl = p.strip_edges()
+			if cl.length() >= 3:
+				leader_tokens.append(cl)
+
+	# 3. Скоринг кандидатов
+	var best_cand := ""
+	var best_score := -100
+
+	for cand in candidate_ids:
+		var c_lower = cand.to_lower()
+		var score := 0
+
+		# Совпадение тега
+		if not clean_tag.is_empty() and c_lower.contains(clean_tag.to_lower()):
+			score += 25
+
+		# Совпадение категории стадии
+		if c_lower.contains(cat_lower):
+			score += 15
+
+		var t_meta: Dictionary = trees_manifest.get(cand, {})
+		if str(t_meta.get("stage_category", "")).to_upper() == cat_upper:
+			score += 15
+
+		# Оценка AST активации, если есть
+		var act_ast = t_meta.get("activation_ast", {})
+		if not act_ast.is_empty() and country_state != null:
+			if ConditionEvaluator.evaluate(act_ast, country_state):
+				score += 40
+			else:
+				score -= 60
+
+		# Совпадение лидера
+		for token in leader_tokens:
+			if c_lower.contains(token):
+				score += 50
+				break
+
+		# Совпадение идеологии
+		if not ideol.is_empty():
+			if (ideol.contains("communist") or ideol.contains("socialist")) and (c_lower.contains("communist") or c_lower.contains("soc") or c_lower.contains("bukharin") or c_lower.contains("suslov") or c_lower.contains("zhdanov") or c_lower.contains("sablin")):
+				score += 20
+			elif (ideol.contains("fascist") or ideol.contains("national_socialism")) and (c_lower.contains("fascist") or c_lower.contains("serov") or c_lower.contains("gumilyov") or c_lower.contains("shafarevich") or c_lower.contains("rodzaevsky")):
+				score += 20
+			elif (ideol.contains("democrat") or ideol.contains("liberal") or ideol.contains("progressivism")) and (c_lower.contains("democrat") or c_lower.contains("stalina") or c_lower.contains("yeltsin")):
+				score += 20
+			elif (ideol.contains("despot") or ideol.contains("authoritarian")) and (c_lower.contains("despot") or c_lower.contains("morozov") or c_lower.contains("vlasov") or c_lower.contains("batov")):
+				score += 20
+			elif ideol.contains("burgund") and c_lower.contains("taboritsky"):
+				score += 30
+
+		if score > best_score:
+			best_score = score
+			best_cand = cand
+
+	if not best_cand.is_empty() and best_score > 0 and best_cand != current_tree_id:
+		print("[FocusStageController] Геополитический скачок стадии [%s] -> Древо [%s] (Оценка: %d)" % [category, best_cand, best_score])
+		stage_transition_requested.emit(best_cand, "geopolitical_stage_advance_" + category)
+		switch_focus_tree(best_cand, true)
+		return true
+
 	return false
 
 

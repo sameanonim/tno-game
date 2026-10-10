@@ -129,12 +129,23 @@ func to_dict() -> Dictionary:
 """Deserializes FocusNodeData from a plain Dictionary."""
 static func from_dict(data: Dictionary) -> FocusNodeData:
 	var node := FocusNodeData.new()
-	node.id = StringName(data.get("id", ""))
-	node.text_id = StringName(data.get("text_id", node.id))
-	node.desc_id = StringName(data.get("desc_id", String(node.id) + "_desc"))
-	node.icon_path = str(data.get("icon_path", data.get("icon", "")))
-	node.relative_position_id = StringName(data.get("relative_position_id", ""))
-	node.custom_tooltip_id = StringName(data.get("custom_tooltip_id", data.get("custom_effect_tooltip", "")))
+	var raw_id = data.get("id")
+	node.id = StringName(str(raw_id)) if raw_id != null and not str(raw_id).is_empty() else &""
+
+	var raw_text = data.get("text_id")
+	node.text_id = StringName(str(raw_text)) if raw_text != null and not str(raw_text).is_empty() else node.id
+
+	var raw_desc = data.get("desc_id")
+	node.desc_id = StringName(str(raw_desc)) if raw_desc != null and not str(raw_desc).is_empty() else StringName(str(node.id) + "_desc")
+
+	var raw_icon = data.get("icon_path", data.get("icon"))
+	node.icon_path = str(raw_icon) if raw_icon != null else ""
+
+	var raw_rel = data.get("relative_position_id")
+	node.relative_position_id = StringName(str(raw_rel)) if raw_rel != null and not str(raw_rel).is_empty() else &""
+
+	var raw_tt = data.get("custom_tooltip_id", data.get("custom_effect_tooltip"))
+	node.custom_tooltip_id = StringName(str(raw_tt)) if raw_tt != null and not str(raw_tt).is_empty() else &""
 	node.coordinates_resolved = bool(data.get("coordinates_resolved", false))
 
 	var coords = data.get("grid_coord", [0, 0])
@@ -165,9 +176,10 @@ static func from_dict(data: Dictionary) -> FocusNodeData:
 			var g_arr: Array[StringName] = []
 			if group is Array:
 				for item in group:
-					g_arr.append(StringName(item))
-			elif group is String or group is StringName:
-				g_arr.append(StringName(group))
+					if item != null and not str(item).is_empty():
+						g_arr.append(StringName(str(item)))
+			elif group != null and not str(group).is_empty():
+				g_arr.append(StringName(str(group)))
 			parsed_prereqs.append(g_arr)
 	node.prerequisites = parsed_prereqs
 
@@ -176,7 +188,8 @@ static func from_dict(data: Dictionary) -> FocusNodeData:
 	var parsed_mut: Array[StringName] = []
 	if raw_mut is Array:
 		for item in raw_mut:
-			parsed_mut.append(StringName(item))
+			if item != null and not str(item).is_empty():
+				parsed_mut.append(StringName(str(item)))
 	node.mutually_exclusive = parsed_mut
 
 	# ASTs
