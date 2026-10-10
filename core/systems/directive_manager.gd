@@ -324,9 +324,21 @@ func _apply_completion_effects(dir: DirectiveResource, state: CountryState) -> v
 	if eff.has("country_events"):
 		for ev in eff["country_events"]:
 			directive_event_triggered.emit(str(ev), 0)
+	if eff.has("country_event"):
+		var ce = eff["country_event"]
+		if ce is Dictionary:
+			directive_event_triggered.emit(str(ce.get("id", "")), int(ce.get("days", 0)))
+		elif ce is String:
+			directive_event_triggered.emit(str(ce), 0)
 	if eff.has("news_events"):
 		for ev in eff["news_events"]:
 			directive_event_triggered.emit(str(ev), 0)
+	if eff.has("news_event"):
+		var ne = eff["news_event"]
+		if ne is Dictionary:
+			directive_event_triggered.emit(str(ne.get("id", "")), int(ne.get("days", 0)))
+		elif ne is String:
+			directive_event_triggered.emit(str(ne), 0)
 
 
 ## Вычисляет актуальный визуальный статус директивы для UI

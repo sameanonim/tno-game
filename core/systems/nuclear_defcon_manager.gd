@@ -348,6 +348,9 @@ func deserialize(data: Dictionary) -> void:
 	if data.has("active_crises") and data["active_crises"] is Dictionary:
 		active_crises = data["active_crises"].duplicate(true)
 	if data.has("escalation_history") and data["escalation_history"] is Array:
-		escalation_history = data["escalation_history"].duplicate(true)
+		escalation_history.clear()
+		for item in data["escalation_history"]:
+			if item is Dictionary:
+				escalation_history.append(item)
 
 	_sync_military_engine()

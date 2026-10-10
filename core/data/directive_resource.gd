@@ -519,6 +519,9 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 	if data.has("completion_reward") and data["completion_reward"] is Dictionary:
 		var raw_cr: Dictionary = data["completion_reward"]
 		_parse_hoi4_completion_reward(raw_cr, res)
+	elif data.has("completion_effects") and data["completion_effects"] is Dictionary:
+		var raw_ce: Dictionary = data["completion_effects"]
+		_parse_hoi4_completion_reward(raw_ce, res)
 
 	res.completion_effects = data.get("completion_effects", {}).duplicate(true)
 
@@ -558,17 +561,6 @@ static func _parse_hoi4_completion_reward(cr: Dictionary, res: DirectiveResource
 			"opcode": "MOD_MANPOWER",
 			"value": int(_safe_val_to_float(cr["add_manpower"]))
 		})
-	if cr.has("country_event"):
-		var ev_id := ""
-		if cr["country_event"] is Dictionary:
-			ev_id = str(cr["country_event"].get("id", ""))
-		elif cr["country_event"] is String:
-			ev_id = str(cr["country_event"])
-		if not ev_id.is_empty():
-			res.completion_rewards.append({
-				"opcode": "FIRE_EVENT",
-				"event_id": ev_id
-			})
 	if cr.has("set_country_flag"):
 		res.completion_rewards.append({
 			"opcode": "SET_FLAG",
@@ -579,8 +571,73 @@ static func _parse_hoi4_completion_reward(cr: Dictionary, res: DirectiveResource
 			"opcode": "TRANSFER_STATE",
 			"state_id": int(cr["transfer_state"])
 		})
+
+	# Рекурсивное извлечение нарративных событий (включая скрытые блоки hidden_effect)
+	_extract_events_from_dict(cr, res)
+
+	# Распаковка эффектов внутри hidden_effect
+	if cr.has("hidden_effect") and cr["hidden_effect"] is Dictionary:
+		var h_eff: Dictionary = cr["hidden_effect"]
+		if h_eff.has("add_political_power") and not cr.has("add_political_power"):
+			res.completion_rewards.append({
+				"opcode": "MOD_PC",
+				"value": _safe_val_to_float(h_eff["add_political_power"])
+			})
+		if h_eff.has("add_stability") and not cr.has("add_stability"):
+			res.completion_rewards.append({
+				"opcode": "MOD_STABILITY",
+				"value": _safe_val_to_float(h_eff["add_stability"])
+			})
+		if h_eff.has("set_country_flag") and not cr.has("set_country_flag"):
+			res.completion_rewards.append({
+				"opcode": "SET_FLAG",
+				"flag": str(h_eff["set_country_flag"])
+			})
+
 	for k in cr.keys():
 		res.completion_effects[k] = cr[k]
+
+
+static func _extract_events_from_dict(d: Dictionary, res: DirectiveResource) -> void:
+	if d.has("country_event"):
+		_append_event_rewards(d["country_event"], res, false)
+	if d.has("country_events"):
+		_append_event_rewards(d["country_events"], res, false)
+	if d.has("news_event"):
+		_append_event_rewards(d["news_event"], res, true)
+	if d.has("news_events"):
+		_append_event_rewards(d["news_events"], res, true)
+	if d.has("FIRE_EVENT"):
+		_append_event_rewards(d["FIRE_EVENT"], res, false)
+	if d.has("FIRE_NEWS"):
+		_append_event_rewards(d["FIRE_NEWS"], res, true)
+	if d.has("hidden_effect") and d["hidden_effect"] is Dictionary:
+		_extract_events_from_dict(d["hidden_effect"], res)
+	if d.has("custom_effect_tooltip") and d["custom_effect_tooltip"] is Dictionary:
+		_extract_events_from_dict(d["custom_effect_tooltip"], res)
+
+
+static func _append_event_rewards(raw_val: Variant, res: DirectiveResource, is_news: bool) -> void:
+	if raw_val is String:
+		var ev_id: String = str(raw_val).strip_edges()
+		if not ev_id.is_empty():
+			res.completion_rewards.append({
+				"opcode": "FIRE_NEWS" if is_news else "FIRE_EVENT",
+				"event_id": ev_id,
+				"days": 0
+			})
+	elif raw_val is Dictionary:
+		var ev_id: String = str(raw_val.get("id", raw_val.get("event_id", ""))).strip_edges()
+		var days: int = int(raw_val.get("days", raw_val.get("random_days", 0)))
+		if not ev_id.is_empty():
+			res.completion_rewards.append({
+				"opcode": "FIRE_NEWS" if is_news else "FIRE_EVENT",
+				"event_id": ev_id,
+				"days": days
+			})
+	elif raw_val is Array:
+		for item in raw_val:
+			_append_event_rewards(item, res, is_news)
 
 
 static func _safe_val_to_float(val: Variant) -> float:

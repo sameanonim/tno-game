@@ -64,11 +64,23 @@ func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 		return
 
 	if event_title != null:
-		event_title.text = ev.title
+		var raw_title: String = ev.title
+		var tr_title: String = raw_title
+		if has_node("/root/LocalizationManager"):
+			tr_title = get_node("/root/LocalizationManager").tr_key(raw_title, {}, raw_title)
+		elif TranslationServer.translate(raw_title) != raw_title:
+			tr_title = TranslationServer.translate(raw_title)
+		event_title.text = tr_title
 	if event_classification != null:
 		event_classification.text = ev.classification
 	if event_body != null:
-		event_body.text = ev.description
+		var raw_desc: String = ev.description
+		var tr_desc: String = raw_desc
+		if has_node("/root/LocalizationManager"):
+			tr_desc = get_node("/root/LocalizationManager").tr_key(raw_desc, {}, raw_desc)
+		elif TranslationServer.translate(raw_desc) != raw_desc:
+			tr_desc = TranslationServer.translate(raw_desc)
+		event_body.text = tr_desc
 
 	# Отображение исторической иллюстрации события (Event Picture)
 	var vbox: VBoxContainer = event_options_container.get_parent() as VBoxContainer
@@ -116,22 +128,29 @@ func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 	for i in range(ev.options.size()):
 		var opt_idx = i
 		var opt = ev.options[i]
-		var opt_text = opt.get("text", "ПРИНЯТЬ")
-		var req_cap = int(opt.get("required_cap", 0))
-		var req_pc = float(opt.get("required_pc", 0.0))
+		var opt_text: String = str(opt.get("text", opt.get("name", "")))
+		if opt_text.is_empty():
+			var n_key: String = str(opt.get("name_key", ""))
+			if not n_key.is_empty():
+				if has_node("/root/LocalizationManager"):
+					opt_text = get_node("/root/LocalizationManager").tr_key(n_key, {}, n_key)
+				else:
+					var tr_opt = TranslationServer.translate(n_key)
+					opt_text = tr_opt if tr_opt != n_key else n_key
+		if opt_text.is_empty():
+			opt_text = "ПРИНЯТЬ"
 
-		var can_afford = true
-		if player_state != null:
-			if req_cap > 0 and player_state.current_cap < req_cap:
-				can_afford = false
-			if req_pc > 0.0 and player_state.political_capital < req_pc:
-				can_afford = false
+		var eval_res: Dictionary = GameEvent.evaluate_option_availability(opt, player_state)
+		var can_afford: bool = bool(eval_res.get("allowed", true))
 
 		var btn := Button.new()
 		btn.text = opt_text
 		btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		btn.disabled = not can_afford
+		var tip: String = str(eval_res.get("effects_tooltip", ""))
+		if not tip.is_empty():
+			btn.tooltip_text = tip
 		TNOTheme.apply_button_style(btn, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.09, 0.04, 0.95))
 
 		btn.pressed.connect(func():
@@ -142,6 +161,9 @@ func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 		event_options_container.add_child(btn)
 
 	event_overlay.visible = true
+	if event_dialog != null:
+		event_dialog.visible = true
+	event_overlay.move_to_front()
 	if has_node("/root/AudioManager"):
 		get_node("/root/AudioManager").play_sfx("event_popup")
 

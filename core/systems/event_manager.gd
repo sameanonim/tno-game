@@ -244,6 +244,16 @@ func evaluate_turn_triggers(state: CountryState, turn_number: int = -1) -> Array
 		if s_ev.fire_only_once:
 			fired_events.append(s_ev.event_id)
 
+	# 1.5. Извлекаем накопленные немедленные модальные события
+	while not pending_modal_events.is_empty():
+		var p_ev: GameEvent = pending_modal_events.pop_front()
+		if p_ev != null:
+			if p_ev.fire_only_once and fired_events.has(p_ev.event_id):
+				continue
+			triggered.append(p_ev)
+			if p_ev.fire_only_once:
+				fired_events.append(p_ev.event_id)
+
 	# 2. Проверяем только активные условные триггеры текущей кампании
 	for ev_id in active_conditional_event_ids:
 		if fired_events.has(ev_id):
@@ -326,10 +336,12 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 	if option.has("required_cap"):
 		state.current_cap = maxi(state.current_cap - int(option["required_cap"]), 0)
 
-	var effects: Dictionary = option.get("effects", {})
-	if effects.is_empty():
+	var raw_effects: Dictionary = option.get("effects", {})
+	if raw_effects.is_empty():
 		event_resolved.emit(event.event_id, str(option.get("option_id", "")))
 		return
+
+	var effects: Dictionary = _flatten_effects(raw_effects)
 
 	# 2. ПОЛИТИЧЕСКИЙ КАПИТАЛ И ЛЕГИТИМНОСТЬ
 	_apply_numeric_mod(effects, ["MOD_PC", "modify_pc", "add_political_power"], func(val: float) -> void:
@@ -741,6 +753,21 @@ func _read_json_file(res_path: String) -> Variant:
 	return {}
 
 
+func _flatten_effects(eff: Dictionary) -> Dictionary:
+	var merged: Dictionary = eff.duplicate(true)
+	if merged.has("hidden_effect") and merged["hidden_effect"] is Dictionary:
+		var h_eff: Dictionary = merged["hidden_effect"]
+		for k in h_eff.keys():
+			if not merged.has(k):
+				merged[k] = h_eff[k]
+			elif merged[k] is Array:
+				if h_eff[k] is Array:
+					merged[k].append_array(h_eff[k])
+				else:
+					merged[k].append(h_eff[k])
+	return merged
+
+
 func _dispatch_or_schedule_event(ev_entry: Variant, state: CountryState) -> void:
 	var ev_id: String = ""
 	var days_delay: int = 0
@@ -749,7 +776,7 @@ func _dispatch_or_schedule_event(ev_entry: Variant, state: CountryState) -> void
 	if ev_entry is String:
 		ev_id = ev_entry
 	elif ev_entry is Dictionary:
-		ev_id = str(ev_entry.get("id", ""))
+		ev_id = str(ev_entry.get("id", ev_entry.get("event_id", "")))
 		days_delay = int(ev_entry.get("days", ev_entry.get("random_days", 0)))
 		if ev_entry.has("turns"):
 			days_delay = int(ev_entry["turns"]) * 7
@@ -757,8 +784,8 @@ func _dispatch_or_schedule_event(ev_entry: Variant, state: CountryState) -> void
 	if ev_id.is_empty():
 		return
 
-	if days_delay > 0:
-		var turns_delay: int = int(ceil(float(days_delay) / 7.0))
+	if days_delay > 1:
+		var turns_delay: int = maxi(1, int(round(float(days_delay) / 7.0)))
 		schedule_event(ev_id, turns_delay, cur_turn, state.country_tag if state != null else "")
 	else:
 		var sub_ev: GameEvent = get_or_load_event(ev_id)

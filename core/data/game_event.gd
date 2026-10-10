@@ -141,20 +141,30 @@ func to_dict() -> Dictionary:
 
 static func from_dict(data: Dictionary) -> GameEvent:
 	var ev = GameEvent.new()
-	ev.event_id = str(data.get("event_id", ""))
-	ev.title = str(data.get("title", "UNKNOWN EVENT"))
+	ev.event_id = str(data.get("event_id", data.get("id", "")))
+	ev.title = str(data.get("title", data.get("name", "UNKNOWN EVENT")))
 	ev.classification = str(data.get("classification", "[TOP SECRET]"))
-	ev.description = str(data.get("description", ""))
-	ev.portrait_path = str(data.get("portrait_path", ""))
+	ev.description = str(data.get("description", data.get("desc", data.get("text", ""))))
+	ev.portrait_path = str(data.get("portrait_path", data.get("picture", data.get("image", ""))))
 	ev.is_modal = bool(data.get("is_modal", true))
 	ev.fire_only_once = bool(data.get("fire_only_once", true))
-	
-	var cond = data.get("trigger_conditions", {})
+
+	var cond = data.get("trigger_conditions", data.get("trigger", {}))
 	if cond is Dictionary:
 		ev.trigger_conditions = cond.duplicate(true)
-	
+
 	var opts = data.get("options", [])
 	if opts is Array:
-		ev.options = opts.duplicate(true)
-	
+		var norm_opts: Array = []
+		for raw_opt in opts:
+			if raw_opt is Dictionary:
+				var opt_copy: Dictionary = raw_opt.duplicate(true)
+				var opt_txt: String = str(opt_copy.get("text", opt_copy.get("name", "")))
+				opt_copy["text"] = opt_txt
+				opt_copy["name"] = opt_txt
+				norm_opts.append(opt_copy)
+			else:
+				norm_opts.append(raw_opt)
+		ev.options = norm_opts
+
 	return ev

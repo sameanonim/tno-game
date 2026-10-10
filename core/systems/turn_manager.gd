@@ -428,8 +428,8 @@ func _on_directive_cancelled(dir: DirectiveResource, reason: String) -> void:
 
 func _on_directive_event_triggered(ev_id: String, delay_days: int = 0) -> void:
 	if event_manager != null:
-		if delay_days > 0:
-			var turns_delay = maxi(1, int(ceil(float(delay_days) / 7.0)))
+		if delay_days > 1:
+			var turns_delay = maxi(1, int(round(float(delay_days) / 7.0)))
 			event_manager.schedule_event(ev_id, turns_delay, current_turn, player_state.country_tag if player_state != null else "")
 		else:
 			var ev: GameEvent = event_manager.get_or_load_event(ev_id)
@@ -650,8 +650,6 @@ func end_turn() -> void:
 	if defcon_rep.get("is_armageddon", false):
 		_trigger_game_over(false, "Шкала DEFCON достигла уровня 1 (Ядерная Полночь). Термоядерный апокалипсис уничтожил мир.")
 
-	pending_modal_events.clear()
-
 	# Проверка результатов фронтов на захват регионов, боевые инциденты и капитуляцию
 	TurnTerritoryHandlerScript.resolve_military_reports(self, last_military_reports)
 
@@ -692,6 +690,9 @@ func end_turn() -> void:
 	var triggered_events: Array[GameEvent] = []
 	if event_manager != null:
 		triggered_events = event_manager.evaluate_turn_triggers(player_state, current_turn)
+		if not event_manager.pending_modal_events.is_empty():
+			pending_modal_events.append_array(event_manager.pending_modal_events)
+			event_manager.pending_modal_events.clear()
 
 	for ev in triggered_events:
 		if ev.is_modal:
@@ -740,6 +741,10 @@ func _process_directives_phase() -> void:
 
 
 func _display_next_modal_event() -> void:
+	if pending_modal_events.is_empty() and event_manager != null and not event_manager.pending_modal_events.is_empty():
+		pending_modal_events.append_array(event_manager.pending_modal_events)
+		event_manager.pending_modal_events.clear()
+
 	if pending_modal_events.is_empty():
 		_finalize_turn()
 		return
@@ -760,6 +765,9 @@ func resolve_modal_event_choice(event: GameEvent, option_index: int) -> void:
 		var chosen_opt: Dictionary = event.options[option_index]
 		if event_manager != null:
 			event_manager.resolve_event_option(event, chosen_opt, player_state)
+			if not event_manager.pending_modal_events.is_empty():
+				pending_modal_events.append_array(event_manager.pending_modal_events)
+				event_manager.pending_modal_events.clear()
 		elif event.has_method("resolve_option_effects"):
 			event.resolve_option_effects(chosen_opt, player_state)
 
