@@ -21,6 +21,7 @@ const TestCountryDossier = preload("res://tests/test_country_dossier.gd")
 const TestUtils = preload("res://tests/test_utils.gd")
 const TestParliamentEngine = preload("res://tests/test_parliament_engine.gd")
 const TestSocietalLaws = preload("res://tests/test_societal_laws.gd")
+const TestNarrativeEvents = preload("res://tests/test_narrative_events.gd")
 
 func _init() -> void:
 	print("================================================================")
@@ -42,7 +43,8 @@ func _init() -> void:
 		{"name": "CountryDossier Suite", "instance": TestCountryDossier.new()},
 		{"name": "Utils Suite", "instance": TestUtils.new()},
 		{"name": "ParliamentEngine Suite", "instance": TestParliamentEngine.new()},
-		{"name": "SocietalLaws Suite", "instance": TestSocietalLaws.new()}
+		{"name": "SocietalLaws Suite", "instance": TestSocietalLaws.new()},
+		{"name": "NarrativeEvents Suite", "instance": TestNarrativeEvents.new()}
 	]
 	
 	var total_passed: int = 0

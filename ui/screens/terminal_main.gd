@@ -711,8 +711,9 @@ func _display_modal_event_fallback(event: GameEvent) -> void:
 			c.queue_free()
 		for idx in range(event.options.size()):
 			var opt = event.options[idx]
+			var opt_str: String = str(opt.get("text", opt.get("name", "Acknowledge")))
 			var btn := Button.new()
-			btn.text = "> %s" % opt.get("text", "Acknowledge")
+			btn.text = "> %s" % opt_str
 			var captured_idx = idx
 			btn.pressed.connect(func():
 				_on_event_option_selected(captured_idx)
