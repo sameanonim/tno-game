@@ -64,6 +64,21 @@ func register_tree(tree: FocusTreeData) -> void:
 func set_current_tree(tree: FocusTreeData) -> void:
 	current_tree = tree
 	register_tree(tree)
+	if current_tree:
+		current_tree.resolve_relative_coordinates()
+		update_branches_visibility()
+
+
+"""Dynamically evaluates allow_branch conditions on the current tree."""
+func update_branches_visibility() -> void:
+	if current_tree == null:
+		return
+	var scope := ScopeContext.new(country_state)
+	var diff: Dictionary = current_tree.update_branches_visibility(vm.evaluator, scope)
+	var hidden_arr: Array = diff.get("hidden", [])
+	var visible_arr: Array = diff.get("visible", [])
+	if not hidden_arr.is_empty() or not visible_arr.is_empty():
+		branch_replaced.emit(&"branch_visibility_updated")
 
 
 # ==============================================================================
@@ -94,15 +109,16 @@ func process_day(daily_factor: float = 1.0) -> void:
 	var scope := ScopeContext.new(country_state, node)
 
 	# 1. Auto-cancel verification: if available condition is invalidated mid-way
-	if not node.available_ast.is_empty():
-		var still_valid: bool = vm.evaluator.evaluate(node.available_ast, scope, true)
-		if not still_valid:
-			cancel_active_focus("Requirements no longer met")
-			return
-	if node.available_callable.is_valid():
-		if not node.available_callable.call(self, node):
-			cancel_active_focus("Requirements no longer met (Callable)")
-			return
+	if node.cancel_if_invalid:
+		if not node.available_ast.is_empty():
+			var still_valid: bool = vm.evaluator.evaluate(node.available_ast, scope, true)
+			if not still_valid:
+				cancel_active_focus("Requirements no longer met")
+				return
+		if node.available_callable.is_valid():
+			if not node.available_callable.call(self, node):
+				cancel_active_focus("Requirements no longer met (Callable)")
+				return
 
 	# 2. Check for bypass
 	if can_bypass_focus(node.id):

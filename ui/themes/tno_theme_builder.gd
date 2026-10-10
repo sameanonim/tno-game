@@ -61,22 +61,70 @@ static func get_texture(res_path: String) -> Texture2D:
 		return _texture_cache[res_path]
 	if ResourceLoader.exists(res_path):
 		var tex = load(res_path) as Texture2D
-		_texture_cache[res_path] = tex
-		return tex
+		if tex != null:
+			_texture_cache[res_path] = tex
+			return tex
+
+	# Fallback: динамическая загрузка неимпортированных изображений с диска
+	var global_path = ProjectSettings.globalize_path(res_path)
+	if FileAccess.file_exists(global_path) or FileAccess.file_exists(res_path):
+		var img = Image.new()
+		var p_to_load = global_path if FileAccess.file_exists(global_path) else res_path
+		var err = img.load(p_to_load)
+		if err == OK:
+			var itex = ImageTexture.create_from_image(img)
+			_texture_cache[res_path] = itex
+			return itex
 	return null
+
+const FLAG_ALIASES: Dictionary = {
+	"SPE": "SGR",
+	"HEY": "HGR",
+	"TYU": "TYM",
+	"SOV": "WRS_RUS",
+	"RUS": "WRS_RUS",
+	"SPN": "GER_speidel",
+	"DSR": "DSR",
+	"GOB": "GER_fascism"
+}
 
 static func get_flag_texture(country_tag: String) -> Texture2D:
 	var clean_tag = country_tag.strip_edges().to_upper()
-	var path = "res://assets/gfx/flags/%s.png" % clean_tag
-	var tex = get_texture(path)
-	if tex != null:
-		return tex
-	# Fallback flag search
-	for ext in ["_unified.png", "_communist.png", "_fascism.png", "_paternalism.png"]:
-		tex = get_texture("res://assets/gfx/flags/%s%s" % [clean_tag, ext])
-		if tex != null:
-			return tex
-	return get_texture("res://assets/gfx/flags/KOM.png")
+	var search_tags: Array[String] = [clean_tag]
+	if FLAG_ALIASES.has(clean_tag):
+		search_tags.append(str(FLAG_ALIASES[clean_tag]))
+
+	var dirs: Array[String] = [
+		"res://assets/gfx/flags",
+		"res://extracted_tno_data/gfx/flags"
+	]
+
+	# 1. Точное совпадение
+	for stag in search_tags:
+		for d in dirs:
+			var path = "%s/%s.png" % [d, stag]
+			var tex = get_texture(path)
+			if tex != null:
+				return tex
+
+	# 2. Идеологические и региональные расширения
+	var extensions: Array[String] = [
+		"_unified.png", "_communist.png", "_fascism.png", "_paternalism.png",
+		"_RUS.png", "_regional_unifier.png", "_socialist.png", "_liberalism.png"
+	]
+	for stag in search_tags:
+		for ext in extensions:
+			for d in dirs:
+				var path = "%s/%s%s" % [d, stag, ext]
+				var tex = get_texture(path)
+				if tex != null:
+					return tex
+
+	# 3. Гарантированный fallback
+	var kom_flag = get_texture("res://assets/gfx/flags/KOM.png")
+	if kom_flag != null:
+		return kom_flag
+	return get_texture("res://assets/gfx/flags/GER.png")
 
 static func get_ideology_icon(ideology_id: String) -> Texture2D:
 	var key = ideology_id.to_lower().strip_edges()

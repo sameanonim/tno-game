@@ -91,6 +91,68 @@ func replace_branch(root_id: StringName, new_branch_data: FocusTreeData, remove_
 			add_node(node)
 
 
+"""Resolves relative_position_id across all nodes to compute absolute grid_coord values."""
+func resolve_relative_coordinates() -> void:
+	var memo: Dictionary = {}
+	var visiting: Dictionary = {}
+
+	var resolve_node: Callable
+	resolve_node = func(node_id: StringName) -> Vector2i:
+		if memo.has(node_id):
+			return memo[node_id]
+		var node = get_node(node_id)
+		if node == null:
+			return Vector2i.ZERO
+		if visiting.has(node_id):
+			return node.grid_coord
+
+		visiting[node_id] = true
+		var final_pos = node.grid_coord
+		if node.relative_position_id != &"" and node.relative_position_id != node_id and nodes.has(node.relative_position_id):
+			var parent_pos: Vector2i = resolve_node.call(node.relative_position_id)
+			final_pos = parent_pos + node.grid_coord
+		visiting.erase(node_id)
+		memo[node_id] = final_pos
+		node.grid_coord = final_pos
+		return final_pos
+
+	for nid in nodes.keys():
+		resolve_node.call(nid)
+
+
+"""
+Dynamically evaluates allow_branch_ast triggers on all nodes,
+updating their is_hidden status. Returns dictionaries of changed node IDs.
+"""
+func update_branches_visibility(evaluator: Variant, scope: Variant) -> Dictionary:
+	var newly_hidden: Array[StringName] = []
+	var newly_shown: Array[StringName] = []
+
+	for nid in nodes.keys():
+		var node = nodes[nid]
+		if not (node is FocusNodeData):
+			continue
+		if node.allow_branch_ast.is_empty():
+			continue
+
+		var is_allowed: bool = true
+		if evaluator != null and evaluator.has_method("evaluate"):
+			is_allowed = evaluator.evaluate(node.allow_branch_ast, scope, true)
+
+		var should_hide = not is_allowed
+		if node.is_hidden != should_hide:
+			node.is_hidden = should_hide
+			if should_hide:
+				newly_hidden.append(node.id)
+			else:
+				newly_shown.append(node.id)
+
+	return {
+		"hidden": newly_hidden,
+		"visible": newly_shown
+	}
+
+
 """Serializes the entire tree into a plain Dictionary."""
 func to_dict() -> Dictionary:
 	var nodes_serialized: Dictionary = {}
@@ -132,4 +194,5 @@ static func from_dict(data: Dictionary) -> FocusTreeData:
 		for b in raw_branches:
 			tree.shared_focus_branches.append(StringName(b))
 
+	tree.resolve_relative_coordinates()
 	return tree

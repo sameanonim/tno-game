@@ -131,6 +131,36 @@ static func load_country(tag: String) -> CountryState:
 			if m_info is Dictionary:
 				state.cabinet_members.append(LeaderResource.from_dict(m_info))
 
+	if state.cabinet_members.is_empty():
+		var canonical_mins = CountrySelectDossierBuilder.get_canonical_ministers(clean_tag)
+		var roles_order = [
+			{"key": "hog", "default_role": "Глава правительства", "title": "Премьер-министр"},
+			{"key": "for", "default_role": "Министр иностранных дел", "title": "Министр иностранных дел"},
+			{"key": "eco", "default_role": "Министр экономики", "title": "Министр экономики"},
+			{"key": "sec", "default_role": "Министр безопасности", "title": "Министр безопасности"}
+		]
+		for r_def in roles_order:
+			var r_key: String = r_def["key"]
+			if canonical_mins.has(r_key):
+				var m_data: Dictionary = canonical_mins[r_key]
+				var lr := LeaderResource.new()
+				lr.leader_name = str(m_data.get("name", "Министр"))
+				lr.role_type = str(m_data.get("full", r_def["default_role"]))
+				lr.title = str(m_data.get("full", r_def["title"]))
+				lr.portrait_path = str(m_data.get("portrait", ""))
+				if lr.portrait_path.is_empty():
+					lr.portrait_path = "res://icon.svg"
+				lr.description = "%s\n%s" % [str(m_data.get("dep", "")), str(m_data.get("effects", ""))]
+				lr.ideology = state.ruling_ideology
+				lr.cabinet_influence = 80.0
+				lr.loyalty = 85.0
+				lr.stat_military = 75.0 if r_key == "sec" else 50.0
+				lr.stat_economy = 80.0 if r_key == "eco" else 50.0
+				lr.stat_politics = 85.0 if r_key == "hog" else (75.0 if r_key == "for" else 50.0)
+				lr.stat_diplomacy = 85.0 if r_key == "for" else 50.0
+				state.cabinet_members.append(lr)
+
+
 	# Сборка военачальников
 	var commanders_raw = profile_data.get("commanders", profile_data.get("military_commanders", []))
 	state.military_commanders.clear()
@@ -249,7 +279,124 @@ static func _ensure_authentic_tno_politics(state: CountryState) -> void:
 					"desc": "Хрупкий альянс республиканцев и демократов противостоит националистической коалиции NPP.\nПолитический капитал: +5/ход"
 				}
 			]
-		elif tag in ["WRS", "KOM", "OMS", "SVR", "SAM", "NOV", "TYU", "IRK", "CHT", "MAG", "KEM", "VYT", "BRY", "SBA", "ONE", "ORE", "ZLT", "DRL", "MGN"]:
+		elif tag in ["JAP"]:
+			state.national_spirits = [
+				{
+					"id": "spirit_sphere_hegemon",
+					"name": "Гегемон Сферы Сопроцветания",
+					"icon": "res://assets/gfx/interface/goals/focus_GER_a_common_goal.png",
+					"desc": "Токио диктует законы всей Восточной Азии, извлекая ресурсы и промышленные товары из колоний.\nПриток сырья: +35%\nДипломатический вес: +25%"
+				},
+				{
+					"id": "spirit_zaibatsu_monopoly",
+					"name": "Засилье Концернов Дзайбацу",
+					"icon": "res://assets/gfx/interface/industrial_capacity_icon.png",
+					"desc": "Гигантские финансовые кланы Mitsubishi, Mitsui и Sumitomo контролируют министров и подавляют конкуренцию.\nДоходы бюджета: +15%\nОбщественное недовольство: +10%"
+				},
+				{
+					"id": "spirit_army_navy_rivalry",
+					"name": "Вражда Армии и Императорского Флота",
+					"icon": "res://assets/gfx/interface/war_support_icon.png",
+					"desc": "Непримиримая борьба IJA и IJN за бюджет и влияние саботирует координацию обороны Империи.\nЭффективность совместных операций: -20%\nКоррупция военных ведомств: +15%"
+				}
+			]
+		elif tag in ["ITA"]:
+			state.national_spirits = [
+				{
+					"id": "spirit_triumvirate_leader",
+					"name": "Лидер Средиземноморского Триумвирата",
+					"icon": "res://assets/gfx/interface/goals/focus_GER_a_common_goal.png",
+					"desc": "Рим претендует на роль альтернативного центра силы между Берлином и Вашингтоном.\nВлияние на Балканах и Ближнем Востоке: +25%"
+				},
+				{
+					"id": "spirit_fading_fascism",
+					"name": "Усталость и Закат Фашизма",
+					"icon": "res://assets/gfx/interface/war_support_icon.png",
+					"desc": "Стареющий Дучe и циничное общество теряют веру в идеалы чернорубашечников. Назревает кризис.\nПолитическая апатия: +15%\nСтойкость режима: Падающая"
+				},
+				{
+					"id": "spirit_battle_for_oil",
+					"name": "Битва за Ближневосточную Нефть",
+					"icon": "res://assets/gfx/interface/industrial_capacity_icon.png",
+					"desc": "Итальянская промышленность критически зависит от поставок черного золота из Ирака и Персидского залива.\nТопливный резерв: 90 дней"
+				}
+			]
+		elif tag in ["IBR"]:
+			state.national_spirits = [
+				{
+					"id": "spirit_fragile_union",
+					"name": "Хрупкий Иберийский Пакт (Франко-Салазар)",
+					"icon": "res://assets/gfx/interface/pol_power_icon.png",
+					"desc": "Вынужденный альянс Мадрида и Лиссабона раздирают взаимное недоверие и экономический дисбаланс.\nСтабильность пакта: Хрупкая\nРиск распада при кризисе: Высокий"
+				},
+				{
+					"id": "spirit_iberian_separatism",
+					"name": "Угроза Баскского и Каталонского Сепаратизма",
+					"icon": "res://assets/gfx/interface/war_support_icon.png",
+					"desc": "Национальные меньшинства ведут подпольную войну против централизаторской политики режима.\nСопротивление в провинциях: +20%"
+				}
+			]
+		elif tag in ["BRG"]:
+			state.national_spirits = [
+				{
+					"id": "spirit_black_sun_reign",
+					"name": "Царство Черного Солнца",
+					"icon": "res://assets/gfx/interface/war_support_icon.png",
+					"desc": "Спартанский тоталитарный орден СС превратил Бургундию в колоссальный концлагерь.\nКонтроль населения: 100%\nГуманность: 0%"
+				},
+				{
+					"id": "spirit_apocalypse_plot",
+					"name": "План Ядерного Очищения Мира",
+					"icon": "res://assets/gfx/interface/goals/focus_GER_the_second_bormann_ausschuss.png",
+					"desc": "Гиммлер и эсэсовцы готовят глобальную ядерную войну, надеясь пережить ее в подземных бункерах.\nСкорость создания бункеров: +35%"
+				}
+			]
+		elif tag in ["GNG"]:
+			state.national_spirits = [
+				{
+					"id": "spirit_cyber_capitalism",
+					"name": "Кибернетический Капитализм Гуандуна",
+					"icon": "res://assets/gfx/interface/industrial_capacity_icon.png",
+					"desc": "Передовые заводы полупроводников и электроники работают рука об руку с жестокой эксплуатацией рабочих.\nВыпуск электроники: +35%\nЧеловеческая цена: Запредельная"
+				},
+				{
+					"id": "spirit_triad_underworld",
+					"name": "Власть Триад и Контрабандистов",
+					"icon": "res://assets/gfx/interface/war_support_icon.png",
+					"desc": "Улицы Коулуна и трущобы контролируются криминальными синдикатами в сговоре с полицией.\nТеневая экономика: 28% ВВП"
+				}
+			]
+		elif tag in ["CHI"]:
+			state.national_spirits = [
+				{
+					"id": "spirit_subjugated_dragon",
+					"name": "Униженный Дракон Поднебесной",
+					"icon": "res://assets/gfx/interface/war_support_icon.png",
+					"desc": "Нанкинское правительство формально покорно Токио, но копит силы к грядущей Великой Азиатской Войне.\nВоенная скрытность: +30%\nТерпение нации: Стальное"
+				},
+				{
+					"id": "spirit_gao_modernization",
+					"name": "План Возрождения Гао Цзунъу",
+					"icon": "res://assets/gfx/interface/industrial_capacity_icon.png",
+					"desc": "Тайное строительство оборонных заводов в глубине провинций вдали от глаз Квантунской армии.\nСкорость тайной индустриализации: +25%"
+				}
+			]
+		elif tag in ["OMS"]:
+			state.national_spirits = [
+				{
+					"id": "spirit_great_trial",
+					"name": "Идеология Великого Суда (Черная Лига)",
+					"icon": "res://assets/gfx/interface/war_support_icon.png",
+					"desc": "Вся жизнь Омска подчинена одной цели — ядерному возмездию Тевтонскому врагу.\nБоевой дух солдат: Фанатичный\nПотери не имеют значения"
+				},
+				{
+					"id": "spirit_underground_citadel",
+					"name": "Подземная Цитадель Омска",
+					"icon": "res://assets/gfx/interface/industrial_capacity_icon.png",
+					"desc": "Оборонные заводы и казармы укрыты глубоко в скальных толщах от налетов Люфтваффе.\nСтойкость к бомбардировкам: +50%"
+				}
+			]
+		elif tag in ["WRS", "KOM", "SVR", "SAM", "NOV", "TYU", "TYM", "IRK", "CHT", "MAG", "KEM", "VYT", "BRY", "SBA", "ONE", "ORE", "ZLT", "DRL", "MGN"]:
 			state.national_spirits = [
 				{
 					"id": "spirit_terror_bombings",

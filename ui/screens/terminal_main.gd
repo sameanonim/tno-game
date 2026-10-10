@@ -270,6 +270,9 @@ func _ready() -> void:
 	_populate_sample_directives()
 	_populate_sample_events()
 
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").attach_ui_sounds(self)
+
 
 func _setup_hotkey_controller() -> void:
 	if _hotkey_controller_node == null:
@@ -793,6 +796,8 @@ func _update_localized_ui() -> void:
 
 func _on_end_turn_pressed() -> void:
 	btn_end_turn.disabled = true
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("counter_tick")
 	if sound_fx != null:
 		sound_fx.play_telegraph_chirp()
 	label_log.text = "TRANSMITTING TELEGRAPH ORDERS... COMPUTING CYCLE..."
@@ -801,6 +806,8 @@ func _on_end_turn_pressed() -> void:
 
 func _on_turn_started(_turn: int, _date_str: String) -> void:
 	btn_end_turn.disabled = false
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("page_flip")
 	_update_hud()
 	if directive_tree_view != null:
 		directive_tree_view.refresh_tree()

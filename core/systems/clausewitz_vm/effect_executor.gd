@@ -52,6 +52,7 @@ func _register_default_handlers() -> void:
 	# Variable manipulation
 	handlers[&"set_variable"] = Callable(self, "_handle_set_variable")
 	handlers[&"add_to_variable"] = Callable(self, "_handle_add_to_variable")
+	handlers[&"subtract_from_variable"] = Callable(self, "_handle_subtract_from_variable")
 	handlers[&"multiply_variable"] = Callable(self, "_handle_multiply_variable")
 	handlers[&"divide_variable"] = Callable(self, "_handle_divide_variable")
 	handlers[&"clamp_variable"] = Callable(self, "_handle_clamp_variable")
@@ -71,7 +72,13 @@ func _register_default_handlers() -> void:
 	# Narrative & Flow
 	handlers[&"country_event"] = Callable(self, "_handle_country_event")
 	handlers[&"set_focus_tree"] = Callable(self, "_handle_set_focus_tree")
+	handlers[&"load_focus_tree"] = Callable(self, "_handle_set_focus_tree")
 	handlers[&"swap_ideas"] = Callable(self, "_handle_swap_ideas")
+	handlers[&"add_ideas"] = Callable(self, "_handle_add_idea")
+	handlers[&"add_idea"] = Callable(self, "_handle_add_idea")
+	handlers[&"remove_ideas"] = Callable(self, "_handle_remove_idea")
+	handlers[&"remove_idea"] = Callable(self, "_handle_remove_idea")
+	handlers[&"custom_effect_tooltip"] = Callable(self, "_handle_custom_tooltip")
 	handlers[&"log"] = Callable(self, "_handle_log")
 
 
@@ -81,7 +88,7 @@ func _register_default_handlers() -> void:
 
 func _handle_set_variable(args: Dictionary, scope: ScopeContext) -> void:
 	var tag = scope.get_root_tag()
-	var var_name = StringName(args.get("var", args.get("name", "")))
+	var var_name = StringName(args.get("which", args.get("var", args.get("name", ""))))
 	var val = float(args.get("value", args.get("val", 0.0)))
 	if var_name == &"" and args.size() == 1:
 		var_name = StringName(args.keys()[0])
@@ -91,7 +98,7 @@ func _handle_set_variable(args: Dictionary, scope: ScopeContext) -> void:
 
 func _handle_add_to_variable(args: Dictionary, scope: ScopeContext) -> void:
 	var tag = scope.get_root_tag()
-	var var_name = StringName(args.get("var", args.get("name", "")))
+	var var_name = StringName(args.get("which", args.get("var", args.get("name", ""))))
 	var val = float(args.get("value", args.get("val", 0.0)))
 	if var_name == &"" and args.size() == 1:
 		var_name = StringName(args.keys()[0])
@@ -99,9 +106,19 @@ func _handle_add_to_variable(args: Dictionary, scope: ScopeContext) -> void:
 	registry.add_to_variable(tag, var_name, val)
 
 
+func _handle_subtract_from_variable(args: Dictionary, scope: ScopeContext) -> void:
+	var tag = scope.get_root_tag()
+	var var_name = StringName(args.get("which", args.get("var", args.get("name", ""))))
+	var val = float(args.get("value", args.get("val", 0.0)))
+	if var_name == &"" and args.size() == 1:
+		var_name = StringName(args.keys()[0])
+		val = float(args.values()[0])
+	registry.add_to_variable(tag, var_name, -val)
+
+
 func _handle_multiply_variable(args: Dictionary, scope: ScopeContext) -> void:
 	var tag = scope.get_root_tag()
-	var var_name = StringName(args.get("var", args.get("name", "")))
+	var var_name = StringName(args.get("which", args.get("var", args.get("name", ""))))
 	var val = float(args.get("value", args.get("val", 1.0)))
 	if var_name == &"" and args.size() == 1:
 		var_name = StringName(args.keys()[0])
@@ -111,7 +128,7 @@ func _handle_multiply_variable(args: Dictionary, scope: ScopeContext) -> void:
 
 func _handle_divide_variable(args: Dictionary, scope: ScopeContext) -> void:
 	var tag = scope.get_root_tag()
-	var var_name = StringName(args.get("var", args.get("name", "")))
+	var var_name = StringName(args.get("which", args.get("var", args.get("name", ""))))
 	var val = float(args.get("value", args.get("val", 1.0)))
 	if var_name == &"" and args.size() == 1:
 		var_name = StringName(args.keys()[0])
@@ -121,7 +138,7 @@ func _handle_divide_variable(args: Dictionary, scope: ScopeContext) -> void:
 
 func _handle_clamp_variable(args: Dictionary, scope: ScopeContext) -> void:
 	var tag = scope.get_root_tag()
-	var var_name = StringName(args.get("var", args.get("name", "")))
+	var var_name = StringName(args.get("which", args.get("var", args.get("name", ""))))
 	var min_val = float(args.get("min", 0.0))
 	var max_val = float(args.get("max", 100.0))
 	registry.clamp_variable(tag, var_name, min_val, max_val)
@@ -192,7 +209,9 @@ func _handle_country_event(args: Dictionary, scope: ScopeContext) -> void:
 
 
 func _handle_set_focus_tree(args: Dictionary, _scope: ScopeContext) -> void:
-	var tree_id = StringName(str(args.get("id", args.get("tree", ""))))
+	var tree_id = StringName(str(args.get("which", args.get("id", args.get("tree", args.get("value", ""))))))
+	if tree_id == &"" and not args.is_empty():
+		tree_id = StringName(str(args.values()[0]))
 	if tree_id != &"":
 		tree_swap_requested.emit(tree_id)
 
@@ -206,6 +225,33 @@ func _handle_swap_ideas(args: Dictionary, scope: ScopeContext) -> void:
 			spirits.erase(remove_id)
 		if not add_id.is_empty() and not spirits.has(add_id):
 			spirits.append(add_id)
+
+
+func _handle_add_idea(args: Dictionary, scope: ScopeContext) -> void:
+	var idea_id = str(args.get("idea", args.get("value", args.get("name", ""))))
+	if idea_id == "" and not args.is_empty():
+		idea_id = str(args.values()[0])
+	if scope.root and "national_spirits" in scope.root:
+		var spirits: Array = scope.root.get("national_spirits")
+		if not idea_id.is_empty() and not spirits.has(idea_id):
+			spirits.append(idea_id)
+
+
+func _handle_remove_idea(args: Dictionary, scope: ScopeContext) -> void:
+	var idea_id = str(args.get("idea", args.get("value", args.get("name", ""))))
+	if idea_id == "" and not args.is_empty():
+		idea_id = str(args.values()[0])
+	if scope.root and "national_spirits" in scope.root:
+		var spirits: Array = scope.root.get("national_spirits")
+		if not idea_id.is_empty():
+			spirits.erase(idea_id)
+
+
+func _handle_custom_tooltip(args: Dictionary, _scope: ScopeContext) -> void:
+	var tt = str(args.get("tooltip", args.get("value", args.get("text", ""))))
+	if tt == "" and not args.is_empty():
+		tt = str(args.values()[0])
+	# Logged or cached for UI presentation
 
 
 func _handle_log(args: Dictionary, _scope: ScopeContext) -> void:

@@ -28,6 +28,8 @@ var super_event_modal: TNOSuperEventModal = null
 var current_modal_event: GameEvent = null
 var game_over_modal: Control = null
 
+const EVENT_PICTURE_SHADER = preload("res://shaders/event_picture_crt.gdshader")
+
 
 func setup(
 	overlay: Control,
@@ -68,6 +70,46 @@ func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 	if event_body != null:
 		event_body.text = ev.description
 
+	# Отображение исторической иллюстрации события (Event Picture)
+	var vbox: VBoxContainer = event_options_container.get_parent() as VBoxContainer
+	if vbox != null:
+		var pic_rect: TextureRect = vbox.get_node_or_null("EventPictureRect") as TextureRect
+		var ev_tex: Texture2D = null
+		if has_node("/root/AssetRegistry"):
+			var ar = get_node("/root/AssetRegistry")
+			if not ev.portrait_path.is_empty():
+				ev_tex = ar.get_event_picture(ev.portrait_path)
+			if ev_tex == null:
+				ev_tex = ar.get_event_picture(ev.event_id)
+
+		if ev_tex != null:
+			if pic_rect == null:
+				pic_rect = TextureRect.new()
+				pic_rect.name = "EventPictureRect"
+				pic_rect.custom_minimum_size = Vector2(0, 180)
+				pic_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				pic_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				var mat := ShaderMaterial.new()
+				mat.shader = EVENT_PICTURE_SHADER
+				mat.set_shader_parameter("phosphor_tint", Color(0.20, 0.90, 0.65, 1.0))
+				mat.set_shader_parameter("tint_mix", 0.40)
+				mat.set_shader_parameter("scanline_intensity", 0.22)
+				mat.set_shader_parameter("vignette_strength", 0.35)
+				mat.set_shader_parameter("reveal_progress", 1.0)
+				pic_rect.material = mat
+				vbox.add_child(pic_rect)
+				if event_body != null:
+					vbox.move_child(pic_rect, event_body.get_index())
+			pic_rect.texture = ev_tex
+			pic_rect.visible = true
+			if pic_rect.material is ShaderMaterial:
+				var smat: ShaderMaterial = pic_rect.material as ShaderMaterial
+				smat.set_shader_parameter("reveal_progress", 0.0)
+				var tween = pic_rect.create_tween()
+				tween.tween_method(func(v: float): smat.set_shader_parameter("reveal_progress", v), 0.0, 1.0, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		elif pic_rect != null:
+			pic_rect.visible = false
+
 	for child in event_options_container.get_children():
 		child.queue_free()
 
@@ -93,11 +135,15 @@ func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 		TNOTheme.apply_button_style(btn, TNOTheme.COLOR_BORDER_AMBER, Color(0.12, 0.09, 0.04, 0.95))
 
 		btn.pressed.connect(func():
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("click_ok")
 			_on_event_option_chosen(opt_idx)
 		)
 		event_options_container.add_child(btn)
 
 	event_overlay.visible = true
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("event_popup")
 
 
 func _on_event_option_chosen(index: int) -> void:

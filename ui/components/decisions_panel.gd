@@ -725,6 +725,8 @@ func _build_category_buttons() -> void:
 		TNOTheme.apply_button_style(btn, TNOTheme.COLOR_BORDER_CYAN if active_category == cat["id"] else TNOTheme.COLOR_BORDER_DIM)
 		var cid = cat["id"]
 		btn.pressed.connect(func():
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("decisions_tab")
 			active_category = cid
 			_build_category_buttons()
 			refresh_panel()
@@ -837,7 +839,19 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 		icon_path = "res://assets/gfx/interface/war_support_icon.png"
 	elif cat_str.contains("state") or cat_str.contains("stab") or cat_str.contains("polit"):
 		icon_path = "res://assets/gfx/interface/stability_icon.png"
-	icon_rect.texture = TNOTheme.get_texture(icon_path)
+
+	var dec_icon_key = str(dec.get("icon", ""))
+	var dec_tex: Texture2D = null
+	if is_inside_tree() and get_tree().root.has_node("AssetRegistry"):
+		var ar = get_tree().root.get_node("AssetRegistry")
+		if not dec_icon_key.is_empty():
+			dec_tex = ar.get_decision_icon(dec_icon_key)
+		if dec_tex == null:
+			dec_tex = ar.get_decision_icon(dec_id)
+	if dec_tex != null:
+		icon_rect.texture = dec_tex
+	else:
+		icon_rect.texture = TNOTheme.get_texture(icon_path)
 	hbox.add_child(icon_rect)
 
 	# Текстовое досье
@@ -912,6 +926,9 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 func _execute_decision(dec: Dictionary) -> void:
 	if player_state == null:
 		return
+
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("decisions_button")
 
 	var dec_id = str(dec.get("id", ""))
 	var cost_pc = float(dec.get("cost_pc", dec.get("cost", 0.0)))

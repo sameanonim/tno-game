@@ -34,6 +34,7 @@ var selected_theater_index: int = 0
 var selected_tag: String = "KOM"
 var config: RefCounted
 var current_bg_is_submod: bool = false
+var bg_mode_index: int = 0
 var sound_fx: TerminalSoundFx = null
 
 signal leader_selected(leader: LeaderResource)
@@ -324,10 +325,30 @@ func _setup_radio() -> void:
 		am.track_changed.connect(_on_radio_track_changed)
 	if not am.playback_state_changed.is_connected(_on_radio_playback_changed):
 		am.playback_state_changed.connect(_on_radio_playback_changed)
+	if am.has_signal("station_changed") and not am.station_changed.is_connected(_on_radio_station_changed):
+		am.station_changed.connect(_on_radio_station_changed)
+
+	if lbl_radio_title != null:
+		lbl_radio_title.mouse_filter = Control.MOUSE_FILTER_STOP
+		lbl_radio_title.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		if not lbl_radio_title.gui_input.is_connected(_on_radio_title_gui_input):
+			lbl_radio_title.gui_input.connect(_on_radio_title_gui_input)
 
 	# Запуск заглавной темы TNO при старте
 	am.play_music(0, false)
 	_update_radio_ui(am.get_current_track_title(), not am.is_music_paused)
+
+
+func _on_radio_title_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if has_node("/root/AudioManager"):
+			get_node("/root/AudioManager").next_station()
+
+
+func _on_radio_station_changed(_station_id: String, _st_title: String, _st_freq: String) -> void:
+	if has_node("/root/AudioManager"):
+		var am = get_node("/root/AudioManager")
+		_update_radio_ui(am.get_current_track_title(), not am.is_music_paused)
 
 
 func _on_prev_track_pressed() -> void:
@@ -359,16 +380,38 @@ func _update_radio_ui(title: String, is_playing: bool) -> void:
 		lbl_current_track.text = title
 	if btn_play_pause != null:
 		btn_play_pause.text = "❚❚" if is_playing else "▶"
+	if lbl_radio_title != null and has_node("/root/AudioManager"):
+		var am = get_node("/root/AudioManager")
+		var st_info: Dictionary = am.get_current_station_info()
+		var st_name: String = str(st_info.get("title", "AFN"))
+		var st_freq: String = str(st_info.get("frequency", "104.2 MHz"))
+		var loc = get_node_or_null("/root/LocalizationManager")
+		var r_hdr = loc.tr_key("RADIO_HEADER", "РАДИОСТАНЦИЯ TNO // В ЭФИРЕ:") if loc != null else "РАДИОСТАНЦИЯ TNO // В ЭФИРЕ:"
+		lbl_radio_title.text = "[📻 %s (%s)] %s" % [st_name, st_freq, r_hdr]
 
 
 func _on_toggle_background() -> void:
-	current_bg_is_submod = not current_bg_is_submod
-	var path = BG_PATH_SUBMOD if current_bg_is_submod else BG_PATH_DEFAULT
-	_set_background_texture(path)
-	if btn_change_bg != null and has_node("/root/LocalizationManager"):
-		var loc = get_node("/root/LocalizationManager")
-		var mode_name = "2WRW" if current_bg_is_submod else "1962"
-		btn_change_bg.text = "[ 🖼 %s: %s ]" % [loc.tr_key("BTN_CHANGE_BG", "ФОН"), mode_name]
+	bg_mode_index = (bg_mode_index + 1) % 3
+	var loc = get_node_or_null("/root/LocalizationManager")
+	var mode_label := "1962"
+	match bg_mode_index:
+		0:
+			_set_background_texture(BG_PATH_DEFAULT)
+			mode_label = "1962"
+		1:
+			_set_background_texture(BG_PATH_SUBMOD)
+			mode_label = "2WRW"
+		2:
+			if has_node("/root/AssetRegistry"):
+				var ar = get_node("/root/AssetRegistry")
+				var tex = ar.get_random_loading_screen()
+				if tex != null and background_texture != null:
+					background_texture.texture = tex
+			mode_label = "GALLERY"
+
+	if btn_change_bg != null:
+		var prefix = loc.tr_key("BTN_CHANGE_BG", "ФОН") if loc != null else "ФОН"
+		btn_change_bg.text = "[ 🖼 %s: %s ]" % [prefix, mode_label]
 
 
 func _on_menupic_hover(zone_idx: int) -> void:

@@ -106,6 +106,14 @@ func evaluate(ast_node: Dictionary, scope: ScopeContext, default_fallback: bool 
 			var target = StringName(ast_node.get("target", ""))
 			return scope.get_root_tag() == target
 
+		&"has_idea":
+			var target = str(ast_node.get("target", ast_node.get("idea", "")))
+			if scope.root and "national_spirits" in scope.root:
+				var spirits = scope.root.get("national_spirits")
+				if spirits is Array:
+					return spirits.has(target)
+			return false
+
 		&"is_puppet":
 			if scope.root and "is_puppet" in scope.root:
 				return bool(scope.root.get("is_puppet"))
@@ -157,9 +165,9 @@ func evaluate(ast_node: Dictionary, scope: ScopeContext, default_fallback: bool 
 
 
 func _eval_check_variable(ast: Dictionary, scope: ScopeContext) -> bool:
-	var var_name = StringName(ast.get("var", ""))
+	var var_name = StringName(ast.get("which", ast.get("var", "")))
 	var cmp = str(ast.get("cmp", ">="))
-	var target_val = float(ast.get("val", 0.0))
+	var target_val = float(ast.get("value", ast.get("val", 0.0)))
 	var tag = scope.get_root_tag()
 
 	# Check root properties first if match (e.g. gdp, debt)

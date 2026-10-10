@@ -17,6 +17,7 @@ extends Control
 signal option_selected()
 
 const CATALOG_PATH = "res://data/events/superevents_catalog.json"
+const EVENT_PICTURE_SHADER = preload("res://shaders/event_picture_crt.gdshader")
 
 @onready var backdrop: ColorRect = get_node_or_null("Backdrop")
 @onready var modal_panel: PanelContainer = get_node_or_null("ModalPanel")
@@ -212,14 +213,38 @@ func show_super_event(title_text: String, quote_text: String, option_text: Strin
 		btn_option.text = option_text.to_upper()
 
 	# 1. Загрузка атмосферного арта
-	if not art_path.is_empty() and ResourceLoader.exists(art_path):
-		var tex = load(art_path)
-		if tex is Texture2D and art_texture != null:
-			art_texture.texture = tex
-	else:
-		var def_tex = TNOTheme.get_texture("res://assets/gfx/interface/superevents/russian_reunification.png")
-		if def_tex != null and art_texture != null:
-			art_texture.texture = def_tex
+	var loaded_art: Texture2D = null
+	if not art_path.is_empty():
+		if ResourceLoader.exists(art_path):
+			loaded_art = load(art_path) as Texture2D
+		elif has_node("/root/AssetRegistry"):
+			loaded_art = get_node("/root/AssetRegistry").get_texture(art_path)
+
+	if loaded_art == null and has_node("/root/AssetRegistry"):
+		var ar = get_node("/root/AssetRegistry")
+		var fn = art_path.get_file()
+		if not fn.is_empty():
+			loaded_art = ar.get_texture("res://assets/gfx/interface/superevents/" + fn)
+
+	if loaded_art == null:
+		loaded_art = TNOTheme.get_texture("res://assets/gfx/interface/superevents/russian_reunification.png")
+
+	if art_texture != null and loaded_art != null:
+		art_texture.texture = loaded_art
+		if art_texture.material == null or not (art_texture.material is ShaderMaterial):
+			var mat := ShaderMaterial.new()
+			mat.shader = EVENT_PICTURE_SHADER
+			mat.set_shader_parameter("phosphor_tint", Color(0.95, 0.85, 0.55, 1.0))
+			mat.set_shader_parameter("tint_mix", 0.30)
+			mat.set_shader_parameter("scanline_intensity", 0.18)
+			mat.set_shader_parameter("vignette_strength", 0.45)
+			mat.set_shader_parameter("reveal_progress", 1.0)
+			art_texture.material = mat
+		if art_texture.material is ShaderMaterial:
+			var smat = art_texture.material as ShaderMaterial
+			smat.set_shader_parameter("reveal_progress", 0.0)
+			var tw = art_texture.create_tween()
+			tw.tween_method(func(v: float): smat.set_shader_parameter("reveal_progress", v), 0.0, 1.0, 0.6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 	# 2. Приостановка фонового радио для воспроизведения трека супер-события
 	var tree = _get_active_scene_tree()
@@ -276,6 +301,8 @@ func _on_option_button_pressed() -> void:
 	var root_node = tree.root if tree != null else null
 	if root_node != null and root_node.has_node("AudioManager"):
 		var am = root_node.get_node("AudioManager")
+		if am.has_method("play_sfx"):
+			am.play_sfx("window_close")
 		if am.has_method("resume_music_after_super_event"):
 			am.resume_music_after_super_event()
 

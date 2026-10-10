@@ -14,6 +14,7 @@ extends Node
 
 signal track_changed(track_index: int, track_title: String)
 signal playback_state_changed(is_playing: bool)
+signal station_changed(station_id: String, station_title: String, station_freq: String)
 
 static var instance: AudioManagerClass = null
 
@@ -55,7 +56,28 @@ const SFX_PATHS: Dictionary = {
 	"click_default": "res://assets/audio/sfx/click_default.ogg",
 	"click_close": "res://assets/audio/sfx/click_close.ogg",
 	"click_checkbox": "res://assets/audio/sfx/click_checkbox.ogg",
-	"start_game_01": "res://assets/audio/sfx/start_game_01.ogg"
+	"start_game_01": "res://assets/audio/sfx/start_game_01.ogg",
+	"start_game_02": "res://assets/audio/sfx/start_game_02.ogg",
+	"page_flip": "res://assets/audio/sfx/page_flip.wav",
+	"window_open": "res://assets/audio/sfx/window_open.wav",
+	"window_close": "res://assets/audio/sfx/window_close.wav",
+	"event_popup": "res://assets/audio/sfx/event_popup.wav",
+	"decisions_button": "res://assets/audio/sfx/decisions_button.wav",
+	"decisions_checkbox": "res://assets/audio/sfx/decisions_checkbox.wav",
+	"decisions_tab": "res://assets/audio/sfx/decisions_tab.wav",
+	"alert_high": "res://assets/audio/sfx/alert_high.wav",
+	"alert_mid": "res://assets/audio/sfx/alert_mid.wav",
+	"alert_low": "res://assets/audio/sfx/alert_low.wav",
+	"pause_toggle": "res://assets/audio/sfx/pause_toggle.wav",
+	"counter_tick": "res://assets/audio/sfx/counter_tick.wav",
+	"telemetry_beep": "res://assets/audio/sfx/telemetry_beep.wav",
+	"ui_tab_switch": "res://assets/audio/sfx/ui_tab_switch.wav",
+	"ui_mapmode_land": "res://assets/audio/sfx/ui_mapmode_land.wav",
+	"rocket_fire": "res://assets/audio/sfx/rocket_fire.wav",
+	"big_ben_bong": "res://assets/audio/sfx/big_ben_bong.wav",
+	"click_province": "res://assets/audio/sfx/click_province.wav",
+	"click_research": "res://assets/audio/sfx/click_research.wav",
+	"click_ok": "res://assets/audio/sfx/click_ok.wav"
 }
 
 # --- Audio players ---
@@ -66,6 +88,13 @@ const SFX_POOL_SIZE: int = 6
 
 var _music_stream_cache: Dictionary = {}
 var _sfx_stream_cache: Dictionary = {}
+
+var radio_catalog: Dictionary = {}
+var stations: Dictionary = {}
+var station_keys: Array[String] = []
+var current_station_id: String = "radio_free_world"
+var current_playlist: Array[Dictionary] = []
+var current_playlist_index: int = 0
 
 var current_track_index: int = 0
 var is_music_paused: bool = false
@@ -85,6 +114,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_setup_players()
+	_load_radio_catalog()
 	_preload_audio()
 	_apply_bus_volumes_from_settings()
 
@@ -124,43 +154,110 @@ func _bus_exists(bus_name: String) -> bool:
 	return AudioServer.get_bus_index(bus_name) >= 0
 
 
+func _load_radio_catalog() -> void:
+	var catalog_path: String = "res://data/radio_stations.json"
+	if FileAccess.file_exists(catalog_path):
+		var fa := FileAccess.open(catalog_path, FileAccess.READ)
+		if fa != null:
+			var content := fa.get_as_text()
+			fa.close()
+			var json := JSON.new()
+			if json.parse(content) == OK and json.data is Dictionary:
+				radio_catalog = json.data
+				stations = radio_catalog.get("stations", {})
+				for k in stations.keys():
+					station_keys.append(str(k))
+
+	# Fallback если станций нет
+	if stations.is_empty():
+		station_keys = ["radio_free_world"]
+		stations["radio_free_world"] = {
+			"title": "AFN / Radio Free World",
+			"frequency": "104.2 MHz",
+			"tracks": TRACKS
+		}
+
+	current_station_id = station_keys[0]
+	_rebuild_playlist_for_station(current_station_id)
+
+
+func _rebuild_playlist_for_station(st_id: String) -> void:
+	current_playlist.clear()
+	if stations.has(st_id):
+		var st_data: Dictionary = stations[st_id]
+		var trks: Array = st_data.get("tracks", [])
+		for t in trks:
+			if t is Dictionary:
+				current_playlist.append(t)
+
+	# Если в станции пусто, берем базовые треки
+	if current_playlist.is_empty():
+		for t in TRACKS:
+			current_playlist.append(t)
+
+	current_playlist_index = 0
+
+
 func _preload_audio() -> void:
-	# Предзагрузка SFX
-	for k in SFX_PATHS.keys():
-		var path = SFX_PATHS[k]
-		var stream = _load_ogg_stream(path)
-		if stream != null:
-			_sfx_stream_cache[k] = stream
+	# Предзагрузка ключевых SFX
+	for k in ["click_default", "click_close", "ui_menu_over", "window_open", "event_popup"]:
+		if SFX_PATHS.has(k):
+			var path: String = SFX_PATHS[k]
+			var stream = _load_audio_stream(path)
+			if stream != null:
+				_sfx_stream_cache[k] = stream
 
 	# Предзагрузка заглавного трека
 	_load_track_stream(0)
 
 
-func _load_ogg_stream(path: String) -> AudioStream:
+func _load_audio_stream(path: String) -> AudioStream:
 	if ResourceLoader.exists(path):
 		var res = load(path)
 		if res is AudioStream:
 			return res
 	elif FileAccess.file_exists(path):
-		return AudioStreamOggVorbis.load_from_file(path)
+		if path.to_lower().ends_with(".ogg"):
+			return AudioStreamOggVorbis.load_from_file(path)
 	return null
 
 
 func _load_track_stream(idx: int) -> AudioStream:
-	if idx < 0 or idx >= TRACKS.size():
+	if current_playlist.is_empty():
 		return null
-	var t_data = TRACKS[idx]
-	var tid = t_data["id"]
+	if idx < 0 or idx >= current_playlist.size():
+		idx = 0
+
+	var t_data: Dictionary = current_playlist[idx]
+	var tid: String = str(t_data.get("id", str(idx)))
 	if _music_stream_cache.has(tid):
 		return _music_stream_cache[tid]
 
-	var path = t_data["path"]
-	var stream = _load_ogg_stream(path)
+	var stream: AudioStream = null
+
+	# 1. Попытка загрузить из bundled path (res://)
+	var bundled_path: String = str(t_data.get("path", ""))
+	if not bundled_path.is_empty() and ResourceLoader.exists(bundled_path):
+		stream = _load_audio_stream(bundled_path)
+
+	# 2. Попытка загрузить из физического пути мода (streaming)
+	if stream == null:
+		var phys_path: String = str(t_data.get("physical_path", ""))
+		if not phys_path.is_empty() and FileAccess.file_exists(phys_path):
+			stream = _load_audio_stream(phys_path)
+
+	# 3. Fallback на один из встроенных треков
+	if stream == null and not TRACKS.is_empty():
+		var fallback_idx = idx % TRACKS.size()
+		var fb_path = TRACKS[fallback_idx]["path"]
+		stream = _load_audio_stream(fb_path)
+
 	if stream != null:
 		if stream is AudioStreamOggVorbis:
-			(stream as AudioStreamOggVorbis).loop = true
+			(stream as AudioStreamOggVorbis).loop = false
 		_music_stream_cache[tid] = stream
 		return stream
+
 	return null
 
 
@@ -169,16 +266,21 @@ func _load_track_stream(idx: int) -> AudioStream:
 # ==============================================================================
 
 func play_music(track_idx: int = 0, restart_if_same: bool = false) -> void:
-	if track_idx < 0 or track_idx >= TRACKS.size():
-		track_idx = 0
-
-	if current_track_index == track_idx and music_player.playing and not restart_if_same:
+	if current_playlist.is_empty():
 		return
 
+	if track_idx < 0 or track_idx >= current_playlist.size():
+		track_idx = 0
+
+	if current_playlist_index == track_idx and music_player.playing and not restart_if_same:
+		return
+
+	current_playlist_index = track_idx
 	current_track_index = track_idx
+
 	var stream = _load_track_stream(track_idx)
 	if stream == null:
-		push_warning("[AudioManager] Failed to load track: %s" % TRACKS[track_idx]["title"])
+		push_warning("[AudioManager] Failed to load track: %s" % get_current_track_title())
 		return
 
 	music_player.stop()
@@ -187,15 +289,52 @@ func play_music(track_idx: int = 0, restart_if_same: bool = false) -> void:
 	is_music_paused = false
 
 	var title = get_current_track_title()
-	track_changed.emit(current_track_index, title)
+	track_changed.emit(current_playlist_index, title)
 	playback_state_changed.emit(true)
-	print("[AudioManager] Playing: %s" % title)
+	print("[AudioManager] Playing [%s]: %s" % [current_station_id, title])
+
+
+func set_station(station_id: String) -> void:
+	if not stations.has(station_id) or station_id == current_station_id:
+		return
+
+	current_station_id = station_id
+	_rebuild_playlist_for_station(current_station_id)
+
+	var st_info = get_current_station_info()
+	station_changed.emit(current_station_id, st_info.get("title", ""), st_info.get("frequency", ""))
+	play_music(0, true)
+
+
+func next_station() -> void:
+	if station_keys.is_empty():
+		return
+	var cur_idx = station_keys.find(current_station_id)
+	var next_idx = (cur_idx + 1) % station_keys.size()
+	set_station(station_keys[next_idx])
+
+
+func prev_station() -> void:
+	if station_keys.is_empty():
+		return
+	var cur_idx = station_keys.find(current_station_id)
+	var prev_idx = (cur_idx - 1 + station_keys.size()) % station_keys.size()
+	set_station(station_keys[prev_idx])
+
+
+func get_current_station_info() -> Dictionary:
+	if stations.has(current_station_id):
+		return stations[current_station_id]
+	return {"title": "AFN / Radio Free World", "frequency": "104.2 MHz"}
+
+
+func get_stations_dict() -> Dictionary:
+	return stations
 
 
 func toggle_pause() -> void:
 	if not music_player.playing and not is_music_paused:
-		# Если не играло вообще, запускаем текущий трек
-		play_music(current_track_index)
+		play_music(current_playlist_index)
 		return
 
 	if is_music_paused:
@@ -209,12 +348,16 @@ func toggle_pause() -> void:
 
 
 func next_track() -> void:
-	var next_idx = (current_track_index + 1) % TRACKS.size()
+	if current_playlist.is_empty():
+		return
+	var next_idx = (current_playlist_index + 1) % current_playlist.size()
 	play_music(next_idx, true)
 
 
 func prev_track() -> void:
-	var prev_idx = (current_track_index - 1 + TRACKS.size()) % TRACKS.size()
+	if current_playlist.is_empty():
+		return
+	var prev_idx = (current_playlist_index - 1 + current_playlist.size()) % current_playlist.size()
 	play_music(prev_idx, true)
 
 
@@ -244,14 +387,14 @@ func resume_music_after_super_event() -> void:
 
 
 func get_current_track_title() -> String:
-	if current_track_index >= 0 and current_track_index < TRACKS.size():
-		var t_data = TRACKS[current_track_index]
-		if has_node("/root/LocalizationManager"):
+	if current_playlist_index >= 0 and current_playlist_index < current_playlist.size():
+		var t_data: Dictionary = current_playlist[current_playlist_index]
+		var title: String = str(t_data.get("title", "UNKNOWN TRACK"))
+		var loc_key: String = str(t_data.get("loc_key", ""))
+		if has_node("/root/LocalizationManager") and not loc_key.is_empty():
 			var loc = get_node("/root/LocalizationManager")
-			var loc_key = t_data.get("loc_key", "")
-			if not loc_key.is_empty():
-				return loc.tr_key(loc_key, t_data["title"])
-		return t_data["title"]
+			return loc.tr_key(loc_key, title)
+		return title
 	return "UNKNOWN FREQUENCY"
 
 
@@ -269,8 +412,8 @@ func play_sfx(sfx_name: String, pitch_scale: float = 1.0) -> void:
 	if _sfx_stream_cache.has(sfx_name):
 		stream = _sfx_stream_cache[sfx_name]
 	elif SFX_PATHS.has(sfx_name):
-		var path = SFX_PATHS[sfx_name]
-		stream = _load_ogg_stream(path)
+		var path: String = SFX_PATHS[sfx_name]
+		stream = _load_audio_stream(path)
 		if stream != null:
 			_sfx_stream_cache[sfx_name] = stream
 

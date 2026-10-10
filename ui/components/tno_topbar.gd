@@ -70,13 +70,25 @@ func _connect_signals() -> void:
 	if btn_end_turn != null:
 		btn_end_turn.pressed.connect(func(): end_turn_requested.emit())
 	if defcon_btn != null:
-		defcon_btn.pressed.connect(func(): defcon_clicked.emit())
+		defcon_btn.pressed.connect(func():
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("alert_high")
+			defcon_clicked.emit()
+		)
 	if btn_directive != null:
-		btn_directive.pressed.connect(func(): directive_clicked.emit())
+		btn_directive.pressed.connect(func():
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("click_research")
+			directive_clicked.emit()
+		)
 	
 	var flag_btn = get_node_or_null("HBox/CountrySection/FlagContainer/FlagButton")
 	if flag_btn != null:
-		flag_btn.pressed.connect(func(): country_flag_clicked.emit())
+		flag_btn.pressed.connect(func():
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("window_open")
+			country_flag_clicked.emit()
+		)
 
 
 func _apply_tno_styling() -> void:

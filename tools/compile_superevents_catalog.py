@@ -101,6 +101,23 @@ def main():
                 break
 
         if not matched_art:
+            # 2WRW and submod specific patterns
+            subpart = clean_name.replace("russian_unification_", "").replace("russian_reunification_", "")
+            subpart_candidates = [
+                f"{subpart}_victory.png",
+                f"{subpart}_declaration.png",
+                f"{subpart}_war.png",
+                f"{subpart}_war_declaration.png",
+                f"{subpart}.png",
+                f"{subpart}_super.png",
+                f"{subpart}_unification_super.png"
+            ]
+            for sc in subpart_candidates:
+                if sc in art_files:
+                    matched_art = f"res://assets/gfx/interface/superevents/{sc}"
+                    break
+
+        if not matched_art:
             for af in art_files:
                 af_base = af.lower().replace(".png", "")
                 if af_base == clean_name or af_base == alt_unif or af_base == no_underscore:

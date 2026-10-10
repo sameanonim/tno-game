@@ -639,14 +639,20 @@ func _handle_action_result(res: Dictionary) -> void:
 # ==============================================================================
 
 func _on_raid_recon_pressed() -> void:
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("telemetry_beep")
 	raid_requested.emit("recon")
 
 
 func _on_raid_heavy_pressed() -> void:
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("rocket_fire")
 	raid_requested.emit("heavy")
 
 
 func _on_advance_regional_pressed() -> void:
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("alert_high")
 	if unification_mgr != null and unification_mgr.advance_to_regional(player_state, turn_manager):
 		stage_advance_requested.emit()
 		refresh_ui()
@@ -655,6 +661,8 @@ func _on_advance_regional_pressed() -> void:
 func _on_proclamation_pressed() -> void:
 	if unification_mgr == null:
 		return
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("big_ben_bong")
 	match unification_mgr.current_stage:
 		RussianUnificationManager.SmutaStage.STAGE_2_REGIONAL:
 			unification_mgr.proclaim_regional_unification(player_state, turn_manager)
@@ -667,6 +675,8 @@ func _on_proclamation_pressed() -> void:
 
 
 func _on_diplomatic_summit_pressed() -> void:
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("click_ok")
 	if opt_summit_target == null or unification_mgr == null or opt_summit_target.item_count == 0:
 		return
 	var idx = opt_summit_target.selected

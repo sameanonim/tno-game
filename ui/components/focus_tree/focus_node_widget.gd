@@ -119,12 +119,32 @@ func setup(p_data: FocusNodeData, p_manager: FocusTreeManager) -> void:
 	cost_label.text = "%d Days" % int(node_data.cost)
 
 	# Load icon
-	if not node_data.icon_path.is_empty() and ResourceLoader.exists(node_data.icon_path):
-		var tex = load(node_data.icon_path) as Texture2D
-		if tex:
-			icon_rect.texture = tex
+	var icon_tex: Texture2D = null
+	if not node_data.icon_path.is_empty():
+		if ResourceLoader.exists(node_data.icon_path):
+			icon_tex = load(node_data.icon_path) as Texture2D
+		elif has_node("/root/AssetRegistry"):
+			icon_tex = get_node("/root/AssetRegistry").get_texture(node_data.icon_path)
+
+	if icon_tex == null and has_node("/root/AssetRegistry"):
+		var ar = get_node("/root/AssetRegistry")
+		var candidates: Array[String] = [
+			String(node_data.id),
+			"GFX_" + String(node_data.id),
+			"GFX_goal_" + String(node_data.id),
+			"GFX_focus_" + String(node_data.id),
+			String(node_data.text_id),
+			"GFX_" + String(node_data.text_id)
+		]
+		for c in candidates:
+			var t = ar.get_texture(c)
+			if t != null:
+				icon_tex = t
+				break
+
+	if icon_tex != null:
+		icon_rect.texture = icon_tex
 	else:
-		# Use default icon if specific icon not yet extracted
 		var default_icon = load("res://icon.svg") as Texture2D
 		if default_icon:
 			icon_rect.texture = default_icon

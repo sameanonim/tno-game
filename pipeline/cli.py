@@ -18,6 +18,8 @@ import time
 
 from .cleaner import DataDeduplicator
 from .config import PipelineConfig
+from .extractors.asset_bundler import AssetBundler
+from .extractors.audio_bundler import AudioBundler
 from .extractors.countries import CountriesExtractor
 from .extractors.country_packager import CountryPackager
 from .extractors.decisions import DecisionsExtractor
@@ -25,6 +27,7 @@ from .extractors.directives import DirectivesExtractor
 from .extractors.events import EventsExtractor
 from .extractors.localization import LocalizationExtractor
 from .extractors.map_data import MapExtractor
+from .parsers.gfx_registry import SpriteRegistry
 from .validator import DatasetValidator
 from .vfs import LayeredVFS
 
@@ -43,12 +46,15 @@ def main():
 
     # Module selection flags
     parser.add_argument("--all", "-a", action="store_true", help="Run entire pipeline end-to-end")
+    parser.add_argument("--sprites", action="store_true", help="Build Clausewitz GFX sprite registry & SQLite")
+    parser.add_argument("--assets", action="store_true", help="Selectively convert & bundle game assets (events, ideas, etc.)")
     parser.add_argument("--loc", action="store_true", help="Extract localization database & SQLite")
     parser.add_argument("--map", action="store_true", help="Extract map, provinces, and build LUT")
     parser.add_argument("--countries", action="store_true", help="Extract countries, characters, politics")
     parser.add_argument("--directives", action="store_true", help="Extract national focus trees into directives")
     parser.add_argument("--events", action="store_true", help="Extract narrative events and superevents")
     parser.add_argument("--decisions", action="store_true", help="Extract crisis decisions and mechanics")
+    parser.add_argument("--radio", action="store_true", help="Bundle authentic SFX and generate TNO Radio catalog")
     parser.add_argument("--package-countries", action="store_true", help="Package modular country dossiers & SQLite DBs")
     parser.add_argument("--tags", type=str, default=None, help="Comma-separated country tags filter (e.g. GER,USA,JAP)")
     parser.add_argument("--clean-duplicates", action="store_true", help="Clean up redundant and duplicate exported files")
@@ -115,7 +121,14 @@ def main():
     total_start = time.time()
 
     # Determine tasks
-    run_all = args.all
+    has_specific_task = any([
+        args.all, args.sprites, args.assets, args.radio, args.loc, args.map,
+        args.countries, args.directives, args.events, args.decisions,
+        args.package_countries, args.validate, args.clean_duplicates
+    ])
+
+    run_all = args.all or not has_specific_task
+    run_radio = args.radio or run_all
     run_loc = args.loc or run_all
     run_map = args.map or run_all
     run_countries = args.countries or run_all
@@ -123,14 +136,12 @@ def main():
     run_events = args.events or run_all
     run_decisions = args.decisions or run_all
     run_validate = args.validate or run_all
+    run_sprites = args.sprites or run_all
+    run_assets = args.assets or run_all
+    run_package = args.package_countries or (run_all and config.export_country_packages)
 
-    run_package = args.package_countries or run_all or config.export_country_packages
     if args.tags:
         config.target_tags = [t.strip().upper() for t in args.tags.split(",") if t.strip()]
-
-    # If no flags specified at all, default to full content extraction
-    if not any([args.all, args.loc, args.map, args.countries, args.directives, args.events, args.decisions, args.package_countries, args.validate, args.clean_duplicates]):
-        run_loc = run_map = run_countries = run_directives = run_events = run_decisions = run_package = run_validate = True
 
     loc_dict = {}
     loc_db = {}
@@ -199,12 +210,27 @@ def main():
         )
         packager.package_all(target_tags=config.target_tags if config.target_tags else None)
 
-    # 8. VALIDATION
+    # 8. SPRITE REGISTRY & ASSET BUNDLING
+    sprite_reg = {}
+    if args.sprites or args.assets or run_all:
+        sprite_builder = SpriteRegistry(vfs, config)
+        sprite_reg = sprite_builder.build_registry()
+
+    if args.assets or run_all:
+        bundler = AssetBundler(vfs, config, sprite_reg)
+        bundler.run()
+
+    # 9. TNO RADIO & AUDIO ASSETS
+    if run_radio:
+        audio_bundler = AudioBundler(vfs, config)
+        audio_bundler.run()
+
+    # 9. VALIDATION
     if run_validate:
         validator = DatasetValidator(config)
         validator.validate_all()
 
-    # 9. CLEAN DUPLICATES
+    # 10. CLEAN DUPLICATES
     if args.clean_duplicates or args.all:
         deduplicator = DataDeduplicator(config)
         deduplicator.clean_all()

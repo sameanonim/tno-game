@@ -28,6 +28,18 @@ trigger condition ASTs, and effect sequences (including TNO midway effects).
 ## Declarative AST for bypass condition
 @export var bypass_ast: Dictionary = {}
 
+## Anchor ID for relative positioning (relative_position_id = <parent_focus_id>)
+@export var relative_position_id: StringName = &""
+
+## Declarative AST for dynamic branch visibility (allow_branch = { ... })
+@export var allow_branch_ast: Dictionary = {}
+
+## Flag determining if focus cancels automatically when requirements are invalidated (cancel_if_invalid = yes/no)
+@export var cancel_if_invalid: bool = true
+
+## Custom effect tooltip localization key (custom_effect_tooltip = KEY)
+@export var custom_tooltip_id: StringName = &""
+
 ## Array of instructions executed when focus begins
 @export var on_start_effects: Array[ClausewitzInstruction] = []
 
@@ -97,6 +109,10 @@ func to_dict() -> Dictionary:
 		"mutually_exclusive": mut_ex_serialized,
 		"available_ast": available_ast.duplicate(true),
 		"bypass_ast": bypass_ast.duplicate(true),
+		"relative_position_id": String(relative_position_id),
+		"allow_branch_ast": allow_branch_ast.duplicate(true),
+		"cancel_if_invalid": cancel_if_invalid,
+		"custom_tooltip_id": String(custom_tooltip_id),
 		"on_start_effects": start_effects_serialized,
 		"on_completion_effects": effects_serialized,
 		"tno_midway_effects": midway_serialized,
@@ -113,6 +129,8 @@ static func from_dict(data: Dictionary) -> FocusNodeData:
 	node.text_id = StringName(data.get("text_id", node.id))
 	node.desc_id = StringName(data.get("desc_id", String(node.id) + "_desc"))
 	node.icon_path = str(data.get("icon_path", data.get("icon", "")))
+	node.relative_position_id = StringName(data.get("relative_position_id", ""))
+	node.custom_tooltip_id = StringName(data.get("custom_tooltip_id", data.get("custom_effect_tooltip", "")))
 
 	var coords = data.get("grid_coord", [0, 0])
 	if coords is Array and coords.size() >= 2:
@@ -122,6 +140,7 @@ static func from_dict(data: Dictionary) -> FocusNodeData:
 
 	node.cost = float(data.get("cost", 7.0))
 	node.is_hidden = bool(data.get("is_hidden", false))
+	node.cancel_if_invalid = bool(data.get("cancel_if_invalid", true))
 	node.is_point_of_no_return = bool(data.get("is_point_of_no_return", false))
 	node.point_of_no_return_warning = str(data.get("point_of_no_return_warning", ""))
 
@@ -150,6 +169,7 @@ static func from_dict(data: Dictionary) -> FocusNodeData:
 	# ASTs
 	node.available_ast = data.get("available_ast", {}).duplicate(true)
 	node.bypass_ast = data.get("bypass_ast", {}).duplicate(true)
+	node.allow_branch_ast = data.get("allow_branch_ast", data.get("allow_branch", {})).duplicate(true)
 
 	# Start effects
 	var raw_start = data.get("on_start_effects", data.get("select_effect", []))

@@ -280,7 +280,15 @@ func _resolve_portrait_texture(path: String, tag: String, leader_name: String) -
 	if loaded_tex == null and not tag.is_empty():
 		loaded_tex = _find_from_country_leader_data(tag, leader_name)
 
-	# 4. Сохранение в кэш
+	# 4. Поиск через глобальный AssetRegistry
+	if loaded_tex == null and has_node("/root/AssetRegistry"):
+		var ar = get_node("/root/AssetRegistry")
+		if not path.is_empty():
+			loaded_tex = ar.get_texture(path)
+			if loaded_tex == null and not path.begins_with("GFX_"):
+				loaded_tex = ar.get_texture("GFX_" + path)
+
+	# 5. Сохранение в кэш
 	if loaded_tex != null:
 		_texture_cache[cache_key] = loaded_tex
 		return loaded_tex

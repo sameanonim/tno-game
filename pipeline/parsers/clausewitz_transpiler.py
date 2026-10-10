@@ -267,7 +267,7 @@ class ASTBuilder:
                     })
                 elif key == "check_variable":
                     children.append(cls._parse_check_variable(v))
-                elif key in ("has_country_flag", "has_global_flag", "has_completed_focus", "tag", "is_puppet"):
+                elif key in ("has_country_flag", "has_global_flag", "has_completed_focus", "tag", "is_puppet", "has_idea"):
                     children.append({
                         "op": key,
                         "target": str(v)
@@ -309,12 +309,12 @@ class ASTBuilder:
 
     @classmethod
     def _parse_check_variable(cls, v: Any) -> Dict[str, Any]:
-        """Parses Clausewitz check_variable = { var > 10 } or check_variable = { var = x value = 10 }."""
+        """Parses Clausewitz check_variable = { which = var value > 10 } or check_variable = { var > 10 }."""
         if isinstance(v, dict):
             if "_op" in v:
                 return {
                     "op": "check_variable",
-                    "var": v.get("var", ""),
+                    "var": v.get("which", v.get("var", "")),
                     "cmp": v.get("_op", ">="),
                     "val": v.get("val", 0)
                 }
@@ -334,9 +334,12 @@ class ASTBuilder:
                         "cmp": ">=",
                         "val": inner_v
                     }
-            var_name = v.get("var", "")
-            cmp_op = v.get("compare", ">=")
-            val = v.get("value", 0)
+            var_name = v.get("which", v.get("var", ""))
+            cmp_op = v.get("compare", v.get("_op", ">="))
+            val = v.get("value", v.get("val", 0))
+            if isinstance(val, dict) and "_op" in val:
+                cmp_op = val.get("_op", cmp_op)
+                val = val.get("val", 0)
             return {
                 "op": "check_variable",
                 "var": var_name,
@@ -509,6 +512,43 @@ class FocusTreeCompiler:
             node_data = cls._compile_focus_node(f)
             compiled_nodes[f_id] = node_data
 
+        # 1. Resolve relative_position_id chains into absolute grid_coord [x, y]
+        raw_coords: Dict[str, Tuple[int, int, str]] = {
+            fid: (node["raw_x"], node["raw_y"], node["relative_position_id"])
+            for fid, node in compiled_nodes.items()
+        }
+
+        memo_pos: Dict[str, Tuple[int, int]] = {}
+
+        def resolve_pos(fid: str, visited: Optional[Set[str]] = None) -> Tuple[int, int]:
+            if fid in memo_pos:
+                return memo_pos[fid]
+            if visited is None:
+                visited = set()
+            if fid in visited or fid not in raw_coords:
+                rx, ry = raw_coords.get(fid, (0, 0, ""))[:2]
+                return rx, ry
+            visited.add(fid)
+            rx, ry, parent_id = raw_coords[fid]
+            if not parent_id or parent_id not in raw_coords:
+                memo_pos[fid] = (rx, ry)
+                return rx, ry
+            px, py = resolve_pos(parent_id, visited)
+            final_pos = (px + rx, py + ry)
+            memo_pos[fid] = final_pos
+            return final_pos
+
+        for fid, node in compiled_nodes.items():
+            ax, ay = resolve_pos(fid)
+            node["grid_coord"] = [ax, ay]
+
+        # 2. Guarantee bidirectional symmetrization of mutually_exclusive references
+        for fid, node in compiled_nodes.items():
+            for mex in node.get("mutually_exclusive", []):
+                if mex in compiled_nodes:
+                    if fid not in compiled_nodes[mex]["mutually_exclusive"]:
+                        compiled_nodes[mex]["mutually_exclusive"].append(fid)
+
         return {
             "tree_id": actual_id,
             "country_tag": country_tag,
@@ -525,6 +565,16 @@ class FocusTreeCompiler:
         x = int(f.get("x", 0))
         y = int(f.get("y", 0))
         cost = float(f.get("cost", 10.0))
+        relative_id = str(f.get("relative_position_id", ""))
+        custom_tooltip = str(f.get("custom_effect_tooltip", ""))
+
+        raw_cii = f.get("cancel_if_invalid", "yes")
+        if isinstance(raw_cii, str):
+            cancel_if_invalid = raw_cii.lower() not in ("no", "false")
+        elif isinstance(raw_cii, bool):
+            cancel_if_invalid = raw_cii
+        else:
+            cancel_if_invalid = True
 
         # Prerequisites: multiple prerequisite blocks = AND, within each block = OR
         prereqs: List[List[str]] = []
@@ -563,6 +613,10 @@ class FocusTreeCompiler:
         bypass_raw = f.get("bypass", {})
         bypass_ast = ASTBuilder.build_trigger_ast(bypass_raw)
 
+        # Allow branch dynamic condition AST (allow_branch = { ... })
+        allow_branch_raw = f.get("allow_branch", {})
+        allow_branch_ast = ASTBuilder.build_trigger_ast(allow_branch_raw)
+
         # Completion rewards
         reward_raw = f.get("completion_reward", {})
         completion_effects = ASTBuilder.build_effects_list(reward_raw)
@@ -578,15 +632,95 @@ class FocusTreeCompiler:
             "text_id": text_id,
             "desc_id": desc_id,
             "icon_path": icon_path,
+            "raw_x": x,
+            "raw_y": y,
             "grid_coord": [x, y],
+            "relative_position_id": relative_id,
             "cost": cost,
+            "cancel_if_invalid": cancel_if_invalid,
+            "custom_tooltip_id": custom_tooltip,
             "prerequisites": prereqs,
             "mutually_exclusive": mut_ex,
             "available_ast": available_ast,
             "bypass_ast": bypass_ast,
+            "allow_branch_ast": allow_branch_ast,
             "on_completion_effects": completion_effects,
             "tno_midway_effects": midway_effects
         }
+
+
+class ClausewitzEventParser:
+    """Parses Hearts of Iron IV event files into structured GameEvent dictionaries."""
+
+    @classmethod
+    def parse_events(cls, text: str) -> List[Dict[str, Any]]:
+        tokens = ClausewitzLexer.tokenize(text)
+        parser = ClausewitzParser(tokens)
+        raw = parser.parse()
+
+        events_list: List[Dict[str, Any]] = []
+        raw_events = raw.get("country_event", [])
+        if isinstance(raw_events, dict):
+            raw_events = [raw_events]
+
+        for ev in raw_events:
+            if not isinstance(ev, dict):
+                continue
+            ev_id = str(ev.get("id", ""))
+            if not ev_id:
+                continue
+
+            title_id = str(ev.get("title", ""))
+            desc_id = str(ev.get("desc", ""))
+            picture = str(ev.get("picture", ""))
+            is_triggered_only = str(ev.get("is_triggered_only", "no")).lower() in ("yes", "true")
+
+            trigger_ast = ASTBuilder.build_trigger_ast(ev.get("trigger", {}))
+            immediate_effects = ASTBuilder.build_effects_list(ev.get("immediate", {}))
+
+            raw_options = ev.get("option", [])
+            if isinstance(raw_options, dict):
+                raw_options = [raw_options]
+
+            options: List[Dict[str, Any]] = []
+            for idx, opt in enumerate(raw_options):
+                if not isinstance(opt, dict):
+                    continue
+                opt_name = str(opt.get("name", f"{ev_id}.{chr(97 + idx)}"))
+                ai_chance = 100
+                raw_chance = opt.get("ai_chance", {})
+                if isinstance(raw_chance, dict) and "factor" in raw_chance:
+                    try:
+                        ai_chance = int(float(raw_chance["factor"]))
+                    except (ValueError, TypeError):
+                        ai_chance = 100
+
+                # Exclude meta keys when extracting option rewards
+                opt_copy = dict(opt)
+                opt_copy.pop("name", None)
+                opt_copy.pop("ai_chance", None)
+                opt_copy.pop("trigger", None)
+
+                rewards = ASTBuilder.build_effects_list(opt_copy)
+                options.append({
+                    "id": f"opt_{idx + 1}",
+                    "title": opt_name,
+                    "ai_weight": ai_chance,
+                    "rewards": rewards
+                })
+
+            events_list.append({
+                "event_id": ev_id,
+                "title_id": title_id,
+                "desc_id": desc_id,
+                "picture": picture,
+                "is_triggered_only": is_triggered_only,
+                "trigger_ast": trigger_ast,
+                "immediate_effects": immediate_effects,
+                "options": options
+            })
+
+        return events_list
 
 
 def parse_and_compile_clausewitz(text: str, tree_id: str = "") -> Dict[str, Any]:
@@ -595,3 +729,16 @@ def parse_and_compile_clausewitz(text: str, tree_id: str = "") -> Dict[str, Any]
     parser = ClausewitzParser(tokens)
     raw = parser.parse()
     return FocusTreeCompiler.compile_tree(raw, tree_id)
+
+
+def transpile_tno_bundle(focus_script: str, loc_yml: str = "", events_script: str = "", tree_id: str = "") -> Dict[str, Any]:
+    """Transpiles a complete TNO national content package (Focuses + Localisation + Events)."""
+    focus_tree = parse_and_compile_clausewitz(focus_script, tree_id)
+    localization = LocalizationParser.parse_yml_text(loc_yml) if loc_yml else {}
+    events = ClausewitzEventParser.parse_events(events_script) if events_script else []
+
+    return {
+        "tree": focus_tree,
+        "localization": localization,
+        "events": events
+    }

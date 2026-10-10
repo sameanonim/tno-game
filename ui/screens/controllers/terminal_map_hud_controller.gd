@@ -75,21 +75,29 @@ func _bind_map_buttons() -> void:
 		btn_map_pol.pressed.connect(func():
 			if map_controller != null: map_controller.set_map_mode(0)
 			sound_effect_requested.emit("switch_click", 900.0)
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("ui_mapmode_land")
 		)
 	if btn_map_econ != null:
 		btn_map_econ.pressed.connect(func():
 			if map_controller != null: map_controller.set_map_mode(1)
 			sound_effect_requested.emit("switch_click", 950.0)
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("ui_mapmode_land")
 		)
 	if btn_map_unrest != null:
 		btn_map_unrest.pressed.connect(func():
 			if map_controller != null: map_controller.set_map_mode(2)
 			sound_effect_requested.emit("switch_click", 1000.0)
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("ui_mapmode_land")
 		)
 	if btn_map_diplo != null:
 		btn_map_diplo.pressed.connect(func():
 			if map_controller != null: map_controller.set_map_mode(3)
 			sound_effect_requested.emit("switch_click", 1050.0)
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("ui_mapmode_land")
 		)
 
 	if btn_ruler_focus != null:
@@ -178,6 +186,10 @@ func _bind_panels() -> void:
 func handle_province_click(pid: int, data: Dictionary) -> void:
 	if turn_manager == null:
 		return
+
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("click_province")
+
 	var prov_owner = data.get("owner", "NEU")
 	var is_player = (prov_owner == turn_manager.player_state.country_tag)
 

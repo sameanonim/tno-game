@@ -49,6 +49,8 @@ func _ready() -> void:
 	_apply_tno_styling()
 	if btn_close != null:
 		btn_close.pressed.connect(func():
+			if has_node("/root/AudioManager"):
+				get_node("/root/AudioManager").play_sfx("window_close")
 			if active_reform_modal != null and is_instance_valid(active_reform_modal):
 				active_reform_modal.queue_free()
 				active_reform_modal = null
@@ -85,6 +87,9 @@ func display_country(state: CountryState) -> void:
 	if current_state == null:
 		return
 
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sfx("window_open")
+
 	# Гарантия наличия аутентичных законов TNO
 	current_state.ensure_default_societal_laws()
 
@@ -119,6 +124,16 @@ func display_country(state: CountryState) -> void:
 			portrait_frame.display_leader(state.head_of_state, state.country_tag, true)
 		else:
 			portrait_frame.display_leader(state, state.country_tag, true)
+		var bio = state.leader_description
+		if state.head_of_state != null and not state.head_of_state.description.is_empty():
+			bio = state.head_of_state.description
+		if bio.is_empty():
+			var canonical = CountryDossierProvider.get_country_dossier(state.country_tag)
+			bio = canonical.get("briefing", "Верховный лидер и глава государства.")
+		portrait_frame.tooltip_text = "┌── [%s // %s] ──\n│ ТИТУЛ: %s\n│ ИДЕОЛОГИЯ: %s\n├─────────────────────────────────────────\n│ БИОГРАФИЯ И СТРАТЕГИЧЕСКИЙ ПРОФИЛЬ:\n%s" % [
+			l_name, state.country_tag, l_title, party, bio
+		]
+
 
 	# Идеология
 	var ideo_key = str(party).to_lower()
@@ -255,8 +270,18 @@ func _populate_national_spirits() -> void:
 		icon.custom_minimum_size = Vector2(28, 28)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		var icon_path = str(sp.get("icon", "res://assets/gfx/interface/war_support_icon.png"))
-		icon.texture = TNOTheme.get_texture(icon_path)
+		var icon_path: String = str(sp.get("icon", ""))
+		var sp_id: String = str(sp.get("id", ""))
+		var tex: Texture2D = null
+		if has_node("/root/AssetRegistry"):
+			var ar = get_node("/root/AssetRegistry")
+			if not sp_id.is_empty():
+				tex = ar.get_idea_icon(sp_id)
+			if tex == null and not icon_path.is_empty():
+				tex = ar.get_texture(icon_path)
+		if tex == null:
+			tex = TNOTheme.get_texture(icon_path if not icon_path.is_empty() else "res://assets/gfx/interface/war_support_icon.png")
+		icon.texture = tex
 		hbox.add_child(icon)
 
 		var lbl := Label.new()
@@ -338,8 +363,7 @@ func _populate_cabinet_members() -> void:
 		# Портрет министра в рамке
 		var port_tex: Texture2D = null
 		if not m.portrait_path.is_empty() and m.portrait_path != "res://icon.svg":
-			if ResourceLoader.exists(m.portrait_path):
-				port_tex = load(m.portrait_path) as Texture2D
+			port_tex = TNOTheme.get_texture(m.portrait_path)
 
 		var img_rect := TextureRect.new()
 		img_rect.custom_minimum_size = Vector2(50, 68)
@@ -373,6 +397,14 @@ func _populate_cabinet_members() -> void:
 		m_stat_lbl.add_theme_font_size_override("font_size", 9)
 		m_stat_lbl.add_theme_color_override("font_color", TNOTheme.COLOR_TEXT_MUTED)
 		mvbox.add_child(m_stat_lbl)
+
+		card.tooltip_text = "┌── [ЧЛЕН КАБИНЕТА // CABINET MEMBER] ──\n│ ДОЛЖНОСТЬ: %s\n│ МИНИСТР: %s\n│ ВЛИЯНИЕ: %d%% | ЛОЯЛЬНОСТЬ: %d%%\n├─────────────────────────────────────────\n│ СТРАТЕГИЧЕСКИЙ ПРОФИЛЬ:\n%s" % [
+			m.title if not m.title.is_empty() else m.role_type,
+			m.leader_name,
+			int(m.cabinet_influence),
+			int(m.loyalty),
+			m.description if not m.description.is_empty() else "Исполняет ключевые обязанности в правительстве."
+		]
 
 		hbox.add_child(card)
 

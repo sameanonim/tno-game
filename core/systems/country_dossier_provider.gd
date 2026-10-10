@@ -231,77 +231,10 @@ static func get_country_dossier(tag: String, manifest_data: Dictionary = {}, cac
 			"lore": lore_text
 		}
 
-		if tag == "USA":
-			dossier["name"] = "the United States of America"
-			dossier["name_ru"] = "Соединённые Штаты Америки"
-			dossier["leader_name"] = "Ричард Никсон"
-			dossier["leader_title"] = "Президент США"
-			dossier["portrait_path"] = "res://assets/gfx/leaders/USA/USA_Richard_Nixon.png"
-			dossier["color"] = Color(0.20, 0.40, 0.85)
-			dossier["theater"] = "theater_superpowers"
-			dossier["difficulty_rating"] = "●●○○○ (УМЕРЕННАЯ)"
-			dossier["starting_gdp"] = 280.0
-			dossier["starting_manpower"] = 650000
-			dossier["starting_factories"] = 310
-			dossier["traits"] = ["Мастер кулуаров", "Альянс ОФН", "Расколотый конгресс", "Борьба за гражданские права"]
-			dossier["lore"] = "Оплот свободного мира после поражения во Второй мировой войне. Под руководством Никсона страна противостоит Рейху и Японии в прокси-конфликтах (Южная Африка), пока в Конгрессе разгорается ожесточенная битва коалиции R-D и пакта NPP за гражданские права и будущее нации."
-			dossier["geopolitical_bloc"] = "ОФН (Организация Свободных Наций)"
-		elif tag == "SPE":
-			dossier["name"] = "Reich of Albert Speer (Reformists)"
-			dossier["name_ru"] = "Германия (Альберт Шпеер / Реформаторы)"
-			dossier["leader_name"] = "Альберт Шпеер"
-			dossier["leader_title"] = "Рейхсминистр вооружений / Лидер Реформаторов"
-			dossier["portrait_path"] = "res://data/countries/GER/leaders/portraits/GER_albert_speer.png"
-			dossier["color"] = Color(0.85, 0.65, 0.20)
-			dossier["theater"] = "theater_gcw"
-			dossier["difficulty_rating"] = "●●●○○ (СРЕДНЯЯ)"
-			dossier["starting_gdp"] = 85.0
-			dossier["starting_manpower"] = 250000
-			dossier["starting_factories"] = 110
-			dossier["traits"] = ["Архитектор Рейха", "Либерализация рынка", "Поддержка студенчества"]
-			dossier["geopolitical_bloc"] = "Einheitspakt (Реформаторы)"
-		elif tag == "BOR":
-			dossier["name"] = "Reich of Martin Bormann (Party Bureaucracy)"
-			dossier["name_ru"] = "Германия (Мартин Борман / Партократы)"
-			dossier["leader_name"] = "Мартин Борман"
-			dossier["leader_title"] = "Партийный Секретарь НСДАП / Коричневое Преосвященство"
-			dossier["portrait_path"] = "res://data/countries/GER/leaders/portraits/GER_martin_bormann.png"
-			dossier["color"] = Color(0.60, 0.45, 0.25)
-			dossier["theater"] = "theater_gcw"
-			dossier["difficulty_rating"] = "●●○○○ (НИЗКАЯ)"
-			dossier["starting_gdp"] = 95.0
-			dossier["starting_manpower"] = 380000
-			dossier["starting_factories"] = 140
-			dossier["traits"] = ["Коричневое преосвященство", "Аппаратная паутина", "Консервация статуса-кво"]
-			dossier["geopolitical_bloc"] = "Einheitspakt (Партократы)"
-		elif tag == "GOR":
-			dossier["name"] = "Reich of Hermann Göring (Militarist Junta)"
-			dossier["name_ru"] = "Германия (Герман Геринг / Милитаристы)"
-			dossier["leader_name"] = "Герман Геринг"
-			dossier["leader_title"] = "Рейхсмаршал Великогермании / Глава Люфтваффе"
-			dossier["portrait_path"] = "res://data/countries/GER/leaders/portraits/GER_hermann_goring.png"
-			dossier["color"] = Color(0.48, 0.52, 0.58)
-			dossier["theater"] = "theater_gcw"
-			dossier["difficulty_rating"] = "●●●●○ (ВЫСОКАЯ)"
-			dossier["starting_gdp"] = 90.0
-			dossier["starting_manpower"] = 420000
-			dossier["starting_factories"] = 150
-			dossier["traits"] = ["Марионетка Шёрнера", "Экономика непрерывного грабежа", "Воздушный триумф"]
-			dossier["geopolitical_bloc"] = "Einheitspakt (Милитаристы)"
-		elif tag == "HEY":
-			dossier["name"] = "SS-Reich of Reinhard Heydrich"
-			dossier["name_ru"] = "Германия (Рейнхард Гейдрих / Черный Орден СС)"
-			dossier["leader_name"] = "Рейнхард Гейдрих"
-			dossier["leader_title"] = "Обергруппенфюрер СС / Пражский Мясник"
-			dossier["portrait_path"] = "res://data/countries/GER/leaders/portraits/GER_reinhard_heydrich.png"
-			dossier["color"] = Color(0.18, 0.18, 0.24)
-			dossier["theater"] = "theater_gcw"
-			dossier["difficulty_rating"] = "●●●●● (ЭКСТРЕМАЛЬНАЯ)"
-			dossier["starting_gdp"] = 70.0
-			dossier["starting_manpower"] = 180000
-			dossier["starting_factories"] = 95
-			dossier["traits"] = ["Пражский мясник", "Орудие Гиммлера", "Черный орден"]
-			dossier["geopolitical_bloc"] = "Burgundian Sphere (Черный Орден СС)"
+		var overrides = _get_canonical_overrides(tag)
+		if not overrides.is_empty():
+			for k in overrides:
+				dossier[k] = overrides[k]
 
 		cached_dossiers[tag] = dossier
 		return dossier
@@ -332,3 +265,571 @@ static func get_country_dossier(tag: String, manifest_data: Dictionary = {}, cac
 		return dossier
 
 	return {}
+
+
+static func _get_canonical_overrides(tag: String) -> Dictionary:
+	match tag:
+		"USA":
+			return {
+				"name": "the United States of America",
+				"name_ru": "Соединённые Штаты Америки",
+				"leader_name": "Ричард Никсон",
+				"leader_title": "37-й Президент Соединённых Штатов",
+				"portrait_path": "res://assets/gfx/leaders/USA/USA_Richard_Nixon.png",
+				"color": Color(0.20, 0.40, 0.85),
+				"theater": "theater_superpowers",
+				"difficulty_rating": "●●○○○ (УМЕРЕННАЯ)",
+				"starting_gdp": 280.0,
+				"starting_manpower": 650000,
+				"starting_factories": 310,
+				"traits": ["Мастер кулуарных интриг", "Альянс ОФН", "Расколотый конгресс", "Борьба за гражданские права"],
+				"lore": "Оплот свободного мира после горького поражения во Второй мировой войне. Под руководством Никсона Америка сдерживает экспансию Германии и Японии в прокси-войнах (Южная Африка), пока в Вашингтоне разгорается ожесточенная битва коалиции R-D и пакта NPP за Закон о гражданских правах и будущее демократии.",
+				"geopolitical_bloc": "ОФН (Организация Свободных Наций)"
+			}
+		"GER":
+			return {
+				"name": "Greater German Reich",
+				"name_ru": "Великогерманский Рейх",
+				"leader_name": "Адольф Гитлер",
+				"leader_title": "Фюрер Великогерманского Рейха",
+				"portrait_path": "res://assets/gfx/leaders/GER/GER_adolf_hitler.png",
+				"color": Color(0.48, 0.28, 0.18),
+				"theater": "theater_superpowers",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 148.5,
+				"starting_manpower": 850000,
+				"starting_factories": 240,
+				"traits": ["Дряхлеющий диктатор", "Культ Вождя", "Архитектор Нового Порядка", "Смертельный кризис престолонаследия"],
+				"lore": "Январь 1962 года. Адольф Гитлер слабеет с каждым днем в сумрачных залах Зала Народа в столице мира Германии. За его спиной четыре могущественные клики — бюрократы Бормана, милитаристы Геринга, реформаторы Шпеера и фанатики Гейдриха — делят власть и готовят дивизии к неизбежной Немецкой Гражданской Войне. Экономика Рейха скована миллионами рабов и провалом гигантских проектов Атлантропы.",
+				"geopolitical_bloc": "Einheitspakt (Пакт Единства)"
+			}
+		"JAP":
+			return {
+				"name": "Empire of Japan",
+				"name_ru": "Великая Японская Империя",
+				"leader_name": "Ино Хироя",
+				"leader_title": "Премьер-министр Японской Империи",
+				"portrait_path": "res://assets/gfx/leaders/JAP/JAP_Ino_Hiroya.png",
+				"color": Color(0.85, 0.25, 0.25),
+				"theater": "theater_superpowers",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 195.0,
+				"starting_manpower": 720000,
+				"starting_factories": 210,
+				"traits": ["Ставленник дзайбацу", "Императорская лояльность", "Азиатская гегемония", "Уязвимость биржи Ясуда"],
+				"lore": "Владычица Восточной Азии и Тихого океана. Японская Империя держит сотни миллионов людей в колониальной Сфере Сопроцветания. Однако хрупкое благополучие Токио держится на коррупционной паутине кланов дзайбацу. Неизбежное банкротство банка Ясуда грозит обрушить экономику державы, спровоцировать падение кабинета министров и открыть путь к борьбе между гражданскими бюрократами и фанатичной армией.",
+				"geopolitical_bloc": "Дайтоа Кёэйкэн (Сфера Сопроцветания)"
+			}
+		"ITA":
+			return {
+				"name": "Italian Empire",
+				"name_ru": "Итальянская Империя",
+				"leader_name": "Галеаццо Чиано",
+				"leader_title": "Министр иностранных дел / Преемник Дуче",
+				"portrait_path": "res://assets/gfx/leaders/ITA/ITA_Galeazzo_Ciano.png",
+				"color": Color(0.18, 0.55, 0.35),
+				"theater": "theater_europe",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 68.0,
+				"starting_manpower": 320000,
+				"starting_factories": 85,
+				"traits": ["Зять Дуче", "Архитектор Триумвирата", "Тайный реформатор", "Битва за Средиземноморье"],
+				"lore": "Победительница во Второй мировой войне, Римская Империя Муссолини объединила Средиземноморье в блок Триумвирата с Иберией и Турцией. Но проект Атлантропы превратил Адриатику в солончак, уничтожил морскую торговлю, а фашистская партия разрывается между консерваторами Скорцы и реформаторами Чиано. Скорая смерть дряхлого Муссолини поставит Италию на грань демократической революции или военного путча.",
+				"geopolitical_bloc": "Триумвират (Средиземноморский пакт)"
+			}
+		"IBR":
+			return {
+				"name": "Iberian Union",
+				"name_ru": "Иберийский Союз",
+				"leader_name": "Франсиско Франко",
+				"leader_title": "Каудильо Иберийского Союза",
+				"portrait_path": "res://assets/gfx/leaders/IBR/IBR_Francisco_Franco.png",
+				"color": Color(0.75, 0.60, 0.20),
+				"theater": "theater_europe",
+				"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+				"starting_gdp": 45.0,
+				"starting_manpower": 280000,
+				"starting_factories": 55,
+				"traits": ["Каудильо Пиренеев", "Неустойчивый дуумвират", "Борьба с террором ETA", "Ядерная программа Иберии"],
+				"lore": "Шаткий конфедеративный союз Испании и Португалии, скрепленный соглашением генерала Франко и премьера Салазара. Страну сотрясают этнические волнения басков и каталонцев, террористические акты ETA и экономическая изоляция. В случае смерти одного из лидеров Союз рискует распасться в пламени Иберийской Гражданской Войны.",
+				"geopolitical_bloc": "Триумвират (Иберо-Итальянский пакт)"
+			}
+		"ENG":
+			return {
+				"name": "Kingdom of England",
+				"name_ru": "Королевство Англия (Коллаборационисты)",
+				"leader_name": "Эндрю Фаунтейн",
+				"leader_title": "Премьер-министр Королевства Англия",
+				"portrait_path": "res://assets/gfx/leaders/ENG/ENG_Andrew_Fountaine.png",
+				"color": Color(0.70, 0.20, 0.20),
+				"theater": "theater_europe",
+				"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+				"starting_gdp": 38.0,
+				"starting_manpower": 140000,
+				"starting_factories": 48,
+				"traits": ["Лондонский коллаборационист", "Марионетка Пакта", "Тень восстания HMMLR", "Расколотая Британия"],
+				"lore": "После вторжения сил Оси во время операции 'Морской лев' Великобритания была расчленена. В Лондоне правит коллаборационистский режим под скипетром лояльного немцам короля Эдварда VIII. Однако на севере и западе зреет подпольное пламя Сопротивления Её Величества (HMMLR), готовое поднять всеобщее восстание при первом же кризисе в Германии.",
+				"geopolitical_bloc": "Einheitspakt (Британский протекторат)"
+			}
+		"BRG":
+			return {
+				"name": "SS-Ordensstaat Burgund",
+				"name_ru": "Орденсштаат Бургундия (СС)",
+				"leader_name": "Генрих Гиммлер",
+				"leader_title": "Рейхсфюрер СС / Правитель Орденсштаата",
+				"portrait_path": "res://assets/gfx/leaders/BRG/BRG_Heinrich_Himmler.png",
+				"color": Color(0.12, 0.12, 0.18),
+				"theater": "theater_europe",
+				"difficulty_rating": "●●●●● (ЭКСТРЕМАЛЬНАЯ)",
+				"starting_gdp": 25.0,
+				"starting_manpower": 120000,
+				"starting_factories": 60,
+				"traits": ["Архитектор Черного Ордена", "Спартанский тоталитаризм", "План атомного апокалипсиса", "Тайные бункеры"],
+				"lore": "Самое мрачное тоталитарное государство на планете. Выделенная Гитлером земля превращена Гиммлером в циклопический концлагерь спартанского типа. Под прикрытием жесточайшей дисциплины Бургундия ведет глобальные подрывные операции во всех сверхдержавах с единственной целью: спровоцировать глобальную ядерную войну ради 'очищения арийской расы'.",
+				"geopolitical_bloc": "Бургундская Система (Черное Солнце)"
+			}
+		"TUR":
+			return {
+				"name": "Republic of Turkey",
+				"name_ru": "Турецкая Республика",
+				"leader_name": "Исмет Инёню",
+				"leader_title": "Президент Турецкой Республики",
+				"portrait_path": "res://assets/gfx/leaders/TUR/TUR_Ismet_Inonu.png",
+				"color": Color(0.65, 0.25, 0.25),
+				"theater": "theater_europe",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 32.0,
+				"starting_manpower": 260000,
+				"starting_factories": 42,
+				"traits": ["Второй человек Республики", "Средиземноморские амбиции", "Кемалистский порядок", "Итало-турецкое соперничество"],
+				"lore": "Участник Триумвирата, получивший земли в Леванте и Закавказье после падения союзников. Но Анкара недовольна итальянским доминированием в Средиземноморье. Стареющий Инёню сталкивается с растущим давлением военных ультранационалистов Алпарслана Тюркеша и кризисом на Ближнем Востоке.",
+				"geopolitical_bloc": "Триумвират (Средиземноморский пакт)"
+			}
+		"GNG":
+			return {
+				"name": "State of Guangdong",
+				"name_ru": "Государство Гуандун (Корпорации)",
+				"leader_name": "Масахару Мацусита",
+				"leader_title": "Глава Совета Директоров / Президент Matsushita",
+				"portrait_path": "res://assets/gfx/leaders/GNG/GNG_matsushita_masaharu.png",
+				"color": Color(0.25, 0.75, 0.65),
+				"theater": "theater_sphere",
+				"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+				"starting_gdp": 28.5,
+				"starting_manpower": 95000,
+				"starting_factories": 68,
+				"traits": ["Корпоративный олигарх", "Высокотехнологичный анклав", "Кэмпэйтай против триад", "Жажда сверхприбыли"],
+				"lore": "Уникальный полигон корпоративного капитализма в Южном Китае. Вся власть разделена между электронными мегакорпорациями: Sony (Морита), Matsushita, Yasuda и Cheung Kong. Под неоновыми вывесками Гонконга и Гуанчжоу кипит жестокая эксплуатация рабочих, постоянные войны триад и интриги японского надзора.",
+				"geopolitical_bloc": "Сфера Сопроцветания (Корпоративный доминион)"
+			}
+		"CHI":
+			return {
+				"name": "Republic of China",
+				"name_ru": "Китайская Республика (Реорганизованная)",
+				"leader_name": "Гао Цзунъу",
+				"leader_title": "Президент Китайской Республики",
+				"portrait_path": "res://assets/gfx/leaders/CHI/CHI_gao_zongwu.png",
+				"color": Color(0.85, 0.70, 0.25),
+				"theater": "theater_sphere",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 72.0,
+				"starting_manpower": 1200000,
+				"starting_factories": 90,
+				"traits": ["Осторожный реформатор", "Японское ярмо", "Тайная модернизация", "Грядущая Война за Освобождение"],
+				"lore": "Нанкинское правительство внешне демонстрирует полную покорность Токио. Но президент Гао Цзунъу ведет величайшую в истории конспиративную игру: втайне модернизирует промышленность, копит оружие и объединяет китайский народ ради неминуемой Войны за Освобождение Китая против японских захватчиков.",
+				"geopolitical_bloc": "Сфера Сопроцветания (Поднебесная)"
+			}
+		"MAN":
+			return {
+				"name": "Empire of Manchuria",
+				"name_ru": "Маньчжоу-Го (Империя Маньчжурия)",
+				"leader_name": "Айсиньгёро Пу И",
+				"leader_title": "Император Маньчжурии (Кандэ)",
+				"portrait_path": "res://assets/gfx/leaders/MAN/MAN_aisin_gioro_puyi.png",
+				"color": Color(0.80, 0.65, 0.15),
+				"theater": "theater_sphere",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 34.0,
+				"starting_manpower": 350000,
+				"starting_factories": 72,
+				"traits": ["Последний император", "Заложник Квантунской армии", "Индустриальное сердце Сферы", "Подавленный ропот"],
+				"lore": "Индустриальная цитадель Японской Империи на материке. Император Пу И правит лишь номинально — реальная власть принадлежит командующему Квантунской армией и корпорациям Мансинь. Страна скована железной военной дисциплиной и страхом перед восстанием сибирских варлордов.",
+				"geopolitical_bloc": "Сфера Сопроцветания (Квантунский протекторат)"
+			}
+		"THA":
+			return {
+				"name": "Kingdom of Thailand",
+				"name_ru": "Королевство Таиланд",
+				"leader_name": "Плек Пибунсонграм",
+				"leader_title": "Премьер-министр и фельдмаршал",
+				"portrait_path": "res://assets/gfx/leaders/THA/THA_Plaek_Phibunsongkhram.png",
+				"color": Color(0.30, 0.55, 0.70),
+				"theater": "theater_sphere",
+				"difficulty_rating": "●●○○○ (НИЗКАЯ)",
+				"starting_gdp": 18.0,
+				"starting_manpower": 160000,
+				"starting_factories": 28,
+				"traits": ["Тайский модернизатор", "Равноправный союзник Токио", "Милитаристская рулетка", "Королевский баланс"],
+				"lore": "Единственное суверенное королевство Юго-Восточной Азии, добровольно вступившее в союз с Японией. Фельдмаршал Пибун проводит политику национальной гордости и модернизации, лавируя между японским диктатом и армейскими заговорами.",
+				"geopolitical_bloc": "Сфера Сопроцветания (Суверенный союзник)"
+			}
+		"YUN":
+			return {
+				"name": "Yunnan",
+				"name_ru": "Юньнань (Юго-Западный Варлорд)",
+				"leader_name": "Лу Хан",
+				"leader_title": "Губернатор провинции Юньнань",
+				"portrait_path": "res://assets/gfx/leaders/YUN/YUN_lu_han.png",
+				"color": Color(0.45, 0.60, 0.40),
+				"theater": "theater_sphere",
+				"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+				"starting_gdp": 12.0,
+				"starting_manpower": 180000,
+				"starting_factories": 18,
+				"traits": ["Горный варлорд", "Опиумная казна", "Угроза возвращения Лун Юня", "Оружейные арсеналы Бирмы"],
+				"lore": "Труднодоступная горная провинция Китая. Генерал Лу Хан поддерживает формальный мир с Нанкином и Японией, однако в домашнем заключении томится свергнутый тиран Лун Юнь — бескомпромиссный националист, мечтающий поднять Великое Азиатское Восстание и утопить оккупантов в крови.",
+				"geopolitical_bloc": "Сфера Сопроцветания (Китайский варлорд)"
+			}
+		"SPE":
+			return {
+				"name": "Reich of Albert Speer (Reformists)",
+				"name_ru": "Германия (Альберт Шпеер / Реформаторы)",
+				"leader_name": "Альберт Шпеер",
+				"leader_title": "Рейхсминистр вооружений / Лидер Реформаторов",
+				"portrait_path": "res://data/countries/GER/leaders/portraits/GER_albert_speer.png",
+				"color": Color(0.85, 0.65, 0.20),
+				"theater": "theater_gcw",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 85.0,
+				"starting_manpower": 250000,
+				"starting_factories": 110,
+				"traits": ["Архитектор Рейха", "Либерализация рынка", "Поддержка студенчества", "Банда Четырёх"],
+				"lore": "Главный архитектор Рейха, осознавший экономический тупик национал-социализма. Опираясь на прогрессивное студенчество, технократов и либеральных заговорщиков фон Трескова ('Банду Четырёх'), Шпеер обещает демонтировать рабство и спасти Рейх через модернизацию.",
+				"geopolitical_bloc": "Einheitspakt (Реформаторы)"
+			}
+		"BOR":
+			return {
+				"name": "Reich of Martin Bormann (Party Bureaucracy)",
+				"name_ru": "Германия (Мартин Борман / Партократы)",
+				"leader_name": "Мартин Борман",
+				"leader_title": "Партийный Секретарь НСДАП / Коричневое Преосвященство",
+				"portrait_path": "res://data/countries/GER/leaders/portraits/GER_martin_bormann.png",
+				"color": Color(0.60, 0.45, 0.25),
+				"theater": "theater_gcw",
+				"difficulty_rating": "●●○○○ (НИЗКАЯ)",
+				"starting_gdp": 95.0,
+				"starting_manpower": 380000,
+				"starting_factories": 140,
+				"traits": ["Коричневое преосвященство", "Аппаратная паутина", "Консервация статуса-кво", "Партийный фаворит"],
+				"lore": "Теневой хозяин партийной канцелярии НСДАП. Борман контролирует партийных функционеров и гауляйтеров по всей Европе. Его программа — консервация наследия Гитлера, медленные умеренные корректировки и безжалостная зачистка политических конкурентов.",
+				"geopolitical_bloc": "Einheitspakt (Партократы)"
+			}
+		"GOR":
+			return {
+				"name": "Reich of Hermann Göring (Militarist Junta)",
+				"name_ru": "Германия (Герман Геринг / Милитаристы)",
+				"leader_name": "Герман Геринг",
+				"leader_title": "Рейхсмаршал Великогермании / Глава Люфтваффе",
+				"portrait_path": "res://data/countries/GER/leaders/portraits/GER_hermann_goring.png",
+				"color": Color(0.48, 0.52, 0.58),
+				"theater": "theater_gcw",
+				"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+				"starting_gdp": 90.0,
+				"starting_manpower": 420000,
+				"starting_factories": 150,
+				"traits": ["Марионетка Шёрнера", "Экономика непрерывного грабежа", "Воздушный триумф", "Военная хунта"],
+				"lore": "Рейхсмаршал опирается на генералитет Вермахта и фанатиков фельдмаршала Шёрнера. Милитаристы предлагают радикальный выход из кризиса: возобновление тотальной захватнической войны, аннексию Швейцарии, Швеции и восточных земель ради тотального грабежа ресурсов.",
+				"geopolitical_bloc": "Einheitspakt (Милитаристы)"
+			}
+		"HEY":
+			return {
+				"name": "SS-Reich of Reinhard Heydrich",
+				"name_ru": "Германия (Рейнхард Гейдрих / Черный Орден СС)",
+				"leader_name": "Рейнхард Гейдрих",
+				"leader_title": "Обергруппенфюрер СС / Пражский Мясник",
+				"portrait_path": "res://data/countries/GER/leaders/portraits/GER_reinhard_heydrich.png",
+				"color": Color(0.18, 0.18, 0.24),
+				"theater": "theater_gcw",
+				"difficulty_rating": "●●●●● (ЭКСТРЕМАЛЬНАЯ)",
+				"starting_gdp": 70.0,
+				"starting_manpower": 180000,
+				"starting_factories": 95,
+				"traits": ["Пражский мясник", "Орудие Гиммлера", "Черный орден", "Тайный бунт против Бургундии"],
+				"lore": "Шеф РСХА и безжалостный палач Чехии. Номинально Гейдрих действует как марионетка Бургундии, однако осознав, что цель Гиммлера — уничтожение Германии в ядерном пламени, он оказывается перед мучительным выбором между верностью Ордену и спасением немецкой нации.",
+				"geopolitical_bloc": "Burgundian Sphere (Черный Орден СС)"
+			}
+		"KOM":
+			return {
+				"name": "Komi Republic",
+				"name_ru": "Республика Коми (Сыктывкар)",
+				"leader_name": "Николай Вознесенский",
+				"leader_title": "Президент Республики Коми",
+				"portrait_path": "res://assets/gfx/leaders/KOM/KOM_Nikolai_Voznesensky.png",
+				"color": Color(0.20, 0.75, 0.70),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+				"starting_gdp": 16.5,
+				"starting_manpower": 45000,
+				"starting_factories": 22,
+				"traits": ["Демократический экономист", "Расколотый Сыктывкарский парламент", "Осада радикалами", "Налеты Люфтваффе"],
+				"lore": "Хрупкий островок демократии на северо-востоке европейской России. Президент Вознесенский пытается удержать республику от гражданской войны, пока левые социалисты (Суслов, Жданов) и правые фанатики-пассионарии (Гумилёв, Серов, Шафаревич, Таборицкий) открыто готовят вооруженные перевороты.",
+				"geopolitical_bloc": "Демократический Центр (Россия)"
+			}
+		"WRS":
+			return {
+				"name": "West Russian Revolutionary Front",
+				"name_ru": "Западнорусский Революционный Фронт",
+				"leader_name": "Михаил Тухачевский",
+				"leader_title": "Маршал Советского Союза / Главком Фронта",
+				"portrait_path": "res://assets/gfx/leaders/WRS/WRS_Mikhail_Tukhachevsky.png",
+				"color": Color(0.85, 0.15, 0.15),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●○○○ (УМЕРЕННАЯ)",
+				"starting_gdp": 19.0,
+				"starting_manpower": 95000,
+				"starting_factories": 34,
+				"traits": ["Красный Наполеон", "Теория глубокой операции", "Несгибаемая РККА", "Жажда реванша за Москву"],
+				"lore": "Наследники непобедимой Красной Армии, удержавшие Архангельск после катастрофы Второй мировой войны и отразившие немецкий натиск во время Западнорусской войны. Маршалы Ворошилов и Тухачевский готовят советских солдат ко Второму Западному Походу ради освобождения Москвы от тевтонского ига.",
+				"geopolitical_bloc": "Коминтерн / Красная Армия"
+			}
+		"OMS":
+			return {
+				"name": "All-Russian Black League",
+				"name_ru": "Омск (Всероссийская Чёрная Лига)",
+				"leader_name": "Дмитрий Карбышев",
+				"leader_title": "Генералиссимус Чёрной Лиги",
+				"portrait_path": "res://assets/gfx/leaders/OMS/OMS_Dmitry_Karbyshev.png",
+				"color": Color(0.25, 0.25, 0.28),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 15.0,
+				"starting_manpower": 75000,
+				"starting_factories": 28,
+				"traits": ["Несломленный узник", "Идея Великого Суда", "Черные бригады возмездия", "Подземная крепость Сибири"],
+				"lore": "Омск живет лишь одной целью — Великим Судом над Германией. Старый генерал Карбышев и его бескомпромиссный преемник Дмитрий Язов превратили город в тоталитарный военный лагерь. Здесь нет гражданской жизни: все ресурсы направлены на армию, циклопические бункеры и подготовку к тотальной войне на взаимное истребление.",
+				"geopolitical_bloc": "Чёрная Лига (Великий Суд)"
+			}
+		"SVR":
+			return {
+				"name": "Ural Military District",
+				"name_ru": "Свердловск (Уральский Военный Округ)",
+				"leader_name": "Павел Батов",
+				"leader_title": "Командующий Военным Округом / Генерал Армии",
+				"portrait_path": "res://assets/gfx/leaders/SVR/SVR_Pavel_Batov.png",
+				"color": Color(0.35, 0.55, 0.35),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●○○○ (НИЗКАЯ)",
+				"starting_gdp": 21.0,
+				"starting_manpower": 85000,
+				"starting_factories": 38,
+				"traits": ["Солдатский генерал", "Стальная дисциплина", "Служить России", "Уральский оборонный вал"],
+				"lore": "Остатки советского генералитета на Урале во главе с легендарным комдивом Павлом Батовым. Здесь отвергли партийную идеологическую демагогию во имя железного принципа: 'Служить России'. Опираясь на заводы Свердловска и выучку офицеров, армия Батова готова железной рукой навести порядок на русской земле.",
+				"geopolitical_bloc": "Вооруженные Силы России"
+			}
+		"TOM":
+			return {
+				"name": "Tomsk Intellectual Republic",
+				"name_ru": "Томск (Город Интеллектуалов и Салонов)",
+				"leader_name": "Борис Пастернак",
+				"leader_title": "Президент Республики / Глава Салонов",
+				"portrait_path": "res://assets/gfx/leaders/TOM/TOM_Boris_Pasternak.png",
+				"color": Color(0.40, 0.65, 0.85),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 18.5,
+				"starting_manpower": 55000,
+				"starting_factories": 30,
+				"traits": ["Поэт и философ", "Гуманистическая демократия", "Четыре Салона", "Оазис сибирской культуры"],
+				"lore": "Томск стал приютом для спасшейся русской интеллигенции, инженеров, ученых и художников. Под руководством поэта Бориса Пастернака создана уникальная салонная демократия: Декабристы борются за права человека, Модернисты — за технологический прогресс, Бастурма — за социальную справедливость, а Евразийцы — за сильную державу.",
+				"geopolitical_bloc": "Сибирский Союз Культуры"
+			}
+		"NOV":
+			return {
+				"name": "Central Siberian Federation",
+				"name_ru": "Новосибирск (Федерация Центральной Сибири)",
+				"leader_name": "Александр Покрышкин",
+				"leader_title": "Председатель Федерации / Маршал Авиации",
+				"portrait_path": "res://assets/gfx/leaders/NOV/NOV_Alexander_Pokryshkin.png",
+				"color": Color(0.30, 0.45, 0.75),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●○○○ (НИЗКАЯ)",
+				"starting_gdp": 24.0,
+				"starting_manpower": 90000,
+				"starting_factories": 42,
+				"traits": ["Ас и прагматик", "Альянс ВПК и генералов", "Корпорация Сибирь", "Хозяйственный расчет"],
+				"lore": "Новосибирск объединил военную элиту маршала Покрышкина и промышленных магнатов ВПК. Вместо пустой идеологии здесь правят холодный расчет, экспорт ресурсов и скупка соседних территорий через экономическое доминирование. Противовесом олигархам выступает народное движение писателя Василия Шукшина.",
+				"geopolitical_bloc": "Сибирская Федерация"
+			}
+		"BRY":
+			return {
+				"name": "Buryat Soviet Socialist Republic",
+				"name_ru": "Бурятская ССР (Саблинский Идеализм)",
+				"leader_name": "Валерий Саблин",
+				"leader_title": "Председатель Революционного Военсовета",
+				"portrait_path": "res://assets/gfx/leaders/BRY/BRY_Valery_Sablin.png",
+				"color": Color(0.80, 0.25, 0.25),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+				"starting_gdp": 12.0,
+				"starting_manpower": 38000,
+				"starting_factories": 18,
+				"traits": ["Истинный ленинец", "Чистая революция", "Власть Советам", "Отвержение бюрократии"],
+				"lore": "Молодой морской офицер Валерий Саблин поднял восстание против чекистской тирании Ягоды в Иркутске. На берегах Байкала он строит государство подлинного социализма, основанное на власти рабочих советов, свободе слова и вере в идеалы Ленина.",
+				"geopolitical_bloc": "Истинный Союз Советов"
+			}
+		"SBA":
+			return {
+				"name": "Siberian Black Army",
+				"name_ru": "Сибирская Чёрная Армия (Вольная Территория)",
+				"leader_name": "Степан Валентеев",
+				"leader_title": "Командующий Чёрной Армией",
+				"portrait_path": "res://assets/gfx/leaders/SBA/SBA_Stepan_Valenteev.png",
+				"color": Color(0.15, 0.15, 0.15),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 14.5,
+				"starting_manpower": 60000,
+				"starting_factories": 24,
+				"traits": ["Безвластие и воля", "Сибирский анархизм", "Черная гвардия советов", "Отказ от государства"],
+				"lore": "Канск стал центром крупнейшего анархистского эксперимента в мировой истории. Здесь упразднены государственные институты, деньги и чиновники — вся власть принадлежит коммунам и синдикатам. Безопасность вольной Сибири защищает самоотверженная Чёрная Армия Степана Валентеева.",
+				"geopolitical_bloc": "Вольная Федерация Анархистов"
+			}
+		"SAM":
+			return {
+				"name": "Committee for the Liberation of the Peoples of Russia",
+				"name_ru": "Самара (КОНР / Русская Освободительная Армия)",
+				"leader_name": "Андрей Власов",
+				"leader_title": "Председатель КОНР / Командующий РОА",
+				"portrait_path": "res://assets/gfx/leaders/SAM/SAM_Andrey_Vlasov.png",
+				"color": Color(0.65, 0.55, 0.30),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 17.0,
+				"starting_manpower": 70000,
+				"starting_factories": 26,
+				"traits": ["Генерал-власовец", "Клеймо предательства", "Тайный план возмездия", "Тяжелая техника Вермахта"],
+				"lore": "Русская Освободительная Армия (РОА) генерала Власова осела в Поволжье. Русские люди презирают власовцев как немецких прислужников, но сам Власов и его штабисты (Трухин, Малышкин) мечтают о дне, когда слабость Рейха позволит повернуть оружие против захватчиков.",
+				"geopolitical_bloc": "КОНР (Самара)"
+			}
+		"TYU", "TYM":
+			return {
+				"name": "West Siberian People's Republic",
+				"name_ru": "Тюмень (Западно-Сибирская Народная Республика)",
+				"leader_name": "Лазарь Каганович",
+				"leader_title": "Первый Секретарь ВКП(б)",
+				"portrait_path": "res://assets/gfx/leaders/TYM/TYM_Lazar_Kaganovich.png",
+				"color": Color(0.75, 0.12, 0.12),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 16.0,
+				"starting_manpower": 65000,
+				"starting_factories": 28,
+				"traits": ["Железный нарком", "Непоколебимый сталинист", "Пятилетки любой ценой", "Лагерный индустриальный фронт"],
+				"lore": "Последняя цитадель несгибаемого сталинизма. Лазарь Каганович железной рукой проводит форсированную индустриализацию посреди болот и мерзлоты. Ценой жесточайшей дисциплины Тюмень кует сталь и танки для реванша, пока в обкоме назревает конфликт с прагматичным крылом Никиты Хрущёва.",
+				"geopolitical_bloc": "ВКП(б) (Тюмень)"
+			}
+		"VYT":
+			return {
+				"name": "Russian Empire (Vyatka)",
+				"name_ru": "Вятка (Русская Империя Владимира III)",
+				"leader_name": "Владимир III",
+				"leader_title": "Император и Самодержец Всероссийский",
+				"portrait_path": "res://assets/gfx/leaders/VYT/VYT_Vladimir_III.png",
+				"color": Color(0.20, 0.40, 0.70),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 16.8,
+				"starting_manpower": 58000,
+				"starting_factories": 25,
+				"traits": ["Законный Государь", "Монархическое возрождение", "Солидаризм НТС", "Раскаяние за сотрудничество"],
+				"lore": "Наследник дома Романовых провозгласил возрождение Российской Империи в лесах Вятки. Великий князь Владимир стремится искупить вину за вынужденный союз с Германией и построить современную народную монархию, опираясь на солидаристов НТС и белое офицерство.",
+				"geopolitical_bloc": "Российский Императорский Дом"
+			}
+		"IRK":
+			return {
+				"name": "Presidium of the Supreme Soviet",
+				"name_ru": "Иркутск (Президиум Верховного Совета СССР)",
+				"leader_name": "Генрих Ягода",
+				"leader_title": "Генеральный Секретарь / Нарком Госбезопасности",
+				"portrait_path": "res://assets/gfx/leaders/IRK/IRK_Genrikh_Yagoda.png",
+				"color": Color(0.60, 0.15, 0.15),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 15.5,
+				"starting_manpower": 62000,
+				"starting_factories": 27,
+				"traits": ["Чекистский диктатор", "Аппарат террора НКВД", "Остатки советского Госплана", "Осада мятежниками"],
+				"lore": "Официальный правопреемник прежнего советского руководства, превратившийся в чекистскую диктатуру. Генрих Ягода держит Восточную Сибирь железной хваткой спецслужб и трудовых лагерей, подавляя мятеж Саблина и готовясь восстановить Союз через тотальный контроль.",
+				"geopolitical_bloc": "НКВД / Президиум СССР"
+			}
+		"MAG":
+			return {
+				"name": "Russian National Party",
+				"name_ru": "Магадан (Русская Национальная Партия)",
+				"leader_name": "Михаил Матковский",
+				"leader_title": "Вождь РНП / Премьер-министр",
+				"portrait_path": "res://assets/gfx/leaders/MAG/MAG_Mikhail_Matkovsky.png",
+				"color": Color(0.35, 0.40, 0.50),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 14.0,
+				"starting_manpower": 42000,
+				"starting_factories": 20,
+				"traits": ["Прагматичный фашист", "Американская помощь (ОФН)", "Охотский плацдарм", "Конкуренция наёмников"],
+				"lore": "Бывшие русские эмигранты из Харбина захватили порт Магадан. Отказавшись от слепого нацизма, Матковский проводит прагматичный курс, продавая ресурсы американцам и получая в ответ оружие ОФН, пока наёмник Митчелл Вербелл строит планы создания корпоративного государства.",
+				"geopolitical_bloc": "Тихоокеанский Союз"
+			}
+		"AMR":
+			return {
+				"name": "All-Russian Fascist Party",
+				"name_ru": "Амур (Всероссийская Фашистская Партия)",
+				"leader_name": "Константин Родзаевский",
+				"leader_title": "Верховный Вождь ВФП",
+				"portrait_path": "res://assets/gfx/leaders/AMR/AMR_Konstantin_Rodzaevsky.png",
+				"color": Color(0.30, 0.25, 0.25),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●●○ (ВЫСОКАЯ)",
+				"starting_gdp": 11.5,
+				"starting_manpower": 36000,
+				"starting_factories": 17,
+				"traits": ["Слепой поклонник Рейха", "Чернорубашечники", "Параноидальный антисемитизм", "Дальневосточный фанатизм"],
+				"lore": "Константин Родзаевский слепо скопировал худшие черты гитлеровского национал-социализма. В тайге Приамурья его чернорубашечники проводят чистки, надеясь заслужить благосклонность Берлина и Токио, в то время как паранойя Вождя медленно разрушает остатки рассудка.",
+				"geopolitical_bloc": "ВФП (Харбинские фашисты)"
+			}
+		"CHT":
+			return {
+				"name": "Chita (White Army Junta)",
+				"name_ru": "Чита (Забайкальское Белое Княжество)",
+				"leader_name": "Михаил II",
+				"leader_title": "Царь Всероссийский (Михаил Романов)",
+				"portrait_path": "res://assets/gfx/leaders/CHT/CHT_Mikhail_II.png",
+				"color": Color(0.60, 0.40, 0.20),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 13.5,
+				"starting_manpower": 48000,
+				"starting_factories": 21,
+				"traits": ["Царь поневоле", "Казачий атаман Семёнов", "Харбинские офицеры", "Тоска по Австралии"],
+				"lore": "Австралийский эмигрант князь Михаил Романов был обманом привезен в Читу атаманом Григорием Семёновым и провозглашен марионеточным монархом. Пока Семёнов грабит край с помощью казачьих шашек, несчастный царь ищет способ освободиться от опеки атаманов и служить русскому народу.",
+				"geopolitical_bloc": "Забайкальское Казачество"
+			}
+		"KEM":
+			return {
+				"name": "Principality of Kemerovo",
+				"name_ru": "Кемерово (Княжество Русь / Рюриковичи)",
+				"leader_name": "Рюрик II",
+				"leader_title": "Великий Князь Всея Руси (Николай Крылов)",
+				"portrait_path": "res://assets/gfx/leaders/KEM/KEM_Rurik_II.png",
+				"color": Color(0.85, 0.50, 0.20),
+				"theater": "theater_smuta",
+				"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+				"starting_gdp": 15.0,
+				"starting_manpower": 52000,
+				"starting_factories": 23,
+				"traits": ["Безумный Царь", "Княжеская дружина", "Синтез социализма и монархии", "Династический раскол"],
+				"lore": "Бывший советский генерал Николай Крылов сошел с ума от ужасов войны и провозгласил себя прямым наследником Рюрика. В Кузбассе он создал причудливое языческо-социалистическое княжество с народными пирами и верной дружиной, пока его дети — Юрий и Лидия — делят будущую корону.",
+				"geopolitical_bloc": "Княжество Рюриковичей"
+			}
+		_:
+			return {}
+

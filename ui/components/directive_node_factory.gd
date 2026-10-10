@@ -359,7 +359,15 @@ static func resolve_directive_texture(dir: DirectiveResource, current_country_ta
 				if t is Texture2D:
 					return t
 
-	# 4. Тематический fallback по категории директивы и ключевым словам
+	# 4. Поиск через глобальный AssetRegistry
+	var ar = AssetRegistryClass.get_instance()
+	if ar != null:
+		for c in candidates:
+			var t = ar.get_texture(c)
+			if t != null:
+				return t
+
+	# 5. Тематический fallback по категории директивы и ключевым словам
 	var tag_str = (dir.category + " " + dir.id + " " + dir.title).to_lower()
 	if tag_str.contains("mil") or tag_str.contains("war") or tag_str.contains("army") or tag_str.contains("front") or tag_str.contains("weapon") or tag_str.contains("armor") or tag_str.contains("plan"):
 		var t_mil = load("res://assets/gfx/interface/war_support_icon.png")
