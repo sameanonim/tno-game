@@ -1,4487 +1,1368 @@
 [
   {
-    "id": "invite_CZE_skoda_armor_organization",
-    "category_id": "foreign_mio_decisions_category",
-    "name": "Invite $CZE_skoda_armor_organization$ to [ROOT.GetNameWithFlag]",
-    "desc": "",
-    "icon": "generic_tank",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {
-      "CZE": {
-        "mio_original_country_available_with_opinion_subject_and_war_requirements_fulfilled": true
-      }
-    },
-    "visible": {
-      "CZE": {
-        "mio_original_country_exists_and_not_at_war_with_ROOT": true
-      },
-      "IF": {
-        "limit": {
-          "original_tag": "ETH"
-        },
-        "has_completed_focus": "ETH_invite_foreign_industrialists"
-      },
-      "ELSE": {
-        "always": false
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "has_invited_CZE_skoda_armor_organization_flag"
-      },
-      "custom_effect_tooltip": "available_mio_tt",
-      "show_mio_tooltip": "CZE_skoda_armor_organization"
-    }
-  },
-  {
-    "id": "BEL_more_equipment_for_the_spanish_decision",
-    "category_id": "BEL_intervention_in_spain_cat",
-    "name": "Предложить больше снаряжения нашим [FROM.GetAdjective]им друзьям",
-    "desc": "",
-    "icon": "GFX_decision_generic_industry",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "BEL_currently_undertaking_intervention_decision_flag"
-      }
-    },
-    "visible": {
-      "SPR_scw_in_progress": true,
-      "has_country_flag": "BEL_sent_equipment_to_spain_flag"
-    },
-    "complete_effect": {
-      "set_country_flag": "BEL_currently_undertaking_intervention_decision_flag"
-    }
-  },
-  {
-    "id": "BUL_purchase_armor",
-    "category_id": "BUL_purchase_equipment",
-    "name": "Закупить [FROM.GetAdjective]ую бронетехнику",
-    "desc": "",
-    "icon": "generic_tank",
-    "cost": "BUL_purchase_equipment_cost",
+    "id": "show_display_workforce",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Show Display Workforce",
+    "title_en": "Show Display Workforce",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 1,
     "fire_only_once": false,
-    "available": {
-      "FROM": [
-        {
-          "has_opinion": {
-            "target": "ROOT",
-            "value": {
-              "_op": ">",
-              "value": 0
-            }
-          },
-          "BUL_is_valid_subject": true
-        },
-        {
-          "OR": {
-            "has_tech": [
-              "basic_light_tank",
-              "basic_light_tank_chassis"
-            ]
-          }
-        }
-      ],
-      "NOT": [
-        {
-          "has_country_flag": "BUL_purchasing_armor_flag"
-        },
-        {
-          "has_war_with": "FROM"
-        },
-        {
-          "is_justifying_wargoal_against": "FROM"
-        }
-      ],
-      "if": {
-        "limit": {
-          "FROM": {
-            "tag": "GER"
-          }
-        },
-        "OR": {
-          "is_in_faction_with": "GER",
-          "AND": {
-            "BUL_foreign_agreements_in_faction_with_eng": true,
-            "BUL_foreign_agreements_in_faction_with_sov": true,
-            "BUL_foreign_agreements_in_faction_with_ita": true
-          }
-        }
-      },
-      "else_if": [
-        {
-          "limit": {
-            "FROM": {
-              "tag": "ITA"
-            }
-          },
-          "OR": {
-            "is_in_faction_with": "ITA",
-            "AND": {
-              "BUL_foreign_agreements_in_faction_with_ger": true,
-              "BUL_foreign_agreements_in_faction_with_eng": true,
-              "BUL_foreign_agreements_in_faction_with_sov": true
-            }
-          }
-        },
-        {
-          "limit": {
-            "FROM": {
-              "tag": "ENG"
-            }
-          },
-          "OR": {
-            "is_in_faction_with": "ENG",
-            "AND": {
-              "BUL_foreign_agreements_in_faction_with_ger": true,
-              "BUL_foreign_agreements_in_faction_with_sov": true,
-              "BUL_foreign_agreements_in_faction_with_ita": true
-            }
-          }
-        },
-        {
-          "limit": {
-            "FROM": {
-              "tag": "SOU"
-            }
-          },
-          "OR": {
-            "is_in_faction_with": "SOU",
-            "AND": {
-              "BUL_foreign_agreements_in_faction_with_ger": true,
-              "BUL_foreign_agreements_in_faction_with_eng": true,
-              "BUL_foreign_agreements_in_faction_with_ita": true
-            }
-          }
-        }
-      ]
-    },
-    "visible": {
-      "country_exists": "FROM",
-      "NOT": {
-        "has_war_with": "FROM"
-      },
-      "FROM": {
-        "BUL_is_valid_subject": true
-      }
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Show Display Workforce»"
     },
     "complete_effect": {
-      "set_country_flag": "BUL_purchasing_armor_flag",
-      "hidden_effect": {
-        "set_variable": {
-          "BUL_armor_seller": "FROM"
-        },
-        "country_event": "bftb_bulgaria_equipment_purchases.3"
-      },
-      "FROM": {
-        "add_offsite_building": {
-          "type": "industrial_complex",
-          "level": 1
-        },
-        "add_opinion_modifier": {
-          "target": "BUL",
-          "modifier": "BUL_bought_guns"
-        }
-      },
-      "add_opinion_modifier": [
-        {
-          "target": "FROM",
-          "modifier": "BUL_sold_guns"
-        },
-        {
-          "target": "FROM",
-          "modifier": "BUL_arms_trade"
-        }
-      ],
-      "custom_effect_tooltip": "BUL_purchase_armor_tt"
-    }
-  },
-  {
-    "id": "CHI_use_expat_community_for_more_cic_decision",
-    "category_id": "CHI_lend_lease_missions_cat",
-    "name": "Договориться с [FROM.GetFlag] [FROM.GetNameRuInst] об экономической поддержке",
-    "desc": "",
-    "icon": "GFX_decision_hol_exchange_intelligence_data",
-    "cost": 75,
-    "fire_only_once": true,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "CHI_reach_out_to_expats",
-      "has_dynamic_modifier": "CHI_foreign_economic_support",
-      "has_government": "democratic"
+      "log": "[GetDateText]: [Root.GetName]: [?displayCurrentWorkforce]"
     },
-    "complete_effect": []
-  },
-  {
-    "id": "ott_merge_the_eyalets_of_morea_crete_and_kibris",
-    "category_id": "form_ottoman_empire_category",
-    "name": "Объединить эялеты Морею, Крит и Кибрис",
-    "desc": "",
-    "icon": "generic_form_nation",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "is_subject": false,
-      "OR": {
-        "has_country_leader": [
-          {
-            "character": "TUR_abdulmejid_ii",
-            "ruling_only": true
-          },
-          {
-            "character": "TUR_durrushehvar_i",
-            "ruling_only": true
-          }
-        ]
-      },
-      "controls_state": [
-        186,
-        182,
-        187,
-        164,
-        183
-      ]
-    },
-    "visible": {
-      "original_tag": "TUR",
-      "NOT": {
-        "has_global_flag": "ottoman_greece_flag"
-      },
-      "has_completed_focus": "TUR_reclaim_macedonia"
-    },
-    "complete_effect": {
-      "186": {
-        "add_core_of": "ROOT"
-      },
-      "182": {
-        "add_core_of": "ROOT"
-      },
-      "187": {
-        "add_core_of": "ROOT"
-      },
-      "164": {
-        "add_core_of": "ROOT"
-      },
-      "183": {
-        "add_core_of": "ROOT"
-      },
-      "hidden_effect": {
-        "set_global_flag": "ottoman_greece_flag"
-      }
-    }
-  },
-  {
-    "id": "conquer_the_comoros",
-    "category_id": "form_east_africa_category",
-    "name": "Завоевать Коморы",
-    "desc": "",
-    "icon": "generic_form_nation",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "controls_state": 708
-    },
-    "visible": {
-      "has_global_flag": "form_east_africa_flag"
-    },
-    "complete_effect": {
-      "708": {
-        "add_core_of": "ROOT"
-      }
-    }
-  },
-  {
-    "id": "GER_reichsprotektorat_bohemia_moravia",
-    "category_id": "GER_reichskommissariats",
-    "name": "Рейхспротекторат Богемии и Моравии",
-    "desc": "",
-    "icon": "ger_reichskommissariats",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": {
-      "is_subject": false,
-      "OR": {
-        "has_completed_focus": [
-          "GER_heed_von_neuraths_concerns",
-          "GER_reorganize_the_wehrmacht"
-        ]
-      },
-      "NOT": {
-        "has_subject": "CZE"
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "GER_reichskommissariat_highlighted_required_states",
-        "9": {
-          "is_controlled_by_ROOT_or_subject": true
-        },
-        "75": {
-          "is_controlled_by_ROOT_or_subject": true
-        }
-      }
-    },
-    "visible": {
-      "RKH": {
-        "exists": false
-      },
-      "CZE": {
-        "NOT": {
-          "is_subject_of": "ROOT"
-        }
-      }
-    },
-    "complete_effect": {
-      "GER_improve_rosenbergs_trait_effect": true,
-      "custom_effect_tooltip": [
-        "generic_skip_one_line_tt",
-        "GER_reichskommissariat_bohemia_effect_tt",
-        "generic_skip_one_line_tt"
-      ],
-      "9": {
-        "IF": {
-          "limit": {
-            "OWNER": {
-              "NOT": {
-                "original_tag": "GER"
-              }
-            }
-          },
-          "OWNER": {
-            "set_country_flag": [
-              "GER_RK_capital_state_trasferred_RKH_victim_flag",
-              "GER_reichskommissariats_puppet_flag"
-            ]
-          }
-        },
-        "transfer_state_to": "RKH",
-        "set_state_flag": "GER_RK_capital_state_trasferred_RKH_flag",
-        "add_compliance": 25
-      },
-      "set_autonomy": {
-        "target": "RKH",
-        "autonomy_state": "autonomy_reichsprotectorate"
-      },
-      "hidden_effect": {
-        "every_state": [
-          {
-            "limit": {
-              "GER_is_RKH_state": true,
-              "NOT": {
-                "state": 7
-              },
-              "OR": {
-                "is_owned_by": "ROOT",
-                "owner": {
-                  "is_subject_of": "ROOT"
-                }
-              }
-            },
-            "transfer_state_to": "RKH",
-            "add_compliance": 25
-          },
-          {
-            "limit": {
-              "GER_is_RKH_state": true,
-              "NOT": [
-                {
-                  "state": 7
-                },
-                {
-                  "OR": {
-                    "is_owned_by": "ROOT",
-                    "any_country": {
-                      "is_subject_of": "ROOT",
-                      "owns_state": "PREV"
-                    }
-                  }
-                }
-              ]
-            },
-            "add_contested_owner": "RKH",
-            "set_state_controller_to": "RKH",
-            "add_claim_by": "RKH",
-            "add_compliance": 25
-          }
-        ],
-        "RKH": {
-          "add_manpower": 50000,
-          "add_equipment_to_stockpile": [
-            {
-              "type": "infantry_equipment",
-              "amount": 5000,
-              "producer": "GER"
-            },
-            {
-              "type": "support_equipment",
-              "amount": 500,
-              "producer": "GER"
-            }
-          ],
-          "inherit_technology": "GER",
-          "add_offsite_building": {
-            "type": "arms_factory",
-            "level": 2
-          },
-          "load_oob": "RK_OOB"
-        }
-      },
-      "country_event": {
-        "id": "wuw_GER_reichskommissariats.13",
-        "hours": 0
-      }
-    }
-  },
-  {
-    "id": "HUN_expand_the_manfred_weiss_armor_plant_decision",
-    "category_id": "HUN_gyor_program_initiatives_category",
-    "name": "Расширить танковый завод Манфреда Вайсса",
-    "desc": "",
-    "icon": "GFX_decision_generic_merge_plant_tank",
-    "cost": 75,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": [
-        "wuw_HUN_announce_the_gyor_program",
-        "wuw_HUN_quantity_over_quality"
-      ],
-      "IF": {
-        "limit": {
-          "has_dlc": "No Step Back"
-        },
-        "has_tech": "basic_heavy_tank_chassis"
-      },
-      "ELSE": {
-        "has_tech": "basic_heavy_tank"
-      },
-      "has_country_flag": "HUN_activated_huba_ii_flag",
-      "any_core_state": {
-        "is_fully_controlled_by": "ROOT"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "wuw_HUN_announce_the_gyor_program",
-      "NOT": {
-        "OR": {
-          "has_completed_focus": "wuw_HUN_expand_the_army",
-          "has_country_flag": "HUN_expaned_the_mw_tank_plant"
-        }
-      }
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "send_more_men_to_the_AOI",
-    "category_id": "ITA_colonial_management_dec_cat",
-    "name": "Отправить людей в ИВА",
-    "desc": "",
-    "icon": "GFX_decision_eng_blackshirt_march",
-    "cost": 10,
-    "fire_only_once": false,
-    "available": {
-      "AOI": {
-        "exists": true
-      },
-      "ITA": {
-        "has_manpower": {
-          "_op": ">",
-          "value": 10000
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "ITA_ministry_of_italian_africa",
-      "original_tag": "ITA",
-      "has_global_flag": "italian_east_africa_flag"
-    },
-    "complete_effect": {
-      "ITA": {
-        "add_manpower": -10000
-      },
-      "AOI": {
-        "add_manpower": 10000,
-        "army_experience": 15
-      },
-      "every_state": {
-        "limit": {
-          "is_owned_and_controlled_by": "AOI"
-        },
-        "add_resistance": -5
-      },
-      "hidden_effect": []
-    }
-  },
-  {
-    "id": "send_more_weapons_to_the_AOI",
-    "category_id": "ITA_colonial_management_dec_cat",
-    "name": "Отправить оружие в ИВА",
-    "desc": "",
-    "icon": "GFX_decision_generic_prepare_civil_war",
-    "cost": 10,
-    "fire_only_once": false,
-    "available": {
-      "AOI": {
-        "exists": true
-      },
-      "OR": {
-        "ITA": [
-          {
-            "has_equipment": {
-              "infantry_equipment_1": {
-                "_op": ">",
-                "value": 2000
-              }
-            }
-          },
-          {
-            "has_equipment": {
-              "infantry_equipment_0": {
-                "_op": ">",
-                "value": 2000
-              }
-            }
-          },
-          {
-            "has_equipment": {
-              "infantry_equipment_2": {
-                "_op": ">",
-                "value": 2000
-              }
-            }
-          }
-        ]
-      }
-    },
-    "visible": {
-      "has_completed_focus": "ITA_ministry_of_italian_africa",
-      "original_tag": "ITA",
-      "has_global_flag": "italian_east_africa_flag"
-    },
-    "complete_effect": {
-      "ITA": {
-        "send_equipment": {
-          "equipment": "infantry_equipment",
-          "amount": 2000,
-          "target": "AOI"
-        }
-      },
-      "every_state": {
-        "limit": {
-          "is_owned_and_controlled_by": "AOI"
-        },
-        "add_resistance": -5
-      },
-      "hidden_effect": []
-    }
-  },
-  {
-    "id": "JAP_raise_military_moreale_decision",
-    "category_id": "JAP_spiritual_mobilization_decisions",
-    "name": "Поднять боевой дух армии",
-    "desc": "",
-    "icon": "GFX_decision_generic_political_rally",
-    "cost": 75,
-    "fire_only_once": true,
-    "available": {
-      "has_war": true
-    },
-    "visible": {
-      "has_completed_focus": "JAP_form_the_dai_nippon_fujinkai",
-      "OR": {
-        "has_government": [
-          "neutrality",
-          "fascism"
-        ]
-      }
-    },
-    "complete_effect": {
-      "add_war_support": 0.05,
-      "custom_effect_tooltip": "generic_skip_one_line_tt",
-      "JAP_add_or_modify_imperial_army": true,
-      "add_to_variable": {
-        "JAP_army_army_morale_factor": 0.05,
-        "tooltip": "army_morale_factor_tt"
-      }
-    }
-  },
-  {
-    "id": "JAP_army_faction_demands_more_trucks",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_army_faction$ требует больше грузовиков",
-    "desc": "",
-    "icon": "GFX_decision_JAP_army_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_army_faction_demands_more_tanks",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_army_faction$ требует больше танков",
-    "desc": "",
-    "icon": "GFX_decision_JAP_army_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_army_faction_demands_more_artillery",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_army_faction$ требует больше артиллерии",
-    "desc": "",
-    "icon": "GFX_decision_JAP_army_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_more_carriers",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует больше авианосцев",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_more_carriers_and_battleships",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует больше авианосцев и линкоров",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_more_battleships",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует больше линкоров",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_organize_timorese_black_columns_decision",
-    "category_id": "JAP_the_co_prosperity_sphere_decisions",
-    "name": "Организовать тиморские черные отряды",
-    "desc": "",
-    "icon": "GFX_decision_SWE_set_army_budget",
-    "cost": 15,
-    "fire_only_once": true,
-    "available": {
-      "has_war": true
-    },
-    "visible": {
-      "OR": {
-        "721": {
-          "is_controlled_by": "ROOT"
-        },
-        "AND": {
-          "has_subject": "TML",
-          "TML": {
-            "controls_state": 721
-          }
-        }
-      }
-    },
-    "complete_effect": {
-      "IF": {
-        "limit": {
-          "721": {
-            "is_controlled_by": "ROOT"
-          }
-        },
-        "hidden_effect": {
-          "delete_unit_template_and_units": {
-            "division_template": "Colunas Negras",
-            "disband": true
-          },
-          "division_template": {
-            "name": "Colunas Negras",
-            "division_names_group": "POR_INF_01",
-            "role": "garrison",
-            "is_locked": false,
-            "regiments": {
-              "infantry": [
-                {
-                  "x": 0,
-                  "y": 0
-                },
-                {
-                  "x": 0,
-                  "y": 1
-                },
-                {
-                  "x": 0,
-                  "y": 2
-                },
-                {
-                  "x": 1,
-                  "y": 0
-                }
-              ]
-            },
-            "support": []
-          }
-        },
-        "721": {
-          "create_unit": [
-            {
-              "division": "name = \"1. Colunas Negras\" division_template = \"Colunas Negras\" start_experience_factor = 0.3 start_equipment_factor = 0.5",
-              "owner": "ROOT"
-            },
-            {
-              "division": "name = \"2. Colunas Negras\" division_template = \"Colunas Negras\" start_experience_factor = 0.3 start_equipment_factor = 0.5",
-              "owner": "ROOT"
-            }
-          ]
-        }
-      },
-      "ELSE_IF": {
-        "limit": {
-          "has_subject": "TML",
-          "TML": {
-            "controls_state": 721
-          }
-        },
-        "TML": {
-          "hidden_effect": {
-            "delete_unit_template_and_units": {
-              "division_template": "Colunas Negras",
-              "disband": true
-            },
-            "division_template": {
-              "name": "Colunas Negras",
-              "division_names_group": "POR_INF_01",
-              "role": "garrison",
-              "is_locked": false,
-              "regiments": {
-                "infantry": [
-                  {
-                    "x": 0,
-                    "y": 0
-                  },
-                  {
-                    "x": 0,
-                    "y": 1
-                  },
-                  {
-                    "x": 0,
-                    "y": 2
-                  },
-                  {
-                    "x": 1,
-                    "y": 0
-                  }
-                ]
-              },
-              "support": []
-            }
-          },
-          "721": {
-            "create_unit": [
-              {
-                "division": "name = \"1. Colunas Negras\" division_template = \"Colunas Negras\" start_experience_factor = 0.3 start_equipment_factor = 0.5",
-                "owner": "ROOT"
-              },
-              {
-                "division": "name = \"2. Colunas Negras\" division_template = \"Colunas Negras\" start_experience_factor = 0.3 start_equipment_factor = 0.5",
-                "owner": "ROOT"
-              }
-            ]
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "JAP_army_recruiting_more_conscripts_mission",
-    "category_id": "JAP_the_peoples_state_decisions",
-    "name": "Армия набирает новых призывников",
-    "desc": "",
-    "icon": "GFX_decision_generic_military",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "tag": "JAP",
-      "NOT": {
-        "has_completed_focus": "JAP_revoke_the_peace_preservation_law"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "POL_diplomatic_mission_to_FIN",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [FIN.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_the_north_sea",
-      "FIN": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_DEN",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [DEN.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_finno_polish_pact",
-      "DEN": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_NOR",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [NOR.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_finno_polish_pact",
-      "NOR": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_SWE",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [SWE.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_finno_polish_pact",
-      "SWE": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_CZE",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [CZE.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_the_mediterranean",
-      "CZE": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_YUG",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [YUG.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_the_mediterranean",
-      "YUG": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_AUS",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [AUS.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_coerce_czechoslovakia",
-      "AUS": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_HUN",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [HUN.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_coerce_czechoslovakia",
-      "HUN": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_GRE",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [GRE.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_protect_yugoslavia",
-      "NOT": {
-        "has_completed_focus": "POL_control_the_bosporus"
-      },
-      "GRE": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_TUR",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [TUR.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POL_protect_yugoslavia",
-      "NOT": {
-        "has_completed_focus": "POL_invite_greece"
-      },
-      "TUR": {
-        "is_ai": true,
-        "exists": true,
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POL_diplomatic_mission_to_ITA",
-    "category_id": "POL_miedzymorze_decisions",
-    "name": "Дипломатическая миссия в государстве [ITA.GetNameDef]",
-    "desc": "Если мы хотим убедить другие страны присоединиться к Междуморью, надо доказать им, что это в их интересах. Отправив Юзефа Бека в дипломатические миссии, мы значительно увеличим свои шансы на построение оборонительного альянса, о котором мечтаем.",
-    "icon": "infiltrate_state",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "POL_completing_miedzymorze_decision"
-      },
-      "has_completed_focus": "POL_austro_hungarian_alliance",
-      "OR": {
-        "has_completed_focus": [
-          "POL_invite_greece",
-          "POL_control_the_bosporus"
-        ]
-      }
-    },
-    "visible": {
-      "OR": {
-        "has_completed_focus": [
-          "POL_austro_hungarian_alliance",
-          "POL_invite_greece",
-          "POL_control_the_bosporus"
-        ]
-      },
-      "ITA": {
-        "NOT": {
-          "is_in_faction": true,
-          "has_war_with": "ROOT",
-          "has_country_flag": [
-            "rejected_miedzymorze_flag",
-            "delegation_recieved_flag"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "POL_completing_miedzymorze_decision"
-    }
-  },
-  {
-    "id": "POR_timor_overseas_territory",
-    "category_id": "POR_overseas_provinces",
-    "name": "Интеграция Тимора",
-    "desc": "",
-    "icon": "infiltrate_state",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_completed_focus": "POR_revert_the_local_autonomy_policies",
-      "AND": {
-        "POR": {
-          "controls_state": 721
-        },
-        "TML": {
-          "exists": false
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "POR_revert_the_local_autonomy_policies"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "RAJ_GOE_eic_no_more_taxman",
-    "category_id": "RAJ_GOE_eic_cat",
-    "name": "С налогами покончено навсегда",
-    "desc": "",
-    "icon": "mission_icon",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "controls_state": 126
-    },
-    "visible": {},
-    "complete_effect": {
-      "custom_effect_tooltip": "RAJ_GOE_eic_no_more_taxman_tt",
-      "hidden_effect": {
-        "remove_dynamic_modifier": {
-          "modifier": "idea_RAJ_eic_taxes"
-        }
-      }
-    }
-  },
-  {
-    "id": "ROM_claim_morava",
-    "category_id": "ROM_dividing_yugo",
-    "name": "Заявить претензии: [108.GetName]",
-    "desc": "",
-    "icon": [
-      {
-        "key": "GFX_decision_ROM_claim_yugo_4",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_ROM",
-                "value": 3,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_ROM"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_ROM_claim_yugo_3",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_ROM",
-                "value": 2,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_ROM"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_ROM_claim_yugo_2",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_ROM",
-                "value": 1,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_ROM"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_ROM_claim_yugo_1",
-        "trigger": {
-          "108": {
-            "NOT": {
-              "has_state_flag": [
-                "strongest_claimant_GER",
-                "strongest_claimant_ROM",
-                "strongest_claimant_ITA",
-                "strongest_claimant_HUN"
-              ]
-            }
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_ITA_claim_yugo_4",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_ITA",
-                "value": 3,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_ITA"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_ITA_claim_yugo_3",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_ITA",
-                "value": 2,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_ITA"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_ITA_claim_yugo_2",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_ITA",
-                "value": 1,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_ITA"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_HUN_claim_yugo_4",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_HUN",
-                "value": 3,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_HUN"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_HUN_claim_yugo_3",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_HUN",
-                "value": 2,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_HUN"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_HUN_claim_yugo_2",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_HUN",
-                "value": 1,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_HUN"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_GER_claim_yugo_4",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_GER",
-                "value": 3,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_GER"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_GER_claim_yugo_3",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_GER",
-                "value": 2,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_GER"
-          }
-        }
-      },
-      {
-        "key": "GFX_decision_GER_claim_yugo_2",
-        "trigger": {
-          "108": {
-            "108": {
-              "check_variable": {
-                "var": "claim_strength_GER",
-                "value": 1,
-                "compare": "greater_than_or_equals"
-              }
-            },
-            "has_state_flag": "strongest_claimant_GER"
-          }
-        }
-      }
-    ],
-    "cost": 20,
-    "fire_only_once": false,
-    "available": {
-      "108": {
-        "has_anyone_else_claimed_ROM": true
-      },
-      "OR": {
-        "GER": {
-          "has_country_flag": "invited_to_split_yugo"
-        },
-        "ITA": {
-          "has_country_flag": "invited_to_split_yugo"
-        },
-        "HUN": {
-          "has_country_flag": "invited_to_split_yugo"
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "invited_to_split_yugo",
-      "hidden_trigger": {
-        "NOT": {
-          "has_country_flag": "claiming_a_yugoslav_state_flag"
-        }
-      },
-      "108": {
-        "owner": {
-          "OR": {
-            "tag": "YUG",
-            "is_subject_of": "YUG"
-          }
-        }
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "claiming_a_yugoslav_state_flag"
-      }
-    }
-  },
-  {
-    "id": "liberate_morocco",
-    "category_id": "SAF_anti_colonialist_crusade",
-    "name": "Освободить государство [MOR.GetName]",
-    "desc": "Это займет 6 месяцев.",
-    "icon": "generic_independence",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "tag": "SAF",
-      "has_completed_focus": "SAF_anti_colonialist_crusade",
-      "AND": {
-        "SAF": {
-          "controls_state": [
-            290,
-            461,
-            462,
-            783
-          ]
-        },
-        "MOR": {
-          "exists": false
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "SAF_anti_colonialist_crusade"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "SOV_propaganda_more_metal",
-    "category_id": "SOV_propaganda_campaigns",
-    "name": "Больше металла — больше оружия!",
-    "desc": "",
-    "icon": "eng_propaganda_campaigns",
-    "cost": "SOV_propaganda_more_metal_cost",
-    "fire_only_once": false,
-    "available": {
-      "SOV_propaganda_poster_slot_available": true,
-      "any_controlled_state": {
-        "OR": {
-          "has_resources_amount": [
-            {
-              "resource": "steel",
-              "amount": {
-                "_op": ">",
-                "value": 0
-              }
-            },
-            {
-              "resource": "aluminium",
-              "amount": {
-                "_op": ">",
-                "value": 0
-              }
-            },
-            {
-              "resource": "chromium",
-              "amount": {
-                "_op": ">",
-                "value": 0
-              }
-            },
-            {
-              "resource": "tungsten",
-              "amount": {
-                "_op": ">",
-                "value": 0
-              }
-            }
-          ]
-        }
-      }
-    },
-    "visible": {
-      "OR": {
-        "has_completed_focus": "SOV_expand_the_agitprop",
-        "has_country_flag": "SOV_debug_unlock_propaganda_campaigns_flag"
-      }
-    },
-    "complete_effect": {
-      "set_variable": {
-        "SOV_new_propaganda_campaign": 10
-      },
-      "SOV_pick_propaganda_campaign_slot_effect": true,
-      "SOV_achievement_propaganda_counter_effect": true,
-      "hidden_effect": {
-        "capital_scope": {
-          "set_variable": [
-            {
-              "SOV_steel_bonus": 0
-            },
-            {
-              "SOV_aluminium_bonus": 0
-            },
-            {
-              "SOV_chromium_bonus": 0
-            },
-            {
-              "SOV_tungsten_bonus": 0
-            }
-          ]
-        },
-        "every_controlled_state": [
-          {
-            "limit": {
-              "has_resources_amount": {
-                "resource": "steel",
-                "amount": {
-                  "_op": ">",
-                  "value": 0
-                }
-              }
-            },
-            "capital_scope": {
-              "add_to_variable": {
-                "SOV_steel_bonus": 1
-              }
-            }
-          },
-          {
-            "limit": {
-              "has_resources_amount": {
-                "resource": "aluminium",
-                "amount": {
-                  "_op": ">",
-                  "value": 0
-                }
-              }
-            },
-            "capital_scope": {
-              "add_to_variable": {
-                "SOV_aluminium_bonus": 1
-              }
-            }
-          },
-          {
-            "limit": {
-              "has_resources_amount": {
-                "resource": "chromium",
-                "amount": {
-                  "_op": ">",
-                  "value": 0
-                }
-              }
-            },
-            "capital_scope": {
-              "add_to_variable": {
-                "SOV_chromium_bonus": 1
-              }
-            }
-          },
-          {
-            "limit": {
-              "has_resources_amount": {
-                "resource": "tungsten",
-                "amount": {
-                  "_op": ">",
-                  "value": 0
-                }
-              }
-            },
-            "capital_scope": {
-              "add_to_variable": {
-                "SOV_tungsten_bonus": 1
-              }
-            }
-          }
-        ]
-      },
-      "capital_scope": {
-        "add_dynamic_modifier": {
-          "modifier": "SOV_increased_metals_production"
-        }
-      },
-      "custom_effect_tooltip": "SOV_propaganda_more_metal_tt"
-    }
-  },
-  {
-    "id": "AAC_Marine_Equipment_Decision_USA_M18A1_Claymore",
-    "category_id": "Antarctica_GUI_AAC_Marine",
-    "name": "Закупить $AAC_Marine_Equipment_USA_M18A1_Claymore$",
-    "desc": "",
-    "icon": "GFX_decision_generic_mortar_indent",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "NOT": {
-        "has_country_flag": "AAC_procuring_equipment"
-      },
-      "set_temp_variable": {
-        "tempIntel": {
-          "_op": ">",
-          "value": 5
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "AAC_intel_on_AAO_tt",
-        "check_variable": {
-          "var": "Antarctica_Intel_on_AAO_Value",
-          "value": "tempIntel",
-          "compare": "greater_than_or_equals"
-        }
-      }
-    },
-    "visible": {
-      "NOT": [
-        {
-          "has_country_flag": "AAC_hide_equipment_decisions"
-        },
-        {
-          "has_idea": "AAC_Marine_Equipment_USA_M18A1_Claymore"
-        }
-      ],
-      "check_variable": {
-        "AAC_Marine_Active_Category": 1
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_USA_M18A1_Claymore",
-      "add_to_variable": {
-        "AAC_unlocked_support_weapons": 1
-      },
-      "set_country_flag": "AAC_procuring_equipment",
-      "hidden_effect": {
-        "add_political_power": -40,
-        "set_temp_variable": {
-          "tempEq": -7
-        },
-        "Antarctica_change_equipment": true
-      },
-      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
-      "set_temp_variable": {
-        "equipment_id_temp": "token:AAC_Marine_Equipment_USA_M18A1_Claymore"
-      },
-      "Antarctica_AAC_Marine_Add_Equipment": true
-    }
-  },
-  {
-    "id": "AAC_Marine_Equipment_Decision_JAP_Body_Armor",
-    "category_id": "Antarctica_GUI_AAC_Marine",
-    "name": "Закупить $AAC_Marine_Equipment_JAP_Body_Armor$",
-    "desc": "",
-    "icon": "GFX_decision_generic_military_parade_indent",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "NOT": {
-        "has_country_flag": "AAC_procuring_equipment"
-      },
-      "set_temp_variable": {
-        "tempIntel": {
-          "_op": ">",
-          "value": 5
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "AAC_intel_on_AAJ_tt",
-        "check_variable": {
-          "var": "Antarctica_Intel_on_AAJ_Value",
-          "value": "tempIntel",
-          "compare": "greater_than_or_equals"
-        }
-      }
-    },
-    "visible": {
-      "NOT": [
-        {
-          "has_country_flag": "AAC_hide_equipment_decisions"
-        },
-        {
-          "has_idea": "AAC_Marine_Equipment_JAP_Body_Armor"
-        }
-      ],
-      "check_variable": {
-        "AAC_Marine_Active_Category": 2
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision AAC_Marine_Equipment_Decision_JAP_Body_Armor",
-      "add_to_variable": {
-        "AAC_unlocked_body_kit": 1
-      },
-      "set_country_flag": "AAC_procuring_equipment",
-      "hidden_effect": {
-        "add_political_power": -40,
-        "set_temp_variable": {
-          "tempEq": -7
-        },
-        "Antarctica_change_equipment": true
-      },
-      "custom_effect_tooltip": "AAC_unlocked_equipment_tt",
-      "set_temp_variable": {
-        "equipment_id_temp": "token:AAC_Marine_Equipment_JAP_Body_Armor"
-      },
-      "Antarctica_AAC_Marine_Add_Equipment": true
-    }
-  },
-  {
-    "id": "ENG_DEC_Commemorate_the_Heros_of_the_Civil_War",
-    "category_id": "ENG_DECCAT_SLP_Politics",
-    "name": "Почтить героев гражданской войны",
-    "desc": "",
-    "icon": "GFX_decision_generic_military_parade",
-    "cost": 75,
-    "fire_only_once": false,
     "available": {},
-    "visible": {},
-    "complete_effect": {
-      "ENG_SLP_Add_Reformer_Love_10": true,
-      "add_to_variable": [
-        {
-          "ENG_MIL_LOY": 10
-        },
-        {
-          "ENG_MIL_LOY_FLR": 5
-        }
-      ],
-      "ENG_MILMAN_CALC": true,
-      "custom_effect_tooltip": "loyalty_boost_small.tt"
-    }
-  },
-  {
-    "id": "demand_more_guns",
-    "category_id": "ENG_cornwall_garrison",
-    "name": "Больше пехотного снаряжения",
-    "desc": "Это позволит нам производить пехотное снаряжение.\nВсе произведённое снаряжение будет отправлено в Корнуолл.\nСтарое сняряжение идёт первым!",
-    "icon": "GFX_decision_generic_arms_crate",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "has_equipment": {
-        "infantry_equipment": {
-          "_op": ">",
-          "value": 1499
-        }
-      }
-    },
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision complete demand_more_guns",
-      "clr_country_flag": "demand_more_guns_prod",
-      "custom_effect_tooltip": "demand_more_guns_tt",
-      "add_to_variable": [
-        {
-          "Cornwall_Happiness": 2
-        },
-        {
-          "ENG_CRN_Attack": 0.05
-        },
-        {
-          "ENG_CRN_Defense": 0.05
-        }
-      ],
-      "hidden_effect": {
-        "ENG_update_cornwall_mechanic": true,
-        "send_equipment": {
-          "equipment": "infantry_equipment",
-          "amount": "num_equipment@infantry_equipment",
-          "target": "CRN"
-        }
-      },
-      "ENG_CornwallRelations_Increase_med": true
-    }
-  },
-  {
-    "id": "demand_more_artillery",
-    "category_id": "ENG_cornwall_garrison",
-    "name": "Больше артиллерии",
-    "desc": "Это позволит нам производить артиллерию.\nВся произведённая артилерия будет отправлена в Корнуолл.\nСтарое сняряжение идёт первым!",
-    "icon": "GFX_decision_generic_supply",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "has_equipment": {
-        "artillery_equipment": {
-          "_op": ">",
-          "value": 124
-        }
-      }
-    },
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision complete demand_more_artillery",
-      "clr_country_flag": "demand_more_artillery_prod",
-      "custom_effect_tooltip": "demand_more_artillery_tt",
-      "add_to_variable": [
-        {
-          "Cornwall_Happiness": 2
-        },
-        {
-          "ENG_CRN_Attack": 0.05
-        },
-        {
-          "ENG_CRN_Defense": 0.05
-        }
-      ],
-      "hidden_effect": {
-        "ENG_update_cornwall_mechanic": true,
-        "send_equipment": {
-          "equipment": "artillery_equipment",
-          "amount": "num_equipment@artillery_equipment",
-          "target": "CRN"
-        }
-      },
-      "ENG_CornwallRelations_Increase_med": true
-    }
-  },
-  {
-    "id": "demand_more_motorized",
-    "category_id": "ENG_cornwall_garrison",
-    "name": "Больше моторизованной техники",
-    "desc": "Это позволит нам производить моторизованную технику.\nВся произведённая техника будет отправлено в Корнуолл.\nСтарое сняряжение идёт первым!",
-    "icon": "GFX_decision_generic_phone_call",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "has_equipment": {
-        "motorized_equipment": {
-          "_op": ">",
-          "value": 199
-        }
-      }
-    },
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision complete demand_more_motorized",
-      "clr_country_flag": "demand_more_motorized_prod",
-      "custom_effect_tooltip": "demand_more_motorized_tt",
-      "add_to_variable": [
-        {
-          "Cornwall_Happiness": 2
-        },
-        {
-          "ENG_CRN_Speed": 0.07
-        }
-      ],
-      "hidden_effect": {
-        "ENG_update_cornwall_mechanic": true,
-        "send_equipment": {
-          "equipment": "motorized_equipment",
-          "amount": "num_equipment@motorized_equipment",
-          "target": "CRN"
-        }
-      },
-      "ENG_CornwallRelations_Increase_med": true
-    }
-  },
-  {
-    "id": "CHI_WI_more_counter_NPA_propanganda",
-    "category_id": "CHI_Western_Insurrection_category",
-    "name": "Устранить сеть предателей",
-    "desc": "Хотя наша модернизация приносит пользу всем в долгосрочной перспективе, всегда будут некоторые прискорбные краткосрочные жертвы, прежде чем мы сможем пожинать плоды. Сейчас все больше и больше заблуждающихся, которых смущают фальшивые слова \"справедливость\", \"независимость\", \"правосудие\", тайно приближаются к поджигателям войны и хотят увидеть нашу гибель. Этого нельзя допустить, мы будем больше финансировать ЦБИС, чтобы поддержать агентов в уничтожении сети, которую пытается создать АНО, и без этих предателей, стоящих на нашем пути, война будет больше в нашу пользу.",
-    "icon": "",
-    "cost": 20,
-    "fire_only_once": false,
-    "available": [],
     "visible": {
-      "has_global_flag": "WI_Warlord_Struggle_begin"
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_econ_debug_decisions"
+    }
+  },
+  {
+    "id": "ANG_Free_Angola",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Free Angola",
+    "title_en": "Free Angola",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Free Angola»"
     },
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: CHI_WI_more_counter_NPA_propanganda decision begun",
-      "add_equipment_to_stockpile": {
-        "type": "infantry_equipment",
-        "amount": -1000
+      "ANG_free_angola": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
       },
-      "set_temp_variable": {
-        "tempMomentumTick": -1.0
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "COG_Mandate_trigger_mandate_collapse",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Collapse OFN Mandate of the Congo",
+    "title_en": "Collapse OFN Mandate of the Congo",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Collapse OFN Mandate of the Congo»"
+    },
+    "complete_effect": {
+      "OFN_COG_MANDATE_CIVIL_WAR": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
       },
-      "WI_calc_momentum_tick_drift": true,
-      "custom_effect_tooltip": "WI_calc_momentum_tick_tt"
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_Timeskip_Africa",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger West African Expansion",
+    "title_en": "Trigger West African Expansion",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger West African Expansion»"
+    },
+    "complete_effect": {
+      "TNO_timeskip_Africa": "yes",
+      "every_country": {
+        "if": {
+          "limit": {
+            "has_idea": "WEST_AFRICA_idea_terror_bombing"
+          },
+          "remove_ideas": "WEST_AFRICA_idea_terror_bombing"
+        }
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_FFRWA_CA_Crisis",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 1",
+    "title_en": "Trigger WAC - Scenario 1",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 1»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_1": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_BATTLE_ROYALE_Crisis",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 2",
+    "title_en": "Trigger WAC - Scenario 2",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 2»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_2": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
     }
   },
   {
     "id": "WA_FFRWA_CA_Crisis_but_more",
+    "category": "economy",
     "category_id": "global_debug_decisions",
-    "name": "Trigger WAC - Scenario 3",
-    "desc": "",
-    "icon": "GFX_decision_generic_industry_indent_2",
-    "cost": 0,
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 3",
+    "title_en": "Trigger WAC - Scenario 3",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
     "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 3»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_3": "yes"
+    },
     "available": {},
     "visible": {
       "NOT": {
         "has_country_flag": "hide_debug_decisions"
       },
-      "has_country_flag": [
-        "TT_debug_decisions",
-        "TT_africa_debug_decisions"
-      ]
-    },
-    "complete_effect": {
-      "TNO_TT_WAC_debug_3": true
+      "has_country_flag": "TT_africa_debug_decisions"
     }
   },
   {
-    "id": "debug_trigger_third_moroccan_war",
+    "id": "TNO_Unleash_Congo",
+    "category": "economy",
     "category_id": "global_debug_decisions",
-    "name": "Начать Третью марокканскую войну",
-    "desc": "",
-    "icon": "GFX_decision_generic_industry_indent",
-    "cost": 0,
+    "category_name": "Глобальные решения дебага",
+    "title": "Ignite Congo Civil War",
+    "title_en": "Ignite Congolese Civil War",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
     "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Ignite Congo Civil War»"
+    },
+    "complete_effect": {
+      "TNO_COG_Crisis_Map_Setup": "yes"
+    },
     "available": {},
     "visible": {
       "NOT": {
         "has_country_flag": "hide_debug_decisions"
       },
-      "has_country_flag": "show_mt_proxys"
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Puerto_Plata_planning_phase",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Puerto Plata Planning",
+    "title_en": "Begin Puerto Plata Planning",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Puerto Plata Planning»"
     },
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: debug_trigger_venezuelan_revolution",
+      "set_global_flag": "PPI_proxy_war_preparation",
+      "USA": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_legion",
+        "hidden_effect": {
+          "TNO_USA_PP_invasion_start": "yes"
+        }
+      },
+      "MEX": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_legion",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "TNO_MEX_PP_invasion_start": "yes"
+        }
+      },
+      "ZZZ": {
+        "activate_mission": "ZZZ_PPI_CAL_training"
+      },
       "IBR": {
-        "country_event": {
-          "id": "MOR_moroccowar.1"
-        },
-        "leave_faction": true,
-        "end_puppet": "MOR"
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_trujillo",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "USA": {
+            "country_event": {
+              "id": "HIS_puertoplata.5",
+              "days": "35"
+            }
+          },
+          "if": {
+            "limit": {
+              "IBR": {
+                "is_ai": "yes"
+              }
+            },
+            "IBR": {
+              "add_command_power": "100"
+            }
+          }
+        }
       },
-      "MOR": {
-        "leave_faction": true
+      "GER": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_trujillo",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "if": {
+            "limit": {
+              "GER": {
+                "is_ai": "yes"
+              }
+            },
+            "GER": {
+              "add_command_power": "100"
+            }
+          },
+          "set_variable": {
+            "PPI_infiltration_cost": "10"
+          }
+        }
       }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
     }
   },
   {
-    "id": "GER_bormann_our_morale_decreases",
-    "category_id": "GER_Bormann_Foreign_Policy_category",
-    "name": "The Ukraine Campaign Continues",
-    "desc": "",
-    "icon": "GFX_decision_generic_clock_red",
-    "cost": 0,
+    "id": "TNO_Puerto_Plata_ceasefire_PHASE",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Puerto Plata Ceasefire",
+    "title_en": "Begin Puerto Plata Ceasefire",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
     "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "tooltip": "UKR_german_morale_decreases_trigger_tt",
-        "always": false
-      }
-    },
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "GER_speer_our_morale_decreases",
-    "category_id": "SGR_state_of_the_reich_category",
-    "name": "The Ukraine Campaign Continues",
-    "desc": "",
-    "icon": "GFX_decision_generic_clock_red",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "tooltip": "UKR_german_morale_decreases_trigger_tt",
-        "always": false
-      }
-    },
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "GNG_morita_path_debug",
-    "category_id": "GNG_debug_category",
-    "name": "Загрузить путь  Мориты",
-    "desc": "",
-    "icon": "GFX_decision_GNG_sony",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_country_flag": "GNG_show_debug_decisions"
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Puerto Plata Ceasefire»"
     },
     "complete_effect": {
+      "set_global_flag": "PPI_ceasefire_happening",
+      "GER": {
+        "add_command_power": "10"
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Civil_War",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Haitian Civil War",
+    "title_en": "Begin Haitian Civil War",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Haitian Civil War»"
+    },
+    "complete_effect": {
+      "TNO_HAI_civil_war_start": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Blitz",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Haitian Blitz",
+    "title_en": "Begin Haitian Blitz",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Haitian Blitz»"
+    },
+    "complete_effect": {
+      "TNO_HAI_civil_war_start": "yes",
+      "USA": {
+        "country_event": {
+          "id": "HIS_HAI.8"
+        }
+      },
+      "every_country": {
+        "limit": {
+          "is_ai": "no",
+          "HasPaktAmericasInterest": "yes"
+        },
+        "news_event": {
+          "id": "hispaniola_news.11",
+          "days": "1"
+        }
+      },
+      "DOM": {
+        "declare_war_on": {
+          "type": "annex_everything",
+          "target": "HAI"
+        }
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Civil_War_BuildUp",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haitian Civil War Buildup Phase",
+    "title_en": "Haitian Civil War Buildup Phase",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haitian Civil War Buildup Phase»",
+      "clear_flags": [
+        "TNO_HCW_base_phase"
+      ],
+      "set_flags": {
+        "TNO_HCW_buildup_phase": true
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "TNO_HCW_base_phase",
+      "set_country_flag": "TNO_HCW_buildup_phase"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Civil_War_Intervention",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haitian Civil War Intervention Phase",
+    "title_en": "Haitian Civil War Intervention Phase",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haitian Civil War Intervention Phase»",
+      "clear_flags": [
+        "TNO_HCW_buildup_phase"
+      ],
+      "set_flags": {
+        "TNO_HCW_interventionism_phase": true
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "TNO_HCW_buildup_phase",
+      "set_country_flag": "TNO_HCW_interventionism_phase"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haiti_Nat_Spirit",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haiti/PPLN/DOM Nat Spirit Debugging",
+    "title_en": "Haiti/PPLN/DOM Nat Spirit Debugging",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haiti/PPLN/DOM Nat Spirit Debugging»"
+    },
+    "complete_effect": {
+      "USA": {
+        "add_ideas": {}
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "slash_bureaucracy",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить бюрократию",
+    "title_en": "Slash Bureaucratic Expenses",
+    "description": "Бюрократия часто бывает большой, избыточной и запутанной и составляет значительную часть бюджета любой страны. Таким образом, одним из наиболее эффективных способов сокращения государственных расходов является резкое сокращение бюрократического персонала: клерки и чиновники, занимающие должности, которые считаются второстепенными, увольняются, в то время как все остальные видят резкое сокращение своего жалованья, по крайней мере, до тех пор, пока кризис не пройдет. Конечно, это не пройдет без последствий: вскоре возникнет критическая нехватка персонала и материалов, что резко снизит способность правительства осуществлять свою повестку дня, поскольку многие бюрократы не в состоянии эффективно выполнять свои обязанности, а некоторые даже прибегают к получению взяток, чтобы поддерживать свой образ жизни. Даже после того, как кризис пройдет, последствия будут преследовать нацию в течение нескольких месяцев или лет, поскольку новые сборы должны будут решить горы накопившихся досье.",
+    "description_en": "A country's bureaucracy is often large, redundant and labyrinthine, and constitutes a large portion of any nation's budget. One of the most effective ways to reduce government spending is, therefore, the drastic reduction of bureaucratic personnel: clerks and functionaries who occupy offices perceived as non-primary are fired, while all others see a harsh reduction to their emoluments, at least until the crisis has passed. Of course, this is not without consequences: critical lack of personnel and materials will soon ensue, drastically reducing the government's ability to see its agenda enacted as many bureaucrats are unable to perform their duties effectively, and some even turn to accepting bribes in order to maintain their lifestyle. Even after the crisis has passed, consequences will haunt the nation for months or years, as the new levies will have to address mountains of backlog dossiers.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить бюрократию»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_admin_cost_down",
+      "add_to_variable": {
+        "admin_program_cut_fc": "-0.6"
+      },
+      "TNO_worsen_admin_efficiency_high": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "privatisation_programs",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Начать программы приватизации",
+    "title_en": "Enact Sweeping Privatization Programs",
+    "description": "Большинство правительств, независимо от их политических пристрастий и экономической лояльности, поддерживают большое количество государственных учреждений, объектов недвижимости и видов деятельности, которые считаются стратегически важными. От парков и лесов до национализированных оружейных предприятий и государственных горнодобывающих предприятий государство использует их в качестве инструмента для удовлетворения спроса на основные товары и услуги. Во времена кризиса наличные деньги становятся важнее долгосрочного планирования. Таким образом, приватизация большого количества государственной собственности и предприятий наполнит государственную казну деньгами и устранит потенциальные источники дополнительных потерь: при немедленном вознаграждении, конечно, это приведет к усилению зависимости от рынка после окончания кризиса, поскольку у правительства больше нет средств для непосредственного удовлетворения своих потребностей.",
+    "description_en": "Most governments, no matter their political leanings and economic loyalties, maintain a large array of public institutions, properties and activities perceived as strategically vital. From parks and forests, to nationalised armament industries and state-owned extraction operations, the State uses them as a tool to satisfy demand for staple goods and services. In times of crisis, cash becomes more important than long-term planning. As such, privatizing a large amount of state-owned properties and businesses will fill the public coffers with money, and eliminate potential sources of additional losses: while immediately rewarding, of course, this will result in increased dependency on the market once the crisis has ended, as the government no longer has the means to directly satisfy its needs.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.1,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Начать программы приватизации»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25,
+      "modify_reserves": 0.05
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_privatization",
+      "add_to_variable": {
+        "sales_tax_fc": "-0.1"
+      },
+      "set_temp_variable": {
+        "temp_gdp_gained": "0.2"
+      },
+      "econ_money_reserves_change_percent_gdp": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "negotiate_deferred_payment",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Договориться с кредиторами",
+    "title_en": "Negotiate Decreased Payments With Our Creditors",
+    "description": "Иногда яйцо сегодня лучше, чем курица в следующем году. Наши кредиторы хотят получить свои деньги, но даже они знают, что веревка, натянутая слишком сильно, рискует оборваться: таким образом, самое грозное оружие, имеющееся в нашем распоряжении, - это возможность просто объявить дефолт. Хотя это было бы катастрофично для нашей экономики, это также означало бы, что все наши кредиторы останутся без единой монеты: пусть Самсон умрет вместе со всеми филистерами. Конечно, мы можем собрать убедительные аргументы, позволяющие сократить наш общий долг в обмен на обещание не объявлять дефолт и в конечном итоге выплатить все долги. Однако угрозы нашим кредиторам - не лучший способ снова заявить о себе на мировом финансовом рынке: как только кризис закончится, мы можем ожидать, что потенциальные покупатели облигаций будут требовать более высоких процентных ставок...",
+    "description_en": "Sometimes, an egg today is better than a chicken next year. Our creditors want their money, but even they know that a rope pulled too harshly risks breaking: as such, the most threatening weapon at our disposal is the power to simply declare default. While disastrous for our economy, it would also mean all our creditors would end up without a single coin: let Samson die with all the Philistines. Surely, we can muster convincing arguments to allow for a reduction in our overall debt, in exchange for the promise not to declare default, and eventually pay. However, threatening our creditors is not a good way to present ourselves once again into the global financial market: once the crisis is over, we can expect potential bond buyers to demand higher interest rates...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Договориться с кредиторами»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_interest_rate_down",
+      "add_to_variable": {
+        "inflation_fc": "5"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "print_emergency",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Увеличить денежную массу",
+    "title_en": "Increase Monetary Supply",
+    "description": "Номинальный принцип формирования дел означает, что мы должны заплатить сумму, указанную в облигации, даже если этой суммы больше не хватает даже на покупку кофе. Таким образом, печатание денег - в большом количестве - может быть использовано как способ быстрого погашения больших сумм долгов. Конечно, такая практика не обходится без последствий. Искусственное производство денег равно значительному росту инфляции, которая может преследовать нашу экономику в течение многих лет: это также приведет в ярость средние и низшие классы, которые увидят, что их сбережения практически исчезнут в одночасье, поскольку валюта теряет большую часть своей покупательной способности.",
+    "description_en": "The nominalistic principle of obligations means that we have to pay the amount stated on the bond, even if that amount is no longer enough to even buy a coffee. Therefore, printing money - lots of it - can be used as a way to quickly repay large amounts of debts. Of course, this practice is not without consequences. Artificial money production equals a large increase in inflation, which may haunt our economy for years: this will also enrage the middle and lower classes, who will see their savings basically vanish overnight as the currency loses most of its buying power.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Увеличить денежную массу»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "inflation_temp": "3"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
       "set_variable": {
-        "GNG_legco_faction_in_power": 3
+        "inflation_fc": "10"
       },
-      "set_politics": {
-        "ruling_party": "paternalism"
-      },
-      "load_focus_tree": "GNG_morita_silicon_years",
-      "remove_all_ministers": true,
-      "mark_focus_tree_layout_dirty": true,
-      "add_ideas": [
-        "GNG_Li_Ka_Shing_hog",
-        "GNG_Matsushita_Masaharu_for",
-        "GNG_Stanley_Ho_eco",
-        "GNG_Omori_Kan_sec"
-      ],
-      "clr_country_flag": "GNG_Riots_Active"
-    }
-  },
-  {
-    "id": "GNG_morita_oil_crisis_debug",
-    "category_id": "GNG_debug_category",
-    "name": "Загрузить древо нефтяного кризиса  Мориты",
-    "desc": "",
-    "icon": "GFX_decision_GNG_sony",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": [
-      {
-        "has_country_flag": "GNG_show_debug_decisions"
-      },
-      {
-        "has_country_leader": {
-          "character": "GNG_morita_akio"
-        }
+      "econ_inflation_change": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
       }
-    ],
-    "complete_effect": {
-      "load_focus_tree": "GNG_morita_oil_crisis_tree",
-      "clr_country_flag": "GNG_Riots_Active"
-    }
-  },
-  {
-    "id": "GNG_morita_riots_debug",
-    "category_id": "GNG_debug_category",
-    "name": "Загрузить древо беспорядков  Мориты",
-    "desc": "",
-    "icon": "GFX_decision_GNG_sony",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": [
-      {
-        "has_country_flag": "GNG_show_debug_decisions"
-      },
-      {
-        "has_country_leader": {
-          "character": "GNG_morita_akio"
-        }
-      }
-    ],
-    "complete_effect": {
-      "load_focus_tree": "GNG_morita_riots",
-      "set_country_flag": "GNG_Riots_Active"
-    }
-  },
-  {
-    "id": "GNG_morita_success_ending_debug",
-    "category_id": "GNG_debug_category",
-    "name": "Загрузить финал. древо успеха  Мориты",
-    "desc": "",
-    "icon": "GFX_decision_GNG_sony",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": [
-      {
-        "has_country_flag": "GNG_show_debug_decisions"
-      },
-      {
-        "has_country_leader": {
-          "character": "GNG_morita_akio"
-        }
-      }
-    ],
-    "complete_effect": {
-      "load_focus_tree": "GNG_morita_ending_tree",
-      "clr_country_flag": [
-        "GNG_Riots_Active",
-        "GNG_morita_personal_crisis_bad_end",
-        "GNG_li_personal_crisis_bad_end"
-      ],
-      "set_country_flag": [
-        "GNG_morita_personal_crisis_good_end",
-        "GNG_li_personal_crisis_good_end"
-      ],
-      "mark_focus_tree_layout_dirty": true
-    }
-  },
-  {
-    "id": "GNG_morita_failure_morita_ending_debug",
-    "category_id": "GNG_debug_category",
-    "name": "Загрузить финал. древо провала  Мориты",
-    "desc": "",
-    "icon": "GFX_decision_GNG_sony",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": [
-      {
-        "has_country_flag": "GNG_show_debug_decisions"
-      },
-      {
-        "has_country_leader": {
-          "character": "GNG_morita_akio"
-        }
-      }
-    ],
-    "complete_effect": {
-      "load_focus_tree": "GNG_morita_ending_tree",
-      "clr_country_flag": [
-        "GNG_Riots_Active",
-        "GNG_morita_personal_crisis_good_end",
-        "GNG_li_personal_crisis_bad_end"
-      ],
-      "set_country_flag": [
-        "GNG_morita_personal_crisis_bad_end",
-        "GNG_li_personal_crisis_good_end"
-      ],
-      "mark_focus_tree_layout_dirty": true
-    }
-  },
-  {
-    "id": "GNG_morita_failure_li_ending_debug",
-    "category_id": "GNG_debug_category",
-    "name": "Загрузить финал. древо провала  Ли",
-    "desc": "",
-    "icon": "GFX_decision_GNG_sony",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": [
-      {
-        "has_country_flag": "GNG_show_debug_decisions"
-      },
-      {
-        "has_country_leader": {
-          "character": "GNG_morita_akio"
-        }
-      }
-    ],
-    "complete_effect": {
-      "load_focus_tree": "GNG_morita_ending_tree",
-      "clr_country_flag": [
-        "GNG_Riots_Active",
-        "GNG_morita_personal_crisis_bad_end",
-        "GNG_li_personal_crisis_good_end"
-      ],
-      "set_country_flag": [
-        "GNG_morita_personal_crisis_good_end",
-        "GNG_li_personal_crisis_bad_end"
-      ],
-      "mark_focus_tree_layout_dirty": true
-    }
-  },
-  {
-    "id": "GNG_matsushita_morita_ending_debug",
-    "category_id": "GNG_debug_category",
-    "name": "Загрузить финальное древо  Мацуситы и Мориты",
-    "desc": "",
-    "icon": "GFX_decision_GNG_matsushita",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": [
-      {
-        "has_country_flag": "GNG_show_debug_decisions"
-      },
-      {
-        "has_country_leader": {
-          "character": "GNG_matsushita_masaharu"
-        }
-      }
-    ],
-    "complete_effect": {
-      "load_focus_tree": "GNG_matsushita_epilogue_tree",
-      "clr_country_flag": [
-        "GNG_Riots_Active",
-        "Matsushita_Ibuka_ending",
-        "Matsushita_Independent_ending"
-      ],
-      "set_country_flag": "Matsushita_Morita_ending",
-      "mark_focus_tree_layout_dirty": true
-    }
-  },
-  {
-    "id": "GNG_click_on_a_state_to_see_more_actions",
-    "category_id": "GNG_Map_GUI",
-    "name": "Нажмите, чтобы просмотреть дополнительные действия",
-    "desc": "Огромная сеть офицеров, гангстеров, шпионов и тайных обществ существует скрыто от глаз простых граждан Гуандуна.\nНажмите на регион на карте выше, чтобы взаимодействовать с теневым миром.",
-    "icon": "GFX_decision_GNG_regions",
-    "cost": 0,
-    "fire_only_once": false,
+    },
     "available": {
-      "hidden_trigger": {
-        "always": false
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "fiscal_crisis_default_overlord",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Попросить о помощи своего покровителя",
+    "title_en": "Negotiate A Debt Repayment Plan With Our Overlord",
+    "description": "Благодаря нашим... тесным отношениям с мировой сверхдержавой, мы можем обратиться к ним за помощью в эти трудные времена. Попросив их спонсировать план погашения долга с нашими кредиторами, мы, несомненно, сможем обеспечить лучшие условия и, возможно, даже уменьшить общую сумму. Конечно, такого рода помощь никогда не бывает бесплатной. Как только план будет одобрен, мы наверняка увидим увеличение числа \"дружеских предложений\" и просьб о \"взаимном сотрудничестве\" с нашим спонсором, что в основном повлечет за собой предоставление им большего влияния в наших делах и более широкое экономическое проникновение их бизнеса в нашу экономику: в политике нет друзей, только партнеры...",
+    "description_en": "Thanks to our... tight relationships with a world power, we can call for their help during these troubled times. By asking them to sponsor a debt repayment plan with our creditors, we'll surely be able to secure better conditions, and maybe even a reduction in the overall amount. Of course, this kind of help never comes for free. As soon as the plan has been approved, we'll surely see an increase to \"friendly suggestions\" and requests of \"mutual cooperation\" with our sponsor, which will mostly entail allowing them greater influence in our affairs, and a larger economic penetration of their businesses into our economy: kindness can be two faced, it seems..",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Попросить о помощи своего покровителя»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_overlord_cancel_debt",
+      "set_temp_variable": {
+        "debt_temp": "-0.2"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "add_to_variable": {
+        "GDP_to_sphere_leader_fc": "0.05"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "fiscal_crisis_default_1",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Выпуск гос. облигаций",
+    "title_en": "Issue Emergency Public Bonds",
+    "description": "Во время чрезвычайных ситуаций все граждане призваны выполнять свой долг. Во время войны это обязательство выполняется путем зачисления в армию или нормирования, в то время как во время финансового кризиса оно принимает форму экстренной подписки на облигации: пропагандистская кампания будет подчеркивать необходимость поддержки родины путем покупки патриотических облигаций, которые, скорее всего, никогда не будут погашены. Конечно, такой кампании не суждено быть хорошо воспринятой населением, чьи деньги мы в основном просим пожертвовать нам. Однако попытка никогда не повредит, и собранные деньги могут покрыть наши неотложные расходы до тех пор, пока кризис не пройдет: тогда мы могли бы подумать о том, как вознаградить их за лояльность.",
+    "description_en": "In times of emergency, all citizens are called to do their duty. During a war, this obligation is fulfilled through enrolment into the army, or rationing, while during a fiscal crisis, it takes form in the way of emergency bond subscription: a propaganda campaign will stress the need to sustain the motherland by buying patriotic bonds which will most likely never be repaid. Of course, such a campaign is destined not to be well received by the population whose money we are basically asking to donate to us. However, trying never hurts, and the collected money may sustain our urgent expenses until the crisis passes: then, we might think about how to reward their loyalty.",
+    "cost_pc": 10.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Выпуск гос. облигаций»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.02"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "1"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
     "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
-      },
       "check_variable": {
-        "GNG_map_selected_state": 0
+        "partial_default": "0"
       }
-    },
-    "complete_effect": {}
+    }
   },
   {
-    "id": "GNG_click_on_a_group_to_see_more_actions",
-    "category_id": "GNG_Map_GUI",
-    "name": "Нажмите на фракцию, чтобы увидеть доступные действия",
-    "desc": "",
-    "icon": "GFX_decision_GNG_regions",
-    "cost": 0,
+    "id": "fiscal_crisis_default_2",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Заключить сделку с банками",
+    "title_en": "Cut A Deal With National Banks",
+    "description": "В то время как международные кредиторы - крепкие орешки, национальные инвесторы, и особенно банки, - совсем другое дело. При тщательном уговаривании и правильном количестве угроз мы могли бы \"убедить\" их отказаться от некоторых своих требований в обмен на обещание заплатить остальное и какое-нибудь необычное общественное признание. Конечно, большинство из них не будет впечатлено, и политическая реакция на это будет как минимум осуждающей, но это единственная альтернатива, которая у нас есть. Частные интересы должны быть принесены в жертву общему благополучию страны, независимо от наших политических пристрастий или экономической политики: выживание всегда на первом месте.",
+    "description_en": "While international creditors are tough nuts to crack, national investors, and especially banks, are another matter entirely. With careful cajoling, and the right amount of threats, we might be able to \"convince\" them to give up on some of their demands in exchange for a promise to pay the rest, and some fancy public recognition. Of course, most won't be impressed, and the political backlash won't be light, but this is the only alternative we have to full payment. Private interests must be sacrificed to the country's general well being, no matter our political leanings or economic policy: survival always comes first.",
+    "cost_pc": 15.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
     "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Заключить сделку с банками»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.05"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "2"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.1"
+      },
+      "custom_effect_tooltip": "default_2_tooltip",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
     "available": {
-      "hidden_trigger": {
-        "always": false
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
     "visible": {
-      "NOT": [
-        {
-          "has_country_flag": "GNG_disable_all_mechanics_IJA"
-        },
-        {
+      "check_variable": {
+        "partial_default": "1"
+      }
+    }
+  },
+  {
+    "id": "fiscal_crisis_default_3",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Созвать международную конференцию",
+    "title_en": "Call For a Conference on our Debt",
+    "description": "Иногда лучше всего справиться с кризисом напрямую. Как национальные, так и международные кредиторы ожидают быстрых действий, и лучший способ убедить их в нашей готовности сотрудничать для решения этого финансового кризиса - продемонстрировать работу, которую мы делаем: созвав международную конференцию, каждый сможет увидеть наш прогресс. Как и ожидалось, это будет иметь политические последствия. Люди будут интерпретировать конференцию как способ для иностранных держав оказывать ненадлежащее влияние на наши дела, а нас - как их добровольных марионеток: мы можем ожидать массовых протестов и усиления радикализации общества во время работы конференции.",
+    "description_en": "Sometimes, it's best to tackle a crisis directly. Both national and international creditors expect swift action, and the best way to reassure them of our willingness to cooperate to solve this fiscal crisis is to showcase the work we are doing: by calling an international conference, everyone will be able to see our progress. As expected, this will have political consequences. The people will interpret the conference as a way for foreign powers to exert undue influence over our affairs, and us as their willing puppets: we can expect large protests and an increased radicalization of society while the conference operates.",
+    "cost_pc": 15.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Созвать международную конференцию»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.1"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.2"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "3"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      },
+      "custom_effect_tooltip": "default_3_tooltip"
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "partial_default": "2"
+      }
+    }
+  },
+  {
+    "id": "fiscal_crisis_default_4",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Принудительная уступка должников",
+    "title_en": "Force Concession on Debtors",
+    "description": "Экономика - жестокий мир, и иногда даже быть правым не означает быть удовлетворенным. Нам нужны деньги, чтобы продолжать функционировать, и нас не волнует, что по этому поводу думают кредитора: таким образом, мы должны дать понять, что здесь, в нашей стране, командуем мы, а не они - и если они хотят получить свои деньги, они должны слушаться нас. Кого волнует, что позже меньше людей захотят купить наши облигации? Наши реформы позволят убедиться, что нам не понадобится так много: пусть они держат свои деньги в карманах, мы найдем лучшие способы наполнить нашу казну, или, по крайней мере, мы на это надеемся...",
+    "description_en": "Economy is a cruel world, and sometimes, even being right doesn't mean being satisfied. We need money to keep functioning, and we won't bow to our creditors: as such, we shall make it clear that we are the ones in command, not them - and if they want their money, they'll listen to us. Who cares if fewer will be willing to buy our bonds later? Our reforms will make sure we won't need as many: let them keep their money in their pockets, we'll find better ways to fill our coffers, or at least, we hope so...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Принудительная уступка должников»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.2"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "add_to_variable": {
+        "deficit_pp_fc": "0.4"
+      },
+      "set_variable": {
+        "partial_default": "4"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      },
+      "custom_effect_tooltip": "default_4_tooltip"
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "partial_default": "3"
+      }
+    }
+  },
+  {
+    "id": "fiscal_crisis_default_5",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Реструктурировать невыгодные облигации",
+    "title_en": "Restructurate Unfavourable Bonds",
+    "description": "Очевидно, что наши кредиторы хотят только задушить нашу экономику грабительскими процентными ставками. Когда наше терпение давно исчерпано, настало время для крайних мер: нашей властью как суверенной нации мы в одностороннем порядке решим, какие облигации должны быть погашены, а какие будут полностью или частично реструктурированы. Это, конечно, будет иметь последствия. Международные экономические субъекты будут осуждать наше нарушение самых элементарных правил, касающихся государственных обязательств, но давайте будем реалистами: если мы зашли так далеко, то это потому, что у нас нет другого выбора, кроме как заплатить за это.",
+    "description_en": "It is evident our creditors only wish to suffocate our economy with extortionate interest rates. With our patience long exhausted, it is time for extreme measures: by our power as a sovereign nation, we shall unilaterally decide which bonds shall be repaid, and with ones will be totally or partially restructured. This will, of course, have consequences. International economic actors will decry our violation of the most basic rules about public obligations, but let's be real: if we have come this far, it's because we have no choice but to pay the price.",
+    "cost_pc": 40.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Реструктурировать невыгодные облигации»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.4"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "5"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.8"
+      },
+      "custom_effect_tooltip": "default_5_tooltip",
+      "econ_lower_credit_rating": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "partial_default": "4"
+      }
+    }
+  },
+  {
+    "id": "end_econ_investment",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить гос. программы",
+    "title_en": "Cut State Programs",
+    "description": "Любое правительство финансирует крупные программы субсидирования, от образования до экономического развития. В трудные времена бюджет должен быть радикально пересмотрен, а все имеющиеся средства перенаправлены на более важные расходы. Как и следовало ожидать, такого рода общее сокращение нанесет ущерб нашему социальному и экономическому развитию. Однако долгосрочное планирование - это то, чего мы не можем себе позволить: если кризис продолжится, у нас больше не будет экономики, которую можно будет субсидировать.",
+    "description_en": "Any government funds large subsidisation programs, from education to economic development. In difficult times, the budget must be drastically redimensioned, and all available funding redirected towards more important expenses. As one might expect, this kind of general slashing will cripple our societal and economic development. However, long-term planning is something we cannot afford: if the crisis continues, we won't have an economy to subsidise anymore.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить гос. программы»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_civ_cost_down",
+      "add_to_variable": {
+        "civilian_fc": "-0.6"
+      },
+      "set_temp_variable": {
+        "gdp_growth_temp": "-0.1"
+      },
+      "multiply_temp_variable": {
+        "gdp_growth_temp": "gdp_growth"
+      },
+      "if": {
+        "limit": {
           "check_variable": {
-            "GNG_map_selected_state": 0
+            "gdp_growth_temp": "-3"
           }
         },
-        {
-          "has_country_flag": "GNG_riots_underworld_active"
+        "set_temp_variable": {
+          "gdp_growth_temp": "-3"
         }
-      ],
-      "check_variable": {
-        "GNG_map_group_select": 0
+      },
+      "econ_gdp_growth_change": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
       }
     },
-    "complete_effect": {}
-  },
-  {
-    "id": "GNG_hire_more_skilled_engineers",
-    "category_id": "GNG_Product_Decisions_GUI",
-    "name": "Наем высококвалифицированных инженеров",
-    "desc": "Концепция ничего не стоит без грамотной реализации. Для успешного запуска требуется нечто большее, чем просто хорошая идея и маркетинг. Нужна надежность, качественная сборка и продуманный дизайн. Если для того, чтобы наш продукт соответствовал строгим рыночным стандартам, потребуется нанять еще пару десятков первоклассных специалистов в команду разработчиков - значит, мы это сделаем.",
-    "icon": "GFX_decision_generic_gear_green_indent",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "GNG_has_not_reached_product_quality_cap": true
-    },
-    "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
-      },
-      "has_country_flag": "GNG_show_quality_assurance_decisions"
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_political_power": -20,
-        "set_temp_variable": {
-          "temp_econ_spending_amount": 0.075
-        },
-        "econ_spend_money_once_effect_raw_money": true
-      }
-    }
-  },
-  {
-    "id": "GNG_investigate_rumored_yasuda_connections",
-    "category_id": "GNG_Three_Evils_of_Guangdong_category",
-    "name": "Расследовать слухи о связях с \"Ясудой\"",
-    "desc": "Ходят дикие слухи, о которых прекрасно осведомлен исполнительный директор Судзуки, что корпорация \"Ясуда\" и её представитель Такудзи Мацудзава вовлечены в 'секретные' схемы, разлагающие их компанию. Недопустимо, чтобы одна из 'Четырех компаний' была коррумпирована, и Судзуки позаботится о том, чтобы по этому делу было проведено тщательное расследование.",
-    "icon": "GFX_decision_GNG_yasuda",
-    "cost": 40,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
-      },
-      "check_variable": [
-        {
-          "GNG_legco_faction_in_power": 2
-        },
-        {
-          "GNG_corruption_var": {
-            "_op": ">",
-            "value": 0
-          }
-        }
-      ],
-      "has_country_flag": "GNG_show_corruption_decisions"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "GNG_appeal_for_more_chinese_workers",
-    "category_id": "GNG_Three_Evils_of_Guangdong_category",
-    "name": "Запросить больше китайских рабочих",
-    "desc": "Призывая Китайскую Республику упростить процесс иммиграции в Гуандун, мы сможем получить больше рабочих рук для питания наших заводов - хотя китайцы предпочли бы, чтобы мы прекратили эксплуатировать их народ.",
-    "icon": "GFX_decision_GNG_roc_workers",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
-      },
-      "has_country_flag": "GNG_show_china_opinion_decisions"
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_political_power": -30,
-        "set_temp_variable": {
-          "GNG_opinion_temp_var": -3
-        },
-        "GNG_China_opinion_Change": true
-      }
-    }
-  },
-  {
-    "id": "GNG_request_more_engineers",
-    "category_id": "GNG_Three_Evils_of_Guangdong_category",
-    "name": "Запросить больше ученых",
-    "desc": "Чтобы ускорить наши исследовательские проекты, мы запросим у Токио дополнительных ученых, хотя подобная 'утечка мозгов' в нашу пользу их явно не обрадует.",
-    "icon": "GFX_decision_GNG_japan_scientists",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
-      },
-      "has_country_flag": "GNG_show_japan_approval_decisions"
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_political_power": -25,
-        "set_temp_variable": {
-          "GNG_approval_temp_var": -4
-        },
-        "GNG_Japan_approval_change": true
-      }
-    }
-  },
-  {
-    "id": "GNG_dispatch_armored_patrols_GFT",
-    "category_id": "GNG_Riots_GUI",
-    "name": "Бронетанковые патрули против  ФРГ",
-    "desc": "Бутылки с зажигательной смесью и камни способны серьезно ранить пеших офицеров. К счастью, они бессильны против толстой брони.",
-    "icon": "GFX_decision_generic_apc",
-    "cost": 0,
-    "fire_only_once": false,
     "available": {
       "custom_trigger_tooltip": {
-        "tooltip": "GNG_isnt_reallocating_from_GFT",
-        "NOT": {
-          "has_country_flag": "GNG_reallocating_from_GFT"
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
         }
       }
     },
-    "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
-      },
-      "check_variable": {
-        "GNG_selected_riot_group": 1
-      },
-      "has_country_flag": "GNG_or_against_us"
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_temp_variable": {
-          "temp_econ_spending_amount": 0.6
-        },
-        "econ_spend_money_once_effect_raw_money": true,
-        "add_political_power": -30
-      }
-    }
+    "visible": {}
   },
   {
-    "id": "GNG_dispatch_armored_patrols_CCL",
-    "category_id": "GNG_Riots_GUI",
-    "name": "Бронетанковые патрули против  ККТ",
-    "desc": "Бутылки с зажигательной смесью и камни способны серьезно ранить пеших офицеров. К счастью, они бессильны против толстой брони.",
-    "icon": "GFX_decision_generic_apc",
-    "cost": 0,
+    "id": "slash_research",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сокращение финансирования исследований",
+    "title_en": "Slash Research Fundings",
+    "description": "Как любое здравомыслящее правительство, мы вкладываем большие средства в перспективные научные учреждения внутри нашей страны. Однако в эти смутные времена ясно, что мы больше не можем позволить себе такую роскошь: расходы на исследования будут сокращены, а институты брошены на произвол судьбы. Мы понимаем, что это приведет к общему снижению нашей способности поддерживать темпы инноваций, но деньги являются более насущной проблемой. Тысячи лет назад кто-то думал, что \"деньги\" - великое изобретение: если бы только мы могли наложить лапы на его кости...",
+    "description_en": "As any sane government, we invest large amounts of funds into promising scientific institutions within our country. In these troubled times, however, it is clear we can no longer afford such luxuries: research expenditures will be cut, and institutions left to fend for themselves. We understand that this will result in an overall reduction in our ability to keep the pace of innovation, but money is a more pressing concern. Thousands of years ago, someone thought \"money\" was a great invention: if only we could get our hands on his bones...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
     "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "tooltip": "GNG_isnt_reallocating_from_CCL",
-        "NOT": {
-          "has_country_flag": "GNG_reallocating_from_CCL"
-        }
-      }
-    },
-    "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
-      },
-      "check_variable": {
-        "GNG_selected_riot_group": 2
-      },
-      "has_country_flag": "GNG_or_against_us"
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_temp_variable": {
-          "temp_econ_spending_amount": 0.6
-        },
-        "econ_spend_money_once_effect_raw_money": true,
-        "add_political_power": -30
-      }
-    }
-  },
-  {
-    "id": "GNG_push_back_with_armored_cars_gft",
-    "category_id": "GNG_Riots_GUI",
-    "name": "Таран баррикад  ФРГ броневиками",
-    "desc": "Руководители корпораций и члены  Законодательного совета блокированы на улицах самодельными заграждениями и обезумевшей толпой. Таран этих препятствий нашими БТРами позволит важным людям безопасно добраться до места назначения.",
-    "icon": "GFX_decision_generic_apc",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
-      },
-      "has_country_flag": "GNG_chief_executive_we_need_you",
-      "check_variable": {
-        "GNG_selected_riot_group": 1
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сокращение финансирования исследований»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
       }
     },
     "complete_effect": {
-      "hidden_effect": {
-        "add_political_power": -10,
-        "set_temp_variable": {
-          "temp_econ_spending_amount": 0.1
-        },
-        "econ_spend_money_once_effect_raw_money": true
-      }
-    }
-  },
-  {
-    "id": "GNG_push_back_with_armored_cars_ccl",
-    "category_id": "GNG_Riots_GUI",
-    "name": "Таран баррикад  ККТ броневиками",
-    "desc": "Руководители корпораций и члены  Законодательного совета блокированы на улицах самодельными заграждениями и обезумевшей толпой. Таран этих препятствий нашими БТРами позволит важным людям безопасно добраться до места назначения.",
-    "icon": "GFX_decision_generic_apc",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "NOT": {
-        "has_country_flag": "GNG_disable_all_mechanics_IJA"
+      "custom_effect_tooltip": "FC_research_freeze",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
       },
-      "has_country_flag": "GNG_chief_executive_we_need_you",
-      "check_variable": {
-        "GNG_selected_riot_group": 2
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_political_power": -10,
-        "set_temp_variable": {
-          "temp_econ_spending_amount": 0.1
-        },
-        "econ_spend_money_once_effect_raw_money": true
-      }
-    }
-  },
-  {
-    "id": "IBR_import_armor_designs_decision_1960",
-    "category_id": "IBR_ofn_diplomacy_category",
-    "name": "Импортировать чертежи брони",
-    "desc": "",
-    "icon": "GFX_decision_market_armor",
-    "cost": 35,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_country_flag": "IBR_OFN_import_designs",
-      "USA": [
-        {
-          "has_tech": "APC_1960"
-        },
-        {
-          "has_tech": "IFV_1960"
-        },
-        {
-          "has_tech": "MBT_1960"
-        }
-      ],
-      "date": {
-        "_op": "<",
-        "value": "1970.01.01"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "IBR_import_armor_designs_decision_1970",
-    "category_id": "IBR_ofn_diplomacy_category",
-    "name": "Импортировать чертежи брони",
-    "desc": "",
-    "icon": "GFX_decision_market_armor",
-    "cost": 35,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_country_flag": "IBR_OFN_import_designs",
-      "USA": [
-        {
-          "has_tech": "APC_1970"
-        },
-        {
-          "has_tech": "IFV_1970"
-        },
-        {
-          "has_tech": "MBT_1970"
-        }
-      ],
-      "date": [
-        {
-          "_op": ">",
-          "value": "1970.01.01"
-        },
-        {
-          "_op": "<",
-          "value": "1980.01.01"
-        }
-      ]
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "IBR_import_armor_designs_decision_1980",
-    "category_id": "IBR_ofn_diplomacy_category",
-    "name": "Импортировать чертежи брони",
-    "desc": "",
-    "icon": "GFX_decision_market_armor",
-    "cost": 35,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_country_flag": "IBR_OFN_import_designs",
-      "USA": [
-        {
-          "has_tech": "APC_1980"
-        },
-        {
-          "has_tech": "IFV_1980"
-        },
-        {
-          "has_tech": "MBT_1980"
-        }
-      ],
-      "date": [
-        {
-          "_op": ">",
-          "value": "1980.01.01"
-        },
-        {
-          "_op": "<",
-          "value": "1990.01.01"
-        }
-      ]
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "IBR_franco_morocco_decision",
-    "category_id": "IBR_caudillos_category",
-    "name": "Франко отправляется в Марокко",
-    "desc": "",
-    "icon": "GFX_decision_generic_political_discourse",
-    "cost": 75,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "has_country_flag": "IBR_caudillos_show_special_f",
-      "NOT": {
-        "has_country_flag": [
-          "IBR_legislative_council_rogue",
-          "IBRDemUnion"
-        ]
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "IBR_pre_election_no_more_dictatorship",
-    "category_id": "IBR_caudillos_category",
-    "name": "Больше никакой диктатуры",
-    "desc": "Франко и Каэтану остаются нашими каудильо. Но, отстранив их от всего, кроме самых долгих церемониальных обязанностей, мы сможем убрать эти неловкие фигуры с глаз общественности.",
-    "icon": "GFX_decision_generic_break_treaty",
-    "cost": 20,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_country_flag": "IBRDemUnion",
-      "NOT": {
-        "has_country_flag": "IBR_Elections_Happening"
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision IBR_pre_election_no_more_dictatorship",
-      "add_war_support": -0.03,
-      "set_temp_variable": [
-        {
-          "IBR_pre_election_category_temp": 1
-        },
-        {
-          "IBR_pre_election_influence_change_temp": -3
-        },
-        {
-          "IBR_pre_election_category_temp": 2
-        },
-        {
-          "IBR_pre_election_influence_change_temp": -3
-        }
-      ],
-      "IBR_pre_election_change_influence": [
-        true,
-        true
-      ]
-    }
-  },
-  {
-    "id": "IBR_DP_mor_invest_plans",
-    "category_id": "IBR_Development_Projects",
-    "name": "Инвестировать в экономику Марокко",
-    "desc": "",
-    "icon": "GFX_decision_generic_money",
-    "cost": 40,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_country_flag": "IBR_DP_Eco",
-      "MOR": {
-        "is_subject_of": "IBR"
-      },
-      "OR": {
-        "has_country_flag": "IBR_DP_show_colonial",
-        "is_ai": true
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision IBR_DP_mor_invest_plans",
-      "custom_effect_tooltip": "IBR_repeatable_project_tt",
-      "set_temp_variable": {
-        "temp_econ_spending_amount": 0.055
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "IND_debug_Morarji",
-    "category_id": "IND_debug_category",
-    "name": "IND_debug_Morarji",
-    "desc": "",
-    "icon": "GFX_decision_debug",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {},
-    "complete_effect": {
-      "retire_character": [
-        "IND_Deendayal_Upadhyaya",
-        "IND_Lal_Bahadur_Shastri",
-        "IND_Hirubhai_M_Patel"
-      ],
-      "IND_Atal_Bihari_Vajpayee": {
-        "promote_character": true
-      },
-      "set_party_name": [
-        {
-          "ideology": "socialist",
-          "long_name": "IND_socialist_forum_party_long",
-          "name": "IND_socialist_forum_party"
-        },
-        {
-          "ideology": "paternalism",
-          "long_name": "IND_paternalism_bjs2_party_long",
-          "name": "IND_paternalism_bjs2_party"
-        },
-        {
-          "ideology": "conservatism",
-          "long_name": "IND_conservatism_2_party_long",
-          "name": "IND_conservatism_2_party"
-        }
-      ],
-      "remove_ideas": [
-        "IND_Death_March_Downwards",
-        "IND_Embers_Of_Communalism",
-        "IND_Indias_Long_Night",
-        "IND_Friend_In_Need",
-        "IND_The_Behemoth_Shastri",
-        "IND_The_Behemoth_Shastri_OBQ"
-      ],
-      "set_politics": {
-        "ruling_party": "conservatism",
-        "elections_allowed": true,
-        "last_election": "1967.7.25",
-        "election_frequency": 60
-      },
-      "set_popularities": {
-        "communist": 10,
-        "socialist": 15,
-        "socialist_1": 3,
-        "progressivism": 5,
-        "liberalism": 15,
-        "liberal_conservatism": 5,
-        "conservatism": 35,
-        "paternalism": 5,
-        "paternalism_1": 3,
-        "fascism": 2,
-        "ultranationalism": 2
-      },
-      "promote_character": {
-        "character": "IND_Ramaswamy_Venkataraman",
-        "ideology": "progressivism_reformist_socialism_subtype"
-      },
-      "add_ideas": [
-        "IND_The_Behemoth_Desai",
-        "IND_The_Indian_Vision",
-        "IND_An_India_of_Light",
-        "IND_Look_Westwards"
-      ],
-      "if": {
-        "limit": {
-          "NOT": {
-            "country_exists": "PAK"
-          }
-        },
-        "add_ideas": "IND_My_Brothers_Keeper"
-      },
-      "else": {
-        "add_ideas": "IND_The_Partition"
-      }
-    }
-  },
-  {
-    "id": "MEX_shutter_immoral_businesses",
-    "category_id": "MEX_Economy_category",
-    "name": "Закрыть безнравственные предприятия",
-    "desc": "",
-    "icon": "GFX_decision_generic_judge",
-    "cost": 10,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "check_variable": {
-        "MEX_econ_tab_selected": 3
-      },
-      "has_country_leader": {
-        "character": "MEX_Gustavo_Ordaz",
-        "ruling_only": true
-      }
-    },
-    "complete_effect": {
-      "decision_region_decider": true,
-      "set_temp_variable": [
-        {
-          "temp_value": -3
-        },
-        {
-          "temp_value": 3
-        },
-        {
-          "t_val": 2
-        }
-      ],
-      "MEX_econ_region_stimulation_percent_change": true,
-      "MEX_econ_region_urban_quality_of_life_percent_change": true,
-      "add_political_power": 20,
-      "add_stability": 0.03,
-      "Mexico_elTitan_authoritarianism_change": true,
-      "MEX_econ_reload": true,
-      "MEX_econ_region_map_value_change": true
-    }
-  },
-  {
-    "id": "OFN_CAR_memento_mori",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Memento Mori",
-    "desc": "Часы тикают, но всё ещё можно отложить смерть ЦАР Определённые политические решения и определенные политические назначения ещё больше отодвинут крайний срок, добывая ОСН ещё немного времени для исполнения плана...",
-    "icon": "GFX_decision_generic_military_hat_skull",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "always": false
-    },
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "OFN_CAR_destroy_countryside_roads",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Уничтожить деревенские дороги",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "NOT": {
-        "has_country_flag": "OFN_CAR_on_a_mission"
-      },
-      "OR": {
-        "check_variable": [
-          {
-            "OFN_CAR_WAR_logistics": 0.05
-          },
-          {
-            "OFN_CAR_WAR_logistics": {
-              "_op": ">",
-              "value": 0.05
-            }
-          }
-        ]
-      }
-    },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
-    },
-    "complete_effect": {
       "add_to_variable": {
-        "OFN_CAR_WAR_logistics": -0.05
+        "research_cut_fc": "-0.6"
       },
-      "clamp_variable": {
-        "var": "OFN_CAR_WAR_logistics",
-        "max": 1,
-        "min": 0
-      },
-      "custom_effect_tooltip": "OFN_CAR_WAR_logistics_decrease",
-      "set_country_flag": "OFN_CAR_on_a_mission"
-    }
-  },
-  {
-    "id": "OFN_CAR_launch_counter_terrorist_operation",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Провести контр-террористические операции",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
+      "research_funding_minimal_set_position_0": "yes",
+      "research_funding_maximal_set_position_0": "yes"
+    },
     "available": {
-      "NOT": {
-        "has_country_flag": "OFN_CAR_on_a_mission"
-      },
-      "OR": {
-        "check_variable": [
-          {
-            "OFN_CAR_WAR_material": 0.05
-          },
-          {
-            "OFN_CAR_WAR_material": {
-              "_op": ">",
-              "value": 0.05
-            }
-          }
-        ]
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
+    "visible": {}
+  },
+  {
+    "id": "restore_trust_debtors",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Заработать расположение",
+    "title_en": "Buy Back Some Goodwill",
+    "description": "Балансирование на грани или чрезмерная самоуверенность ни к чему нас не приведут. В конце концов, мы не сможем выжить без того, чтобы кто-то не купил наши облигации, иначе мы бы не оказались в такой сложной ситуации: таким образом, мы должны работать над восстановлением уверенности рынка в нашей платежеспособности. Спонтанно погасив небольшой транш просроченных облигаций вместе с их процентами, мы дадим знать нашим кредиторам, что готовы сотрудничать. Это будет похоже на попытку высосать кровь из камня, но мы должны быть уверены, что после того, как этот кризис закончится - а однажды он закончится, - мы сможем снова встретиться с рынками лицом к лицу, не опасаясь, что нас станут избегать.",
+    "description_en": "Brinkmanship and overconfidence will lead us nowhere. In the end, we can't survive without someone buying our bonds, or we wouldn't have been in such a difficult situation in the first place: as such, we should work on rebuilding the market's confidence in our solvability. By spontaneously repaying a small tranche of overdue bonds along with their interests, we'll let our creditors know that we are willing to cooperate. It will be like trying to draw blood from a stone, but we must ensure that, after this crisis is over - and it will be over, one day - we'll be able to once again face the markets without being shunned.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.1,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Заработать расположение»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25
     },
     "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.1"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_spend_money_once_effect_GDP_percent": "yes",
+      "econ_national_debt_change": "yes",
+      "econ_raise_credit_rating": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "freeze_military",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить военные расходы",
+    "title_en": "Cut Military Spendings",
+    "description": "Мощь государства часто измеряется его военной мощью, но какая польза от большой армии, если мы даже не можем оплатить их услуги? Вместо того, чтобы через несколько месяцев столкнуться с бунтами солдат, лучше действовать решительно и выбирать, что можно сохранить, а что нужно сократить: прекращение любого нового набора, отсрочка любого проекта расширения и сокращение до минимума расходов на содержание, несомненно, облегчат нашу государственную казну. Как и следовало ожидать, в долгосрочной перспективе это будет иметь серьезные последствия. Оставленное без присмотра оборудование ломается легче, старая тактика и оружие покажут свой возраст против более современных противников, и молодые люди дважды подумают, прежде чем записываться в наши вооруженные силы: но все же война есть война, и экономические сражения тоже требуют жертв.",
+    "description_en": "A state's power is often measured in its military power, but what use is a large military, if we can't even pay for their stipends? Rather than find ourselves with a riotous soldiery in a few months, it's best to act decisively, and choose what can be kept and what must be cut: halting any new recruitment, delaying any expansion project, and reducing to the bare minimum maintenance expenses, will surely provide relief to our state coffers. As one might expect, this will have harsh consequences in the long run. Unattended equipment breaks more easily, old tactics and weapons will show their age against more modern opponents, and young men will think twice before enrolling, if they aren't even sure of being paid: still, a war is a war, and economic battles require sacrifices too.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить военные расходы»",
+      "set_flags": {
+        "FC_cut_military_spending": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_mil_freeze",
       "add_to_variable": {
-        "OFN_CAR_WAR_material": -0.05
+        "military_fc": "-0.8"
       },
-      "clamp_variable": {
-        "var": "OFN_CAR_WAR_material",
-        "max": 1,
-        "min": 0
-      },
-      "custom_effect_tooltip": "OFN_CAR_WAR_material_decrease",
-      "set_country_flag": "OFN_CAR_on_a_mission"
-    }
-  },
-  {
-    "id": "OFN_CAR_investigate_our_native_recruits",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Проверить наших местных новобранцев",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "NOT": {
-        "has_country_flag": "OFN_CAR_on_a_mission"
-      },
-      "OR": {
-        "check_variable": [
-          {
-            "OFN_CAR_WAR_training": 0.05
-          },
-          {
-            "OFN_CAR_WAR_training": {
-              "_op": ">",
-              "value": 0.05
-            }
-          }
-        ]
-      }
+      "army_funding_minimal_set_position_0": "yes",
+      "army_funding_maximal_set_position_0": "yes",
+      "naval_funding_minimal_set_position_0": "yes",
+      "naval_funding_maximal_set_position_0": "yes",
+      "set_country_flag": "FC_cut_military_spending"
     },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
-    },
-    "complete_effect": {
-      "add_to_variable": {
-        "OFN_CAR_WAR_training": -0.05
-      },
-      "clamp_variable": {
-        "var": "OFN_CAR_WAR_training",
-        "max": 1,
-        "min": 0
-      },
-      "custom_effect_tooltip": "OFN_CAR_WAR_training_decrease",
-      "set_country_flag": "OFN_CAR_on_a_mission"
-    }
-  },
-  {
-    "id": "OFN_CAR_review_our_operation",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Пересмотреть наши операции",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "OFN_CAR_request_equipment_to_the_ofn",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Запросить припасы у ОСН",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "OFN_CAR_organize_military_drills",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Провести военные учения",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "OFN_CAR_emergency_road_building",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Провести чрезвычайное дорожное строительство",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
     "available": {
       "custom_trigger_tooltip": {
-        "check_variable": {
-          "money_reserves": {
-            "_op": ">",
-            "value": 0.0
-          }
-        },
-        "tooltip": "OFN_CAR_reserves"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
-    },
-    "complete_effect": {
-      "set_temp_variable": {
-        "temp_econ_spending_amount": 0.25
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "OFN_CAR_buy_weapons_from_the_US",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Купить оружие у Штатов",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "check_variable": {
-          "money_reserves": {
-            "_op": ">",
-            "value": 0.0
-          }
-        },
-        "tooltip": "OFN_CAR_reserves"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
-    },
-    "complete_effect": {
-      "set_temp_variable": {
-        "temp_econ_spending_amount": 0.25
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "OFN_CAR_improve_training_camps",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Улучшить тренировачные лагеря",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "check_variable": {
-          "money_reserves": {
-            "_op": ">",
-            "value": 0.0
-          }
-        },
-        "tooltip": "OFN_CAR_reserves"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_stand_our_ground"
-    },
-    "complete_effect": {
-      "set_temp_variable": {
-        "temp_econ_spending_amount": 0.25
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "OFN_CAR_crackdown_on_warlords",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Облава на полевых командиров",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": {
-      "add_to_variable": [
-        {
-          "OFN_CAR_DIP_east_negotiation": -0.075
-        },
-        {
-          "OFN_CAR_DIP_ango_negotiation": -0.025
-        }
-      ],
-      "clamp_variable": [
-        {
-          "var": "OFN_CAR_DIP_east_negotiation",
-          "max": 1,
-          "min": 0
-        },
-        {
-          "var": "OFN_CAR_DIP_ango_negotiation",
-          "max": 1,
-          "min": 0
-        }
-      ],
-      "custom_effect_tooltip": [
-        "OFN_CAR_DIP_east_decrease_big",
-        "OFN_CAR_DIP_ango_decrease"
-      ]
-    }
-  },
-  {
-    "id": "OFN_CAR_crackdown_on_pan_africans",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Облава на пан-африканцев",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": {
-      "add_to_variable": [
-        {
-          "OFN_CAR_DIP_ango_negotiation": -0.075
-        },
-        {
-          "OFN_CAR_DIP_cent_negotiation": -0.025
-        }
-      ],
-      "clamp_variable": [
-        {
-          "var": "OFN_CAR_DIP_ango_negotiation",
-          "max": 1,
-          "min": 0
-        },
-        {
-          "var": "OFN_CAR_DIP_cent_negotiation",
-          "max": 1,
-          "min": 0
-        }
-      ],
-      "custom_effect_tooltip": [
-        "OFN_CAR_DIP_ango_decrease_big",
-        "OFN_CAR_DIP_cent_decrease"
-      ]
-    }
-  },
-  {
-    "id": "OFN_CAR_crackdown_on_separatists",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Облава на сепаратистов",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": {
-      "add_to_variable": [
-        {
-          "OFN_CAR_DIP_cent_negotiation": -0.075
-        },
-        {
-          "OFN_CAR_DIP_east_negotiation": -0.025
-        }
-      ],
-      "clamp_variable": [
-        {
-          "var": "OFN_CAR_DIP_cent_negotiation",
-          "max": 1,
-          "min": 0
-        },
-        {
-          "var": "OFN_CAR_DIP_east_negotiation",
-          "max": 1,
-          "min": 0
-        }
-      ],
-      "custom_effect_tooltip": [
-        "OFN_CAR_DIP_cent_decrease_big",
-        "OFN_CAR_DIP_east_decrease"
-      ]
-    }
-  },
-  {
-    "id": "OFN_CAR_reassure_the_market",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Успокоить рынок",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 75,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "OFN_CAR_talk_with_the_african_socialists",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Поговорить с африканскимии социалистами",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 75,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "OFN_CAR_resolve_border_issues",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Разрешить проблемы с границами",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 75,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "OFN_CAR_relief_effort_angola",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Оказать чрезвычайную помощь Анголе",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "always": true
-    },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": {
-      "set_temp_variable": {
-        "temp_econ_spending_amount": 0.25
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "OFN_CAR_expand_congo_ports",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Расширить порты в Конго",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "always": true
-    },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": {
-      "set_temp_variable": {
-        "temp_econ_spending_amount": 0.25
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "OFN_CAR_renovate_east_africa",
-    "category_id": "OFN_CAR_memento_mori_cat",
-    "name": "Отстроить Восточную Африку",
-    "desc": "",
-    "icon": "GFX_decision_generic_assault",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "always": true
-    },
-    "visible": {
-      "has_completed_focus": "OFN_CAR_find_another_way"
-    },
-    "complete_effect": {
-      "set_temp_variable": {
-        "temp_econ_spending_amount": 0.25
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "GRO_conscript_more_workers",
-    "category_id": "GRO_war_preparations_category",
-    "name": "Набрать больше рабочих",
-    "desc": "Дьявол находит работу для праздных рук. Местные, которых мы не загоняем в шахты и фабрики, строят заговоры и замышляют против нас. Мы должны убедиться, что все местные трудятся днем и ночью на благо Остафрики и их самих. Это такая трата времени, когда здоровые и сильные рабы тратят свою энергию на бесполезный бунт.",
-    "icon": "GFX_decision_generic_industry",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "GRO_slave_munitions"
-    },
-    "visible": {
-      "has_country_flag": "GRO_war_preparations_begin"
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision GRO_conscript_more_workers",
-      "add_manpower": -500,
-      "add_timed_idea": {
-        "idea": "GRO_conscripted_additional_workers",
-        "days": 60
-      }
-    }
-  },
-  {
-    "id": "KOM_load_morozov_regional_tree",
-    "category_id": "KOM_debug_category",
-    "name": "Загрузить региональное древо Морозова",
-    "desc": "",
-    "icon": "",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision remove KOM_load_morozov_regional_tree",
-      "load_focus_tree": "KOM_morozov_regional"
-    }
-  },
-  {
-    "id": "DRL_share_loot_more_equally",
-    "category_id": "DRL_Keeping_The_Brigade_Secure",
-    "name": "Раздать бабло",
-    "desc": "Мы позаботимся о том, чтобы добыча, добытая в ходе недавних набегов, распределялась между нашими людьми более равномерно. Это обещание большей награды для простых солдат, несомненно, вызовет общую поддержку будущих рейдов.",
-    "icon": "GFX_decision_generic_civil_support",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "AND": {
-        "has_country_leader": {
-          "character": "DRL_Oskar_Dirlewanger",
-          "ruling_only": true
-        },
-        "NOT": {
-          "has_country_flag": "DRL_more_to_the_officers_decision"
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
         }
       }
     },
-    "visible": {},
-    "complete_effect": {
-      "set_country_flag": "DRL_share_loot_more_equally_decision"
-    }
-  },
-  {
-    "id": "DRL_more_to_the_officers",
-    "category_id": "DRL_Keeping_The_Brigade_Secure",
-    "name": "Потакать офицерам",
-    "desc": "Мы позаботимся о том, чтобы большая часть добычи, награбленной в ходе недавних рейдов, досталась тем, кто этого больше всего заслуживает, - офицерам. Успокоенные таким образом, их возросшая поддержка позволит нам достичь наших конкретных целей.",
-    "icon": "GFX_decision_generic_civil_support",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "AND": {
-        "has_country_leader": {
-          "character": "DRL_Oskar_Dirlewanger",
-          "ruling_only": true
-        },
-        "NOT": {
-          "has_country_flag": "DRL_share_loot_more_equally_decision"
-        }
-      }
-    },
-    "visible": {},
-    "complete_effect": {
-      "set_country_flag": "DRL_more_to_the_officers_decision"
-    }
-  },
-  {
-    "id": "KOM_expand_morozov_influence",
-    "category_id": "KOM_horrifying_politics_category",
-    "name": "Кампания за СМР",
-    "desc": "",
-    "icon": "GFX_decision_category_generic_propaganda",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "tooltip": "KOM_expand_center_influence_tt",
-        "check_variable": {
-          "KOMCenterPower": {
-            "_op": ">",
-            "value": 20
-          }
-        }
-      },
-      "NOT": {
-        "has_country_flag": "KOM_is_campaigning"
-      }
-    },
-    "visible": {
-      "OR": {
-        "has_government": [
-          "progressivism",
-          "liberalism",
-          "liberal_conservatism",
-          "conservatism"
-        ]
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "KOM_is_campaigning"
-    }
-  },
-  {
-    "id": "KOM_hunt_for_morozov",
-    "category_id": "KOM_opposition_category",
-    "name": "Установить расположение Ивана Морозова",
-    "desc": "",
-    "icon": "",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": [],
-    "visible": {
-      "NOT": [
-        {
-          "has_country_flag": "KOM_Morozov_Active"
-        },
-        {
-          "OR": {
-            "has_government": [
-              "liberalism",
-              "progressivism",
-              "liberal_conservatism"
-            ],
-            "AND": {
-              "has_government": "despotism",
-              "has_country_leader": {
-                "character": "KOM_Svetlana_Stalina",
-                "ruling_only": true
-              }
-            }
-          }
-        }
-      ],
-      "check_variable": {
-        "KOM_leader_status^4": 3
-      },
-      "has_country_flag": "KOM_hunt_opposition"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "KOM_launch_operation_against_morozov",
-    "category_id": "KOM_opposition_category",
-    "name": "Начать операцию против Ивана Морозова",
-    "desc": "",
-    "icon": "",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": [],
-    "visible": {
-      "NOT": [
-        {
-          "OR": {
-            "check_variable": [
-              {
-                "KOM_leader_status^4": 0
-              },
-              {
-                "KOM_leader_status^4": 2
-              },
-              {
-                "KOM_leader_status^4": 1
-              }
-            ]
-          }
-        },
-        {
-          "OR": {
-            "has_government": [
-              "liberalism",
-              "progressivism",
-              "liberal_conservatism"
-            ],
-            "AND": [
-              {
-                "has_government": "despotism",
-                "has_country_leader": {
-                  "character": "KOM_Svetlana_Stalina",
-                  "ruling_only": true
-                }
-              },
-              {
-                "has_government": "liberal_conservatism",
-                "has_country_leader": {
-                  "character": "KOM_Svetlana_Stalina",
-                  "ruling_only": true
-                }
-              }
-            ]
-          }
-        }
-      ],
-      "has_country_flag": [
-        "KOM_Morozov_Active",
-        "KOM_hunt_opposition"
-      ]
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_command_power": -20
-      }
-    }
-  },
-  {
-    "id": "OMS_acquire_more_bases",
-    "category_id": "OMS_DECCAT_insurgency",
-    "name": "Организовать больше баз (осталось [?OMS_available_new_bases|Y0])",
-    "desc": "Вы можете активировать это решение ещё [?OMS_available_new_bases|Y0] раза.",
-    "icon": "GFX_decision_generic_building_army_base",
-    "cost": 40,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "check_variable": {
-        "OMS_available_new_bases": {
-          "_op": ">",
-          "value": 0
-        }
-      }
-    },
-    "complete_effect": {
-      "add_stability": -0.05,
-      "subtract_from_variable": {
-        "OMS_available_new_bases": 1
-      }
-    }
-  },
-  {
-    "id": "ore_assemble_more_men",
-    "category_id": "ORE_category_centralization_gamble",
-    "name": "Созвать добровольцев",
-    "desc": "",
-    "icon": "",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision ore_assemble_more_men",
-      "ORE": {
-        "652": {
-          "create_unit": {
-            "division": "name = \"Orenburgskiye Novobrantsy\" division_template = \"Podrazdeleniye Opolcheniya\" start_experience_factor = 0.5",
-            "prioritize_location": 3563,
-            "owner": "PREV"
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "ore_push_the_council_to_assemble_more_men",
-    "category_id": "ORE_category_centralization_gamble",
-    "name": "Подтолкнуть Совет к созыву добровольцев",
-    "desc": "",
-    "icon": "",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "tooltip": "ORE_sufficient_centralization",
-        "check_variable": {
-          "var": "ORECentralizedPower",
-          "value": 3,
-          "compare": "greater_than_or_equals"
-        }
-      }
-    },
-    "visible": {
-      "NOT": {
-        "OR": {
-          "has_government": [
-            "paternalism",
-            "communist"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision ore_push_the_council_to_assemble_more_men",
-      "ORE_decentralization_great": true,
-      "ORE": {
-        "652": {
-          "create_unit": {
-            "division": "name = \"Novobrantsy Orenburgskogo Soveta\" division_template = \"Podrazdeleniye Opolcheniya\" start_experience_factor = 0.5",
-            "prioritize_location": 3563,
-            "owner": "PREV"
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "SAF_propaganda_demoralization_campaign",
-    "category_id": "SAF_south_african_war_category",
-    "name": "Начать кампанию по деморализации",
-    "desc": "",
-    "icon": "GFX_decision_generic_prospect_for_resources",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_completed_focus": "SAF_the_propaganda_war"
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SAF_propaganda_demoralization_campaign",
-      "BOR": {
-        "add_war_support": -0.15
-      },
-      "ANG": {
-        "add_war_support": -0.15
-      },
-      "COG": {
-        "add_war_support": -0.15
-      },
-      "GRO": {
-        "add_war_support": -0.15
-      }
-    }
-  },
-  {
-    "id": "ANG_Send_More_Planes",
-    "category_id": "ANG_Better_TMW_Decisions",
-    "name": "Отправить больше самолетов",
-    "desc": "Отправка большего количества самолетов Хюттигу и Мюллеру заслужит если не благодарность, то, по крайней мере, снизит подозрения.",
-    "icon": "GFX_decision_generic_fighter_plane",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "command_power": {
-          "_op": ">",
-          "value": 14.9
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "Ang_good"
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_command_power": -15
-      },
-      "COG": {
-        "add_equipment_to_stockpile": {
-          "type": "fighter_equipment",
-          "amount": 20
-        }
-      },
-      "GRO": {
-        "add_equipment_to_stockpile": {
-          "type": "fighter_equipment",
-          "amount": 20
-        }
-      },
-      "subtract_from_variable": [
-        {
-          "ANG_Muller_Sus": 2
-        },
-        {
-          "ANG_Huttig_Sus": 2
-        }
-      ],
-      "custom_effect_tooltip": [
-        "ANG_Lower_Muller_Sus_Low",
-        "ANG_Lower_Huttig_Sus_Low"
-      ],
-      "ANG_Sus_Clamp_Check": true
-    }
-  },
-  {
-    "id": "UKR_power_struggle_ohlendorf_ai_recruits_more_ukrainian_police",
-    "category_id": "UKR_power_struggle_category",
-    "name": "Олендорф набирает кадры в полицию",
-    "desc": "",
-    "icon": "GFX_decision_GER_ss",
-    "cost": "UKR_ohlendorf_ai_shutup?10",
-    "fire_only_once": false,
-    "available": {
-      "has_country_flag": "UKR_power_struggle_active"
-    },
-    "visible": {},
-    "complete_effect": {
-      "hidden_effect": {
-        "country_event": {
-          "id": "UKR_pwr_struggle_hidden_mission_events.5",
-          "days": 7
-        }
-      }
-    }
-  },
-  {
-    "id": "UKR_german_morale_decreases",
-    "category_id": "UKR_ukraine_must_survive_category",
-    "name": "German Morale Decreases",
-    "desc": "Germany expected this campaign to be a quick restoration of their rule. They were wrong. We will make them pay for every meter of soil with blood. As we hold strong, their morale will decline, but they will take increasingly desperate measures to win.",
-    "icon": "GFX_decision_generic_clock_red",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "tooltip": "UKR_german_morale_decreases_trigger_tt",
-        "always": false
-      }
-    },
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "USA_Hart_Cancer_Chep_Morrison_1",
-    "category_id": "USA_the_desk_of_the_president",
-    "name": "Осмыслить карьеру Чепа",
-    "desc": "",
-    "icon": "GFX_decision_USA_chep_morrison_discussion",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": [
-          "USA_chain_bill",
-          "USA_hart_working_on_cancer_focus"
-        ]
-      }
-    },
-    "visible": {
-      "has_country_flag": [
-        "USA_hart_presidency",
-        "USA_hart_cancer_decisions"
-      ]
-    },
-    "complete_effect": {
-      "set_country_flag": "USA_hart_working_on_cancer_focus"
-    }
-  },
-  {
-    "id": "USA_Hart_Cancer_Chep_Morrison_2",
-    "category_id": "USA_the_desk_of_the_president",
-    "name": "Напомнить Чепу о его помощи",
-    "desc": "",
-    "icon": "GFX_decision_USA_chep_morrison_discussion",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": [
-          "USA_chain_bill",
-          "USA_hart_working_on_cancer_focus"
-        ]
-      }
-    },
-    "visible": {
-      "has_country_flag": [
-        "USA_hart_presidency",
-        "USA_hart_cancer_decisions",
-        "Hart_CM_Step_1"
-      ]
-    },
-    "complete_effect": {
-      "set_country_flag": "USA_hart_working_on_cancer_focus"
-    }
-  },
-  {
-    "id": "USA_Hart_Cancer_Chep_Morrison_3",
-    "category_id": "USA_the_desk_of_the_president",
-    "name": "Обсудить президентство с Чепом",
-    "desc": "",
-    "icon": "GFX_decision_USA_chep_morrison_discussion",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": [
-          "USA_chain_bill",
-          "USA_hart_working_on_cancer_focus"
-        ]
-      }
-    },
-    "visible": {
-      "has_country_flag": [
-        "USA_hart_presidency",
-        "USA_hart_cancer_decisions",
-        "Hart_CM_Step_2"
-      ]
-    },
-    "complete_effect": {
-      "set_country_flag": "USA_hart_working_on_cancer_focus"
-    }
-  },
-  {
-    "id": "USA_Take_the_moral_highground",
-    "category_id": "USA_the_heartless",
-    "name": "Апеллировать моралью",
-    "desc": "",
-    "icon": "GFX_decision_generic_building_hospital",
-    "cost": 80,
-    "fire_only_once": false,
-    "available": {
-      "NOT": {
-        "has_country_flag": "USA_attacking_cons"
-      }
-    },
-    "visible": {
-      "has_country_flag": "USA_mudslinging_decisions"
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision USA_Take_the_moral_highground",
-      "USA_Chep_Conservative_PR_down": true,
-      "hidden_effect": {
-        "USA_Chep_Conservative_PR_down": true
-      },
-      "set_country_flag": "USA_attacking_cons"
-    }
-  },
-  {
-    "id": "USA_construct_mor_police_offices",
-    "category_id": "USA_bill_assessment",
-    "name": "Построить больше полицейских департаментов",
-    "desc": "",
-    "icon": "GFX_decision_generic_money",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "USA_active_construction"
-      }
-    },
-    "visible": {
-      "has_country_flag": "USA_Crime_bill_building",
-      "NOT": {
-        "has_country_flag": "USA_construct_mor_police_offices"
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision USA_construct_mor_police_offices",
-      "set_country_flag": "USA_active_construction"
-    }
-  },
-  {
-    "id": "GLD68_become_more_transparent",
-    "category_id": "USA_GLD_Dealing_With_Unions",
-    "name": "Затяните свободные концы",
-    "desc": "",
-    "icon": "",
-    "cost": 80,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "WFB_improve_mormon_relations",
-    "category_id": "USA_WFB_relationships",
-    "name": "Обращение к мормонам",
-    "desc": "",
-    "icon": "",
-    "cost": 35,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "WFB_kennedy_memorial",
-    "category_id": "USA_WFB_relationships",
-    "name": "Построить мемориал Кеннеди",
-    "desc": "",
-    "icon": "",
-    "cost": 10,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "NOT": {
-        "has_country_flag": "WFB_NO_DEMOCRATS"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "USA_WFB_CAN_no_more_devaulations",
-    "category_id": "USA_WFB_CFN_category",
-    "name": "Больше никаких девальваций",
-    "desc": "",
-    "icon": "",
-    "cost": 20,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "check_variable": {
-        "CFN_selected_reform": 3
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision USA_WFB_CAN_no_more_devaulations",
-      "add_to_variable": {
-        "CAN.CFN_voting_desire^3": 15
-      },
-      "CAN": {
-        "custom_effect_tooltip": "WFB_opinion_increase_fixed_15"
-      }
-    }
-  },
-  {
-    "id": "NPP_FP_CAN_Armor",
-    "category_id": "NPP_FP_invest_in_allies_category",
-    "name": "Поставки бронетехники в Канаду",
-    "desc": "",
-    "icon": "",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "has_completed_focus": "USA_Brothers_In_Arms"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "NPP_FP_AUS_Armor",
-    "category_id": "NPP_FP_invest_in_allies_category",
-    "name": "Поставки бронетехники в Австралию",
-    "desc": "",
-    "icon": "",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "has_completed_focus": "USA_Brothers_In_Arms"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "NPP_FP_NZL_Armor",
-    "category_id": "NPP_FP_invest_in_allies_category",
-    "name": "Поставки бронетехники в Новую Зеландию",
-    "desc": "",
-    "icon": "",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "has_completed_focus": "USA_Brothers_In_Arms"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "YUN_WI_more_counter_RGOC_propanganda",
-    "category_id": "YUN_NPA_Crusade",
-    "name": "Уничтожить связи Хэнцзяня",
-    "desc": "К сожалению, два десятилетия правления коллаборационистов отравили разум многих людей на этой земле, и некоторые из них даже осмеливаются тайно подрывать наши военные усилия по приказу режима предателей. Мы искореним их и подвергнем смертной казни в качестве предупреждения тем, кто сотрудничает с режимом Ханьцзяня, и без помех со стороны предателей наш крестовый поход пройдет более гладко.",
-    "icon": "",
-    "cost": 20,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_global_flag": "WI_Warlord_Struggle_begin"
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: YUN_WI_more_counter_RGOC_propanganda decision begun",
-      "add_equipment_to_stockpile": {
-        "type": "infantry_equipment",
-        "amount": -1000
-      },
-      "set_temp_variable": {
-        "tempMomentumTick": 1.5
-      },
-      "WI_calc_momentum_tick_drift": true,
-      "custom_effect_tooltip": "WI_calc_momentum_tick_tt",
-      "add_to_variable": {
-        "YUN_NPA_Crusade_dirty": 1
-      }
-    }
-  },
-  {
-    "id": "YUN_WI_more_counter_JAP_propanganda",
-    "category_id": "YUN_NPA_Crusade",
-    "name": "Публичный суд над предателями",
-    "desc": "Коллаборационистское правительство, может быть, и ушло, но их слова - нет. Хотя мы не можем позволить себе перевоспитывать тех чиновников низкого ранга, которые сейчас находятся под угрозой японских собак, с этими еще худшими подонками можно разобраться довольно легко - они будут преданы публичному суду, напомнив нашему народу о последствиях для тех, кто разочаровался в силе Заходящего Солнца и, таким образом, отвернулся от своей нации. Победа не за горами, и судьба этих предателей доказывает это, так что верьте в победу! Слава Китаю!",
-    "icon": "",
-    "cost": 20,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_global_flag": "YUN_NPA_GAW_Crisis"
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: YUN_WI_more_counter_JAP_propanganda decision begun",
-      "add_equipment_to_stockpile": {
-        "type": "infantry_equipment",
-        "amount": -1000
-      },
-      "set_temp_variable": {
-        "tempMomentumTick": 4.0
-      },
-      "WI_calc_momentum_tick_drift": true,
-      "custom_effect_tooltip": "WI_calc_momentum_tick_tt",
-      "add_to_variable": {
-        "YUN_NPA_Crusade_dirty": 1
-      }
-    }
-  },
-  {
-    "id": "OMS_get_armor_design",
-    "category_id": "OMS_2WRWCE_PostApoc_category",
-    "name": "Search for Old Technology Blueprints...",
-    "desc": "",
-    "icon": "GFX_decision_market_armor",
-    "cost": 30,
-    "fire_only_once": true,
-    "available": {
-      "custom_trigger_tooltip": {
-        "check_variable": {
-          "Antarctica_Militarization": {
-            "_op": ">",
-            "value": 4
-          }
-        },
-        "tooltip": "PostApoc_train_light_infantry_tt"
-      }
-    },
-    "visible": {},
-    "complete_effect": {
-      "Postnuke_Militarization_Loss_Small": true
-    }
-  },
-  {
-    "id": "OMS_deploy_armor_division",
-    "category_id": "OMS_2WRWCE_PostApoc_category",
-    "name": "Train Armored Division",
-    "desc": "",
-    "icon": "GFX_decision_generic_tank",
-    "cost": 30,
-    "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "check_variable": {
-          "Antarctica_Militarization": {
-            "_op": ">",
-            "value": 4
-          }
-        },
-        "tooltip": "PostApoc_train_light_infantry_tt"
-      },
-      "has_equipment": {
-        "infantry_equipment": {
-          "_op": ">",
-          "value": 640
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "OMS_get_tank_design"
-    },
-    "complete_effect": {
-      "Postnuke_Militarization_Loss_Small": true
-    }
-  },
-  {
-    "id": "RUS_issue_of_primorsky",
-    "category_id": "RUS_lord_of_the_east_category",
-    "name": "Negotiations for Primorsky Krai",
-    "desc": "",
-    "icon": "GFX_decision_primorsky_icon",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "has_country_flag": "RUS_issue_of_primorsky"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "VOR_More_Benefits_for_Russians_Decision",
-    "category_id": "VOR_mixed_economic_management_assembly_category",
-    "name": "More Benefits for Russians Resolution",
-    "desc": "",
-    "icon": "",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "VOR_inclusion_of_primorie",
-    "category_id": "VOR_destination_fief_of_the_region_category",
-    "name": "Share Directions for Primorye District",
-    "desc": "",
-    "icon": "GFX_decision_generic_form_nation",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": {
-      "controls_state": 409
-    },
-    "visible": {
-      "owns_state": 409,
-      "AND": {
-        "408": {
-          "is_core_of": "ROOT"
-        },
-        "409": {
-          "is_core_of": "ROOT"
-        },
-        "1644": {
-          "is_core_of": "ROOT"
-        }
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "VOR_military_conscripted_primorie",
-    "category_id": "VOR_destination_fief_of_the_region_category",
-    "name": "Transfer Primorye to Military Commissariats",
-    "desc": "",
-    "icon": "GFX_decision_generic_military_parade",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "always": true
-    },
-    "visible": {
-      "NOT": {
-        "1644": {
-          "OR": {
-            "has_state_flag": [
-              "VOR_military_conscripted_region",
-              "VOR_rural_destination_region"
-            ]
-          }
-        },
-        "409": {
-          "OR": {
-            "has_state_flag": [
-              "VOR_military_conscripted_region",
-              "VOR_rural_destination_region"
-            ]
-          }
-        },
-        "408": {
-          "OR": {
-            "has_state_flag": [
-              "VOR_military_conscripted_region",
-              "VOR_rural_destination_region"
-            ]
-          }
-        }
-      },
-      "owns_state": [
-        1644,
-        409,
-        408
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision VOR_military_conscripted_primorie",
-      "add_to_variable": [
-        {
-          "VOR_military_conscripted_states": 1
-        },
-        {
-          "VOR_unassigned_fief_states": -1
-        }
-      ],
-      "1644": {
-        "set_state_flag": "VOR_military_conscripted_region",
-        "add_dynamic_modifier": {
-          "modifier": "VOR_militarization_of_villages_administration_dynomod"
-        }
-      },
-      "409": {
-        "set_state_flag": "VOR_military_conscripted_region",
-        "add_dynamic_modifier": {
-          "modifier": "VOR_militarization_of_villages_administration_dynomod"
-        }
-      },
-      "408": {
-        "set_state_flag": "VOR_military_conscripted_region",
-        "add_dynamic_modifier": {
-          "modifier": "VOR_militarization_of_villages_administration_dynomod"
-        }
-      }
-    }
-  },
-  {
-    "id": "VOR_rural_destination_primorie",
-    "category_id": "VOR_destination_fief_of_the_region_category",
-    "name": "Transfer Primorye to Collective Farms",
-    "desc": "",
-    "icon": "GFX_decision_generic_political_action",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "always": true
-    },
-    "visible": {
-      "NOT": {
-        "1644": {
-          "OR": {
-            "has_state_flag": [
-              "VOR_military_conscripted_region",
-              "VOR_rural_destination_region"
-            ]
-          }
-        },
-        "409": {
-          "OR": {
-            "has_state_flag": [
-              "VOR_military_conscripted_region",
-              "VOR_rural_destination_region"
-            ]
-          }
-        },
-        "408": {
-          "OR": {
-            "has_state_flag": [
-              "VOR_military_conscripted_region",
-              "VOR_rural_destination_region"
-            ]
-          }
-        }
-      },
-      "owns_state": [
-        1644,
-        409,
-        408
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision VOR_rural_destination_primorie",
-      "add_to_variable": [
-        {
-          "VOR_rural_destination_states": 1
-        },
-        {
-          "VOR_unassigned_fief_states": -1
-        }
-      ],
-      "1644": {
-        "set_state_flag": "VOR_rural_destination_region",
-        "add_dynamic_modifier": {
-          "modifier": "VOR_settlement_in_villages_administration_dynomod"
-        }
-      },
-      "409": {
-        "set_state_flag": "VOR_rural_destination_region",
-        "add_dynamic_modifier": {
-          "modifier": "VOR_settlement_in_villages_administration_dynomod"
-        }
-      },
-      "408": {
-        "set_state_flag": "VOR_rural_destination_region",
-        "add_dynamic_modifier": {
-          "modifier": "VOR_settlement_in_villages_administration_dynomod"
-        }
-      }
-    }
-  },
-  {
-    "id": "VOR_unassigned_strip_away_primorie",
-    "category_id": "VOR_destination_fief_of_the_region_category",
-    "name": "Strip Away Control of Primorye",
-    "desc": "",
-    "icon": "GFX_decision_generic_break_treaty",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "always": true
-    },
-    "visible": {
-      "1644": {
-        "OR": {
-          "has_state_flag": [
-            "VOR_military_conscripted_region",
-            "VOR_rural_destination_region"
-          ]
-        }
-      },
-      "409": {
-        "OR": {
-          "has_state_flag": [
-            "VOR_military_conscripted_region",
-            "VOR_rural_destination_region"
-          ]
-        }
-      },
-      "408": {
-        "OR": {
-          "has_state_flag": [
-            "VOR_military_conscripted_region",
-            "VOR_rural_destination_region"
-          ]
-        }
-      },
-      "owns_state": [
-        1644,
-        409,
-        408
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision VOR_unassigned_strip_away_primorie",
-      "custom_effect_tooltip": "VOR_strip_away_region_tt",
-      "if": {
-        "limit": {
-          "1644": {
-            "has_state_flag": "VOR_military_conscripted_region"
-          },
-          "409": {
-            "has_state_flag": "VOR_military_conscripted_region"
-          },
-          "408": {
-            "has_state_flag": "VOR_military_conscripted_region"
-          }
-        },
-        "add_to_variable": [
-          {
-            "VOR_military_conscripted_states": -1
-          },
-          {
-            "VOR_unassigned_fief_states": 1
-          }
-        ]
-      },
-      "else_if": {
-        "limit": {
-          "1644": {
-            "has_state_flag": "VOR_rural_destination_region"
-          },
-          "409": {
-            "has_state_flag": "VOR_rural_destination_region"
-          },
-          "408": {
-            "has_state_flag": "VOR_rural_destination_region"
-          }
-        },
-        "add_to_variable": [
-          {
-            "VOR_rural_destination_states": -1
-          },
-          {
-            "VOR_unassigned_fief_states": 1
-          }
-        ]
-      },
-      "hidden_effect": {
-        "1644": {
-          "clr_state_flag": [
-            "VOR_military_conscripted_region",
-            "VOR_rural_destination_region"
-          ],
-          "remove_dynamic_modifier": [
-            {
-              "modifier": "VOR_militarization_of_villages_administration_dynomod"
-            },
-            {
-              "modifier": "VOR_settlement_in_villages_administration_dynomod"
-            }
-          ]
-        },
-        "409": {
-          "clr_state_flag": [
-            "VOR_military_conscripted_region",
-            "VOR_rural_destination_region"
-          ],
-          "remove_dynamic_modifier": [
-            {
-              "modifier": "VOR_militarization_of_villages_administration_dynomod"
-            },
-            {
-              "modifier": "VOR_settlement_in_villages_administration_dynomod"
-            }
-          ]
-        },
-        "408": {
-          "clr_state_flag": [
-            "VOR_military_conscripted_region",
-            "VOR_rural_destination_region"
-          ],
-          "remove_dynamic_modifier": [
-            {
-              "modifier": "VOR_militarization_of_villages_administration_dynomod"
-            },
-            {
-              "modifier": "VOR_settlement_in_villages_administration_dynomod"
-            }
-          ]
-        }
-      }
-    }
+    "visible": {}
   }
 ]

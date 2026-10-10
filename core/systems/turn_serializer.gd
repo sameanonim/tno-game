@@ -44,6 +44,7 @@ static func save_session(tm: TurnManager, save_path: String = "user://savegame.j
 		"global_defcon_level": MilitaryEngine.global_defcon_level,
 		"global_world_tension": MilitaryEngine.global_world_tension,
 		"nuclear_defcon": tm.nuclear_defcon_manager.serialize() if tm.nuclear_defcon_manager != null else {},
+		"decision_manager_state": tm.decision_manager.save_state() if tm.decision_manager != null else {},
 		"frontlines": [],
 		"countries_world_state": {},
 		"regions_world_state": {},
@@ -224,6 +225,9 @@ static func load_session(tm: TurnManager, save_path: String = "user://savegame.j
 
 	if tm.directive_manager != null and data.has("directive_progress") and data["directive_progress"] is Dictionary:
 		tm.directive_manager.active_progress = data["directive_progress"].duplicate(true)
+
+	if data.has("decision_manager_state") and data["decision_manager_state"] is Dictionary and tm.decision_manager != null:
+		tm.decision_manager.load_state(data["decision_manager_state"])
 
 	if data.has("frontlines") and data["frontlines"] is Array:
 		MilitaryEngine.clear_frontlines()

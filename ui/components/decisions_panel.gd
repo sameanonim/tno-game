@@ -6,10 +6,13 @@ extends Control
 ## Управляет решениями Смуты, интригами престолонаследия Рейха и чрезвычайными декретами.
 ##
 
+const DecisionManager = preload("res://core/systems/decision_manager.gd")
+
 signal decision_executed(decision_id: String, effects: Dictionary)
 
 @export var player_state: CountryState
 @export var turn_manager: TurnManager
+var decision_manager = null
 
 var active_category: String = "all"
 var decisions_cooldowns: Dictionary = {} # decision_id -> turn_available
@@ -530,45 +533,77 @@ func _ready() -> void:
 			if not loc.locale_changed.is_connected(_on_locale_changed):
 				loc.locale_changed.connect(_on_locale_changed)
 	_build_ui()
-	_load_decisions_for_player()
-	refresh_panel()
+	if player_state != null and decision_manager == null:
+		setup(player_state, turn_manager)
+	elif decision_manager == null:
+		_load_decisions_for_player()
+		refresh_panel()
 
 
 func setup(state: CountryState, tm: TurnManager) -> void:
 	player_state = state
 	turn_manager = tm
+	if tm != null and tm.get("decision_manager") != null:
+		decision_manager = tm.decision_manager
+	elif decision_manager == null:
+		decision_manager = DecisionManager.new()
+	if not decision_manager.decision_executed.is_connected(_on_manager_decision_executed):
+		decision_manager.decision_executed.connect(_on_manager_decision_executed)
+	if not decision_manager.decisions_updated.is_connected(_on_manager_decisions_updated):
+		decision_manager.decisions_updated.connect(_on_manager_decisions_updated)
+
+	decision_manager.setup(player_state, turn_manager)
+	all_decisions = decision_manager.all_decisions
+
 	if turn_manager != null:
 		if not turn_manager.turn_started.is_connected(_on_turn_started):
 			turn_manager.turn_started.connect(_on_turn_started)
-	_load_decisions_for_player()
+
+	_build_category_buttons()
 	refresh_panel()
 
 
 ## Динамическая загрузка решений для государства игрока из Data Pipeline
 func _load_decisions_for_player() -> void:
-	var tag = player_state.country_tag if player_state != null else "KOM"
-	var loader = ContentLoader.get_instance()
-	var dynamic_decs: Array[Dictionary] = []
-	if loader != null:
-		dynamic_decs = loader.load_country_decisions(tag)
-
-	if not dynamic_decs.is_empty():
-		all_decisions = dynamic_decs.duplicate(true)
-		var existing_ids: Dictionary = {}
-		for d in all_decisions:
-			existing_ids[str(d.get("id", ""))] = true
-		for fd in fallback_decisions:
-			var fid = str(fd.get("id", ""))
-			if not existing_ids.has(fid):
-				all_decisions.append(fd.duplicate(true))
-				existing_ids[fid] = true
-	else:
-		all_decisions = fallback_decisions.duplicate(true)
-
+	if turn_manager != null and turn_manager.get("decision_manager") != null:
+		decision_manager = turn_manager.decision_manager
+	elif decision_manager == null:
+		decision_manager = DecisionManager.new()
+	if not decision_manager.decision_executed.is_connected(_on_manager_decision_executed):
+		decision_manager.decision_executed.connect(_on_manager_decision_executed)
+	if not decision_manager.decisions_updated.is_connected(_on_manager_decisions_updated):
+		decision_manager.decisions_updated.connect(_on_manager_decisions_updated)
+	decision_manager.setup(player_state, turn_manager)
+	all_decisions = decision_manager.all_decisions
 	_build_category_buttons()
 
 
 func _on_turn_started(_turn: int, _date: String) -> void:
+	refresh_panel()
+
+
+func _on_manager_decision_executed(dec_id: String, eff: Dictionary) -> void:
+	var current_turn = turn_manager.current_turn if turn_manager != null else 1
+	var raw_log = str(eff.get("log", "Решение утверждено."))
+	var log_key = "DEC_" + dec_id.to_upper() + "_LOG"
+	var log_msg = _tr(log_key, _tr(raw_log, raw_log))
+	var title_key = "DEC_" + dec_id.to_upper() + "_TITLE"
+	var title_str = _tr(title_key, _tr(str(dec_id), str(dec_id)))
+	if log_rich_text != null:
+		var init_fmt = _tr("DEC_LOG_EXECUTED", "[color=#44d990]>> [ХОД %d] ИНИЦИАТИВА [%s]: %s[/color]\n%s")
+		log_rich_text.text = init_fmt % [
+			current_turn,
+			title_str.to_upper(),
+			log_msg,
+			log_rich_text.text
+		]
+	decision_executed.emit(dec_id, eff)
+
+
+func _on_manager_decisions_updated() -> void:
+	if decision_manager != null:
+		all_decisions = decision_manager.all_decisions
+	_build_category_buttons()
 	refresh_panel()
 
 
@@ -742,50 +777,18 @@ func refresh_panel() -> void:
 		c.queue_free()
 
 	var current_turn = turn_manager.current_turn if turn_manager != null else 1
-	var tag = player_state.country_tag.to_upper()
-	var is_russian = tag in ["WRS", "KOM", "OMS", "SVR", "SAM", "NOV", "TYU", "IRK", "CHT", "MAG", "KEM", "VYT", "BRY", "SBA", "ONE", "ORE", "ZLT", "DRL", "MGN", "VOR"] or RussianUnificationManager.is_warlord(tag)
-	var is_german = tag in ["GER", "SPE", "BOR", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"]
-	var is_usa = (tag == "USA")
+	var displayed_decs: Array[Dictionary] = []
+	if decision_manager != null:
+		displayed_decs = decision_manager.get_decisions(active_category)
+	else:
+		var tag = player_state.country_tag.to_upper()
+		for dec in all_decisions:
+			if active_category != "all" and dec.get("category", "") != active_category:
+				continue
+			displayed_decs.append(dec)
 
 	var available_count := 0
-
-	for dec in all_decisions:
-		# Фильтрация по конкретным тегам державы
-		var req_tags = dec.get("requires_tags", [])
-		if not req_tags.is_empty() and not req_tags.has(tag):
-			continue
-
-		# Фильтрация по региону / типу державы
-		if dec.get("requires_russia", false) and not is_russian:
-			continue
-		if dec.get("requires_germany", false) and not is_german:
-			continue
-		if dec.get("requires_usa", false) and not is_usa:
-			continue
-
-		# Проверка обязательных и блокирующих флагов
-		if dec.has("required_flags"):
-			var missing_flag := false
-			for rf in dec["required_flags"]:
-				if not player_state.has_flag(rf):
-					missing_flag = true
-					break
-			if missing_flag:
-				continue
-
-		if dec.has("blocked_flags"):
-			var has_blocked := false
-			for bf in dec["blocked_flags"]:
-				if player_state.has_flag(bf):
-					has_blocked = true
-					break
-			if has_blocked:
-				continue
-
-		# Фильтрация по выбранной категории
-		if active_category != "all" and dec.get("category", "") != active_category:
-			continue
-
+	for dec in displayed_decs:
 		var dec_card = _create_decision_card(dec, current_turn)
 		decisions_list_container.add_child(dec_card)
 		available_count += 1
@@ -800,19 +803,29 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	var dec_id = str(dec.get("id", "decision_unknown"))
-	var cd_turn = decisions_cooldowns.get(dec_id, 0)
-	var on_cooldown = (current_turn < cd_turn)
-	var cd_remaining = cd_turn - current_turn
+	var on_cooldown := false
+	var cd_remaining := 0
+	var can_afford := false
+
+	if decision_manager != null:
+		on_cooldown = decision_manager.is_on_cooldown(dec)
+		cd_remaining = decision_manager.get_cooldown_remaining(dec)
+		can_afford = decision_manager.can_afford(dec)
+	else:
+		var cd_turn = decisions_cooldowns.get(dec_id, 0)
+		on_cooldown = (current_turn < cd_turn)
+		cd_remaining = cd_turn - current_turn
+		var cost_pc = float(dec.get("cost_pc", dec.get("cost", 0.0)))
+		var cost_cap = int(dec.get("cost_cap", 0))
+		var cost_money = float(dec.get("cost_money", 0.0))
+		var has_pc = player_state.political_capital >= cost_pc
+		var has_cap = player_state.current_cap >= cost_cap
+		var has_money = (player_state.liquid_reserves_billions >= cost_money) or (cost_money <= 0.0)
+		can_afford = has_pc and has_cap and has_money and not on_cooldown
 
 	var cost_pc = float(dec.get("cost_pc", dec.get("cost", 0.0)))
 	var cost_cap = int(dec.get("cost_cap", 0))
 	var cost_money = float(dec.get("cost_money", 0.0))
-
-	var has_pc = player_state.political_capital >= cost_pc
-	var has_cap = player_state.current_cap >= cost_cap
-	var has_money = (player_state.liquid_reserves_billions >= cost_money) or (cost_money <= 0.0)
-
-	var can_afford = has_pc and has_cap and has_money and not on_cooldown
 
 	var border_col = TNOTheme.COLOR_BORDER_CYAN if can_afford else (TNOTheme.COLOR_BORDER_AMBER if on_cooldown else TNOTheme.COLOR_BORDER_DIM)
 	var bg_col = Color(0.03, 0.06, 0.08, 0.95) if can_afford else Color(0.02, 0.03, 0.04, 0.90)
@@ -885,6 +898,41 @@ func _create_decision_card(dec: Dictionary, current_turn: int) -> Control:
 	desc_lbl.add_theme_color_override("font_color", Color(0.65, 0.75, 0.70))
 	vbox.add_child(desc_lbl)
 
+	# Превью эффектов (дельты)
+	var eff: Dictionary = dec.get("effects", {})
+	var eff_summary_parts: Array[String] = []
+	if eff.has("modify_weapons"):
+		eff_summary_parts.append(("[color=#44d990]+%s винт.[/color]" if int(eff["modify_weapons"]) > 0 else "[color=#ff6666]%s винт.[/color]") % str(eff["modify_weapons"]))
+	if eff.has("modify_heavy_equipment"):
+		eff_summary_parts.append(("[color=#44d990]+%s техн.[/color]" if int(eff["modify_heavy_equipment"]) > 0 else "[color=#ff6666]%s техн.[/color]") % str(eff["modify_heavy_equipment"]))
+	if eff.has("modify_manpower"):
+		eff_summary_parts.append(("[color=#44d990]+%s люд.[/color]" if int(eff["modify_manpower"]) > 0 else "[color=#ff6666]%s люд.[/color]") % str(eff["modify_manpower"]))
+	if eff.has("modify_readiness"):
+		eff_summary_parts.append("[color=#44d990]+%.1f%% готовн.[/color]" % float(eff["modify_readiness"]))
+	if eff.has("modify_legitimacy"):
+		eff_summary_parts.append("[color=#44d990]+%.1f%% легит.[/color]" % float(eff["modify_legitimacy"]))
+	if eff.has("modify_radicalization"):
+		eff_summary_parts.append(("[color=#44d990]%.1f%% радик.[/color]" if float(eff["modify_radicalization"]) < 0.0 else "[color=#ff6666]+%.1f%% радик.[/color]") % float(eff["modify_radicalization"]))
+	if eff.has("modify_war_support"):
+		eff_summary_parts.append("[color=#44d990]+%.1f%% подд. войны[/color]" % float(eff["modify_war_support"]))
+	if eff.has("modify_gdp"):
+		eff_summary_parts.append("[color=#44d990]+$%.2fB ВВП[/color]" % float(eff["modify_gdp"]))
+	if eff.has("modify_reserves"):
+		eff_summary_parts.append("[color=#44d990]+$%.2fB казны[/color]" % float(eff["modify_reserves"]))
+	if eff.has("modify_debt"):
+		eff_summary_parts.append("[color=#ff6666]+$%.2fB долга[/color]" % float(eff["modify_debt"]))
+	if eff.has("modify_military_factories"):
+		eff_summary_parts.append("[color=#44d990]+%d воен. зав.[/color]" % int(eff["modify_military_factories"]))
+	if eff.has("modify_civilian_factories"):
+		eff_summary_parts.append("[color=#44d990]+%d фабр.[/color]" % int(eff["modify_civilian_factories"]))
+
+	if not eff_summary_parts.is_empty():
+		var eff_lbl := RichTextLabel.new()
+		eff_lbl.bbcode_enabled = true
+		eff_lbl.fit_content = true
+		eff_lbl.text = "[font_size=11]>> ЭФФЕКТ: " + " | ".join(eff_summary_parts) + "[/font_size]"
+		vbox.add_child(eff_lbl)
+
 	# Плашка стоимости и кнопка выполнения
 	var right_col := VBoxContainer.new()
 	right_col.custom_minimum_size = Vector2(170, 0)
@@ -931,16 +979,19 @@ func _execute_decision(dec: Dictionary) -> void:
 		get_node("/root/AudioManager").play_sfx("decisions_button")
 
 	var dec_id = str(dec.get("id", ""))
+	if decision_manager != null:
+		decision_manager.execute_decision(dec_id)
+		return
+
+	# Fallback если decision_manager отсутствует
 	var cost_pc = float(dec.get("cost_pc", dec.get("cost", 0.0)))
 	var cost_cap = int(dec.get("cost_cap", 0))
 	var cost_money = float(dec.get("cost_money", 0.0))
 
-	# Списание ресурсов
 	player_state.political_capital = maxf(player_state.political_capital - cost_pc, 0.0)
 	player_state.current_cap = maxi(player_state.current_cap - cost_cap, 0)
 	player_state.liquid_reserves_billions = maxf(player_state.liquid_reserves_billions - cost_money, 0.0)
 
-	# Установка кулдауна
 	var current_turn = turn_manager.current_turn if turn_manager != null else 1
 	var cd_turns = int(dec.get("cooldown_turns", 2))
 	decisions_cooldowns[dec_id] = current_turn + cd_turns

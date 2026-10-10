@@ -1,5 +1,5 @@
 class_name ProvinceInspectorPanel
-extends PanelContainer
+extends DraggableWindow
 
 ##
 ## ProvinceInspectorPanel: Интерактивный тактический инспектор провинций
@@ -8,6 +8,8 @@ extends PanelContainer
 ## - Победные очки, статус столицы и историческое название города.
 ## - Военная инфраструктура (Порты, Аэродромы, Укрепления, Склады).
 ## - Ресурсы, демография и ВПК региона.
+##
+## Поддерживает свободное перемещение мышью за заголовок (DraggableWindow).
 ##
 
 signal open_region_management_requested(region_id: int)
@@ -39,6 +41,7 @@ func _ensure_nodes() -> void:
 
 
 func _ready() -> void:
+	super._ready()
 	_ensure_nodes()
 	if close_button != null and not close_button.pressed.is_connected(_on_close_pressed):
 		close_button.pressed.connect(_on_close_pressed)

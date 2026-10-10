@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://tno_event_popup_01"]
+
+[ext_resource type="Script" path="res://ui/components/event_popup.gd" id="1_popup"]
+[ext_resource type="Shader" path="res://shaders/event_picture_crt.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("2_shader")
+shader_parameter/phosphor_tint = Color(0.2, 0.9, 0.65, 1)
+shader_parameter/tint_mix = 0.35
+shader_parameter/scanline_intensity = 0.2
+shader_parameter/vignette_strength = 0.3
+shader_parameter/reveal_progress = 1.0
+
+[node name="EventPopup" type="PanelContainer"]
+custom_minimum_size = Vector2(660, 440)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -330.0
+offset_top = -220.0
+offset_right = 330.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_popup")
+drag_handle_path = NodePath("VBox/HeaderHBox")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HeaderHBox" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ClassificationLabel" type="Label" parent="VBox/HeaderHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.72, 0.15, 1)
+text = "[TOP SECRET // PREKAS]"
+
+[node name="TitleLabel" type="Label" parent="VBox/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.98, 0.97, 1)
+text = "CRISIS EVENT TITLE"
+text_overrun_behavior = 3
+
+[node name="ActionsHBox" type="HBoxContainer" parent="VBox/HeaderHBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnCenter" type="Button" parent="VBox/HeaderHBox/ActionsHBox"]
+layout_mode = 2
+tooltip_text = "Центрировать окно (или двойной клик по заголовку)"
+text = "[⤢]"
+
+[node name="BtnMinimize" type="Button" parent="VBox/HeaderHBox/ActionsHBox"]
+layout_mode = 2
+tooltip_text = "Свернуть для обзора карты"
+text = "[_]"
+
+[node name="HSeparator" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="ContentScroll" type="ScrollContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ContentVBox" type="VBoxContainer" parent="VBox/ContentScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="EventPictureRect" type="TextureRect" parent="VBox/ContentScroll/ContentVBox"]
+material = SubResource("ShaderMaterial_crt")
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BodyText" type="RichTextLabel" parent="VBox/ContentScroll/ContentVBox"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Event narrative description..."
+fit_content = true
+autowrap_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="OptionsContainer" type="VBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6

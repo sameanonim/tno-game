@@ -1,9 +1,11 @@
 class_name RegionManagementPanel
-extends PanelContainer
+extends DraggableWindow
 
 ##
 ## RegionManagementPanel: Консоль прямого управления регионом правителя
 ## Позволяет осуществлять инвестиции, подавление подполья, конверсию ВПК и мобилизацию гарнизона.
+##
+## Поддерживает свободное перемещение мышью за заголовок (DraggableWindow).
 ##
 
 signal invest_infrastructure_requested(region_id: int)
@@ -45,6 +47,7 @@ func _ensure_nodes() -> void:
 
 
 func _ready() -> void:
+	super._ready()
 	_ensure_nodes()
 	if close_button != null and not close_button.pressed.is_connected(_on_close_pressed):
 		close_button.pressed.connect(_on_close_pressed)

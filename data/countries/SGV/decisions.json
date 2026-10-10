@@ -1,2282 +1,1368 @@
 [
   {
-    "id": "SGV_analysis_of_the_critical_situation",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Analyse Our Situation",
-    "desc": "",
-    "icon": "GFX_decision_generic_newspaper",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false
-    },
-    "visible": {
-      "has_country_flag": [
-        "SGV_begin_salvation",
-        "is_warlord"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_analysis_of_the_critical_situation",
-      "add_political_power": 25,
-      "add_stability": 0.15,
-      "set_temp_variable": [
-        {
-          "gdp_growth_temp": 0.25
-        },
-        {
-          "pus_temp": 1
-        }
-      ],
-      "econ_gdp_growth_change": true,
-      "econ_pus_change": true,
-      "hidden_effect": {
-        "country_event": {
-          "id": "SGV.nothinginteresting.2",
-          "days": 11
-        },
-        "SGV_Evgeny_Savintsev": {
-          "set_nationality": "SGV"
-        },
-        "OMS_Evgeny_Savintsev": {
-          "set_nationality": "SGV"
-        },
-        "OMS": {
-          "OMS_Aleksandr_Sakharovsky": {
-            "set_nationality": "SGV"
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_reliable_military_command",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Reliable Military Command",
-    "desc": "",
-    "icon": "GFX_decision_generic_military_hat_red",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false
-    },
-    "visible": {
-      "has_country_flag": [
-        "SGV_begin_salvation",
-        "is_warlord",
-        "SGV_analysis_of_our_critical_situation"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_reliable_military_command",
-      "add_war_support": 0.05,
-      "if": {
-        "limit": {
-          "has_idea": "RUS_shattered_ambitions"
-        },
-        "modify_timed_idea": {
-          "idea": "RUS_shattered_ambitions",
-          "days": -20
-        }
-      },
-      "SGV_Evgeny_Savintsev": {
-        "add_unit_leader_trait": "anti_fascist"
-      },
-      "army_funding_minimal_increase_high": true,
-      "add_command_power": -50,
-      "army_experience": 50,
-      "TNO_improve_conscription_policy_effectiveness_low": true,
-      "hidden_effect": {
-        "OMS_Evgeny_Savintsev": {
-          "add_unit_leader_trait": "anti_fascist"
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_ready_to_conquest",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Prepare for harsh combat conditions",
-    "desc": "",
-    "icon": "GFX_decision_generic_military_guns_brown",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false,
-      "custom_trigger_tooltip": {
-        "tooltip": "SGV_ready_to_conquest_tt",
-        "has_country_flag": [
-          "SGV_reliable_military_command",
-          "SGV_analysis_of_our_critical_situation",
-          "SGV_initial_equipment",
-          "SGV_initial_goods_for_population"
-        ]
-      }
-    },
-    "visible": {
-      "has_country_flag": [
-        "SGV_begin_salvation",
-        "is_warlord"
-      ],
-      "OR": {
-        "has_country_flag": [
-          "SGV_analysis_of_our_critical_situation",
-          "SGV_reliable_military_command"
-        ]
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_ready_to_conquest",
-      "add_political_power": 75,
-      "add_stability": 0.075,
-      "add_war_support": 0.075,
-      "if": {
-        "limit": {
-          "has_idea": "RUS_shattered_ambitions"
-        },
-        "modify_timed_idea": {
-          "idea": "RUS_shattered_ambitions",
-          "days": -20
-        }
-      },
-      "TNO_improve_conscription_policy_effectiveness_low": true,
-      "add_opinion_modifier": {
-        "target": "ZLT",
-        "modifier": "medium_increase"
-      },
-      "ZLT": {
-        "add_opinion_modifier": {
-          "target": "SGV",
-          "modifier": "medium_increase"
-        }
-      },
-      "OMS": {
-        "add_opinion_modifier": {
-          "target": "SGV",
-          "modifier": "medium_increase"
-        }
-      },
-      "hidden_effect": {
-        "set_variable": {
-          "national_debt": 0
-        },
-        "calculate_display_variables": true,
-        "army_experience": -15,
-        "add_political_power": -15,
-        "division_template": {
-          "name": "Redemption Brigade",
-          "regiments": {
-            "infantry": [
-              {
-                "x": 0,
-                "y": 0
-              },
-              {
-                "x": 0,
-                "y": 1
-              },
-              {
-                "x": 0,
-                "y": 2
-              },
-              {
-                "x": 1,
-                "y": 0
-              },
-              {
-                "x": 1,
-                "y": 1
-              }
-            ]
-          },
-          "support": {
-            "artillery": {
-              "x": 0,
-              "y": 0
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_invide_ntg",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Operation 'Rotten Blister'",
-    "desc": "\"No matter how many innocent souls you give a Chekist, it's never enough\" - this saying fits Meshik to a tee. His recent collaboration with the Black League was rewarded with nothing more than a slap on the wrist, comparable to a blister or a rash on the skin.\n\nAn unexpected mistake contributed to the premature collapse of our League, so there will be no mercy for him. Our allies from Zlatoust will help us to ensure justice is done and to punish the Chekists and the local NKVD for their betrayal of the Motherland.",
-    "icon": "GFX_decision_generic_use_force_alt",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_idea": "RUS_shattered_ambitions"
-      },
-      "has_war": false,
-      "command_power": {
-        "_op": ">",
-        "value": 14.99
-      },
-      "is_neighbor_of": "NTG",
-      "custom_trigger_tooltip": {
-        "tooltip": "SGV_inviding_neighbor_tt",
-        "NOT": {
-          "has_country_flag": "SGV_inviding_neighbor"
-        }
-      }
-    },
-    "visible": {
-      "country_exists": "NTG",
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_begin_salvation",
-        "SGV_ready_to_conquest_flag",
-        "SGV_deal_with_bogatyr_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_invide_ntg",
-      "set_country_flag": [
-        "SGV_inviding_neighbor",
-        "SGV_reintegrate_ntg"
-      ],
-      "add_war_support": 0.03,
-      "add_manpower": 7500,
-      "declare_war_on": {
-        "target": "NTG",
-        "type": "annex_everything"
-      },
-      "SVR": {
-        "add_war_support": -0.03,
-        "if": {
-          "limit": {
-            "has_idea": "RUS_shattered_ambitions"
-          },
-          "modify_timed_idea": {
-            "idea": "RUS_shattered_ambitions",
-            "days": -21
-          }
-        }
-      },
-      "add_days_mission_timeout": {
-        "mission": "SGV_countdown_to_the_ash_being_lit",
-        "days": 21
-      },
-      "hidden_effect": {
-        "add_command_power": -15,
-        "ZLT": {
-          "add_war_support": 0.06,
-          "add_manpower": 15000,
-          "declare_war_on": {
-            "target": "NTG",
-            "type": "annex_everything"
-          }
-        },
-        "NTG": {
-          "add_war_support": -0.06,
-          "division_template": {
-            "name": "Militia Brigade",
-            "regiments": {
-              "light_infantry": [
-                {
-                  "x": 0,
-                  "y": 0
-                },
-                {
-                  "x": 0,
-                  "y": 1
-                },
-                {
-                  "x": 0,
-                  "y": 2
-                },
-                {
-                  "x": 1,
-                  "y": 0
-                },
-                {
-                  "x": 1,
-                  "y": 1
-                },
-                {
-                  "x": 1,
-                  "y": 2
-                }
-              ]
-            },
-            "support": {
-              "recon": {
-                "x": 0,
-                "y": 0
-              },
-              "artillery": {
-                "x": 0,
-                "y": 1
-              }
-            }
-          },
-          "871": {
-            "create_unit": [
-              {
-                "division": "name = \"23-ya Brigada NKVD\" division_template = \"Militia Brigade\" start_experience_factor = 0.1 start_equipment_factor = 0.85",
-                "owner": "NTG"
-              },
-              {
-                "division": "name = \"66-ya Brigada Krasnoarmeytsev\" division_template = \"Militia Brigade\" start_experience_factor = 0.3 start_equipment_factor = 1",
-                "owner": "NTG"
-              }
-            ]
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_reintegrate_ntg",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Reintegrate Nizhny Tagil",
-    "desc": "",
-    "icon": "GFX_decision_generic_infiltrate_state",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false
-    },
-    "visible": {
-      "NOT": {
-        "country_exists": "NTG"
-      },
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_begin_salvation",
-        "SGV_reintegrate_ntg",
-        "SGV_inviding_neighbor"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_reintegrate_ntg",
-      "clr_country_flag": "SGV_reintegrate_ntg",
-      "NTG": {
-        "remove_state_core": 871
-      },
-      "add_state_core": 871
-    }
-  },
-  {
-    "id": "SGV_invide_yugra",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Operation 'Devastation of Gangs'",
-    "desc": "Soslanbek Apayev is a slippery character, like a cat with nine lives. Despite all the repression and persecution, the thieves have survived. Well then, Savintsev has a different approach to reforming them - instead of prison sentences, we'll take those thieves who surrender into custody and send them to the 'Redemption' Brigades, where they'll have no rights. There, the gangsters will be taught proper behaviour, discipline and, above all, loyalty; otherwise, they'll be disposed of.",
-    "icon": "GFX_decision_generic_use_force_alt",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false,
-      "command_power": {
-        "_op": ">",
-        "value": 14.99
-      },
-      "is_neighbor_of": "YGR",
-      "custom_trigger_tooltip": {
-        "tooltip": "SGV_inviding_neighbor_tt",
-        "NOT": {
-          "has_country_flag": "SGV_inviding_neighbor"
-        }
-      }
-    },
-    "visible": {
-      "country_exists": "YGR",
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_begin_salvation",
-        "SGV_ready_to_conquest_flag",
-        "SGV_deal_with_bogatyr_flag",
-        "SGV_invansion_of_yugra"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_invide_yugra",
-      "set_country_flag": [
-        "SGV_inviding_neighbor",
-        "SGV_reintegrate_ygr"
-      ],
-      "clr_country_flag": "SGV_invansion_of_yugra",
-      "add_war_support": 0.03,
-      "add_manpower": 6550,
-      "declare_war_on": {
-        "target": "YGR",
-        "type": "annex_everything"
-      },
-      "SVR": {
-        "add_war_support": -0.03,
-        "if": {
-          "limit": {
-            "has_idea": "RUS_shattered_ambitions"
-          },
-          "modify_timed_idea": {
-            "idea": "RUS_shattered_ambitions",
-            "days": -21
-          }
-        }
-      },
-      "add_days_mission_timeout": {
-        "mission": "SGV_countdown_to_the_ash_being_lit",
-        "days": -7
-      },
-      "hidden_effect": {
-        "add_command_power": -15,
-        "YGR": {
-          "add_war_support": -0.06,
-          "division_template": {
-            "name": "Militia Brigade",
-            "regiments": {
-              "infantry": [
-                {
-                  "x": 0,
-                  "y": 0
-                },
-                {
-                  "x": 0,
-                  "y": 1
-                },
-                {
-                  "x": 0,
-                  "y": 2
-                },
-                {
-                  "x": 1,
-                  "y": 0
-                },
-                {
-                  "x": 1,
-                  "y": 1
-                },
-                {
-                  "x": 1,
-                  "y": 2
-                }
-              ]
-            },
-            "support": {
-              "recon": {
-                "x": 0,
-                "y": 0
-              },
-              "artillery": {
-                "x": 0,
-                "y": 1
-              }
-            }
-          },
-          "845": {
-            "create_unit": [
-              {
-                "division": "name = \"20-ya Gangsterskaya Brigada\" division_template = \"Militia Brigade\" start_experience_factor = 0.6 start_equipment_factor = 0.85",
-                "owner": "YGR"
-              },
-              {
-                "division": "name = \"6-ya Prestupnaya Brigada\" division_template = \"Militia Brigade\" start_experience_factor = 0.4 start_equipment_factor = 1",
-                "owner": "YGR"
-              },
-              {
-                "division": "name = \"18-ya Gangsterskaya Brigada\" division_template = \"Militia Brigade\" start_experience_factor = 0.6 start_equipment_factor = 0.85",
-                "owner": "YGR"
-              },
-              {
-                "division": "name = \"4-ya Prestupnaya Brigada\" division_template = \"Militia Brigade\" start_experience_factor = 0.4 start_equipment_factor = 1",
-                "owner": "YGR"
-              }
-            ]
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_reintegrate_ygr",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Reintegrate Yugorsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_infiltrate_state",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false
-    },
-    "visible": {
-      "NOT": {
-        "country_exists": "YGR"
-      },
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_begin_salvation",
-        "SGV_reintegrate_ygr",
-        "SGV_inviding_neighbor"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_reintegrate_ygr",
-      "add_stability": 0.05,
-      "set_temp_variable": {
-        "pus_temp": 1
-      },
-      "econ_pus_change": true,
-      "clr_country_flag": "SGV_reintegrate_ygr",
-      "add_state_core": [
-        845,
-        756
-      ],
-      "hidden_effect": {
-        "YGR": {
-          "remove_state_core": [
-            845,
-            756
-          ]
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_invide_vorkuta",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Operation 'Pacifying the Mad Dogs'",
-    "desc": "In Vorkutlag, and indeed throughout the region, prisoners have criminally seized power. They are no better than their counterparts, the disorganised bandits of Yugra. Despite this sense of déjà vu, we will under no circumstances forgive that scoundrel Viktor Kolesnikov and his reprisals against the Black League's guards. We will respond in kind, with physical reprisals against all representatives of his regime.",
-    "icon": "GFX_decision_vorkuta_icon",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false,
-      "command_power": {
-        "_op": ">",
-        "value": 14.99
-      },
-      "is_neighbor_of": "VOR",
-      "custom_trigger_tooltip": {
-        "tooltip": "SGV_inviding_neighbor_tt",
-        "NOT": {
-          "has_country_flag": "SGV_inviding_neighbor"
-        }
-      }
-    },
-    "visible": {
-      "country_exists": "VOR",
-      "NOT": {
-        "country_exists": "NTG"
-      },
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_begin_salvation",
-        "SGV_ready_to_conquest_flag",
-        "SGV_deal_with_bogatyr_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_invide_vorkuta",
-      "add_war_support": 0.03,
-      "add_manpower": 4250,
-      "declare_war_on": {
-        "target": "VOR",
-        "type": "annex_everything"
-      },
-      "SVR": {
-        "add_war_support": -0.03,
-        "if": {
-          "limit": {
-            "has_idea": "RUS_shattered_ambitions"
-          },
-          "modify_timed_idea": {
-            "idea": "RUS_shattered_ambitions",
-            "days": -7
-          }
-        }
-      },
-      "add_days_mission_timeout": {
-        "mission": "SGV_countdown_to_the_ash_being_lit",
-        "days": -7
-      },
-      "hidden_effect": {
-        "add_command_power": -15,
-        "VOR": {
-          "add_war_support": -0.06,
-          "division_template": {
-            "name": "Militia Brigade",
-            "regiments": {
-              "infantry": [
-                {
-                  "x": 0,
-                  "y": 0
-                },
-                {
-                  "x": 0,
-                  "y": 1
-                },
-                {
-                  "x": 0,
-                  "y": 2
-                },
-                {
-                  "x": 1,
-                  "y": 0
-                },
-                {
-                  "x": 1,
-                  "y": 1
-                },
-                {
-                  "x": 1,
-                  "y": 2
-                }
-              ]
-            },
-            "support": {
-              "artillery": {
-                "x": 0,
-                "y": 0
-              }
-            }
-          },
-          "863": {
-            "create_unit": [
-              {
-                "division": "name = \"20-ya Strelkovo-Teritorialnaya Brigada\" division_template = \"Militia Brigade\" start_experience_factor = 0.5 start_equipment_factor = 0.9",
-                "owner": "VOR"
-              },
-              {
-                "division": "name = \"42-ya Strelkovo-Teritorialnaya Brigada\" division_template = \"Militia Brigade\" start_experience_factor = 0.5 start_equipment_factor = 0.9",
-                "owner": "VOR"
-              }
-            ]
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_invide_surgut",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Operation 'Arctic Thunder'",
-    "desc": "To our surprise, the self-proclaimed Government of Surgut is led by a civilian administration, which is weak and ineffective. Their leader, Valentin Shashin, is a true sycophant who survives thanks to deals and agreements with other regional military commanders. The potential threat from the north must be crushed on the battlefield as soon as possible if we do not wish to fight on two fronts.",
-    "icon": "GFX_decision_surgut_icon",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false,
-      "command_power": {
-        "_op": ">",
-        "value": 14.99
-      },
-      "is_neighbor_of": "FAV",
-      "custom_trigger_tooltip": {
-        "tooltip": "SGV_inviding_neighbor_tt",
-        "NOT": {
-          "has_country_flag": "SGV_inviding_neighbor"
-        }
-      }
-    },
-    "visible": {
-      "country_exists": "FAV",
-      "NOT": {
-        "country_exists": "NTG"
-      },
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_begin_salvation",
-        "SGV_ready_to_conquest_flag",
-        "SGV_deal_with_bogatyr_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_invide_vorkuta",
-      "add_war_support": 0.03,
-      "add_manpower": 4250,
-      "declare_war_on": {
-        "target": "FAV",
-        "type": "annex_everything"
-      },
-      "SVR": {
-        "add_war_support": -0.03,
-        "if": {
-          "limit": {
-            "has_idea": "RUS_shattered_ambitions"
-          },
-          "modify_timed_idea": {
-            "idea": "RUS_shattered_ambitions",
-            "days": -14
-          }
-        }
-      },
-      "add_days_mission_timeout": {
-        "mission": "SGV_countdown_to_the_ash_being_lit",
-        "days": -7
-      },
-      "hidden_effect": {
-        "add_command_power": -15,
-        "FAV": {
-          "add_war_support": -0.06,
-          "division_template": {
-            "name": "Militia Brigade",
-            "regiments": {
-              "light_infantry": [
-                {
-                  "x": 0,
-                  "y": 0
-                },
-                {
-                  "x": 0,
-                  "y": 1
-                },
-                {
-                  "x": 0,
-                  "y": 2
-                },
-                {
-                  "x": 1,
-                  "y": 0
-                },
-                {
-                  "x": 1,
-                  "y": 1
-                }
-              ]
-            },
-            "support": {
-              "recon": {
-                "x": 0,
-                "y": 0
-              }
-            }
-          },
-          "579": {
-            "create_unit": [
-              {
-                "division": "name = \"7-ya Brigada Nenetskikh Opolchentsev\" division_template = \"Militia Brigade\" start_experience_factor = 0.5 start_equipment_factor = 0.98",
-                "owner": "FAV"
-              },
-              {
-                "division": "name = \"8-ya Brigada Nenetskikh Opolchentsev\" division_template = \"Militia Brigade\" start_experience_factor = 0.4 start_equipment_factor = 0.88",
-                "owner": "FAV"
-              },
-              {
-                "division": "name = \"9-ya Brigada Nenetskikh Opolchentsev\" division_template = \"Militia Brigade\" start_experience_factor = 0.3 start_equipment_factor = 0.78",
-                "owner": "FAV"
-              }
-            ]
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_buying_time_on_the_battlefields",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Buying Time on the Battlefields",
-    "desc": "",
-    "icon": "GFX_decision_buying_time_on_the_battlefields",
-    "cost": 0,
+    "id": "show_display_workforce",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Show Display Workforce",
+    "title_en": "Show Display Workforce",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 1,
     "fire_only_once": false,
-    "available": {
-      "has_war": true,
-      "custom_trigger_tooltip": {
-        "tooltip": "SGV_ready_to_conquest_tt",
-        "set_country_flag": "SGV_ready_to_conquest_flag",
-        "has_country_flag": [
-          "SGV_reliable_military_command",
-          "SGV_analysis_of_our_critical_situation",
-          "SGV_initial_equipment",
-          "SGV_initial_goods_for_population"
-        ]
-      }
-    },
-    "visible": {
-      "has_country_flag": [
-        "SGV_begin_salvation",
-        "is_warlord",
-        "SGV_ready_to_conquest_flag"
-      ],
-      "NOT": {
-        "has_country_flag": "SGV_stop_buying_time_on_the_battlefields"
-      }
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Show Display Workforce»"
     },
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_buying_time_on_the_battlefields",
-      "TNO_worsen_conscription_policy_effectiveness_low": true,
-      "add_command_power": -15,
-      "hidden_effect": {
-        "set_temp_variable": {
-          "temp_econ_spending_amount": 0.005
-        },
-        "econ_spend_money_once_effect_raw_money": true,
-        "army_experience": -5,
-        "add_equipment_to_stockpile": {
-          "type": "infantry_equipment",
-          "amount": -500
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_find_loot_please",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Organise a Specialised Loot Expedition",
-    "desc": "",
-    "icon": "GFX_decision_generic_supply",
-    "cost": 15,
-    "fire_only_once": false,
-    "available": {
-      "has_war": false,
-      "custom_trigger_tooltip": {
-        "tooltip": "SGV_no_loot_tt",
-        "SGV": {
-          "check_variable": {
-            "loot_amount": {
-              "_op": "<",
-              "value": 1
-            }
-          }
-        }
-      }
+      "log": "[GetDateText]: [Root.GetName]: [?displayCurrentWorkforce]"
     },
-    "visible": {
-      "has_country_flag": [
-        "SGV_begin_salvation",
-        "is_warlord",
-        "SGV_analysis_of_our_critical_situation"
-      ],
-      "NOT": {
-        "has_country_flag": "SGV_stop_buying_time_on_the_battlefields"
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_find_loot_please",
-      "add_stability": 0.01,
-      "set_temp_variable": {
-        "inflation_temp": 0.1
-      },
-      "econ_inflation_change": true
-    }
-  },
-  {
-    "id": "SGV_temporary_community_canteens",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Investing in Community Canteens",
-    "desc": "",
-    "icon": "GFX_decision_canteens_goods",
-    "cost": 27,
-    "fire_only_once": false,
-    "available": {
-      "has_war": false,
-      "date": {
-        "_op": "<",
-        "value": "1966.07.01"
-      }
-    },
-    "visible": {
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_analysis_of_our_critical_situation",
-        "SGV_begin_salvation"
-      ],
-      "NOT": {
-        "has_country_flag": "SGV_stop_buying_time_on_the_battlefields"
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_temporary_community_canteens",
-      "add_stability": 0.025,
-      "set_temp_variable": [
-        {
-          "temp_econ_spending_amount": 0.02
-        },
-        {
-          "gdp_growth_temp": -0.007
-        }
-      ],
-      "econ_spend_money_once_effect_raw_money": true,
-      "econ_gdp_growth_change": true,
-      "TNO_improve_admin_efficiency_really_low": true
-    }
-  },
-  {
-    "id": "SGV_consolidate_control_over_the_northeast",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Consolidate Our Rule in the North-Eastern Urals",
-    "desc": "",
-    "icon": "GFX_decision_OMS_spg_v",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false,
-      "owns_state": [
-        871,
-        581,
-        756,
-        845,
-        844,
-        579,
-        863
-      ]
-    },
-    "visible": {
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_analysis_of_our_critical_situation",
-        "SGV_begin_salvation"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_consolidate_control_over_the_northeast",
-      "set_country_flag": "SGV_stop_buying_time_on_the_battlefields",
-      "custom_effect_tooltip": [
-        "SGV_consolidate_control_over_the_northeast_cores_tt",
-        "SGV_consolidate_control_over_the_northeast_united_tt"
-      ],
-      "add_political_power": 75,
-      "add_war_support": 0.15,
-      "add_stability": 0.075,
-      "add_manpower": 7500,
-      "swap_ideas": {
-        "remove_idea": "OMS_the_shield_weak",
-        "add_idea": "OMS_the_shield"
-      },
-      "add_days_mission_timeout": {
-        "mission": "SGV_countdown_to_the_ash_being_lit",
-        "days": 11
-      },
-      "TNO_improve_academic_base_med": true,
-      "TNO_improve_agriculture_med": true,
-      "TNO_improve_industrial_expertise_med": true,
-      "TNO_improve_industrial_equipment_med": true,
-      "TNO_improve_research_facilities_med": true,
-      "TNO_improve_poverty_med": true,
-      "hidden_effect": {
-        "add_state_core": [
-          845,
-          756,
-          871,
-          863,
-          844,
-          579,
-          573
-        ],
-        "YGR": {
-          "remove_state_core": [
-            845,
-            756
-          ]
-        },
-        "NTG": {
-          "remove_state_core": 871
-        },
-        "VOR": {
-          "remove_state_core": 863
-        },
-        "FAV": {
-          "remove_state_core": [
-            844,
-            579
-          ]
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_countdown_to_the_ash_being_lit",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Countdown to the Ash Being Lit",
-    "desc": "Dozens of kilometres away, along the vague line of demarcation in the east, lie the hostile rebel forces of Pavel Batov. This scoundrel has deliberately cut us off from our home city of Omsk, seeking to wear down and starve our forces through a lack of food.\n\nWe can play this game to our advantage if we act as quickly as possible. By capturing the Nizhny Tagil region, we will secure a route to our allies in the prosperous city of Zlatoust, which will resolve our food supply issues. Moreover, following this operation, we will cut off the transport link between Western Russia and the eastern traitors, which may delay the resumption of full-scale fighting for a while.\n\nHowever, none of the generals are in any doubt: if hostilities do not resume this year, they will begin next year. The only question is, who will be the first to launch the attack?",
-    "icon": "GFX_decision_OMS_assassinate_batov",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "custom_trigger_tooltip": {
-        "tooltip": "SGV_countdown_to_the_ash_being_lit_trigger",
-        "NOT": {
-          "has_country_flag": "SGV_batov_make_moves1"
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "SGV_begin_salvation"
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_countdown_to_the_ash_being_lit",
-      "add_political_power": 50,
-      "set_country_flag": "SGV_stop_buying_time_on_the_battlefields",
-      "add_war_support": 0.05,
-      "add_stability": 0.025,
-      "add_manpower": 50000,
-      "clr_country_flag": "SGV_batov_make_moves1",
-      "if": [
-        {
-          "limit": {
-            "has_idea": "OMS_the_shield"
-          },
-          "swap_ideas": {
-            "remove_idea": "OMS_the_shield",
-            "add_idea": "OMS_the_shield_upgrated"
-          }
-        },
-        {
-          "limit": {
-            "is_neighbor_of": "ZLT"
-          },
-          "hidden_effect": [
-            {
-              "set_temp_variable": [
-                {
-                  "TNO_KD_Annexed_Tag": "ZLT.id"
-                },
-                {
-                  "TNO_KD_Annexing_Tag": "SGV.id"
-                }
-              ],
-              "TNO_KD_Consequences_of_Annexation": true
-            },
-            {
-              "OMS": {
-                "OMS_Konstantin_Pastanogov": {
-                  "set_nationality": "SGV"
-                }
-              }
-            }
-          ],
-          "annex_country": {
-            "target": "ZLT",
-            "transfer_troops": true
-          },
-          "ZLT": {
-            "OMS_Konstantin_Pastanogov": {
-              "set_nationality": "SGV"
-            }
-          }
-        }
-      ],
-      "SVR": {
-        "declare_war_on": {
-          "target": "OMS",
-          "type": "annex_everything"
-        },
-        "hidden_effect": {
-          "add_state_core": 571,
-          "division_template": {
-            "name": "Strelkovaya Diviziya",
-            "regiments": {
-              "elite_infantry": [
-                {
-                  "x": 0,
-                  "y": 0
-                },
-                {
-                  "x": 0,
-                  "y": 1
-                },
-                {
-                  "x": 0,
-                  "y": 2
-                }
-              ],
-              "infantry": [
-                {
-                  "x": 0,
-                  "y": 3
-                },
-                {
-                  "x": 1,
-                  "y": 0
-                },
-                {
-                  "x": 1,
-                  "y": 1
-                },
-                {
-                  "x": 1,
-                  "y": 2
-                }
-              ],
-              "artillery_brigade": {
-                "x": 2,
-                "y": 0
-              }
-            },
-            "support": {
-              "engineer": {
-                "x": 0,
-                "y": 0
-              },
-              "recon": {
-                "x": 0,
-                "y": 1
-              },
-              "artillery": {
-                "x": 0,
-                "y": 2
-              }
-            }
-          },
-          "403": {
-            "create_unit": [
-              {
-                "division": "name = \"55-ya Strelkovaya Diviziya\" division_template = \"Strelkovaya Diviziya\" start_experience_factor = 0.3 start_equipment_factor = 1",
-                "owner": "SVR"
-              },
-              {
-                "division": "name = \"57-ya Strelkovaya Diviziya\" division_template = \"Strelkovaya Diviziya\" start_experience_factor = 0.3 start_equipment_factor = 1",
-                "owner": "SVR"
-              }
-            ]
-          }
-        }
-      },
-      "hidden_effect": {
-        "remove_mission": "SGV_countdown_to_the_ash_being_lit",
-        "if": {
-          "limit": {
-            "country_exists": "YGR"
-          },
-          "declare_war_on": {
-            "target": "YGR",
-            "type": "annex_everything"
-          },
-          "SVR": {
-            "declare_war_on": {
-              "target": "YGR",
-              "type": "annex_everything"
-            }
-          }
-        }
-      },
-      "else": {
-        "hidden_effect": {
-          "set_temp_variable": [
-            {
-              "TNO_KD_Annexed_Tag": "ZLT.id"
-            },
-            {
-              "TNO_KD_Annexing_Tag": "SVR.id"
-            }
-          ],
-          "TNO_KD_Consequences_of_Annexation": true
-        },
-        "SVR": {
-          "annex_country": {
-            "target": "ZLT",
-            "transfer_troops": false
-          }
-        }
-      },
-      "declare_war_on": {
-        "target": "SVR",
-        "type": "annex_everything"
-      },
-      "set_temp_variable": [
-        {
-          "temp_econ_spending_amount": 0.12
-        },
-        {
-          "inflation_temp": -0.6
-        },
-        {
-          "temp_econ_GDP_boost_percentage": 0.1
-        }
-      ],
-      "econ_spend_money_once_effect_raw_money": true,
-      "econ_inflation_change": true,
-      "econ_GDP_boost_once_percentage": true
-    }
-  },
-  {
-    "id": "SGV_unite_west_siberia",
-    "category_id": "SGV_WSB_forming_nation_category",
-    "name": "Recapture All of West Siberia",
-    "desc": "",
-    "icon": "GFX_decision_west_siberia_sgv",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_war": false,
-      "can_form_west_siberia": true
-    },
-    "visible": {
-      "has_country_flag": [
-        "is_warlord",
-        "SGV_stop_buying_time_on_the_battlefields"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_unite_west_siberia",
-      "add_political_power": 75,
-      "add_stability": 0.075,
-      "if": {
-        "limit": {
-          "NOT": {
-            "has_idea": "OMS_the_shield_upgrated"
-          }
-        },
-        "add_ideas": "OMS_the_shield_upgrated",
-        "hidden_effect": {
-          "remove_ideas": [
-            "OMS_the_shield_weak",
-            "OMS_the_shield"
-          ],
-          "ZLT": {
-            "remove_ideas": "OMS_the_shield"
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "SGV_national_redoubt_program_plan",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Draw Up a Plan of the Redoubts",
-    "desc": "",
-    "icon": "GFX_decision_generic_document_building",
-    "cost": 15,
-    "fire_only_once": true,
     "available": {},
     "visible": {
       "NOT": {
-        "has_country_flag": "SGV_national_redoubt_program_start"
+        "has_country_flag": "hide_debug_decisions"
       },
-      "has_country_flag": "OMS_national_redoubt_program_flag"
+      "has_country_flag": "TT_econ_debug_decisions"
+    }
+  },
+  {
+    "id": "ANG_Free_Angola",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Free Angola",
+    "title_en": "Free Angola",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Free Angola»"
     },
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_national_redoubt_program_plan",
-      "set_temp_variable": [
-        {
-          "income_tax_temp": 0.08
-        },
-        {
-          "business_tax_temp": 0.04
-        },
-        {
-          "inflation_temp": 0.51
-        },
-        {
-          "econ_centralization_temp": 10
+      "ANG_free_angola": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "COG_Mandate_trigger_mandate_collapse",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Collapse OFN Mandate of the Congo",
+    "title_en": "Collapse OFN Mandate of the Congo",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Collapse OFN Mandate of the Congo»"
+    },
+    "complete_effect": {
+      "OFN_COG_MANDATE_CIVIL_WAR": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_Timeskip_Africa",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger West African Expansion",
+    "title_en": "Trigger West African Expansion",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger West African Expansion»"
+    },
+    "complete_effect": {
+      "TNO_timeskip_Africa": "yes",
+      "every_country": {
+        "if": {
+          "limit": {
+            "has_idea": "WEST_AFRICA_idea_terror_bombing"
+          },
+          "remove_ideas": "WEST_AFRICA_idea_terror_bombing"
         }
-      ],
-      "econ_income_tax_rate_change": true,
-      "econ_business_tax_rate_change": true,
-      "econ_inflation_change": true,
-      "econ_centralization_change": true,
-      "tno_max_workhours_worsen": true,
-      "hidden_effect": {
-        "set_variable": {
-          "SGV_national_redoubt_program": 0
-        },
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_FFRWA_CA_Crisis",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 1",
+    "title_en": "Trigger WAC - Scenario 1",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 1»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_1": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_BATTLE_ROYALE_Crisis",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 2",
+    "title_en": "Trigger WAC - Scenario 2",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 2»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_2": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_FFRWA_CA_Crisis_but_more",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 3",
+    "title_en": "Trigger WAC - Scenario 3",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 3»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_3": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Unleash_Congo",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Ignite Congo Civil War",
+    "title_en": "Ignite Congolese Civil War",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Ignite Congo Civil War»"
+    },
+    "complete_effect": {
+      "TNO_COG_Crisis_Map_Setup": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Puerto_Plata_planning_phase",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Puerto Plata Planning",
+    "title_en": "Begin Puerto Plata Planning",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Puerto Plata Planning»"
+    },
+    "complete_effect": {
+      "set_global_flag": "PPI_proxy_war_preparation",
+      "USA": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_legion",
+        "hidden_effect": {
+          "TNO_USA_PP_invasion_start": "yes"
+        }
+      },
+      "MEX": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_legion",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "TNO_MEX_PP_invasion_start": "yes"
+        }
+      },
+      "ZZZ": {
+        "activate_mission": "ZZZ_PPI_CAL_training"
+      },
+      "IBR": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_trujillo",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "USA": {
+            "country_event": {
+              "id": "HIS_puertoplata.5",
+              "days": "35"
+            }
+          },
+          "if": {
+            "limit": {
+              "IBR": {
+                "is_ai": "yes"
+              }
+            },
+            "IBR": {
+              "add_command_power": "100"
+            }
+          }
+        }
+      },
+      "GER": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_trujillo",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "if": {
+            "limit": {
+              "GER": {
+                "is_ai": "yes"
+              }
+            },
+            "GER": {
+              "add_command_power": "100"
+            }
+          },
+          "set_variable": {
+            "PPI_infiltration_cost": "10"
+          }
+        }
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Puerto_Plata_ceasefire_PHASE",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Puerto Plata Ceasefire",
+    "title_en": "Begin Puerto Plata Ceasefire",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Puerto Plata Ceasefire»"
+    },
+    "complete_effect": {
+      "set_global_flag": "PPI_ceasefire_happening",
+      "GER": {
+        "add_command_power": "10"
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Civil_War",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Haitian Civil War",
+    "title_en": "Begin Haitian Civil War",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Haitian Civil War»"
+    },
+    "complete_effect": {
+      "TNO_HAI_civil_war_start": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Blitz",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Haitian Blitz",
+    "title_en": "Begin Haitian Blitz",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Haitian Blitz»"
+    },
+    "complete_effect": {
+      "TNO_HAI_civil_war_start": "yes",
+      "USA": {
         "country_event": {
-          "id": "SGV.nothinginteresting.6",
-          "days": 14
+          "id": "HIS_HAI.8"
+        }
+      },
+      "every_country": {
+        "limit": {
+          "is_ai": "no",
+          "HasPaktAmericasInterest": "yes"
+        },
+        "news_event": {
+          "id": "hispaniola_news.11",
+          "days": "1"
+        }
+      },
+      "DOM": {
+        "declare_war_on": {
+          "type": "annex_everything",
+          "target": "HAI"
         }
       }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
     }
   },
   {
-    "id": "SGV_construct_sverdlovsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Sverdlovsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 653,
+    "id": "TNO_Haitian_Civil_War_BuildUp",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haitian Civil War Buildup Phase",
+    "title_en": "Haitian Civil War Buildup Phase",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haitian Civil War Buildup Phase»",
+      "clear_flags": [
+        "TNO_HCW_base_phase"
+      ],
+      "set_flags": {
+        "TNO_HCW_buildup_phase": true
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "TNO_HCW_base_phase",
+      "set_country_flag": "TNO_HCW_buildup_phase"
+    },
+    "available": {},
+    "visible": {
       "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Civil_War_Intervention",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haitian Civil War Intervention Phase",
+    "title_en": "Haitian Civil War Intervention Phase",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haitian Civil War Intervention Phase»",
+      "clear_flags": [
+        "TNO_HCW_buildup_phase"
+      ],
+      "set_flags": {
+        "TNO_HCW_interventionism_phase": true
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "TNO_HCW_buildup_phase",
+      "set_country_flag": "TNO_HCW_interventionism_phase"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haiti_Nat_Spirit",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haiti/PPLN/DOM Nat Spirit Debugging",
+    "title_en": "Haiti/PPLN/DOM Nat Spirit Debugging",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haiti/PPLN/DOM Nat Spirit Debugging»"
+    },
+    "complete_effect": {
+      "USA": {
+        "add_ideas": {}
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "slash_bureaucracy",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить бюрократию",
+    "title_en": "Slash Bureaucratic Expenses",
+    "description": "Бюрократия часто бывает большой, избыточной и запутанной и составляет значительную часть бюджета любой страны. Таким образом, одним из наиболее эффективных способов сокращения государственных расходов является резкое сокращение бюрократического персонала: клерки и чиновники, занимающие должности, которые считаются второстепенными, увольняются, в то время как все остальные видят резкое сокращение своего жалованья, по крайней мере, до тех пор, пока кризис не пройдет. Конечно, это не пройдет без последствий: вскоре возникнет критическая нехватка персонала и материалов, что резко снизит способность правительства осуществлять свою повестку дня, поскольку многие бюрократы не в состоянии эффективно выполнять свои обязанности, а некоторые даже прибегают к получению взяток, чтобы поддерживать свой образ жизни. Даже после того, как кризис пройдет, последствия будут преследовать нацию в течение нескольких месяцев или лет, поскольку новые сборы должны будут решить горы накопившихся досье.",
+    "description_en": "A country's bureaucracy is often large, redundant and labyrinthine, and constitutes a large portion of any nation's budget. One of the most effective ways to reduce government spending is, therefore, the drastic reduction of bureaucratic personnel: clerks and functionaries who occupy offices perceived as non-primary are fired, while all others see a harsh reduction to their emoluments, at least until the crisis has passed. Of course, this is not without consequences: critical lack of personnel and materials will soon ensue, drastically reducing the government's ability to see its agenda enacted as many bureaucrats are unable to perform their duties effectively, and some even turn to accepting bribes in order to maintain their lifestyle. Even after the crisis has passed, consequences will haunt the nation for months or years, as the new levies will have to address mountains of backlog dossiers.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить бюрократию»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_admin_cost_down",
+      "add_to_variable": {
+        "admin_program_cut_fc": "-0.6"
+      },
+      "TNO_worsen_admin_efficiency_high": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "privatisation_programs",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Начать программы приватизации",
+    "title_en": "Enact Sweeping Privatization Programs",
+    "description": "Большинство правительств, независимо от их политических пристрастий и экономической лояльности, поддерживают большое количество государственных учреждений, объектов недвижимости и видов деятельности, которые считаются стратегически важными. От парков и лесов до национализированных оружейных предприятий и государственных горнодобывающих предприятий государство использует их в качестве инструмента для удовлетворения спроса на основные товары и услуги. Во времена кризиса наличные деньги становятся важнее долгосрочного планирования. Таким образом, приватизация большого количества государственной собственности и предприятий наполнит государственную казну деньгами и устранит потенциальные источники дополнительных потерь: при немедленном вознаграждении, конечно, это приведет к усилению зависимости от рынка после окончания кризиса, поскольку у правительства больше нет средств для непосредственного удовлетворения своих потребностей.",
+    "description_en": "Most governments, no matter their political leanings and economic loyalties, maintain a large array of public institutions, properties and activities perceived as strategically vital. From parks and forests, to nationalised armament industries and state-owned extraction operations, the State uses them as a tool to satisfy demand for staple goods and services. In times of crisis, cash becomes more important than long-term planning. As such, privatizing a large amount of state-owned properties and businesses will fill the public coffers with money, and eliminate potential sources of additional losses: while immediately rewarding, of course, this will result in increased dependency on the market once the crisis has ended, as the government no longer has the means to directly satisfy its needs.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.1,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Начать программы приватизации»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25,
+      "modify_reserves": 0.05
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_privatization",
+      "add_to_variable": {
+        "sales_tax_fc": "-0.1"
+      },
+      "set_temp_variable": {
+        "temp_gdp_gained": "0.2"
+      },
+      "econ_money_reserves_change_percent_gdp": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "negotiate_deferred_payment",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Договориться с кредиторами",
+    "title_en": "Negotiate Decreased Payments With Our Creditors",
+    "description": "Иногда яйцо сегодня лучше, чем курица в следующем году. Наши кредиторы хотят получить свои деньги, но даже они знают, что веревка, натянутая слишком сильно, рискует оборваться: таким образом, самое грозное оружие, имеющееся в нашем распоряжении, - это возможность просто объявить дефолт. Хотя это было бы катастрофично для нашей экономики, это также означало бы, что все наши кредиторы останутся без единой монеты: пусть Самсон умрет вместе со всеми филистерами. Конечно, мы можем собрать убедительные аргументы, позволяющие сократить наш общий долг в обмен на обещание не объявлять дефолт и в конечном итоге выплатить все долги. Однако угрозы нашим кредиторам - не лучший способ снова заявить о себе на мировом финансовом рынке: как только кризис закончится, мы можем ожидать, что потенциальные покупатели облигаций будут требовать более высоких процентных ставок...",
+    "description_en": "Sometimes, an egg today is better than a chicken next year. Our creditors want their money, but even they know that a rope pulled too harshly risks breaking: as such, the most threatening weapon at our disposal is the power to simply declare default. While disastrous for our economy, it would also mean all our creditors would end up without a single coin: let Samson die with all the Philistines. Surely, we can muster convincing arguments to allow for a reduction in our overall debt, in exchange for the promise not to declare default, and eventually pay. However, threatening our creditors is not a good way to present ourselves once again into the global financial market: once the crisis is over, we can expect potential bond buyers to demand higher interest rates...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Договориться с кредиторами»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_interest_rate_down",
+      "add_to_variable": {
+        "inflation_fc": "5"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "print_emergency",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Увеличить денежную массу",
+    "title_en": "Increase Monetary Supply",
+    "description": "Номинальный принцип формирования дел означает, что мы должны заплатить сумму, указанную в облигации, даже если этой суммы больше не хватает даже на покупку кофе. Таким образом, печатание денег - в большом количестве - может быть использовано как способ быстрого погашения больших сумм долгов. Конечно, такая практика не обходится без последствий. Искусственное производство денег равно значительному росту инфляции, которая может преследовать нашу экономику в течение многих лет: это также приведет в ярость средние и низшие классы, которые увидят, что их сбережения практически исчезнут в одночасье, поскольку валюта теряет большую часть своей покупательной способности.",
+    "description_en": "The nominalistic principle of obligations means that we have to pay the amount stated on the bond, even if that amount is no longer enough to even buy a coffee. Therefore, printing money - lots of it - can be used as a way to quickly repay large amounts of debts. Of course, this practice is not without consequences. Artificial money production equals a large increase in inflation, which may haunt our economy for years: this will also enrage the middle and lower classes, who will see their savings basically vanish overnight as the currency loses most of its buying power.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Увеличить денежную массу»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "inflation_temp": "3"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "inflation_fc": "10"
+      },
+      "econ_inflation_change": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "fiscal_crisis_default_overlord",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Попросить о помощи своего покровителя",
+    "title_en": "Negotiate A Debt Repayment Plan With Our Overlord",
+    "description": "Благодаря нашим... тесным отношениям с мировой сверхдержавой, мы можем обратиться к ним за помощью в эти трудные времена. Попросив их спонсировать план погашения долга с нашими кредиторами, мы, несомненно, сможем обеспечить лучшие условия и, возможно, даже уменьшить общую сумму. Конечно, такого рода помощь никогда не бывает бесплатной. Как только план будет одобрен, мы наверняка увидим увеличение числа \"дружеских предложений\" и просьб о \"взаимном сотрудничестве\" с нашим спонсором, что в основном повлечет за собой предоставление им большего влияния в наших делах и более широкое экономическое проникновение их бизнеса в нашу экономику: в политике нет друзей, только партнеры...",
+    "description_en": "Thanks to our... tight relationships with a world power, we can call for their help during these troubled times. By asking them to sponsor a debt repayment plan with our creditors, we'll surely be able to secure better conditions, and maybe even a reduction in the overall amount. Of course, this kind of help never comes for free. As soon as the plan has been approved, we'll surely see an increase to \"friendly suggestions\" and requests of \"mutual cooperation\" with our sponsor, which will mostly entail allowing them greater influence in our affairs, and a larger economic penetration of their businesses into our economy: kindness can be two faced, it seems..",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Попросить о помощи своего покровителя»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_overlord_cancel_debt",
+      "set_temp_variable": {
+        "debt_temp": "-0.2"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "add_to_variable": {
+        "GDP_to_sphere_leader_fc": "0.05"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "fiscal_crisis_default_1",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Выпуск гос. облигаций",
+    "title_en": "Issue Emergency Public Bonds",
+    "description": "Во время чрезвычайных ситуаций все граждане призваны выполнять свой долг. Во время войны это обязательство выполняется путем зачисления в армию или нормирования, в то время как во время финансового кризиса оно принимает форму экстренной подписки на облигации: пропагандистская кампания будет подчеркивать необходимость поддержки родины путем покупки патриотических облигаций, которые, скорее всего, никогда не будут погашены. Конечно, такой кампании не суждено быть хорошо воспринятой населением, чьи деньги мы в основном просим пожертвовать нам. Однако попытка никогда не повредит, и собранные деньги могут покрыть наши неотложные расходы до тех пор, пока кризис не пройдет: тогда мы могли бы подумать о том, как вознаградить их за лояльность.",
+    "description_en": "In times of emergency, all citizens are called to do their duty. During a war, this obligation is fulfilled through enrolment into the army, or rationing, while during a fiscal crisis, it takes form in the way of emergency bond subscription: a propaganda campaign will stress the need to sustain the motherland by buying patriotic bonds which will most likely never be repaid. Of course, such a campaign is destined not to be well received by the population whose money we are basically asking to donate to us. However, trying never hurts, and the collected money may sustain our urgent expenses until the crisis passes: then, we might think about how to reward their loyalty.",
+    "cost_pc": 10.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Выпуск гос. облигаций»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.02"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "1"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
     "visible": {
-      "controls_state": 653,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_sverdlovsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
+      "check_variable": {
+        "partial_default": "0"
+      }
     }
   },
   {
-    "id": "SGV_construct_omsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Omsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
+    "id": "fiscal_crisis_default_2",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Заключить сделку с банками",
+    "title_en": "Cut A Deal With National Banks",
+    "description": "В то время как международные кредиторы - крепкие орешки, национальные инвесторы, и особенно банки, - совсем другое дело. При тщательном уговаривании и правильном количестве угроз мы могли бы \"убедить\" их отказаться от некоторых своих требований в обмен на обещание заплатить остальное и какое-нибудь необычное общественное признание. Конечно, большинство из них не будет впечатлено, и политическая реакция на это будет как минимум осуждающей, но это единственная альтернатива, которая у нас есть. Частные интересы должны быть принесены в жертву общему благополучию страны, независимо от наших политических пристрастий или экономической политики: выживание всегда на первом месте.",
+    "description_en": "While international creditors are tough nuts to crack, national investors, and especially banks, are another matter entirely. With careful cajoling, and the right amount of threats, we might be able to \"convince\" them to give up on some of their demands in exchange for a promise to pay the rest, and some fancy public recognition. Of course, most won't be impressed, and the political backlash won't be light, but this is the only alternative we have to full payment. Private interests must be sacrificed to the country's general well being, no matter our political leanings or economic policy: survival always comes first.",
+    "cost_pc": 15.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Заключить сделку с банками»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.05"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "2"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.1"
+      },
+      "custom_effect_tooltip": "default_2_tooltip",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
     "available": {
-      "owns_state": 571,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
     "visible": {
-      "controls_state": 571,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_omsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
+      "check_variable": {
+        "partial_default": "1"
+      }
     }
   },
   {
-    "id": "SGV_construct_tyumen_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Tyumen",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
+    "id": "fiscal_crisis_default_3",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Созвать международную конференцию",
+    "title_en": "Call For a Conference on our Debt",
+    "description": "Иногда лучше всего справиться с кризисом напрямую. Как национальные, так и международные кредиторы ожидают быстрых действий, и лучший способ убедить их в нашей готовности сотрудничать для решения этого финансового кризиса - продемонстрировать работу, которую мы делаем: созвав международную конференцию, каждый сможет увидеть наш прогресс. Как и ожидалось, это будет иметь политические последствия. Люди будут интерпретировать конференцию как способ для иностранных держав оказывать ненадлежащее влияние на наши дела, а нас - как их добровольных марионеток: мы можем ожидать массовых протестов и усиления радикализации общества во время работы конференции.",
+    "description_en": "Sometimes, it's best to tackle a crisis directly. Both national and international creditors expect swift action, and the best way to reassure them of our willingness to cooperate to solve this fiscal crisis is to showcase the work we are doing: by calling an international conference, everyone will be able to see our progress. As expected, this will have political consequences. The people will interpret the conference as a way for foreign powers to exert undue influence over our affairs, and us as their willing puppets: we can expect large protests and an increased radicalization of society while the conference operates.",
+    "cost_pc": 15.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Созвать международную конференцию»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.1"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.2"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "3"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      },
+      "custom_effect_tooltip": "default_3_tooltip"
+    },
     "available": {
-      "owns_state": 403,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
     "visible": {
-      "controls_state": 403,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_tyumen_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
+      "check_variable": {
+        "partial_default": "2"
+      }
     }
   },
   {
-    "id": "SGV_construct_chelyabinsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Chelyabinsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
+    "id": "fiscal_crisis_default_4",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Принудительная уступка должников",
+    "title_en": "Force Concession on Debtors",
+    "description": "Экономика - жестокий мир, и иногда даже быть правым не означает быть удовлетворенным. Нам нужны деньги, чтобы продолжать функционировать, и нас не волнует, что по этому поводу думают кредитора: таким образом, мы должны дать понять, что здесь, в нашей стране, командуем мы, а не они - и если они хотят получить свои деньги, они должны слушаться нас. Кого волнует, что позже меньше людей захотят купить наши облигации? Наши реформы позволят убедиться, что нам не понадобится так много: пусть они держат свои деньги в карманах, мы найдем лучшие способы наполнить нашу казну, или, по крайней мере, мы на это надеемся...",
+    "description_en": "Economy is a cruel world, and sometimes, even being right doesn't mean being satisfied. We need money to keep functioning, and we won't bow to our creditors: as such, we shall make it clear that we are the ones in command, not them - and if they want their money, they'll listen to us. Who cares if fewer will be willing to buy our bonds later? Our reforms will make sure we won't need as many: let them keep their money in their pockets, we'll find better ways to fill our coffers, or at least, we hope so...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Принудительная уступка должников»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.2"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "add_to_variable": {
+        "deficit_pp_fc": "0.4"
+      },
+      "set_variable": {
+        "partial_default": "4"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      },
+      "custom_effect_tooltip": "default_4_tooltip"
+    },
     "available": {
-      "owns_state": 754,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
     "visible": {
-      "controls_state": 754,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_chelyabinsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
+      "check_variable": {
+        "partial_default": "3"
+      }
     }
   },
   {
-    "id": "SGV_construct_orenburg_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Orenburg",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
+    "id": "fiscal_crisis_default_5",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Реструктурировать невыгодные облигации",
+    "title_en": "Restructurate Unfavourable Bonds",
+    "description": "Очевидно, что наши кредиторы хотят только задушить нашу экономику грабительскими процентными ставками. Когда наше терпение давно исчерпано, настало время для крайних мер: нашей властью как суверенной нации мы в одностороннем порядке решим, какие облигации должны быть погашены, а какие будут полностью или частично реструктурированы. Это, конечно, будет иметь последствия. Международные экономические субъекты будут осуждать наше нарушение самых элементарных правил, касающихся государственных обязательств, но давайте будем реалистами: если мы зашли так далеко, то это потому, что у нас нет другого выбора, кроме как заплатить за это.",
+    "description_en": "It is evident our creditors only wish to suffocate our economy with extortionate interest rates. With our patience long exhausted, it is time for extreme measures: by our power as a sovereign nation, we shall unilaterally decide which bonds shall be repaid, and with ones will be totally or partially restructured. This will, of course, have consequences. International economic actors will decry our violation of the most basic rules about public obligations, but let's be real: if we have come this far, it's because we have no choice but to pay the price.",
+    "cost_pc": 40.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Реструктурировать невыгодные облигации»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.4"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "5"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.8"
+      },
+      "custom_effect_tooltip": "default_5_tooltip",
+      "econ_lower_credit_rating": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
     "available": {
-      "owns_state": 652,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
     "visible": {
-      "controls_state": 652,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_orenburg_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
+      "check_variable": {
+        "partial_default": "4"
+      }
     }
   },
   {
-    "id": "SGV_construct_zlatoust_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Zlatoust",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 573,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 573,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_zlatoust_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
+    "id": "end_econ_investment",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить гос. программы",
+    "title_en": "Cut State Programs",
+    "description": "Любое правительство финансирует крупные программы субсидирования, от образования до экономического развития. В трудные времена бюджет должен быть радикально пересмотрен, а все имеющиеся средства перенаправлены на более важные расходы. Как и следовало ожидать, такого рода общее сокращение нанесет ущерб нашему социальному и экономическому развитию. Однако долгосрочное планирование - это то, чего мы не можем себе позволить: если кризис продолжится, у нас больше не будет экономики, которую можно будет субсидировать.",
+    "description_en": "Any government funds large subsidisation programs, from education to economic development. In difficult times, the budget must be drastically redimensioned, and all available funding redirected towards more important expenses. As one might expect, this kind of general slashing will cripple our societal and economic development. However, long-term planning is something we cannot afford: if the crisis continues, we won't have an economy to subsidise anymore.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить гос. программы»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
       },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_nizhny_tagil_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Nizhny Tagil",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 871,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 871,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag"
-      ]
+      "modify_gdp": 0.25
     },
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_nizhny_tagil_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
+      "custom_effect_tooltip": "FC_civ_cost_down",
+      "add_to_variable": {
+        "civilian_fc": "-0.6"
       },
       "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
+        "gdp_growth_temp": "-0.1"
       },
       "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
+        "gdp_growth_temp": "gdp_growth"
       },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_arkhangelsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Arkhangelsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 214,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 214,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag",
-        "OMS_a_societal_redoubt_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_arkhangelsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_vyatka_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Vyatka",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 400,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 400,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag",
-        "OMS_a_societal_redoubt_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_vyatka_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_izhevsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Izhevsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 399,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 399,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag",
-        "OMS_a_societal_redoubt_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_izhevsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_perm_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Perm",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 753,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 753,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag",
-        "OMS_a_societal_redoubt_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_perm_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_nizhny_novgorod_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Gorky",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 252,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 252,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag",
-        "OMS_a_societal_redoubt_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_nizhny_novgorod_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_kazan_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Kazan",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 249,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 249,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag",
-        "OMS_a_societal_redoubt_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_kazan_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_samara_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Samara",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 850,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 850,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag",
-        "OMS_a_societal_redoubt_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_samara_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_syzran_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Syzran",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 250,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": {
-      "controls_state": 250,
-      "has_country_flag": [
-        "SGV_national_redoubt_program_start",
-        "OMS_national_redoubt_program_flag",
-        "OMS_a_societal_redoubt_flag"
-      ]
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_syzran_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -25
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_novosibirsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Novosibirsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 570,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": [
-      {
-        "controls_state": 570,
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ]
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_novosibirsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_kemerovo_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Kemerovo",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 569,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": [
-      {
-        "controls_state": 569,
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ]
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_kemerovo_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_krasnoyarsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Krasnoyarsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 757,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": [
-      {
-        "controls_state": 757,
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ]
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_krasnoyarsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_tomsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Tomsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 578,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": [
-      {
-        "controls_state": 578,
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ]
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_tomsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_tuva_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Altai",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "OR": {
-        "owns_state": [
-          329,
-          654
-        ]
-      },
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
-    },
-    "visible": [
-      {
-        "OR": {
-          "controls_state": [
-            329,
-            654
-          ]
+      "if": {
+        "limit": {
+          "check_variable": {
+            "gdp_growth_temp": "-3"
+          }
         },
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ]
+        "set_temp_variable": {
+          "gdp_growth_temp": "-3"
+        }
       },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_tuva_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_irkutsk_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Irkutsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 566,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+      "econ_gdp_growth_change": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
       }
     },
-    "visible": [
-      {
-        "controls_state": 566,
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ]
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_irkutsk_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "SGV_construct_buryatia_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Verkhneudinsk",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
     "available": {
-      "owns_state": 564,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
       }
     },
-    "visible": [
-      {
-        "controls_state": 564,
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ]
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_buryatia_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
-      },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
+    "visible": {}
   },
   {
-    "id": "SGV_construct_chita_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Chita",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 563,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+    "id": "slash_research",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сокращение финансирования исследований",
+    "title_en": "Slash Research Fundings",
+    "description": "Как любое здравомыслящее правительство, мы вкладываем большие средства в перспективные научные учреждения внутри нашей страны. Однако в эти смутные времена ясно, что мы больше не можем позволить себе такую роскошь: расходы на исследования будут сокращены, а институты брошены на произвол судьбы. Мы понимаем, что это приведет к общему снижению нашей способности поддерживать темпы инноваций, но деньги являются более насущной проблемой. Тысячи лет назад кто-то думал, что \"деньги\" - великое изобретение: если бы только мы могли наложить лапы на его кости...",
+    "description_en": "As any sane government, we invest large amounts of funds into promising scientific institutions within our country. In these troubled times, however, it is clear we can no longer afford such luxuries: research expenditures will be cut, and institutions left to fend for themselves. We understand that this will result in an overall reduction in our ability to keep the pace of innovation, but money is a more pressing concern. Thousands of years ago, someone thought \"money\" was a great invention: if only we could get our hands on his bones...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сокращение финансирования исследований»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
       }
     },
-    "visible": [
-      {
-        "controls_state": 563,
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ]
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_chita_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
+      "custom_effect_tooltip": "FC_research_freeze",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
       },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
+      "add_to_variable": {
+        "research_cut_fc": "-0.6"
       },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
+      "research_funding_minimal_set_position_0": "yes",
+      "research_funding_maximal_set_position_0": "yes"
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
   },
   {
-    "id": "SGV_construct_amur_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt along the Amur River",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 561,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
-      }
+    "id": "restore_trust_debtors",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Заработать расположение",
+    "title_en": "Buy Back Some Goodwill",
+    "description": "Балансирование на грани или чрезмерная самоуверенность ни к чему нас не приведут. В конце концов, мы не сможем выжить без того, чтобы кто-то не купил наши облигации, иначе мы бы не оказались в такой сложной ситуации: таким образом, мы должны работать над восстановлением уверенности рынка в нашей платежеспособности. Спонтанно погасив небольшой транш просроченных облигаций вместе с их процентами, мы дадим знать нашим кредиторам, что готовы сотрудничать. Это будет похоже на попытку высосать кровь из камня, но мы должны быть уверены, что после того, как этот кризис закончится - а однажды он закончится, - мы сможем снова встретиться с рынками лицом к лицу, не опасаясь, что нас станут избегать.",
+    "description_en": "Brinkmanship and overconfidence will lead us nowhere. In the end, we can't survive without someone buying our bonds, or we wouldn't have been in such a difficult situation in the first place: as such, we should work on rebuilding the market's confidence in our solvability. By spontaneously repaying a small tranche of overdue bonds along with their interests, we'll let our creditors know that we are willing to cooperate. It will be like trying to draw blood from a stone, but we must ensure that, after this crisis is over - and it will be over, one day - we'll be able to once again face the markets without being shunned.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.1,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Заработать расположение»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25
     },
-    "visible": [
-      {
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ],
-        "controls_state": 561
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_amur_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
-      },
       "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
+        "debt_temp": "-0.1"
       },
       "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
+        "debt_temp": "national_debt"
       },
-      "econ_spend_money_once_effect_raw_money": true
-    }
+      "econ_spend_money_once_effect_GDP_percent": "yes",
+      "econ_national_debt_change": "yes",
+      "econ_raise_credit_rating": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
   },
   {
-    "id": "SGV_construct_kamchatka_bunkers",
-    "category_id": "SGV_national_redoubt_program_category",
-    "name": "Assemble the Redoubt in Magadan",
-    "desc": "",
-    "icon": "GFX_decision_generic_fort",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "owns_state": 562,
-      "NOT": {
-        "has_country_flag": "OMS_national_redoubt_construction"
+    "id": "freeze_military",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить военные расходы",
+    "title_en": "Cut Military Spendings",
+    "description": "Мощь государства часто измеряется его военной мощью, но какая польза от большой армии, если мы даже не можем оплатить их услуги? Вместо того, чтобы через несколько месяцев столкнуться с бунтами солдат, лучше действовать решительно и выбирать, что можно сохранить, а что нужно сократить: прекращение любого нового набора, отсрочка любого проекта расширения и сокращение до минимума расходов на содержание, несомненно, облегчат нашу государственную казну. Как и следовало ожидать, в долгосрочной перспективе это будет иметь серьезные последствия. Оставленное без присмотра оборудование ломается легче, старая тактика и оружие покажут свой возраст против более современных противников, и молодые люди дважды подумают, прежде чем записываться в наши вооруженные силы: но все же война есть война, и экономические сражения тоже требуют жертв.",
+    "description_en": "A state's power is often measured in its military power, but what use is a large military, if we can't even pay for their stipends? Rather than find ourselves with a riotous soldiery in a few months, it's best to act decisively, and choose what can be kept and what must be cut: halting any new recruitment, delaying any expansion project, and reducing to the bare minimum maintenance expenses, will surely provide relief to our state coffers. As one might expect, this will have harsh consequences in the long run. Unattended equipment breaks more easily, old tactics and weapons will show their age against more modern opponents, and young men will think twice before enrolling, if they aren't even sure of being paid: still, a war is a war, and economic battles require sacrifices too.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить военные расходы»",
+      "set_flags": {
+        "FC_cut_military_spending": true
       }
     },
-    "visible": [
-      {
-        "has_country_flag": [
-          "SGV_national_redoubt_program_start",
-          "OMS_national_redoubt_program_flag"
-        ],
-        "controls_state": 562
-      },
-      {
-        "has_country_flag": [
-          "OMS_national_redoubt_program_flag",
-          "OMS_a_societal_redoubt_flag"
-        ]
-      }
-    ],
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision SGV_construct_kamchatka_bunkers",
-      "set_country_flag": "OMS_national_redoubt_construction",
-      "hidden_effect": {
-        "add_command_power": -20,
-        "add_political_power": -20
+      "custom_effect_tooltip": "FC_mil_freeze",
+      "add_to_variable": {
+        "military_fc": "-0.8"
       },
-      "set_temp_variable": {
-        "temp_econ_spending_amount": "GDP"
-      },
-      "multiply_temp_variable": {
-        "temp_econ_spending_amount": 0.015
-      },
-      "econ_spend_money_once_effect_raw_money": true
-    }
+      "army_funding_minimal_set_position_0": "yes",
+      "army_funding_maximal_set_position_0": "yes",
+      "naval_funding_minimal_set_position_0": "yes",
+      "naval_funding_maximal_set_position_0": "yes",
+      "set_country_flag": "FC_cut_military_spending"
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
   }
 ]

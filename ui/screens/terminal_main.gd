@@ -41,13 +41,14 @@ var tab_container: TabContainer:
 @onready var btn_end_turn: Button = $BottomBar/EndTurnButton
 @onready var label_log: Label = $BottomBar/LogLabel
 
-# --- Modal Event Dialog ---
-@onready var event_dialog: PanelContainer = $ModalEventOverlay/EventPanel
+# --- Modal Event Dialog & Draggable Popup ---
 @onready var event_overlay: Control = $ModalEventOverlay
-@onready var event_title: Label = $ModalEventOverlay/EventPanel/VBox/TitleLabel
-@onready var event_classification: Label = $ModalEventOverlay/EventPanel/VBox/ClassificationLabel
-@onready var event_body: RichTextLabel = $ModalEventOverlay/EventPanel/VBox/BodyText
-@onready var event_options_container: VBoxContainer = $ModalEventOverlay/EventPanel/VBox/OptionsContainer
+@onready var event_popup: EventPopup = get_node_or_null("ModalEventOverlay/EventPopup")
+@onready var event_dialog: PanelContainer = get_node_or_null("ModalEventOverlay/EventPanel")
+@onready var event_title: Label = get_node_or_null("ModalEventOverlay/EventPanel/VBox/TitleLabel")
+@onready var event_classification: Label = get_node_or_null("ModalEventOverlay/EventPanel/VBox/ClassificationLabel")
+@onready var event_body: RichTextLabel = get_node_or_null("ModalEventOverlay/EventPanel/VBox/BodyText")
+@onready var event_options_container: VBoxContainer = get_node_or_null("ModalEventOverlay/EventPanel/VBox/OptionsContainer")
 
 # --- Tactical Map HUD & Smuta Raid Planning ---
 @onready var btn_map_pol: Button = $TabContainer/TacticalMap/MapModeHUD/HBox/BtnPolitical
@@ -341,7 +342,9 @@ func _on_escape_pressed() -> void:
 func _setup_modal_controller() -> void:
 	if _modal_controller_node == null:
 		return
-	if event_overlay != null and event_dialog != null:
+	if event_popup != null:
+		_modal_controller_node.setup_popup(event_overlay, event_popup, super_event_modal)
+	elif event_overlay != null and event_dialog != null:
 		_modal_controller_node.setup(
 			event_overlay,
 			event_dialog,

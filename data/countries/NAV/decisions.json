@@ -1,4600 +1,1368 @@
 [
   {
-    "id": "invite_JAP_maizuru_naval_arsenal_organization",
-    "category_id": "foreign_mio_decisions_category",
-    "name": "Invite $JAP_maizuru_naval_arsenal_organization$ to [ROOT.GetNameWithFlag]",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {
-      "JAP": {
-        "mio_original_country_available_with_opinion_subject_and_war_requirements_fulfilled": true
-      }
-    },
-    "visible": {
-      "JAP": {
-        "mio_original_country_exists_and_not_at_war_with_ROOT": true
-      },
-      "IF": {
-        "limit": {
-          "original_tag": "ETH"
-        },
-        "has_completed_focus": "ETH_invite_foreign_industrialists"
-      },
-      "ELSE": {
-        "always": false
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "has_invited_JAP_maizuru_naval_arsenal_organization_flag"
-      },
-      "custom_effect_tooltip": "available_mio_tt",
-      "show_mio_tooltip": "JAP_maizuru_naval_arsenal_organization"
-    }
-  },
-  {
-    "id": "JAP_break_the_london_naval_treaty",
-    "category_id": "political_actions",
-    "name": "Разрыв Лондонского морского соглашения",
-    "desc": "Оскорбительные условия Лондонского морского соглашения представляют угрозу безопасности нашей нации. Мы должны построить флот, способный дать отпор любой нации, рискнувшей посягнуть на то, что принадлежит нам по праву.",
-    "icon": "generic_break_treaty",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": [],
-    "visible": {
-      "has_idea": "JAP_the_london_naval_treaty",
-      "has_completed_focus": "JAP_join_the_london_naval_treaty"
-    },
-    "complete_effect": {
-      "remove_ideas": "JAP_the_london_naval_treaty",
-      "FRA": [
-        {
-          "add_opinion_modifier": {
-            "target": "ROOT",
-            "modifier": "JAP_broke_the_london_naval_treaty"
-          }
-        },
-        {
-          "remove_opinion_modifier": {
-            "target": "ROOT",
-            "modifier": "JAP_join_the_london_naval_treaty"
-          }
-        }
-      ],
-      "USA": [
-        {
-          "add_opinion_modifier": {
-            "target": "ROOT",
-            "modifier": "JAP_broke_the_london_naval_treaty"
-          }
-        },
-        {
-          "remove_opinion_modifier": {
-            "target": "ROOT",
-            "modifier": "JAP_join_the_london_naval_treaty"
-          }
-        }
-      ],
-      "ENG": [
-        {
-          "add_opinion_modifier": {
-            "target": "ROOT",
-            "modifier": "JAP_broke_the_london_naval_treaty"
-          }
-        },
-        {
-          "remove_opinion_modifier": {
-            "target": "ROOT",
-            "modifier": "JAP_join_the_london_naval_treaty"
-          }
-        }
-      ],
-      "remove_opinion_modifier": [
-        {
-          "target": "FRA",
-          "modifier": "JAP_join_the_london_naval_treaty"
-        },
-        {
-          "target": "USA",
-          "modifier": "JAP_join_the_london_naval_treaty"
-        },
-        {
-          "target": "ENG",
-          "modifier": "JAP_join_the_london_naval_treaty"
-        }
-      ]
-    }
-  },
-  {
-    "id": "AST_naval_expansion",
-    "category_id": "AST_big_business_pact_cat",
-    "name": "$NOR_alt_dem_naval_expansion$",
-    "desc": "В обмен на проведение партией [ROOT.GetFascistParty] политики, отвечающей их интересам, ведущие представители деловых кругов согласились вложить средства в реформирование промышленности в соответствии с целями партии.\n\nЧтобы противостоять мощной военно-морской державе, [AST.GetNameRuDat] следует развивать собственный флот. Необходимо временно мобилизовать все верфи и обеспечить быстрое строительство военных кораблей.",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "AST_big_business_request_ongoing_flag"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "AST_resist_western_intruders"
-    },
-    "complete_effect": {
-      "set_country_flag": "AST_big_business_request_ongoing_flag"
-    }
-  },
-  {
-    "id": "AST_refit_a_retired_british_carrier",
-    "category_id": "AST_naval_efforts_cat",
-    "name": "Переоснастить списанный британский авианосец",
-    "desc": "",
-    "icon": "GFX_decision_eng_ally_imperialist_coup",
-    "cost": 100,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_war_with": "ENG"
-      }
-    },
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "AST_dockyard_construction",
-    "category_id": "AST_naval_efforts_cat",
-    "name": "Строительство верфей",
-    "desc": "",
-    "icon": "GFX_decision_generic_merge_plant_ship",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {
-      "any_core_state": {
-        "impassable": false,
-        "is_owned_by": "AST",
-        "is_fully_controlled_by": "AST",
-        "is_coastal": true,
-        "industrial_complex": {
-          "_op": ">",
-          "value": 1
-        },
-        "free_building_slots": {
-          "building": "dockyard",
-          "size": {
-            "_op": ">",
-            "value": 0
-          },
-          "include_locked": true
-        }
-      }
-    },
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "AST_man_the_docks_first",
-    "category_id": "AST_naval_efforts_cat",
-    "name": "Верфям срочно нужны люди",
-    "desc": "",
-    "icon": "GFX_decision_SWE_set_navy_budget",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {},
-    "complete_effect": {}
-  },
-  {
-    "id": "BUL_naval_agreements",
-    "category_id": "BUL_foreign_agreements",
-    "name": "Соглашение о морском сотрудничестве с государством [FROM.GetNameDef]",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": "BUL_foreign_military_agreements_cost",
-    "fire_only_once": true,
-    "available": {
-      "FROM": {
-        "has_opinion": {
-          "target": "ROOT",
-          "value": {
-            "_op": ">",
-            "value": 49
-          }
-        },
-        "BUL_is_valid_subject": true
-      },
-      "NOT": [
-        {
-          "has_country_flag": "BUL_naval_agreements_ongoing_flag"
-        },
-        {
-          "has_war_with": "FROM"
-        },
-        {
-          "is_justifying_wargoal_against": "FROM"
-        }
-      ],
-      "if": {
-        "limit": {
-          "FROM": {
-            "tag": "ENG"
-          }
-        },
-        "OR": {
-          "is_in_faction_with": "ENG",
-          "AND": {
-            "BUL_foreign_agreements_in_faction_with_sov": true,
-            "BUL_foreign_agreements_in_faction_with_ita": true
-          }
-        }
-      },
-      "else_if": [
-        {
-          "limit": {
-            "FROM": {
-              "tag": "SOV"
-            }
-          },
-          "OR": {
-            "is_in_faction_with": "SOV",
-            "AND": {
-              "BUL_foreign_agreements_in_faction_with_eng": true,
-              "BUL_foreign_agreements_in_faction_with_ita": true
-            }
-          }
-        },
-        {
-          "limit": {
-            "FROM": {
-              "tag": "ITA"
-            }
-          },
-          "OR": {
-            "is_in_faction_with": "ITA",
-            "AND": {
-              "BUL_foreign_agreements_in_faction_with_eng": true,
-              "BUL_foreign_agreements_in_faction_with_sov": true
-            }
-          }
-        }
-      ]
-    },
-    "visible": {
-      "country_exists": "FROM",
-      "NOT": {
-        "has_war_with": "FROM"
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "BUL_naval_agreements_ongoing_flag",
-      "FROM": {
-        "add_opinion_modifier": {
-          "target": "BUL",
-          "modifier": "BUL_industrial_investments_in_bulgaria"
-        }
-      },
-      "add_opinion_modifier": {
-        "target": "FROM",
-        "modifier": "BUL_industrial_investments_in_bulgaria"
-      }
-    }
-  },
-  {
-    "id": "JAP_Danne_small_navy_faction_increase_debugging",
-    "category_id": "debug_decisions",
-    "name": "JAP_Danne_small_navy_faction_increase_debugging",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "is_debug": true,
-      "has_dynamic_modifier": {
-        "modifier": "JAP_imperial_influence_dm"
-      }
-    },
-    "complete_effect": {
-      "JAP_small_naval_faction_gain": true
-    }
-  },
-  {
-    "id": "JAP_Danne_big_navy_faction_increase_debugging",
-    "category_id": "debug_decisions",
-    "name": "JAP_Danne_big_navy_faction_increase_debugging",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "is_debug": true,
-      "has_dynamic_modifier": {
-        "modifier": "JAP_imperial_influence_dm"
-      }
-    },
-    "complete_effect": {
-      "JAP_big_naval_faction_gain": true
-    }
-  },
-  {
-    "id": "JAP_Danne_small_navy_faction_decrease_debugging",
-    "category_id": "debug_decisions",
-    "name": "JAP_Danne_small_navy_faction_decrease_debugging",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "is_debug": true,
-      "has_dynamic_modifier": {
-        "modifier": "JAP_imperial_influence_dm"
-      }
-    },
-    "complete_effect": {
-      "JAP_small_naval_faction_loss": true
-    }
-  },
-  {
-    "id": "JAP_Danne_big_navy_faction_decrease_debugging",
-    "category_id": "debug_decisions",
-    "name": "JAP_Danne_big_navy_faction_decrease_debugging",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "is_debug": true,
-      "has_dynamic_modifier": {
-        "modifier": "JAP_imperial_influence_dm"
-      }
-    },
-    "complete_effect": {
-      "JAP_big_naval_faction_loss": true
-    }
-  },
-  {
-    "id": "CHI_warlord_propaganda_navy",
-    "category_id": "CHI_tsr_power_struggle_cat",
-    "name": "Новый флот",
-    "desc": "",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {
-      "is_subject": false,
-      "is_in_faction_with": "event_target:WTT_current_china_leader",
-      "has_navy_size": {
-        "size": {
-          "_op": ">",
-          "value": 9
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "tsr_warlord_propaganda",
-      "NOT": {
-        "original_tag": "event_target:WTT_current_china_leader"
-      }
-    },
-    "complete_effect": {
-      "add_to_variable": {
-        "var": "ROOT.warlord_faction_influence_war_score_factor",
-        "value": 0.05,
-        "tooltip": "faction_influence_war_score_factor_tt"
-      },
-      "navy_experience": 25
-    }
-  },
-  {
-    "id": "CHL_preparing_another_naval_mutiny_mission",
-    "category_id": "CHL_nacista_decisions",
-    "name": "Готовится еще один военно-морской мятеж",
-    "desc": "",
-    "icon": "GFX_decision_generic_merge_plant_ship",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "tag": "CHL",
-      "NOT": {
-        "OR": {
-          "has_government": "fascism",
-          "has_completed_focus": "CHL_commence_the_counter_revolution"
-        }
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "DEN_navy_drills",
-    "category_id": "DEN_military_category",
-    "name": "DEN_navy_drills",
-    "desc": "",
-    "icon": "GFX_decision_generic_military",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "DEN_military_preparations"
-    },
-    "visible": {
-      "has_completed_focus": "DEN_industrial_preparations"
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_political_power": -50,
-        "add_command_power": -50
-      },
-      "ROOT": {
-        "country_event": {
-          "id": "denmark_protection_event.201",
-          "days": 30
-        }
-      },
-      "event_option_tooltip": "denmark_protection_event.201.a"
-    }
-  },
-  {
-    "id": "DEN_rally_the_icelanders",
-    "category_id": "DEN_pan_scandinavianism_decisions_category",
-    "name": "DEN_rally_the_icelanders",
-    "desc": "",
-    "icon": "GFX_decision_generic_nationalism",
-    "cost": "DEN_decision_low_cost",
-    "fire_only_once": false,
-    "available": {
-      "any_owned_state": {
-        "is_core_of": "ICE"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "DEN_pan_scandinavianism",
-      "ICE": {
-        "any_core_state": {
-          "is_fully_controlled_by": "ROOT",
-          "NOT": {
-            "has_dynamic_modifier": {
-              "modifier": "DEN_pan_scandinavianism_modifier"
-            }
-          }
-        }
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "DEN_rally_the_swedes",
-    "category_id": "DEN_pan_scandinavianism_decisions_category",
-    "name": "DEN_rally_the_swedes",
-    "desc": "",
-    "icon": "GFX_decision_generic_nationalism",
-    "cost": "DEN_decision_low_cost",
-    "fire_only_once": false,
-    "available": {
-      "any_owned_state": {
-        "is_core_of": "SWE"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "DEN_pan_scandinavianism",
-      "SWE": {
-        "any_core_state": {
-          "is_fully_controlled_by": "ROOT",
-          "NOT": {
-            "has_dynamic_modifier": {
-              "modifier": "DEN_pan_scandinavianism_modifier"
-            }
-          }
-        }
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "DEN_rally_the_finnish",
-    "category_id": "DEN_pan_scandinavianism_decisions_category",
-    "name": "DEN_rally_the_finnish",
-    "desc": "",
-    "icon": "GFX_decision_generic_nationalism",
-    "cost": "DEN_decision_low_cost",
-    "fire_only_once": false,
-    "available": {
-      "any_owned_state": {
-        "is_core_of": "FIN"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "DEN_pan_scandinavianism",
-      "FIN": {
-        "any_core_state": {
-          "is_fully_controlled_by": "ROOT",
-          "NOT": {
-            "has_dynamic_modifier": {
-              "modifier": "DEN_pan_scandinavianism_modifier"
-            }
-          }
-        }
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "DEN_rally_the_norwegians",
-    "category_id": "DEN_pan_scandinavianism_decisions_category",
-    "name": "DEN_rally_the_norwegians",
-    "desc": "",
-    "icon": "GFX_decision_generic_nationalism",
-    "cost": "DEN_decision_low_cost",
-    "fire_only_once": false,
-    "available": {
-      "any_owned_state": {
-        "is_core_of": "NOR"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "DEN_pan_scandinavianism",
-      "NOR": {
-        "any_core_state": {
-          "is_fully_controlled_by": "ROOT",
-          "NOT": {
-            "has_dynamic_modifier": {
-              "modifier": "DEN_pan_scandinavianism_modifier"
-            }
-          }
-        }
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "ENG_demand_treaty_compliance",
-    "category_id": "ENG_enforce_the_naval_treaties",
-    "name": "Потребовать соблюдения договора",
-    "desc": "",
-    "icon": "eng_trade_unions_demand",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "has_navy_size": {
-        "size": {
-          "_op": ">",
-          "value": 14
-        },
-        "archetype": "ship_hull_heavy"
-      },
-      "if": [
-        {
-          "limit": {
-            "FROM": {
-              "original_tag": "USA"
-            }
-          },
-          "FROM": {
-            "custom_trigger_tooltip": {
-              "tooltip": "ENG_demand_treaty_compliance_tt2",
-              "naval_strength_comparison": {
-                "other": "ENG",
-                "ratio": {
-                  "_op": ">",
-                  "value": 1
-                },
-                "sub_unit_def_weights": {
-                  "carrier": 1,
-                  "battleship": 1,
-                  "battle_cruiser": 1
-                }
-              }
-            },
-            "NOT": [
-              {
-                "is_in_faction_with": "ROOT"
-              },
-              {
-                "has_war_with": "ROOT"
-              }
-            ]
-          }
-        },
-        {
-          "limit": {
-            "FROM": {
-              "original_tag": "JAP"
-            }
-          },
-          "FROM": {
-            "custom_trigger_tooltip": {
-              "tooltip": "ENG_demand_treaty_compliance_tt3",
-              "naval_strength_comparison": {
-                "other": "ENG",
-                "ratio": {
-                  "_op": ">",
-                  "value": 0.65
-                },
-                "sub_unit_def_weights": {
-                  "carrier": 1,
-                  "battleship": 1,
-                  "battle_cruiser": 1
-                }
-              }
-            },
-            "NOT": [
-              {
-                "is_in_faction_with": "ROOT"
-              },
-              {
-                "has_war_with": "ROOT"
-              }
-            ]
-          }
-        },
-        {
-          "limit": {
-            "FROM": {
-              "NOT": [
-                {
-                  "original_tag": "USA"
-                },
-                {
-                  "original_tag": "JAP"
-                }
-              ]
-            }
-          },
-          "FROM": {
-            "custom_trigger_tooltip": {
-              "tooltip": "ENG_demand_treaty_compliance_tt4",
-              "naval_strength_comparison": {
-                "other": "ENG",
-                "ratio": {
-                  "_op": ">",
-                  "value": 0.35
-                },
-                "sub_unit_def_weights": {
-                  "carrier": 1,
-                  "battleship": 1,
-                  "battle_cruiser": 1
-                }
-              }
-            },
-            "NOT": [
-              {
-                "is_in_faction_with": "ROOT"
-              },
-              {
-                "has_war_with": "ROOT"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "visible": {
-      "original_tag": "ENG",
-      "has_completed_focus": "ENG_enforce_the_naval_treaties",
-      "FROM": {
-        "OR": {
-          "AND": [
-            {
-              "original_tag": "USA",
-              "naval_strength_comparison": {
-                "other": "ENG",
-                "ratio": {
-                  "_op": ">",
-                  "value": 0.8
-                },
-                "sub_unit_def_weights": {
-                  "carrier": 1,
-                  "battleship": 1,
-                  "battle_cruiser": 1
-                }
-              },
-              "NOT": [
-                {
-                  "is_in_faction_with": "ROOT"
-                },
-                {
-                  "has_war_with": "ROOT"
-                }
-              ]
-            },
-            {
-              "original_tag": "JAP",
-              "naval_strength_comparison": {
-                "other": "ENG",
-                "ratio": {
-                  "_op": ">",
-                  "value": 0.5
-                },
-                "sub_unit_def_weights": {
-                  "carrier": 1,
-                  "battleship": 1,
-                  "battle_cruiser": 1
-                }
-              },
-              "NOT": [
-                {
-                  "is_in_faction_with": "ROOT"
-                },
-                {
-                  "has_war_with": "ROOT"
-                }
-              ]
-            },
-            {
-              "NOT": [
-                {
-                  "original_tag": "USA"
-                },
-                {
-                  "original_tag": "JAP"
-                },
-                {
-                  "is_in_faction_with": "ROOT"
-                },
-                {
-                  "has_war_with": "ROOT"
-                }
-              ],
-              "naval_strength_comparison": {
-                "other": "ENG",
-                "ratio": {
-                  "_op": ">",
-                  "value": 0.2
-                },
-                "sub_unit_def_weights": {
-                  "carrier": 1,
-                  "battleship": 1,
-                  "battle_cruiser": 1
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "FROM": {
-        "set_country_flag": "ENG_demanding_ship_reduction_flag",
-        "activate_mission": "ENG_britain_demands_treaty_compliance",
-        "country_event": {
-          "id": "mtg_britain.106",
-          "hours": 6
-        },
-        "custom_effect_tooltip": "ENG_demand_treaty_compliance_tt"
-      }
-    }
-  },
-  {
-    "id": "request_control_of_navy",
-    "category_id": "governments_in_exile",
-    "name": "Требование контроля над [From.GetAdjective]им флотом",
-    "desc": "Наш альянс станет гораздо эффективнее после интеграции в наш флот [From.GetAdjective]ого флота.",
-    "icon": "generic_naval",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": {
-      "FROM": {
-        "has_legitimacy": {
-          "_op": "<",
-          "value": 80
-        }
-      }
-    },
-    "visible": {
-      "FROM": {
-        "is_exiled_in": "ROOT"
-      }
-    },
-    "complete_effect": {
-      "effect_tooltip": {
-        "FROM": {
-          "transfer_navy": {
-            "target": "ROOT",
-            "is_government_in_exile": true
-          },
-          "add_legitimacy": 10
-        }
-      },
-      "custom_effect_tooltip": "HOL_request_equipment_tt_2",
-      "FROM": {
-        "country_event": {
-          "id": "mtg_exile_government.3",
-          "hours": 6
-        }
-      }
-    }
-  },
-  {
-    "id": "form_scandinavia",
-    "category_id": "form_scandinavia_category",
-    "name": "Восстановить Кальмарскую унию",
-    "desc": "",
-    "icon": "generic_form_nation",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "is_subject": false,
-      "custom_trigger_tooltip": [
-        {
-          "tooltip": "form_country_norway_required_states_tt",
-          "controls_state": [
-            110,
-            142,
-            143,
-            144,
-            920,
-            921,
-            922,
-            923,
-            924,
-            925
-          ]
-        },
-        {
-          "tooltip": "form_country_sweden_required_states_tt",
-          "controls_state": [
-            38,
-            124,
-            138,
-            139,
-            140,
-            141,
-            666,
-            913,
-            915,
-            916,
-            917,
-            918,
-            919
-          ]
-        },
-        {
-          "tooltip": "form_country_denmark_required_states_tt",
-          "controls_state": [
-            37,
-            99,
-            337,
-            910,
-            911,
-            912
-          ]
-        }
-      ]
-    },
-    "visible": {
-      "OR": {
-        "original_tag": [
-          "NOR",
-          "DEN",
-          "SWE"
-        ]
-      },
-      "NOT": [
-        {
-          "has_global_flag": "form_nordic_league_flag"
-        },
-        {
-          "has_global_flag": "form_scandinavia_flag"
-        }
-      ]
-    },
-    "complete_effect": {
-      "set_cosmetic_tag": "SCA_UNIFIED",
-      "custom_effect_tooltip": [
-        "form_country_norway_coring_states_tt",
-        "form_country_sweden_coring_states_tt",
-        "form_scandinavia_denmark_coring_states_tt"
-      ],
-      "hidden_effect": [
-        {
-          "110": {
-            "add_core_of": "ROOT"
-          },
-          "142": {
-            "add_core_of": "ROOT"
-          },
-          "143": {
-            "add_core_of": "ROOT"
-          },
-          "144": {
-            "add_core_of": "ROOT"
-          },
-          "920": {
-            "add_core_of": "ROOT"
-          },
-          "921": {
-            "add_core_of": "ROOT"
-          },
-          "922": {
-            "add_core_of": "ROOT"
-          },
-          "923": {
-            "add_core_of": "ROOT"
-          },
-          "924": {
-            "add_core_of": "ROOT"
-          },
-          "925": {
-            "add_core_of": "ROOT"
-          }
-        },
-        {
-          "124": {
-            "add_core_of": "ROOT"
-          },
-          "138": {
-            "add_core_of": "ROOT"
-          },
-          "139": {
-            "add_core_of": "ROOT"
-          },
-          "140": {
-            "add_core_of": "ROOT"
-          },
-          "141": {
-            "add_core_of": "ROOT"
-          },
-          "38": {
-            "add_core_of": "ROOT"
-          },
-          "666": {
-            "add_core_of": "ROOT"
-          },
-          "913": {
-            "add_core_of": "ROOT"
-          },
-          "915": {
-            "add_core_of": "ROOT"
-          },
-          "916": {
-            "add_core_of": "ROOT"
-          },
-          "917": {
-            "add_core_of": "ROOT"
-          },
-          "918": {
-            "add_core_of": "ROOT"
-          },
-          "919": {
-            "add_core_of": "ROOT"
-          }
-        },
-        {
-          "37": {
-            "add_core_of": "ROOT"
-          },
-          "99": {
-            "add_core_of": "ROOT"
-          },
-          "910": {
-            "add_core_of": "ROOT"
-          },
-          "911": {
-            "add_core_of": "ROOT"
-          },
-          "912": {
-            "add_core_of": "ROOT"
-          },
-          "337": {
-            "add_core_of": "ROOT"
-          }
-        },
-        {
-          "news_event": {
-            "id": "wtt_news.53",
-            "hours": 6
-          },
-          "set_global_flag": "form_scandinavia_flag"
-        }
-      ]
-    }
-  },
-  {
-    "id": "EU_scandinavian_expansion_decision",
-    "category_id": "form_european_union_category",
-    "name": "Скандинавская экспансия",
-    "desc": "",
-    "icon": "GFX_decision_generic_nationalism",
-    "cost": 100,
-    "fire_only_once": false,
-    "available": {
-      "controls_state": [
-        912,
-        99,
-        911,
-        37,
-        910,
-        138,
-        124,
-        139,
-        140,
-        915,
-        913,
-        919,
-        141,
-        916,
-        38,
-        917,
-        918,
-        666,
-        110,
-        921,
-        922,
-        142,
-        920,
-        143,
-        923,
-        144,
-        924,
-        925
-      ]
-    },
-    "visible": {
-      "NOT": {
-        "has_global_flag": "EU_integrated_scandinavia_states_flag"
-      },
-      "has_global_flag": "form_european_union_flag"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "ITA_bop_question_the_navy",
-    "category_id": "ITA_balance_of_power_category",
-    "name": "Поставить под сомнение лояльность флота",
-    "desc": "После недавних событий, показавших неэффективность флота, многие начали задумываться — а насколько вообще этот род войск лоялен Италии и фашистскому режиму?",
-    "icon": "GFX_decision_generic_political_discourse",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_country_leader": {
-        "character": "ITA_benito_mussolini",
-        "ruling_only": true
-      },
-      "OR": {
-        "has_completed_focus": [
-          "ITA_conspiracies_in_the_shadows",
-          "ITA_triumph_in_africa_bba"
-        ]
-      }
-    },
-    "complete_effect": {
-      "ITA_bop_very_low_decrease_effect": true,
-      "hidden_effect": {
-        "add_political_power": -15,
-        "navy_experience": -10
-      }
-    }
-  },
-  {
-    "id": "ITA_bop_praise_the_navy",
-    "category_id": "ITA_balance_of_power_category",
-    "name": "Похвалить флот",
-    "desc": "Отважные бойцы нашего флота — основа безопасности и стабильности [ITA.GetNameRuGen]. Они достойны восхищения итальянского народа!",
-    "icon": "GFX_decision_generic_naval",
-    "cost": "ITA_bop_generic_council_cost",
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "OR": {
-        "has_completed_focus": [
-          "ITA_italo_balbo_focus",
-          "ITA_dino_grandi_focus",
-          "ITA_monarchia_d_italia",
-          "ITA_triumph_in_africa_bba"
-        ]
-      }
-    },
-    "complete_effect": {
-      "ITA_bop_very_low_increase_effect": true
-    }
-  },
-  {
-    "id": "ITA_cooperation_program_with_country",
-    "category_id": "ITA_naval_cooperation_programs_dec_cat",
-    "name": "Программа сотрудничества с государством [FROM.GetNameDef]",
-    "desc": "Строительство кораблей и их экспорт в другие страны поможет усилить технологическое сотрудничество.",
-    "icon": "GFX_decision_generic_research",
-    "cost": 15,
-    "fire_only_once": true,
-    "available": {
-      "has_navy_size": [
-        {
-          "size": {
-            "_op": ">",
-            "value": 4
-          },
-          "archetype": "ship_hull_light"
-        },
-        {
-          "size": {
-            "_op": ">",
-            "value": 0
-          },
-          "type": "capital_ship"
-        }
-      ],
-      "FROM": {
-        "has_navy_size": {
-          "size": {
-            "_op": ">",
-            "value": 4
-          },
-          "archetype": "ship_hull_light"
-        }
-      }
-    },
-    "visible": {},
-    "complete_effect": {
-      "FROM": {
-        "country_event": {
-          "id": "BBA_italy_naval_cooperation_programs.01",
-          "hours": 1
-        }
-      },
-      "custom_effect_tooltip": "if_they_accept_tt",
-      "effect_tooltip": {
-        "add_to_tech_sharing_group": "ITA_naval_cooperation_program_research_group",
-        "FROM": {
-          "add_to_tech_sharing_group": "ITA_naval_cooperation_program_research_group"
-        }
-      }
-    }
-  },
-  {
-    "id": "ITA_joint_maneuvers_with_country",
-    "category_id": "ITA_naval_cooperation_programs_dec_cat",
-    "name": "Совместные [ROOT.GetAdjective]о-[FROM.GetAdjective]ие маневры",
-    "desc": "Чтобы быть эффективными и готовыми к действию, любым вооруженным силам необходима подготовка. Совместные учения с другой страной здесь будут кстати.",
-    "icon": "GFX_decision_hol_draw_up_staff_plans",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_navy_size": [
-        {
-          "size": {
-            "_op": ">",
-            "value": 14
-          },
-          "archetype": "ship_hull_light"
-        },
-        {
-          "size": {
-            "_op": ">",
-            "value": 2
-          },
-          "type": "capital_ship"
-        }
-      ],
-      "FROM": [
-        {
-          "has_navy_size": {
-            "size": {
-              "_op": ">",
-              "value": 9
-            },
-            "archetype": "ship_hull_light"
-          }
-        },
-        {
-          "has_navy_size": {
-            "size": {
-              "_op": ">",
-              "value": 2
-            },
-            "type": "capital_ship"
-          }
-        }
-      ]
-    },
-    "visible": {},
-    "complete_effect": {
-      "hidden_effect": {
-        "add_political_power": -15,
-        "navy_experience": -15
-      },
-      "FROM": {
-        "country_event": {
-          "id": "BBA_italy_naval_cooperation_programs.04",
-          "hours": 1
-        }
-      }
-    }
-  },
-  {
-    "id": "ITA_sell_obsolete_escort_ships_to_country",
-    "category_id": "ITA_naval_cooperation_programs_dec_cat",
-    "name": "Продать устаревшие корабли сопровождения государству [FROM.GetNameDef]",
-    "desc": "В нашем флоте есть устаревшие корабли, которые можно продать другой стране.",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 15,
-    "fire_only_once": false,
-    "available": {
-      "FROM": {
-        "OR": {
-          "is_in_faction_with": "ROOT",
-          "is_in_faction": false
-        },
-        "is_major": false,
-        "capital_scope": {
-          "is_on_continent": "europe"
-        },
-        "NOT": {
-          "has_war_with": "ROOT"
-        },
-        "has_navy_size": {
-          "size": {
-            "_op": ">",
-            "value": 0
-          },
-          "archetype": "ship_hull_light"
-        }
-      },
-      "NOT": {
-        "has_country_flag": "ITA_escort_ships_purchase_ongoing_flag"
-      }
-    },
-    "visible": {
-      "NOT": {
-        "has_country_flag": "ITA_sold_obsolete_escort_ships_flag"
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "ITA_escort_ships_purchase_ongoing_flag",
-      "FROM": {
-        "country_event": {
-          "id": "BBA_italy_naval_cooperation_programs.08",
-          "hours": 1
-        }
-      },
-      "custom_effect_tooltip": [
-        "if_they_accept_tt",
-        "ITA_sell_obsolete_escort_ships_to_country_only_once_tt"
-      ],
-      "effect_tooltip": {
-        "custom_effect_tooltip": "ITA_cooperation_programs_deal_others_tt",
-        "add_timed_idea": {
-          "idea": "ITA_sold_obsolete_escort_ships_ns",
-          "days": 365
-        }
-      }
-    }
-  },
-  {
-    "id": "ITA_cede_aquila_class_destroyers_to_spanish_tag",
-    "category_id": "ITA_naval_cooperation_programs_dec_cat",
-    "name": "Уступить эсминцы класса «Аквила» государству [FROM.GetNameDef]",
-    "desc": "Мы могли бы передать испанцам часть наших эсминцев, чтобы усилить узы между нашими странами и укрепить боеспособность союзников.",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_navy_size": {
-        "size": {
-          "_op": ">",
-          "value": 0
-        },
-        "archetype": "ship_hull_light"
-      },
-      "FROM": {
-        "OR": {
-          "is_in_faction_with": "ROOT",
-          "is_in_faction": false
-        },
-        "is_major": false,
-        "capital_scope": {
-          "is_on_continent": "europe"
-        },
-        "NOT": {
-          "has_war_with": "ROOT"
-        },
-        "has_navy_size": {
-          "size": {
-            "_op": ">",
-            "value": 0
-          },
-          "archetype": "ship_hull_light"
-        }
-      }
-    },
-    "visible": {
-      "NOT": {
-        "has_country_flag": "ITA_ceded_aquila_class_destroyers_flag"
-      }
-    },
-    "complete_effect": {
-      "FROM": {
-        "country_event": {
-          "id": "BBA_italy_naval_cooperation_programs.11",
-          "hours": 1
-        }
-      },
-      "custom_effect_tooltip": "if_they_accept",
-      "effect_tooltip": {
-        "navy_experience": 50,
-        "add_political_power": 50,
-        "custom_effect_tooltip": "ITA_cede_aquila_class_destroyers_tt",
-        "FROM": {
-          "add_opinion_modifier": {
-            "modifier": "ITA_ceded_destroyers",
-            "target": "ROOT"
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "ITA_export_midget_submarines",
-    "category_id": "ITA_naval_cooperation_programs_dec_cat",
-    "name": "Экспортировать сверхмалые подводные лодки",
-    "desc": "Прозрачные воды Средиземноморья опасны для крупных субмарин. Другим странам могут быть интересны наши сверхмалые подводные лодки.",
-    "icon": "GFX_decision_generic_construction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "FROM": {
-        "is_in_faction_with": "ROOT",
-        "is_major": false,
-        "capital_scope": {
-          "is_on_continent": "europe"
-        },
-        "has_navy_size": {
-          "size": {
-            "_op": ">",
-            "value": 0
-          },
-          "archetype": "ship_hull_submarine"
-        }
-      },
-      "NOT": {
-        "has_country_flag": "ITA_producing_midget_submarines_for_export_flag"
-      }
-    },
-    "visible": {
-      "NOT": {
-        "FROM": {
-          "has_country_flag": "ITA_midget_submarines_flag"
-        }
-      }
-    },
-    "complete_effect": {
-      "set_country_flag": "ITA_producing_midget_submarines_for_export_flag",
-      "FROM": {
-        "country_event": {
-          "id": "BBA_italy_naval_cooperation_programs.14",
-          "hours": 1
-        }
-      },
-      "custom_effect_tooltip": "if_they_accept",
-      "effect_tooltip": {
-        "custom_effect_tooltip": "ITA_export_midget_submarines_tt",
-        "FROM": {
-          "add_opinion_modifier": {
-            "modifier": "POR_sold_ships",
-            "target": "ROOT"
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "JAP_naval_faction_demands_dockyards",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует больше верфей",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_political_appointment",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует назначить главнокомандующего ВМФ",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_conscription_law_change",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует изменить закон о призыве",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_more_carriers",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует больше авианосцев",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_more_carriers_and_battleships",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует больше авианосцев и линкоров",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_more_battleships",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует больше линкоров",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_naval_faction_demands_strike_south_happen_mission",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_naval_faction$ требует наступления на юг",
-    "desc": "",
-    "icon": "GFX_decision_JAP_naval_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_government_faction_demands_limited_navy_influence",
-    "category_id": "JAP_imperial_influence_decision_cat",
-    "name": "$JAP_government_faction$ требует ограниченного влияния над флотом",
-    "desc": "",
-    "icon": "GFX_decision_JAP_civic_faction",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": [],
-    "complete_effect": {}
-  },
-  {
-    "id": "JAP_army_securing_navy_support_mission",
-    "category_id": "JAP_the_peoples_state_decisions",
-    "name": "Армия заручается поддержкой флота",
-    "desc": "",
-    "icon": "GFX_decision_SWE_set_navy_budget",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "tag": "JAP",
-      "NOT": {
-        "has_completed_focus": "JAP_revoke_the_peace_preservation_law"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "MTG_abandon_treaty_democratic",
-    "category_id": "MTG_naval_treaties",
-    "name": "Выход из морских соглашений",
-    "desc": "Попытка сдержать гонку морских вооружений провалилась. Нам нужно разрешение на перевооружение, чтобы мы могли противостоять будущим угрозам.",
-    "icon": "generic",
-    "cost": 150,
-    "fire_only_once": true,
-    "available": {
-      "OR": {
-        "threat": {
-          "_op": ">",
-          "value": 0.2
-        },
-        "has_global_flag": "MTG_second_london_conference"
-      }
-    },
-    "visible": {
-      "has_naval_treaty_trigger": true,
-      "OR": {
-        "has_government": [
-          "democratic",
-          "neutrality"
-        ]
-      },
-      "NOT": {
-        "AND": {
-          "original_tag": "JAP",
-          "has_government": "neutrality"
-        }
-      }
-    },
-    "complete_effect": {
-      "remove_naval_treaty_effect": true,
-      "every_other_country": {
-        "limit": {
-          "has_naval_treaty_trigger": true
-        },
-        "country_event": "MTG_naval_treaty.7"
-      },
-      "if": [
-        {
-          "limit": {
-            "has_global_flag": {
-              "flag": "MTG_naval_treaty_signatories",
-              "value": {
-                "_op": "<",
-                "value": 3
-              }
-            }
-          },
-          "random_other_country": {
-            "limit": {
-              "has_naval_treaty_trigger": true
-            },
-            "remove_naval_treaty_effect": true
-          },
-          "clr_global_flag": "MTG_naval_treaty_signatories",
-          "hidden_effect": {
-            "news_event": "mtg_news.60"
-          }
-        },
-        {
-          "limit": {
-            "has_global_flag": "MTG_naval_treaty_signatories"
-          },
-          "modify_global_flag": {
-            "flag": "MTG_naval_treaty_signatories",
-            "value": -1
-          }
-        },
-        {
-          "limit": {
-            "not": {
-              "any_other_country": {
-                "OR": {
-                  "has_idea": [
-                    "MTG_naval_treaty_cheating_reduced",
-                    "MTG_naval_treaty_adherent_reduced"
-                  ]
-                }
-              }
-            }
-          },
-          "every_other_country": {
-            "limit": {
-              "OR": {
-                "has_idea": [
-                  "MTG_naval_treaty_cheating",
-                  "MTG_naval_treaty_adherent"
-                ]
-              }
-            },
-            "activate_mission": "MTG_escalator_clause_invocation_mission",
-            "custom_effect_tooltip": "MTG_escalator_clause_tt"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "id": "MTG_abandon_treaty_fascist",
-    "category_id": "MTG_naval_treaties",
-    "name": "Отказ от морских соглашений",
-    "desc": "Мировые демократии недальновидно сковали себя ограничениями человеческого закона, тогда как в борьбе наций есть лишь один закон — закон природы, и он требует силы. Мы не будем сдерживать свое стремление построить мощный флот!",
-    "icon": "generic",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": {
-      "OR": {
-        "threat": {
-          "_op": ">",
-          "value": 0.2
-        },
-        "has_global_flag": "MTG_second_london_conference"
-      }
-    },
-    "visible": {
-      "has_naval_treaty_trigger": true,
-      "OR": {
-        "has_government": [
-          "fascism",
-          "communism"
-        ]
-      }
-    },
-    "complete_effect": {
-      "remove_naval_treaty_effect": true,
-      "every_other_country": {
-        "limit": {
-          "has_naval_treaty_trigger": true
-        },
-        "country_event": {
-          "id": "MTG_naval_treaty.7",
-          "days": 2
-        }
-      },
-      "if": [
-        {
-          "limit": {
-            "has_global_flag": {
-              "flag": "MTG_naval_treaty_signatories",
-              "value": {
-                "_op": "<",
-                "value": 3
-              }
-            }
-          },
-          "random_other_country": {
-            "limit": {
-              "has_naval_treaty_trigger": true
-            },
-            "remove_naval_treaty_effect": true
-          },
-          "clr_global_flag": "MTG_naval_treaty_signatories",
-          "hidden_effect": {
-            "news_event": "mtg_news.60"
-          }
-        },
-        {
-          "limit": {
-            "has_global_flag": "MTG_naval_treaty_signatories"
-          },
-          "modify_global_flag": {
-            "flag": "MTG_naval_treaty_signatories",
-            "value": -1
-          }
-        },
-        {
-          "limit": {
-            "not": {
-              "any_other_country": {
-                "OR": {
-                  "has_idea": [
-                    "MTG_naval_treaty_cheating_reduced",
-                    "MTG_naval_treaty_adherent_reduced"
-                  ]
-                }
-              }
-            }
-          },
-          "every_other_country": {
-            "limit": {
-              "OR": {
-                "has_idea": [
-                  "MTG_naval_treaty_cheating",
-                  "MTG_naval_treaty_adherent"
-                ]
-              }
-            },
-            "activate_mission": "MTG_escalator_clause_invocation_mission",
-            "custom_effect_tooltip": "MTG_escalator_clause_tt"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "id": "MTG_abandon_treaty_japanese",
-    "category_id": "MTG_naval_treaties",
-    "name": "Отказ от морских соглашений",
-    "desc": "Мировые демократии недальновидно сковали себя ограничениями человеческого закона, тогда как в борьбе наций есть лишь один закон — закон природы, и он требует силы. Мы не будем сдерживать свое стремление построить мощный флот!",
-    "icon": "generic",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": {
-      "OR": {
-        "threat": {
-          "_op": ">",
-          "value": 0.2
-        },
-        "has_global_flag": "MTG_second_london_conference"
-      }
-    },
-    "visible": {
-      "has_naval_treaty_trigger": true,
-      "original_tag": "JAP",
-      "has_government": "neutrality"
-    },
-    "complete_effect": {
-      "remove_naval_treaty_effect": true,
-      "every_other_country": {
-        "limit": {
-          "has_naval_treaty_trigger": true
-        },
-        "country_event": {
-          "id": "MTG_naval_treaty.7",
-          "days": 2
-        }
-      },
-      "if": [
-        {
-          "limit": {
-            "has_global_flag": {
-              "flag": "MTG_naval_treaty_signatories",
-              "value": {
-                "_op": "<",
-                "value": 3
-              }
-            }
-          },
-          "random_other_country": {
-            "limit": {
-              "has_naval_treaty_trigger": true
-            },
-            "remove_naval_treaty_effect": true
-          },
-          "clr_global_flag": "MTG_naval_treaty_signatories",
-          "hidden_effect": {
-            "news_event": "mtg_news.60"
-          }
-        },
-        {
-          "limit": {
-            "has_global_flag": "MTG_naval_treaty_signatories"
-          },
-          "modify_global_flag": {
-            "flag": "MTG_naval_treaty_signatories",
-            "value": -1
-          }
-        },
-        {
-          "limit": {
-            "not": {
-              "any_other_country": {
-                "OR": {
-                  "has_idea": [
-                    "MTG_naval_treaty_cheating_reduced",
-                    "MTG_naval_treaty_adherent_reduced"
-                  ]
-                }
-              }
-            }
-          },
-          "every_other_country": {
-            "limit": {
-              "OR": {
-                "has_idea": [
-                  "MTG_naval_treaty_cheating",
-                  "MTG_naval_treaty_adherent"
-                ]
-              }
-            },
-            "activate_mission": "MTG_escalator_clause_invocation_mission",
-            "custom_effect_tooltip": "MTG_escalator_clause_tt"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "id": "MTG_cheat_on_treaty",
-    "category_id": "MTG_naval_treaties",
-    "name": "Обман участников соглашений",
-    "desc": "Ограничения, наложенные на наш флот морскими соглашениями, слишком суровы. Возможно, если немного поиграть с числами, мы могли бы что-нибудь придумать...",
-    "icon": "generic",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": [],
-    "visible": {
-      "OR": [
-        {
-          "has_idea": [
-            "MTG_naval_treaty_adherent",
-            "MTG_naval_treaty_adherent_reduced"
-          ]
-        },
-        {
-          "has_government": [
-            "fascism",
-            "communism"
-          ]
-        }
-      ]
-    },
-    "complete_effect": {
-      "if": [
-        {
-          "limit": {
-            "has_idea": "MTG_naval_treaty_adherent"
-          },
-          "swap_ideas": {
-            "remove_idea": "MTG_naval_treaty_adherent",
-            "add_idea": "MTG_naval_treaty_cheating"
-          }
-        },
-        {
-          "limit": {
-            "has_idea": "MTG_naval_treaty_adherent_reduced"
-          },
-          "swap_ideas": {
-            "remove_idea": "MTG_naval_treaty_adherent_reduced",
-            "add_idea": "MTG_naval_treaty_cheating_reduced"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "id": "MTG_invite_FROM_to_treaty",
-    "category_id": "MTG_naval_treaties",
-    "name": "Пригласить государство [From.GetNameDef] присоединиться к морским соглашениям",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": [],
-    "visible": {
-      "has_naval_treaty_trigger": true
-    },
-    "complete_effect": {
-      "FROM": {
-        "country_event": "MTG_naval_treaty.1"
-      }
-    }
-  },
-  {
-    "id": "MTG_send_treaty_warning_to_FROM_previous_signatory",
-    "category_id": "MTG_naval_treaties",
-    "name": "Объявить предупреждение государству [From.GetNameDef]",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": [],
-    "visible": {
-      "has_naval_treaty_trigger": true
-    },
-    "complete_effect": {
-      "FROM": {
-        "country_event": {
-          "id": "MTG_naval_treaty.4"
-        }
-      }
-    }
-  },
-  {
-    "id": "MTG_send_treaty_warning_to_FROM",
-    "category_id": "MTG_naval_treaties",
-    "name": "Предупредить государство [From.GetNameDef]",
-    "desc": "Похоже, государство [From.GetNameDef] считает, что мы не заметим его нарушений при строительстве флота. Надо сообщить его представителям, что они ошибаются.",
-    "icon": "generic_naval",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": [],
-    "visible": {
-      "has_naval_treaty_trigger": true
-    },
-    "complete_effect": {
-      "FROM": {
-        "country_event": {
-          "id": "MTG_naval_treaty.4"
-        }
-      }
-    }
-  },
-  {
-    "id": "MTG_treaty_reduction_mission",
-    "category_id": "MTG_naval_treaties",
-    "name": "Реализовать план по морскому разоружению",
-    "desc": "Мы публично согласились сократить количество крупных кораблей в своем флоте. Нам надо срочно избавиться от нескольких кораблей, чтобы соблюсти ограничения.",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "if": {
-        "limit": {
-          "ENG": {
-            "has_naval_treaty_trigger": true
-          }
-        },
-        "naval_strength_comparison": {
-          "other": "ENG",
-          "ratio": {
-            "_op": "<",
-            "value": 0.8
-          },
-          "sub_unit_def_weights": {
-            "carrier": 0.25,
-            "battleship": 1,
-            "battle_cruiser": 0.8,
-            "heavy_cruiser": 0.5
-          }
-        }
-      },
-      "else_if": {
-        "limit": {
-          "USA": {
-            "has_naval_treaty_trigger": true
-          }
-        },
-        "naval_strength_comparison": {
-          "other": "USA",
-          "ratio": {
-            "_op": "<",
-            "value": 0.8
-          },
-          "sub_unit_def_weights": {
-            "carrier": 0.25,
-            "battleship": 1,
-            "battle_cruiser": 0.8,
-            "heavy_cruiser": 0.5
-          }
-        }
-      },
-      "else": {
-        "has_navy_size": {
-          "type": "capital_ship",
-          "size": {
-            "_op": "<",
-            "value": 20
-          }
-        }
-      }
-    },
-    "visible": [],
-    "complete_effect": []
-  },
-  {
-    "id": "MTG_treaty_reduction_signatory_mission",
-    "category_id": "MTG_naval_treaties",
-    "name": "Вернуться к размеру флота, оговоренному соглашением",
-    "desc": "Нам, как участникам морского соглашения, разрешено иметь определенное количество крупных кораблей. Сейчас оно превышено, и люди начинают задаваться вопросом — так ли мы привержены идеям международного ограничения вооружений, как говорим?",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "if": {
-        "limit": {
-          "ENG": {
-            "has_naval_treaty_trigger": true
-          }
-        },
-        "naval_strength_comparison": {
-          "other": "ENG",
-          "ratio": {
-            "_op": "<",
-            "value": 1
-          },
-          "sub_unit_def_weights": {
-            "carrier": 0.5,
-            "battleship": 1,
-            "battle_cruiser": 0.8,
-            "heavy_cruiser": 0.5
-          }
-        }
-      },
-      "else_if": {
-        "limit": {
-          "USA": {
-            "has_naval_treaty_trigger": true
-          }
-        },
-        "naval_strength_comparison": {
-          "other": "USA",
-          "ratio": {
-            "_op": "<",
-            "value": 1
-          },
-          "sub_unit_def_weights": {
-            "carrier": 0.5,
-            "battleship": 1,
-            "battle_cruiser": 0.8,
-            "heavy_cruiser": 0.5
-          }
-        }
-      },
-      "else": {
-        "has_navy_size": {
-          "type": "capital_ship",
-          "size": {
-            "_op": "<",
-            "value": 50
-          }
-        }
-      }
-    },
-    "visible": [],
-    "complete_effect": []
-  },
-  {
-    "id": "MTG_treaty_renew_mission",
-    "category_id": "MTG_naval_treaties",
-    "name": "Вторая Лондонская морская конференция",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "has_naval_treaty_trigger": true
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "MTG_escalator_clause_invocation_mission",
-    "category_id": "MTG_naval_treaties",
-    "name": "Задействована особая оговорка",
-    "desc": "Одно из государств, подписавших соглашение, решило больше не соблюдать его условия и, наверное, уже строит новые, более мощные корабли. К счастью, условия соглашения позволяют нам автоматически задействовать в таком случае особую оговорку, ослабляющую ограничения на размер кораблей и вооружения для нас.",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "has_naval_treaty_trigger": true
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "NOR_naval_expanion",
-    "category_id": "NOR_democratic_preparation_decisions_category",
-    "name": "NOR_naval_expanion",
-    "desc": "",
-    "icon": "",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "NOT": {
-        "ROOT": {
-          "has_country_flag": "NOR_ongoing_countrywide_program"
-        }
-      },
-      "has_equipment": {
-        "convoy": {
-          "_op": ">",
-          "value": "NOR_prep_his_program_min_convoy"
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "NOR_patrol_our_coast",
-      "OR": {
-        "has_country_flag": "NOR_going_dem_historical"
-      }
-    },
-    "complete_effect": {
-      "ROOT": {
-        "set_country_flag": "NOR_ongoing_countrywide_program"
-      }
-    }
-  },
-  {
-    "id": "NOR_alt_dem_naval_expansion",
-    "category_id": "NOR_allied_democratic_preparation_decisions_category",
-    "name": "NOR_alt_dem_naval_expansion",
-    "desc": "",
-    "icon": "",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "NOT": {
-        "ROOT": {
-          "has_country_flag": "NOR_ongoing_countrywide_program"
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "NOR_patrol_our_coast",
-      "NOT": {
-        "has_country_flag": "NOR_preps_system_has_been_reset"
-      },
-      "has_war": false
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "subtract_from_variable": {
-          "NOR_country_preparedness": 1
-        },
-        "set_country_flag": "NOR_ongoing_countrywide_program"
-      }
-    }
-  },
-  {
-    "id": "POR_evade_blockade_with_portuguese_convoys",
-    "category_id": "POR_naval_blockade",
-    "name": "Избежать блокады с помощью португальских конвоев",
-    "desc": "Мы примем предложение использовать португальские конвои для перевозки грузов туда, куда не могут дойти наши корабли. Когда наши войска увидят, что проблемы с поставками решены, их боевой дух возрастёт.",
-    "icon": "generic_naval",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": {
-      "num_of_civilian_factories": {
-        "_op": ">",
-        "value": 1
-      },
-      "POR": {
-        "has_navy_size": {
-          "size": {
-            "_op": ">",
-            "value": 49
-          },
-          "type": "convoy"
-        },
-        "has_opinion": {
-          "target": "ROOT",
-          "value": {
-            "_op": ">",
-            "value": -10
-          }
-        }
-      }
-    },
-    "visible": {
-      "POR": {
-        "has_completed_focus": "POR_refuse_the_naval_blockade"
-      },
-      "NOT": {
-        "has_country_flag": [
-          "POR_evade_blockade_flag",
-          "POR_cancel_evade_blockade_flag"
-        ]
-      }
-    },
-    "complete_effect": {
-      "add_war_support": 0.1,
-      "set_country_flag": "POR_evade_blockade_flag",
-      "effect_tooltip": {
-        "POR": {
-          "add_equipment_to_stockpile": {
-            "type": "convoy_1",
-            "amount": -50
-          },
-          "add_offsite_building": {
-            "type": "industrial_complex",
-            "level": 1
-          }
-        }
-      },
-      "hidden_effect": {
-        "POR": {
-          "country_event": "lar_portugal_naval_blockade.2",
-          "activate_targeted_decision": {
-            "target": "ROOT",
-            "decision": "POR_portugal_cancel_blockade_evasion_for_country"
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "POR_major_cancel_portuguese_blockade_evasion",
-    "category_id": "POR_naval_blockade",
-    "name": "Отменить соглашение с Португалией об избегании блокады",
-    "desc": "Нам больше не нужно использовать португальские конвои, чтобы обходить британскую блокаду. Мы немедленно отменим соглашение.",
-    "icon": "generic_break_treaty",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_country_flag": "POR_evade_blockade_flag"
-    },
-    "visible": {
-      "has_country_flag": "POR_evade_blockade_flag",
-      "NOT": {
-        "has_country_flag": "POR_cancel_evade_blockade_flag"
-      }
-    },
-    "complete_effect": {
-      "add_war_support": -0.1,
-      "set_country_flag": "POR_cancel_evade_blockade_flag",
-      "clr_country_flag": "POR_evade_blockade_flag"
-    }
-  },
-  {
-    "id": "POR_portugal_cancel_blockade_evasion_for_country",
-    "category_id": "POR_naval_blockade",
-    "name": "Отменить соглашение об избегании блокады с государством [From.GetNameDef]",
-    "desc": "Соглашение, в рамках которого мы предоставляем свои конвои [From.GetAdjective]ому правительству, чтобы помочь избежать британской блокады, больше не выгодно нам, и потому мы немедленно его отменим.",
-    "icon": "generic_break_treaty",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "always": true
-    },
-    "visible": {
-      "original_tag": "POR",
-      "country_exists": "FROM",
-      "FROM": {
-        "has_country_flag": "POR_evade_blockade_flag",
-        "NOT": {
-          "has_country_flag": "POR_cancel_evade_blockade_flag",
-          "has_war_with": "POR"
-        }
-      }
-    },
-    "complete_effect": {
-      "FROM": {
-        "add_war_support": -0.1,
-        "set_country_flag": "POR_cancel_evade_blockade_flag",
-        "clr_country_flag": "POR_evade_blockade_flag"
-      }
-    }
-  },
-  {
-    "id": "SIA_appeal_to_navy_clique",
-    "category_id": "SIA_appeal_for_support_cat",
-    "name": "Воззвать к флотской клике",
-    "desc": "",
-    "icon": "GFX_decision_POL_looming_peasants_strike",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "NOT": {
-        "has_country_flag": "SIA_appeal_to_navy_clique_flag"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "SIA_appeal_to_navy_clique_countdown",
-    "category_id": "SIA_appeal_for_support_cat",
-    "name": "Провести флотские реформы",
-    "desc": "",
-    "icon": "GFX_decision_generic_political_discourse",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "has_country_flag": "SIA_appeal_to_navy_clique_flag",
-      "has_completed_focus": "SIA_the_kings_gambit",
-      "has_civil_war": false
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "SIA_divert_army_funds_to_navy_toggle",
-    "category_id": "SIA_army_navy_reform_cat",
-    "name": "[SIA_GetDivertingArmyFundsToNavyTitle]",
-    "desc": "",
-    "icon": "GFX_decision_generic_political_discourse",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_completed_focus": "SIA_direct_army_fundings_towards_the_navy"
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "SOV_inspection_in_the_navy",
-    "category_id": "SOV_paranoia_system",
-    "name": "Инспекция на флоте",
-    "desc": "Нужно разрешить НКВД провести инспекцию флота, чтобы найти потенциальных диссидентов и вредителей.",
-    "icon": "GFX_decision_generic_political_discourse",
-    "cost": "SOV_paranoia_inspection_decision_cost",
-    "fire_only_once": false,
-    "available": {
-      "has_country_flag": "SOV_paranoia_system_active_flag",
-      "custom_trigger_tooltip": {
-        "tooltip": "SOV_paranoia_navy_purgeable_tt",
-        "OR": {
-          "any_navy_leader": {
-            "SOV_character_can_be_purged": true
-          },
-          "NOT": [
-            {
-              "has_idea": "SOV_anti_soviet_military_thinking_banned_navy"
-            },
-            {
-              "has_idea": "SOV_shipyard_staff_purged"
-            }
-          ]
-        }
-      },
-      "NOT": {
-        "has_country_flag": "SOV_paranoia_conducting_inspection_flag"
-      }
-    },
-    "visible": {
-      "has_country_flag": "SOV_paranoia_system_active_flag",
-      "OR": {
-        "any_navy_leader": {
-          "SOV_character_can_be_purged": true
-        },
-        "NOT": [
-          {
-            "has_idea": "SOV_anti_soviet_military_thinking_banned_navy"
-          },
-          {
-            "has_idea": "SOV_shipyard_staff_purged"
-          }
-        ]
-      },
-      "SOV_is_stalinist": true
-    },
-    "complete_effect": {
-      "set_country_flag": "SOV_paranoia_conducting_inspection_flag"
-    }
-  },
-  {
-    "id": "SOV_reinforce_navy_officer_ranks_with_veterans_dec",
-    "category_id": "SOV_paranoia_system",
-    "name": "Усилить ряды офицеров флота",
-    "desc": "Офицерский состав нашего флота подвергся чистке. Мы усилим его опытными и закаленными ветеранами.",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "if": {
-        "limit": {
-          "has_country_flag": "SOV_assassinated_stalin_flag"
-        },
-        "has_country_flag": "SOV_assassinated_stalin_flag"
-      },
-      "else_if": {
-        "limit": {
-          "has_global_flag": "SOV_soviet_civil_war"
-        },
-        "has_global_flag": "SOV_soviet_civil_war"
-      },
-      "else": {
-        "has_country_flag": {
-          "flag": "SOV_third_moscow_trial_flag",
-          "days": {
-            "_op": ">",
-            "value": 365
-          }
-        }
-      }
-    },
-    "visible": {
-      "OR": [
-        {
-          "has_idea": [
-            "SOV_purged_junior_navy_officers_1",
-            "SOV_purged_junior_navy_officers_2",
-            "SOV_purged_junior_navy_officers_3"
-          ]
-        },
-        {
-          "SOV_is_stalinist": true,
-          "SOV_is_left_opposition": true,
-          "SOV_is_right_opposition": true,
-          "has_country_flag": "SOV_assassinated_stalin_flag"
-        }
-      ]
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_command_power": -50,
-        "add_political_power": -50,
-        "navy_experience": -50
-      }
-    }
-  },
-  {
-    "id": "SOV_DEBUG_trigger_great_purge_junior_naval_officers_effect",
-    "category_id": "SOV_paranoia_system",
-    "name": "SOV_DEBUG_trigger_great_purge_junior_naval_officers_effect",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
-    },
-    "complete_effect": {
-      "SOV_trigger_great_purge_junior_naval_officers_effect": true
-    }
-  },
-  {
-    "id": "SOV_DEBUG_trigger_regular_purge_naval_conspiracy_in_the_academys_dec",
-    "category_id": "SOV_paranoia_system",
-    "name": "SOV_DEBUG_trigger_regular_purge_naval_conspiracy_in_the_academys_dec",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
-    },
-    "complete_effect": {
-      "SOV_trigger_regular_purge_naval_conspiracy_in_the_academy_effect": true
-    }
-  },
-  {
-    "id": "SOV_DEBUG_trigger_regular_purge_naval_anti_saboteur_campaign_dec",
-    "category_id": "SOV_paranoia_system",
-    "name": "SOV_DEBUG_trigger_regular_purge_naval_anti_saboteur_campaign_dec",
-    "desc": "",
-    "icon": "generic_naval",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": [],
-    "visible": {
-      "has_country_flag": "SOV_TEST_show_debug_purge_decisions_flag"
-    },
-    "complete_effect": {
-      "SOV_trigger_regular_purge_naval_anti_saboteur_campaign_effect": true
-    }
-  },
-  {
-    "id": "SOV_navy_framejob",
-    "category_id": "SOV_soviet_civil_war_dec_cat",
-    "name": "Подставить адмирала",
-    "desc": "Распустив слухи об адмиралах, чьей лояльностью пользуется [ROOT.GetLeader], и подкинув НКВД поддельные «улики», мы на какое-то время отвлечем внимание от себя. К тому же, если нам повезет, репрессии могут ослабить и других служащих флота.",
-    "icon": "generic_police_action",
-    "cost": "SOV_navy_framejob_decision_cost",
-    "fire_only_once": false,
-    "available": {
-      "IF": [
-        {
-          "limit": {
-            "SOV_is_exiles": true
-          },
-          "any_navy_leader": {
-            "NOT": [
-              {
-                "has_trait": "trait_SOV_monarchist_sympathizer"
-              },
-              {
-                "has_trait": "trait_SOV_stalinist"
-              }
-            ]
-          }
-        },
-        {
-          "limit": {
-            "SOV_is_left_opposition": true
-          },
-          "any_navy_leader": {
-            "NOT": [
-              {
-                "has_trait": "trait_SOV_trotskyist"
-              },
-              {
-                "has_trait": "trait_SOV_stalinist"
-              }
-            ]
-          }
-        },
-        {
-          "limit": {
-            "SOV_is_right_opposition": true
-          },
-          "any_navy_leader": {
-            "NOT": [
-              {
-                "has_trait": "trait_SOV_bukharinist"
-              },
-              {
-                "has_trait": "trait_SOV_stalinist"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "visible": {
-      "SOV_soviet_civil_war_not_started": true,
-      "hidden_trigger": {
-        "OR": {
-          "has_completed_focus": [
-            "SOV_divert_attention_towards_military",
-            "SOV_covert_operations"
-          ]
-        }
-      }
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "SOV_influence_navy_opposition",
-    "category_id": "SOV_soviet_civil_war_dec_cat",
-    "name": "Увеличить флотскую поддержку",
-    "desc": "Флот не особенно полезен в гражданской войне, но он может помочь нам занять ключевые позиции и обеспечить получение припасов. Уже ради этого стоит заручиться лояльностью нескольких капитанов. Кроме того, после войны наличие флота откроет нам новые возможности на международной арене.",
-    "icon": "GFX_decision_generic_naval",
-    "cost": "SOV_influence_navy_decision_cost",
-    "fire_only_once": false,
-    "available": {
-      "IF": {
-        "limit": {
-          "SOV_is_left_opposition": true
-        },
-        "custom_trigger_tooltip": {
-          "tooltip": "SOV_influence_navy_opposition_level_tt",
-          "check_variable": {
-            "SOV.SOV_left_opposition_navy_support": {
-              "_op": "<",
-              "value": 0.7
-            }
-          }
-        }
-      },
-      "ELSE_IF": {
-        "limit": {
-          "SOV_is_right_opposition": true
-        },
-        "custom_trigger_tooltip": {
-          "tooltip": "SOV_influence_navy_opposition_level_tt",
-          "check_variable": {
-            "SOV.SOV_right_opposition_navy_support": {
-              "_op": "<",
-              "value": 0.7
-            }
-          }
-        }
-      }
-    },
-    "visible": {
-      "hidden_trigger": {
-        "has_completed_focus": "SOV_military_support"
-      },
-      "NOT": {
-        "has_global_flag": "SOV_soviet_civil_war"
-      }
-    },
-    "complete_effect": {
-      "random_list": {
-        "20": [
-          {
-            "SOV_paranoia_very_low_increase_effect": true
-          },
-          {
-            "SOV_paranoia_medium_increase_effect": true
-          }
-        ],
-        "60": {
-          "SOV_paranoia_low_increase_effect": true
-        }
-      }
-    }
-  },
-  {
-    "id": "SPA_expand_influence_in_the_navarra_garrison",
-    "category_id": "SPR_the_inevitable_civil_war",
-    "name": "Расширить влияние в наваррском гарнизоне",
-    "desc": "",
-    "icon": [
-      {
-        "key": "spa_garrison_control_none",
-        "trigger": {
-          "has_completed_focus": "SPA_a_great_spain",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 1,
-              "compare": "equals"
-            }
-          }
-        }
-      },
-      {
-        "key": "spa_garrison_control_weak",
-        "trigger": {
-          "has_completed_focus": "SPA_a_great_spain",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 2,
-              "compare": "equals"
-            },
-            "NOT": {
-              "has_state_flag": "SPA_northern_garrisons_state_flag"
-            }
-          }
-        }
-      },
-      {
-        "key": "spa_garrison_control_weak2",
-        "trigger": {
-          "has_completed_focus": "SPA_a_great_spain",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 2,
-              "compare": "equals"
-            },
-            "has_state_flag": "SPA_northern_garrisons_state_flag"
-          }
-        }
-      },
-      {
-        "key": "spa_garrison_control_strong",
-        "trigger": {
-          "has_completed_focus": "SPA_a_great_spain",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 3,
-              "compare": "equals"
-            },
-            "NOT": {
-              "has_state_flag": "SPA_northern_garrisons_state_flag"
-            }
-          }
-        }
-      },
-      {
-        "key": "spa_garrison_control_strong2",
-        "trigger": {
-          "has_completed_focus": "SPA_a_great_spain",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 3,
-              "compare": "equals"
-            },
-            "has_state_flag": "SPA_northern_garrisons_state_flag"
-          }
-        }
-      },
-      {
-        "key": "spa_garrison_control_total",
-        "trigger": {
-          "has_completed_focus": "SPA_a_great_spain",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 4,
-              "compare": "greater_than_or_equals"
-            }
-          }
-        }
-      },
-      {
-        "key": "spr_garrison_control_none",
-        "trigger": {
-          "has_completed_focus": "SPR_the_popular_front",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 1,
-              "compare": "equals"
-            }
-          }
-        }
-      },
-      {
-        "key": "spr_garrison_control_weak",
-        "trigger": {
-          "has_completed_focus": "SPR_the_popular_front",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 2,
-              "compare": "equals"
-            },
-            "NOT": {
-              "has_state_flag": "SPA_northern_garrisons_state_flag"
-            }
-          }
-        }
-      },
-      {
-        "key": "spr_garrison_control_weak2",
-        "trigger": {
-          "has_completed_focus": "SPR_the_popular_front",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 2,
-              "compare": "equals"
-            },
-            "has_state_flag": "SPA_northern_garrisons_state_flag"
-          }
-        }
-      },
-      {
-        "key": "spr_garrison_control_strong",
-        "trigger": {
-          "has_completed_focus": "SPR_the_popular_front",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 3,
-              "compare": "equals"
-            },
-            "NOT": {
-              "has_state_flag": "SPA_northern_garrisons_state_flag"
-            }
-          }
-        }
-      },
-      {
-        "key": "spr_garrison_control_strong2",
-        "trigger": {
-          "has_completed_focus": "SPR_the_popular_front",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 3,
-              "compare": "equals"
-            },
-            "has_state_flag": "SPA_northern_garrisons_state_flag"
-          }
-        }
-      },
-      {
-        "key": "spr_garrison_control_total",
-        "trigger": {
-          "has_completed_focus": "SPR_the_popular_front",
-          "172": {
-            "check_variable": {
-              "var": "SPA_garrison_control",
-              "value": 4,
-              "compare": "greater_than_or_equals"
-            }
-          }
-        }
-      }
-    ],
-    "cost": "172.SPA_garrison_control_cost?10",
-    "fire_only_once": false,
-    "available": {
-      "has_full_control_of_state": 172,
-      "if": [
-        {
-          "limit": {
-            "has_completed_focus": "SPA_a_great_spain"
-          },
-          "custom_trigger_tooltip": {
-            "tooltip": "SPA_expand_influence_nationalists_trigger_tt",
-            "172": {
-              "check_variable": {
-                "var": "SPA_garrison_control",
-                "value": 4,
-                "compare": "less_than"
-              }
-            }
-          }
-        },
-        {
-          "limit": {
-            "has_completed_focus": "SPR_the_popular_front"
-          },
-          "custom_trigger_tooltip": {
-            "tooltip": "SPR_expand_influence_republicans_trigger_tt",
-            "172": {
-              "check_variable": {
-                "var": "SPA_garrison_control",
-                "value": 2,
-                "compare": "greater_than_or_equals"
-              }
-            }
-          }
-        }
-      ],
-      "NOT": {
-        "has_country_flag": "SPA_already_expanding_influence_flag"
-      }
-    },
-    "visible": {
-      "NOT": {
-        "has_global_flag": "spanish_civil_war"
-      },
-      "has_country_flag": "SPR_spanish_elections_flag"
-    },
-    "complete_effect": {
-      "set_country_flag": "SPA_already_expanding_influence_flag"
-    }
-  },
-  {
-    "id": "SPA_expand_influence_in_the_navarra_garrison_mission",
-    "category_id": "SPR_opposition_civil_war_preparations",
-    "name": "Возникло сопротивление влиянию в наваррском гарнизоне",
-    "desc": "",
-    "icon": "generic_prepare_civil_war",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "tag": "SPR",
-      "has_country_flag": "SPR_spanish_elections_flag",
-      "NOT": {
-        "has_global_flag": "spanish_civil_war"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "SPA_navarra_offensive",
-    "category_id": "SPR_civil_war_offensives",
-    "name": "Наваррское наступление",
-    "desc": "",
-    "icon": "hol_draw_up_staff_plans",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "NOT": [
-        {
-          "has_full_control_of_state": 172
-        },
-        {
-          "has_active_mission": "SPR_preparing_offensive"
-        }
-      ],
-      "172": {
-        "has_state_flag": "SPR_unplanned_offensive_flag",
-        "OR": {
-          "is_controlled_by": "ROOT",
-          "any_neighbor_state": {
-            "is_controlled_by": "ROOT"
-          }
-        }
-      }
-    },
-    "visible": {
-      "original_tag": "SPR",
-      "has_global_flag": "spanish_civil_war",
-      "NOT": {
-        "has_global_flag": "scw_over"
-      },
-      "172": {
-        "has_state_flag": "SPR_unplanned_offensive_flag"
-      }
-    },
-    "complete_effect": {
-      "activate_mission": "SPR_preparing_offensive",
-      "set_country_flag": "SPR_preparing_offensive_in_progress_flag",
-      "every_other_country": {
-        "limit": {
-          "original_tag": "SPR"
-        },
-        "activate_mission": "SPA_navarra_offensive_mission"
-      }
-    }
-  },
-  {
-    "id": "SPA_navarra_offensive_mission",
-    "category_id": "SPR_civil_war_offensives",
-    "name": "Неминуемо наваррское наступление",
-    "desc": "",
-    "icon": "hol_draw_up_staff_plans",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "hidden_trigger": {
-        "always": false
-      }
-    },
-    "visible": {
-      "original_tag": "SPR",
-      "has_global_flag": "spanish_civil_war",
-      "NOT": {
-        "has_global_flag": "scw_over"
-      },
-      "172": {
-        "has_state_flag": "SPR_unplanned_offensive_flag"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "SPA_activate_navarra_fifth_columnists",
-    "category_id": "SPR_civil_war_offensives",
-    "name": "Задействовать наваррскую пятую колонну",
-    "desc": "",
-    "icon": "generic_ignite_civil_war",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": {
-      "172": {
-        "NOT": {
-          "is_controlled_by": "ROOT"
-        },
-        "any_neighbor_state": {
-          "is_controlled_by": "ROOT"
-        }
-      }
-    },
-    "visible": {
-      "tag": "SPA",
-      "has_global_flag": "spanish_civil_war",
-      "NOT": {
-        "has_global_flag": "scw_over"
-      },
-      "172": {
-        "NOT": {
-          "is_controlled_by": "ROOT"
-        }
-      },
-      "has_completed_focus": "SPA_the_fifth_column"
-    },
-    "complete_effect": []
-  },
-  {
-    "id": "SPA_establish_navarra_carlist_cell",
-    "category_id": "SPA_preparing_the_carlist_insurrection",
-    "name": "Основать наваррскую карлистскую ячейку",
-    "desc": "",
-    "icon": "generic_prepare_civil_war",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "controls_state": 172,
-      "172": [
-        {
-          "NOT": {
-            "has_state_flag": "SPA_carlist_cell_flag"
-          }
-        },
-        {
-          "NOT": {
-            "has_state_flag": "SPA_union_militar_flag"
-          }
-        }
-      ],
-      "NOT": {
-        "has_country_flag": "SPA_already_establishing_carlist_cell_flag"
-      }
-    },
-    "visible": {
-      "has_global_flag": "spanish_civil_war",
-      "NOT": [
-        {
-          "has_global_flag": "scw_over"
-        },
-        {
-          "has_global_flag": "SPR_carlist_uprising_flag"
-        }
-      ],
-      "has_completed_focus": "SPA_prepare_the_carlist_insurrection"
-    },
-    "complete_effect": {
-      "set_country_flag": "SPA_already_establishing_carlist_cell_flag"
-    }
-  },
-  {
-    "id": "purchase_dreadnoughts_usa",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "[USA.GetFlag]Купить дредноуты у [USA.GetNameRuGen]",
-    "desc": "",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 100,
-    "fire_only_once": false,
-    "available": {
-      "USA": {
-        "has_civil_war": false,
-        "has_capitulated": false,
-        "NOT": {
-          "has_opinion": {
-            "target": "ROOT",
-            "value": {
-              "_op": "<",
-              "value": 50
-            }
-          }
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "generic_purchase_dreadnoughts_flag",
-      "USA": {
-        "NOT": {
-          "has_country_flag": [
-            "sold_dreadnoughts_to_us@ROOT",
-            "negotiating_ship_purchase_flag@ROOT"
-          ]
-        }
-      },
-      "NOT": {
-        "has_war_with": "USA"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "purchase_dreadnoughts_ENG",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "[ENG.GetFlag]Купить дредноуты у [ENG.GetNameRuGen]",
-    "desc": "",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 100,
-    "fire_only_once": false,
-    "available": {
-      "ENG": {
-        "has_civil_war": false,
-        "has_capitulated": false,
-        "NOT": {
-          "has_opinion": {
-            "target": "ROOT",
-            "value": {
-              "_op": "<",
-              "value": 50
-            }
-          }
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "generic_purchase_dreadnoughts_flag",
-      "ENG": {
-        "NOT": {
-          "has_country_flag": [
-            "sold_dreadnoughts_to_us@ROOT",
-            "negotiating_ship_purchase_flag@ROOT"
-          ]
-        }
-      },
-      "NOT": {
-        "has_war_with": "ENG"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "purchase_dreadnoughts_FRA",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "[FRA.GetFlag]Купить дредноуты у [FRA.GetNameRuGen]",
-    "desc": "",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 100,
-    "fire_only_once": false,
-    "available": {
-      "FRA": {
-        "has_civil_war": false,
-        "has_capitulated": false,
-        "NOT": {
-          "has_opinion": {
-            "target": "ROOT",
-            "value": {
-              "_op": "<",
-              "value": 50
-            }
-          }
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "generic_purchase_dreadnoughts_flag",
-      "FRA": {
-        "NOT": {
-          "has_country_flag": [
-            "sold_dreadnoughts_to_us@ROOT",
-            "negotiating_ship_purchase_flag@ROOT"
-          ]
-        }
-      },
-      "NOT": {
-        "has_war_with": "FRA"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "purchase_dreadnoughts_ITA",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "[ITA.GetFlag]Купить дредноуты у [ITA.GetNameRuGen]",
-    "desc": "",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 100,
-    "fire_only_once": false,
-    "available": {
-      "ITA": {
-        "has_civil_war": false,
-        "has_capitulated": false,
-        "NOT": {
-          "has_opinion": {
-            "target": "ROOT",
-            "value": {
-              "_op": "<",
-              "value": 50
-            }
-          }
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "generic_purchase_dreadnoughts_flag",
-      "ITA": {
-        "NOT": {
-          "has_country_flag": [
-            "sold_dreadnoughts_to_us@ROOT",
-            "negotiating_ship_purchase_flag@ROOT"
-          ]
-        }
-      },
-      "NOT": {
-        "has_war_with": "ITA"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "purchase_dreadnoughts_GER",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "[GER.GetFlag]Купить дредноуты у [GER.GetNameRuGen]",
-    "desc": "",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 100,
-    "fire_only_once": false,
-    "available": {
-      "GER": {
-        "has_civil_war": false,
-        "has_capitulated": false,
-        "NOT": {
-          "has_opinion": {
-            "target": "ROOT",
-            "value": {
-              "_op": "<",
-              "value": 50
-            }
-          }
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "generic_purchase_dreadnoughts_flag",
-      "GER": {
-        "NOT": {
-          "has_country_flag": [
-            "sold_dreadnoughts_to_us@ROOT",
-            "negotiating_ship_purchase_flag@ROOT"
-          ]
-        }
-      },
-      "NOT": {
-        "has_war_with": "GER"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "purchase_dreadnoughts_JAP",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "[JAP.GetFlag]Купить дредноуты у [JAP.GetNameRuGen]",
-    "desc": "",
-    "icon": "GFX_decision_generic_naval",
-    "cost": 100,
-    "fire_only_once": false,
-    "available": {
-      "JAP": {
-        "has_civil_war": false,
-        "has_capitulated": false,
-        "NOT": {
-          "has_opinion": {
-            "target": "ROOT",
-            "value": {
-              "_op": "<",
-              "value": 50
-            }
-          }
-        }
-      }
-    },
-    "visible": {
-      "has_country_flag": "generic_purchase_dreadnoughts_flag",
-      "JAP": {
-        "NOT": {
-          "has_country_flag": [
-            "sold_dreadnoughts_to_us@ROOT",
-            "negotiating_ship_purchase_flag@ROOT"
-          ]
-        }
-      },
-      "NOT": {
-        "has_war_with": "JAP"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "JUNO_invite_japanese_naval_advisors",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "Пригласить [JAP.GetAdjective]их флотских советников",
-    "desc": "",
-    "icon": "GFX_decision_generic_army_support",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "any_country": {
-        "original_tag": "JAP",
-        "exists": true,
-        "NOT": {
-          "has_war_with": "ROOT"
-        }
-      },
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_japanese_naval_advisors_completed",
-            "JUNO_already_invited_american_naval_advisors_completed",
-            "JUNO_already_invited_soviet_naval_advisors_completed"
-          ]
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "has_japanese_ideology",
-        "OR": {
-          "AND": [
-            {
-              "JAP": {
-                "has_government": "fascism"
-              },
-              "ROOT": {
-                "NOT": {
-                  "has_government": "communism"
-                }
-              }
-            },
-            {
-              "JAP": {
-                "has_government": "democratic"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "fascism"
-                ]
-              }
-            },
-            {
-              "JAP": {
-                "has_government": "communism"
-              },
-              "NOT": {
-                "has_government": [
-                  "fascism",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "JAP": {
-                "has_government": "neutrality"
-              },
-              "NOT": {
-                "has_government": "communism"
-              }
-            }
-          ]
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_japanese_naval_advisors_removed",
-            "JUNO_already_invited_american_naval_advisors_removed",
-            "JUNO_already_invited_soviet_naval_advisors_removed"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "JUNO_already_invited_japanese_naval_advisors_completed"
-      }
-    }
-  },
-  {
-    "id": "JUNO_invite_american_navy_advisors",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "Пригласить [USA.GetAdjective]их флотских советников",
-    "desc": "",
-    "icon": "GFX_decision_generic_army_support",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "any_country": {
-        "original_tag": "USA",
-        "exists": true,
-        "NOT": {
-          "has_war_with": "ROOT"
-        }
-      },
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_american_naval_advisors_completed",
-            "JUNO_already_invited_italian_naval_advisors_completed",
-            "JUNO_already_invited_japanese_naval_advisors_completed"
-          ]
-        }
-      },
-      "IF": {
-        "limit": {
-          "original_tag": "CHL"
-        },
-        "NOT": {
-          "has_completed_focus": "CHL_promote_broad_anti_americansim"
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "has_american_ideology",
-        "OR": {
-          "AND": [
-            {
-              "USA": {
-                "has_government": "fascism"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "democratic"
-                ]
-              }
-            },
-            {
-              "USA": {
-                "has_government": "democratic"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "fascism"
-                ]
-              }
-            },
-            {
-              "USA": {
-                "has_government": "communism"
-              },
-              "NOT": {
-                "has_government": [
-                  "fascism",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "USA": {
-                "has_government": "neutrality"
-              },
-              "NOT": {
-                "has_government": "communism"
-              }
-            }
-          ]
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_american_naval_advisors_removed",
-            "JUNO_already_invited_italian_naval_advisors_removed",
-            "JUNO_already_invited_japanese_naval_advisors_removed"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "JUNO_already_invited_american_naval_advisors_completed"
-      }
-    }
-  },
-  {
-    "id": "JUNO_invite_soviet_navy_advisors",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "Пригласить [SOV.GetAdjective]их флотских советников",
-    "desc": "",
-    "icon": "GFX_decision_generic_army_support",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "any_country": {
-        "original_tag": "SOV",
-        "exists": true,
-        "NOT": {
-          "has_war_with": "ROOT"
-        }
-      },
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_soviet_naval_advisors_completed",
-            "JUNO_already_invited_german_naval_advisors_completed",
-            "JUNO_already_invited_japanese_naval_advisors_completed"
-          ]
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "has_soviet_ideology",
-        "OR": {
-          "AND": [
-            {
-              "SOV": {
-                "has_government": "fascism"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "democratic",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "SOV": {
-                "has_government": "democratic"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "neutrality",
-                  "fascism"
-                ]
-              }
-            },
-            {
-              "SOV": {
-                "has_government": "communism"
-              },
-              "NOT": {
-                "has_government": [
-                  "fascism",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "SOV": {
-                "has_government": "neutrality"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "fascism"
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_soviet_naval_advisors_removed",
-            "JUNO_already_invited_german_naval_advisors_removed",
-            "JUNO_already_invited_japanese_naval_advisors_removed"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "JUNO_already_invited_soviet_naval_advisors_completed"
-      }
-    }
-  },
-  {
-    "id": "JUNO_invite_german_navy_advisors",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "Пригласить [GER.GetAdjective]их флотских советников",
-    "desc": "",
-    "icon": "GFX_decision_generic_army_support",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "any_country": {
-        "original_tag": "GER",
-        "exists": true,
-        "NOT": {
-          "has_war_with": "ROOT"
-        }
-      },
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_german_naval_advisors_completed",
-            "JUNO_already_invited_british_naval_advisors_completed",
-            "JUNO_already_invited_soviet_naval_advisors_completed"
-          ]
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "has_german_ideology",
-        "OR": {
-          "AND": [
-            {
-              "GER": {
-                "has_government": "fascism"
-              },
-              "NOT": {
-                "has_government": "communism"
-              }
-            },
-            {
-              "GER": {
-                "has_government": "democratic"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "fascism"
-                ]
-              }
-            },
-            {
-              "GER": {
-                "has_government": "communism"
-              },
-              "NOT": {
-                "has_government": [
-                  "fascism",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "GER": {
-                "has_government": "neutrality"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "fascism",
-                  "democratic"
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_german_naval_advisors_removed",
-            "JUNO_already_invited_british_naval_advisors_removed",
-            "JUNO_already_invited_soviet_naval_advisors_removed"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "JUNO_already_invited_german_naval_advisors_completed"
-      }
-    }
-  },
-  {
-    "id": "JUNO_invite_italian_navy_advisors",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "Пригласить [ITA.GetAdjective]их флотских советников",
-    "desc": "",
-    "icon": "GFX_decision_generic_army_support",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "any_country": {
-        "original_tag": "ITA",
-        "exists": true,
-        "NOT": {
-          "has_war_with": "ROOT"
-        }
-      },
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_italian_naval_advisors_completed",
-            "JUNO_already_invited_american_naval_advisors_completed",
-            "JUNO_already_invited_british_naval_advisors_completed"
-          ]
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "has_italian_ideology",
-        "OR": {
-          "AND": [
-            {
-              "ITA": {
-                "has_government": "fascism"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "ITA": {
-                "has_government": "democratic"
-              },
-              "NOT": {
-                "has_government": "fascism"
-              }
-            },
-            {
-              "ITA": {
-                "has_government": "communism"
-              },
-              "NOT": {
-                "has_government": [
-                  "fascism",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "ITA": {
-                "has_government": "neutrality"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "democratic"
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_italian_naval_advisors_removed",
-            "JUNO_already_invited_american_naval_advisors_removed",
-            "JUNO_already_invited_british_naval_advisors_removed"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "JUNO_already_invited_italian_naval_advisors_completed"
-      }
-    }
-  },
-  {
-    "id": "JUNO_invite_british_navy_advisors",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "Пригласить [ENG.GetAdjective]их флотских советников",
-    "desc": "",
-    "icon": "GFX_decision_generic_army_support",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "any_country": {
-        "original_tag": "ENG",
-        "exists": true,
-        "NOT": {
-          "has_war_with": "ROOT"
-        }
-      },
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_british_naval_advisors_completed",
-            "JUNO_already_invited_italian_naval_advisors_completed",
-            "JUNO_already_invited_german_naval_advisors_completed"
-          ]
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "has_british_ideology",
-        "OR": {
-          "AND": [
-            {
-              "ENG": {
-                "has_government": "fascism"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "neutrality",
-                  "democratic"
-                ]
-              }
-            },
-            {
-              "ENG": {
-                "has_government": "democratic"
-              },
-              "NOT": {
-                "has_government": [
-                  "fascism",
-                  "communism"
-                ]
-              }
-            },
-            {
-              "ENG": {
-                "has_government": "communism"
-              },
-              "NOT": {
-                "has_government": [
-                  "fascism",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "ENG": {
-                "has_government": "neutrality"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "democratic"
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_british_naval_advisors_removed",
-            "JUNO_already_invited_italian_naval_advisors_removed",
-            "JUNO_already_invited_german_naval_advisors_removed"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "JUNO_already_invited_british_naval_advisors_completed"
-      }
-    }
-  },
-  {
-    "id": "JUNO_invite_french_navy_advisors",
-    "category_id": "south_american_naval_arms_race_category",
-    "name": "Пригласить [FRA.GetAdjective]их флотских советников",
-    "desc": "",
-    "icon": "GFX_decision_generic_army_support",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "any_country": {
-        "original_tag": "FRA",
-        "exists": true,
-        "NOT": {
-          "has_war_with": "ROOT"
-        }
-      },
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_french_naval_advisors_completed",
-            "JUNO_already_invited_italian_naval_advisors_completed",
-            "JUNO_already_invited_german_naval_advisors_completed"
-          ]
-        }
-      },
-      "custom_trigger_tooltip": {
-        "tooltip": "has_french_ideology",
-        "OR": {
-          "AND": [
-            {
-              "FRA": {
-                "has_government": "fascism"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "democratic"
-                ]
-              }
-            },
-            {
-              "FRA": {
-                "has_government": "democratic"
-              },
-              "NOT": {
-                "has_government": "fascism"
-              }
-            },
-            {
-              "FRA": {
-                "has_government": "communism"
-              },
-              "NOT": {
-                "has_government": [
-                  "fascism",
-                  "neutrality"
-                ]
-              }
-            },
-            {
-              "FRA": {
-                "has_government": "neutrality"
-              },
-              "NOT": {
-                "has_government": [
-                  "communism",
-                  "democratic",
-                  "fascism"
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    "visible": {
-      "has_completed_focus": "SMB_naval_foreign_advisors",
-      "NOT": {
-        "OR": {
-          "has_country_flag": [
-            "JUNO_already_invited_french_naval_advisors_removed",
-            "JUNO_already_invited_italian_naval_advisors_removed",
-            "JUNO_already_invited_german_naval_advisors_removed"
-          ]
-        }
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "set_country_flag": "JUNO_already_invited_french_naval_advisors_completed"
-      }
-    }
-  },
-  {
-    "id": "USA_establish_personal_communication_with_former_naval_person",
-    "category_id": "USA_aid_britain",
-    "name": "Контакт с бывшим морским офицером",
-    "desc": "[ENG.GetName] теперь под руководством нового первого министра. Нам следует начать с ним диалог, чтобы лучше подготовить и скоординировать наше неизбежное вступление в войну.",
-    "icon": "generic_political_discourse",
-    "cost": 50,
-    "fire_only_once": true,
-    "available": {
-      "has_country_leader": {
-        "ruling_only": true,
-        "character": "USA_franklin_delano_roosevelt"
-      },
-      "has_country_flag": "blood_toil_tears_sweat_speech",
-      "ENG": {
-        "has_defensive_war": true
-      }
-    },
-    "visible": {
-      "has_war": false
-    },
-    "complete_effect": {
-      "add_war_support": 0.05,
-      "add_opinion_modifier": {
-        "target": "ENG",
-        "modifier": "USA_special_relationship"
-      },
-      "reverse_add_opinion_modifier": {
-        "target": "ENG",
-        "modifier": "USA_special_relationship"
-      }
-    }
-  },
-  {
-    "id": "Antarctica_GUI_AAO_Decision_Reinforce_American_Naval_Presence",
-    "category_id": "Antarctica_GUI_AAO",
-    "name": "Усилить американское военно-морское присутствие",
-    "desc": "",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "always": true
-    },
-    "visible": {
-      "has_country_flag": "Antarctica_GUI_AAO_Decision_Reinforce_American_Naval_Presence_Available"
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: decision Antarctica_GUI_AAO_Decision_Reinforce_American_Naval_Presence",
-      "hidden_effect": {
-        "add_political_power": -50
-      }
-    }
-  },
-  {
-    "id": "Antarctica_GUI_AAG_Survival_End_Naval_Endeavors",
-    "category_id": "Antarctica_GUI_AAG_Survival",
-    "name": "Завершить военно-морские операции",
-    "desc": "",
-    "icon": "GFX_decision_generic_submarines",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "NOT": {
-        "has_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess"
-      }
-    },
-    "visible": {
-      "has_country_flag": "Antarctica_GUI_AAG_Survival_Mech_Enabled"
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Antarctica_GUI_AAG_Survival_End_Naval_Endeavors",
-      "set_country_flag": "Antarctica_GUI_AAG_Survival_Decision_In_Progess",
-      "hidden_effect": {
-        "add_political_power": -50,
-        "add_to_variable": {
-          "Antarctica_Militarization": -2
-        }
-      }
-    }
-  },
-  {
-    "id": "wal_rent_scottish_dockyards",
-    "category_id": "wal_union_navy_category",
-    "name": "Арендовать шотландские верфи",
-    "desc": "",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {
-      "has_country_flag": "WAL_UnionistNavyDream"
-    },
-    "visible": {
-      "NOT": {
-        "has_idea": "WAL_RentedScotland"
-      }
-    },
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision wal_rent_scottish_dockyards",
-      "custom_effect_tooltip": "WAL_RentingScotland",
-      "hidden_effect": {
-        "SCO": {
-          "country_event": {
-            "id": "WALSCO.1",
-            "hours": 1
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "wal_purchase_submarine",
-    "category_id": "wal_union_navy_category",
-    "name": "Приобрести подводную лодку",
-    "desc": "",
-    "icon": "GFX_decision_generic_battleship",
-    "cost": 100,
-    "fire_only_once": false,
-    "available": {
-      "has_country_flag": "WAL_UnionistNavyDream",
-      "has_idea": "WAL_RentedScotland"
-    },
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision wal_purchase_submarine",
-      "hidden_effect": {
-        "SCO": {
-          "create_equipment_variant": {
-            "name": "S Class",
-            "type": "ship_hull_submarine_1",
-            "parent_version": 0,
-            "show_position": false,
-            "modules": {
-              "fixed_ship_engine_slot": "sub_ship_engine_2",
-              "fixed_ship_torpedo_slot": "ship_torpedo_sub_1",
-              "rear_1_custom_slot": "ship_torpedo_sub_1"
-            }
-          }
-        },
-        "create_ship": {
-          "type": "ship_hull_submarine_1",
-          "equipment_variant": "S Class",
-          "creator": "SCO",
-          "name": "S Class Submarine"
-        }
-      },
-      "set_temp_variable": {
-        "debt_temp": 0.015
-      },
-      "econ_national_debt_change": true,
-      "SCO": {
-        "set_temp_variable": {
-          "money_reserves_temp": 0.015
-        },
-        "econ_money_reserves_change_raw_money": true
-      }
-    }
-  },
-  {
-    "id": "wal_purchase_destroyer",
-    "category_id": "wal_union_navy_category",
-    "name": "Приобрести эсминец",
-    "desc": "",
-    "icon": "GFX_decision_generic_battleship",
-    "cost": 125,
-    "fire_only_once": false,
-    "available": {
-      "has_country_flag": "WAL_UnionistNavyDream",
-      "has_idea": "WAL_RentedScotland"
-    },
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision wal_purchase_destroyer",
-      "hidden_effect": {
-        "SCO": {
-          "create_equipment_variant": {
-            "name": "H Class",
-            "type": "ship_hull_light_1",
-            "parent_version": 0,
-            "show_position": false,
-            "modules": {
-              "fixed_ship_battery_slot": "ship_light_battery_1",
-              "fixed_ship_anti_air_slot": "ship_anti_air_2",
-              "fixed_ship_fire_control_system_slot": "ship_fire_control_system_2",
-              "fixed_ship_radar_slot": "ship_radar_2",
-              "fixed_ship_engine_slot": "light_ship_engine_1",
-              "fixed_ship_torpedo_slot": "ship_torpedo_1",
-              "mid_1_custom_slot": "ship_light_battery_1",
-              "rear_1_custom_slot": "ship_anti_air_2"
-            }
-          }
-        },
-        "create_ship": {
-          "type": "ship_hull_light_1",
-          "equipment_variant": "H Class",
-          "creator": "SCO",
-          "name": "H Class Destroyer"
-        }
-      },
-      "set_temp_variable": {
-        "debt_temp": 0.018
-      },
-      "econ_national_debt_change": true,
-      "SCO": {
-        "set_temp_variable": {
-          "money_reserves_temp": 0.018
-        },
-        "econ_money_reserves_change_raw_money": true
-      }
-    }
-  },
-  {
-    "id": "wal_purchase_light_cruiser",
-    "category_id": "wal_union_navy_category",
-    "name": "Приобрести крейсер",
-    "desc": "",
-    "icon": "GFX_decision_generic_battleship",
-    "cost": 150,
-    "fire_only_once": false,
-    "available": {
-      "has_country_flag": "WAL_UnionistNavyDream",
-      "has_idea": "WAL_RentedScotland"
-    },
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision wal_purchase_light_cruiser",
-      "hidden_effect": {
-        "SCO": {
-          "create_equipment_variant": {
-            "name": "Town Class",
-            "type": "ship_hull_cruiser_1",
-            "parent_version": 0,
-            "show_position": false,
-            "modules": {
-              "fixed_ship_battery_slot": "ship_light_battery_2",
-              "fixed_ship_anti_air_slot": "ship_anti_air_2",
-              "fixed_ship_fire_control_system_slot": "ship_fire_control_system_3",
-              "fixed_ship_radar_slot": "ship_radar_3",
-              "fixed_ship_engine_slot": "cruiser_ship_engine_2",
-              "fixed_ship_secondaries_slot": "ship_secondaries_2",
-              "fixed_ship_armor_slot": "ship_armor_cruiser_2",
-              "mid_1_custom_slot": "ship_light_battery_2",
-              "rear_1_custom_slot": "ship_anti_air_2"
-            }
-          }
-        },
-        "create_ship": {
-          "type": "ship_hull_cruiser_1",
-          "equipment_variant": "Town Class",
-          "creator": "SCO",
-          "name": "Town Class Cruiser"
-        }
-      },
-      "set_temp_variable": {
-        "debt_temp": 0.028
-      },
-      "econ_national_debt_change": true,
-      "SCO": {
-        "set_temp_variable": {
-          "money_reserves_temp": 0.028
-        },
-        "econ_money_reserves_change_raw_money": true
-      }
-    }
-  },
-  {
-    "id": "debug_tt_econ_test_check_army_navy_spam",
+    "id": "show_display_workforce",
+    "category": "economy",
     "category_id": "global_debug_decisions",
-    "name": "debug_tt_econ_test_check_army_navy_spam",
-    "desc": "",
-    "icon": "GFX_decision_generic_industry_indent",
-    "cost": 0,
+    "category_name": "Глобальные решения дебага",
+    "title": "Show Display Workforce",
+    "title_en": "Show Display Workforce",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 1,
     "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Show Display Workforce»"
+    },
+    "complete_effect": {
+      "log": "[GetDateText]: [Root.GetName]: [?displayCurrentWorkforce]"
+    },
     "available": {},
     "visible": {
       "NOT": {
         "has_country_flag": "hide_debug_decisions"
       },
       "has_country_flag": "TT_econ_debug_decisions"
-    },
-    "complete_effect": {
-      "log": [
-        "[GetDateText]: [Root.GetName]: debug_tt_econ_test_check_army_navy_spam",
-        "[?army_idea_number] is army idea number and [?army_idea_number_set] is set army idea number",
-        "[?naval_idea_number] is naval idea number and [?naval_idea_number_set] is set naval idea number"
-      ]
     }
   },
   {
-    "id": "IBR_special_navy_training_decision",
-    "category_id": "IBR_ofn_diplomacy_category",
-    "name": "Специальные военно-морские тренировки",
-    "desc": "",
-    "icon": "GFX_decision_generic_submarines",
-    "cost": 20,
+    "id": "ANG_Free_Angola",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Free Angola",
+    "title_en": "Free Angola",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
     "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Free Angola»"
+    },
+    "complete_effect": {
+      "ANG_free_angola": "yes"
+    },
     "available": {},
     "visible": {
-      "has_country_flag": "IBR_OFN_military_advisors",
-      "USA": {
-        "has_war": false
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "IBR_navy_officer_training_decision",
-    "category_id": "IBR_ofn_diplomacy_category",
-    "name": "Тренировка военно-морских офицеров",
-    "desc": "",
-    "icon": "GFX_decision_generic_military_parade",
-    "cost": 20,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_country_flag": "IBR_OFN_military_advisors",
-      "USA": {
-        "has_war": false
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "ITA_help_borghese_navy",
-    "category_id": "ita_Fascisms_Favors",
-    "name": "Поддержать влияние Боргезе во флоте",
-    "desc": "",
-    "icon": "GFX_decision_generic_prospect_for_resources",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {},
-    "visible": [],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision ITA_help_borghese_navy",
-      "add_to_variable": [
-        {
-          "ita_good_boy_points_bank": -10
-        },
-        {
-          "political_power": -50
-        }
-      ],
-      "ITA_navy_add_borghese_pop": true
-    }
-  },
-  {
-    "id": "ITA_fuck_sogno_navy",
-    "category_id": "ita_Fascisms_Favors",
-    "name": "Осудить влияние Соньо во флоте",
-    "desc": "",
-    "icon": "GFX_decision_generic_prospect_for_resources",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": {},
-    "visible": [],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision ITA_fuck_sogno_navy",
-      "add_to_variable": [
-        {
-          "ita_bad_boy_points_bank": -10
-        },
-        {
-          "political_power": -50
-        }
-      ],
-      "ITA_navy_add_borghese_pop": true
-    }
-  },
-  {
-    "id": "JAP_kaya_do_navy_branch",
-    "category_id": "JAP_kaya_military_rivalry",
-    "name": "Начать реформы ИФЯ",
-    "desc": "",
-    "icon": "GFX_decision_generic_battleship",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_completed_focus": "JAP_kaya_imperial_navy"
-    },
-    "visible": {},
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision JAP_kaya_do_navy_branch"
-    }
-  },
-  {
-    "id": "JAP_court_the_navy",
-    "category_id": "JAP_government_collapse",
-    "name": "Ухаживания за флотом",
-    "desc": "",
-    "icon": "GFX_decision_generic_battleship",
-    "cost": 50,
-    "fire_only_once": false,
-    "available": [],
-    "visible": [],
-    "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision JAP_court_the_navy",
-      "JAP_IJN_increase_small": true,
-      "set_temp_variable": {
-        "temp_government_stability": 2
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
       },
-      "JAP_government_stability_change": true
+      "has_country_flag": "TT_africa_debug_decisions"
     }
   },
   {
-    "id": "JAP_lobby_navy_staff",
-    "category_id": "JAP_Army_Reforms",
-    "name": "Лоббировать кадры  ИФЯ",
-    "desc": "",
-    "icon": "GFX_decision_generic_shake_hands",
-    "cost": 0,
+    "id": "COG_Mandate_trigger_mandate_collapse",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Collapse OFN Mandate of the Congo",
+    "title_en": "Collapse OFN Mandate of the Congo",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
     "fire_only_once": false,
-    "available": {
-      "has_country_flag": "JAP_army_reforms_started"
-    },
-    "visible": {
-      "has_country_flag": "JAP_army_reforms_started"
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Collapse OFN Mandate of the Congo»"
     },
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision JAP_lobby_navy_staff",
-      "add_command_power": 20,
-      "JAP_IJN_decrease_med": true,
-      "hidden_effect": {
-        "navy_experience": -50,
-        "add_political_power": -25
-      }
+      "OFN_COG_MANDATE_CIVIL_WAR": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
     }
   },
   {
-    "id": "CHT_novosibirsk_naval_program",
-    "category_id": "CHT_chessboard_category",
-    "name": "Программа развития флота Магадана",
-    "desc": "",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 75,
-    "fire_only_once": true,
-    "available": [],
+    "id": "WA_Timeskip_Africa",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger West African Expansion",
+    "title_en": "Trigger West African Expansion",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger West African Expansion»"
+    },
+    "complete_effect": {
+      "TNO_timeskip_Africa": "yes",
+      "every_country": {
+        "if": {
+          "limit": {
+            "has_idea": "WEST_AFRICA_idea_terror_bombing"
+          },
+          "remove_ideas": "WEST_AFRICA_idea_terror_bombing"
+        }
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_FFRWA_CA_Crisis",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 1",
+    "title_en": "Trigger WAC - Scenario 1",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 1»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_1": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_BATTLE_ROYALE_Crisis",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 2",
+    "title_en": "Trigger WAC - Scenario 2",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 2»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_2": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "WA_FFRWA_CA_Crisis_but_more",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Trigger WAC - Scenario 3",
+    "title_en": "Trigger WAC - Scenario 3",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Trigger WAC - Scenario 3»"
+    },
+    "complete_effect": {
+      "TNO_TT_WAC_debug_3": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Unleash_Congo",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Ignite Congo Civil War",
+    "title_en": "Ignite Congolese Civil War",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Ignite Congo Civil War»"
+    },
+    "complete_effect": {
+      "TNO_COG_Crisis_Map_Setup": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_africa_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Puerto_Plata_planning_phase",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Puerto Plata Planning",
+    "title_en": "Begin Puerto Plata Planning",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Puerto Plata Planning»"
+    },
+    "complete_effect": {
+      "set_global_flag": "PPI_proxy_war_preparation",
+      "USA": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_legion",
+        "hidden_effect": {
+          "TNO_USA_PP_invasion_start": "yes"
+        }
+      },
+      "MEX": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_legion",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "TNO_MEX_PP_invasion_start": "yes"
+        }
+      },
+      "ZZZ": {
+        "activate_mission": "ZZZ_PPI_CAL_training"
+      },
+      "IBR": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_trujillo",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "USA": {
+            "country_event": {
+              "id": "HIS_puertoplata.5",
+              "days": "35"
+            }
+          },
+          "if": {
+            "limit": {
+              "IBR": {
+                "is_ai": "yes"
+              }
+            },
+            "IBR": {
+              "add_command_power": "100"
+            }
+          }
+        }
+      },
+      "GER": {
+        "add_command_power": "10",
+        "custom_effect_tooltip": "DOM_puerto_plata_intervention_enabled_trujillo",
+        "hidden_effect": {
+          "TNO_fopo_add_puerto_plata_tab": "yes",
+          "if": {
+            "limit": {
+              "GER": {
+                "is_ai": "yes"
+              }
+            },
+            "GER": {
+              "add_command_power": "100"
+            }
+          },
+          "set_variable": {
+            "PPI_infiltration_cost": "10"
+          }
+        }
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Puerto_Plata_ceasefire_PHASE",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Puerto Plata Ceasefire",
+    "title_en": "Begin Puerto Plata Ceasefire",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Puerto Plata Ceasefire»"
+    },
+    "complete_effect": {
+      "set_global_flag": "PPI_ceasefire_happening",
+      "GER": {
+        "add_command_power": "10"
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Civil_War",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Haitian Civil War",
+    "title_en": "Begin Haitian Civil War",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Haitian Civil War»"
+    },
+    "complete_effect": {
+      "TNO_HAI_civil_war_start": "yes"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Blitz",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Begin Haitian Blitz",
+    "title_en": "Begin Haitian Blitz",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Begin Haitian Blitz»"
+    },
+    "complete_effect": {
+      "TNO_HAI_civil_war_start": "yes",
+      "USA": {
+        "country_event": {
+          "id": "HIS_HAI.8"
+        }
+      },
+      "every_country": {
+        "limit": {
+          "is_ai": "no",
+          "HasPaktAmericasInterest": "yes"
+        },
+        "news_event": {
+          "id": "hispaniola_news.11",
+          "days": "1"
+        }
+      },
+      "DOM": {
+        "declare_war_on": {
+          "type": "annex_everything",
+          "target": "HAI"
+        }
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Civil_War_BuildUp",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haitian Civil War Buildup Phase",
+    "title_en": "Haitian Civil War Buildup Phase",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haitian Civil War Buildup Phase»",
+      "clear_flags": [
+        "TNO_HCW_base_phase"
+      ],
+      "set_flags": {
+        "TNO_HCW_buildup_phase": true
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "TNO_HCW_base_phase",
+      "set_country_flag": "TNO_HCW_buildup_phase"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haitian_Civil_War_Intervention",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haitian Civil War Intervention Phase",
+    "title_en": "Haitian Civil War Intervention Phase",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haitian Civil War Intervention Phase»",
+      "clear_flags": [
+        "TNO_HCW_buildup_phase"
+      ],
+      "set_flags": {
+        "TNO_HCW_interventionism_phase": true
+      }
+    },
+    "complete_effect": {
+      "clr_country_flag": "TNO_HCW_buildup_phase",
+      "set_country_flag": "TNO_HCW_interventionism_phase"
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "TNO_Haiti_Nat_Spirit",
+    "category": "economy",
+    "category_id": "global_debug_decisions",
+    "category_name": "Глобальные решения дебага",
+    "title": "Haiti/PPLN/DOM Nat Spirit Debugging",
+    "title_en": "Haiti/PPLN/DOM Nat Spirit Debugging",
+    "description": "Оперативная инициатива высшего руководства государства.",
+    "description_en": "",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 4,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Haiti/PPLN/DOM Nat Spirit Debugging»"
+    },
+    "complete_effect": {
+      "USA": {
+        "add_ideas": {}
+      }
+    },
+    "available": {},
+    "visible": {
+      "NOT": {
+        "has_country_flag": "hide_debug_decisions"
+      },
+      "has_country_flag": "TT_wif_debug_decisions"
+    }
+  },
+  {
+    "id": "slash_bureaucracy",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить бюрократию",
+    "title_en": "Slash Bureaucratic Expenses",
+    "description": "Бюрократия часто бывает большой, избыточной и запутанной и составляет значительную часть бюджета любой страны. Таким образом, одним из наиболее эффективных способов сокращения государственных расходов является резкое сокращение бюрократического персонала: клерки и чиновники, занимающие должности, которые считаются второстепенными, увольняются, в то время как все остальные видят резкое сокращение своего жалованья, по крайней мере, до тех пор, пока кризис не пройдет. Конечно, это не пройдет без последствий: вскоре возникнет критическая нехватка персонала и материалов, что резко снизит способность правительства осуществлять свою повестку дня, поскольку многие бюрократы не в состоянии эффективно выполнять свои обязанности, а некоторые даже прибегают к получению взяток, чтобы поддерживать свой образ жизни. Даже после того, как кризис пройдет, последствия будут преследовать нацию в течение нескольких месяцев или лет, поскольку новые сборы должны будут решить горы накопившихся досье.",
+    "description_en": "A country's bureaucracy is often large, redundant and labyrinthine, and constitutes a large portion of any nation's budget. One of the most effective ways to reduce government spending is, therefore, the drastic reduction of bureaucratic personnel: clerks and functionaries who occupy offices perceived as non-primary are fired, while all others see a harsh reduction to their emoluments, at least until the crisis has passed. Of course, this is not without consequences: critical lack of personnel and materials will soon ensue, drastically reducing the government's ability to see its agenda enacted as many bureaucrats are unable to perform their duties effectively, and some even turn to accepting bribes in order to maintain their lifestyle. Even after the crisis has passed, consequences will haunt the nation for months or years, as the new levies will have to address mountains of backlog dossiers.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить бюрократию»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_admin_cost_down",
+      "add_to_variable": {
+        "admin_program_cut_fc": "-0.6"
+      },
+      "TNO_worsen_admin_efficiency_high": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "privatisation_programs",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Начать программы приватизации",
+    "title_en": "Enact Sweeping Privatization Programs",
+    "description": "Большинство правительств, независимо от их политических пристрастий и экономической лояльности, поддерживают большое количество государственных учреждений, объектов недвижимости и видов деятельности, которые считаются стратегически важными. От парков и лесов до национализированных оружейных предприятий и государственных горнодобывающих предприятий государство использует их в качестве инструмента для удовлетворения спроса на основные товары и услуги. Во времена кризиса наличные деньги становятся важнее долгосрочного планирования. Таким образом, приватизация большого количества государственной собственности и предприятий наполнит государственную казну деньгами и устранит потенциальные источники дополнительных потерь: при немедленном вознаграждении, конечно, это приведет к усилению зависимости от рынка после окончания кризиса, поскольку у правительства больше нет средств для непосредственного удовлетворения своих потребностей.",
+    "description_en": "Most governments, no matter their political leanings and economic loyalties, maintain a large array of public institutions, properties and activities perceived as strategically vital. From parks and forests, to nationalised armament industries and state-owned extraction operations, the State uses them as a tool to satisfy demand for staple goods and services. In times of crisis, cash becomes more important than long-term planning. As such, privatizing a large amount of state-owned properties and businesses will fill the public coffers with money, and eliminate potential sources of additional losses: while immediately rewarding, of course, this will result in increased dependency on the market once the crisis has ended, as the government no longer has the means to directly satisfy its needs.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.1,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Начать программы приватизации»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25,
+      "modify_reserves": 0.05
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_privatization",
+      "add_to_variable": {
+        "sales_tax_fc": "-0.1"
+      },
+      "set_temp_variable": {
+        "temp_gdp_gained": "0.2"
+      },
+      "econ_money_reserves_change_percent_gdp": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "negotiate_deferred_payment",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Договориться с кредиторами",
+    "title_en": "Negotiate Decreased Payments With Our Creditors",
+    "description": "Иногда яйцо сегодня лучше, чем курица в следующем году. Наши кредиторы хотят получить свои деньги, но даже они знают, что веревка, натянутая слишком сильно, рискует оборваться: таким образом, самое грозное оружие, имеющееся в нашем распоряжении, - это возможность просто объявить дефолт. Хотя это было бы катастрофично для нашей экономики, это также означало бы, что все наши кредиторы останутся без единой монеты: пусть Самсон умрет вместе со всеми филистерами. Конечно, мы можем собрать убедительные аргументы, позволяющие сократить наш общий долг в обмен на обещание не объявлять дефолт и в конечном итоге выплатить все долги. Однако угрозы нашим кредиторам - не лучший способ снова заявить о себе на мировом финансовом рынке: как только кризис закончится, мы можем ожидать, что потенциальные покупатели облигаций будут требовать более высоких процентных ставок...",
+    "description_en": "Sometimes, an egg today is better than a chicken next year. Our creditors want their money, but even they know that a rope pulled too harshly risks breaking: as such, the most threatening weapon at our disposal is the power to simply declare default. While disastrous for our economy, it would also mean all our creditors would end up without a single coin: let Samson die with all the Philistines. Surely, we can muster convincing arguments to allow for a reduction in our overall debt, in exchange for the promise not to declare default, and eventually pay. However, threatening our creditors is not a good way to present ourselves once again into the global financial market: once the crisis is over, we can expect potential bond buyers to demand higher interest rates...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Договориться с кредиторами»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_interest_rate_down",
+      "add_to_variable": {
+        "inflation_fc": "5"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "print_emergency",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Увеличить денежную массу",
+    "title_en": "Increase Monetary Supply",
+    "description": "Номинальный принцип формирования дел означает, что мы должны заплатить сумму, указанную в облигации, даже если этой суммы больше не хватает даже на покупку кофе. Таким образом, печатание денег - в большом количестве - может быть использовано как способ быстрого погашения больших сумм долгов. Конечно, такая практика не обходится без последствий. Искусственное производство денег равно значительному росту инфляции, которая может преследовать нашу экономику в течение многих лет: это также приведет в ярость средние и низшие классы, которые увидят, что их сбережения практически исчезнут в одночасье, поскольку валюта теряет большую часть своей покупательной способности.",
+    "description_en": "The nominalistic principle of obligations means that we have to pay the amount stated on the bond, even if that amount is no longer enough to even buy a coffee. Therefore, printing money - lots of it - can be used as a way to quickly repay large amounts of debts. Of course, this practice is not without consequences. Artificial money production equals a large increase in inflation, which may haunt our economy for years: this will also enrage the middle and lower classes, who will see their savings basically vanish overnight as the currency loses most of its buying power.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Увеличить денежную массу»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "inflation_temp": "3"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "inflation_fc": "10"
+      },
+      "econ_inflation_change": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "fiscal_crisis_default_overlord",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Попросить о помощи своего покровителя",
+    "title_en": "Negotiate A Debt Repayment Plan With Our Overlord",
+    "description": "Благодаря нашим... тесным отношениям с мировой сверхдержавой, мы можем обратиться к ним за помощью в эти трудные времена. Попросив их спонсировать план погашения долга с нашими кредиторами, мы, несомненно, сможем обеспечить лучшие условия и, возможно, даже уменьшить общую сумму. Конечно, такого рода помощь никогда не бывает бесплатной. Как только план будет одобрен, мы наверняка увидим увеличение числа \"дружеских предложений\" и просьб о \"взаимном сотрудничестве\" с нашим спонсором, что в основном повлечет за собой предоставление им большего влияния в наших делах и более широкое экономическое проникновение их бизнеса в нашу экономику: в политике нет друзей, только партнеры...",
+    "description_en": "Thanks to our... tight relationships with a world power, we can call for their help during these troubled times. By asking them to sponsor a debt repayment plan with our creditors, we'll surely be able to secure better conditions, and maybe even a reduction in the overall amount. Of course, this kind of help never comes for free. As soon as the plan has been approved, we'll surely see an increase to \"friendly suggestions\" and requests of \"mutual cooperation\" with our sponsor, which will mostly entail allowing them greater influence in our affairs, and a larger economic penetration of their businesses into our economy: kindness can be two faced, it seems..",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Попросить о помощи своего покровителя»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_overlord_cancel_debt",
+      "set_temp_variable": {
+        "debt_temp": "-0.2"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "add_to_variable": {
+        "GDP_to_sphere_leader_fc": "0.05"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "fiscal_crisis_default_1",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Выпуск гос. облигаций",
+    "title_en": "Issue Emergency Public Bonds",
+    "description": "Во время чрезвычайных ситуаций все граждане призваны выполнять свой долг. Во время войны это обязательство выполняется путем зачисления в армию или нормирования, в то время как во время финансового кризиса оно принимает форму экстренной подписки на облигации: пропагандистская кампания будет подчеркивать необходимость поддержки родины путем покупки патриотических облигаций, которые, скорее всего, никогда не будут погашены. Конечно, такой кампании не суждено быть хорошо воспринятой населением, чьи деньги мы в основном просим пожертвовать нам. Однако попытка никогда не повредит, и собранные деньги могут покрыть наши неотложные расходы до тех пор, пока кризис не пройдет: тогда мы могли бы подумать о том, как вознаградить их за лояльность.",
+    "description_en": "In times of emergency, all citizens are called to do their duty. During a war, this obligation is fulfilled through enrolment into the army, or rationing, while during a fiscal crisis, it takes form in the way of emergency bond subscription: a propaganda campaign will stress the need to sustain the motherland by buying patriotic bonds which will most likely never be repaid. Of course, such a campaign is destined not to be well received by the population whose money we are basically asking to donate to us. However, trying never hurts, and the collected money may sustain our urgent expenses until the crisis passes: then, we might think about how to reward their loyalty.",
+    "cost_pc": 10.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Выпуск гос. облигаций»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.02"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "1"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
     "visible": {
       "check_variable": {
-        "CHT_chessboard_phase": {
-          "_op": ">",
-          "value": 3
-        }
-      },
-      "has_country_flag": "RUS_superregional_stage"
+        "partial_default": "0"
+      }
+    }
+  },
+  {
+    "id": "fiscal_crisis_default_2",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Заключить сделку с банками",
+    "title_en": "Cut A Deal With National Banks",
+    "description": "В то время как международные кредиторы - крепкие орешки, национальные инвесторы, и особенно банки, - совсем другое дело. При тщательном уговаривании и правильном количестве угроз мы могли бы \"убедить\" их отказаться от некоторых своих требований в обмен на обещание заплатить остальное и какое-нибудь необычное общественное признание. Конечно, большинство из них не будет впечатлено, и политическая реакция на это будет как минимум осуждающей, но это единственная альтернатива, которая у нас есть. Частные интересы должны быть принесены в жертву общему благополучию страны, независимо от наших политических пристрастий или экономической политики: выживание всегда на первом месте.",
+    "description_en": "While international creditors are tough nuts to crack, national investors, and especially banks, are another matter entirely. With careful cajoling, and the right amount of threats, we might be able to \"convince\" them to give up on some of their demands in exchange for a promise to pay the rest, and some fancy public recognition. Of course, most won't be impressed, and the political backlash won't be light, but this is the only alternative we have to full payment. Private interests must be sacrificed to the country's general well being, no matter our political leanings or economic policy: survival always comes first.",
+    "cost_pc": 15.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Заключить сделку с банками»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
     },
     "complete_effect": {
-      "log": "[GetDateText]: [Root.GetName]: Decision CHT_novosibirsk_naval_program",
       "set_temp_variable": {
-        "temp_econ_spending_amount": 0.4
+        "debt_temp": "-0.05"
       },
-      "econ_spend_money_once_effect_raw_money": true
-    }
-  },
-  {
-    "id": "RUS_FEN_recover_schematics",
-    "category_id": "far_east_naval_category",
-    "name": "Восстановить схемы советской эпохи",
-    "desc": "Из-за анархии искусство передового кораблестроения было утрачено. К счастью, с административными объектами Иркутска и портами Магадана и Камчатки, находящимися под нашим контролем, мы сможем начать строительство судов, которые использовались СССР во время Второй мировой войны.",
-    "icon": "GFX_decision_generic_document_target",
-    "cost": 15,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "NOT": {
-        "tag": [
-          "MAG",
-          "OMO"
-        ]
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "2"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.1"
+      },
+      "custom_effect_tooltip": "default_2_tooltip",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
       }
     },
-    "complete_effect": {}
-  },
-  {
-    "id": "RUS_FEN_fleet_modernization",
-    "category_id": "far_east_naval_category",
-    "name": "Начать модернизацию флота",
-    "desc": "",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 25,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "OR": {
-        "tag": "MAG",
-        "has_country_flag": "RUS_FEN_recover_schematics_flag"
-      }
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "RUS_FEN_heavy_ship_program",
-    "category_id": "far_east_naval_category",
-    "name": "Программа тяжёлых кораблей",
-    "desc": "Благодаря богатствам Сибири, которые подпитывают наши амбиции по освоению морей, теперь мы можем воплотить свои планы по производству тяжёлых судов. Поистине, возможность вывести в море относительно современный флагман нашего флота докажет всему миру, как далеко продвинулась Россия в своих усилиях по преодолению анархии!",
-    "icon": "GFX_decision_generic_battleship",
-    "cost": 30,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "has_country_flag": "RUS_FEN_fleet_modernization_flag"
-    },
-    "complete_effect": {}
-  },
-  {
-    "id": "RUS_FEN_naval_program",
-    "category_id": "far_east_naval_category",
-    "name": "Программа перевооружения флота",
-    "desc": "",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 25,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {
-      "has_country_flag": "RUS_FEN_fleet_modernization_flag"
-    },
-    "complete_effect": {
-      "add_timed_idea": {
-        "idea": "RUS_naval_rearmament_program",
-        "days": 365
-      }
-    }
-  },
-  {
-    "id": "RUS_FEN_state_fishing_fleet",
-    "category_id": "far_east_naval_category",
-    "name": "Создать рыболовный флот",
-    "desc": "Преобразовав часть нашего флота снабжения в крупные транспортные суда, мы сможем оставить свой след в Беринговом и Охотском морях. Это не только позволило бы нам прокормить наших людей, но и позволило бы нам дополнить наш сельскохозяйственный сектор, который изо всех сил пытается развиться в суровых условиях Дальнего Востока.",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {},
-    "complete_effect": {
-      "add_equipment_to_stockpile": {
-        "type": "convoy_1",
-        "amount": -35
-      }
-    }
-  },
-  {
-    "id": "RUS_FEN_state_fishing_fleets",
-    "category_id": "far_east_naval_category",
-    "name": "Расширить рыболовный флот",
-    "desc": "Переоборудовав ещё большее количество судов снабжения для гражданского использования, мы сможем сохранить значительное присутствие в нашей заявленной морской экономической зоне.",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "has_idea": "RUS_FEN_state_fishing_fleet_1"
-    },
-    "complete_effect": {
-      "add_equipment_to_stockpile": {
-        "type": "convoy_1",
-        "amount": -65
-      }
-    }
-  },
-  {
-    "id": "RUS_FEN_state_fishing_armada",
-    "category_id": "far_east_naval_category",
-    "name": "Государственная рыболовная армада",
-    "desc": "Расширив наш флот ещё больше, мы сможем увеличить нашу рыболовную деятельность до пределов устойчивости.",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {},
-    "visible": {
-      "has_idea": "RUS_FEN_state_fishing_fleet_2"
-    },
-    "complete_effect": {
-      "add_equipment_to_stockpile": {
-        "type": "convoy_1",
-        "amount": -100
-      }
-    }
-  },
-  {
-    "id": "RUS_FEN_sell_10_convoys",
-    "category_id": "far_east_naval_category",
-    "name": "Конвертировать и продать 10 конвоев",
-    "desc": "Переоборудовав некоторые из наших судов снабжения для гражданского использования и продав их судоходным компаниям, работающим в Тихом океане, мы сможем заработать немного дополнительных денег на стороне для финансирования других наших государственных программ.",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {},
-    "complete_effect": {
-      "add_equipment_to_stockpile": {
-        "type": "convoy_1",
-        "amount": -10
-      }
-    }
-  },
-  {
-    "id": "RUS_FEN_sell_100_convoys",
-    "category_id": "far_east_naval_category",
-    "name": "Конвертировать и продать 100 конвоев",
-    "desc": "Переоборудовав большое количество наших судов снабжения для гражданского использования и продав их судоходным компаниям, работающим в Тихом океане, мы сможем заработать немного дополнительных денег на стороне для финансирования других наших государственных программ.",
-    "icon": "GFX_decision_generic_shipyard",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {},
-    "visible": {},
-    "complete_effect": {
-      "add_equipment_to_stockpile": {
-        "type": "convoy_1",
-        "amount": -100
-      }
-    }
-  },
-  {
-    "id": "USA_NPP_navy_research",
-    "category_id": "USA_NPP_FP_Decision_Category",
-    "name": "Сосредоточится на морских исследованиях",
-    "desc": "",
-    "icon": "GFX_decision_generic_battleship",
-    "cost": 125,
-    "fire_only_once": true,
     "available": {
-      "NOT": {
-        "has_country_flag": "USA_NPP_FP_already_doing_decision"
-      }
-    },
-    "visible": {
-      "has_completed_focus": "USA_Fund_The_Skunkworks"
-    },
-    "complete_effect": {
-      "set_country_flag": "USA_NPP_FP_already_doing_decision",
-      "add_ideas": "NPP_NAVAL_RESEARCH",
-      "naval_funding_minimal_increase_med": true,
-      "naval_funding_maximal_increase_low": true
-    }
-  },
-  {
-    "id": "OMS_2WRW_readiness_construct_establish_baltic_navy",
-    "category_id": "OMS_2WRW_readiness_category",
-    "name": "Establish a Baltic Naval Presence",
-    "desc": "We've been denied access to the Baltic Sea for three decades and it's about time that the Black Fleet made its presence felt here. By constructing new naval facilities here we'll be able to reclaim our naval legacy on this region. With it, we'll be in a position to strike directly at German cities in the north once the Great Trial begins, shattering any illusions their so-called civilians may have that they'll be safe from our wrath.",
-    "icon": "GFX_decision_generic",
-    "cost": 0,
-    "fire_only_once": true,
-    "available": {
-      "has_completed_focus": "OMS_in_bobrikov_footsteps",
-      "NOT": {
-        "has_war_with": "GER"
-      }
-    },
-    "visible": {
-      "has_country_flag": "OMS_readiness_redoubt_decisions_enabled",
-      "has_completed_focus": "OMS_in_bobrikov_footsteps",
-      "NOT": {
-        "has_war_with": "GER"
-      }
-    },
-    "complete_effect": {
-      "hidden_effect": {
-        "add_command_power": -10
-      }
-    }
-  },
-  {
-    "id": "RUS_naval_exercises",
-    "category_id": "RUS_lord_of_the_east_category",
-    "name": "Perform Naval Exercises",
-    "desc": "",
-    "icon": "GFX_decision_naval_exercises",
-    "cost": 0,
-    "fire_only_once": false,
-    "available": {
-      "ships_in_area": {
-        "area": 87,
-        "size": {
-          "_op": ">",
-          "value": 39
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
         }
       }
     },
-    "visible": [],
-    "complete_effect": {
-      "add_command_power": -25,
-      "navy_experience": -20
+    "visible": {
+      "check_variable": {
+        "partial_default": "1"
+      }
     }
+  },
+  {
+    "id": "fiscal_crisis_default_3",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Созвать международную конференцию",
+    "title_en": "Call For a Conference on our Debt",
+    "description": "Иногда лучше всего справиться с кризисом напрямую. Как национальные, так и международные кредиторы ожидают быстрых действий, и лучший способ убедить их в нашей готовности сотрудничать для решения этого финансового кризиса - продемонстрировать работу, которую мы делаем: созвав международную конференцию, каждый сможет увидеть наш прогресс. Как и ожидалось, это будет иметь политические последствия. Люди будут интерпретировать конференцию как способ для иностранных держав оказывать ненадлежащее влияние на наши дела, а нас - как их добровольных марионеток: мы можем ожидать массовых протестов и усиления радикализации общества во время работы конференции.",
+    "description_en": "Sometimes, it's best to tackle a crisis directly. Both national and international creditors expect swift action, and the best way to reassure them of our willingness to cooperate to solve this fiscal crisis is to showcase the work we are doing: by calling an international conference, everyone will be able to see our progress. As expected, this will have political consequences. The people will interpret the conference as a way for foreign powers to exert undue influence over our affairs, and us as their willing puppets: we can expect large protests and an increased radicalization of society while the conference operates.",
+    "cost_pc": 15.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Созвать международную конференцию»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.1"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.2"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "3"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      },
+      "custom_effect_tooltip": "default_3_tooltip"
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "partial_default": "2"
+      }
+    }
+  },
+  {
+    "id": "fiscal_crisis_default_4",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Принудительная уступка должников",
+    "title_en": "Force Concession on Debtors",
+    "description": "Экономика - жестокий мир, и иногда даже быть правым не означает быть удовлетворенным. Нам нужны деньги, чтобы продолжать функционировать, и нас не волнует, что по этому поводу думают кредитора: таким образом, мы должны дать понять, что здесь, в нашей стране, командуем мы, а не они - и если они хотят получить свои деньги, они должны слушаться нас. Кого волнует, что позже меньше людей захотят купить наши облигации? Наши реформы позволят убедиться, что нам не понадобится так много: пусть они держат свои деньги в карманах, мы найдем лучшие способы наполнить нашу казну, или, по крайней мере, мы на это надеемся...",
+    "description_en": "Economy is a cruel world, and sometimes, even being right doesn't mean being satisfied. We need money to keep functioning, and we won't bow to our creditors: as such, we shall make it clear that we are the ones in command, not them - and if they want their money, they'll listen to us. Who cares if fewer will be willing to buy our bonds later? Our reforms will make sure we won't need as many: let them keep their money in their pockets, we'll find better ways to fill our coffers, or at least, we hope so...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Принудительная уступка должников»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.2"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "add_to_variable": {
+        "deficit_pp_fc": "0.4"
+      },
+      "set_variable": {
+        "partial_default": "4"
+      },
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      },
+      "custom_effect_tooltip": "default_4_tooltip"
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "partial_default": "3"
+      }
+    }
+  },
+  {
+    "id": "fiscal_crisis_default_5",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Реструктурировать невыгодные облигации",
+    "title_en": "Restructurate Unfavourable Bonds",
+    "description": "Очевидно, что наши кредиторы хотят только задушить нашу экономику грабительскими процентными ставками. Когда наше терпение давно исчерпано, настало время для крайних мер: нашей властью как суверенной нации мы в одностороннем порядке решим, какие облигации должны быть погашены, а какие будут полностью или частично реструктурированы. Это, конечно, будет иметь последствия. Международные экономические субъекты будут осуждать наше нарушение самых элементарных правил, касающихся государственных обязательств, но давайте будем реалистами: если мы зашли так далеко, то это потому, что у нас нет другого выбора, кроме как заплатить за это.",
+    "description_en": "It is evident our creditors only wish to suffocate our economy with extortionate interest rates. With our patience long exhausted, it is time for extreme measures: by our power as a sovereign nation, we shall unilaterally decide which bonds shall be repaid, and with ones will be totally or partially restructured. This will, of course, have consequences. International economic actors will decry our violation of the most basic rules about public obligations, but let's be real: if we have come this far, it's because we have no choice but to pay the price.",
+    "cost_pc": 40.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Реструктурировать невыгодные облигации»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.4"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_national_debt_change": "yes",
+      "set_variable": {
+        "partial_default": "5"
+      },
+      "add_to_variable": {
+        "deficit_pp_fc": "0.8"
+      },
+      "custom_effect_tooltip": "default_5_tooltip",
+      "econ_lower_credit_rating": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {
+      "check_variable": {
+        "partial_default": "4"
+      }
+    }
+  },
+  {
+    "id": "end_econ_investment",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить гос. программы",
+    "title_en": "Cut State Programs",
+    "description": "Любое правительство финансирует крупные программы субсидирования, от образования до экономического развития. В трудные времена бюджет должен быть радикально пересмотрен, а все имеющиеся средства перенаправлены на более важные расходы. Как и следовало ожидать, такого рода общее сокращение нанесет ущерб нашему социальному и экономическому развитию. Однако долгосрочное планирование - это то, чего мы не можем себе позволить: если кризис продолжится, у нас больше не будет экономики, которую можно будет субсидировать.",
+    "description_en": "Any government funds large subsidisation programs, from education to economic development. In difficult times, the budget must be drastically redimensioned, and all available funding redirected towards more important expenses. As one might expect, this kind of general slashing will cripple our societal and economic development. However, long-term planning is something we cannot afford: if the crisis continues, we won't have an economy to subsidise anymore.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить гос. программы»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_civ_cost_down",
+      "add_to_variable": {
+        "civilian_fc": "-0.6"
+      },
+      "set_temp_variable": {
+        "gdp_growth_temp": "-0.1"
+      },
+      "multiply_temp_variable": {
+        "gdp_growth_temp": "gdp_growth"
+      },
+      "if": {
+        "limit": {
+          "check_variable": {
+            "gdp_growth_temp": "-3"
+          }
+        },
+        "set_temp_variable": {
+          "gdp_growth_temp": "-3"
+        }
+      },
+      "econ_gdp_growth_change": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "slash_research",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сокращение финансирования исследований",
+    "title_en": "Slash Research Fundings",
+    "description": "Как любое здравомыслящее правительство, мы вкладываем большие средства в перспективные научные учреждения внутри нашей страны. Однако в эти смутные времена ясно, что мы больше не можем позволить себе такую роскошь: расходы на исследования будут сокращены, а институты брошены на произвол судьбы. Мы понимаем, что это приведет к общему снижению нашей способности поддерживать темпы инноваций, но деньги являются более насущной проблемой. Тысячи лет назад кто-то думал, что \"деньги\" - великое изобретение: если бы только мы могли наложить лапы на его кости...",
+    "description_en": "As any sane government, we invest large amounts of funds into promising scientific institutions within our country. In these troubled times, however, it is clear we can no longer afford such luxuries: research expenditures will be cut, and institutions left to fend for themselves. We understand that this will result in an overall reduction in our ability to keep the pace of innovation, but money is a more pressing concern. Thousands of years ago, someone thought \"money\" was a great invention: if only we could get our hands on his bones...",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сокращение финансирования исследований»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_research_freeze",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      },
+      "add_to_variable": {
+        "research_cut_fc": "-0.6"
+      },
+      "research_funding_minimal_set_position_0": "yes",
+      "research_funding_maximal_set_position_0": "yes"
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "restore_trust_debtors",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Заработать расположение",
+    "title_en": "Buy Back Some Goodwill",
+    "description": "Балансирование на грани или чрезмерная самоуверенность ни к чему нас не приведут. В конце концов, мы не сможем выжить без того, чтобы кто-то не купил наши облигации, иначе мы бы не оказались в такой сложной ситуации: таким образом, мы должны работать над восстановлением уверенности рынка в нашей платежеспособности. Спонтанно погасив небольшой транш просроченных облигаций вместе с их процентами, мы дадим знать нашим кредиторам, что готовы сотрудничать. Это будет похоже на попытку высосать кровь из камня, но мы должны быть уверены, что после того, как этот кризис закончится - а однажды он закончится, - мы сможем снова встретиться с рынками лицом к лицу, не опасаясь, что нас станут избегать.",
+    "description_en": "Brinkmanship and overconfidence will lead us nowhere. In the end, we can't survive without someone buying our bonds, or we wouldn't have been in such a difficult situation in the first place: as such, we should work on rebuilding the market's confidence in our solvability. By spontaneously repaying a small tranche of overdue bonds along with their interests, we'll let our creditors know that we are willing to cooperate. It will be like trying to draw blood from a stone, but we must ensure that, after this crisis is over - and it will be over, one day - we'll be able to once again face the markets without being shunned.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.1,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Заработать расположение»",
+      "set_flags": {
+        "{'flag': 'FC_took_action', 'days': '14', 'value': '1'}": true
+      },
+      "modify_gdp": 0.25
+    },
+    "complete_effect": {
+      "set_temp_variable": {
+        "debt_temp": "-0.1"
+      },
+      "multiply_temp_variable": {
+        "debt_temp": "national_debt"
+      },
+      "econ_spend_money_once_effect_GDP_percent": "yes",
+      "econ_national_debt_change": "yes",
+      "econ_raise_credit_rating": "yes",
+      "set_country_flag": {
+        "flag": "FC_took_action",
+        "days": "14",
+        "value": "1"
+      }
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
+  },
+  {
+    "id": "freeze_military",
+    "category": "economy",
+    "category_id": "Fiscal_crisis_response_category",
+    "category_name": "Преодоление кризиса",
+    "title": "Сократить военные расходы",
+    "title_en": "Cut Military Spendings",
+    "description": "Мощь государства часто измеряется его военной мощью, но какая польза от большой армии, если мы даже не можем оплатить их услуги? Вместо того, чтобы через несколько месяцев столкнуться с бунтами солдат, лучше действовать решительно и выбирать, что можно сохранить, а что нужно сократить: прекращение любого нового набора, отсрочка любого проекта расширения и сокращение до минимума расходов на содержание, несомненно, облегчат нашу государственную казну. Как и следовало ожидать, в долгосрочной перспективе это будет иметь серьезные последствия. Оставленное без присмотра оборудование ломается легче, старая тактика и оружие покажут свой возраст против более современных противников, и молодые люди дважды подумают, прежде чем записываться в наши вооруженные силы: но все же война есть война, и экономические сражения тоже требуют жертв.",
+    "description_en": "A state's power is often measured in its military power, but what use is a large military, if we can't even pay for their stipends? Rather than find ourselves with a riotous soldiery in a few months, it's best to act decisively, and choose what can be kept and what must be cut: halting any new recruitment, delaying any expansion project, and reducing to the bare minimum maintenance expenses, will surely provide relief to our state coffers. As one might expect, this will have harsh consequences in the long run. Unattended equipment breaks more easily, old tactics and weapons will show their age against more modern opponents, and young men will think twice before enrolling, if they aren't even sure of being paid: still, a war is a war, and economic battles require sacrifices too.",
+    "cost_pc": 20.0,
+    "cost_cap": 1,
+    "cost_money": 0.05,
+    "cooldown_turns": 2,
+    "fire_only_once": false,
+    "requires_tags": [],
+    "requires_russia": false,
+    "requires_germany": false,
+    "requires_usa": false,
+    "requires_general": true,
+    "effects": {
+      "log": "Утверждена инициатива: «Сократить военные расходы»",
+      "set_flags": {
+        "FC_cut_military_spending": true
+      }
+    },
+    "complete_effect": {
+      "custom_effect_tooltip": "FC_mil_freeze",
+      "add_to_variable": {
+        "military_fc": "-0.8"
+      },
+      "army_funding_minimal_set_position_0": "yes",
+      "army_funding_maximal_set_position_0": "yes",
+      "naval_funding_minimal_set_position_0": "yes",
+      "naval_funding_maximal_set_position_0": "yes",
+      "set_country_flag": "FC_cut_military_spending"
+    },
+    "available": {
+      "custom_trigger_tooltip": {
+        "tooltip": "no_action_against_fc",
+        "not": {
+          "has_country_flag": "FC_took_action"
+        }
+      }
+    },
+    "visible": {}
   }
 ]

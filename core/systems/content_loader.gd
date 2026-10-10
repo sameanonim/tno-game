@@ -809,9 +809,12 @@ func load_country_decisions(tag: String) -> Array[Dictionary]:
 
 		for d in master:
 			var tags = d.get("requires_tags", [])
-			if tags.has(clean_tag):
-				result.append(d)
-			elif is_russian and d.get("requires_russia", false):
+			if not tags.is_empty():
+				if tags.has(clean_tag):
+					result.append(d)
+				continue
+
+			if is_russian and d.get("requires_russia", false):
 				result.append(d)
 			elif is_german and d.get("requires_germany", false):
 				result.append(d)

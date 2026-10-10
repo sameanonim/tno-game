@@ -22,6 +22,8 @@ const TestUtils = preload("res://tests/test_utils.gd")
 const TestParliamentEngine = preload("res://tests/test_parliament_engine.gd")
 const TestSocietalLaws = preload("res://tests/test_societal_laws.gd")
 const TestNarrativeEvents = preload("res://tests/test_narrative_events.gd")
+const TestDecisions = preload("res://tests/test_decisions.gd")
+const TestDraggableWindow = preload("res://tests/test_draggable_window.gd")
 
 func _init() -> void:
 	print("================================================================")
@@ -44,7 +46,9 @@ func _init() -> void:
 		{"name": "Utils Suite", "instance": TestUtils.new()},
 		{"name": "ParliamentEngine Suite", "instance": TestParliamentEngine.new()},
 		{"name": "SocietalLaws Suite", "instance": TestSocietalLaws.new()},
-		{"name": "NarrativeEvents Suite", "instance": TestNarrativeEvents.new()}
+		{"name": "NarrativeEvents Suite", "instance": TestNarrativeEvents.new()},
+		{"name": "Decisions Suite", "instance": TestDecisions.new()},
+		{"name": "DraggableWindow & EventPopup Suite", "instance": TestDraggableWindow.new()}
 	]
 	
 	var total_passed: int = 0

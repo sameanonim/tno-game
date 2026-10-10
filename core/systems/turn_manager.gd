@@ -47,6 +47,7 @@ const TurnTerritoryHandlerScript = preload("res://core/systems/turn_territory_ha
 const TurnCrisisHandlerScript = preload("res://core/systems/turn_crisis_handler.gd")
 const NuclearDefconManagerScript = preload("res://core/systems/nuclear_defcon_manager.gd")
 const WorldDataLoaderScript = preload("res://core/systems/world_data_loader.gd")
+const DecisionManagerScript = preload("res://core/systems/decision_manager.gd")
 
 @export var player_state: CountryState:
 	get:
@@ -234,6 +235,17 @@ var _nuclear_defcon_manager_node: NuclearDefconManager = null
 		return _nuclear_defcon_manager_node
 	set(val):
 		_nuclear_defcon_manager_node = val
+
+var _decision_manager_instance = null
+@export var decision_manager:
+	get:
+		if _decision_manager_instance != null:
+			return _decision_manager_instance
+		_decision_manager_instance = DecisionManagerScript.new()
+		_decision_manager_instance.setup(player_state, self)
+		return _decision_manager_instance
+	set(val):
+		_decision_manager_instance = val
 
 var espionage_engine: EspionageEngine = null
 var us_electoral_engine: USElectoralEngine = null
@@ -520,6 +532,8 @@ func set_player_state(st: CountryState) -> void:
 		russian_unification_manager.player_tag = player_state.country_tag
 	if focus_stage_controller != null and directive_manager != null and event_manager != null:
 		focus_stage_controller.setup(player_state, directive_manager, self, event_manager)
+	if _decision_manager_instance != null:
+		_decision_manager_instance.setup(player_state, self)
 
 
 

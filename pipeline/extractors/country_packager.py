@@ -83,14 +83,54 @@ class CountryPackager:
                     if tag in ev_id or tag in cat.upper():
                         events_by_tag[tag].append(ev)
 
-        # Pre-index decisions by country tag cues
+        # Pre-index decisions by country tag cues with strict tag boundary matching
+        tag_pattern_cache: Dict[str, re.Pattern] = {
+            t: re.compile(rf"(?:^|_){re.escape(t)}(?:_|$)", re.IGNORECASE)
+            for t in self.countries_db.keys()
+        }
+
+        russian_warlords = {
+            "KOM", "WRS", "WRRF", "SAM", "OMS", "VYT", "SVR", "TYM", "TYU", "IRK",
+            "BRY", "TOM", "NOV", "KEM", "MAG", "AMR", "CHT", "YAK", "ZLT", "ORE",
+            "MGN", "DRL", "BKR", "TAR", "YGR", "VOR", "KAZ", "AKT", "ARL", "KOK",
+            "PAV", "NPL", "KRK", "ALT", "KMC", "MIR", "KHA", "VLG", "KOS", "ONE",
+            "ONG", "PRM", "SBA", "URL"
+        }
+        german_tags = {"GER", "BOR", "SPE", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"}
+
         decisions_by_tag: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
         for cat_id, dec_list in self.decisions_by_cat.items():
             for dec in dec_list:
                 dec_id = str(dec.get("id", "")).upper()
-                for tag in self.countries_db.keys():
-                    if tag in dec_id or tag in cat_id.upper():
-                        decisions_by_tag[tag].append(dec)
+                req_tags = dec.get("requires_tags", [])
+                if req_tags:
+                    for rt in req_tags:
+                        decisions_by_tag[rt.upper()].append(dec)
+                    continue
+
+                # Check strict 3-letter prefix on decision or category
+                matched_tag = None
+                m_dec = re.match(r"^([A-Z0-9]{3})_", dec_id)
+                m_cat = re.match(r"^([A-Z0-9]{3})_", cat_id.upper())
+                candidate = m_dec.group(1) if m_dec else (m_cat.group(1) if m_cat else None)
+                if candidate and candidate in self.countries_db:
+                    matched_tag = candidate
+
+                if matched_tag:
+                    decisions_by_tag[matched_tag].append(dec)
+                elif dec.get("requires_russia") or dec_id.startswith("RUS_") or "SMUTA" in cat_id.upper():
+                    for w in russian_warlords:
+                        if w in self.countries_db:
+                            decisions_by_tag[w].append(dec)
+                elif dec.get("requires_germany") or dec_id.startswith("GER_"):
+                    for g in german_tags:
+                        if g in self.countries_db:
+                            decisions_by_tag[g].append(dec)
+                elif dec.get("requires_usa") or dec_id.startswith("USA_"):
+                    decisions_by_tag["USA"].append(dec)
+                elif dec.get("requires_general"):
+                    for t in self.countries_db.keys():
+                        decisions_by_tag[t].append(dec)
 
         tags_to_process = target_tags or list(self.countries_db.keys())
         processed_count = 0

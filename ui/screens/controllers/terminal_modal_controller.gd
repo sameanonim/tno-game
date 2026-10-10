@@ -23,12 +23,25 @@ var event_title: Label = null
 var event_classification: Label = null
 var event_body: RichTextLabel = null
 var event_options_container: VBoxContainer = null
+var event_popup: EventPopup = null
 
 var super_event_modal: TNOSuperEventModal = null
 var current_modal_event: GameEvent = null
 var game_over_modal: Control = null
 
 const EVENT_PICTURE_SHADER = preload("res://shaders/event_picture_crt.gdshader")
+
+
+func setup_popup(overlay: Control, popup: EventPopup, se_modal: TNOSuperEventModal) -> void:
+	event_overlay = overlay
+	event_popup = popup
+	super_event_modal = se_modal
+
+	if event_popup != null and not event_popup.option_chosen.is_connected(_on_event_option_chosen):
+		event_popup.option_chosen.connect(_on_event_option_chosen)
+
+	if super_event_modal != null and not super_event_modal.option_selected.is_connected(_on_super_event_option_selected):
+		super_event_modal.option_selected.connect(_on_super_event_option_selected)
 
 
 func setup(
@@ -54,7 +67,18 @@ func setup(
 
 func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 	current_modal_event = ev
-	if ev == null or event_overlay == null or event_dialog == null or event_options_container == null:
+	if ev == null:
+		return
+
+	# Если подключен модульный перетаскиваемый EventPopup, делегируем отображение ему
+	if event_popup != null:
+		if event_overlay != null:
+			event_overlay.visible = true
+			event_overlay.move_to_front()
+		event_popup.display_event(ev, player_state)
+		return
+
+	if event_overlay == null or event_dialog == null or event_options_container == null:
 		return
 
 	# Fail-safe гарантия наличия опций: событие всегда отображается игроку
@@ -178,6 +202,8 @@ func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 func _on_event_option_chosen(index: int) -> void:
 	if event_overlay != null:
 		event_overlay.visible = false
+	if event_popup != null:
+		event_popup.visible = false
 	var ev = current_modal_event
 	current_modal_event = null
 	modal_choice_resolved.emit(ev, index)
