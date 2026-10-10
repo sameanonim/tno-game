@@ -95,29 +95,28 @@ func replace_branch(root_id: StringName, new_branch_data: FocusTreeData, remove_
 func resolve_relative_coordinates() -> void:
 	var memo: Dictionary = {}
 	var visiting: Dictionary = {}
-
-	var resolve_node: Callable
-	resolve_node = func(node_id: StringName) -> Vector2i:
-		if memo.has(node_id):
-			return memo[node_id]
-		var node = get_node(node_id)
-		if node == null:
-			return Vector2i.ZERO
-		if visiting.has(node_id):
-			return node.grid_coord
-
-		visiting[node_id] = true
-		var final_pos = node.grid_coord
-		if node.relative_position_id != &"" and node.relative_position_id != node_id and nodes.has(node.relative_position_id):
-			var parent_pos: Vector2i = resolve_node.call(node.relative_position_id)
-			final_pos = parent_pos + node.grid_coord
-		visiting.erase(node_id)
-		memo[node_id] = final_pos
-		node.grid_coord = final_pos
-		return final_pos
-
 	for nid in nodes.keys():
-		resolve_node.call(nid)
+		_resolve_node_coord(nid, memo, visiting)
+
+
+func _resolve_node_coord(node_id: StringName, memo: Dictionary, visiting: Dictionary) -> Vector2i:
+	if memo.has(node_id):
+		return memo[node_id]
+	var node = get_node(node_id)
+	if node == null:
+		return Vector2i.ZERO
+	if visiting.has(node_id):
+		return node.grid_coord
+
+	visiting[node_id] = true
+	var final_pos = node.grid_coord
+	if node.relative_position_id != &"" and node.relative_position_id != node_id and nodes.has(node.relative_position_id):
+		var parent_pos: Vector2i = _resolve_node_coord(node.relative_position_id, memo, visiting)
+		final_pos = parent_pos + node.grid_coord
+	visiting.erase(node_id)
+	memo[node_id] = final_pos
+	node.grid_coord = final_pos
+	return final_pos
 
 
 """

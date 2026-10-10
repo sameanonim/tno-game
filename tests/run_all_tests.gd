@@ -12,6 +12,7 @@ const TestTurnManager = preload("res://tests/test_turn_manager.gd")
 const TestContentLoader = preload("res://tests/test_content_loader.gd")
 const TestConditionEvaluator = preload("res://tests/test_condition_evaluator.gd")
 const TestDirectiveResource = preload("res://tests/test_directive_resource.gd")
+const TestFocusTreeData = preload("res://tests/test_focus_tree_data.gd")
 
 func _init() -> void:
 	print("================================================================")
@@ -24,7 +25,8 @@ func _init() -> void:
 		{"name": "TurnManager Suite", "instance": TestTurnManager.new()},
 		{"name": "ContentLoader Suite", "instance": TestContentLoader.new()},
 		{"name": "ConditionEvaluator Suite", "instance": TestConditionEvaluator.new()},
-		{"name": "DirectiveResource Suite", "instance": TestDirectiveResource.new()}
+		{"name": "DirectiveResource Suite", "instance": TestDirectiveResource.new()},
+		{"name": "FocusTreeData Suite", "instance": TestFocusTreeData.new()}
 	]
 	
 	var total_passed: int = 0
