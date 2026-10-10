@@ -1,6 +1,17 @@
 class_name RussianUnificationManager
 extends Node
 
+const JSONFileHelper = preload("res://core/utils/json_file_helper.gd")
+const CampaignTreeResolver = preload("res://core/systems/campaign_tree_resolver.gd")
+
+const TITLES_DATA_PATH: String = "res://data/russia/titles_and_events.json"
+static var _titles_data_cache: Dictionary = {}
+
+static func _get_titles_data() -> Dictionary:
+	if _titles_data_cache.is_empty():
+		_titles_data_cache = JSONFileHelper.load_json_dict(TITLES_DATA_PATH)
+	return _titles_data_cache
+
 ##
 ## RussianUnificationManager: Главный контроллер стадий Русской Смуты и Воссоединения России
 ##
@@ -613,115 +624,77 @@ func execute_warlord_conquest(
 # ==============================================================================
 
 static func get_regional_title(tag: String, country: CountryState) -> String:
-	match tag.to_upper():
-		"WRS": return "Западнорусская Советская Республика"
-		"KOM":
-			var l = country.leader_name.to_lower() if country != null else ""
-			if l.contains("serov"): return "Русское Национальное Государство"
-			if l.contains("tabor"): return "Коми Имперское Правительство"
-			if l.contains("gumil"): return "Евразийское Государство"
-			if l.contains("bukhar"): return "Коми Социалистическая Республика"
-			return "Всероссийское Временное Правительство"
-		"VYT": return "Российское Царство (Вятка)"
-		"SAM": return "Комитет Освобождения Народов России"
-		"TYM": return "Западно-Сибирская Народная Республика"
-		"OMS": return "Западно-Сибирское Военное Правительство"
-		"SVR": return "Уральская Военная Администрация"
-		"TOM": return "Центрально-Сибирская Республика"
-		"NOV": return "Сибирская Федерация"
-		"KEM": return "Кемеровское Княжество"
-		"IRK": return "Президиум Верховного Совета СССР"
-		"BRY": return "Бурятская Советская Республика"
-		"MAG": return "Магаданская Военная Администрация"
-		"CHT": return "Российская Восточная Окраина"
-		"AMR": return "Русская Фашистская Партия"
-		_: return "%s (Региональное Правительство)" % tag
+	var data: Dictionary = _get_titles_data()
+	var reg_titles: Dictionary = data.get("regional_titles", {})
+	var u_tag: String = tag.to_upper()
+	if reg_titles.has(u_tag):
+		var entry: Variant = reg_titles[u_tag]
+		if entry is String:
+			return str(entry)
+		elif entry is Dictionary:
+			var l: String = country.leader_name.to_lower() if country != null else ""
+			var overrides: Array = entry.get("overrides", [])
+			for ov: Variant in overrides:
+				if ov is Dictionary and l.contains(str(ov.get("token", ""))):
+					return str(ov.get("title", ""))
+			return str(entry.get("default", "%s (Региональное Правительство)" % tag))
+	return "%s (Региональное Правительство)" % tag
 
 
 static func get_superregional_title(tag: String, country: CountryState) -> String:
-	match tag.to_upper():
-		"WRS": return "Союз Советских Республик России"
-		"KOM":
-			var l = country.leader_name.to_lower() if country != null else ""
-			if l.contains("serov"): return "Ордосоциалистическая Россия"
-			if l.contains("tabor"): return "Священная Российская Империя"
-			if l.contains("gumil"): return "Евразийская Федерация"
-			return "Российская Федеративная Республика"
-		"VYT": return "Всероссийское Царство"
-		"SAM": return "Российское Государство (КОНР)"
-		"TYM": return "Российская Советская Республика"
-		"OMS": return "Всероссийское Правительство Черной Лиги"
-		"SVR": return "Российская Военная Республика"
-		"TOM": return "Сибирская Демократическая Федерация"
-		"NOV": return "Российская Федерация"
-		"KEM": return "Русское Царство Рюриковичей"
-		"IRK": return "Союз Советских Социалистических Республик"
-		"BRY": return "Советская Федерация Трудящихся"
-		_: return "%s (Супер-Региональное Государство)" % tag
+	var data: Dictionary = _get_titles_data()
+	var super_titles: Dictionary = data.get("superregional_titles", {})
+	var u_tag: String = tag.to_upper()
+	if super_titles.has(u_tag):
+		var entry: Variant = super_titles[u_tag]
+		if entry is String:
+			return str(entry)
+		elif entry is Dictionary:
+			var l: String = country.leader_name.to_lower() if country != null else ""
+			var overrides: Array = entry.get("overrides", [])
+			for ov: Variant in overrides:
+				if ov is Dictionary and l.contains(str(ov.get("token", ""))):
+					return str(ov.get("title", ""))
+			return str(entry.get("default", "%s (Супер-Региональное Государство)" % tag))
+	return "%s (Супер-Региональное Государство)" % tag
 
 
 static func get_final_all_russian_title(tag: String, country: CountryState) -> String:
-	match tag.to_upper():
-		"WRS", "TYM", "IRK", "BRY":
-			return "Союз Советских Социалистических Республик"
-		"KOM":
-			var l = country.leader_name.to_lower() if country != null else ""
-			if l.contains("serov"): return "Ордосоциалистический Русский Союз"
-			if l.contains("tabor"): return "Священная Российская Империя"
-			if l.contains("gumil"): return "Евразийский Союз"
-			return "Российская Федерация"
-		"VYT": return "Российская Империя"
-		"OMS": return "Русское Национальное Государство"
-		"SVR", "NOV", "TOM": return "Российская Федерация"
-		"KEM": return "Российская Империя Рюрика"
-		"AMR": return "Российское Национальное Государство"
-		_: return "Единая и Неделимая Россия"
+	var data: Dictionary = _get_titles_data()
+	var final_sec: Dictionary = data.get("final_titles", {})
+	var tags: Dictionary = final_sec.get("tags", {})
+	var u_tag: String = tag.to_upper()
+	if tags.has(u_tag):
+		var entry: Variant = tags[u_tag]
+		if entry is String:
+			return str(entry)
+		elif entry is Dictionary:
+			var l: String = country.leader_name.to_lower() if country != null else ""
+			var overrides: Array = entry.get("overrides", [])
+			for ov: Variant in overrides:
+				if ov is Dictionary and l.contains(str(ov.get("token", ""))):
+					return str(ov.get("title", ""))
+			return str(entry.get("default", "Единая и Неделимая Россия"))
+	return str(final_sec.get("default", "Единая и Неделимая Россия"))
 
 
 ## Точный маппинг на аутентичный ID TNO Супер-события
 static func get_reunification_super_event_id(tag: String, country: CountryState) -> String:
-	var l = country.leader_name.to_lower() if country != null else ""
-	match tag.to_upper():
-		"WRS":
-			if l.contains("tukh") or l.contains("тухач"):
-				return "SE_RUSSIAN_REUNIFICATION_WRRF_TUKHA"
-			return "SE_RUSSIAN_REUNIFICATION_WRRF_ZHUKOV"
-		"KOM":
-			if l.contains("serov") or l.contains("серов"): return "SE_RUSSIAN_REUNIFICATION_KOMI_SEROV"
-			if l.contains("tabor") or l.contains("табориц"): return "SE_RUSSIAN_REUNIFICATION_KOMI_TABORITSKY"
-			if l.contains("bukhar") or l.contains("бухарин"): return "SE_RUSSIAN_REUNIFICATION_KOMI_BUKHARINA"
-			if l.contains("gumil") or l.contains("гумилев"): return "SE_RUSSIAN_REUNIFICATION_KOMI_GUMMILYOV"
-			if l.contains("shafar") or l.contains("шафаревич"): return "SE_RUSSIAN_REUNIFICATION_KOMI_SHAFAREVICH"
-			if l.contains("stalin") or l.contains("сталина"): return "SE_RUSSIAN_REUNIFICATION_KOMI_STALINA"
-			if l.contains("suslov") or l.contains("суслов"): return "SE_RUSSIAN_REUNIFICATION_KOMI_SUSLOV"
-			if l.contains("zhdan") or l.contains("жданов"): return "SE_RUSSIAN_REUNIFICATION_KOMI_ZHDANOV"
-			return "SE_RUSSIAN_REUNIFICATION_KOMI_DEMOCRATIC"
-		"OMS": return "SE_RUSSIAN_REUNIFICATION_OMSK"
-		"TYM":
-			if l.contains("khrush") or l.contains("хрущев"): return "SE_RUSSIAN_REUNIFICATION_TYUMEN_KHRUSHCHEV"
-			return "SE_RUSSIAN_REUNIFICATION_TYUMEN_KAGANOVICH"
-		"SVR":
-			if l.contains("yelts") or l.contains("ельцин"): return "SE_RUSSIAN_REUNIFICATION_SVERDLOVSK_YELTSIN"
-			return "SE_RUSSIAN_REUNIFICATION_SVERDLOVSK_BATOV"
-		"TOM":
-			if l.contains("human") or l.contains("гуманист"): return "SE_RUSSIAN_REUNIFICATION_TOMSK_HUMANIST"
-			if l.contains("modern") or l.contains("модернист"): return "SE_RUSSIAN_REUNIFICATION_TOMSK_MODERNISTS"
-			if l.contains("bastil") or l.contains("бастильяр"): return "SE_RUSSIAN_REUNIFICATION_TOMSK_BASTILLARDS"
-			return "SE_RUSSIAN_REUNIFICATION_TOMSK_DECEMBRISTS"
-		"NOV":
-			if l.contains("shuksh") or l.contains("шукшин"): return "SE_RUSSIAN_REUNIFICATION_NOVOSIBIRSK_SHUKSHIN"
-			return "SE_RUSSIAN_REUNIFICATION_NOVOSIBIRSK_POKRYSHKIN"
-		"KEM":
-			if l.contains("lydia") or l.contains("лидия"): return "SE_RUSSIAN_REUNIFICATION_KEMEROVO_LYDIA"
-			return "SE_RUSSIAN_REUNIFICATION_KEMEROVO_YURIY"
-		"IRK": return "SE_RUSSIAN_REUNIFICATION_IRKUTSK_PARTY"
-		"BRY": return "SE_RUSSIAN_REUNIFICATION_BURYATIA_LIBSOC"
-		"VYT": return "SE_RUSSIAN_REUNIFICATION_VYATKA_CONDEM"
-		"SAM": return "SE_RUSSIAN_REUNIFICATION_SAMARA_ZYKOV"
-		"MAG": return "SE_RUSSIAN_REUNIFICATION_MAGADAN_MATKOVSKY"
-		"AMR": return "SE_RUSSIAN_REUNIFICATION_AMUR"
-		"CHT": return "SE_RUSSIAN_REUNIFICATION_CHITA_IMPERIAL"
-		_: return "SE_RUSSIAN_REUNIFICATION_WRRF_ZHUKOV"
+	var data: Dictionary = _get_titles_data()
+	var se_dict: Dictionary = data.get("super_events", {})
+	var u_tag: String = tag.to_upper()
+	if se_dict.has(u_tag):
+		var entry: Variant = se_dict[u_tag]
+		if entry is String:
+			return str(entry)
+		elif entry is Dictionary:
+			var l: String = country.leader_name.to_lower() if country != null else ""
+			var overrides: Array = entry.get("overrides", [])
+			for ov: Variant in overrides:
+				if ov is Dictionary and l.contains(str(ov.get("token", ""))):
+					return str(ov.get("event", ""))
+			return str(entry.get("default", "SE_RUSSIAN_REUNIFICATION_WRRF_ZHUKOV"))
+	return "SE_RUSSIAN_REUNIFICATION_WRRF_ZHUKOV"
 
 
 # ==============================================================================
@@ -907,114 +880,15 @@ func _switch_directives_tree(turn_manager: TurnManager, stage_suffix: String) ->
 
 	var country: CountryState = turn_manager.player_state
 	var clean_tag: String = player_tag.to_upper() if not player_tag.is_empty() else (country.country_tag.to_upper() if country != null else "")
-	var l_name: String = country.leader_name.to_lower() if country != null else ""
-	var ideol: String = country.ruling_ideology.to_lower() if country != null else ""
+	var manifest: Dictionary = turn_manager.focus_stage_controller.trees_manifest if turn_manager.focus_stage_controller != null else {}
 
-	# Ключевые маркеры лидеров для сопоставления с именами деревьев
-	var leader_tokens: Array[String] = []
-	if l_name.contains("tabor") or l_name.contains("табориц"): leader_tokens.append("taboritsky")
-	elif l_name.contains("bukhar") or l_name.contains("бухарин"): leader_tokens.append("bukharina")
-	elif l_name.contains("suslov") or l_name.contains("суслов"): leader_tokens.append("suslov")
-	elif l_name.contains("zhdan") or l_name.contains("жданов"): leader_tokens.append("zhdanov")
-	elif l_name.contains("gumil") or l_name.contains("гумилев") or l_name.contains("гумилёв"): leader_tokens.append("gumilyov")
-	elif l_name.contains("serov") or l_name.contains("серов"): leader_tokens.append("serov")
-	elif l_name.contains("shafar") or l_name.contains("шафаревич"): leader_tokens.append("shafarevich")
-	elif l_name.contains("stalin") or l_name.contains("сталин"): leader_tokens.append("stalina")
-	elif l_name.contains("moroz") or l_name.contains("морозов"): leader_tokens.append("morozov")
-	elif l_name.contains("voznes") or l_name.contains("вознесенск"): leader_tokens.append("voznesensky")
-	elif l_name.contains("yazov") or l_name.contains("язов"): leader_tokens.append("yazov")
-	elif l_name.contains("zhukov") or l_name.contains("жуков"): leader_tokens.append("zhukov")
-	elif l_name.contains("tukhach") or l_name.contains("тухачевск"): leader_tokens.append("tukhachevsky")
-	elif l_name.contains("batov") or l_name.contains("батов"): leader_tokens.append("batov")
-	elif l_name.contains("yelts") or l_name.contains("ельцин"): leader_tokens.append("yeltsin")
-	elif l_name.contains("sablin") or l_name.contains("саблин"): leader_tokens.append("sablin")
-	elif l_name.contains("rodzaev") or l_name.contains("родзаевск"): leader_tokens.append("rodzaevsky")
-	elif l_name.contains("matkov") or l_name.contains("матковск"): leader_tokens.append("matkovsky")
-	elif l_name.contains("pokrysh") or l_name.contains("покрышкин"): leader_tokens.append("pokryshkin")
-	elif l_name.contains("shuksh") or l_name.contains("шукшин"): leader_tokens.append("shukshin")
-
-	var candidates: Array[String] = []
-
-	# 1. Из FocusStageController.trees_manifest
-	if turn_manager.focus_stage_controller != null:
-		for tid in turn_manager.focus_stage_controller.trees_manifest.keys():
-			var s_tid = str(tid)
-			if s_tid.to_lower().contains(stage_suffix.to_lower()):
-				candidates.append(s_tid)
-
-	# 2. Из файловой структуры директории страны
-	var dir_paths = [
-		"res://data/countries/%s/directives" % clean_tag,
-		"res://data/countries/%s/directives/trees" % clean_tag
-	]
-	for d_path in dir_paths:
-		if DirAccess.dir_exists_absolute(d_path):
-			var dir = DirAccess.open(d_path)
-			if dir != null:
-				dir.list_dir_begin()
-				var fn = dir.get_next()
-				while fn != "":
-					if not dir.current_is_dir() and fn.ends_with(".json") and fn.to_lower().contains(stage_suffix.to_lower()):
-						var tree_id = fn.trim_suffix(".json")
-						if not candidates.has(tree_id):
-							candidates.append(tree_id)
-					fn = dir.get_next()
-
-	if candidates.is_empty():
-		_log("ПРЕДУПРЕЖДЕНИЕ: Дерево директив для стадии [%s] не найдено." % stage_suffix)
-		return
-
-	# Скоринг кандидатов
-	var best_tree := ""
-	var best_score := -100
-
-	for cand in candidates:
-		var c_lower = cand.to_lower()
-		var score := 0
-
-		# Обязательный фильтр: дерево должно принадлежать тегу игрока
-		if not c_lower.contains(clean_tag.to_lower()):
-			continue
-
-		# Совпадение суффикса стадии
-		if c_lower.contains(stage_suffix.to_lower()):
-			score += 10
-
-		# Совпадение лидера
-		for token in leader_tokens:
-			if c_lower.contains(token):
-				score += 50
-				break
-
-		# Совпадение идеологии
-		if ideol.contains("communist") and (c_lower.contains("communist") or c_lower.contains("socialist") or c_lower.contains("socdem") or c_lower.contains("bukharin") or c_lower.contains("suslov") or c_lower.contains("zhdanov")):
-			score += 15
-		elif (ideol.contains("fascist") or ideol.contains("national_socialism")) and (c_lower.contains("fascist") or c_lower.contains("serov") or c_lower.contains("gumilyov") or c_lower.contains("shafarevich")):
-			score += 15
-		elif (ideol.contains("democrat") or ideol.contains("liberal")) and (c_lower.contains("democrat") or c_lower.contains("dsnp") or c_lower.contains("psd") or c_lower.contains("stalina")):
-			score += 15
-		elif (ideol.contains("despot") or ideol.contains("authoritarian")) and (c_lower.contains("despot") or c_lower.contains("morozov")):
-			score += 15
-		elif ideol.contains("burgund") and c_lower.contains("taboritsky"):
-			score += 25
-
-		if score > best_score:
-			best_score = score
-			best_tree = cand
+	var best_tree: String = CampaignTreeResolver.get_best_candidate_for_category(country, stage_suffix, manifest, clean_tag)
 
 	if not best_tree.is_empty() and turn_manager.focus_stage_controller != null:
 		turn_manager.focus_stage_controller.switch_focus_tree(best_tree, true)
-		_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s (Оценка соответствия: %d)" % [best_tree, best_score])
-	elif candidates.size() > 0 and turn_manager.focus_stage_controller != null:
-		var fallback_cand := ""
-		for cand in candidates:
-			if cand.to_lower().contains(clean_tag.to_lower()):
-				fallback_cand = cand
-				break
-		if fallback_cand.is_empty():
-			fallback_cand = candidates[0]
-		turn_manager.focus_stage_controller.switch_focus_tree(fallback_cand, true)
-		_log("РАЗВЕРНУТО РЕЗЕРВНОЕ ДРЕВО ДИРЕКТИВ: %s" % fallback_cand)
+		_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s" % best_tree)
+	elif turn_manager.focus_stage_controller != null:
+		_log("ПРЕДУПРЕЖДЕНИЕ: Дерево директив для стадии [%s] не найдено." % stage_suffix)
 
 
 func _log(msg: String) -> void:

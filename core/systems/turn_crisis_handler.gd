@@ -159,3 +159,29 @@ static func trigger_game_over(turn_manager: TurnManager, victory: bool, reason: 
 	]
 	turn_manager.pending_modal_events.clear()
 	turn_manager.modal_event_opened.emit(ev)
+
+
+"""Обработка финального воссоединения России."""
+static func handle_russian_unification(turn_manager: TurnManager, tag: String) -> void:
+	if turn_manager == null:
+		return
+	if turn_manager.player_state != null and tag.to_upper() == turn_manager.player_state.country_tag.to_upper():
+		trigger_game_over(turn_manager, true, "Священная миссия завершена! Вы окончательно объединили Россию и положили конец эпохе Русской Смуты!")
+	else:
+		trigger_game_over(turn_manager, false, "Россия была окончательно воссоединена державой %s. Ваша фракция повержена." % tag)
+
+
+"""Обработка ядерной полуночи Таборицкого."""
+static func handle_midnight_struck(turn_manager: TurnManager) -> void:
+	if turn_manager != null:
+		trigger_game_over(turn_manager, false, "Часы Судного Дня пробили полночь. Режим рухнул в бездну безумия и ядерного кошмара.")
+
+
+"""Обработка исхода Немецкой Гражданской Войны."""
+static func handle_gcw_concluded(turn_manager: TurnManager, victor_tag: String) -> void:
+	if turn_manager == null:
+		return
+	if turn_manager.player_state != null and victor_tag.to_upper() == turn_manager.player_state.country_tag.to_upper():
+		trigger_game_over(turn_manager, true, "Борьба за Рейх завершена вашей триумфальной победой! Германия под вашим полным контролем.")
+	elif turn_manager.player_state != null and turn_manager.player_state.country_tag in ["BOR", "SPE", "GOR", "HEY"]:
+		trigger_game_over(turn_manager, false, "Гражданская война в Германии проиграна. Власть в Рейхе захватил %s." % victor_tag)

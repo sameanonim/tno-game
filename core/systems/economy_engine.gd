@@ -16,6 +16,8 @@ extends RefCounted
 
 const RegionalInvestmentsManagerScript = preload("res://core/systems/economy/regional_investments.gd")
 const CurrencyClearingManagerScript = preload("res://core/systems/economy/currency_clearing_manager.gd")
+const StrategicResourcesManagerScript = preload("res://core/systems/economy/strategic_resources_manager.gd")
+const SocietalDevelopmentEngineScript = preload("res://core/systems/economy/societal_development_engine.gd")
 
 const DEFAULT_TURNS_PER_YEAR = 52.143 # 365 дней / 7 дней в неделю
 
@@ -80,43 +82,32 @@ static func get_turns_per_year() -> float:
 # ==============================================================================
 # GLOBAL TNO OIL CRISIS ENGINE
 # ==============================================================================
-static var global_oil_crisis_active: bool = false
-static var global_oil_crisis_multiplier: float = 3.5
+static var global_oil_crisis_active: bool:
+	get: return StrategicResourcesManagerScript.global_oil_crisis_active
+	set(v): StrategicResourcesManagerScript.global_oil_crisis_active = v
+
+static var global_oil_crisis_multiplier: float:
+	get: return StrategicResourcesManagerScript.global_oil_crisis_multiplier
+	set(v): StrategicResourcesManagerScript.global_oil_crisis_multiplier = v
 
 ## Включение/выключение глобального Нефтяного кризиса TNO
 static func set_oil_crisis(active: bool, price_multiplier: float = 3.5) -> void:
-	global_oil_crisis_active = active
-	global_oil_crisis_multiplier = price_multiplier
-	TNOLogger.info("EconomyEngine", "Global Oil Crisis status set to: %s (Multiplier: x%.1f)" % [str(active), price_multiplier])
+	StrategicResourcesManagerScript.set_oil_crisis(active, price_multiplier)
 
 
 ## Проверка, охвачена ли экономика Нефтяным кризисом
 static func is_oil_crisis(state: CountryState = null) -> bool:
-	if global_oil_crisis_active:
-		return true
-	if state != null:
-		return state.has_flag("oil_crisis_active") or bool(state.story_flags.get("oil_crisis_active", false))
-	return false
+	return StrategicResourcesManagerScript.is_oil_crisis(state)
 
 
 ## Интерактивный запуск глобального Нефтяного кризиса 1973 года (SE_OIL_CRISIS)
 static func trigger_oil_crisis_event(turn_mgr: Node = null) -> Dictionary:
-	set_oil_crisis(true, 3.5)
-	var report = {
-		"event": "SE_OIL_CRISIS",
-		"price_multiplier": 3.5,
-		"affected_hegemons": ["USA", "GER", "JAP"]
-	}
-	if turn_mgr != null:
-		if turn_mgr.has_method("trigger_super_event"):
-			turn_mgr.trigger_super_event("SE_OIL_CRISIS")
-	return report
+	return StrategicResourcesManagerScript.trigger_oil_crisis_event(turn_mgr)
 
 
 ## Дипломатическое и экономическое разрешение Нефтяного кризиса
 static func resolve_oil_crisis_event() -> Dictionary:
-	set_oil_crisis(false, 1.0)
-	return {"event": "OIL_CRISIS_RESOLVED", "price_multiplier": 1.0}
+	return StrategicResourcesManagerScript.resolve_oil_crisis_event()
 
 
 # ==============================================================================
@@ -411,124 +402,7 @@ static func calculate_turn_expenses(state: CountryState) -> Dictionary:
 
 ## Расчет добычи, потребления и торгового сальдо сырья за ход
 static func calculate_resource_balance(state: CountryState, regions: Dictionary = {}) -> Dictionary:
-	var cfg = ConfigManager.get_instance()
-	
-	var oil_base_price: float = 0.006
-	if is_oil_crisis(state):
-		oil_base_price *= global_oil_crisis_multiplier
-
-	var res_prices = {
-		"oil": oil_base_price,
-		"steel": 0.003,
-		"rubber": 0.004,
-		"rare_alloys": 0.008
-	}
-	if cfg != null and cfg.has_constant("economy", "resource_prices"):
-		res_prices = cfg.get_dict("economy", "resource_prices")
-		if is_oil_crisis(state):
-			res_prices["oil"] = float(res_prices.get("oil", 0.006)) * global_oil_crisis_multiplier
-		
-	var produced: Dictionary = {
-		"oil": 0,
-		"steel": 0,
-		"rubber": 0,
-		"rare_alloys": 0
-	}
-	
-	# 1. Агрегация добычи по контролируемым провинциям
-	var found_regions := false
-	if not regions.is_empty():
-		for reg in regions.values():
-			if reg is RegionData and reg.owner_tag == state.country_tag:
-				found_regions = true
-				produced["steel"] += int(reg.resource_deposits.get("steel", 0))
-				produced["oil"] += int(reg.resource_deposits.get("oil", 0))
-				produced["rubber"] += int(reg.resource_deposits.get("rubber", 0))
-				produced["rare_alloys"] += int(reg.resource_deposits.get("rare_alloys", 0))
-	
-	# Если регионы не переданы (тесты или изолированный расчет), берем существующие или базовые
-	if not found_regions:
-		if state.produced_resources.get("steel", 0) > 0 or state.produced_resources.get("oil", 0) > 0:
-			produced = state.produced_resources.duplicate(true)
-		else:
-			produced["steel"] = int(float(state.civilian_factories) * 0.8) + 5
-			produced["oil"] = 8
-			produced["rubber"] = 2
-			produced["rare_alloys"] = int(float(state.military_factories) * 0.3) + 2
-
-	# 2. Расчет потребления сырья
-	var oil_per_10k := 0.08
-	var steel_civ := 0.5
-	var steel_mil := 1.0
-	var rubber_cg := 0.35
-	var alloys_mil := 0.4
-	
-	if cfg != null and cfg.has_constant("economy", "resource_consumption"):
-		var rc = cfg.get_dict("economy", "resource_consumption")
-		oil_per_10k = float(rc.get("oil_per_10k_army", oil_per_10k))
-		steel_civ = float(rc.get("steel_per_civ_factory", steel_civ))
-		steel_mil = float(rc.get("steel_per_mil_factory", steel_mil))
-		rubber_cg = float(rc.get("rubber_per_cg_factory", rubber_cg))
-		alloys_mil = float(rc.get("alloys_per_mil_factory", alloys_mil))
-		
-	var army_units = float(state.manpower_pool) / 10000.0
-	var heavy_units = float(state.heavy_equipment_stockpile) / 400.0
-	var cg_factories = float(state.civilian_factories) * state.consumer_goods_ratio
-	
-	var consumed: Dictionary = {
-		"oil": maxi(int(ceil(army_units * oil_per_10k + heavy_units * 0.5)), 1),
-		"steel": maxi(int(ceil(float(state.civilian_factories) * steel_civ + float(state.military_factories) * steel_mil)), 2),
-		"rubber": maxi(int(ceil(cg_factories * rubber_cg)), 1),
-		"rare_alloys": maxi(int(ceil(float(state.military_factories) * alloys_mil)), 1)
-	}
-	
-	# 3. Чистое сальдо ресурсов и торговая выручка/расход
-	var net: Dictionary = {}
-	var export_revenue: float = 0.0
-	var import_cost: float = 0.0
-	var deficits: Array[String] = []
-	
-	for res_key in produced.keys():
-		var p_val = int(produced.get(res_key, 0))
-		var c_val = int(consumed.get(res_key, 0))
-		var diff = p_val - c_val
-		net[res_key] = diff
-		
-		var price = float(res_prices.get(res_key, 0.005))
-		if diff > 0:
-			# Продажа излишков на мировом рынке
-			export_revenue += float(diff) * price
-		elif diff < 0:
-			# Дефицит сырья — закупка за валюту
-			import_cost += float(abs(diff)) * price
-			deficits.append(str(res_key))
-			
-	# Сохраняем показатели в CountryState
-	state.produced_resources = produced
-	state.consumed_resources = consumed
-	state.net_resources = net
-	state.resource_trade_balance = export_revenue - import_cost
-	
-	# Дефицитные штрафы
-	var prod_mult := 1.0
-	if net.get("steel", 0) < 0:
-		prod_mult *= 0.75 # Нехватка стали режет выпуск техники
-	if net.get("rare_alloys", 0) < 0:
-		prod_mult *= 0.85 # Нехватка редких сплавов
-	if net.get("oil", 0) < 0:
-		# Топливный голод снижает боеготовность войск (во время Нефтяного кризиса штраф удваивается)
-		var fuel_penalty: float = 2.8 if is_oil_crisis(state) else 1.2
-		state.army_readiness = clampf(state.army_readiness - fuel_penalty, 5.0, 100.0)
-		
-	return {
-		"produced": produced,
-		"consumed": consumed,
-		"net": net,
-		"export_revenue": export_revenue,
-		"import_cost": import_cost,
-		"deficits": deficits,
-		"production_mult": prod_mult
-	}
+	return StrategicResourcesManagerScript.calculate_resource_balance(state, regions)
 
 
 # ==============================================================================
@@ -537,50 +411,7 @@ static func calculate_resource_balance(state: CountryState, regions: Dictionary 
 
 ## Обновление параметров общества за ход
 static func update_societal_development(state: CountryState, turns_per_year: float) -> Dictionary:
-	var cfg = ConfigManager.get_instance()
-	var soc_cfg = cfg.get_dict("economy", "societal_development") if (cfg != null and cfg.has_constant("economy", "societal_development")) else {}
-	
-	var pov_red_rate = float(soc_cfg.get("poverty_reduction_base_rate", 0.05))
-	var pov_neg_rate = float(soc_cfg.get("poverty_growth_neglect_rate", 0.08))
-	var lit_gain_rate = float(soc_cfg.get("literacy_gain_base_rate", 0.04))
-	var cor_red_rate = float(soc_cfg.get("corruption_reduction_base_rate", 0.05))
-	var cor_neg_rate = float(soc_cfg.get("corruption_growth_neglect_rate", 0.07))
-	var eq_growth_rate = float(soc_cfg.get("industrial_equipment_growth_rate", 0.03))
-	
-	# 1. Бедность (Poverty Rate)
-	var poverty_delta := 0.0
-	if state.civilian_spending_share >= 0.25:
-		poverty_delta = - (state.civilian_spending_share - 0.20) * pov_red_rate
-	elif state.civilian_spending_share < 0.18:
-		poverty_delta = (0.18 - state.civilian_spending_share) * pov_neg_rate
-	state.poverty_rate = clampf(state.poverty_rate + (poverty_delta * 52.0 / turns_per_year), 3.0, 95.0)
-	
-	# 2. Грамотность (Literacy Rate)
-	var literacy_delta := 0.0
-	if state.rd_spending_share >= 0.08:
-		literacy_delta = state.rd_spending_share * lit_gain_rate
-	state.literacy_rate = clampf(state.literacy_rate + (literacy_delta * 52.0 / turns_per_year), 10.0, 99.0)
-	
-	# 3. Коррупция (Corruption Rate)
-	var corruption_delta := 0.0
-	if state.admin_spending_share >= 0.22:
-		corruption_delta = - (state.admin_spending_share - 0.18) * cor_red_rate
-	elif state.admin_spending_share < 0.16:
-		corruption_delta = (0.16 - state.admin_spending_share) * cor_neg_rate
-	state.corruption_rate = clampf(state.corruption_rate + (corruption_delta * 52.0 / turns_per_year), 5.0, 90.0)
-	
-	# 4. Промышленная оснащенность (Industrial Equipment)
-	var eq_delta := 0.0
-	if state.civilian_factories >= 12 and state.liquid_reserves_billions > 0.5:
-		eq_delta = eq_growth_rate
-	state.industrial_equipment_level = clampf(state.industrial_equipment_level + (eq_delta * 52.0 / turns_per_year), 10.0, 100.0)
-	
-	return {
-		"poverty_delta": poverty_delta,
-		"literacy_delta": literacy_delta,
-		"corruption_delta": corruption_delta,
-		"equipment_delta": eq_delta
-	}
+	return SocietalDevelopmentEngineScript.update_societal_development(state, turns_per_year)
 
 
 # ==============================================================================
@@ -808,75 +639,17 @@ static func process_turn(state: CountryState, regions: Dictionary = {}) -> Econo
 
 ## Переключение режима жесткой экономии (Austerity)
 static func toggle_austerity_program(state: CountryState) -> Dictionary:
-	state.is_austerity_active = not state.is_austerity_active
-	if state.is_austerity_active:
-		state.radicalization = clampf(state.radicalization + 6.0, 0.0, 100.0)
-		state.legitimacy = clampf(state.legitimacy - 4.0, 0.0, 100.0)
-		return {
-			"active": true,
-			"message": _tr_str("ECON_AUSTERITY_ON_MSG", {}, "РЕЖИМ ЖЕСТКОЙ ЭКОНОМИИ ВКЛЮЧЕН: Военные и гражданские расходы урезаны, сборы повышены, но недовольство растет.")
-		}
-	else:
-		return {
-			"active": false,
-			"message": _tr_str("ECON_AUSTERITY_OFF_MSG", {}, "РЕЖИМ ЖЕСТКОЙ ЭКОНОМИИ СНЯТ: Финансирование секторов возвращено в штатный режим.")
-		}
+	return SocietalDevelopmentEngineScript.toggle_austerity_program(state)
 
 
 ## Проведение денежной реформы (сбивает гиперинфляцию ценой резервов)
 static func conduct_currency_reform(state: CountryState) -> Dictionary:
-	var cost: float = 0.40 # $0.40 млрд
-	if state.liquid_reserves_billions < cost:
-		return {
-			"success": false,
-			"message": _tr_str(
-				"ECON_CURRENCY_REFORM_FAIL_MSG",
-				{"required": "0.40"},
-				"Отказ: Недостаточно валютных резервов для обеспечения новой денежной массы (требуется $0.40 млрд)."
-			)
-		}
-		
-	state.liquid_reserves_billions -= cost
-	state.inflation_rate = clampf(state.inflation_rate * 0.45, 0.02, 0.95)
-	state.legitimacy = clampf(state.legitimacy + 5.0, 0.0, 100.0)
-	return {
-		"success": true,
-		"message": _tr_str(
-			"ECON_CURRENCY_REFORM_SUCCESS_MSG",
-			{"rate": "%.1f" % (state.inflation_rate * 100.0)},
-			"Денежная реформа успешно проведена: инфляция сбита ценой стабилизационного фонда."
-		)
-	}
+	return SocietalDevelopmentEngineScript.conduct_currency_reform(state)
 
 
 ## Реструктуризация суверенного внешнего долга
 static func restructure_foreign_debt(state: CountryState) -> Dictionary:
-	if state.national_debt_billions <= 0.0:
-		return {
-			"success": false,
-			"message": _tr_str(
-				"ECON_DEBT_RESTRUCTURE_ZERO_MSG",
-				{},
-				"Отказ: У государства отсутствует суверенный долг для реструктуризации."
-			)
-		}
-		
-	# Списание 35% долговых обязательств в обмен на резкое падение кредитного рейтинга и престижа
-	var haircut: float = state.national_debt_billions * 0.35
-	state.national_debt_billions = maxf(state.national_debt_billions - haircut, 0.0)
-	state.credit_rating_index = maxi(state.credit_rating_index - 3, state.credit_rating_min)
-	state.legitimacy = clampf(state.legitimacy - 12.0, 0.0, 100.0)
-	state.radicalization = clampf(state.radicalization + 8.0, 0.0, 100.0)
-	
-	return {
-		"success": true,
-		"haircut": haircut,
-		"message": _tr_str(
-			"ECON_DEBT_RESTRUCTURE_SUCCESS_MSG",
-			{"haircut": "%.2f" % haircut},
-			"Долг реструктурирован: списано $%.2f млрд обязательств, однако кредитный рейтинг обрушен до дефолтного уровня."
-		)
-	}
+	return SocietalDevelopmentEngineScript.restructure_foreign_debt(state)
 
 
 

@@ -46,6 +46,7 @@ const DemographicsEngineScript = preload("res://core/systems/demographics_engine
 const TurnTerritoryHandlerScript = preload("res://core/systems/turn_territory_handler.gd")
 const TurnCrisisHandlerScript = preload("res://core/systems/turn_crisis_handler.gd")
 const NuclearDefconManagerScript = preload("res://core/systems/nuclear_defcon_manager.gd")
+const WorldDataLoaderScript = preload("res://core/systems/world_data_loader.gd")
 
 @export var player_state: CountryState:
 	get:
@@ -528,103 +529,7 @@ func load_world_data(
 	countries_path: String = "res://map_data/starting_countries_state.json",
 	manifest_path: String = "res://map_data/map_manifest.json"
 ) -> void:
-	# 1. Загрузка стартовых стран
-	if FileAccess.file_exists(countries_path):
-		var f_c = FileAccess.open(countries_path, FileAccess.READ)
-		if f_c != null:
-			var text = f_c.get_as_text()
-			f_c.close()
-			var json := JSON.new()
-			if json.parse(text) == OK and json.data is Dictionary:
-				for c_tag in json.data.keys():
-					var c_dict: Dictionary = json.data[c_tag]
-					if player_state != null and c_tag == player_state.country_tag:
-						countries_world_state[c_tag] = player_state
-						continue
-					var c_state = CountryState.from_dict(c_dict)
-					countries_world_state[c_tag] = c_state
-
-	# Сохраняем стейт игрока во всеобщем справочнике
-	if player_state != null:
-		countries_world_state[player_state.country_tag] = player_state
-
-	# 2. Загрузка манифеста (штаты и связь с провинциями)
-	var loaded_states := false
-	if FileAccess.file_exists(manifest_path):
-		var f_m = FileAccess.open(manifest_path, FileAccess.READ)
-		if f_m != null:
-			var m_txt = f_m.get_as_text()
-			f_m.close()
-			var json_m := JSON.new()
-			if json_m.parse(m_txt) == OK and json_m.data is Dictionary:
-				var states_dict = json_m.data.get("states", {})
-				for sid_str in states_dict.keys():
-					var sid := int(sid_str)
-					var s_info = states_dict[sid_str]
-					var provs = s_info.get("provinces", [])
-					var int_provs: Array[int] = []
-					for p in provs:
-						var pid := int(p)
-						int_provs.append(pid)
-						province_to_state[pid] = sid
-					state_to_provinces[sid] = int_provs
-
-				# Если в манифесте нет секции states, извлекаем штаты из провинций
-				if state_to_provinces.is_empty() and json_m.data.has("provinces"):
-					var provs_dict = json_m.data["provinces"]
-					for pid_str in provs_dict.keys():
-						var pid := int(pid_str)
-						var p_info = provs_dict[pid_str]
-						if p_info is Dictionary and p_info.has("state_id"):
-							var sid := int(p_info["state_id"])
-							if sid > 0:
-								province_to_state[pid] = sid
-								if not state_to_provinces.has(sid):
-									var new_provs: Array[int] = []
-									state_to_provinces[sid] = new_provs
-								state_to_provinces[sid].append(pid)
-
-				if not state_to_provinces.is_empty():
-					loaded_states = true
-
-	# Дополнительный фоллбек: загрузка штатов из border_hierarchy_manifest.json
-	if not loaded_states and FileAccess.file_exists("res://map_data/border_hierarchy_manifest.json"):
-		var f_ext = FileAccess.open("res://map_data/border_hierarchy_manifest.json", FileAccess.READ)
-		if f_ext != null:
-			var ext_txt = f_ext.get_as_text()
-			f_ext.close()
-			var json_ext := JSON.new()
-			if json_ext.parse(ext_txt) == OK and json_ext.data is Dictionary:
-				var ext_states = json_ext.data.get("states", {})
-				for sid_str in ext_states.keys():
-					var sid := int(sid_str)
-					var s_info = ext_states[sid_str]
-					var provs = s_info.get("provinces", [])
-					var int_provs: Array[int] = []
-					for p in provs:
-						var pid := int(p)
-						int_provs.append(pid)
-						province_to_state[pid] = sid
-					state_to_provinces[sid] = int_provs
-
-	# 3. Загрузка стартовых провинций
-	if FileAccess.file_exists(regions_path):
-		var f_r = FileAccess.open(regions_path, FileAccess.READ)
-		if f_r != null:
-			var r_txt = f_r.get_as_text()
-			f_r.close()
-			var json_r := JSON.new()
-			if json_r.parse(r_txt) == OK and json_r.data is Dictionary:
-				for pid_str in json_r.data.keys():
-					var pid := int(pid_str)
-					var r_dict: Dictionary = json_r.data[pid_str]
-					var r_data = RegionData.from_dict(r_dict)
-					regions_world_state[pid] = r_data
-
-	print("[TurnManager] Loaded world data: %d regions, %d countries, %d states." % [
-		regions_world_state.size(), countries_world_state.size(), state_to_provinces.size()
-	])
-	world_data_loaded.emit(regions_world_state.size(), countries_world_state.size())
+	WorldDataLoaderScript.load_world_data(self, regions_path, countries_path, manifest_path)
 
 
 ## Алиас для пошагового расчета (совместимость тестов и UI)
@@ -748,67 +653,7 @@ func end_turn() -> void:
 	pending_modal_events.clear()
 
 	# Проверка результатов фронтов на захват регионов, боевые инциденты и капитуляцию
-	var regions_captured_count: int = 0
-	for rep in last_military_reports:
-		if rep.get("captured_region_id", -1) > 0:
-			var reg_id: int = int(rep["captured_region_id"])
-			var n_tag: String = str(rep.get("new_owner", "")).to_upper().strip_edges()
-			if n_tag.is_empty():
-				n_tag = str(rep.get("attacker_tag", "")).to_upper().strip_edges()
-			var p_tag: String = str(rep.get("previous_owner", "")).to_upper().strip_edges()
-			if p_tag.is_empty():
-				p_tag = str(rep.get("defender_tag", "")).to_upper().strip_edges()
-			var sid: int = province_to_state.get(reg_id, 0)
-
-			if not n_tag.is_empty():
-				if boundary_manager != null:
-					boundary_manager.transfer_province(reg_id, n_tag)
-
-				if sid > 0:
-					var provs: Array = state_to_provinces.get(sid, [])
-					var all_ours: bool = true
-					for p in provs:
-						var r: RegionData = regions_world_state.get(p, null)
-						if r != null and r.owner_tag.to_upper() != n_tag:
-							all_ours = false
-							break
-					if all_ours:
-						transfer_state(sid, n_tag)
-					else:
-						if map_controller != null and map_controller.has_method("update_province_owner"):
-							map_controller.update_province_owner(reg_id, n_tag)
-				else:
-					if map_controller != null and map_controller.has_method("update_province_owner"):
-						map_controller.update_province_owner(reg_id, n_tag)
-
-				region_conquered.emit(reg_id, n_tag, p_tag)
-				regions_captured_count += 1
-
-		if rep.get("battle_incident") != null:
-			var inc: GameEvent = rep["battle_incident"]
-			pending_modal_events.append(inc)
-
-		if rep.get("capitulation", false):
-			var victor: String = str(rep.get("victor_tag", "")).to_upper()
-			var defeated: String = str(rep.get("defeated_tag", "")).to_upper()
-			if not defeated.is_empty() and not victor.is_empty():
-				if russian_unification_manager != null and RussianUnificationManager.is_warlord(victor) and RussianUnificationManager.is_warlord(defeated):
-					russian_unification_manager.execute_warlord_conquest(victor, defeated, self, "annex_and_integrate")
-				else:
-					annex_country(defeated, victor)
-				if countries_world_state.has(defeated):
-					var def_st: CountryState = countries_world_state[defeated]
-					if def_st != null:
-						def_st.is_annexed = true
-				if player_state != null and player_state.country_tag == defeated:
-					player_state.is_annexed = true
-					_trigger_game_over(false, "Ваша держава пала под натиском войск %s и безоговорочно капитулировала." % victor)
-				elif player_state != null and player_state.country_tag == victor:
-					player_state.legitimacy = clampf(player_state.legitimacy + 12.0, 0.0, 100.0)
-					player_state.army_morale = clampf(player_state.army_morale + 15.0, 0.0, 100.0)
-
-	if regions_captured_count > 0 and boundary_manager != null:
-		boundary_manager.audit_enclaves()
+	TurnTerritoryHandlerScript.resolve_military_reports(self, last_military_reports)
 
 	# 4.1. Кампания Германии / Немецкая Гражданская Война (GCW)
 	if german_civil_war_manager != null:
@@ -1035,21 +880,15 @@ func _trigger_game_over(victory: bool, reason: String) -> void:
 
 
 func _on_rum_final_unification(tag: String, _leader: String, _super_event_id: String) -> void:
-	if player_state != null and tag.to_upper() == player_state.country_tag.to_upper():
-		_trigger_game_over(true, "Священная миссия завершена! Вы окончательно объединили Россию и положили конец эпохе Русской Смуты!")
-	else:
-		_trigger_game_over(false, "Россия была окончательно воссоединена державой %s. Ваша фракция повержена." % tag)
+	TurnCrisisHandlerScript.handle_russian_unification(self, tag)
 
 
 func _on_rum_midnight_struck() -> void:
-	_trigger_game_over(false, "Часы Судного Дня пробили полночь. Режим рухнул в бездну безумия и ядерного кошмара.")
+	TurnCrisisHandlerScript.handle_midnight_struck(self)
 
 
 func _on_gcw_concluded(victor_tag: String) -> void:
-	if player_state != null and victor_tag.to_upper() == player_state.country_tag.to_upper():
-		_trigger_game_over(true, "Борьба за Рейх завершена вашей триумфальной победой! Германия под вашим полным контролем.")
-	elif player_state != null and player_state.country_tag in ["BOR", "SPE", "GOR", "HEY"]:
-		_trigger_game_over(false, "Гражданская война в Германии проиграна. Власть в Рейхе захватил %s." % victor_tag)
+	TurnCrisisHandlerScript.handle_gcw_concluded(self, victor_tag)
 
 
 

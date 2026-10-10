@@ -264,3 +264,154 @@ static func _setup_map_hud_buttons(
 			if terminal.sound_fx != null: terminal.sound_fx.play_switch_click(1250.0)
 		)
 		map_hud_hbox.add_child(terminal.btn_research_toggle)
+
+
+"""Обновляет заголовки вкладок и локализованный текст кнопок интерфейса терминала.
+"""
+static func update_localized_ui(terminal: TerminalMain) -> void:
+	if terminal == null:
+		return
+	var tc: TabContainer = terminal.tab_container
+	if tc == null:
+		tc = terminal.get_node_or_null("TabContainer")
+	if tc == null:
+		return
+
+	var loc: Node = terminal._get_localization_manager()
+
+	var tab_map: String = loc.tr_key("TAB_MAP", "ТАКТИЧЕСКАЯ КАРТА") if loc != null else "ТАКТИЧЕСКАЯ КАРТА"
+	var tab_dir: String = loc.tr_key("TAB_DIRECTIVES", "НАЦИОНАЛЬНЫЕ ДИРЕКТИВЫ") if loc != null else "НАЦИОНАЛЬНЫЕ ДИРЕКТИВЫ"
+	var tab_econ: String = loc.tr_key("TAB_ECONOMICS", "ГОСУДАРСТВЕННАЯ ЭКОНОМИКА") if loc != null else "ГОСУДАРСТВЕННАЯ ЭКОНОМИКА"
+
+	var tab_smuta: String = "РУССКАЯ СМУТА // ВОССОЕДИНЕНИЕ"
+	var is_warlord: bool = false
+	var is_german: bool = false
+	var is_usa: bool = false
+	var is_japan: bool = false
+	var is_italy: bool = false
+	if terminal.turn_manager != null and terminal.turn_manager.player_state != null:
+		var p_tag: String = terminal.turn_manager.player_state.country_tag.to_upper()
+		is_warlord = RussianUnificationManager.is_warlord(p_tag)
+		is_german = p_tag in ["GER", "BOR", "SPE", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"]
+		is_usa = (p_tag == "USA")
+		is_japan = (p_tag == "JAP")
+		is_italy = (p_tag == "ITA")
+
+		if is_usa:
+			tab_smuta = loc.tr_key("TAB_USA_CONGRESS", "КАПИТОЛИЙ // КОНГРЕСС США") if loc != null else "КАПИТОЛИЙ // КОНГРЕСС США"
+		elif is_german:
+			tab_smuta = loc.tr_key("TAB_GCW", "ШТАБ РЕЙХА // ГРАЖДАНСКАЯ ВОЙНА") if loc != null else "ШТАБ РЕЙХА // ГРАЖДАНСКАЯ ВОЙНА"
+		elif is_japan:
+			tab_smuta = loc.tr_key("TAB_JAPAN", "ИМПЕРИЯ // ДАЙЭТ И ДЗАЙБАЦУ") if loc != null else "ИМПЕРИЯ // ДАЙЭТ И ДЗАЙБАЦУ"
+		elif is_italy:
+			tab_smuta = loc.tr_key("TAB_ITALY", "РИМ // ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ") if loc != null else "РИМ // ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ"
+		elif loc != null:
+			tab_smuta = loc.tr_key("TAB_SMUTA", "РУССКАЯ СМУТА // ВОССОЕДИНЕНИЕ")
+
+	var tab_dec: String = loc.tr_key("TAB_DECISIONS", "РЕШЕНИЯ И ДЕКРЕТЫ") if loc != null else "РЕШЕНИЯ И ДЕКРЕТЫ"
+
+	if tc.get_tab_count() > 0:
+		tc.set_tab_title(0, tab_map)
+	if tc.get_tab_count() > 1:
+		tc.set_tab_title(1, tab_dir)
+	if tc.get_tab_count() > 2:
+		tc.set_tab_title(2, tab_econ)
+	if tc.get_tab_count() > 3:
+		tc.set_tab_title(3, tab_smuta)
+	if tc.get_tab_count() > 4:
+		tc.set_tab_title(4, tab_dec)
+
+	var has_national_tab: bool = is_warlord or is_german or is_usa or is_japan or is_italy
+	if tc.get_tab_count() > 3:
+		tc.set_tab_hidden(3, not has_national_tab)
+		if not has_national_tab and tc.current_tab == 3:
+			tc.current_tab = 0
+
+	if tc.get_tab_count() > 5:
+		var tab_esp: String = loc.tr_key("TAB_ESPIONAGE", "ШПИОНАЖ") if loc != null else "ШПИОНАЖ"
+		tc.set_tab_title(5, tab_esp)
+	if tc.get_tab_count() > 6:
+		var tab_rnd: String = loc.tr_key("TAB_RESEARCH", "🔬 НИОКР // R&D") if loc != null else "🔬 НИОКР // R&D"
+		tc.set_tab_title(6, tab_rnd)
+
+	if terminal.btn_map_pol != null: terminal.btn_map_pol.text = loc.tr_key("MAP_MODE_POL", "ПОЛИТИЧЕСКАЯ") if loc != null else "ПОЛИТИЧЕСКАЯ"
+	if terminal.btn_map_econ != null: terminal.btn_map_econ.text = loc.tr_key("MAP_MODE_ECON", "ЭКОНОМИКА") if loc != null else "ЭКОНОМИКА"
+	if terminal.btn_map_unrest != null: terminal.btn_map_unrest.text = loc.tr_key("MAP_MODE_UNREST", "БЕСПОРЯДКИ") if loc != null else "БЕСПОРЯДКИ"
+	if terminal.btn_map_diplo != null: terminal.btn_map_diplo.text = loc.tr_key("MAP_MODE_DIPLO", "ДИПЛОМАТИЯ") if loc != null else "ДИПЛОМАТИЯ"
+	if terminal.btn_end_turn != null: terminal.btn_end_turn.text = loc.tr_key("BTN_END_TURN", "ЗАВЕРШИТЬ ХОД >>") if loc != null else "ЗАВЕРШИТЬ ХОД >>"
+	if terminal.btn_save_game != null: terminal.btn_save_game.text = loc.tr_key("BTN_SAVE_GAME", "СОХРАНИТЬ (F5)") if loc != null else "СОХРАНИТЬ (F5)"
+	if terminal.btn_load_game != null: terminal.btn_load_game.text = loc.tr_key("BTN_LOAD_GAME", "ЗАГРУЗИТЬ (F9)") if loc != null else "ЗАГРУЗИТЬ (F9)"
+	if terminal.btn_ruler_focus != null:
+		var r_act: String = loc.tr_key("BTN_RULER_ACTIVE", "[ ПРАВИТЕЛЬ: АКТИВЕН ]") if loc != null else "[ ПРАВИТЕЛЬ: АКТИВЕН ]"
+		var r_inact: String = loc.tr_key("BTN_RULER_INACTIVE", "СТАВКА ВЕРХОВНОГО") if loc != null else "СТАВКА ВЕРХОВНОГО"
+		terminal.btn_ruler_focus.text = r_act if (terminal.map_controller != null and terminal.map_controller.is_ruler_domain_focus) else r_inact
+	if terminal.btn_raid_toggle != null:
+		var rd_act: String = loc.tr_key("BTN_RAID_ACTIVE", "[ ПЛАНИРОВАНИЕ НАБЕГА ]") if loc != null else "[ ПЛАНИРОВАНИЕ НАБЕГА ]"
+		var rd_inact: String = loc.tr_key("BTN_RAID_INACTIVE", "РЕЙДОВЫЕ ОПЕРАЦИИ") if loc != null else "РЕЙДОВЫЕ ОПЕРАЦИИ"
+		terminal.btn_raid_toggle.text = rd_act if terminal.is_raid_mode_active else rd_inact
+
+
+"""Инициализирует первичное состояние глобальной карты, сессии и театров.
+"""
+static func setup_initial_game_state(terminal: TerminalMain) -> void:
+	if terminal == null or terminal.turn_manager == null:
+		return
+
+	var tm: TurnManager = terminal.turn_manager
+	tm.load_world_data()
+
+	var session_node: Node = terminal.get_node_or_null("/root/GameSession")
+	var is_loading: bool = session_node != null and bool(session_node.get("is_loading_saved_game"))
+	if is_loading:
+		session_node.set("is_loading_saved_game", false)
+		var loaded_ok: bool = tm.load_game("user://savegame.json")
+		if loaded_ok:
+			if terminal.map_controller != null:
+				terminal.map_controller.populate_data_lut_from_regions(tm.regions_world_state, tm.player_state.country_tag)
+				terminal.map_controller.refresh_tactical_frontlines()
+			terminal.label_log.text = terminal._tr_str("UI_LOG_LOAD_SUCCESS", {"turn": tm.current_turn}, "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД {turn})")
+	elif session_node != null and session_node.get("active_player_state") != null:
+		tm.set_player_state(session_node.get("active_player_state"))
+	else:
+		tm.player_state.turn_count = tm.current_turn
+		tm.player_state.set_flag("turn_count", tm.current_turn)
+
+	var crt_rect: CanvasItem = terminal._get_crt_node()
+	var sm_node: Node = terminal._get_settings_manager()
+	if crt_rect != null and sm_node != null and sm_node.has_method("register_crt_overlay"):
+		sm_node.register_crt_overlay(crt_rect)
+	elif crt_rect != null and session_node != null and crt_rect.material is ShaderMaterial and session_node.has_method("apply_crt_to_material"):
+		session_node.apply_crt_to_material(crt_rect.material as ShaderMaterial)
+
+	terminal.event_overlay.visible = false
+	if terminal.tno_economy_screen != null:
+		terminal.tno_economy_screen.setup(tm.player_state)
+
+	var p_tag: String = tm.player_state.country_tag.to_upper()
+	var is_warlord: bool = RussianUnificationManager.is_warlord(p_tag)
+	var is_german: bool = p_tag in ["GER", "BOR", "SPE", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"]
+
+	# Инициализация динамического стратегического театра военных действий под державу игрока
+	if tm.player_state != null:
+		MilitaryEngine.deploy_starting_theater(tm.player_state, tm.countries_world_state)
+
+	# Инициализация модуля Германии и Немецкой Гражданской Войны
+	if tm.german_civil_war_manager != null:
+		tm.german_civil_war_manager.initialize(tm, terminal.map_controller, tm.player_state)
+
+	# Регистрация и динамическая загрузка национальных экранов и кнопок карты
+	setup_national_screens(terminal)
+
+	# Стартовая резидентура разведки для погружения в сеттинг
+	if tm.player_state != null and tm.player_state.active_agents.is_empty():
+		var target_rival: String = "ONG" if is_warlord else ("SPE" if is_german else "GER")
+		var ag1 = EspionageEngine.recruit_agent("Спектр", 3, target_rival, 0.6)
+		var ag2 = EspionageEngine.recruit_agent("Сокол", 4, "", 0.8)
+		tm.player_state.add_agent(ag1)
+		tm.player_state.add_agent(ag2)
+		tm.player_state.set_infiltration_level(target_rival, 25.0, "ESTABLISHING")
+		tm.player_state.set_infiltration_level("GER" if target_rival != "GER" else "USA", 10.0, "ESTABLISHING")
+
+	# Синхронизация данных карты и тактического оверлея
+	terminal.map_controller.populate_data_lut_from_regions(tm.regions_world_state, tm.player_state.country_tag)
+	terminal.map_controller.refresh_tactical_frontlines()

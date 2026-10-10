@@ -2,7 +2,7 @@ extends SceneTree
 
 func _init() -> void:
 	print("--- BEGINNING COMPILATION CHECK FOR ALL GD SCRIPTS ---")
-	var dirs_to_check = ["res://core", "res://scripts", "res://ui"]
+	var dirs_to_check = ["res://core", "res://scripts", "res://ui", "res://tests"]
 	var total_checked = 0
 	var errors = 0
 	

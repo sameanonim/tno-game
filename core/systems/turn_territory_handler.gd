@@ -10,6 +10,8 @@ extends RefCounted
 ## 3. Реактивную синхронизацию LUT палитры карты и шейдеров MapController.
 ## ==============================================================================
 
+const RussianUnificationManagerScript = preload("res://core/systems/russia/russian_unification_manager.gd")
+
 
 """Передает суверенитет над штатом новому владельцу с реактивным обновлением карты и провинций.
 """
@@ -127,3 +129,78 @@ static func sync_map_controller_reactive(turn_manager: TurnManager, affected_sta
 	if mc.has_method("populate_data_lut_from_regions") and not turn_manager.regions_world_state.is_empty():
 		var p_tag: String = turn_manager.player_state.country_tag if turn_manager.player_state != null else "KOM"
 		mc.populate_data_lut_from_regions(turn_manager.regions_world_state, p_tag)
+
+
+"""Разрешает отчеты боевых действий, захваты регионов, капитуляции и инциденты на фронтах.
+"""
+static func resolve_military_reports(turn_manager: TurnManager, military_reports: Array[Dictionary]) -> void:
+	if turn_manager == null:
+		return
+
+	var regions_captured_count: int = 0
+	for rep in military_reports:
+		if rep.get("captured_region_id", -1) > 0:
+			var reg_id: int = int(rep["captured_region_id"])
+			var n_tag: String = str(rep.get("new_owner", "")).to_upper().strip_edges()
+			if n_tag.is_empty():
+				n_tag = str(rep.get("attacker_tag", "")).to_upper().strip_edges()
+			var p_tag: String = str(rep.get("previous_owner", "")).to_upper().strip_edges()
+			if p_tag.is_empty():
+				p_tag = str(rep.get("defender_tag", "")).to_upper().strip_edges()
+			var sid: int = int(turn_manager.province_to_state.get(reg_id, 0))
+
+			if not n_tag.is_empty():
+				if turn_manager.boundary_manager != null:
+					turn_manager.boundary_manager.transfer_province(reg_id, n_tag)
+
+				if sid > 0:
+					var provs: Array = turn_manager.state_to_provinces.get(sid, [])
+					var all_ours: bool = true
+					for p in provs:
+						var r: RegionData = turn_manager.regions_world_state.get(p, null)
+						if r != null and r.owner_tag.to_upper() != n_tag:
+							all_ours = false
+							break
+					if all_ours:
+						turn_manager.transfer_state(sid, n_tag)
+					else:
+						if turn_manager.map_controller != null and turn_manager.map_controller.has_method("update_province_owner"):
+							turn_manager.map_controller.update_province_owner(reg_id, n_tag)
+				else:
+					if turn_manager.map_controller != null and turn_manager.map_controller.has_method("update_province_owner"):
+						turn_manager.map_controller.update_province_owner(reg_id, n_tag)
+
+				turn_manager.region_conquered.emit(reg_id, n_tag, p_tag)
+				regions_captured_count += 1
+
+		if rep.get("battle_incident") != null:
+			var inc: GameEvent = rep["battle_incident"]
+			turn_manager.pending_modal_events.append(inc)
+
+		if rep.get("capitulation", false):
+			var victor: String = str(rep.get("victor_tag", "")).to_upper()
+			var defeated: String = str(rep.get("defeated_tag", "")).to_upper()
+			if not defeated.is_empty() and not victor.is_empty():
+				if turn_manager.russian_unification_manager != null and RussianUnificationManagerScript.is_warlord(victor) and RussianUnificationManagerScript.is_warlord(defeated):
+					turn_manager.russian_unification_manager.execute_warlord_conquest(victor, defeated, turn_manager, "annex_and_integrate")
+				else:
+					turn_manager.annex_country(defeated, victor)
+				if turn_manager.countries_world_state.has(defeated):
+					var def_st: CountryState = turn_manager.countries_world_state[defeated]
+					if def_st != null:
+						def_st.is_annexed = true
+				if turn_manager.player_state != null and turn_manager.player_state.country_tag == defeated:
+					turn_manager.player_state.is_annexed = true
+					var defeat_reason: String = "Ваша держава пала под натиском войск %s и капитулировала." % victor
+					var main_loop: MainLoop = Engine.get_main_loop()
+					if main_loop is SceneTree and main_loop.root != null and main_loop.root.has_node("LocalizationManager"):
+						var loc: Node = main_loop.root.get_node("LocalizationManager")
+						if loc != null and loc.has_method("get_translation"):
+							defeat_reason = loc.get_translation("MSG_CAPITULATION_DEFEAT", defeat_reason) % victor
+					turn_manager.game_over.emit(false, defeat_reason)
+				elif turn_manager.player_state != null and turn_manager.player_state.country_tag == victor:
+					turn_manager.player_state.legitimacy = clampf(turn_manager.player_state.legitimacy + 12.0, 0.0, 100.0)
+					turn_manager.player_state.army_morale = clampf(turn_manager.player_state.army_morale + 15.0, 0.0, 100.0)
+
+	if regions_captured_count > 0 and turn_manager.boundary_manager != null:
+		turn_manager.boundary_manager.audit_enclaves()

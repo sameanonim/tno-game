@@ -2,25 +2,9 @@ extends SceneTree
 
 func _init() -> void:
 	var scripts = [
-		"res://core/data/directive_resource.gd",
-		"res://core/data/germany/germany_campaign_state.gd",
-		"res://core/systems/germany/kartenhaus_engine.gd",
-		"res://core/systems/germany/zollverein_engine.gd",
-		"res://core/systems/germany/warplans_engine.gd",
-		"res://core/systems/germany/nuclear_custody_engine.gd",
-		"res://core/systems/germany/germany_campaign_manager.gd",
-		"res://ui/screens/germany/germany_terminal_screen.gd",
-		"res://ui/components/decisions_panel.gd",
-		"res://ui/screens/gcw_operations_panel.gd",
-		"res://ui/components/russian_smuta_panel.gd",
-		"res://ui/screens/tno_economy_screen.gd",
-		"res://ui/components/region_management_panel.gd",
-		"res://ui/screens/main_menu.gd",
-		"res://ui/screens/japan/japan_terminal_screen.gd",
-		"res://ui/screens/terminal_main.gd",
-		"res://ui/components/province_inspector_panel.gd",
-		"res://ui/components/country_labels_overlay.gd",
-		"res://scripts/map_controller.gd"
+		"res://tests/test_utils.gd",
+		"res://tests/test_parliament_engine.gd",
+		"res://tests/test_societal_laws.gd"
 	]
 	for path in scripts:
 		var script = load(path)

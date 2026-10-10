@@ -262,32 +262,14 @@ func _initialize_map() -> void:
 	lut_size = _calculate_lut_size(max_province_id + 1)
 
 	# Political LUT
-	lut_image = Image.create(lut_size.x, lut_size.y, false, Image.FORMAT_RGBA8)
-	lut_image.fill(default_province_color)
-	for pid in provinces_data.keys():
-		var col = _resolve_initial_province_color(pid)
-		var coord = _id_to_lut_coords(pid)
-		lut_image.set_pixel(coord.x, coord.y, col)
-	lut_texture = ImageTexture.create_from_image(lut_image)
+	var pol_res: Dictionary = MapLUTPipelineScript.setup_political_lut(lut_size, provinces_data, country_colors, default_province_color)
+	lut_image = pol_res.get("image")
+	lut_texture = pol_res.get("texture")
 
 	# Scalar Data LUT (R: IC, G: Unrest, B: Terrain/Infra, A: Sphere)
-	data_lut_image = Image.create(lut_size.x, lut_size.y, false, Image.FORMAT_RGBA8)
-	data_lut_image.fill(Color(0.0, 0.0, 0.0, 0.05))
-	for pid in provinces_data.keys():
-		var p_info = provinces_data[pid]
-		var owner_tag = str(p_info.get("owner", ""))
-		var sphere_val = _get_sphere_code_for_owner(owner_tag)
-		var ic_norm := 0.0
-		var unrest_norm := 0.0
-		var infra_norm := 0.0
-		if starting_regions_data.has(pid):
-			var r_info = starting_regions_data[pid]
-			ic_norm = clampf(float(r_info.get("industrial_capacity", 0)) / 10.0, 0.0, 1.0)
-			unrest_norm = clampf(float(r_info.get("unrest", 0.0)) / 100.0, 0.0, 1.0)
-			infra_norm = clampf(float(r_info.get("civilian_infrastructure", 0)) / 10.0, 0.0, 1.0)
-		var coord = _id_to_lut_coords(pid)
-		data_lut_image.set_pixel(coord.x, coord.y, Color(ic_norm, unrest_norm, infra_norm, sphere_val))
-	data_lut_texture = ImageTexture.create_from_image(data_lut_image)
+	var dat_res: Dictionary = MapLUTPipelineScript.setup_data_lut(lut_size, provinces_data, starting_regions_data, country_spheres)
+	data_lut_image = dat_res.get("image")
+	data_lut_texture = dat_res.get("texture")
 
 
 	# Ownership & Hierarchy LUT
@@ -696,49 +678,28 @@ func _get_or_register_country_id(tag: String) -> int:
 ## Установка флага оспариваемых / фронтовых провинций
 ##
 func set_contested_provinces(province_ids: Array, is_contested: bool) -> void:
-	if ownership_lut_image == null:
-		return
-	for pid in province_ids:
-		var p_id = int(pid)
-		var coord = _id_to_lut_coords(p_id)
-		var px = ownership_lut_image.get_pixel(coord.x, coord.y)
-		var r_byte = int(round(px.r * 255.0))
-		var g_byte = int(round(px.g * 255.0))
-		var b_byte = int(round(px.b * 255.0))
-		var a_byte = int(round(px.a * 255.0))
-		if is_contested:
-			a_byte |= 4 # Bit 2 = is_frontline
-			contested_provinces[p_id] = true
-		else:
-			a_byte &= ~4
-			contested_provinces.erase(p_id)
-		var new_col = Color(float(r_byte) / 255.0, float(g_byte) / 255.0, float(b_byte) / 255.0, float(a_byte) / 255.0)
-		ownership_lut_image.set_pixel(coord.x, coord.y, new_col)
-	if ownership_lut_texture != null:
-		ownership_lut_texture.update(ownership_lut_image)
+	MapLUTPipelineScript.update_contested_provinces(
+		ownership_lut_image,
+		ownership_lut_texture,
+		lut_size,
+		province_ids,
+		is_contested,
+		contested_provinces
+	)
 
 
 ##
 ## Установка статуса демилитаризованной зоны (DMZ) для конкретной провинции
 ##
 func set_province_dmz(province_id: int, is_dmz: bool) -> void:
-	if is_dmz:
-		dmz_provinces[province_id] = true
-	else:
-		dmz_provinces.erase(province_id)
-
-	if ownership_lut_image != null:
-		var coord = _id_to_lut_coords(province_id)
-		var px = ownership_lut_image.get_pixel(coord.x, coord.y)
-		var a_byte = int(round(px.a * 255.0))
-		if is_dmz:
-			a_byte |= 32 # Bit 5 (val 32) = is_dmz
-		else:
-			a_byte &= ~32
-		px.a = float(a_byte) / 255.0
-		ownership_lut_image.set_pixel(coord.x, coord.y, px)
-		if ownership_lut_texture != null:
-			ownership_lut_texture.update(ownership_lut_image)
+	MapLUTPipelineScript.update_dmz_provinces(
+		ownership_lut_image,
+		ownership_lut_texture,
+		lut_size,
+		[province_id],
+		is_dmz,
+		dmz_provinces
+	)
 
 
 ##
@@ -746,25 +707,14 @@ func set_province_dmz(province_id: int, is_dmz: bool) -> void:
 ##
 func set_state_dmz(state_id: int, is_dmz: bool) -> void:
 	var provs = state_to_provinces.get(state_id, [])
-	if ownership_lut_image == null:
-		return
-	for pid in provs:
-		var p_id = int(pid)
-		if is_dmz:
-			dmz_provinces[p_id] = true
-		else:
-			dmz_provinces.erase(p_id)
-		var coord = _id_to_lut_coords(p_id)
-		var px = ownership_lut_image.get_pixel(coord.x, coord.y)
-		var a_byte = int(round(px.a * 255.0))
-		if is_dmz:
-			a_byte |= 32
-		else:
-			a_byte &= ~32
-		px.a = float(a_byte) / 255.0
-		ownership_lut_image.set_pixel(coord.x, coord.y, px)
-	if ownership_lut_texture != null:
-		ownership_lut_texture.update(ownership_lut_image)
+	MapLUTPipelineScript.update_dmz_provinces(
+		ownership_lut_image,
+		ownership_lut_texture,
+		lut_size,
+		provs,
+		is_dmz,
+		dmz_provinces
+	)
 
 
 ##
@@ -1125,43 +1075,31 @@ func get_province_data(province_id: int) -> Dictionary:
 # ==============================================================================
 
 func _setup_ownership_lut() -> void:
-	ownership_lut_image = Image.create(lut_size.x, lut_size.y, false, Image.FORMAT_RGBA8)
-	ownership_lut_image.fill(Color(0.0, 0.0, 0.0, 0.0))
-
-	for pid in range(max_province_id + 1):
-		var p_data = provinces_data.get(pid, {})
-		var owner_tag = p_data.get("owner", "")
-		var owner_id = country_tag_to_id.get(owner_tag, 0)
-		var state_id = province_to_state.get(pid, 0)
-		var is_water = bool(p_data.get("type", "") in ["sea", "lake", "ocean"])
-		var is_frontline = contested_provinces.has(pid)
-		var is_dmz = dmz_provinces.has(pid)
-
-		var pixel = _pack_ownership_pixel(owner_id, state_id, is_water, is_frontline, is_dmz)
-		var coord = _id_to_lut_coords(pid)
-		ownership_lut_image.set_pixel(coord.x, coord.y, pixel)
-
-	ownership_lut_texture = ImageTexture.create_from_image(ownership_lut_image)
+	var result: Dictionary = MapLUTPipelineScript.setup_ownership_lut(
+		lut_size,
+		max_province_id,
+		provinces_data,
+		country_tag_to_id,
+		province_to_state,
+		contested_provinces,
+		dmz_provinces
+	)
+	ownership_lut_image = result.get("image")
+	ownership_lut_texture = result.get("texture")
 
 
 func _refresh_ownership_lut_frontlines() -> void:
-	if ownership_lut_image == null or ownership_lut_texture == null:
-		return
-
-	for pid in range(max_province_id + 1):
-		var p_data = provinces_data.get(pid, {})
-		var owner_tag = p_data.get("owner", "")
-		var owner_id = country_tag_to_id.get(owner_tag, 0)
-		var state_id = province_to_state.get(pid, 0)
-		var is_water = bool(p_data.get("type", "") in ["sea", "lake", "ocean"])
-		var is_frontline = contested_provinces.has(pid)
-		var is_dmz = dmz_provinces.has(pid)
-
-		var pixel = _pack_ownership_pixel(owner_id, state_id, is_water, is_frontline, is_dmz)
-		var coord = _id_to_lut_coords(pid)
-		ownership_lut_image.set_pixel(coord.x, coord.y, pixel)
-
-	ownership_lut_texture.update(ownership_lut_image)
+	MapLUTPipelineScript.refresh_ownership_lut_frontlines(
+		ownership_lut_image,
+		ownership_lut_texture,
+		lut_size,
+		max_province_id,
+		provinces_data,
+		country_tag_to_id,
+		province_to_state,
+		contested_provinces,
+		dmz_provinces
+	)
 
 
 func _pack_ownership_pixel(owner_id: int, state_id: int, is_water: bool, is_frontline: bool = false, is_dmz: bool = false) -> Color:

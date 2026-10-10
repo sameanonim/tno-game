@@ -10,7 +10,7 @@ TESTS = [
         "cmd": [GODOT_BIN, "--headless", "-s", "tools/test_compile_all.gd"]
     },
     {
-        "name": "Automated Master Unit Test Suite (12 suites, 198 assertions)",
+        "name": "Automated Master Unit Test Suite (15 suites, 244 assertions)",
         "cmd": [GODOT_BIN, "--headless", "-s", "tests/run_all_tests.gd"]
     },
     {

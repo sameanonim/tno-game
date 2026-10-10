@@ -6,6 +6,8 @@ extends Control
 ## Управляет экранами: Карта, Директивы, Экономика, Парламент, Рейды, Модальные события.
 const TerminalSignalsConnectorScript = preload("res://ui/screens/controllers/terminal_signals_connector.gd")
 const TerminalScreenRegistryScript = preload("res://ui/screens/controllers/terminal_screen_registry.gd")
+const DirectiveFallbackFactoryScript = preload("res://ui/screens/controllers/directive_fallback_factory.gd")
+const TerminalOverlayRouterScript = preload("res://ui/screens/controllers/terminal_overlay_router.gd")
 
 var _turn_manager_node: TurnManager = null
 var turn_manager: TurnManager:
@@ -174,8 +176,8 @@ func quick_save() -> void:
 
 func quick_load() -> void:
 	if turn_manager != null and turn_manager.load_game("user://savegame.json"):
-		if sound_fx != null: sound_fx.play_switch_click(900.0)
-		_setup_player_military_theater(turn_manager.player_state)
+		if turn_manager.player_state != null:
+			MilitaryEngine.deploy_starting_theater(turn_manager.player_state, turn_manager.countries_world_state)
 		map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
 		map_controller.refresh_tactical_frontlines()
 		_update_hud()
@@ -451,74 +453,7 @@ func _connect_signals() -> void:
 
 
 func _setup_initial_game_state() -> void:
-	# Загрузка полноценной мировой географии и государств (13,000+ провинций, 200+ стран)
-	turn_manager.load_world_data()
-
-	# Если сессия запущена через главное меню — подтягиваем сконфигурированный стейт игрока или загружаем сейв
-	var session_node = get_node_or_null("/root/GameSession")
-	var is_loading = session_node != null and bool(session_node.get("is_loading_saved_game"))
-	if is_loading:
-		session_node.is_loading_saved_game = false
-		var loaded_ok = turn_manager.load_game("user://savegame.json")
-		if loaded_ok:
-			if map_controller != null:
-				map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
-				map_controller.refresh_tactical_frontlines()
-			label_log.text = _tr_str("UI_LOG_LOAD_SUCCESS", {"turn": turn_manager.current_turn}, "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД {turn})")
-	elif session_node != null and session_node.active_player_state != null:
-		turn_manager.set_player_state(session_node.active_player_state)
-	else:
-		turn_manager.player_state.turn_count = turn_manager.current_turn
-		turn_manager.player_state.set_flag("turn_count", turn_manager.current_turn)
-
-	var crt_rect: CanvasItem = _get_crt_node()
-	var sm_node = _get_settings_manager()
-	if crt_rect != null and sm_node != null:
-		sm_node.register_crt_overlay(crt_rect)
-	elif crt_rect != null and session_node != null and crt_rect.material is ShaderMaterial:
-		session_node.apply_crt_to_material(crt_rect.material as ShaderMaterial)
-
-	event_overlay.visible = false
-	if tno_economy_screen != null:
-		tno_economy_screen.setup(turn_manager.player_state)
-
-	var p_tag = turn_manager.player_state.country_tag.to_upper()
-	var is_warlord = RussianUnificationManager.is_warlord(p_tag)
-	var is_german = p_tag in ["GER", "BOR", "SPE", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"]
-	var is_usa = (p_tag == "USA")
-	var is_japan = (p_tag == "JAP")
-	var is_italy = (p_tag == "ITA")
-
-	# Инициализация динамического стратегического театра военных действий под державу игрока
-	_setup_player_military_theater(turn_manager.player_state)
-
-	# Инициализация модуля Германии и Немецкой Гражданской Войны
-	if turn_manager.german_civil_war_manager != null:
-		turn_manager.german_civil_war_manager.initialize(turn_manager, map_controller, turn_manager.player_state)
-
-	# Регистрация и динамическая загрузка национальных экранов и кнопок карты
-	TerminalScreenRegistryScript.setup_national_screens(self)
-
-
-	# Стартовая резидентура разведки для погружения в сеттинг
-	if turn_manager.player_state != null and turn_manager.player_state.active_agents.is_empty():
-		var target_rival = "ONG" if is_warlord else ("SPE" if is_german else "GER")
-		var ag1 = EspionageEngine.recruit_agent("Спектр", 3, target_rival, 0.6)
-		var ag2 = EspionageEngine.recruit_agent("Сокол", 4, "", 0.8)
-		turn_manager.player_state.add_agent(ag1)
-		turn_manager.player_state.add_agent(ag2)
-		turn_manager.player_state.set_infiltration_level(target_rival, 25.0, "ESTABLISHING")
-		turn_manager.player_state.set_infiltration_level("GER" if target_rival != "GER" else "USA", 10.0, "ESTABLISHING")
-
-	# Синхронизация данных карты и тактического оверлея
-	map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
-	map_controller.refresh_tactical_frontlines()
-
-
-func _setup_player_military_theater(state: CountryState) -> void:
-	if state == null or turn_manager == null:
-		return
-	MilitaryEngine.deploy_starting_theater(state, turn_manager.countries_world_state)
+	TerminalScreenRegistryScript.setup_initial_game_state(self)
 
 
 
@@ -715,83 +650,7 @@ func _get_settings_manager() -> Node:
 
 
 func _update_localized_ui() -> void:
-	if tab_container == null:
-		tab_container = get_node_or_null("TabContainer")
-	if tab_container == null:
-		return
-
-	var loc = _get_localization_manager()
-
-	var tab_map = loc.tr_key("TAB_MAP", "ТАКТИЧЕСКАЯ КАРТА") if loc != null else "ТАКТИЧЕСКАЯ КАРТА"
-	var tab_dir = loc.tr_key("TAB_DIRECTIVES", "НАЦИОНАЛЬНЫЕ ДИРЕКТИВЫ") if loc != null else "НАЦИОНАЛЬНЫЕ ДИРЕКТИВЫ"
-	var tab_econ = loc.tr_key("TAB_ECONOMICS", "ГОСУДАРСТВЕННАЯ ЭКОНОМИКА") if loc != null else "ГОСУДАРСТВЕННАЯ ЭКОНОМИКА"
-	
-	var tab_smuta := "РУССКАЯ СМУТА // ВОССОЕДИНЕНИЕ"
-	var is_warlord := false
-	var is_german := false
-	var is_usa := false
-	var is_japan := false
-	var is_italy := false
-	if turn_manager != null and turn_manager.player_state != null:
-		var p_tag = turn_manager.player_state.country_tag.to_upper()
-		is_warlord = RussianUnificationManager.is_warlord(p_tag)
-		is_german = p_tag in ["GER", "BOR", "SPE", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"]
-		is_usa = (p_tag == "USA")
-		is_japan = (p_tag == "JAP")
-		is_italy = (p_tag == "ITA")
-
-		if is_usa:
-			tab_smuta = loc.tr_key("TAB_USA_CONGRESS", "КАПИТОЛИЙ // КОНГРЕСС США") if loc != null else "КАПИТОЛИЙ // КОНГРЕСС США"
-		elif is_german:
-			tab_smuta = loc.tr_key("TAB_GCW", "ШТАБ РЕЙХА // ГРАЖДАНСКАЯ ВОЙНА") if loc != null else "ШТАБ РЕЙХА // ГРАЖДАНСКАЯ ВОЙНА"
-		elif is_japan:
-			tab_smuta = loc.tr_key("TAB_JAPAN", "ИМПЕРИЯ // ДАЙЭТ И ДЗАЙБАЦУ") if loc != null else "ИМПЕРИЯ // ДАЙЭТ И ДЗАЙБАЦУ"
-		elif is_italy:
-			tab_smuta = loc.tr_key("TAB_ITALY", "РИМ // ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ") if loc != null else "РИМ // ВЕЛИКИЙ ФАШИСТСКИЙ СОВЕТ"
-		elif loc != null:
-			tab_smuta = loc.tr_key("TAB_SMUTA", "РУССКАЯ СМУТА // ВОССОЕДИНЕНИЕ")
-
-	var tab_dec = loc.tr_key("TAB_DECISIONS", "РЕШЕНИЯ И ДЕКРЕТЫ") if loc != null else "РЕШЕНИЯ И ДЕКРЕТЫ"
-
-	if tab_container.get_tab_count() > 0:
-		tab_container.set_tab_title(0, tab_map)
-	if tab_container.get_tab_count() > 1:
-		tab_container.set_tab_title(1, tab_dir)
-	if tab_container.get_tab_count() > 2:
-		tab_container.set_tab_title(2, tab_econ)
-	if tab_container.get_tab_count() > 3:
-		tab_container.set_tab_title(3, tab_smuta)
-	if tab_container.get_tab_count() > 4:
-		tab_container.set_tab_title(4, tab_dec)
-
-	var has_national_tab = is_warlord or is_german or is_usa or is_japan or is_italy
-	if tab_container.get_tab_count() > 3:
-		tab_container.set_tab_hidden(3, not has_national_tab)
-		if not has_national_tab and tab_container.current_tab == 3:
-			tab_container.current_tab = 0
-
-	if tab_container.get_tab_count() > 5:
-		var tab_esp = loc.tr_key("TAB_ESPIONAGE", "ШПИОНАЖ") if loc != null else "ШПИОНАЖ"
-		tab_container.set_tab_title(5, tab_esp)
-	if tab_container.get_tab_count() > 6:
-		var tab_rnd = loc.tr_key("TAB_RESEARCH", "🔬 НИОКР // R&D") if loc != null else "🔬 НИОКР // R&D"
-		tab_container.set_tab_title(6, tab_rnd)
-
-	if btn_map_pol != null: btn_map_pol.text = loc.tr_key("MAP_MODE_POL", "ПОЛИТИЧЕСКАЯ") if loc != null else "ПОЛИТИЧЕСКАЯ"
-	if btn_map_econ != null: btn_map_econ.text = loc.tr_key("MAP_MODE_ECON", "ЭКОНОМИКА") if loc != null else "ЭКОНОМИКА"
-	if btn_map_unrest != null: btn_map_unrest.text = loc.tr_key("MAP_MODE_UNREST", "БЕСПОРЯДКИ") if loc != null else "БЕСПОРЯДКИ"
-	if btn_map_diplo != null: btn_map_diplo.text = loc.tr_key("MAP_MODE_DIPLO", "ДИПЛОМАТИЯ") if loc != null else "ДИПЛОМАТИЯ"
-	if btn_end_turn != null: btn_end_turn.text = loc.tr_key("BTN_END_TURN", "ЗАВЕРШИТЬ ХОД >>") if loc != null else "ЗАВЕРШИТЬ ХОД >>"
-	if btn_save_game != null: btn_save_game.text = loc.tr_key("BTN_SAVE_GAME", "СОХРАНИТЬ (F5)") if loc != null else "СОХРАНИТЬ (F5)"
-	if btn_load_game != null: btn_load_game.text = loc.tr_key("BTN_LOAD_GAME", "ЗАГРУЗИТЬ (F9)") if loc != null else "ЗАГРУЗИТЬ (F9)"
-	if btn_ruler_focus != null:
-		var r_act = loc.tr_key("BTN_RULER_ACTIVE", "[ ПРАВИТЕЛЬ: АКТИВЕН ]") if loc != null else "[ ПРАВИТЕЛЬ: АКТИВЕН ]"
-		var r_inact = loc.tr_key("BTN_RULER_INACTIVE", "СТАВКА ВЕРХОВНОГО") if loc != null else "СТАВКА ВЕРХОВНОГО"
-		btn_ruler_focus.text = r_act if (map_controller != null and map_controller.is_ruler_domain_focus) else r_inact
-	if btn_raid_toggle != null:
-		var rd_act = loc.tr_key("BTN_RAID_ACTIVE", "[ ПЛАНИРОВАНИЕ НАБЕГА ]") if loc != null else "[ ПЛАНИРОВАНИЕ НАБЕГА ]"
-		var rd_inact = loc.tr_key("BTN_RAID_INACTIVE", "РЕЙДОВЫЕ ОПЕРАЦИИ") if loc != null else "РЕЙДОВЫЕ ОПЕРАЦИИ"
-		btn_raid_toggle.text = rd_act if is_raid_mode_active else rd_inact
+	TerminalScreenRegistryScript.update_localized_ui(self)
 
 
 func _on_end_turn_pressed() -> void:
@@ -978,171 +837,11 @@ func _on_military_frontlines_processed(reports: Array[Dictionary]) -> void:
 # SAMPLES REGISTRATION
 # ==============================================================================
 func _populate_sample_directives() -> void:
-	var mgr = turn_manager.directive_manager
-
-	var session = _get_session()
-	var cl = session.content_loader if (session != null and session.content_loader != null) else ContentLoader.get_instance()
-	if cl == null:
-		cl = ContentLoader.new()
-		add_child(cl)
-
-	directive_tree_view.setup(turn_manager.player_state, turn_manager, mgr, turn_manager.focus_stage_controller)
-	var loaded = directive_tree_view.load_tree_for_country(turn_manager.player_state.country_tag)
-	if loaded and not directive_tree_view.all_directives.is_empty():
-		for d in directive_tree_view.all_directives.values():
-			mgr.register_directive(d)
-		if turn_manager.player_state != null:
-			mgr.sync_initial_directives(turn_manager.player_state)
-		var comp_cnt = turn_manager.player_state.completed_directives.size() if turn_manager.player_state != null else 0
-		var act_cnt = turn_manager.player_state.active_directives.size() if turn_manager.player_state != null else 0
-		label_log.text = _tr_str("LOG_FOCUS_TREE_LOADED", {
-			"tag": turn_manager.player_state.country_tag,
-			"count": directive_tree_view.all_directives.size(),
-			"done": comp_cnt,
-			"active": act_cnt
-		}, "ЗАГРУЖЕНО ДРЕВО ДИРЕКТИВ [{tag}]: {count} ИНИЦИАТИВ (ЗАВЕРШЕНО: {done}, В ПРОЦЕССЕ: {active})")
-		return
-
-	var extracted_directives: Array[DirectiveResource] = cl.get_directives_for_country(turn_manager.player_state.country_tag)
-	if not extracted_directives.is_empty():
-		for d in extracted_directives:
-			mgr.register_directive(d)
-		directive_tree_view.setup(turn_manager.player_state, turn_manager, mgr, turn_manager.focus_stage_controller)
-		label_log.text = _tr_str("LOG_NATIONAL_TREE_LOADED", {"tag": turn_manager.player_state.country_tag, "count": extracted_directives.size()}, "ЗАГРУЖЕНО НАЦИОНАЛЬНОЕ ДРЕВО ДИРЕКТИВ [{tag}]: {count} ИНИЦИАТИВ")
-		return
-
-	# Fallback на встроенное дерево при отсутствии внешних JSON
-	# 1. Корневая директива (Колонка 0, Ряд 1)
-	var d_root = DirectiveResource.new()
-	d_root.directive_id = "dir_wrrf_rearm"
-	d_root.title = "WRRF Strategic Mobilization Directive"
-	d_root.category = "military"
-	d_root.icon_symbol = "[⚔]"
-	d_root.grid_position = Vector2i(0, 1)
-	d_root.description = "Объявление полной мобилизации резервистов и перестройка аппарата снабжения."
-	d_root.turns_required = 2
-	d_root.cost_initial_cap = 1
-	d_root.cost_initial_pc = 10.0
-	d_root.cost_money_per_turn_billions = 0.05
-	d_root.completion_effects = {"modify_weapons": 5000, "modify_manpower": 12000}
-	mgr.register_directive(d_root)
-
-	# 2. Промышленная ветка (Колонка 1, Ряд 0)
-	var d_foundries = DirectiveResource.new()
-	d_foundries.directive_id = "dir_rebuild_foundries"
-	d_foundries.title = "Reconstruct Onega Iron Foundries"
-	d_foundries.category = "economy"
-	d_foundries.icon_symbol = "[🏭]"
-	d_foundries.grid_position = Vector2i(1, 0)
-	d_foundries.prerequisites = ["dir_wrrf_rearm"]
-	d_foundries.description = "Восстановление доменных печей и литейных мощностей освобожденных районов."
-	d_foundries.turns_required = 3
-	d_foundries.cost_initial_cap = 1
-	d_foundries.cost_initial_pc = 15.0
-	d_foundries.cost_money_per_turn_billions = 0.12
-	d_foundries.completion_effects = {"modify_military_factories": 2, "modify_gdp_billions": 0.45}
-	mgr.register_directive(d_foundries)
-
-	# 3. Военная ветка A (Колонка 1, Ряд 1) — Взаимно исключающая с веткой B
-	var d_conscription = DirectiveResource.new()
-	d_conscription.directive_id = "dir_conscription_surge"
-	d_conscription.title = "Mass Revolutionary Levy"
-	d_conscription.category = "military"
-	d_conscription.icon_symbol = "[🚩]"
-	d_conscription.grid_position = Vector2i(1, 1)
-	d_conscription.prerequisites = ["dir_wrrf_rearm"]
-	d_conscription.mutually_exclusive_with = ["dir_professional_cadre"]
-	d_conscription.description = "Опора на народное ополчение и массовый призыв в ряды Красной Армии."
-	d_conscription.turns_required = 2
-	d_conscription.cost_initial_cap = 2
-	d_conscription.cost_initial_pc = 20.0
-	d_conscription.cost_money_per_turn_billions = 0.08
-	d_conscription.completion_effects = {"modify_manpower": 25000, "modify_radicalization": 4.0}
-	mgr.register_directive(d_conscription)
-
-	# 4. Военная ветка B (Колонка 1, Ряд 2) — Профессиональный кадровый костяк
-	var d_cadre = DirectiveResource.new()
-	d_cadre.directive_id = "dir_professional_cadre"
-	d_cadre.title = "Professional Vanguard Officers"
-	d_cadre.category = "doctrine"
-	d_cadre.icon_symbol = "[🎖]"
-	d_cadre.grid_position = Vector2i(1, 2)
-	d_cadre.prerequisites = ["dir_wrrf_rearm"]
-	d_cadre.mutually_exclusive_with = ["dir_conscription_surge"]
-	d_cadre.description = "Элитная подготовка командного состава и упор на огневое превосходство."
-	d_cadre.turns_required = 3
-	d_cadre.cost_initial_cap = 2
-	d_cadre.cost_initial_pc = 25.0
-	d_cadre.cost_money_per_turn_billions = 0.15
-	d_cadre.completion_effects = {"modify_stability": 0.08, "modify_factions": {"military": 15.0}}
-	mgr.register_directive(d_cadre)
-
-	# 5. Глубокая операция (Колонка 2, Ряд 1)
-	var d_deep_battle = DirectiveResource.new()
-	d_deep_battle.directive_id = "dir_deep_battle_doctrine"
-	d_deep_battle.title = "Tukhachevsky Deep Operation Doctrine"
-	d_deep_battle.category = "doctrine"
-	d_deep_battle.icon_symbol = "[⚡]"
-	d_deep_battle.grid_position = Vector2i(2, 1)
-	d_deep_battle.prerequisites = ["dir_conscription_surge"]
-	d_deep_battle.description = "Внедрение теоретического базиса маршала Тухачевского о непрерывном прорыве."
-	d_deep_battle.turns_required = 4
-	d_deep_battle.cost_initial_cap = 2
-	d_deep_battle.cost_initial_pc = 35.0
-	d_deep_battle.cost_money_per_turn_billions = 0.20
-	d_deep_battle.completion_effects = {"set_flags": {"deep_battle_active": true}}
-	mgr.register_directive(d_deep_battle)
-
-	# 6. Тяжелые танковые корпуса (Колонка 2, Ряд 0)
-	var d_armor = DirectiveResource.new()
-	d_armor.directive_id = "dir_heavy_armor"
-	d_armor.title = "Guards Shock Tank Corps"
-	d_armor.category = "military"
-	d_armor.icon_symbol = "[🛡]"
-	d_armor.grid_position = Vector2i(2, 0)
-	d_armor.prerequisites = ["dir_rebuild_foundries"]
-	d_armor.description = "Концентрация бронетехники в единый ударный кулак фронта."
-	d_armor.turns_required = 4
-	d_armor.cost_initial_cap = 2
-	d_armor.cost_initial_pc = 30.0
-	d_armor.cost_money_per_turn_billions = 0.25
-	d_armor.completion_effects = {"modify_military_factories": 3}
-	mgr.register_directive(d_armor)
-
-	directive_tree_view.setup(turn_manager.player_state, turn_manager, mgr, turn_manager.focus_stage_controller)
-
+	DirectiveFallbackFactoryScript.populate_sample_directives(directive_tree_view, turn_manager, self)
 
 
 func _populate_sample_events() -> void:
-	var ev_mgr = turn_manager.event_manager
-	if ev_mgr == null:
-		return
-
-	# Загрузка нарративных событий для текущей страны
-	var loaded = ev_mgr.load_country_events(turn_manager.player_state.country_tag)
-	if not loaded.is_empty():
-		label_log.text = _tr_str("LOG_EVENTS_LOADED", {"count": loaded.size(), "tag": turn_manager.player_state.country_tag}, "НАРРАТИВНЫЙ МОДУЛЬ: Загружено {count} событий для [{tag}]")
-
-	if not ev_mgr.all_events.has("ev_smuta_opening"):
-		var ev = GameEvent.new()
-		ev.event_id = "ev_smuta_opening"
-		ev.title = "THE FIRES OF THE SMUTA"
-		ev.classification = "[TOP SECRET // PREKAS No. 001]"
-		ev.description = "Comrades of the Revolutionary Front!\n\nThe warlords of the Urals and Western Russia remain fractured. Our intelligence reports that the time has come to secure our borders and crush the reactionary remnants. The frontline stands ready."
-		ev.trigger_conditions = {"min_turn": 2}
-		ev.options = [
-			{
-				"option_id": "opt_aggressive",
-				"text": "Mobilize the shock brigades for immediate offensive.",
-				"effects": {"modify_pc": 15.0, "modify_manpower": 5000, "modify_factions": {"military": 10.0}}
-			},
-			{
-				"option_id": "opt_consolidate",
-				"text": "Fortify our industrial base before expanding.",
-				"effects": {"modify_gdp": 0.5, "modify_legitimacy": 5.0}
-			}
-		]
-		ev_mgr.register_event(ev)
+	DirectiveFallbackFactoryScript.populate_sample_events(turn_manager, self)
 
 
 func _get_session() -> Node:
@@ -1158,9 +857,6 @@ func _get_session() -> Node:
 # НАСТРОЙКИ В ПРОЦЕССЕ ИГРЫ (ESC)
 # ==============================================================================
 
-const SETTINGS_TERMINAL_SCENE = preload("res://ui/screens/settings_terminal.tscn")
-const US_CONGRESS_SCENE = preload("res://ui/screens/usa/us_congress_screen.tscn")
-const GEN_PARLIAMENT_SCENE = preload("res://ui/screens/general_parliament_screen.tscn")
 var _active_settings_terminal: Control = null
 var _active_congress_screen: Control = null
 var _active_parliament_screen: Control = null
@@ -1186,93 +882,48 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _toggle_in_game_settings() -> void:
-	if _active_settings_terminal != null and is_instance_valid(_active_settings_terminal):
-		_active_settings_terminal.queue_free()
-		_active_settings_terminal = null
-		var sm = _get_settings_manager()
-		var crt = _get_crt_node()
-		if sm != null and crt != null:
-			crt.remove_meta("crt_suspended")
-			sm.apply_crt_to_overlay(crt)
-		return
-
-	var crt_node = _get_crt_node()
-	if crt_node != null:
-		crt_node.set_meta("crt_suspended", true)
-		crt_node.visible = false
-
-	var st = SETTINGS_TERMINAL_SCENE.instantiate()
-	_active_settings_terminal = st
-	add_child(st)
-	st.settings_saved.connect(func():
-		var sm = _get_settings_manager()
-		var crt = _get_crt_node()
-		if sm != null and crt != null:
-			sm.apply_crt_to_overlay(crt)
-		_update_localized_ui()
-	)
-	st.closed.connect(func():
-		var sm = _get_settings_manager()
-		var crt = _get_crt_node()
-		if sm != null and crt != null:
-			crt.remove_meta("crt_suspended")
-			sm.apply_crt_to_overlay(crt)
-		if _active_settings_terminal != null and is_instance_valid(_active_settings_terminal):
-			_active_settings_terminal.queue_free()
-			_active_settings_terminal = null
-		_update_localized_ui()
+	_active_settings_terminal = TerminalOverlayRouterScript.toggle_settings(
+		self,
+		_active_settings_terminal,
+		_get_crt_node(),
+		_get_settings_manager(),
+		_update_localized_ui
 	)
 
 
 func _open_legislature_screen() -> void:
-	if turn_manager == null or turn_manager.player_state == null:
-		return
-	var p_tag = turn_manager.player_state.country_tag.to_upper()
-	if p_tag == "USA":
-		_open_us_congress_screen()
-	else:
-		_open_general_parliament_screen()
+	var res: Dictionary = TerminalOverlayRouterScript.open_legislature(
+		self,
+		turn_manager,
+		_active_congress_screen,
+		_active_parliament_screen,
+		sound_fx,
+		_update_hud,
+		func(bill_id: String):
+			label_log.text = _tr_str("LOG_PARLIAMENT_BILL_PASSED", {"bill": bill_id}, "ПАРЛАМЕНТ: Законопроект «{bill}» успешно принят большинством голосов!")
+	)
+	_active_congress_screen = res.get("congress")
+	_active_parliament_screen = res.get("parliament")
 
 
 func _open_us_congress_screen() -> void:
-	if _active_congress_screen != null and is_instance_valid(_active_congress_screen):
-		_active_congress_screen.queue_free()
-		_active_congress_screen = null
-		return
-
-	var cong = US_CONGRESS_SCENE.instantiate()
-	_active_congress_screen = cong
-	add_child(cong)
-	var eng = turn_manager.us_electoral_engine if turn_manager != null else null
-	cong.setup(turn_manager.player_state if turn_manager != null else null, eng)
-	cong.closed.connect(func():
-		if _active_congress_screen != null and is_instance_valid(_active_congress_screen):
-			_active_congress_screen.queue_free()
-			_active_congress_screen = null
-		_update_hud()
+	_active_congress_screen = TerminalOverlayRouterScript.open_us_congress(
+		self,
+		turn_manager,
+		_active_congress_screen,
+		_update_hud
 	)
 
 
 func _open_general_parliament_screen() -> void:
-	if _active_parliament_screen != null and is_instance_valid(_active_parliament_screen):
-		_active_parliament_screen.queue_free()
-		_active_parliament_screen = null
-		return
-
-	var parl = GEN_PARLIAMENT_SCENE.instantiate()
-	_active_parliament_screen = parl
-	add_child(parl)
-	parl.setup(turn_manager.player_state)
-	parl.vote_passed.connect(func(bill_id: String, _effects: Dictionary):
-		_update_hud()
-		if sound_fx != null: sound_fx.play_switch_click(1350.0)
-		label_log.text = _tr_str("LOG_PARLIAMENT_BILL_PASSED", {"bill": bill_id}, "ПАРЛАМЕНТ: Законопроект «{bill}» успешно принят большинством голосов!")
-	)
-	parl.closed.connect(func():
-		if _active_parliament_screen != null and is_instance_valid(_active_parliament_screen):
-			_active_parliament_screen.queue_free()
-			_active_parliament_screen = null
-		_update_hud()
+	_active_parliament_screen = TerminalOverlayRouterScript.open_general_parliament(
+		self,
+		turn_manager,
+		_active_parliament_screen,
+		sound_fx,
+		_update_hud,
+		func(bill_id: String):
+			label_log.text = _tr_str("LOG_PARLIAMENT_BILL_PASSED", {"bill": bill_id}, "ПАРЛАМЕНТ: Законопроект «{bill}» успешно принят большинством голосов!")
 	)
 
 

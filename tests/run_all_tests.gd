@@ -18,6 +18,9 @@ const TestClausewitzEffects = preload("res://tests/test_clausewitz_effects.gd")
 const TestNuclearDefcon = preload("res://tests/test_nuclear_defcon.gd")
 const Test2WRWCampaign = preload("res://tests/test_2wrw_campaign.gd")
 const TestCountryDossier = preload("res://tests/test_country_dossier.gd")
+const TestUtils = preload("res://tests/test_utils.gd")
+const TestParliamentEngine = preload("res://tests/test_parliament_engine.gd")
+const TestSocietalLaws = preload("res://tests/test_societal_laws.gd")
 
 func _init() -> void:
 	print("================================================================")
@@ -36,7 +39,10 @@ func _init() -> void:
 		{"name": "ClausewitzEffects Suite", "instance": TestClausewitzEffects.new()},
 		{"name": "NuclearDefcon Suite", "instance": TestNuclearDefcon.new()},
 		{"name": "2WRWCampaign Suite", "instance": Test2WRWCampaign.new()},
-		{"name": "CountryDossier Suite", "instance": TestCountryDossier.new()}
+		{"name": "CountryDossier Suite", "instance": TestCountryDossier.new()},
+		{"name": "Utils Suite", "instance": TestUtils.new()},
+		{"name": "ParliamentEngine Suite", "instance": TestParliamentEngine.new()},
+		{"name": "SocietalLaws Suite", "instance": TestSocietalLaws.new()}
 	]
 	
 	var total_passed: int = 0
