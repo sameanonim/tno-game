@@ -113,3 +113,80 @@ func test_turn_manager_directive_triggers_modal_event() -> void:
 	assert_eq(tm.pending_modal_events.size(), 1, "Событие с days <= 1 должно немедленно попасть в pending_modal_events")
 	var queued_ev: GameEvent = tm.pending_modal_events[0]
 	assert_eq(queued_ev.event_id, "komi_friendship.1", "Очередь должна содержать komi_friendship.1")
+
+
+func test_multi_nation_events_load_from_index() -> void:
+	var em := EventManager.new()
+	var test_ids: Array[String] = [
+		"germany.4",
+		"AAT_USA_events.01",
+		"omsknuclearwar.1",
+		"komi_friendship.1"
+	]
+	
+	for tid in test_ids:
+		var ev: GameEvent = em.get_or_load_event(tid)
+		assert_true(ev != null, "Событие '%s' должно успешно загружаться из мастер-индекса" % tid)
+		if ev != null:
+			assert_true(not ev.title.is_empty(), "Заголовок '%s' не должен быть пустым" % tid)
+			assert_true(not ev.description.is_empty(), "Описание '%s' не должно быть пустым" % tid)
+			assert_true(ev.options.size() > 0, "Событие '%s' обязано иметь варианты выбора" % tid)
+
+
+func test_game_event_empty_options_fallback() -> void:
+	var raw_empty := {
+		"id": "empty_test.1",
+		"title": "Событие без опций",
+		"desc": "Тестовое событие с пустым списком выборов.",
+		"options": []
+	}
+	var ev := GameEvent.from_dict(raw_empty)
+	assert_eq(ev.options.size(), 1, "Пустой список опций должен получать гарантированный фолбэк")
+	assert_eq(ev.options[0].get("text", ""), "ПРИНЯТЬ К СВЕДЕНИЮ", "Текст фолбэк-опции")
+
+
+func test_game_event_cleans_paradox_markup() -> void:
+	var raw_markup := {
+		"id": "markup_test.1",
+		"title": "§YЗаголовок в цвете§!",
+		"desc": "§RКрасное предупреждение§! об угрозе.",
+		"options": [
+			{"name": "§GЗеленый выбор§!"}
+		]
+	}
+	var ev := GameEvent.from_dict(raw_markup)
+	assert_eq(ev.title, "Заголовок в цвете", "Цветовые коды Paradox должны быть очищены из заголовка")
+	assert_eq(ev.description, "Красное предупреждение об угрозе.", "Цветовые коды должны быть очищены из описания")
+	assert_eq(ev.options[0].get("text", ""), "Зеленый выбор", "Цветовые коды должны быть очищены из опции")
+
+
+func test_event_manager_nested_if_hidden_effect_chain() -> void:
+	var em := EventManager.new()
+	var state := CountryState.new()
+	state.country_tag = "KOM"
+	state.turn_count = 1
+
+	var parent_ev := GameEvent.new()
+	parent_ev.event_id = "parent_test.1"
+	parent_ev.options = [
+		{
+			"text": "Выбор с вложенным триггером",
+			"effects": {
+				"add_political_power": 10,
+				"if": {
+					"limit": {"has_flag": "test"},
+					"country_event": {
+						"id": "komi_friendship.2",
+						"days": 14
+					}
+				}
+			}
+		}
+	]
+
+	em.resolve_event_option(parent_ev, parent_ev.options[0], state)
+	assert_eq(em.scheduled_events_queue.size(), 1, "Вложенный в if country_event должен успешно запланироваться")
+	if em.scheduled_events_queue.size() > 0:
+		assert_eq(em.scheduled_events_queue[0]["event_id"], "komi_friendship.2", "Запланированный ID")
+		assert_eq(em.scheduled_events_queue[0]["trigger_turn"], 3, "Ход триггера (14 дней = 2 хода, 1 + 2 = 3)")
+

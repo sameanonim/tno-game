@@ -615,6 +615,12 @@ static func _extract_events_from_dict(d: Dictionary, res: DirectiveResource) -> 
 		_extract_events_from_dict(d["hidden_effect"], res)
 	if d.has("custom_effect_tooltip") and d["custom_effect_tooltip"] is Dictionary:
 		_extract_events_from_dict(d["custom_effect_tooltip"], res)
+	if d.has("if") and d["if"] is Dictionary:
+		_extract_events_from_dict(d["if"], res)
+	if d.has("IF") and d["IF"] is Array:
+		for item in d["IF"]:
+			if item is Dictionary:
+				_extract_events_from_dict(item, res)
 
 
 static func _append_event_rewards(raw_val: Variant, res: DirectiveResource, is_news: bool) -> void:

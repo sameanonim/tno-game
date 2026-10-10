@@ -155,7 +155,7 @@ func _is_foreign_event_for_tag(event_id: String, country_tag: String) -> bool:
 
 func _find_file_path_for_event(event_id: String) -> String:
 	var l_id = event_id.to_lower()
-	if l_id.contains("komi") or l_id.begins_with("kom_"):
+	if l_id.contains("komi") or l_id.begins_with("kom_") or l_id.begins_with("kom."):
 		return COUNTRIES_BASE_DIR.path_join("KOM").path_join("events.json")
 	if l_id.contains("usa") or l_id.contains("nixon") or l_id.contains("kennedy") or l_id.contains("johnson") or l_id.contains("sen_bill") or l_id.contains("gladio") or l_id.contains("civil_rights"):
 		return COUNTRIES_BASE_DIR.path_join("USA").path_join("events.json")
@@ -165,13 +165,23 @@ func _find_file_path_for_event(event_id: String) -> String:
 		return COUNTRIES_BASE_DIR.path_join("JAP").path_join("events.json")
 	if l_id.contains("ita") or l_id.contains("triumvirate") or l_id.contains("ciano") or l_id.contains("scorza"):
 		return COUNTRIES_BASE_DIR.path_join("ITA").path_join("events.json")
-	if l_id.contains("zhukov") or l_id.contains("tukhachevsky") or l_id.begins_with("wrs_"):
+	if l_id.contains("zhukov") or l_id.contains("tukhachevsky") or l_id.begins_with("wrs_") or l_id.begins_with("wrs."):
 		return COUNTRIES_BASE_DIR.path_join("WRS").path_join("events.json")
-	if l_id.contains("yazov") or l_id.begins_with("oms_"):
+	if l_id.contains("yazov") or l_id.begins_with("oms_") or l_id.begins_with("oms.") or l_id.begins_with("omsk"):
 		return COUNTRIES_BASE_DIR.path_join("OMS").path_join("events.json")
 	if l_id.begins_with("news."):
 		return NEWS_EVENTS_PATH
+
+	# Проверяем 3-буквенный тег в начале ID (e.g. ZLT.1, VOR_01, SAM.4)
+	var parts = event_id.replace(".", "_").split("_")
+	if parts.size() > 0 and parts[0].length() == 3 and parts[0].is_valid_ascii_identifier():
+		var tag_candidate = parts[0].to_upper()
+		var candidate_path = COUNTRIES_BASE_DIR.path_join(tag_candidate).path_join("events.json")
+		if FileAccess.file_exists(candidate_path):
+			return candidate_path
+
 	return GLOBAL_EVENTS_PATH
+
 
 
 ## Ленивый поиск и получение события по ID (из активных, по индексу или из глобальных/новостных)
@@ -705,10 +715,12 @@ func _load_patterns_if_needed() -> void:
 		"add_ideas", "add_idea", "remove_ideas", "remove_idea", "swap_ideas",
 		"econ_raise_credit_rating", "econ_lower_credit_rating", "econ_set_credit_rating", "econ_initialize_credit_rating_system",
 		"econ_add_liquid_reserves", "econ_subtract_liquid_reserves", "econ_give_inflation_monthly_temp",
-		"annex_country_and_inherit", "custom_effect_tooltip"
+		"annex_country_and_inherit", "custom_effect_tooltip",
+		"if", "IF", "limit", "hidden_effect", "random_list", "tooltip"
 	]
 	for k: String in BASE_KNOWN_EFFECTS:
 		_known_effect_keys[k] = true
+
 
 	if FileAccess.file_exists(PATTERNS_REGISTRY_PATH):
 		var reg_data = _read_json_file(PATTERNS_REGISTRY_PATH)
@@ -755,41 +767,79 @@ func _read_json_file(res_path: String) -> Variant:
 
 func _flatten_effects(eff: Dictionary) -> Dictionary:
 	var merged: Dictionary = eff.duplicate(true)
+	
 	if merged.has("hidden_effect") and merged["hidden_effect"] is Dictionary:
-		var h_eff: Dictionary = merged["hidden_effect"]
-		for k in h_eff.keys():
-			if not merged.has(k):
-				merged[k] = h_eff[k]
-			elif merged[k] is Array:
-				if h_eff[k] is Array:
-					merged[k].append_array(h_eff[k])
-				else:
-					merged[k].append(h_eff[k])
+		_merge_sub_effects(merged, merged["hidden_effect"])
+	elif merged.has("hidden_effect") and merged["hidden_effect"] is Array:
+		for item in merged["hidden_effect"]:
+			if item is Dictionary:
+				_merge_sub_effects(merged, item)
+
+	if merged.has("if") and merged["if"] is Dictionary:
+		_merge_sub_effects(merged, merged["if"])
+	if merged.has("IF") and merged["IF"] is Array:
+		for item in merged["IF"]:
+			if item is Dictionary:
+				_merge_sub_effects(merged, item)
+
+	for k in merged.keys():
+		var k_str = str(k)
+		if k_str.length() == 3 and k_str == k_str.to_upper() and merged[k] is Dictionary:
+			var sub_dict = merged[k]
+			for sub_k in ["country_event", "country_events", "news_event", "news_events", "FIRE_EVENT", "FIRE_NEWS"]:
+				if sub_dict.has(sub_k):
+					_merge_sub_effects(merged, {sub_k: sub_dict[sub_k]})
+
 	return merged
+
+
+func _merge_sub_effects(target: Dictionary, source: Dictionary) -> void:
+	for k in source.keys():
+		if not target.has(k):
+			target[k] = source[k]
+		elif target[k] is Array:
+			if source[k] is Array:
+				target[k].append_array(source[k])
+			else:
+				target[k].append(source[k])
+		elif target[k] is Dictionary and source[k] is Dictionary:
+			for sub_k in source[k].keys():
+				if not target[k].has(sub_k):
+					target[k][sub_k] = source[k][sub_k]
 
 
 func _dispatch_or_schedule_event(ev_entry: Variant, state: CountryState) -> void:
 	var ev_id: String = ""
 	var days_delay: int = 0
 	var cur_turn: int = state.turn_count if state != null and state.turn_count > 0 else 1
+	var target_tag: String = state.country_tag if state != null else ""
 
 	if ev_entry is String:
 		ev_id = ev_entry
 	elif ev_entry is Dictionary:
 		ev_id = str(ev_entry.get("id", ev_entry.get("event_id", "")))
 		days_delay = int(ev_entry.get("days", ev_entry.get("random_days", 0)))
+		var hours: int = int(ev_entry.get("hours", 0))
+		if hours > 24:
+			days_delay += int(round(float(hours) / 24.0))
+		var months: int = int(ev_entry.get("months", 0))
+		if months > 0:
+			days_delay += months * 30
 		if ev_entry.has("turns"):
-			days_delay = int(ev_entry["turns"]) * 7
+			days_delay += int(ev_entry["turns"]) * 7
+		if ev_entry.has("target"):
+			target_tag = str(ev_entry["target"]).to_upper()
 
 	if ev_id.is_empty():
 		return
 
 	if days_delay > 1:
 		var turns_delay: int = maxi(1, int(round(float(days_delay) / 7.0)))
-		schedule_event(ev_id, turns_delay, cur_turn, state.country_tag if state != null else "")
+		schedule_event(ev_id, turns_delay, cur_turn, target_tag)
 	else:
 		var sub_ev: GameEvent = get_or_load_event(ev_id)
 		if sub_ev != null:
 			pending_modal_events.append(sub_ev)
+
 
 

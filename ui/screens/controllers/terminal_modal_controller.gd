@@ -57,11 +57,14 @@ func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 	if ev == null or event_overlay == null or event_dialog == null or event_options_container == null:
 		return
 
-	# Fail-safe проверка на пустые опции
+	# Fail-safe гарантия наличия опций: событие всегда отображается игроку
 	if ev.options.is_empty():
-		push_warning("TerminalModalController: Modal event '%s' has no options. Auto-resolving." % ev.event_id)
-		modal_choice_resolved.emit(ev, 0)
-		return
+		ev.options.append({
+			"name": "ПРИНЯТЬ К СВЕДЕНИЮ",
+			"text": "ПРИНЯТЬ К СВЕДЕНИЮ",
+			"name_key": "OK",
+			"effects": {}
+		})
 
 	if event_title != null:
 		var raw_title: String = ev.title
@@ -81,6 +84,10 @@ func display_modal_event(ev: GameEvent, player_state: CountryState) -> void:
 		elif TranslationServer.translate(raw_desc) != raw_desc:
 			tr_desc = TranslationServer.translate(raw_desc)
 		event_body.text = tr_desc
+		event_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		event_body.scroll_active = true
+		event_body.visible_ratio = 1.0
+
 
 	# Отображение исторической иллюстрации события (Event Picture)
 	var vbox: VBoxContainer = event_options_container.get_parent() as VBoxContainer

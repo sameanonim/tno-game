@@ -139,12 +139,76 @@ func to_dict() -> Dictionary:
 	}
 
 
+static func clean_paradox_markup(text: String) -> String:
+	if text.is_empty():
+		return ""
+	var cleaned := text
+	if cleaned.contains("§"):
+		var color_regex := RegEx.new()
+		color_regex.compile("§[A-Za-z0-9!_,\\^\\%\\-\\+=]")
+		cleaned = color_regex.sub(cleaned, "", true)
+		if cleaned.contains("§"):
+			var fallback_regex := RegEx.new()
+			fallback_regex.compile("§.")
+			cleaned = fallback_regex.sub(cleaned, "", true)
+	return cleaned.strip_edges()
+
+
+static func resolve_localized_string(key_or_text: String, fallback_key: String = "") -> String:
+	if key_or_text.is_empty() and fallback_key.is_empty():
+		return ""
+	
+	var candidate: String = key_or_text if not key_or_text.is_empty() else fallback_key
+	
+	# If candidate contains spaces or cyrillic characters, it is already a human-readable string
+	var has_space: bool = candidate.contains(" ") or candidate.contains("\n")
+	var is_raw_key: bool = not has_space and (candidate.contains(".") or candidate.begins_with("GFX_") or candidate.begins_with("tno_") or candidate.ends_with(".t") or candidate.ends_with(".d") or candidate.ends_with(".a"))
+	
+	if Engine.has_singleton("LocalizationManager") or (Engine.get_main_loop() != null and Engine.get_main_loop().root != null and Engine.get_main_loop().root.has_node("/root/LocalizationManager")):
+		var lm = Engine.get_main_loop().root.get_node("/root/LocalizationManager")
+		if is_raw_key:
+			var tr_res: String = lm.tr_key(candidate, {}, "")
+			if not tr_res.is_empty() and tr_res != candidate:
+				return clean_paradox_markup(tr_res)
+		elif candidate.is_empty() and not fallback_key.is_empty():
+			var tr_res2: String = lm.tr_key(fallback_key, {}, "")
+			if not tr_res2.is_empty() and tr_res2 != fallback_key:
+				return clean_paradox_markup(tr_res2)
+	
+	if is_raw_key:
+		var ts_tr: String = TranslationServer.translate(candidate)
+		if ts_tr != candidate and not ts_tr.is_empty():
+			return clean_paradox_markup(ts_tr)
+		if not fallback_key.is_empty() and fallback_key != candidate:
+			var ts_fb: String = TranslationServer.translate(fallback_key)
+			if ts_fb != fallback_key and not ts_fb.is_empty():
+				return clean_paradox_markup(ts_fb)
+
+	return clean_paradox_markup(candidate)
+
+
 static func from_dict(data: Dictionary) -> GameEvent:
 	var ev = GameEvent.new()
 	ev.event_id = str(data.get("event_id", data.get("id", "")))
-	ev.title = str(data.get("title", data.get("name", "UNKNOWN EVENT")))
-	ev.classification = str(data.get("classification", "[TOP SECRET]"))
-	ev.description = str(data.get("description", data.get("desc", data.get("text", ""))))
+	
+	var raw_title: String = str(data.get("title", data.get("name", "")))
+	ev.title = resolve_localized_string(raw_title, ev.event_id + ".t")
+	if ev.title.is_empty() or ev.title == "UNKNOWN EVENT" or ev.title.ends_with(".t"):
+		ev.title = "ДОНЕСЕНИЕ: " + ev.event_id.to_upper().replace(".", " / ")
+
+	var raw_class: String = str(data.get("classification", ""))
+	if raw_class.is_empty():
+		var parts = ev.event_id.split(".")
+		var prefix = parts[0].to_upper() if parts.size() > 0 else "СТАВКА"
+		ev.classification = "[ДЕПЕША // %s]" % prefix
+	else:
+		ev.classification = clean_paradox_markup(raw_class)
+
+	var raw_desc: String = str(data.get("description", data.get("desc", data.get("text", ""))))
+	ev.description = resolve_localized_string(raw_desc, ev.event_id + ".d")
+	if ev.description.is_empty() or ev.description.ends_with(".d"):
+		ev.description = "Внимание: Получены экстренные сводки по обстановке в регионе [%s]. Требуется решение руководства." % ev.event_id
+
 	ev.portrait_path = str(data.get("portrait_path", data.get("picture", data.get("image", ""))))
 	ev.is_modal = bool(data.get("is_modal", true))
 	ev.fire_only_once = bool(data.get("fire_only_once", true))
@@ -153,18 +217,45 @@ static func from_dict(data: Dictionary) -> GameEvent:
 	if cond is Dictionary:
 		ev.trigger_conditions = cond.duplicate(true)
 
-	var opts = data.get("options", [])
-	if opts is Array:
-		var norm_opts: Array = []
-		for raw_opt in opts:
-			if raw_opt is Dictionary:
-				var opt_copy: Dictionary = raw_opt.duplicate(true)
-				var opt_txt: String = str(opt_copy.get("text", opt_copy.get("name", "")))
-				opt_copy["text"] = opt_txt
-				opt_copy["name"] = opt_txt
-				norm_opts.append(opt_copy)
-			else:
-				norm_opts.append(raw_opt)
-		ev.options = norm_opts
+	var raw_options: Variant = data.get("options", data.get("option", []))
+	var opts_array: Array = []
+	if raw_options is Array:
+		opts_array = raw_options
+	elif raw_options is Dictionary:
+		for k in raw_options.keys():
+			if raw_options[k] is Dictionary:
+				opts_array.append(raw_options[k])
 
+	var norm_opts: Array = []
+	var opt_letters: Array[String] = ["a", "b", "c", "d", "e", "f"]
+	for idx in range(opts_array.size()):
+		var raw_opt = opts_array[idx]
+		if raw_opt is Dictionary:
+			var opt_copy: Dictionary = raw_opt.duplicate(true)
+			var raw_opt_text: String = str(opt_copy.get("text", opt_copy.get("name", "")))
+			var opt_suffix = opt_letters[idx] if idx < opt_letters.size() else str(idx)
+			var n_key: String = str(opt_copy.get("name_key", ev.event_id + "." + opt_suffix))
+			
+			var final_text: String = resolve_localized_string(raw_opt_text, n_key)
+			if final_text.is_empty() or final_text == n_key or final_text.ends_with("." + opt_suffix):
+				final_text = "ПРИНЯТЬ К СВЕДЕНИЮ" if idx == 0 else "ВАРИАНТ %d" % (idx + 1)
+			
+			opt_copy["text"] = final_text
+			opt_copy["name"] = final_text
+			opt_copy["name_key"] = n_key
+			norm_opts.append(opt_copy)
+		else:
+			norm_opts.append(raw_opt)
+
+	# Guaranteed fallback option: Never drop an event with empty options!
+	if norm_opts.is_empty():
+		norm_opts.append({
+			"name": "ПРИНЯТЬ К СВЕДЕНИЮ",
+			"text": "ПРИНЯТЬ К СВЕДЕНИЮ",
+			"name_key": "OK",
+			"effects": {}
+		})
+
+	ev.options = norm_opts
 	return ev
+
