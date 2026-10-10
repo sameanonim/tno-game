@@ -164,18 +164,29 @@ func get_texture(sprite_name: String) -> Texture2D:
 
 ## Получает иллюстрацию для события
 func get_event_picture(picture_id: String) -> Texture2D:
-	if picture_id.is_empty():
-		return null
+	if not picture_id.is_empty():
+		var tex: Texture2D = get_texture(picture_id)
+		if tex != null:
+			return tex
+		if not picture_id.begins_with("GFX_"):
+			var p_prefixed = get_texture("GFX_" + picture_id)
+			if p_prefixed != null:
+				return p_prefixed
 
-	var tex: Texture2D = get_texture(picture_id)
-	if tex != null:
-		return tex
+	# Fallback на дефолтные арты TNO, если специфический арт события отсутствует
+	var fallback_candidates: Array[String] = [
+		"report_event_generic_sign_treaty2",
+		"GFX_report_event_RUS_soldiers_generic_1",
+		"GFX_report_event_USA_election_generic",
+		"GFX_report_event_JAP_generic_diplomats"
+	]
+	for fb in fallback_candidates:
+		var fb_tex: Texture2D = get_texture(fb)
+		if fb_tex != null:
+			return fb_tex
 
-	# Fallback на дефолтный арт события, если есть
-	var fallback_path: String = "res://assets/gfx/event_pictures/GFX_report_event_generic.png"
-	if ResourceLoader.exists(fallback_path):
-		return get_texture(fallback_path)
 	return null
+
 
 
 ## Получает иконку национального духа / реформы (Idea)
