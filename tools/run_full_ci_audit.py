@@ -6,23 +6,15 @@ GODOT_BIN = r"E:\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console
 
 TESTS = [
     {
-        "name": "GDScript Compilation & Parse Check (81 scripts)",
+        "name": "GDScript Compilation & Parse Check (126 scripts)",
         "cmd": [GODOT_BIN, "--headless", "-s", "tools/test_compile_all.gd"]
     },
     {
-        "name": "Focus Tree Dynamic Synchronization Test",
-        "cmd": [GODOT_BIN, "--headless", "-s", "tests/test_focus_tree_synchronization.gd"]
+        "name": "Automated Master Unit Test Suite (12 suites, 198 assertions)",
+        "cmd": [GODOT_BIN, "--headless", "-s", "tests/run_all_tests.gd"]
     },
     {
-        "name": "Economy Engine & Oil Crisis Unit Tests",
-        "cmd": [GODOT_BIN, "--headless", "-s", "tests/test_economy_engine.gd"]
-    },
-    {
-        "name": "Germany Campaign & 4 Contenders Unit Tests",
-        "cmd": [GODOT_BIN, "--headless", "-s", "tests/test_germany_campaign.gd"]
-    },
-    {
-        "name": "MCP Architecture & Subsystems Audit (6/6)",
+        "name": "MCP Architecture & Subsystems Audit (6/6 checks)",
         "cmd": [GODOT_BIN, "--headless", "-s", "tools/run_mcp_audit.gd"]
     },
     {
@@ -44,16 +36,16 @@ TESTS = [
 ]
 
 def main():
-    print("=" * 80)
-    print(">>> TNO-GAME MASTER CI/CD QUALITY GATE AUDIT <<<")
-    print("=" * 80)
+    print("=" * 80, flush=True)
+    print(">>> TNO-GAME MASTER CI/CD QUALITY GATE AUDIT <<<", flush=True)
+    print("=" * 80, flush=True)
     
     total = len(TESTS)
     passed = 0
     start_time = time.time()
     
     for i, test in enumerate(TESTS, 1):
-        print(f"\n[{i}/{total}] RUNNING: {test['name']}...")
+        print(f"\n[{i}/{total}] RUNNING: {test['name']}...", flush=True)
         t0 = time.time()
         res = subprocess.run(test["cmd"], capture_output=True, text=True, encoding="utf-8", errors="ignore")
         elapsed = time.time() - t0
@@ -61,19 +53,19 @@ def main():
         # Check success
         if res.returncode == 0:
             passed += 1
-            print(f"  -> PASSED in {elapsed:.2f}s")
+            print(f"  -> PASSED in {elapsed:.2f}s", flush=True)
         else:
-            print(f"  -> FAILED with exit code {res.returncode} in {elapsed:.2f}s")
-            print("STDOUT:")
-            print(res.stdout[-1000:] if len(res.stdout) > 1000 else res.stdout)
-            print("STDERR:")
-            print(res.stderr[-1000:] if len(res.stderr) > 1000 else res.stderr)
+            print(f"  -> FAILED with exit code {res.returncode} in {elapsed:.2f}s", flush=True)
+            print("STDOUT:", flush=True)
+            print(res.stdout[-1000:] if len(res.stdout) > 1000 else res.stdout, flush=True)
+            print("STDERR:", flush=True)
+            print(res.stderr[-1000:] if len(res.stderr) > 1000 else res.stderr, flush=True)
             sys.exit(1)
             
     total_elapsed = time.time() - start_time
-    print("\n" + "=" * 80)
-    print(f">>> ALL {passed}/{total} MASTER CI/CD AUDIT SUITES PASSED! Total time: {total_elapsed:.2f}s <<<")
-    print("=" * 80)
+    print("\n" + "=" * 80, flush=True)
+    print(f">>> ALL {passed}/{total} MASTER CI/CD AUDIT SUITES PASSED! Total time: {total_elapsed:.2f}s <<<", flush=True)
+    print("=" * 80, flush=True)
 
 if __name__ == "__main__":
     main()

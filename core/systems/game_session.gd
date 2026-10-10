@@ -651,7 +651,11 @@ func get_country_dossier(tag: String) -> Dictionary:
 	dossiers["TYM"] = dossiers["TYU"]
 	dossiers["WRRF"] = dossiers["WRS"]
 
-	var final_dossier: Dictionary = dossiers.get(clean_tag, dossiers["WRS"]).duplicate()
+	var final_dossier: Dictionary = dossiers.get(clean_tag, {}).duplicate()
+	if final_dossier.is_empty():
+		final_dossier = CountryDossierProvider.get_country_dossier(clean_tag)
+	if final_dossier.is_empty():
+		final_dossier = dossiers.get("WRS", {}).duplicate()
 	if dossiers.has(clean_tag):
 		var curated: Dictionary = dossiers[clean_tag]
 		if content_loader != null and content_loader.has_extracted_data():
@@ -719,6 +723,7 @@ func bootstrap_new_game(config: GameStartConfig) -> void:
 	state.leader_name = dossier["leader_name"]
 	state.leader_title = dossier.get("leader_title", "Глава государства")
 	state.leader_portrait_path = dossier.get("portrait_path", "res://icon.svg")
+	state.leader_description = dossier.get("lore", dossier.get("briefing", ""))
 	state.ruling_ideology = dossier["ideology"]
 	state.sub_ideology = dossier["sub_ideology"]
 	state.country_color = dossier["color"]
@@ -734,6 +739,7 @@ func bootstrap_new_game(config: GameStartConfig) -> void:
 	hos.title = state.leader_title
 	hos.portrait_path = state.leader_portrait_path
 	hos.ideology = state.ruling_ideology
+	hos.description = state.leader_description
 	state.head_of_state = hos
 
 	# Применение модификаторов сложности

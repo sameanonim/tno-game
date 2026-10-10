@@ -194,6 +194,8 @@ func load_country_package(country_tag: String) -> CountryState:
 			state.leader_portrait_path = found_hos.portrait_path
 		if state.leader_title.is_empty() or state.leader_title == "Глава государства":
 			state.leader_title = found_hos.title
+		if state.leader_description.is_empty() and not found_hos.description.is_empty():
+			state.leader_description = found_hos.description
 
 	# Синхронизация министров кабинета (cabinet_members)
 	if state.cabinet_members.is_empty() and not loaded_leaders.is_empty():
@@ -464,17 +466,21 @@ func get_directives_for_country(tag: String) -> Array[DirectiveResource]:
 					chosen_path = str(t_info.get("path", ""))
 					break
 				var tid = str(t_info.get("tree_id", "")).to_lower()
-				if tid.contains("game_start") or tid.contains("intro") or tid.contains("base") or tid.contains("initial") or tid.contains("1962"):
+				if tid.contains("game_start") or tid.contains("intro") or tid.contains("base") or tid.contains("initial") or tid.contains("1962") or tid.contains("pre_election"):
 					chosen_path = str(t_info.get("path", ""))
 					break
 			if chosen_path.is_empty():
 				chosen_path = str(idx_data[0].get("path", ""))
 
-		if not chosen_path.is_empty() and FileAccess.file_exists(chosen_path):
-			var directives = _load_package_directives(tag, chosen_path)
-			if not directives.is_empty():
-				_cached_directives[tag] = directives
-				return directives
+		if not chosen_path.is_empty():
+			var alt_path = chosen_path
+			if not FileAccess.file_exists(alt_path) and "/directives/tree_" in alt_path:
+				alt_path = alt_path.replace("/directives/tree_", "/directives/trees/")
+			if FileAccess.file_exists(alt_path):
+				var directives = _load_package_directives(tag, alt_path)
+				if not directives.is_empty():
+					_cached_directives[tag] = directives
+					return directives
 
 	# 2. Проверяем модульный пакет tree.json
 	var pkg_tree_path = COUNTRIES_BASE_DIR.path_join(tag).path_join("directives").path_join("tree.json")
@@ -725,6 +731,8 @@ func _fallback_create_country_state(tag: String) -> CountryState:
 	state.country_name = dossier.get("name", tag)
 	state.leader_name = dossier.get("leader_name", "")
 	state.leader_portrait_path = dossier.get("portrait_path", "res://icon.svg")
+	state.leader_title = dossier.get("leader_title", "Глава государства")
+	state.leader_description = dossier.get("lore", dossier.get("briefing", ""))
 	state.ruling_ideology = dossier.get("ideology", "Authoritarian Socialism")
 	state.sub_ideology = dossier.get("sub_ideology", "")
 	state.gdp_billions = dossier.get("starting_gdp", 18.0)

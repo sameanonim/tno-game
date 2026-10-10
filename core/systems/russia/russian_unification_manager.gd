@@ -29,6 +29,12 @@ signal diplomatic_summit_resolved(success: bool, player_tag: String, target_tag:
 signal super_event_requested(super_event_id: String)
 signal operational_log_entry(text: String)
 
+# Сигналы Второй Западно-Русской Войны (2WRW)
+signal second_west_russian_war_started(russia_tag: String, germany_tag: String, fronts: Array[String])
+signal second_west_russian_war_progress(war_score: float, moscow_liberated: bool)
+signal second_west_russian_war_concluded(victory: bool, outcome: String)
+signal german_nuclear_ultimatum_received(terms: Dictionary)
+
 # Сигналы уникальных механик варлордов (Таборицкий, Язов, Саблин)
 signal midnight_clock_advanced(new_minutes: int, formatted_time: String)
 signal midnight_struck()
@@ -53,7 +59,8 @@ enum SmutaStage {
 	STAGE_2_REGIONAL = 2,      # Региональная война: покорение своего макро-региона
 	STAGE_3_SUPERREGIONAL = 3, # Супер-регионал: слияние Запада/Востока (мирные переговоры или война)
 	STAGE_4_FINAL = 4,         # Финальная битва: Восток против Запада
-	STAGE_5_UNIFIED = 5        # Россия едина (провозглашение сверхдержавы, супер-событие)
+	STAGE_5_UNIFIED = 5,       # Россия едина (провозглашение сверхдержавы, супер-событие)
+	STAGE_6_2WRW = 6           # Вторая Западно-Русская Война (2WRW / Великий Поход на Запад)
 }
 
 const MACRO_WEST_RUSSIA = "west_russia"
@@ -117,6 +124,14 @@ var warlord_mechanics: WarlordMechanicsManager = null
 # Журнал дипломатических переговоров и набегов
 var operations_log: Array[String] = []
 
+# Состояние кампании 2WRW (Вторая Западно-Русская Война)
+var is_2wrw_active: bool = false
+var is_2wrw_concluded: bool = false
+var german_ultimatum_sent: bool = false
+var moscow_liberated: bool = false
+var turns_in_2wrw: int = 0
+var war_2wrw_fronts: Array[String] = []
+
 
 func _init() -> void:
 	warlord_mechanics = WarlordMechanicsManager.new()
@@ -178,6 +193,7 @@ static func get_stage_title(stage: SmutaStage) -> String:
 		SmutaStage.STAGE_3_SUPERREGIONAL: return "III. СУПЕР-РЕГИОНАЛЬНЫЙ ЭТАП"
 		SmutaStage.STAGE_4_FINAL: return "IV. ОКОНЧАТЕЛЬНОЕ ВОССОЕДИНЕНИЕ"
 		SmutaStage.STAGE_5_UNIFIED: return "V. ЕДИНАЯ РОССИЙСКАЯ ДЕРЖАВА"
+		SmutaStage.STAGE_6_2WRW: return "VI. ВТОРАЯ ЗАПАДНО-РУССКАЯ ВОЙНА (2WRW)"
 		_: return "НЕИЗВЕСТНАЯ СТАДИЯ"
 
 
@@ -733,6 +749,156 @@ func process_turn(_current_turn: int, country_state: CountryState = null, turn_m
 		elif current_stage == SmutaStage.STAGE_4_FINAL and turn_mgr != null:
 			if check_final_unification(player_tag, turn_mgr.regions_world_state, turn_mgr.countries_world_state):
 				proclaim_final_unification(country_state)
+		elif current_stage == SmutaStage.STAGE_6_2WRW and turn_mgr != null:
+			_process_2wrw_turn(turn_mgr, country_state)
+
+
+# ==============================================================================
+# КАМПАНИЯ 2WRW: ВТОРАЯ ЗАПАДНО-РУССКАЯ ВОЙНА
+# ==============================================================================
+
+## Проверка готовности объединенной России к броску на Запад (2WRW)
+func can_launch_second_west_russian_war(country: CountryState) -> bool:
+	if current_stage != SmutaStage.STAGE_5_UNIFIED:
+		return false
+	if is_2wrw_active or is_2wrw_concluded:
+		return false
+	if country == null:
+		return false
+	return (country.manpower_pool >= 40000 and country.military_factories >= 15) or turns_in_current_stage >= 4
+
+
+## Провозглашение начала Второй Западно-Русской Войны (развертывание фронтов и эскалация DEFCON)
+func launch_second_west_russian_war(turn_mgr: TurnManager) -> bool:
+	if turn_mgr == null or turn_mgr.player_state == null:
+		return false
+	if not can_launch_second_west_russian_war(turn_mgr.player_state):
+		return false
+
+	current_stage = SmutaStage.STAGE_6_2WRW
+	is_2wrw_active = true
+	turns_in_2wrw = 0
+	german_ultimatum_sent = false
+	moscow_liberated = false
+
+	# 1. Регистрация оперативных фронтов в MilitaryEngine
+	war_2wrw_fronts.clear()
+	var front_configs = [
+		{"id": "front_2wrw_moscow", "name": "Центральный Фронт (Смоленск - Москва)", "tension": 50.0},
+		{"id": "front_2wrw_south", "name": "Южный Фронт (Воронеж - Ростов)", "tension": 45.0},
+		{"id": "front_2wrw_north", "name": "Северный Фронт (Вологда - Новгород)", "tension": 40.0}
+	]
+	for fc in front_configs:
+		var front = Frontline.new()
+		front.front_id = fc["id"]
+		front.name = fc["name"]
+		front.attacker_tag = player_tag
+		front.defender_tag = "MCW"
+		front.tension = fc["tension"]
+		front.active = true
+		MilitaryEngine.register_frontline(front)
+		war_2wrw_fronts.append(fc["id"])
+
+	# 2. Эскалация DEFCON через NuclearDefconManager
+	if turn_mgr.nuclear_defcon_manager != null:
+		turn_mgr.nuclear_defcon_manager.trigger_crisis(
+			"CRISIS_2WRW",
+			"Вторая Западно-Русская Война",
+			45.0,
+			3,
+			player_tag,
+			"GER"
+		)
+	else:
+		MilitaryEngine.global_defcon_level = 3
+		MilitaryEngine.global_world_tension = 65.0
+
+	# 3. Переключение дерева директив на военное/2WRW
+	_switch_directives_tree(turn_mgr, "2wrw")
+
+	_log("ВЕЛИКИЙ ПОХОД НА ЗАПАД! Началась Вторая Западно-Русская Война против германской оккупации!")
+	super_event_requested.emit("SE_SECOND_WEST_RUSSIAN_WAR")
+	stage_changed.emit(int(current_stage), get_stage_title(current_stage))
+	second_west_russian_war_started.emit(player_tag, "GER", war_2wrw_fronts)
+	return true
+
+
+## Пошаговый расчет продвижения войск 2WRW, освобождения Москвы и ультиматумов
+func _process_2wrw_turn(turn_mgr: TurnManager, country_state: CountryState) -> void:
+	if not is_2wrw_active or is_2wrw_concluded:
+		return
+	turns_in_2wrw += 1
+
+	var army_bonus = (country_state.army_readiness * 0.5) if country_state != null else 25.0
+	var war_score: float = clampf(float(turns_in_2wrw) * 25.0 + army_bonus, 0.0, 100.0)
+
+	# 1. Освобождение Москвы
+	if war_score >= 50.0 and not moscow_liberated:
+		moscow_liberated = true
+		_log("МОСКВА ОСВОБОЖДЕНА! Передовые дивизии выбили оккупационные гарнизоны из сердца России!")
+		second_west_russian_war_progress.emit(war_score, true)
+
+		# Эскалация DEFCON до уровня 2 (войска приближаются к Рейху)
+		if turn_mgr != null and turn_mgr.nuclear_defcon_manager != null:
+			turn_mgr.nuclear_defcon_manager.escalate_defcon(2, "Советские войска освободили Москву и вышли к старой границе СССР!")
+
+	# 2. Немецкий ядерный ультиматум «Fall Rot»
+	if moscow_liberated and not german_ultimatum_sent and turns_in_2wrw >= 2:
+		german_ultimatum_sent = true
+		var terms = {
+			"title": "УЛЬТИМАТУМ РЕЙХА: ОПЕРАЦИЯ «FALL ROT»",
+			"description": "Германия предлагает мирное соглашение с признанием возвращения Московии в обмен на демаркацию границ по Днепру. Пересечение линии повлечет неминуемый ядерный удар.",
+			"offer_moscow": true
+		}
+		_log("ГЕРМАНСКИЙ ЯДЕРНЫЙ УЛЬТИМАТУМ: Рейх угрожает термоядерным ударом при наступлении на Остланд/Украину!")
+		german_nuclear_ultimatum_received.emit(terms)
+
+	# 3. Полная победа при максимальном продвижении
+	if war_score >= 100.0 and not is_2wrw_concluded:
+		resolve_second_west_russian_war(true, "Полное изгнание германских войск и освобождение Московии!", turn_mgr)
+
+
+## Ответ на германский ультиматум
+func handle_german_ultimatum(accept_terms: bool, turn_mgr: TurnManager) -> void:
+	if not is_2wrw_active or is_2wrw_concluded:
+		return
+
+	if accept_terms:
+		_log("МИРНЫЙ ДОГОВОР ПОДПИСАН: Рейх признал границы России, Москва освобождена, ядерный кризис снят!")
+		resolve_second_west_russian_war(true, "Победа по условиям Московского Договора (освобождение Московии)", turn_mgr)
+	else:
+		_log("УЛЬТИМАТУМ ОТВЕРГНУТ! Войска идут на Берлин. Рейх переводит стратегические ракеты на DEFCON 1!")
+		if turn_mgr != null and turn_mgr.nuclear_defcon_manager != null:
+			turn_mgr.nuclear_defcon_manager.escalate_defcon(1, "Отказ от условий ультиматума «Fall Rot»")
+
+
+## Завершение кампании 2WRW
+func resolve_second_west_russian_war(victory: bool, outcome: String, turn_mgr: TurnManager) -> void:
+	is_2wrw_active = false
+	is_2wrw_concluded = true
+
+	# Деактивация фронтов
+	for fid in war_2wrw_fronts:
+		var f = MilitaryEngine.get_frontline(fid)
+		if f != null:
+			f.active = false
+
+	if turn_mgr != null:
+		# Разрешение кризиса в NuclearDefconManager
+		if turn_mgr.nuclear_defcon_manager != null:
+			turn_mgr.nuclear_defcon_manager.resolve_crisis("CRISIS_2WRW", 40.0, outcome)
+
+		# Передача провинций Московии игроку
+		if victory and turn_mgr.regions_world_state != null:
+			for pid in turn_mgr.regions_world_state.keys():
+				var reg: RegionData = turn_mgr.regions_world_state[pid]
+				if reg != null and (reg.owner_tag in ["MCW", "MOS", "MCW_COLLAB"]):
+					reg.owner_tag = player_tag
+
+	var se_id = "SE_RUSSIAN_VICTORY_2WRW" if victory else "SE_POST_MIDNIGHT_COLLAPSE"
+	super_event_requested.emit(se_id)
+	second_west_russian_war_concluded.emit(victory, outcome)
+	_log("2WRW ЗАВЕРШЕНА: %s." % outcome)
 
 
 func _switch_directives_tree(turn_manager: TurnManager, stage_suffix: String) -> void:

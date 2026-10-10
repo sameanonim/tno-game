@@ -133,7 +133,7 @@ func display_leader(leader_data: Variant, country_tag: String = "", animate_tele
 				l_name = cs.head_of_state.leader_name
 			if not cs.head_of_state.portrait_path.is_empty() and cs.head_of_state.portrait_path != "res://icon.svg":
 				l_portrait_path = cs.head_of_state.portrait_path
-			if cs.head_of_state.portrait != null:
+			if "portrait" in cs.head_of_state and cs.head_of_state.portrait != null:
 				direct_texture = cs.head_of_state.portrait
 	else:
 		_set_classified_state()

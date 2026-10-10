@@ -14,6 +14,10 @@ const TestConditionEvaluator = preload("res://tests/test_condition_evaluator.gd"
 const TestDirectiveResource = preload("res://tests/test_directive_resource.gd")
 const TestFocusTreeData = preload("res://tests/test_focus_tree_data.gd")
 const TestTNOFocusTrees = preload("res://tests/test_tno_focus_trees.gd")
+const TestClausewitzEffects = preload("res://tests/test_clausewitz_effects.gd")
+const TestNuclearDefcon = preload("res://tests/test_nuclear_defcon.gd")
+const Test2WRWCampaign = preload("res://tests/test_2wrw_campaign.gd")
+const TestCountryDossier = preload("res://tests/test_country_dossier.gd")
 
 func _init() -> void:
 	print("================================================================")
@@ -28,7 +32,11 @@ func _init() -> void:
 		{"name": "ConditionEvaluator Suite", "instance": TestConditionEvaluator.new()},
 		{"name": "DirectiveResource Suite", "instance": TestDirectiveResource.new()},
 		{"name": "FocusTreeData Suite", "instance": TestFocusTreeData.new()},
-		{"name": "TNOFocusTrees Suite", "instance": TestTNOFocusTrees.new()}
+		{"name": "TNOFocusTrees Suite", "instance": TestTNOFocusTrees.new()},
+		{"name": "ClausewitzEffects Suite", "instance": TestClausewitzEffects.new()},
+		{"name": "NuclearDefcon Suite", "instance": TestNuclearDefcon.new()},
+		{"name": "2WRWCampaign Suite", "instance": Test2WRWCampaign.new()},
+		{"name": "CountryDossier Suite", "instance": TestCountryDossier.new()}
 	]
 	
 	var total_passed: int = 0

@@ -97,6 +97,12 @@ func test_country_modular_starting_trees() -> void:
 	assert_true(usa_dirs.size() == 136, "USA must load starting tree with 136 directives (has %d)" % usa_dirs.size())
 	if not usa_dirs.is_empty():
 		assert_eq(String(usa_dirs[0].id), "USA_the_nixon_presidency", "USA first directive must be USA_the_nixon_presidency")
+
+	# Komi Republic (KOM)
+	var kom_dirs = loader.get_directives_for_country("KOM")
+	assert_eq(kom_dirs.size(), 28, "KOM must load 1962 starting tree with 28 directives (has %d)" % kom_dirs.size())
+	if not kom_dirs.is_empty():
+		assert_eq(String(kom_dirs[0].id), "KOM_the_minutes_of_the_congress", "KOM first directive must be KOM_the_minutes_of_the_congress")
 	loader.free()
 
 
@@ -108,6 +114,10 @@ func test_focus_tree_indexer_summary() -> void:
 	var usa_summary = FocusTreeIndexer.get_focus_tree_summary("USA")
 	assert_true(usa_summary.get("has_tree", false), "USA must have focus tree in summary")
 	assert_eq(str(usa_summary.get("tree_id", "")), "USA_initial_tree", "USA summary tree_id must be USA_initial_tree")
+
+	var kom_summary = FocusTreeIndexer.get_focus_tree_summary("KOM")
+	assert_true(kom_summary.get("has_tree", false), "KOM must have focus tree in summary")
+	assert_eq(str(kom_summary.get("tree_id", "")), "KOM_pre_election", "KOM summary tree_id must be KOM_pre_election")
 
 
 func test_focus_tree_icon_resolution() -> void:
@@ -200,9 +210,10 @@ func test_stage_controller_russia_unification_transitions() -> void:
 	state.leader_name = "Mikhail Suslov"
 	state.ruling_ideology = "communist"
 
-	# 1. Стартовая инициализация Коми
+	# 1. Стартовая инициализация Коми (канонический 1962 старт)
 	ctrl.setup(state)
-	assert_true(not ctrl.current_tree_id.is_empty(), "KOM must have an active starting tree")
+	assert_eq(ctrl.current_tree_id, "KOM_pre_election", "KOM must initialize with KOM_pre_election")
+	assert_eq(ctrl.active_tree_directives.size(), 28, "KOM pre-election tree must contain exactly 28 directives")
 
 	# 2. Региональное объединение: победа Суслова в Коми
 	state.set_flag("is_regional_unifier", true)
@@ -213,6 +224,51 @@ func test_stage_controller_russia_unification_transitions() -> void:
 	state.set_flag("is_superregional_unifier", true)
 	ctrl.process_turn(1, state)
 	assert_eq(ctrl.current_tree_id, "KOM_superregional_suslov", "KOM with Suslov must transition to KOM_superregional_suslov")
+
+	ctrl.free()
+
+
+func test_stage_controller_komi_full_lifecycle() -> void:
+	var ctrl := FocusStageController.new()
+	var state := CountryState.new()
+	state.country_tag = "KOM"
+	state.leader_name = "Nikolay Voznesensky"
+	state.ruling_ideology = "social_democrat"
+
+	# 1. Начало игры в 1962: предвыборное древо Вознесенского
+	ctrl.setup(state)
+	assert_eq(ctrl.current_tree_id, "KOM_pre_election", "Komi must start with KOM_pre_election")
+	assert_eq(ctrl.active_tree_directives.size(), 28, "KOM pre-election tree must have 28 directives")
+
+	# 2. Переворот левых (Suslov / Serov / Bukharina)
+	state.set_flag("komi_left_coup_active", true)
+	ctrl.process_turn(1, state)
+	assert_eq(ctrl.current_tree_id, "KOM_lcoup", "KOM must transition to KOM_lcoup")
+	assert_true(ctrl.active_tree_directives.size() > 0, "KOM lcoup must have directives")
+
+	# 3. Эпоха смуты (Smuta)
+	state.story_flags.erase("komi_left_coup_active")
+	state.set_flag("smuta_active", true)
+	state.set_flag("komi_faction_left", true)
+	ctrl.process_turn(1, state)
+	assert_eq(ctrl.current_tree_id, "KOM_communist_smuta", "KOM must transition to KOM_communist_smuta during smuta")
+	assert_eq(ctrl.active_tree_directives.size(), 30, "KOM communist smuta must have 30 directives")
+
+	# 4. Региональное объединение при Таборицком (Победа правых в Коми)
+	state.story_flags.erase("smuta_active")
+	state.story_flags.erase("komi_faction_left")
+	state.leader_name = "Sergey Taboritsky"
+	state.ruling_ideology = "burgundian_system"
+	state.set_flag("is_regional_unifier", true)
+	ctrl.process_turn(1, state)
+	assert_eq(ctrl.current_tree_id, "KOM_taboritsky_regional", "KOM must transition to KOM_taboritsky_regional")
+	assert_true(ctrl.active_tree_directives.size() >= 30, "KOM Taboritsky regional must have >= 30 directives")
+
+	# 5. Суперирегиональное объединение при Таборицком ("Священная Российская Империя")
+	state.set_flag("is_superregional_unifier", true)
+	ctrl.process_turn(1, state)
+	assert_eq(ctrl.current_tree_id, "KOM_taboritsky_superregional", "KOM must transition to KOM_taboritsky_superregional")
+	assert_true(ctrl.active_tree_directives.size() >= 20, "KOM Taboritsky superregional must have >= 20 directives")
 
 	ctrl.free()
 

@@ -38,6 +38,7 @@ func test_flags_lifecycle() -> void:
 
 
 func test_serialization_roundtrip() -> void:
+	state.leader_description = "Маршал Победы"
 	state.set_flag("test_var", 42)
 	state.controlled_states = [101, 102, 103]
 
@@ -45,6 +46,7 @@ func test_serialization_roundtrip() -> void:
 	assert_true(serialized is Dictionary, "Serialized state must be Dictionary")
 	assert_true(serialized.has("identity"), "Serialized state must have identity section")
 	assert_eq(serialized["identity"].get("country_tag"), "WRS", "Tag must serialize correctly in identity")
+	assert_eq(serialized["identity"].get("leader_description"), "Маршал Победы", "leader_description must serialize correctly in identity")
 	assert_approx_eq(float(serialized["economy"].get("gdp_billions")), 24.5, 0.001, "GDP must match in economy")
 
 	var restored = CountryState.from_dict(serialized)
@@ -52,6 +54,7 @@ func test_serialization_roundtrip() -> void:
 	assert_eq(restored.country_tag, "WRS", "Restored tag must match")
 	assert_approx_eq(restored.gdp_billions, 24.5, 0.001, "Restored GDP must match")
 	assert_eq(restored.leader_name, state.leader_name, "Restored leader must match")
+	assert_eq(restored.leader_description, "Маршал Победы", "Restored leader description must match")
 	assert_true(restored.controlled_states.has(102), "Controlled states array must persist")
 
 

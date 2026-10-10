@@ -71,6 +71,8 @@ static func load_country(tag: String) -> CountryState:
 	state.sub_ideology = ident.get("sub_ideology", "")
 	state.leader_name = ident.get("leader_name", ident.get("leader", ""))
 	state.leader_portrait_path = ident.get("leader_portrait_path", ident.get("portrait", "res://icon.svg"))
+	state.leader_title = ident.get("leader_title", ident.get("title", "Глава государства"))
+	state.leader_description = ident.get("leader_description", ident.get("description", ident.get("lore", "")))
 
 	# Цвет державы
 	var col_raw = ident.get("country_color", ident.get("color", [0.5, 0.5, 0.5, 1.0]))
@@ -122,6 +124,8 @@ static func load_country(tag: String) -> CountryState:
 			state.leader_name = state.head_of_state.leader_name
 		if state.leader_portrait_path == "res://icon.svg":
 			state.leader_portrait_path = state.head_of_state.portrait_path
+		if state.leader_description.is_empty() and not state.head_of_state.description.is_empty():
+			state.leader_description = state.head_of_state.description
 
 	# Сборка членов кабинета министров
 	var ministers_raw = profile_data.get("ministers", profile_data.get("cabinet_members", []))

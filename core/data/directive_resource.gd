@@ -422,8 +422,18 @@ static func from_dict(data: Dictionary) -> DirectiveResource:
 	if not res.icon_path.is_empty() and ResourceLoader.exists(res.icon_path):
 		res.icon = load(res.icon_path) as Texture2D
 
-	# Координаты сетки: поддержка HoI4 "x" и "y"
-	if data.has("x") and data.has("y"):
+	# Координаты сетки: приоритет абсолютному grid_coord / abs_x / abs_y, затем x и y
+	if data.has("abs_x") and data.has("abs_y"):
+		res.grid_position = Vector2(float(data["abs_x"]), float(data["abs_y"]))
+	elif data.has("grid_coord"):
+		var gc = data["grid_coord"]
+		if gc is Array and gc.size() >= 2:
+			res.grid_position = Vector2(float(gc[0]), float(gc[1]))
+		elif gc is Vector2:
+			res.grid_position = gc
+		elif gc is Vector2i:
+			res.grid_position = Vector2(gc.x, gc.y)
+	elif data.has("x") and data.has("y"):
 		res.grid_position = Vector2(float(data["x"]), float(data["y"]))
 	else:
 		var gp = data.get("grid_position", [0.0, 0.0])

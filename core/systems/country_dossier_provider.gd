@@ -149,14 +149,21 @@ static func get_country_dossier(tag: String, manifest_data: Dictionary = {}, cac
 			for lead in c["leaders"]:
 				if lead is Dictionary:
 					if l_name.is_empty() or l_name == "UNKNOWN":
-						l_name = str(lead.get("name", lead.get("id", "UNKNOWN")))
+						l_name = str(lead.get("name_text", lead.get("name", lead.get("id", "UNKNOWN"))))
 					if l_title.is_empty():
 						l_title = str(lead.get("desc", "Лидер державы"))
 
 					var p_large := ""
-					if lead.has("picture"):
+					if lead.has("portraits") and lead["portraits"] is Dictionary:
+						var pts = lead["portraits"]
+						if pts.has("civilian") and pts["civilian"] is Dictionary:
+							p_large = str(pts["civilian"].get("large", ""))
+						elif pts.has("army") and pts["army"] is Dictionary:
+							p_large = str(pts["army"].get("large", ""))
+
+					if p_large.is_empty() and lead.has("picture"):
 						p_large = str(lead["picture"])
-					elif lead.has("country_leader"):
+					elif p_large.is_empty() and lead.has("country_leader"):
 						var cl = lead["country_leader"]
 						if cl is Dictionary:
 							p_large = str(cl.get("picture", ""))
@@ -264,7 +271,124 @@ static func get_country_dossier(tag: String, manifest_data: Dictionary = {}, cac
 		cached_dossiers[tag] = dossier
 		return dossier
 
+	# 3. Детерминированный фоллбэк для малых наций без country.json (DEF-17)
+	var generated = _generate_fallback_dossier(tag, manifest_data)
+	if not generated.is_empty():
+		cached_dossiers[tag] = generated
+		return generated
+
 	return {}
+
+
+"""Генерирует детерминированное досье для малой нации при отсутствии файла country.json.
+Сканирует папку лидеров тега (res://assets/gfx/leaders/<tag>), извлекает локализацию и настраивает параметры.
+"""
+static func _generate_fallback_dossier(tag: String, _manifest_data: Dictionary = {}) -> Dictionary:
+	var clean_tag: String = tag.to_upper().strip_edges()
+	if clean_tag.is_empty():
+		return {}
+
+	# 1. Поиск локализованного названия страны
+	var c_name: String = clean_tag
+	var c_name_ru: String = clean_tag
+	var loc_mgr = null
+	var main_loop = Engine.get_main_loop()
+	if main_loop is SceneTree and main_loop.root != null and main_loop.root.has_node("LocalizationManager"):
+		loc_mgr = main_loop.root.get_node("LocalizationManager")
+	if loc_mgr != null:
+		var n_ru: String = loc_mgr.tr_key(clean_tag, "")
+		if not n_ru.is_empty() and not n_ru.begins_with("[MISSING"):
+			c_name_ru = n_ru
+			c_name = n_ru
+		else:
+			var n_def: String = loc_mgr.tr_key(clean_tag + "_DEF", "")
+			if not n_def.is_empty() and not n_def.begins_with("[MISSING"):
+				c_name_ru = n_def
+				c_name = n_def
+
+	# 2. Поиск портрета и имени лидера в директории лидеров страны
+	var l_name: String = "UNKNOWN"
+	var l_portrait: String = ""
+	var leader_dir_path: String = "res://assets/gfx/leaders/%s" % clean_tag
+
+	if DirAccess.dir_exists_absolute(leader_dir_path):
+		var dir = DirAccess.open(leader_dir_path)
+		if dir != null:
+			dir.list_dir_begin()
+			var fn = dir.get_next()
+			var candidates: Array[String] = []
+			while fn != "":
+				if not dir.current_is_dir() and fn.ends_with(".png") and not fn.ends_with(".import"):
+					candidates.append(fn)
+				fn = dir.get_next()
+
+			if not candidates.is_empty():
+				candidates.sort()
+				var idx = abs(clean_tag.hash()) % candidates.size()
+				var chosen_file = candidates[idx]
+				l_portrait = leader_dir_path.path_join(chosen_file)
+
+				var raw_lead = chosen_file.trim_suffix(".png")
+				if raw_lead.begins_with(clean_tag + "_"):
+					raw_lead = raw_lead.trim_prefix(clean_tag + "_")
+				elif raw_lead.begins_with("Portrait_" + clean_tag + "_"):
+					raw_lead = raw_lead.trim_prefix("Portrait_" + clean_tag + "_")
+				elif raw_lead.begins_with("Portrait_"):
+					raw_lead = raw_lead.trim_prefix("Portrait_")
+
+				raw_lead = raw_lead.replace("_TNO", "").replace("_tno", "").replace("_", " ").strip_edges()
+				if not raw_lead.is_empty():
+					l_name = raw_lead
+
+	if l_portrait.is_empty():
+		var fallback_portraits = [
+			"res://assets/gfx/leaders/USA/USA_Richard_Nixon.png",
+			"res://assets/gfx/leaders/GER/Portrait_Germany_Adolf_Hitler.png",
+			"res://assets/gfx/leaders/JAP/Portrait_Japan_Ino_Hiroya.png",
+			"res://assets/gfx/leaders/ITA/ITA_Gian_Galeazzo_Ciano.png"
+		]
+		for fp in fallback_portraits:
+			if ResourceLoader.exists(fp) or FileAccess.file_exists(fp):
+				l_portrait = fp
+				break
+		if l_portrait.is_empty():
+			l_portrait = "res://icon.svg"
+
+	if l_name == "UNKNOWN":
+		l_name = "%s Временное Руководство" % c_name_ru
+
+	# 3. Детерминированный цвет на основе хэша тега
+	var h = abs(clean_tag.hash())
+	var col_r = float((h & 0xFF)) / 255.0 * 0.6 + 0.2
+	var col_g = float(((h >> 8) & 0xFF)) / 255.0 * 0.6 + 0.2
+	var col_b = float(((h >> 16) & 0xFF)) / 255.0 * 0.6 + 0.2
+	var color = Color(col_r, col_g, col_b)
+
+	var h_seed = abs(clean_tag.hash())
+	var gdp = 2.0 + float(h_seed % 15)
+	var manpower = 15000 + (h_seed % 35000)
+	var factories = 3 + (h_seed % 8)
+
+	return {
+		"tag": clean_tag,
+		"name": c_name,
+		"name_ru": c_name_ru,
+		"leader_name": l_name,
+		"leader_title": "Глава государства",
+		"ideology": "Authoritarian Democracy",
+		"sub_ideology": "Despotism",
+		"theater": "theater_global",
+		"color": color,
+		"portrait_path": l_portrait,
+		"leader_portrait": l_portrait,
+		"difficulty_rating": "●●●○○ (СРЕДНЯЯ)",
+		"starting_gdp": gdp,
+		"starting_manpower": manpower,
+		"starting_factories": factories,
+		"geopolitical_bloc": "Non-Aligned",
+		"traits": ["Суверенное правительство", "Локальный нейтралитет"],
+		"lore": "Суверенное государство, сохраняющее нейтралитет и балансирующее между великими державами в эпоху Холодной Войны."
+	}
 
 
 static func _get_canonical_overrides(tag: String) -> Dictionary:

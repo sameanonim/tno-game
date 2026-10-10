@@ -110,6 +110,10 @@ func resolve_active_tree(tag: String, state: CountryState) -> String:
 		var usa_tree = _resolve_usa_active_tree(eval_state)
 		if not usa_tree.is_empty():
 			return usa_tree
+	elif clean_tag == "KOM":
+		var kom_tree = _resolve_komi_active_tree(eval_state)
+		if not kom_tree.is_empty():
+			return kom_tree
 	else:
 		var rus_tree = _resolve_russia_active_tree(eval_state)
 		if not rus_tree.is_empty():
@@ -242,6 +246,118 @@ func _resolve_russia_active_tree(eval_state: CountryState) -> String:
 			return reg_tree
 
 	return _select_starting_tree(eval_state)
+
+
+## Определение актуального дерева Коми: Превыборное (1962) -> Выборы/Перевороты -> Смута -> Регионал -> Суперрегионал
+func _resolve_komi_active_tree(eval_state: CountryState) -> String:
+	if eval_state == null:
+		return _select_starting_tree(null)
+
+	var l_name = eval_state.leader_name.to_lower()
+	var ideol = eval_state.ruling_ideology.to_lower()
+
+	# 1. Суперрегиональный этап объединения
+	if eval_state.has_flag("is_superregional_unifier"):
+		if l_name.contains("suslov") or l_name.contains("суслов"):
+			return "KOM_superregional_suslov"
+		elif l_name.contains("zhdanov") or l_name.contains("жданов"):
+			return "KOM_superregional_zhdanov"
+		elif l_name.contains("bukharina") or l_name.contains("бухарина"):
+			return "KOM_bukharina_superregional"
+		elif l_name.contains("voznesensky") or l_name.contains("вознесенский"):
+			return "KOM_superregional_dsnp"
+		elif l_name.contains("morozov") or l_name.contains("морозов"):
+			return "KOM_superregional_smr"
+		elif l_name.contains("stalina") or l_name.contains("сталина"):
+			if eval_state.has_flag("stalina_despotist"):
+				return "KOM_superregional_despotist_stalina"
+			return "KOM_superregional_psd"
+		elif l_name.contains("shafarevich") or l_name.contains("шафаревич"):
+			return "KOM_shafarevich_superregional"
+		elif l_name.contains("serov") or l_name.contains("серов"):
+			return "KOM_superregional_serov"
+		elif l_name.contains("gumilyov") or l_name.contains("gumilev") or l_name.contains("гумилев") or l_name.contains("гумилёв"):
+			return "KOM_gumilyov_superregional"
+		elif l_name.contains("taboritsky") or l_name.contains("таборицкий"):
+			return "KOM_taboritsky_superregional"
+		var super_cand = _get_best_candidate_for_category(eval_state, "SUPERREGIONAL")
+		if not super_cand.is_empty():
+			return super_cand
+
+	# 2. Региональный этап объединения (Западная Россия объединена)
+	if eval_state.has_flag("is_regional_unifier"):
+		if l_name.contains("suslov") or l_name.contains("суслов"):
+			return "KOM_suslov_regional"
+		elif l_name.contains("zhdanov") or l_name.contains("жданов"):
+			return "KOM_zhdanov_regional"
+		elif l_name.contains("bukharina") or l_name.contains("бухарина"):
+			return "KOM_bukharina_regional"
+		elif l_name.contains("voznesensky") or l_name.contains("вознесенский"):
+			return "KOM_socdem_regional"
+		elif l_name.contains("morozov") or l_name.contains("морозов"):
+			return "KOM_morozov_regional"
+		elif l_name.contains("stalina") or l_name.contains("сталина"):
+			if eval_state.has_flag("stalina_despotist"):
+				return "KOM_stalina_despot_regional"
+			return "KOM_stalina_regional"
+		elif l_name.contains("shafarevich") or l_name.contains("шафаревич"):
+			return "KOM_shafarevich_regional"
+		elif l_name.contains("serov") or l_name.contains("серов"):
+			return "KOM_serov_regional"
+		elif l_name.contains("gumilyov") or l_name.contains("gumilev") or l_name.contains("гумилев") or l_name.contains("гумилёв"):
+			return "KOM_gumilyov_regional"
+		elif l_name.contains("taboritsky") or l_name.contains("таборицкий"):
+			return "KOM_taboritsky_regional"
+		var reg_cand = _get_best_candidate_for_category(eval_state, "REGIONAL")
+		if not reg_cand.is_empty():
+			return reg_cand
+
+	# 3. Этап Смуты (Warlord Unification)
+	if eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+		if eval_state.has_flag("komi_stalina_in_power") or l_name.contains("сталина") or l_name.contains("stalina"):
+			return "KOM_stalina_smuta"
+		elif eval_state.has_flag("komi_faction_left") or ideol.contains("communist") or ideol.contains("socialist"):
+			return "KOM_communist_smuta"
+		elif eval_state.has_flag("komi_faction_right") or ideol.contains("fascist") or ideol.contains("ultranationalism") or ideol.contains("national_socialism") or ideol.contains("burgundian"):
+			return "KOM_fascist_smuta"
+		elif eval_state.has_flag("komi_faction_center") or ideol.contains("progressivism") or ideol.contains("liberal"):
+			return "KOM_democratic_smuta"
+		var smuta_cand = _get_best_candidate_for_category(eval_state, "SMUTA")
+		if not smuta_cand.is_empty():
+			return smuta_cand
+
+	# 4. Государственные перевороты (Coups)
+	if eval_state.has_flag("komi_left_coup_active") or eval_state.has_flag("lcoup"):
+		return "KOM_lcoup"
+	elif eval_state.has_flag("komi_right_coup_active") or eval_state.has_flag("rcoup"):
+		return "KOM_rcoup"
+	elif eval_state.has_flag("komi_center_coup_active") or eval_state.has_flag("ccoup"):
+		return "KOM_ccoup"
+	elif eval_state.has_flag("komi_stalina_coup_active") or eval_state.has_flag("scoup"):
+		return "KOM_scoup"
+	elif eval_state.has_flag("komi_unstable_victory"):
+		return "KOM_unstable_victory"
+
+	# 5. Выборные этапы (Elections)
+	if eval_state.has_flag("komi_third_election"):
+		return "KOM_third_election_tree"
+	elif eval_state.has_flag("komi_second_election"):
+		return "KOM_second_election_tree"
+	elif eval_state.has_flag("komi_election_winner_dsnp") or (eval_state.has_flag("elections_finished") and (l_name.contains("вознесенский") or l_name.contains("voznesensky"))):
+		return "KOM_voznesensky_elected"
+	elif eval_state.has_flag("komi_election_winner_smr") or (eval_state.has_flag("elections_finished") and (l_name.contains("морозов") or l_name.contains("morozov"))):
+		return "KOM_morozov_elected"
+	elif eval_state.has_flag("komi_election_winner_psd") or (eval_state.has_flag("elections_finished") and (l_name.contains("сталина") or l_name.contains("stalina"))):
+		return "KOM_stalina_elected"
+	elif eval_state.has_flag("komi_election_winner_rnp") or (eval_state.has_flag("elections_finished") and (l_name.contains("шафаревич") or l_name.contains("shafarevich"))):
+		return "KOM_shafarevich_elected"
+	elif eval_state.has_flag("komi_election_winner_kpk") or (eval_state.has_flag("elections_finished") and (ideol.contains("communist") or ideol.contains("socialist"))):
+		return "KOM_communist_elected"
+	elif eval_state.has_flag("komi_elections_prepared") or eval_state.has_flag("komi_interlude"):
+		return "KOM_interlude"
+
+	# 6. Стартовое древо по умолчанию: 1962 год накануне выборов
+	return "KOM_pre_election"
 
 
 ## Поиск наилучшего дерева-кандидата для заданной стадии с учетом лидера и идеологии
@@ -435,17 +551,19 @@ func _load_manifest_for_country(tag: String) -> void:
 ## Определение категории геополитической стадии по идентификатору дерева
 func _infer_stage_category_from_id(tid: String) -> String:
 	var s = tid.to_lower()
-	if s.contains("start") or s.contains("intro") or s.contains("1962") or s.contains("initial"):
+	if s.contains("start") or s.contains("intro") or s.contains("1962") or s.contains("initial") or s.contains("pre_election"):
 		return "PROLOGUE"
-	elif s.contains("civil_war") or s.contains("cw"):
+	elif s.contains("civil_war") or s.contains("cw") or s.contains("coup"):
 		return "CRISIS"
+	elif s.contains("smuta"):
+		return "SMUTA"
 	elif s.contains("regional") and not s.contains("superregional"):
 		return "REGIONAL"
 	elif s.contains("superregional"):
 		return "SUPERREGIONAL"
 	elif s.contains("post_cw") or s.contains("final") or s.contains("2wrw"):
 		return "FINAL"
-	elif s.contains("successor"):
+	elif s.contains("successor") or s.contains("election") or s.contains("interlude") or s.contains("elected"):
 		return "LEADERSHIP"
 	return "GENERAL"
 
@@ -519,7 +637,29 @@ func switch_focus_tree(new_tree_id: String, preserve_history: bool = true) -> vo
 		push_error("[FocusStageController] Не удалось загрузить данные древа [%s]" % new_tree_id)
 		return
 
-	var new_tree_nodes: Dictionary = new_tree_data.get("nodes", {})
+	var new_tree_nodes: Dictionary = {}
+	if new_tree_data.has("nodes") and new_tree_data["nodes"] is Dictionary:
+		new_tree_nodes = new_tree_data["nodes"]
+	elif new_tree_data.has("directives"):
+		var raw_d = new_tree_data["directives"]
+		if raw_d is Dictionary:
+			new_tree_nodes = raw_d
+		elif raw_d is Array:
+			for item in raw_d:
+				if item is Dictionary:
+					var nid = str(item.get("id", item.get("directive_id", "")))
+					if not nid.is_empty():
+						new_tree_nodes[nid] = item
+	elif new_tree_data.has("focuses"):
+		var raw_f = new_tree_data["focuses"]
+		if raw_f is Dictionary:
+			new_tree_nodes = raw_f
+		elif raw_f is Array:
+			for item in raw_f:
+				if item is Dictionary:
+					var nid = str(item.get("id", item.get("directive_id", "")))
+					if not nid.is_empty():
+						new_tree_nodes[nid] = item
 
 	# 2. Детерминированная обработка текущей выполняемой директивы
 	if country_state != null and directive_manager != null:

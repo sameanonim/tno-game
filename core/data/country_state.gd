@@ -16,6 +16,7 @@ const CountryStateSerializerScript = preload("res://core/data/country_state_seri
 @export var country_name: String = "West Russian Revolutionary Front"
 @export var leader_name: String = "Mikhail Tukhachevsky"
 @export var leader_portrait_path: String = "res://icon.svg"
+@export_multiline var leader_description: String = ""
 @export var ruling_ideology: String = "Authoritarian Socialism"
 @export var sub_ideology: String = ""
 @export var leader_title: String = "Глава государства"

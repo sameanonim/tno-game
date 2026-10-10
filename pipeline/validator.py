@@ -77,29 +77,35 @@ class DatasetValidator:
                     })
 
     def _validate_countries(self) -> None:
-        idx_path = self.config.data_dir / "countries_index.json"
+        idx_path = self.config.data_dir / "countries" / "index.json"
         if not idx_path.exists():
-            self.issues.append({"severity": "error", "module": "countries", "msg": "countries_index.json missing"})
+            idx_path = self.config.data_dir / "countries_index.json"
+        if not idx_path.exists():
+            self.issues.append({"severity": "error", "module": "countries", "msg": "countries index missing (expected data/countries/index.json)"})
             return
 
         with open(idx_path, "r", encoding="utf-8") as f:
             tags = json.load(f)
 
-        if len(tags) < 10:
+        count = len(tags) if isinstance(tags, (list, dict)) else 0
+        if count < 10:
             self.issues.append({
                 "severity": "warning",
                 "module": "countries",
-                "msg": f"Only {len(tags)} countries in index. Possible partial export."
+                "msg": f"Only {count} countries in index. Possible partial export."
             })
 
     def _validate_directives(self) -> None:
+        trees_dir = self.config.data_dir / "trees"
         manifest_path = self.config.data_dir / "directives" / "directives_manifest.json"
-        if not manifest_path.exists():
-            self.issues.append({"severity": "warning", "module": "directives", "msg": "directives_manifest.json missing"})
-            return
-
-        with open(manifest_path, "r", encoding="utf-8") as f:
-            manifest = json.load(f)
-
-        if not manifest:
-            self.issues.append({"severity": "warning", "module": "directives", "msg": "directives manifest is empty"})
+        if trees_dir.exists():
+            tree_files = list(trees_dir.glob("*.json"))
+            if len(tree_files) == 0:
+                self.issues.append({"severity": "warning", "module": "directives", "msg": "trees directory is empty"})
+        elif manifest_path.exists():
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                manifest = json.load(f)
+            if not manifest:
+                self.issues.append({"severity": "warning", "module": "directives", "msg": "directives manifest is empty"})
+        else:
+            self.issues.append({"severity": "warning", "module": "directives", "msg": "Neither data/trees nor directives_manifest.json found"})

@@ -49,6 +49,7 @@ static func to_dict(state: CountryState) -> Dictionary:
 			"country_name": state.country_name,
 			"leader_name": state.leader_name,
 			"leader_portrait_path": state.leader_portrait_path,
+			"leader_description": state.leader_description,
 			"ruling_ideology": state.ruling_ideology,
 			"sub_ideology": state.sub_ideology,
 			"leader_title": state.leader_title,
@@ -168,6 +169,7 @@ static func from_dict(data: Dictionary) -> CountryState:
 	state.country_name = ident.get("country_name_ru", ident.get("country_name", data.get("country_name", "Unknown State")))
 	state.leader_name = ident.get("leader_name", data.get("leader_name", ""))
 	state.leader_portrait_path = ident.get("leader_portrait_path", data.get("leader_portrait_path", "res://icon.svg"))
+	state.leader_description = ident.get("leader_description", data.get("leader_description", ""))
 	state.ruling_ideology = ident.get("ruling_ideology", data.get("ruling_ideology", "Authoritarian Socialism"))
 	state.sub_ideology = ident.get("sub_ideology", data.get("sub_ideology", ""))
 	state.leader_title = ident.get("leader_title", data.get("leader_title", "Глава государства"))
@@ -200,6 +202,8 @@ static func from_dict(data: Dictionary) -> CountryState:
 			state.leader_name = state.head_of_state.leader_name
 		if state.leader_portrait_path == "res://icon.svg":
 			state.leader_portrait_path = state.head_of_state.portrait_path
+		if state.leader_description.is_empty() and not state.head_of_state.description.is_empty():
+			state.leader_description = state.head_of_state.description
 
 	var raw_ministers = data.get("ministers", data.get("cabinet_members", ident.get("cabinet_members", [])))
 	if raw_ministers is Array:
@@ -225,6 +229,8 @@ static func from_dict(data: Dictionary) -> CountryState:
 						state.leader_name = res.leader_name
 					if state.leader_portrait_path == "res://icon.svg":
 						state.leader_portrait_path = res.portrait_path
+					if state.leader_description.is_empty() and not res.description.is_empty():
+						state.leader_description = res.description
 				elif res.is_military_commander:
 					if not state.military_commanders.has(res):
 						state.military_commanders.append(res)

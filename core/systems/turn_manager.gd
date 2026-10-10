@@ -45,6 +45,7 @@ const TurnSerializerScript = preload("res://core/systems/turn_serializer.gd")
 const DemographicsEngineScript = preload("res://core/systems/demographics_engine.gd")
 const TurnTerritoryHandlerScript = preload("res://core/systems/turn_territory_handler.gd")
 const TurnCrisisHandlerScript = preload("res://core/systems/turn_crisis_handler.gd")
+const NuclearDefconManagerScript = preload("res://core/systems/nuclear_defcon_manager.gd")
 
 @export var player_state: CountryState:
 	get:
@@ -217,6 +218,22 @@ var _research_manager_node: ResearchManager = null
 		map_controller = val
 		if val is MapController and boundary_manager != null:
 			boundary_manager.map_controller = val
+var _nuclear_defcon_manager_node: NuclearDefconManager = null
+@export var nuclear_defcon_manager: NuclearDefconManager:
+	get:
+		if _nuclear_defcon_manager_node != null:
+			return _nuclear_defcon_manager_node
+		if has_node("NuclearDefconManager"):
+			_nuclear_defcon_manager_node = get_node("NuclearDefconManager") as NuclearDefconManager
+		elif _nuclear_defcon_manager_node == null:
+			_nuclear_defcon_manager_node = NuclearDefconManager.new()
+			_nuclear_defcon_manager_node.name = "NuclearDefconManager"
+			if is_inside_tree():
+				add_child(_nuclear_defcon_manager_node)
+		return _nuclear_defcon_manager_node
+	set(val):
+		_nuclear_defcon_manager_node = val
+
 var espionage_engine: EspionageEngine = null
 var us_electoral_engine: USElectoralEngine = null
 var last_espionage_reports: Array[Dictionary] = []
@@ -344,6 +361,14 @@ func _ensure_directive_manager_connected() -> void:
 			russian_unification_manager.player_tag = player_state.country_tag
 		if not russian_unification_manager.super_event_requested.is_connected(trigger_super_event):
 			russian_unification_manager.super_event_requested.connect(trigger_super_event)
+
+	if nuclear_defcon_manager != null:
+		if not nuclear_defcon_manager.defcon_level_changed.is_connected(_on_nuclear_defcon_changed):
+			nuclear_defcon_manager.defcon_level_changed.connect(_on_nuclear_defcon_changed)
+		if not nuclear_defcon_manager.super_event_requested.is_connected(trigger_super_event):
+			nuclear_defcon_manager.super_event_requested.connect(trigger_super_event)
+		if not nuclear_defcon_manager.nuclear_war_triggered.is_connected(_on_nuclear_war_triggered):
+			nuclear_defcon_manager.nuclear_war_triggered.connect(_on_nuclear_war_triggered)
 		if not russian_unification_manager.final_unification_achieved.is_connected(_on_rum_final_unification):
 			russian_unification_manager.final_unification_achieved.connect(_on_rum_final_unification)
 		if not russian_unification_manager.midnight_struck.is_connected(_on_rum_midnight_struck):
@@ -466,6 +491,16 @@ func _on_gcw_hitler_died() -> void:
 func _on_gcw_defcon_alert(level: int, _reason: String) -> void:
 	if level <= 1:
 		super_event_requested.emit("SE_NUCLEAR_WAR")
+
+
+func _on_nuclear_defcon_changed(level: int, reason: String) -> void:
+	defcon_level_changed.emit(level, reason)
+	if map_controller != null and map_controller.has_method("update_defcon_visuals"):
+		map_controller.update_defcon_visuals(level)
+
+
+func _on_nuclear_war_triggered(initiator: String, reason: String) -> void:
+	_trigger_game_over(false, "ТЕРМОЯДЕРНЫЙ АПОКАЛИПСИС: %s (%s)" % [reason, initiator])
 
 
 func trigger_super_event(super_event_id: String) -> void:
@@ -689,17 +724,25 @@ func end_turn() -> void:
 	military_frontlines_processed.emit(last_military_reports)
 
 	# Расчет глобальной ядерной эскалации DEFCON
-	var defcon_rep: Dictionary = MilitaryEngine.evaluate_global_defcon(
-		MilitaryEngine.get_active_frontlines(),
-		countries_world_state,
-		current_turn
-	)
+	var defcon_rep: Dictionary
+	if nuclear_defcon_manager != null:
+		defcon_rep = nuclear_defcon_manager.evaluate_turn(
+			MilitaryEngine.get_active_frontlines(),
+			countries_world_state,
+			current_turn
+		)
+	else:
+		defcon_rep = MilitaryEngine.evaluate_global_defcon(
+			MilitaryEngine.get_active_frontlines(),
+			countries_world_state,
+			current_turn
+		)
 	if defcon_rep.get("defcon_changed", false):
 		var new_lvl: int = int(defcon_rep["current_level"])
 		defcon_level_changed.emit(new_lvl, str(defcon_rep.get("reason", "")))
 		if map_controller != null and map_controller.has_method("update_defcon_visuals"):
 			map_controller.update_defcon_visuals(new_lvl)
-	if defcon_rep.get("is_nuclear_midnight", false):
+	if defcon_rep.get("is_armageddon", false):
 		_trigger_game_over(false, "Шкала DEFCON достигла уровня 1 (Ядерная Полночь). Термоядерный апокалипсис уничтожил мир.")
 
 	pending_modal_events.clear()
@@ -797,11 +840,6 @@ func end_turn() -> void:
 		var target_ita_state = player_state if (player_state != null and player_state.country_tag == "ITA") else countries_world_state.get("ITA", null)
 		italy_empire_manager.process_turn(current_turn, target_ita_state, countries_world_state)
 
-	# 4.6. Великогерманский Рейх и Немецкий Кризис (Germany Campaign & GCW)
-	if germany_campaign_manager != null:
-		germany_campaign_manager.process_turn(current_turn)
-	if german_civil_war_manager != null:
-		german_civil_war_manager.process_turn(current_turn)
 
 	# 5. Фаза проверки нарративных событий и кризисов
 	current_state = TurnState.CHECKING_EVENTS

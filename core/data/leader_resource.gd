@@ -17,6 +17,14 @@ var leader_title: String:
 	set(val):
 		title = val
 @export var portrait_path: String = "res://icon.svg"
+@export var portrait: Texture2D = null
+@export_multiline var description: String = ""
+## Псевдоним для совместимости с кодом интерфейса (leader_description <-> description)
+var leader_description: String:
+	get:
+		return description
+	set(val):
+		description = val
 
 @export_group("Ideology & Alignment")
 @export var ideology: String = "Authoritarian Socialism"
@@ -56,6 +64,8 @@ func to_dict() -> Dictionary:
 		"title": title,
 		"leader_title": leader_title if not leader_title.is_empty() else title,
 		"portrait_path": portrait_path,
+		"description": description,
+		"leader_description": description,
 		"ideology": ideology,
 		"faction_affiliation": faction_affiliation,
 		"popularity": popularity,
@@ -86,6 +96,11 @@ static func from_dict(data: Dictionary) -> LeaderResource:
 
 	# 3. Должность / Титул
 	res.title = str(data.get("title", data.get("leader_title", "")))
+
+	# 3.1. Биография / Описание
+	res.description = str(data.get("description", data.get("leader_description", data.get("desc", data.get("bio", "")))))
+	if data.get("portrait") is Texture2D:
+		res.portrait = data["portrait"]
 
 	# 4. Портрет (с нормализацией путей Clausewitz gfx/ -> res://assets/gfx/)
 	var port = str(data.get("portrait_path", data.get("portrait", "")))
@@ -159,6 +174,8 @@ static func from_dict(data: Dictionary) -> LeaderResource:
 				for tr in cl_tr:
 					if not res.traits.has(str(tr)):
 						res.traits.append(str(tr))
+			if res.description.is_empty() and cl_dict.has("desc"):
+				res.description = str(cl_dict["desc"])
 
 	# Проверка advisor (Министры кабинета Clausewitz)
 	if data.has("advisor"):

@@ -124,12 +124,14 @@ func display_country(state: CountryState) -> void:
 			portrait_frame.display_leader(state.head_of_state, state.country_tag, true)
 		else:
 			portrait_frame.display_leader(state, state.country_tag, true)
-		var bio = state.leader_description
-		if state.head_of_state != null and not state.head_of_state.description.is_empty():
-			bio = state.head_of_state.description
+		var bio := ""
+		if "leader_description" in state and not str(state.leader_description).is_empty():
+			bio = str(state.leader_description)
+		if state.head_of_state != null and "description" in state.head_of_state and not str(state.head_of_state.description).is_empty():
+			bio = str(state.head_of_state.description)
 		if bio.is_empty():
 			var canonical = CountryDossierProvider.get_country_dossier(state.country_tag)
-			bio = canonical.get("briefing", "Верховный лидер и глава государства.")
+			bio = canonical.get("briefing", canonical.get("lore", "Верховный лидер и глава государства."))
 		portrait_frame.tooltip_text = "┌── [%s // %s] ──\n│ ТИТУЛ: %s\n│ ИДЕОЛОГИЯ: %s\n├─────────────────────────────────────────\n│ БИОГРАФИЯ И СТРАТЕГИЧЕСКИЙ ПРОФИЛЬ:\n%s" % [
 			l_name, state.country_tag, l_title, party, bio
 		]

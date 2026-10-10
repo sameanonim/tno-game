@@ -43,6 +43,7 @@ static func save_session(tm: TurnManager, save_path: String = "user://savegame.j
 		"scheduled_events_queue": event_manager.scheduled_events_queue.duplicate(true) if event_manager != null else [],
 		"global_defcon_level": MilitaryEngine.global_defcon_level,
 		"global_world_tension": MilitaryEngine.global_world_tension,
+		"nuclear_defcon": tm.nuclear_defcon_manager.serialize() if tm.nuclear_defcon_manager != null else {},
 		"frontlines": [],
 		"countries_world_state": {},
 		"regions_world_state": {},
@@ -201,6 +202,8 @@ static func load_session(tm: TurnManager, save_path: String = "user://savegame.j
 		MilitaryEngine.global_defcon_level = int(data["global_defcon_level"])
 	if data.has("global_world_tension"):
 		MilitaryEngine.global_world_tension = float(data["global_world_tension"])
+	if data.has("nuclear_defcon") and tm.nuclear_defcon_manager != null and data["nuclear_defcon"] is Dictionary:
+		tm.nuclear_defcon_manager.deserialize(data["nuclear_defcon"])
 
 	tm.pending_modal_events.clear()
 	if data.has("pending_modal_events") and data["pending_modal_events"] is Array:
