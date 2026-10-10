@@ -12,6 +12,8 @@ trigger condition ASTs, and effect sequences (including TNO midway effects).
 @export var desc_id: StringName = &""
 @export var icon_path: String = ""
 @export var grid_coord: Vector2i = Vector2i.ZERO
+@export var raw_grid_coord: Vector2i = Vector2i.ZERO
+@export var coordinates_resolved: bool = false
 @export var cost: float = 7.0 ## In days (e.g. 7, 14, 28, 70 days)
 
 ## Prerequisites represented in Conjunctive Normal Form (CNF):
@@ -104,6 +106,8 @@ func to_dict() -> Dictionary:
 		"desc_id": String(desc_id),
 		"icon_path": icon_path,
 		"grid_coord": [grid_coord.x, grid_coord.y],
+		"raw_grid_coord": [raw_grid_coord.x, raw_grid_coord.y],
+		"coordinates_resolved": coordinates_resolved,
 		"cost": cost,
 		"prerequisites": prereq_serialized,
 		"mutually_exclusive": mut_ex_serialized,
@@ -131,12 +135,21 @@ static func from_dict(data: Dictionary) -> FocusNodeData:
 	node.icon_path = str(data.get("icon_path", data.get("icon", "")))
 	node.relative_position_id = StringName(data.get("relative_position_id", ""))
 	node.custom_tooltip_id = StringName(data.get("custom_tooltip_id", data.get("custom_effect_tooltip", "")))
+	node.coordinates_resolved = bool(data.get("coordinates_resolved", false))
 
 	var coords = data.get("grid_coord", [0, 0])
 	if coords is Array and coords.size() >= 2:
 		node.grid_coord = Vector2i(int(coords[0]), int(coords[1]))
 	elif data.has("x") and data.has("y"):
 		node.grid_coord = Vector2i(int(data.get("x", 0)), int(data.get("y", 0)))
+
+	var raw_coords = data.get("raw_grid_coord", null)
+	if raw_coords is Array and raw_coords.size() >= 2:
+		node.raw_grid_coord = Vector2i(int(raw_coords[0]), int(raw_coords[1]))
+	elif not node.coordinates_resolved:
+		node.raw_grid_coord = node.grid_coord
+	else:
+		node.raw_grid_coord = node.grid_coord
 
 	node.cost = float(data.get("cost", 7.0))
 	node.is_hidden = bool(data.get("is_hidden", false))

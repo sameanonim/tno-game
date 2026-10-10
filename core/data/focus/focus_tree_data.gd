@@ -108,14 +108,21 @@ func _resolve_node_coord(node_id: StringName, memo: Dictionary, visiting: Dictio
 	if visiting.has(node_id):
 		return node.grid_coord
 
+	if node.coordinates_resolved:
+		memo[node_id] = node.grid_coord
+		return node.grid_coord
+
 	visiting[node_id] = true
-	var final_pos = node.grid_coord
+	var base_pos = node.raw_grid_coord if node.raw_grid_coord != Vector2i.ZERO else node.grid_coord
+	node.raw_grid_coord = base_pos
+	var final_pos = base_pos
 	if node.relative_position_id != &"" and node.relative_position_id != node_id and nodes.has(node.relative_position_id):
 		var parent_pos: Vector2i = _resolve_node_coord(node.relative_position_id, memo, visiting)
-		final_pos = parent_pos + node.grid_coord
+		final_pos = parent_pos + base_pos
 	visiting.erase(node_id)
 	memo[node_id] = final_pos
 	node.grid_coord = final_pos
+	node.coordinates_resolved = true
 	return final_pos
 
 

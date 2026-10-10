@@ -55,6 +55,20 @@ func test_relative_coordinate_resolution() -> void:
 	assert_eq(child1.grid_coord, Vector2i(7, 3), "Child 1 must be offset: (5+2, 1+2) = (7, 3)")
 	assert_eq(child2.grid_coord, Vector2i(7, 4), "Child 2 must be offset: (7+0, 3+1) = (7, 4)")
 
+	# Idempotency check: repeated resolution must not double-shift coordinates
+	tree.resolve_relative_coordinates()
+	assert_eq(root.grid_coord, Vector2i(5, 1), "Root node must remain unchanged on repeat resolution")
+	assert_eq(child1.grid_coord, Vector2i(7, 3), "Child 1 must remain (7, 3) on repeat resolution")
+	assert_eq(child2.grid_coord, Vector2i(7, 4), "Child 2 must remain (7, 4) on repeat resolution")
+
+	# Serialization roundtrip check: from_dict must not double-shift coordinates
+	var serialized_tree = tree.to_dict()
+	var deserialized_tree = FocusTreeData.from_dict(serialized_tree)
+	var d_child1 = deserialized_tree.get_node(&"sam_branch_a")
+	var d_child2 = deserialized_tree.get_node(&"sam_subbranch_a1")
+	assert_eq(d_child1.grid_coord, Vector2i(7, 3), "Deserialized child1 must preserve (7, 3)")
+	assert_eq(d_child2.grid_coord, Vector2i(7, 4), "Deserialized child2 must preserve (7, 4)")
+
 
 func test_serialization_roundtrip_with_new_fields() -> void:
 	var node := FocusNodeData.new()
