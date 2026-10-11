@@ -51,8 +51,10 @@ static func resolve_coup(turn_manager: TurnManager, victim: CountryState, sponso
 	if not sponsor_tag.is_empty() and turn_manager.countries_world_state.has(sponsor_tag):
 		var sponsor: CountryState = turn_manager.countries_world_state[sponsor_tag]
 		if sponsor != null:
-			victim.ruling_ideology = sponsor.ruling_ideology
+			victim.set_ruling_party(sponsor.ruling_ideology, sponsor.get_ruling_party_color())
 			victim.faction = sponsor.faction
+			if turn_manager.map_controller != null and turn_manager.map_controller.has_method("update_country_political_color"):
+				turn_manager.map_controller.update_country_political_color(victim.country_tag, victim.get_ruling_party_color())
 			if sponsor == turn_manager.player_state and turn_manager.player_state != null:
 				turn_manager.player_state.political_capital += 25.0
 				turn_manager.player_state.legitimacy = clampf(turn_manager.player_state.legitimacy + 5.0, 0.0, 100.0)

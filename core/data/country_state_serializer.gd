@@ -293,34 +293,6 @@ static func from_dict(data: Dictionary) -> CountryState:
 	state.initial_parties.clear()
 	var ruling_id = state.ruling_ideology.to_lower().strip_edges()
 
-	var ideology_colors: Dictionary = {
-		"communist": Color(0.85, 0.15, 0.15, 1.0),
-		"socialist": Color(0.92, 0.35, 0.35, 1.0),
-		"progressivism": Color(0.20, 0.80, 0.75, 1.0),
-		"liberalism": Color(0.95, 0.60, 0.15, 1.0),
-		"liberal_conservatism": Color(0.35, 0.60, 0.85, 1.0),
-		"conservatism": Color(0.20, 0.40, 0.80, 1.0),
-		"paternalism": Color(0.40, 0.50, 0.60, 1.0),
-		"despotism": Color(0.30, 0.30, 0.35, 1.0),
-		"fascism": Color(0.55, 0.35, 0.20, 1.0),
-		"national_socialism": Color(0.40, 0.25, 0.15, 1.0),
-		"ultranationalism": Color(0.20, 0.15, 0.25, 1.0)
-	}
-
-	var ideology_names_ru: Dictionary = {
-		"communist": "Коммунизм",
-		"socialist": "Социализм",
-		"progressivism": "Прогрессивизм",
-		"liberalism": "Либерализм",
-		"liberal_conservatism": "Либерал-консерватизм",
-		"conservatism": "Консерватизм",
-		"paternalism": "Патернализм",
-		"despotism": "Деспотизм",
-		"fascism": "Фашизм",
-		"national_socialism": "Национал-социализм",
-		"ultranationalism": "Ультранационализм"
-	}
-
 	if (pol.has("parties") or pol.has("initial_parties")) and (pol.get("parties") is Array or pol.get("initial_parties") is Array):
 		var raw_arr = pol.get("parties", pol.get("initial_parties", []))
 		for p_data in raw_arr:
@@ -334,10 +306,10 @@ static func from_dict(data: Dictionary) -> CountryState:
 				continue
 			var p_obj = PartyData.new()
 			p_obj.ideology_key = str(ideo_key)
-			p_obj.party_name = ideology_names_ru.get(str(ideo_key).to_lower(), str(ideo_key).capitalize())
+			p_obj.party_name = IdeologyRegistry.get_name_ru(str(ideo_key))
 			p_obj.long_name = p_obj.party_name
 			p_obj.popularity = pop_val
-			p_obj.color = ideology_colors.get(str(ideo_key).to_lower(), Color(0.5, 0.5, 0.5, 1.0))
+			p_obj.color = IdeologyRegistry.get_color(str(ideo_key))
 			p_obj.is_ruling = (str(ideo_key).to_lower() == ruling_id or ruling_id in str(ideo_key).to_lower())
 			state.initial_parties.append(p_obj)
 	elif pol.has("parties") and pol["parties"] is Dictionary:
@@ -349,9 +321,9 @@ static func from_dict(data: Dictionary) -> CountryState:
 				continue
 			var p_obj = PartyData.new()
 			p_obj.ideology_key = str(ideo_key)
-			p_obj.party_name = ideology_names_ru.get(str(ideo_key).to_lower(), str(ideo_key).capitalize())
+			p_obj.party_name = IdeologyRegistry.get_name_ru(str(ideo_key))
 			p_obj.popularity = pop
-			p_obj.color = ideology_colors.get(str(ideo_key).to_lower(), Color(0.5, 0.5, 0.5, 1.0))
+			p_obj.color = IdeologyRegistry.get_color(str(ideo_key))
 			p_obj.is_ruling = (str(ideo_key).to_lower() == ruling_id)
 			state.initial_parties.append(p_obj)
 
@@ -359,12 +331,16 @@ static func from_dict(data: Dictionary) -> CountryState:
 		var p_obj = PartyData.new()
 		var ideo_clean = state.ruling_ideology.to_lower().strip_edges()
 		p_obj.ideology_key = ideo_clean
-		p_obj.party_name = ideology_names_ru.get(ideo_clean, state.ruling_ideology.capitalize())
+		p_obj.party_name = IdeologyRegistry.get_name_ru(ideo_clean)
 		p_obj.long_name = p_obj.party_name
 		p_obj.popularity = 100.0
-		p_obj.color = ideology_colors.get(ideo_clean, Color(0.5, 0.5, 0.5, 1.0))
+		p_obj.color = IdeologyRegistry.get_color(ideo_clean)
 		p_obj.is_ruling = true
 		state.initial_parties.append(p_obj)
+
+	# Устанавливаем актуальный цвет страны из правящей партии
+	if not ident.has("country_color") and not data.has("country_color"):
+		state.country_color = state.get_ruling_party_color()
 
 	state.normalize_parties_popularity()
 

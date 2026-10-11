@@ -36,11 +36,16 @@ static func from_dict(data: Dictionary) -> PartyData:
 	res.seats = int(data.get("seats", 0))
 	res.is_ruling = bool(data.get("is_ruling", false))
 
-	var c_arr = data.get("color", [0.5, 0.5, 0.5, 1.0])
-	if c_arr is Array and c_arr.size() >= 3:
-		var a = c_arr[3] if c_arr.size() >= 4 else 1.0
-		res.color = Color(float(c_arr[0]), float(c_arr[1]), float(c_arr[2]), float(a))
-	elif c_arr is Color:
-		res.color = c_arr
+	if data.has("color"):
+		var c_arr = data.get("color")
+		if c_arr is Array and c_arr.size() >= 3:
+			var a = c_arr[3] if c_arr.size() >= 4 else 1.0
+			res.color = Color(float(c_arr[0]), float(c_arr[1]), float(c_arr[2]), float(a))
+		elif c_arr is Color:
+			res.color = c_arr
+		else:
+			res.color = IdeologyRegistry.get_color(res.ideology_key)
+	else:
+		res.color = IdeologyRegistry.get_color(res.ideology_key)
 
 	return res

@@ -92,8 +92,12 @@ uniform float globe_blend : hint_range(0.0, 1.0) = 0.0;
 uniform vec2 globe_center = vec2(0.5, 0.5);
 uniform float globe_radius : hint_range(0.1, 1.0) = 0.45;
 uniform float map_aspect : hint_range(1.0, 4.0) = 2.75;
-uniform vec4 atmosphere_rim_color : source_color = vec4(0.20, 1.00, 0.50, 1.0);
-uniform vec4 space_color : source_color = vec4(0.015, 0.03, 0.02, 1.0);
+uniform vec4 atmosphere_rim_color : source_color = vec4(0.20, 0.55, 0.98, 1.0);
+uniform vec4 space_color : source_color = vec4(0.006, 0.010, 0.018, 1.0);
+uniform bool enable_polar_ice_cap = true;
+uniform vec4 polar_ice_color : source_color = vec4(0.94, 0.97, 1.00, 1.0);
+uniform vec4 polar_ice_rim_color : source_color = vec4(0.35, 0.60, 0.85, 0.85);
+uniform vec3 sun_light_direction = vec3(-0.35, -0.45, 0.82);
 
 // ==============================================================================
 // 5. BAYER 4x4 MATRIX (HALF-TONING FOR BIOMES)
@@ -197,6 +201,8 @@ void fragment() {
 	vec2 cur_uv = UV;
 	float globe_rim_factor = 0.0;
 	float globe_shading = 1.0;
+	bool is_outside_globe = false;
+	vec4 outside_globe_color = vec4(0.0);
 
 	// Сферическая ортографическая проекция глобуса при отдалении
 	if (enable_globe && globe_blend > 0.001) {
@@ -209,16 +215,10 @@ void fragment() {
 			if (rim_dist < 0.12) {
 				float atmo = exp(-rim_dist * 35.0) * globe_blend;
 				vec3 atmo_col = mix(space_color.rgb, atmosphere_rim_color.rgb, atmo);
-				COLOR = vec4(atmo_col, atmo * globe_blend);
-				return;
+				outside_globe_color = vec4(atmo_col, atmo * globe_blend);
+				is_outside_globe = true;
 			} else {
-				if (globe_blend > 0.85) {
-					discard;
-				} else {
-					vec3 sp = mix(vec3(0.0), space_color.rgb, globe_blend);
-					COLOR = vec4(sp, globe_blend * 0.7);
-					return;
-				}
+				discard;
 			}
 		} else {
 			float z = sqrt(max(0.0, 1.0 - r * r));
@@ -236,21 +236,24 @@ void fragment() {
 		}
 	}
 
-	vec2 tex_size = vec2(textureSize(provinces_mask, 0));
-	vec2 pixel_size = 1.0 / tex_size;
+	if (is_outside_globe) {
+		COLOR = outside_globe_color;
+	} else {
+		vec2 tex_size = vec2(textureSize(provinces_mask, 0));
+		vec2 pixel_size = 1.0 / tex_size;
 
-	// 1. Center province sampling
-	vec4 center_raw = texture(provinces_mask, cur_uv);
-	int center_id = decode_province_id(center_raw);
-	ivec4 center_hier = sample_province_hierarchy(center_id);
-	int center_owner = center_hier.x;
-	int center_state = center_hier.y;
-	bool center_is_water = (center_hier.z != 0) || (center_id <= 0);
-	bool center_is_frontline = (center_hier.w != 0);
+		// 1. Center province sampling
+		vec4 center_raw = texture(provinces_mask, cur_uv);
+		int center_id = decode_province_id(center_raw);
+		ivec4 center_hier = sample_province_hierarchy(center_id);
+		int center_owner = center_hier.x;
+		int center_state = center_hier.y;
+		bool center_is_water = (center_hier.z != 0) || (center_id <= 0);
+		bool center_is_frontline = (center_hier.w != 0);
 
-	// 2. Base Color Resolution by Map Mode
-	vec4 base_color = vec4(0.02, 0.05, 0.08, 1.0); // Maritime dark abyss
-	vec4 data_val = vec4(0.0);
+		// 2. Base Color Resolution by Map Mode
+		vec4 base_color = vec4(0.02, 0.05, 0.08, 1.0); // Maritime dark abyss
+		vec4 data_val = vec4(0.0);
 
 	if (!center_is_water) {
 		data_val = sample_scalar_data(center_id);
@@ -438,4 +441,5 @@ void fragment() {
 	base_color.rgb += atmosphere_rim_color.rgb * (globe_rim_factor * 0.45);
 
 	COLOR = vec4(base_color.rgb, 1.0);
+	}
 }

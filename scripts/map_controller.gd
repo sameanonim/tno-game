@@ -125,6 +125,7 @@ var province_to_state: Dictionary = {}
 var state_to_provinces: Dictionary = {}
 var province_centroids: Dictionary = {} # pid -> Vector2
 var country_colors: Dictionary = {}     # Tag -> Color
+var country_ruling_parties: Dictionary = {} # Tag -> String (Ruling party / ideology key)
 var country_tag_to_id: Dictionary = {}  # Tag -> int
 var country_id_to_tag: Dictionary = {}  # int -> Tag
 var player_country_tag: String = "KOM"
@@ -894,6 +895,64 @@ func set_province_owner(province_id: int, new_owner_tag: String, new_color: Colo
 
 
 ##
+## Обновляет цвет правящей партии для указанного государства и всех его подконтрольных провинций
+##
+func update_country_political_color(country_tag: String, new_party_color: Color) -> void:
+	var clean_tag: String = country_tag.to_upper().strip_edges()
+	country_colors[clean_tag] = new_party_color
+	var provs_to_update: Array = []
+	for pid: Variant in provinces_data.keys():
+		var p_info: Dictionary = provinces_data[pid]
+		if str(p_info.get("owner", "")).to_upper() == clean_tag:
+			provs_to_update.append(int(pid))
+	MapLUTPipelineScript.update_country_provinces_color(lut_image, lut_texture, lut_size, provs_to_update, new_party_color)
+
+
+##
+## Пакетно синхронизирует цвета политической карты из справочника государств (TurnManager.countries_world_state)
+##
+func sync_political_colors_from_world_state(countries_world_state: Dictionary) -> void:
+	if lut_image == null or countries_world_state.is_empty():
+		return
+	for c_tag: Variant in countries_world_state.keys():
+		var c_st = countries_world_state[c_tag]
+		if c_st is CountryState:
+			var clean_tag: String = str(c_tag).to_upper().strip_edges()
+			var col: Color = c_st.get_ruling_party_color()
+			country_colors[clean_tag] = col
+			if not c_st.ruling_party.is_empty():
+				country_ruling_parties[clean_tag] = c_st.ruling_party
+	for pid: Variant in provinces_data.keys():
+		var p_info: Dictionary = provinces_data[pid]
+		var owner: String = str(p_info.get("owner", "")).to_upper().strip_edges()
+		if country_colors.has(owner):
+			var col: Color = country_colors[owner]
+			var coord: Vector2i = _id_to_lut_coords(int(pid))
+			lut_image.set_pixel(coord.x, coord.y, col)
+	if lut_texture != null:
+		lut_texture.update(lut_image)
+
+
+##
+## Возвращает правящую партию или идеологию для нации
+##
+func get_country_ruling_party(country_tag: String) -> String:
+	var clean_tag: String = country_tag.to_upper().strip_edges()
+	return country_ruling_parties.get(clean_tag, "despotism")
+
+
+##
+## Возвращает актуальный цвет правящей партии нации
+##
+func get_country_ruling_party_color(country_tag: String) -> Color:
+	var clean_tag: String = country_tag.to_upper().strip_edges()
+	if country_colors.has(clean_tag):
+		return country_colors[clean_tag]
+	var party: String = get_country_ruling_party(clean_tag)
+	return IdeologyRegistry.get_color(party, default_province_color)
+
+
+##
 ## Управление видимостью меток государств на карте
 ##
 func set_country_labels_visible(visible_state: bool) -> void:
@@ -1166,9 +1225,12 @@ func _pack_ownership_pixel(owner_id: int, state_id: int, is_water: bool, is_fron
 
 func _resolve_initial_province_color(pid: int) -> Color:
 	var p_data = provinces_data.get(pid, {})
-	var owner = p_data.get("owner", "")
-	if country_colors.has(owner):
-		return country_colors[owner]
+	var owner = str(p_data.get("owner", "")).to_upper().strip_edges()
+	if not owner.is_empty():
+		if country_colors.has(owner):
+			return country_colors[owner]
+		if country_ruling_parties.has(owner):
+			return IdeologyRegistry.get_color(country_ruling_parties[owner], default_province_color)
 	if p_data.get("type", "") in ["sea", "lake", "ocean"]:
 		return water_color
 	return default_province_color
@@ -1201,6 +1263,7 @@ func _load_supplementary_data() -> void:
 	country_tag_to_id = res.country_tag_to_id
 	country_id_to_tag = res.country_id_to_tag
 	country_colors = res.country_colors
+	country_ruling_parties = res.get("country_ruling_parties", {})
 	country_spheres = res.country_spheres
 	country_factions = res.country_factions
 	starting_regions_data = res.starting_regions_data

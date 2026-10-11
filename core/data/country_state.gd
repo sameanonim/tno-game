@@ -8,6 +8,8 @@ extends Resource
 
 const CountryStateSerializerScript = preload("res://core/data/country_state_serializer.gd")
 
+signal ruling_party_changed(new_party_key: String, new_color: Color)
+
 # ==============================================================================
 # 1. ОСНОВНЫЕ ДАННЫЕ И ЛИДЕРСТВО
 # ==============================================================================
@@ -894,6 +896,54 @@ func ensure_default_societal_laws() -> void:
 			{"name": "Медицинское обеспечение", "value": "Базовые государственные клиники", "tier": 2, "max_tier": 5}
 		]
 
+
+# ==============================================================================
+# ПОЛИТИЧЕСКИЕ ПАРТИИ И ИДЕОЛОГИЧЕСКИЙ ЦВЕТ
+# ==============================================================================
+
+"""Возвращает актуальный цвет правящей партии или идеологии страны.
+Сначала проверяет активную правящую партию из initial_parties.
+Если не найдена, рассчитывает по ruling_party / ruling_ideology через IdeologyRegistry.
+"""
+func get_ruling_party_color() -> Color:
+	for p in initial_parties:
+		if p != null and p.is_ruling:
+			return p.color
+	var key: String = ruling_party if not ruling_party.is_empty() else ruling_ideology
+	return IdeologyRegistry.get_color(key, country_color)
+
+
+"""Устанавливает правящую партию или идеологию с обновлением статусов партий и сигналом.
+"""
+func set_ruling_party(new_party_key: String, new_party_color: Color = Color.TRANSPARENT) -> void:
+	ruling_party = new_party_key
+	ruling_ideology = new_party_key
+	var norm: String = IdeologyRegistry.normalize_key(new_party_key)
+	var resolved_color: Color = new_party_color if new_party_color != Color.TRANSPARENT else IdeologyRegistry.get_color(norm, country_color)
+
+	var found := false
+	for p in initial_parties:
+		if p != null:
+			var p_norm: String = IdeologyRegistry.normalize_key(p.ideology_key)
+			if p_norm == norm or p.party_name.to_lower() == new_party_key.to_lower():
+				p.is_ruling = true
+				if new_party_color != Color.TRANSPARENT:
+					p.color = new_party_color
+				resolved_color = p.color
+				found = true
+			else:
+				p.is_ruling = false
+
+	if not found and not initial_parties.is_empty():
+		var p_new = PartyData.new()
+		p_new.ideology_key = new_party_key
+		p_new.party_name = IdeologyRegistry.get_name_ru(new_party_key)
+		p_new.color = resolved_color
+		p_new.is_ruling = true
+		initial_parties.append(p_new)
+
+	country_color = resolved_color
+	ruling_party_changed.emit(new_party_key, resolved_color)
 
 
 # ==============================================================================

@@ -60,6 +60,7 @@ const DecisionManagerScript = preload("res://core/systems/decision_manager.gd")
 		return player_state
 	set(val):
 		player_state = val
+
 var _internally_created_sub_nodes: Array[Node] = []
 
 func _get_or_create_sub_manager(current_node: Node, node_name: String, factory_callable: Callable) -> Node:
@@ -159,6 +160,8 @@ var _boundary_manager_node: BoundaryManager = null
 		map_controller = val
 		if val is MapController and boundary_manager != null:
 			boundary_manager.map_controller = val
+		if map_controller != null and not countries_world_state.is_empty() and map_controller.has_method("sync_political_colors_from_world_state"):
+			map_controller.sync_political_colors_from_world_state(countries_world_state)
 
 var _nuclear_defcon_manager_node: NuclearDefconManager = null
 @export var nuclear_defcon_manager: NuclearDefconManager:
@@ -867,6 +870,15 @@ func _on_rum_midnight_struck() -> void:
 func _on_gcw_concluded(victor_tag: String) -> void:
 	TurnCrisisHandlerScript.handle_gcw_concluded(self, victor_tag)
 
+
+## Обновление правящей политической партии страны с синхронизацией карты
+func update_country_ruling_party(country_tag: String, new_party_key: String, new_color: Color = Color.TRANSPARENT) -> void:
+	var clean_tag: String = country_tag.to_upper().strip_edges()
+	var target_st: CountryState = player_state if (player_state != null and player_state.country_tag == clean_tag) else countries_world_state.get(clean_tag, null)
+	if target_st != null:
+		target_st.set_ruling_party(new_party_key, new_color)
+		if map_controller != null and map_controller.has_method("update_country_political_color"):
+			map_controller.update_country_political_color(clean_tag, target_st.get_ruling_party_color())
 
 
 ## Сохранение текущей игровой сессии в JSON архив

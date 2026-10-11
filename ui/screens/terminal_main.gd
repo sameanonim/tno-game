@@ -800,10 +800,7 @@ func _execute_context_raid(intensity: String) -> void:
 
 
 func _on_region_conquered(prov_id: int, new_owner: String, previous_owner: String) -> void:
-	var new_color = map_controller.country_colors.get(new_owner, Color.TRANSPARENT)
-	if new_color == Color.TRANSPARENT:
-		new_color = Color(0.85, 0.20, 0.20, 1.0) if new_owner == turn_manager.player_state.country_tag else Color(0.25, 0.45, 0.75, 1.0)
-
+	var new_color = map_controller.get_country_ruling_party_color(new_owner)
 	map_controller.set_province_owner(prov_id, new_owner, new_color)
 	map_controller.add_combat_incident_ping(prov_id, "battle")
 	map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
@@ -813,7 +810,7 @@ func _on_region_conquered(prov_id: int, new_owner: String, previous_owner: Strin
 
 
 func _on_state_conquered(state_id: int, new_owner: String) -> void:
-	var new_color = map_controller.country_colors.get(new_owner, Color.TRANSPARENT)
+	var new_color = map_controller.get_country_ruling_party_color(new_owner)
 	map_controller.transfer_state_ownership(state_id, new_owner, new_color)
 	map_controller.populate_data_lut_from_regions(turn_manager.regions_world_state, turn_manager.player_state.country_tag)
 	if sound_fx != null:

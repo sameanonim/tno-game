@@ -225,23 +225,52 @@ static func refresh_ownership_lut_frontlines(
 
 
 """Создает и заполняет политическое LUT-изображение и текстуру.
+Цвета провинций вычисляются на основе правящей партии (через countries_world_state или country_colors).
 """
 static func setup_political_lut(
 	lut_size: Vector2i,
 	provinces_data: Dictionary,
 	country_colors: Dictionary,
-	default_color: Color
+	default_color: Color,
+	countries_world_state: Dictionary = {}
 ) -> Dictionary:
 	var img: Image = Image.create(lut_size.x, lut_size.y, false, Image.FORMAT_RGBA8)
 	img.fill(default_color)
 	for pid: Variant in provinces_data.keys():
 		var p_data: Dictionary = provinces_data[pid]
 		var owner: String = p_data.get("owner", "")
-		var col: Color = country_colors.get(owner, default_color)
+		var col: Color = default_color
+		if not owner.is_empty():
+			if countries_world_state.has(owner) and countries_world_state[owner] is CountryState:
+				var c_st: CountryState = countries_world_state[owner]
+				col = c_st.get_ruling_party_color()
+			elif country_colors.has(owner):
+				col = country_colors[owner]
 		var coord: Vector2i = id_to_lut_coords(int(pid), lut_size)
 		img.set_pixel(coord.x, coord.y, col)
 	var tex: ImageTexture = ImageTexture.create_from_image(img)
 	return {"image": img, "texture": tex}
+
+
+"""Пакетно обновляет цвета провинций заданной страны в политическом LUT и применяет изменения к текстуре.
+"""
+static func update_country_provinces_color(
+	lut_image: Image,
+	lut_texture: ImageTexture,
+	lut_size: Vector2i,
+	provinces_to_update: Array,
+	new_color: Color
+) -> void:
+	if lut_image == null or provinces_to_update.is_empty():
+		return
+	for pid_val in provinces_to_update:
+		var pid: int = int(pid_val)
+		if pid <= 0:
+			continue
+		var coord: Vector2i = id_to_lut_coords(pid, lut_size)
+		lut_image.set_pixel(coord.x, coord.y, new_color)
+	if lut_texture != null:
+		lut_texture.update(lut_image)
 
 
 """Создает и заполняет скалярное Data-LUT изображение и текстуру (R: IC, G: Unrest, B: Infra, A: Sphere).

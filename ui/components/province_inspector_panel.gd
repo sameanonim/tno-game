@@ -52,6 +52,33 @@ func _ready() -> void:
 
 
 static var country_names_cache: Dictionary = {}
+static var country_parties_cache: Dictionary = {}
+
+
+static func _ensure_countries_cache() -> void:
+	if not country_names_cache.is_empty():
+		return
+	var path := "res://map_data/starting_countries_state.json"
+	if FileAccess.file_exists(path):
+		var f = FileAccess.open(path, FileAccess.READ)
+		if f != null:
+			var text = f.get_as_text()
+			f.close()
+			var json = JSON.new()
+			if json.parse(text) == OK and json.data is Dictionary:
+				for t in json.data.keys():
+					var c_info = json.data[t]
+					var name_ru = str(c_info.get("country_name_ru", c_info.get("country_name", t)))
+					country_names_cache[t] = name_ru
+					var r_party = str(c_info.get("ruling_party", c_info.get("ruling_ideology", "")))
+					if r_party.is_empty() and c_info.has("popularities") and c_info["popularities"] is Dictionary:
+						var max_pop: float = -1.0
+						var pops: Dictionary = c_info["popularities"]
+						for pk: String in pops.keys():
+							if float(pops[pk]) > max_pop:
+								max_pop = float(pops[pk])
+								r_party = pk
+					country_parties_cache[t] = r_party
 
 
 func _get_country_display_name(tag: String) -> String:
@@ -59,21 +86,38 @@ func _get_country_display_name(tag: String) -> String:
 	if clean.is_empty() or clean in ["WST", "WASTE", "NONE", "NEU", "NEUTRAL"]:
 		return tr("Нейтральная территория")
 
-	if country_names_cache.is_empty():
-		var path := "res://map_data/starting_countries_state.json"
-		if FileAccess.file_exists(path):
-			var f = FileAccess.open(path, FileAccess.READ)
-			if f != null:
-				var text = f.get_as_text()
-				f.close()
-				var json = JSON.new()
-				if json.parse(text) == OK and json.data is Dictionary:
-					for t in json.data.keys():
-						var c_info = json.data[t]
-						var name_ru = str(c_info.get("country_name_ru", c_info.get("country_name", t)))
-						country_names_cache[t] = name_ru
-
+	_ensure_countries_cache()
 	return country_names_cache.get(clean, clean)
+
+
+func _get_country_ruling_party_info(tag: String) -> Dictionary:
+	var clean: String = tag.to_upper().strip_edges()
+	if clean.is_empty() or clean in ["WST", "WASTE", "NONE", "NEU", "NEUTRAL"]:
+		return {}
+
+	var tree = get_tree()
+	if tree != null and tree.root != null:
+		var tm = tree.root.find_child("TurnManager", true, false)
+		if tm != null:
+			var c_st = tm.player_state if (tm.player_state != null and tm.player_state.country_tag == clean) else tm.countries_world_state.get(clean, null)
+			if c_st is CountryState:
+				var party_col: Color = c_st.get_ruling_party_color()
+				var p_key: String = c_st.ruling_party if not c_st.ruling_party.is_empty() else c_st.ruling_ideology
+				return {
+					"key": p_key,
+					"name": IdeologyRegistry.get_name_ru(p_key),
+					"color": party_col
+				}
+
+	_ensure_countries_cache()
+	if country_parties_cache.has(clean):
+		var p_key = country_parties_cache[clean]
+		return {
+			"key": p_key,
+			"name": IdeologyRegistry.get_name_ru(p_key),
+			"color": IdeologyRegistry.get_color(p_key)
+		}
+	return {}
 
 
 var current_region_data: RegionData = null
@@ -185,6 +229,11 @@ func _update_display() -> void:
 	text += "[b][color=#88ccff]══ ГЕОПОЛИТИЧЕСКИЙ СТАТУС ══[/color][/b]\n"
 	if owner != "NEU" and owner != "WST":
 		text += "[color=#aaaaaa]ДЕРЖАВА-ВЛАДЕЛЕЦ:[/color] [color=%s]%s [%s][/color] | [color=#aaaaaa]РЕГИОН:[/color] %s\n" % [owner_color, owner_display_name, owner, state_name]
+		var party_info = _get_country_ruling_party_info(owner)
+		if not party_info.is_empty():
+			var p_col: Color = party_info.get("color", Color.WHITE)
+			var p_hex: String = "#" + p_col.to_html(false)
+			text += "[color=#aaaaaa]ПРАВЯЩАЯ СИЛА:[/color] [color=%s]■ %s[/color] [color=#667788](%s)[/color]\n" % [p_hex, party_info.get("name", ""), party_info.get("key", "").to_upper()]
 	else:
 		text += "[color=#aaaaaa]ДЕРЖАВА-ВЛАДЕЛЕЦ:[/color] [color=#888888]%s[/color] | [color=#aaaaaa]РЕГИОН:[/color] %s\n" % [owner_display_name, state_name]
 

@@ -24,6 +24,7 @@ const TestSocietalLaws = preload("res://tests/test_societal_laws.gd")
 const TestNarrativeEvents = preload("res://tests/test_narrative_events.gd")
 const TestDecisions = preload("res://tests/test_decisions.gd")
 const TestDraggableWindow = preload("res://tests/test_draggable_window.gd")
+const TestPoliticalMapColors = preload("res://tests/test_political_map_colors.gd")
 
 func _init() -> void:
 	print("================================================================")
@@ -33,6 +34,7 @@ func _init() -> void:
 	var suites: Array = [
 		{"name": "EconomyEngine Suite", "instance": TestEconomyEngine.new()},
 		{"name": "CountryState Suite", "instance": TestCountryState.new()},
+		{"name": "PoliticalMapColors Suite", "instance": TestPoliticalMapColors.new()},
 		{"name": "TurnManager Suite", "instance": TestTurnManager.new()},
 		{"name": "ContentLoader Suite", "instance": TestContentLoader.new()},
 		{"name": "ConditionEvaluator Suite", "instance": TestConditionEvaluator.new()},

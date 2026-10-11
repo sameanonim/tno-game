@@ -101,4 +101,6 @@ static func load_world_data(
 		turn_manager.countries_world_state.size(),
 		turn_manager.state_to_provinces.size()
 	])
+	if turn_manager.map_controller != null and turn_manager.map_controller.has_method("sync_political_colors_from_world_state"):
+		turn_manager.map_controller.sync_political_colors_from_world_state(turn_manager.countries_world_state)
 	turn_manager.world_data_loaded.emit(turn_manager.regions_world_state.size(), turn_manager.countries_world_state.size())

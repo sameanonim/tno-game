@@ -116,6 +116,8 @@ static func load_supplementary_data(
 	var country_tag_to_id: Dictionary = result["country_tag_to_id"]
 	var country_id_to_tag: Dictionary = result["country_id_to_tag"]
 	var country_colors: Dictionary = result["country_colors"]
+	var country_ruling_parties: Dictionary = {}
+	result["country_ruling_parties"] = country_ruling_parties
 	var country_spheres: Dictionary = result["country_spheres"]
 	var country_factions: Dictionary = result["country_factions"]
 	var starting_regions_data: Dictionary = result["starting_regions_data"]
@@ -135,10 +137,34 @@ static func load_supplementary_data(
 					country_id_to_tag[cid] = tag
 					cid += 1
 					if c_info is Dictionary:
-						var c_arr = c_info.get("country_color", c_info.get("color", []))
-						if c_arr is Array and c_arr.size() >= 3:
-							var a = c_arr[3] if c_arr.size() >= 4 else 1.0
-							country_colors[tag] = Color(float(c_arr[0]), float(c_arr[1]), float(c_arr[2]), a)
+						# Определяем правящую политическую партию
+						var ruling_key: String = str(c_info.get("ruling_party", c_info.get("ruling_ideology", "")))
+						if ruling_key.is_empty() and c_info.has("popularities") and c_info["popularities"] is Dictionary:
+							var max_pop: float = -1.0
+							var pops: Dictionary = c_info["popularities"]
+							for pk: String in pops.keys():
+								var p_val: float = float(pops[pk])
+								if p_val > max_pop:
+									max_pop = p_val
+									ruling_key = pk
+						if ruling_key.is_empty() and c_info.has("leaders") and c_info["leaders"] is Array and not c_info["leaders"].is_empty():
+							var l0 = c_info["leaders"][0]
+							if l0 is Dictionary and l0.has("country_leader") and l0["country_leader"] is Dictionary:
+								ruling_key = str(l0["country_leader"].get("ideology", ""))
+
+						country_ruling_parties[tag] = ruling_key
+
+						# Цвет страны берется непосредственно из правящей политической партии
+						var party_color: Color = IdeologyRegistry.get_color(ruling_key, Color.TRANSPARENT)
+						if party_color != Color.TRANSPARENT:
+							country_colors[tag] = party_color
+						else:
+							var c_arr = c_info.get("country_color", c_info.get("color", []))
+							if c_arr is Array and c_arr.size() >= 3:
+								var a = c_arr[3] if c_arr.size() >= 4 else 1.0
+								country_colors[tag] = Color(float(c_arr[0]), float(c_arr[1]), float(c_arr[2]), a)
+							else:
+								country_colors[tag] = IdeologyRegistry.get_color("despotism")
 						if c_info.has("sphere_code"):
 							country_spheres[tag] = float(c_info["sphere_code"])
 						if c_info.has("faction"):

@@ -412,6 +412,8 @@ void fragment() {
 	vec2 cur_uv = UV;
 	float globe_rim_factor = 0.0;
 	float globe_shading = 1.0;
+	bool is_outside_globe = false;
+	vec4 outside_globe_color = vec4(0.0);
 
 	// Сферическая ортографическая проекция глобуса при отдалении
 	if (enable_globe && globe_blend > 0.001) {
@@ -424,16 +426,10 @@ void fragment() {
 			if (rim_dist < 0.12) {
 				float atmo = exp(-rim_dist * 35.0) * globe_blend;
 				vec3 atmo_col = mix(space_color.rgb, atmosphere_rim_color.rgb, atmo);
-				COLOR = vec4(atmo_col, atmo * globe_blend);
-				return;
+				outside_globe_color = vec4(atmo_col, atmo * globe_blend);
+				is_outside_globe = true;
 			} else {
-				if (globe_blend > 0.85) {
-					discard;
-				} else {
-					vec3 sp = mix(vec3(0.0), space_color.rgb, globe_blend);
-					COLOR = vec4(sp, globe_blend * 0.7);
-					return;
-				}
+				discard;
 			}
 		} else {
 			float z = sqrt(max(0.0, 1.0 - r * r));
@@ -451,8 +447,11 @@ void fragment() {
 		}
 	}
 
-	vec2 mask_size = vec2(textureSize(provinces_mask, 0));
-	vec2 texel = 1.0 / mask_size;
+	if (is_outside_globe) {
+		COLOR = outside_globe_color;
+	} else {
+		vec2 mask_size = vec2(textureSize(provinces_mask, 0));
+		vec2 texel = 1.0 / mask_size;
 
 	vec4 mask_col = texture(provinces_mask, cur_uv);
 	int center_id = decode_province_id(mask_col);
@@ -894,4 +893,5 @@ void fragment() {
 	final_color.rgb += atmosphere_rim_color.rgb * (globe_rim_factor * 0.45);
 
 	COLOR = final_color;
+	}
 }
