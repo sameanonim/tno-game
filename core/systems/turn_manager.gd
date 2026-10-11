@@ -60,18 +60,24 @@ const DecisionManagerScript = preload("res://core/systems/decision_manager.gd")
 		return player_state
 	set(val):
 		player_state = val
+var _internally_created_sub_nodes: Array[Node] = []
+
+func _get_or_create_sub_manager(current_node: Node, node_name: String, factory_callable: Callable) -> Node:
+	if current_node != null and is_instance_valid(current_node):
+		return current_node
+	if has_node(node_name):
+		return get_node(node_name)
+	var new_node: Node = factory_callable.call()
+	new_node.name = node_name
+	_internally_created_sub_nodes.append(new_node)
+	if is_inside_tree():
+		add_child(new_node)
+	return new_node
+
 var _event_manager_node: EventManager = null
 @export var event_manager: EventManager:
 	get:
-		if _event_manager_node != null:
-			return _event_manager_node
-		if has_node("EventManager"):
-			_event_manager_node = get_node("EventManager") as EventManager
-		elif _event_manager_node == null:
-			_event_manager_node = EventManager.new()
-			_event_manager_node.name = "EventManager"
-			if is_inside_tree():
-				add_child(_event_manager_node)
+		_event_manager_node = _get_or_create_sub_manager(_event_manager_node, "EventManager", func(): return EventManager.new()) as EventManager
 		return _event_manager_node
 	set(val):
 		_event_manager_node = val
@@ -79,15 +85,7 @@ var _event_manager_node: EventManager = null
 var _directive_manager_node: DirectiveManager = null
 @export var directive_manager: DirectiveManager:
 	get:
-		if _directive_manager_node != null:
-			return _directive_manager_node
-		if has_node("DirectiveManager"):
-			_directive_manager_node = get_node("DirectiveManager") as DirectiveManager
-		elif _directive_manager_node == null:
-			_directive_manager_node = DirectiveManager.new()
-			_directive_manager_node.name = "DirectiveManager"
-			if is_inside_tree():
-				add_child(_directive_manager_node)
+		_directive_manager_node = _get_or_create_sub_manager(_directive_manager_node, "DirectiveManager", func(): return DirectiveManager.new()) as DirectiveManager
 		return _directive_manager_node
 	set(val):
 		_directive_manager_node = val
@@ -95,15 +93,7 @@ var _directive_manager_node: DirectiveManager = null
 var _focus_stage_controller_node: FocusStageController = null
 @export var focus_stage_controller: FocusStageController:
 	get:
-		if _focus_stage_controller_node != null:
-			return _focus_stage_controller_node
-		if has_node("FocusStageController"):
-			_focus_stage_controller_node = get_node("FocusStageController") as FocusStageController
-		elif _focus_stage_controller_node == null:
-			_focus_stage_controller_node = FocusStageController.new()
-			_focus_stage_controller_node.name = "FocusStageController"
-			if is_inside_tree():
-				add_child(_focus_stage_controller_node)
+		_focus_stage_controller_node = _get_or_create_sub_manager(_focus_stage_controller_node, "FocusStageController", func(): return FocusStageController.new()) as FocusStageController
 		return _focus_stage_controller_node
 	set(val):
 		_focus_stage_controller_node = val
@@ -111,15 +101,7 @@ var _focus_stage_controller_node: FocusStageController = null
 var _german_civil_war_manager_node: GermanCivilWarManager = null
 @export var german_civil_war_manager: GermanCivilWarManager:
 	get:
-		if _german_civil_war_manager_node != null:
-			return _german_civil_war_manager_node
-		if has_node("GermanCivilWarManager"):
-			_german_civil_war_manager_node = get_node("GermanCivilWarManager") as GermanCivilWarManager
-		elif _german_civil_war_manager_node == null:
-			_german_civil_war_manager_node = GermanCivilWarManager.new()
-			_german_civil_war_manager_node.name = "GermanCivilWarManager"
-			if is_inside_tree():
-				add_child(_german_civil_war_manager_node)
+		_german_civil_war_manager_node = _get_or_create_sub_manager(_german_civil_war_manager_node, "GermanCivilWarManager", func(): return GermanCivilWarManager.new()) as GermanCivilWarManager
 		return _german_civil_war_manager_node
 	set(val):
 		_german_civil_war_manager_node = val
@@ -127,45 +109,23 @@ var _german_civil_war_manager_node: GermanCivilWarManager = null
 var _germany_campaign_manager_node: GermanyCampaignManager = null
 @export var germany_campaign_manager: GermanyCampaignManager:
 	get:
-		if _germany_campaign_manager_node != null:
-			return _germany_campaign_manager_node
-		if has_node("GermanyCampaignManager"):
-			_germany_campaign_manager_node = get_node("GermanyCampaignManager") as GermanyCampaignManager
-		elif _germany_campaign_manager_node == null:
-			_germany_campaign_manager_node = GermanyCampaignManager.new()
-			_germany_campaign_manager_node.name = "GermanyCampaignManager"
-			if is_inside_tree():
-				add_child(_germany_campaign_manager_node)
+		_germany_campaign_manager_node = _get_or_create_sub_manager(_germany_campaign_manager_node, "GermanyCampaignManager", func(): return GermanyCampaignManager.new()) as GermanyCampaignManager
 		return _germany_campaign_manager_node
 	set(val):
 		_germany_campaign_manager_node = val
 
+var _russian_unification_manager_node: RussianUnificationManager = null
 @export var russian_unification_manager: RussianUnificationManager:
 	get:
-		if russian_unification_manager == null:
-			if has_node("RussianUnificationManager"):
-				russian_unification_manager = get_node("RussianUnificationManager") as RussianUnificationManager
-			else:
-				russian_unification_manager = RussianUnificationManager.new()
-				russian_unification_manager.name = "RussianUnificationManager"
-				if is_inside_tree():
-					add_child(russian_unification_manager)
-		return russian_unification_manager
+		_russian_unification_manager_node = _get_or_create_sub_manager(_russian_unification_manager_node, "RussianUnificationManager", func(): return RussianUnificationManager.new()) as RussianUnificationManager
+		return _russian_unification_manager_node
 	set(val):
-		russian_unification_manager = val
+		_russian_unification_manager_node = val
 
 var _japan_empire_manager_node: JapanEmpireManager = null
 @export var japan_empire_manager: JapanEmpireManager:
 	get:
-		if _japan_empire_manager_node != null:
-			return _japan_empire_manager_node
-		if has_node("JapanEmpireManager"):
-			_japan_empire_manager_node = get_node("JapanEmpireManager") as JapanEmpireManager
-		elif _japan_empire_manager_node == null:
-			_japan_empire_manager_node = JapanEmpireManager.new()
-			_japan_empire_manager_node.name = "JapanEmpireManager"
-			if is_inside_tree():
-				add_child(_japan_empire_manager_node)
+		_japan_empire_manager_node = _get_or_create_sub_manager(_japan_empire_manager_node, "JapanEmpireManager", func(): return JapanEmpireManager.new()) as JapanEmpireManager
 		return _japan_empire_manager_node
 	set(val):
 		_japan_empire_manager_node = val
@@ -173,15 +133,7 @@ var _japan_empire_manager_node: JapanEmpireManager = null
 var _italy_empire_manager_node: ItalyEmpireManager = null
 @export var italy_empire_manager: ItalyEmpireManager:
 	get:
-		if _italy_empire_manager_node != null:
-			return _italy_empire_manager_node
-		if has_node("ItalyEmpireManager"):
-			_italy_empire_manager_node = get_node("ItalyEmpireManager") as ItalyEmpireManager
-		elif _italy_empire_manager_node == null:
-			_italy_empire_manager_node = ItalyEmpireManager.new()
-			_italy_empire_manager_node.name = "ItalyEmpireManager"
-			if is_inside_tree():
-				add_child(_italy_empire_manager_node)
+		_italy_empire_manager_node = _get_or_create_sub_manager(_italy_empire_manager_node, "ItalyEmpireManager", func(): return ItalyEmpireManager.new()) as ItalyEmpireManager
 		return _italy_empire_manager_node
 	set(val):
 		_italy_empire_manager_node = val
@@ -189,55 +141,36 @@ var _italy_empire_manager_node: ItalyEmpireManager = null
 var _research_manager_node: ResearchManager = null
 @export var research_manager: ResearchManager:
 	get:
-		if _research_manager_node != null:
-			return _research_manager_node
-		if has_node("ResearchManager"):
-			_research_manager_node = get_node("ResearchManager") as ResearchManager
-		elif _research_manager_node == null:
-			_research_manager_node = ResearchManager.new()
-			_research_manager_node.name = "ResearchManager"
-			if is_inside_tree():
-				add_child(_research_manager_node)
+		_research_manager_node = _get_or_create_sub_manager(_research_manager_node, "ResearchManager", func(): return ResearchManager.new()) as ResearchManager
 		return _research_manager_node
 	set(val):
 		_research_manager_node = val
 
+var _boundary_manager_node: BoundaryManager = null
 @export var boundary_manager: BoundaryManager:
 	get:
-		if boundary_manager == null:
-			if has_node("BoundaryManager"):
-				boundary_manager = get_node("BoundaryManager") as BoundaryManager
-			else:
-				boundary_manager = BoundaryManager.new()
-				boundary_manager.name = "BoundaryManager"
-				if is_inside_tree():
-					add_child(boundary_manager)
-		return boundary_manager
+		_boundary_manager_node = _get_or_create_sub_manager(_boundary_manager_node, "BoundaryManager", func(): return BoundaryManager.new()) as BoundaryManager
+		return _boundary_manager_node
 	set(val):
-		boundary_manager = val
+		_boundary_manager_node = val
+
 @export var map_controller: Node = null:
 	set(val):
 		map_controller = val
 		if val is MapController and boundary_manager != null:
 			boundary_manager.map_controller = val
+
 var _nuclear_defcon_manager_node: NuclearDefconManager = null
 @export var nuclear_defcon_manager: NuclearDefconManager:
 	get:
-		if _nuclear_defcon_manager_node != null:
-			return _nuclear_defcon_manager_node
-		if has_node("NuclearDefconManager"):
-			_nuclear_defcon_manager_node = get_node("NuclearDefconManager") as NuclearDefconManager
-		elif _nuclear_defcon_manager_node == null:
-			_nuclear_defcon_manager_node = NuclearDefconManager.new()
-			_nuclear_defcon_manager_node.name = "NuclearDefconManager"
-			if is_inside_tree():
-				add_child(_nuclear_defcon_manager_node)
+		_nuclear_defcon_manager_node = _get_or_create_sub_manager(_nuclear_defcon_manager_node, "NuclearDefconManager", func(): return NuclearDefconManager.new()) as NuclearDefconManager
 		return _nuclear_defcon_manager_node
 	set(val):
 		_nuclear_defcon_manager_node = val
 
-var _decision_manager_instance = null
-@export var decision_manager:
+
+var _decision_manager_instance: DecisionManagerScript = null
+var decision_manager: DecisionManagerScript:
 	get:
 		if _decision_manager_instance != null:
 			return _decision_manager_instance
@@ -285,6 +218,28 @@ var last_military_reports: Array[Dictionary] = []
 func _init() -> void:
 	if player_state == null:
 		player_state = CountryState.new()
+
+
+func _enter_tree() -> void:
+	_attach_sub_managers_to_tree()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		_cleanup_sub_managers()
+
+
+func _attach_sub_managers_to_tree() -> void:
+	for m in _internally_created_sub_nodes:
+		if m != null and is_instance_valid(m) and m.get_parent() == null:
+			add_child(m)
+
+
+func _cleanup_sub_managers() -> void:
+	for m in _internally_created_sub_nodes:
+		if m != null and is_instance_valid(m) and m.get_parent() == null:
+			m.free()
+	_internally_created_sub_nodes.clear()
 
 
 func _ready() -> void:

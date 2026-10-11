@@ -5,13 +5,16 @@ extends TNOSimpleTest
 ## TestDraggableWindow: Тестирование базового компонента перемещения окон и EventPopup
 ##
 
-var window: DraggableWindow = null
-var popup: EventPopup = null
+const DraggableWindowClass = preload("res://ui/components/draggable_window.gd")
+const EventPopupClass = preload("res://ui/components/event_popup.gd")
+
+var window = null
+var popup = null
 
 
 func setup() -> void:
-	window = DraggableWindow.new()
-	popup = EventPopup.new()
+	window = DraggableWindowClass.new()
+	popup = EventPopupClass.new()
 
 
 func teardown() -> void:
@@ -44,7 +47,7 @@ func test_viewport_clamping_math() -> void:
 	window.size = Vector2(400, 300)
 	# Тестируем метод _clamp_to_viewport
 	var clamped_pos = window._clamp_to_viewport(Vector2(-1000, -500))
-	assert_true(clamped_pos.x >= -400.0 + DraggableWindow.MIN_VISIBLE_BORDER, "Окно не должно улетать слишком далеко влево")
+	assert_true(clamped_pos.x >= -400.0 + DraggableWindowClass.MIN_VISIBLE_BORDER, "Окно не должно улетать слишком далеко влево")
 	assert_true(clamped_pos.y >= 0.0, "Окно не должно улетать выше экрана")
 
 
@@ -69,11 +72,11 @@ func test_event_popup_toggle_minimize() -> void:
 
 
 func test_event_popup_option_chosen_signal() -> void:
-	var chosen_idx: int = -1
+	var box: Array = [-1]
 	popup.option_chosen.connect(func(idx: int):
-		chosen_idx = idx
+		box[0] = idx
 	)
 	
 	popup._on_option_pressed(2)
-	assert_eq(chosen_idx, 2, "option_chosen должен передавать правильный индекс опции")
+	assert_eq(box[0], 2, "option_chosen должен передавать правильный индекс опции")
 	assert_false(popup.visible, "Окно должно скрываться после выбора опции")

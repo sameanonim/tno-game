@@ -91,6 +91,7 @@ func test_event_manager_loads_komi_friendship() -> void:
 		var opt0 = ev.options[0]
 		var opt_text = str(opt0.get("text", opt0.get("name", "")))
 		assert_true(opt_text.contains("Место для всех нас"), "Текст первого выбора")
+	em.free()
 
 
 func test_turn_manager_directive_triggers_modal_event() -> void:
@@ -113,6 +114,9 @@ func test_turn_manager_directive_triggers_modal_event() -> void:
 	assert_eq(tm.pending_modal_events.size(), 1, "Событие с days <= 1 должно немедленно попасть в pending_modal_events")
 	var queued_ev: GameEvent = tm.pending_modal_events[0]
 	assert_eq(queued_ev.event_id, "komi_friendship.1", "Очередь должна содержать komi_friendship.1")
+	tm.free()
+	em.free()
+	dm.free()
 
 
 func test_multi_nation_events_load_from_index() -> void:
@@ -131,6 +135,7 @@ func test_multi_nation_events_load_from_index() -> void:
 			assert_true(not ev.title.is_empty(), "Заголовок '%s' не должен быть пустым" % tid)
 			assert_true(not ev.description.is_empty(), "Описание '%s' не должно быть пустым" % tid)
 			assert_true(ev.options.size() > 0, "Событие '%s' обязано иметь варианты выбора" % tid)
+	em.free()
 
 
 func test_game_event_empty_options_fallback() -> void:
@@ -189,4 +194,5 @@ func test_event_manager_nested_if_hidden_effect_chain() -> void:
 	if em.scheduled_events_queue.size() > 0:
 		assert_eq(em.scheduled_events_queue[0]["event_id"], "komi_friendship.2", "Запланированный ID")
 		assert_eq(em.scheduled_events_queue[0]["trigger_turn"], 3, "Ход триггера (14 дней = 2 хода, 1 + 2 = 3)")
+	em.free()
 

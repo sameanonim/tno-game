@@ -1,5 +1,5 @@
 class_name TerminalScreenRegistry
-extends Node
+extends RefCounted
 
 ##
 ## TerminalScreenRegistry: Контроллер регистрации и динамической загрузки национальных экранов
@@ -13,6 +13,11 @@ extends Node
 ## 2. Создание кнопок переключения национальных экранов в панели MapModeHUD.
 ## 3. Управление видимостью вкладок и панелей в зависимости от выбранной державы.
 ## ==============================================================================
+
+
+static func _log(terminal: TerminalMain, msg: String) -> void:
+	if terminal != null and terminal.label_log != null:
+		terminal.label_log.text = msg
 
 
 """Инициализирует и привязывает все национальные терминалы и панели механик к главному терминалу.
@@ -54,18 +59,18 @@ static func setup_national_screens(terminal: TerminalMain) -> void:
 				if terminal.map_controller != null and provs.size() > 0:
 					terminal.map_controller.select_province(provs[0])
 					terminal.map_controller.add_combat_incident_ping(provs[0], "theater_radar")
-				terminal.label_log.text = terminal._tr_str("LOG_PROXY_THEATER", {"proxy": pk.to_upper()}, "ПРОКСИ-ТЕАТР [%s]: КООРДИНАТЫ ПЕРЕДАНЫ В ОПЕРАТИВНЫЙ ШТАБ" % pk.to_upper())
+				_log(terminal, terminal._tr_str("LOG_PROXY_THEATER", {"proxy": pk.to_upper()}, "ПРОКСИ-ТЕАТР [%s]: КООРДИНАТЫ ПЕРЕДАНЫ В ОПЕРАТИВНЫЙ ШТАБ" % pk.to_upper()))
 			)
 			terminal.gcw_operations_panel.tactical_order_clicked.connect(func(order_type, _axis):
 				terminal._update_hud()
 				if terminal.map_controller != null: terminal.map_controller.refresh_tactical_frontlines()
 				if terminal.sound_fx != null: terminal.sound_fx.play_switch_click(1200.0)
-				terminal.label_log.text = terminal._tr_str("LOG_TACTICAL_ORDER", {"order": order_type.to_upper()}, "ГЕНШТАБ: ТАКТИЧЕСКИЙ ПРИКАЗ «%s» ПЕРЕДАН ВОЙСКАМ" % order_type.to_upper())
+				_log(terminal, terminal._tr_str("LOG_TACTICAL_ORDER", {"order": order_type.to_upper()}, "ГЕНШТАБ: ТАКТИЧЕСКИЙ ПРИКАЗ «%s» ПЕРЕДАН ВОЙСКАМ" % order_type.to_upper()))
 			)
 			terminal.gcw_operations_panel.intrigue_action_clicked.connect(func(act_type, contender):
 				terminal._update_hud()
 				if terminal.sound_fx != null: terminal.sound_fx.play_key_click(900.0)
-				terminal.label_log.text = terminal._tr_str("LOG_INTRIGUE_OP", {"op": act_type.to_upper(), "target": contender.to_upper()}, "ИНТРИГА: ОПЕРАЦИЯ «%s» ПРОТИВ ФРАКЦИИ [%s] РЕАЛИЗОВАНА" % [act_type.to_upper(), contender.to_upper()])
+				_log(terminal, terminal._tr_str("LOG_INTRIGUE_OP", {"op": act_type.to_upper(), "target": contender.to_upper()}, "ИНТРИГА: ОПЕРАЦИЯ «%s» ПРОТИВ ФРАКЦИИ [%s] РЕАЛИЗОВАНА" % [act_type.to_upper(), contender.to_upper()]))
 			)
 
 	# 2. Конгресс США (US Congress Screen)
@@ -190,7 +195,7 @@ static func _setup_map_hud_buttons(
 			elif terminal.germany_terminal_screen != null:
 				terminal.germany_terminal_screen.visible = not terminal.germany_terminal_screen.visible
 			if terminal.sound_fx != null: terminal.sound_fx.play_switch_click(1250.0)
-			terminal.label_log.text = terminal._tr_str("LOG_REICH_TERMINAL", {}, "РЕЙХСКАНЦЕЛЯРИЯ: СИТУАЦИОННЫЙ ТЕРМИНАЛ АКТИВИРОВАН")
+			_log(terminal, terminal._tr_str("LOG_REICH_TERMINAL", {}, "РЕЙХСКАНЦЕЛЯРИЯ: СИТУАЦИОННЫЙ ТЕРМИНАЛ АКТИВИРОВАН"))
 		)
 		map_hud_hbox.add_child(terminal.btn_gcw_toggle)
 	if terminal.btn_gcw_toggle != null:
@@ -214,7 +219,7 @@ static func _setup_map_hud_buttons(
 				if terminal.gcw_operations_panel.visible:
 					terminal.gcw_operations_panel.refresh_ui()
 			if terminal.sound_fx != null: terminal.sound_fx.play_switch_click(1250.0)
-			terminal.label_log.text = terminal._tr_str("LOG_OKW_TERMINAL", {}, "ОПЕРАТИВНЫЙ ШТАБ РЕЙХА: АКТИВИРОВАН")
+			_log(terminal, terminal._tr_str("LOG_OKW_TERMINAL", {}, "ОПЕРАТИВНЫЙ ШТАБ РЕЙХА: АКТИВИРОВАН"))
 		)
 		map_hud_hbox.add_child(terminal.btn_okw_toggle)
 	if terminal.btn_okw_toggle != null:
@@ -231,7 +236,7 @@ static func _setup_map_hud_buttons(
 				if terminal.japan_terminal_screen != null:
 					terminal.japan_terminal_screen.refresh_ui()
 			if terminal.sound_fx != null: terminal.sound_fx.play_switch_click(1250.0)
-			terminal.label_log.text = terminal._tr_str("LOG_JAPAN_TERMINAL", {}, "ТЕРМИНАЛ ИМПЕРИИ ЯПОНИЯ: АКТИВИРОВАН")
+			_log(terminal, terminal._tr_str("LOG_JAPAN_TERMINAL", {}, "ТЕРМИНАЛ ИМПЕРИИ ЯПОНИЯ: АКТИВИРОВАН"))
 		)
 		map_hud_hbox.add_child(terminal.btn_japan_toggle)
 	if terminal.btn_japan_toggle != null:
@@ -248,7 +253,7 @@ static func _setup_map_hud_buttons(
 				if terminal.italy_terminal_screen != null:
 					terminal.italy_terminal_screen.refresh_ui()
 			if terminal.sound_fx != null: terminal.sound_fx.play_switch_click(1250.0)
-			terminal.label_log.text = terminal._tr_str("LOG_ITALY_TERMINAL", {}, "ТЕРМИНАЛ ИМПЕРИИ ИТАЛИЯ: АКТИВИРОВАН")
+			_log(terminal, terminal._tr_str("LOG_ITALY_TERMINAL", {}, "ТЕРМИНАЛ ИМПЕРИИ ИТАЛИЯ: АКТИВИРОВАН"))
 		)
 		map_hud_hbox.add_child(terminal.btn_italy_toggle)
 	if terminal.btn_italy_toggle != null:
@@ -366,13 +371,13 @@ static func setup_initial_game_state(terminal: TerminalMain) -> void:
 		session_node.set("is_loading_saved_game", false)
 		var loaded_ok: bool = tm.load_game("user://savegame.json")
 		if loaded_ok:
-			if terminal.map_controller != null:
+			if terminal.map_controller != null and tm.player_state != null:
 				terminal.map_controller.populate_data_lut_from_regions(tm.regions_world_state, tm.player_state.country_tag)
 				terminal.map_controller.refresh_tactical_frontlines()
-			terminal.label_log.text = terminal._tr_str("UI_LOG_LOAD_SUCCESS", {"turn": tm.current_turn}, "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД {turn})")
+			_log(terminal, terminal._tr_str("UI_LOG_LOAD_SUCCESS", {"turn": tm.current_turn}, "СИСТЕМА: ИГРА УСПЕШНО ЗАГРУЖЕНА [user://savegame.json] (ХОД {turn})"))
 	elif session_node != null and session_node.get("active_player_state") != null:
 		tm.set_player_state(session_node.get("active_player_state"))
-	else:
+	elif tm.player_state != null:
 		tm.player_state.turn_count = tm.current_turn
 		tm.player_state.set_flag("turn_count", tm.current_turn)
 
@@ -383,11 +388,12 @@ static func setup_initial_game_state(terminal: TerminalMain) -> void:
 	elif crt_rect != null and session_node != null and crt_rect.material is ShaderMaterial and session_node.has_method("apply_crt_to_material"):
 		session_node.apply_crt_to_material(crt_rect.material as ShaderMaterial)
 
-	terminal.event_overlay.visible = false
-	if terminal.tno_economy_screen != null:
+	if terminal.event_overlay != null:
+		terminal.event_overlay.visible = false
+	if terminal.tno_economy_screen != null and tm.player_state != null:
 		terminal.tno_economy_screen.setup(tm.player_state)
 
-	var p_tag: String = tm.player_state.country_tag.to_upper()
+	var p_tag: String = tm.player_state.country_tag.to_upper() if tm.player_state != null else ""
 	var is_warlord: bool = RussianUnificationManager.is_warlord(p_tag)
 	var is_german: bool = p_tag in ["GER", "BOR", "SPE", "GOR", "HEY", "BGR", "SGR", "GGR", "HGR"]
 
@@ -396,7 +402,7 @@ static func setup_initial_game_state(terminal: TerminalMain) -> void:
 		MilitaryEngine.deploy_starting_theater(tm.player_state, tm.countries_world_state)
 
 	# Инициализация модуля Германии и Немецкой Гражданской Войны
-	if tm.german_civil_war_manager != null:
+	if tm.german_civil_war_manager != null and tm.player_state != null:
 		tm.german_civil_war_manager.initialize(tm, terminal.map_controller, tm.player_state)
 
 	# Регистрация и динамическая загрузка национальных экранов и кнопок карты
@@ -413,5 +419,6 @@ static func setup_initial_game_state(terminal: TerminalMain) -> void:
 		tm.player_state.set_infiltration_level("GER" if target_rival != "GER" else "USA", 10.0, "ESTABLISHING")
 
 	# Синхронизация данных карты и тактического оверлея
-	terminal.map_controller.populate_data_lut_from_regions(tm.regions_world_state, tm.player_state.country_tag)
-	terminal.map_controller.refresh_tactical_frontlines()
+	if terminal.map_controller != null and tm.player_state != null:
+		terminal.map_controller.populate_data_lut_from_regions(tm.regions_world_state, tm.player_state.country_tag)
+		terminal.map_controller.refresh_tactical_frontlines()

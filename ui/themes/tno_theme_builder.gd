@@ -77,6 +77,12 @@ static func get_texture(res_path: String) -> Texture2D:
 			return itex
 	return null
 
+
+static func clear_cache() -> void:
+	_texture_cache.clear()
+	_font_aldrich = null
+	_font_bombardier = null
+
 const FLAG_ALIASES: Dictionary = {
 	"SPE": "SGR",
 	"HEY": "HGR",

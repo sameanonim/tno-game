@@ -50,6 +50,17 @@ func _ready() -> void:
 	_load_all_manifests()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		if instance == self:
+			instance = null
+		_texture_cache.clear()
+
+
+func clear_cache() -> void:
+	_texture_cache.clear()
+
+
 static func get_instance() -> AssetRegistryClass:
 	return instance
 

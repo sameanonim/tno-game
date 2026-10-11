@@ -81,6 +81,11 @@ func _init() -> void:
 	print("  TOTAL ASSERTIONS PASSED: %d" % total_passed)
 	print("  TOTAL ASSERTIONS FAILED: %d" % total_failed)
 	
+	suites.clear()
+	ConfigManager.reset_instance()
+	CountrySelectDossierBuilder.clear_cache()
+	TNOTheme.clear_cache()
+
 	if total_failed > 0:
 		print("\nFAILURES SUMMARY:")
 		for f in all_failures:

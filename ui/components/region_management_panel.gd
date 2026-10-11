@@ -1,5 +1,5 @@
 class_name RegionManagementPanel
-extends DraggableWindow
+extends "res://ui/components/draggable_window.gd"
 
 ##
 ## RegionManagementPanel: Консоль прямого управления регионом правителя

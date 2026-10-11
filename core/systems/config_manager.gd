@@ -1,5 +1,5 @@
 class_name ConfigManager
-extends Node
+extends RefCounted
 
 ##
 ## ConfigManager: Синглтон управления балансными константами и настройками движка (Autoload)
@@ -168,10 +168,12 @@ func _ready() -> void:
 
 static func get_instance() -> ConfigManager:
 	if instance == null:
-		var script_res = load("res://core/systems/config_manager.gd")
-		if script_res != null:
-			instance = script_res.new()
+		instance = ConfigManager.new()
 	return instance
+
+
+static func reset_instance() -> void:
+	instance = null
 
 
 ##

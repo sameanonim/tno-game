@@ -35,9 +35,13 @@ func setup() -> void:
 
 func teardown() -> void:
 	manager = null
-	turn_manager = null
+	if turn_manager != null and is_instance_valid(turn_manager):
+		turn_manager.free()
+		turn_manager = null
+	if loader != null and is_instance_valid(loader):
+		loader.free()
+		loader = null
 	state = null
-	loader = null
 
 
 func test_decision_manager_initialization() -> void:

@@ -110,11 +110,13 @@ func _unhandled_input(event: InputEvent) -> void:
 """Ограничивает координаты окна видимой областью вьюпорта.
 """
 func _clamp_to_viewport(pos: Vector2) -> Vector2:
-	var vp_rect := get_viewport_rect()
+	var vp_size: Vector2 = Vector2(1920, 1080)
+	if is_inside_tree():
+		vp_size = get_viewport_rect().size
 	var min_x: float = -size.x + MIN_VISIBLE_BORDER
-	var max_x: float = vp_rect.size.x - MIN_VISIBLE_BORDER
+	var max_x: float = vp_size.x - MIN_VISIBLE_BORDER
 	var min_y: float = 0.0
-	var max_y: float = vp_rect.size.y - MIN_VISIBLE_BORDER
+	var max_y: float = vp_size.y - MIN_VISIBLE_BORDER
 	
 	return Vector2(
 		clampf(pos.x, min_x, max_x),
@@ -132,7 +134,9 @@ func bring_to_front() -> void:
 """Центрирует окно относительно текущего вьюпорта.
 """
 func center_in_viewport() -> void:
-	var vp_size: Vector2 = get_viewport_rect().size
+	var vp_size: Vector2 = Vector2(1920, 1080)
+	if is_inside_tree():
+		vp_size = get_viewport_rect().size
 	var target_x: float = (vp_size.x - size.x) * 0.5
 	var target_y: float = (vp_size.y - size.y) * 0.5
 	

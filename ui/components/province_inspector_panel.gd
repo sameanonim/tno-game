@@ -1,5 +1,5 @@
 class_name ProvinceInspectorPanel
-extends DraggableWindow
+extends "res://ui/components/draggable_window.gd"
 
 ##
 ## ProvinceInspectorPanel: Интерактивный тактический инспектор провинций

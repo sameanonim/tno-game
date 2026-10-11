@@ -1,5 +1,5 @@
 class_name EventPopup
-extends DraggableWindow
+extends "res://ui/components/draggable_window.gd"
 
 ##
 ## EventPopup: Модульное перетаскиваемое окно нарративных событий TNO

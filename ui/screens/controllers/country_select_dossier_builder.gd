@@ -1,5 +1,5 @@
 class_name CountrySelectDossierBuilder
-extends Node
+extends RefCounted
 
 ##
 ## CountrySelectDossierBuilder: Построитель досье партий, кабинета министров и национальных духов TNO
@@ -426,3 +426,10 @@ static func _ensure_spirits_registry() -> void:
 static func _ensure_parties_metadata() -> void:
 	if _cached_parties_meta.is_empty():
 		_cached_parties_meta = JSONFileHelper.load_json_dict(PARTIES_DATA_PATH)
+
+
+static func clear_cache() -> void:
+	_cached_ministers_db.clear()
+	_cached_spirits_registry.clear()
+	_cached_parties_meta.clear()
+
