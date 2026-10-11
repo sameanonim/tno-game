@@ -182,6 +182,7 @@ func _ready() -> void:
 	_initialize_map()
 	_setup_tactical_overlay()
 	_update_camera_limits()
+	_update_globe_view_state()
 
 
 func _process(delta: float) -> void:
@@ -1113,6 +1114,36 @@ func _clamp_map_position() -> void:
 
 func _update_camera_limits() -> void:
 	MapNavigationControllerScript.update_camera_limits(self, base_position, map_size, target_camera)
+
+
+func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
+	current_zoom = MapNavigationControllerScript.adjust_zoom(
+		self,
+		current_zoom,
+		factor,
+		min_zoom,
+		max_zoom,
+		pivot_screen_pos,
+		base_position,
+		map_size,
+		target_camera
+	)
+	_update_globe_view_state()
+
+
+func _update_globe_view_state() -> void:
+	if not enable_globe_view:
+		globe_blend = 0.0
+	else:
+		if current_zoom <= globe_zoom_threshold:
+			var range_val: float = maxf(globe_zoom_threshold - globe_full_threshold, 0.01)
+			globe_blend = clampf((globe_zoom_threshold - current_zoom) / range_val, 0.0, 1.0)
+		else:
+			globe_blend = 0.0
+
+	if _shader_mat != null:
+		_shader_mat.set_shader_parameter("globe_blend", globe_blend)
+		_shader_mat.set_shader_parameter("zoom_level", current_zoom)
 
 
 # ==============================================================================

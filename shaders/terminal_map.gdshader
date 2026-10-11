@@ -201,10 +201,11 @@ void fragment() {
 	vec2 cur_uv = UV;
 	float globe_rim_factor = 0.0;
 	float globe_shading = 1.0;
+	float polar_ice_factor = 0.0;
 	bool is_outside_globe = false;
 	vec4 outside_globe_color = vec4(0.0);
 
-	// Сферическая ортографическая проекция глобуса при отдалении
+	// Сферическая ортографическая проекция глобуса при отдалении (HoI4 / TNO Planetary Projection)
 	if (enable_globe && globe_blend > 0.001) {
 		vec2 d = UV - globe_center;
 		vec2 p = vec2(d.x * map_aspect, d.y) / globe_radius;
@@ -212,14 +213,17 @@ void fragment() {
 
 		if (r > 1.0) {
 			float rim_dist = r - 1.0;
-			if (rim_dist < 0.12) {
-				float atmo = exp(-rim_dist * 35.0) * globe_blend;
-				vec3 atmo_col = mix(space_color.rgb, atmosphere_rim_color.rgb, atmo);
-				outside_globe_color = vec4(atmo_col, atmo * globe_blend);
-				is_outside_globe = true;
+			if (rim_dist < 0.16) {
+				float inner_atmo = exp(-rim_dist * 42.0) * 1.25;
+				float outer_atmo = exp(-rim_dist * 12.0) * 0.45;
+				float atmo_intensity = (inner_atmo + outer_atmo) * globe_blend;
+				vec3 atmo_color = mix(atmosphere_rim_color.rgb * 1.35, atmosphere_rim_color.rgb * 0.35, rim_dist / 0.16);
+				vec3 space_bg = mix(space_color.rgb, atmo_color, clamp(atmo_intensity, 0.0, 1.0));
+				outside_globe_color = vec4(space_bg, 1.0);
 			} else {
-				discard;
+				outside_globe_color = vec4(space_color.rgb, 1.0);
 			}
+			is_outside_globe = true;
 		} else {
 			float z = sqrt(max(0.0, 1.0 - r * r));
 			vec3 sphere_norm = vec3(p.x, p.y, z);
@@ -231,8 +235,24 @@ void fragment() {
 			vec2 sphere_uv = vec2(sphere_u, sphere_v);
 
 			cur_uv = mix(UV, sphere_uv, globe_blend);
-			globe_shading = mix(1.0, clamp(z * 1.15 + 0.15, 0.25, 1.15), globe_blend);
-			globe_rim_factor = pow(1.0 - z, 2.5) * globe_blend;
+
+			// Реалистичное сферическое освещение с мягким диффузным терминатором
+			vec3 light_dir = normalize(sun_light_direction);
+			float n_dot_l = clamp(dot(sphere_norm, light_dir), 0.0, 1.0);
+			float sphere_lit = clamp(z * 0.70 + n_dot_l * 0.55 + 0.12, 0.15, 1.25);
+			globe_shading = mix(1.0, sphere_lit, globe_blend);
+
+			// Атмосферное рассеяние Рэлея (Fresnel limb haze)
+			globe_rim_factor = pow(1.0 - z, 2.2) * globe_blend;
+
+			// Полярная ледяная шапка Арктики (Северный полюс сверху диска)
+			if (enable_polar_ice_cap) {
+				vec2 pole_offset = vec2(p.x / 0.56, (p.y + 0.76) / 0.25);
+				float pole_dist = length(pole_offset);
+				if (pole_dist < 1.0) {
+					polar_ice_factor = smoothstep(1.0, 0.22, pole_dist) * globe_blend;
+				}
+			}
 		}
 	}
 
@@ -438,7 +458,15 @@ void fragment() {
 
 	// 12. Globe Shading and Planetary Atmospheric Rim Glow
 	base_color.rgb *= globe_shading;
-	base_color.rgb += atmosphere_rim_color.rgb * (globe_rim_factor * 0.45);
+
+	// Арктическая полярная шапка льда (Northern Ice Dome)
+	if (polar_ice_factor > 0.001) {
+		vec3 ice_tint = mix(polar_ice_rim_color.rgb, polar_ice_color.rgb, polar_ice_factor);
+		base_color.rgb = mix(base_color.rgb, ice_tint, polar_ice_factor * 0.96);
+	}
+
+	// Внутреннее атмосферное рассеяние Рэлея по краям диска (Rayleigh Limb Haze)
+	base_color.rgb = mix(base_color.rgb, atmosphere_rim_color.rgb * 1.15, globe_rim_factor * 0.55);
 
 	COLOR = vec4(base_color.rgb, 1.0);
 	}
