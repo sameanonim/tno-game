@@ -22,6 +22,7 @@ uniform float glitch_amount : hint_range(0.0, 1.0) = 0.0;
 uniform float print_progress : hint_range(0.0, 1.0) = 1.0;
 uniform float noise_speed : hint_range(0.0, 40.0) = 15.0;
 uniform bool is_classified = false;
+uniform bool bypass_crt_effects = true;
 
 // 4x4 Bayer Matrix для упорядоченного ретро-растрирования
 float get_bayer_4x4(vec2 screen_pos) {
@@ -72,38 +73,44 @@ void fragment() {
 	vec4 src_tex = texture(TEXTURE, uv);
 	float alpha = src_tex.a;
 
-	// Если засекречен (Classified Silhouette)
-	if (is_classified) {
-		float noise = rand(uv + fract(TIME * 0.1));
-		float silhouette = smoothstep(0.45, 0.55, 1.0 - length(uv - vec2(0.5, 0.55)) * 1.4);
-		float hatch = step(0.5, fract((uv.x + uv.y) * 24.0));
-		src_tex = vec4(vec3(silhouette * 0.6 + hatch * 0.15 + noise * 0.1), alpha);
+	// Отображение аутентичного портрета лидера в полном цвете без дизеринга и искажений
+	if (bypass_crt_effects && !is_classified) {
+		vec3 clean_col = src_tex.rgb + phosphor_color.rgb * beam * 0.4;
+		COLOR = vec4(clean_col, alpha);
+	} else {
+		// Если засекречен (Classified Silhouette)
+		if (is_classified) {
+			float noise = rand(uv + fract(TIME * 0.1));
+			float silhouette = smoothstep(0.45, 0.55, 1.0 - length(uv - vec2(0.5, 0.55)) * 1.4);
+			float hatch = step(0.5, fract((uv.x + uv.y) * 24.0));
+			src_tex = vec4(vec3(silhouette * 0.6 + hatch * 0.15 + noise * 0.1), alpha);
+		}
+
+		// 4. Перевод в монохромную яркость (Luminance)
+		float lum = dot(src_tex.rgb, vec3(0.299, 0.587, 0.114));
+
+		// 5. Контраст и яркость люминофора
+		lum = (lum - 0.5) * contrast + 0.5;
+		lum *= brightness;
+
+		// 6. Полутоновый дизеринг по матрице Байера
+		float dither = get_bayer_4x4(FRAGCOORD.xy);
+		lum += dither * dither_strength;
+		lum = clamp(lum, 0.0, 1.0);
+
+		// Квантование уровней фосфора (4 градации)
+		lum = floor(lum * 4.0 + 0.5) / 4.0;
+
+		// 7. Окрашивание в фосфорную палитру
+		vec3 col = mix(background_color.rgb, phosphor_color.rgb, lum);
+
+		// 8. Сканлайны
+		float scanline = 1.0 - scanline_intensity * (0.5 + 0.5 * sin(uv.y * scanline_density * 6.28318));
+		col *= scanline;
+
+		// 9. Добавление светового луча каретки
+		col += phosphor_color.rgb * beam;
+
+		COLOR = vec4(col, alpha);
 	}
-
-	// 4. Перевод в монохромную яркость (Luminance)
-	float lum = dot(src_tex.rgb, vec3(0.299, 0.587, 0.114));
-
-	// 5. Контраст и яркость люминофора
-	lum = (lum - 0.5) * contrast + 0.5;
-	lum *= brightness;
-
-	// 6. Полутоновый дизеринг по матрице Байера
-	float dither = get_bayer_4x4(FRAGCOORD.xy);
-	lum += dither * dither_strength;
-	lum = clamp(lum, 0.0, 1.0);
-
-	// Квантование уровней фосфора (4 градации)
-	lum = floor(lum * 4.0 + 0.5) / 4.0;
-
-	// 7. Окрашивание в фосфорную палитру
-	vec3 col = mix(background_color.rgb, phosphor_color.rgb, lum);
-
-	// 8. Сканлайны
-	float scanline = 1.0 - scanline_intensity * (0.5 + 0.5 * sin(uv.y * scanline_density * 6.28318));
-	col *= scanline;
-
-	// 9. Добавление светового луча каретки
-	col += phosphor_color.rgb * beam;
-
-	COLOR = vec4(col, alpha);
 }

@@ -85,7 +85,18 @@ uniform bool enable_crt_scanlines = true;
 uniform float scanline_strength : hint_range(0.0, 0.25, 0.01) = 0.05;
 
 // ==============================================================================
-// 4. BAYER 4x4 MATRIX (HALF-TONING FOR BIOMES)
+// 4. GLOBE PLANETARY PROJECTION (ZOOM-OUT WARP)
+// ==============================================================================
+uniform bool enable_globe = true;
+uniform float globe_blend : hint_range(0.0, 1.0) = 0.0;
+uniform vec2 globe_center = vec2(0.5, 0.5);
+uniform float globe_radius : hint_range(0.1, 1.0) = 0.45;
+uniform float map_aspect : hint_range(1.0, 4.0) = 2.75;
+uniform vec4 atmosphere_rim_color : source_color = vec4(0.20, 1.00, 0.50, 1.0);
+uniform vec4 space_color : source_color = vec4(0.015, 0.03, 0.02, 1.0);
+
+// ==============================================================================
+// 5. BAYER 4x4 MATRIX (HALF-TONING FOR BIOMES)
 // ==============================================================================
 const float bayer4[16] = float[16](
 	 0.0 / 16.0,  8.0 / 16.0,  2.0 / 16.0, 10.0 / 16.0,
@@ -183,11 +194,53 @@ ivec4 sample_province_hierarchy(int id) {
 // 6. FRAGMENT SHADER LOGIC
 // ==============================================================================
 void fragment() {
+	vec2 cur_uv = UV;
+	float globe_rim_factor = 0.0;
+	float globe_shading = 1.0;
+
+	// Сферическая ортографическая проекция глобуса при отдалении
+	if (enable_globe && globe_blend > 0.001) {
+		vec2 d = UV - globe_center;
+		vec2 p = vec2(d.x * map_aspect, d.y) / globe_radius;
+		float r = length(p);
+
+		if (r > 1.0) {
+			float rim_dist = r - 1.0;
+			if (rim_dist < 0.12) {
+				float atmo = exp(-rim_dist * 35.0) * globe_blend;
+				vec3 atmo_col = mix(space_color.rgb, atmosphere_rim_color.rgb, atmo);
+				COLOR = vec4(atmo_col, atmo * globe_blend);
+				return;
+			} else {
+				if (globe_blend > 0.85) {
+					discard;
+				} else {
+					vec3 sp = mix(vec3(0.0), space_color.rgb, globe_blend);
+					COLOR = vec4(sp, globe_blend * 0.7);
+					return;
+				}
+			}
+		} else {
+			float z = sqrt(max(0.0, 1.0 - r * r));
+			vec3 sphere_norm = vec3(p.x, p.y, z);
+			float phi = asin(clamp(sphere_norm.y, -1.0, 1.0));
+			float lambda = atan(sphere_norm.x, sphere_norm.z);
+
+			float sphere_u = globe_center.x + (lambda / 3.14159265);
+			float sphere_v = 0.5 - (phi / 3.14159265);
+			vec2 sphere_uv = vec2(sphere_u, sphere_v);
+
+			cur_uv = mix(UV, sphere_uv, globe_blend);
+			globe_shading = mix(1.0, clamp(z * 1.15 + 0.15, 0.25, 1.15), globe_blend);
+			globe_rim_factor = pow(1.0 - z, 2.5) * globe_blend;
+		}
+	}
+
 	vec2 tex_size = vec2(textureSize(provinces_mask, 0));
 	vec2 pixel_size = 1.0 / tex_size;
 
 	// 1. Center province sampling
-	vec4 center_raw = texture(provinces_mask, UV);
+	vec4 center_raw = texture(provinces_mask, cur_uv);
 	int center_id = decode_province_id(center_raw);
 	ivec4 center_hier = sample_province_hierarchy(center_id);
 	int center_owner = center_hier.x;
@@ -272,7 +325,7 @@ void fragment() {
 	float effective_thickness = max(1.0, border_scale);
 
 	for (int i = 0; i < 4; i++) {
-		vec2 sample_uv = UV + offsets[i] * pixel_size * effective_thickness;
+		vec2 sample_uv = cur_uv + offsets[i] * pixel_size * effective_thickness;
 		vec4 n_raw = texture(provinces_mask, sample_uv);
 		int n_id = decode_province_id(n_raw);
 
@@ -321,7 +374,7 @@ void fragment() {
 
 	// 6. Topographical Isohypses (Contour Lines from Heightmap)
 	if (enable_isohypses) {
-		float elevation = texture(height_map, UV).r;
+		float elevation = texture(height_map, cur_uv).r;
 		float iso_mod = mod(elevation * isohypse_density, 1.0);
 		float isohypse_line = smoothstep(isohypse_width, isohypse_width * 0.35, iso_mod);
 		vec3 iso_tint = isohypse_color * (center_is_water ? 0.3 : 1.0);
@@ -330,10 +383,10 @@ void fragment() {
 
 	// 7. Hydrography & River Barriers (Neon Luminescence)
 	if (enable_rivers) {
-		float river_val = texture(rivers_mask, UV).r;
+		float river_val = texture(rivers_mask, cur_uv).r;
 		if (river_val > 0.05) {
 			float r_intensity = clamp(river_val * 1.5, 0.4, 1.5);
-			float flow_pulse = 1.0 + 0.25 * sin(TIME * 3.0 + UV.x * 25.0 + UV.y * 25.0);
+			float flow_pulse = 1.0 + 0.25 * sin(TIME * 3.0 + cur_uv.x * 25.0 + cur_uv.y * 25.0);
 			vec3 r_glow = river_color.rgb * (r_intensity * flow_pulse * river_glow_intensity);
 			base_color.rgb = mix(base_color.rgb, r_glow, smoothstep(0.05, 0.3, river_val));
 		}
@@ -379,6 +432,10 @@ void fragment() {
 		float scanline = 1.0 - scanline_strength * (0.5 + 0.5 * sin(FRAGCOORD.y * 3.14159));
 		base_color.rgb *= scanline;
 	}
+
+	// 12. Globe Shading and Planetary Atmospheric Rim Glow
+	base_color.rgb *= globe_shading;
+	base_color.rgb += atmosphere_rim_color.rgb * (globe_rim_factor * 0.45);
 
 	COLOR = vec4(base_color.rgb, 1.0);
 }

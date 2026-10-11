@@ -17,10 +17,12 @@ enum Level {
 	DEBUG = 0,
 	INFO = 1,
 	WARN = 2,
-	ERROR = 3
+	ERROR = 3,
+	NONE = 4
 }
 
-static var min_level: Level = Level.DEBUG
+static var min_level: Level = Level.WARN
+static var console_logging_enabled: bool = false
 static var file_logging_enabled: bool = false
 static var max_log_file_size: int = 5 * 1024 * 1024
 
@@ -68,6 +70,24 @@ static func set_min_level(level: Level) -> void:
 	min_level = level
 
 
+static func set_console_logging(enabled: bool) -> void:
+	console_logging_enabled = enabled
+
+
+static func is_console_logging_enabled() -> bool:
+	return console_logging_enabled
+
+
+static func mute() -> void:
+	min_level = Level.NONE
+	console_logging_enabled = false
+
+
+static func unmute(level: Level = Level.INFO) -> void:
+	min_level = level
+	console_logging_enabled = true
+
+
 static func set_file_logging(enabled: bool) -> void:
 	file_logging_enabled = enabled
 	if enabled and _log_file == null:
@@ -81,22 +101,23 @@ static func set_file_logging(enabled: bool) -> void:
 # ==============================================================================
 
 static func _log(level: Level, tag: String, message: String) -> void:
-	if level < min_level:
+	if level < min_level or min_level == Level.NONE:
 		return
 
 	var level_str: String = _level_to_string(level)
 	var timestamp: String = Time.get_datetime_string_from_system(false, true)
 	var formatted: String = "[%s] [%s] [%s] %s" % [timestamp, level_str, tag, message]
 
-	match level:
-		Level.DEBUG:
-			print(formatted)
-		Level.INFO:
-			print(formatted)
-		Level.WARN:
-			push_warning(formatted)
-		Level.ERROR:
-			push_error(formatted)
+	if console_logging_enabled:
+		match level:
+			Level.DEBUG:
+				print(formatted)
+			Level.INFO:
+				print(formatted)
+			Level.WARN:
+				push_warning(formatted)
+			Level.ERROR:
+				push_error(formatted)
 
 	if file_logging_enabled and _log_file != null:
 		_write_to_file(formatted)

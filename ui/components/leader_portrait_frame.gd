@@ -38,6 +38,12 @@ const PHOSPHOR_OLIVE  = Color(0.65, 0.85, 0.45)  # Военная хунта / �
 		mode = val
 		_apply_mode_dimensions()
 
+@export var authentic_portrait_mode: bool = true:
+	set(val):
+		authentic_portrait_mode = val
+		if _shader_mat != null:
+			_shader_mat.set_shader_parameter("bypass_crt_effects", authentic_portrait_mode)
+
 @export var show_border: bool = true
 @export var is_interactive: bool = true
 
@@ -74,6 +80,7 @@ func _setup_shader() -> void:
 		_shader_mat.set_shader_parameter("phosphor_color", PHOSPHOR_GREEN)
 		_shader_mat.set_shader_parameter("print_progress", 1.0)
 		_shader_mat.set_shader_parameter("glitch_amount", 0.0)
+		_shader_mat.set_shader_parameter("bypass_crt_effects", authentic_portrait_mode)
 
 
 func _apply_mode_dimensions() -> void:
@@ -81,18 +88,20 @@ func _apply_mode_dimensions() -> void:
 		custom_minimum_size = Vector2(72, 92)
 		if texture_rect != null:
 			texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		if _shader_mat != null:
 			_shader_mat.set_shader_parameter("scanline_density", 90.0)
 			_shader_mat.set_shader_parameter("dither_scale", 1.5)
+			_shader_mat.set_shader_parameter("bypass_crt_effects", authentic_portrait_mode)
 	else:
 		custom_minimum_size = Vector2(156, 210)
 		if texture_rect != null:
 			texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		if _shader_mat != null:
 			_shader_mat.set_shader_parameter("scanline_density", 180.0)
 			_shader_mat.set_shader_parameter("dither_scale", 2.0)
+			_shader_mat.set_shader_parameter("bypass_crt_effects", authentic_portrait_mode)
 
 
 # ==============================================================================

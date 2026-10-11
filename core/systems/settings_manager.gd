@@ -145,9 +145,16 @@ func load_settings() -> void:
 	audio_settings["sfx_volume"] = clampf(float(cfg.get_value("audio", "sfx_volume", 0.85)), 0.0, 1.0)
 	audio_settings["ambient_volume"] = clampf(float(cfg.get_value("audio", "ambient_volume", 0.7)), 0.0, 1.0)
 
-	print("[SettingsManager] Loaded configuration from BIOS: Res=%dx%d, Mode=%d, VSync=%d, UIScale=%.2f" % [
-		current_resolution.x, current_resolution.y, current_window_mode, current_vsync, current_ui_scale
-	])
+	# 4. Система и логи
+	var console_logs = bool(cfg.get_value("system", "console_logs_enabled", false))
+	var min_log_lvl = clampi(int(cfg.get_value("system", "min_log_level", TNOLogger.Level.WARN)), 0, 4)
+	TNOLogger.set_console_logging(console_logs)
+	TNOLogger.set_min_level(min_log_lvl as TNOLogger.Level)
+
+	if console_logs:
+		print("[SettingsManager] Loaded configuration from BIOS: Res=%dx%d, Mode=%d, VSync=%d, UIScale=%.2f" % [
+			current_resolution.x, current_resolution.y, current_window_mode, current_vsync, current_ui_scale
+		])
 
 
 func save_settings() -> void:
@@ -171,11 +178,15 @@ func save_settings() -> void:
 	for k in audio_settings.keys():
 		cfg.set_value("audio", k, audio_settings[k])
 
+	# Сохраняем систему и логирование
+	cfg.set_value("system", "console_logs_enabled", TNOLogger.is_console_logging_enabled())
+	cfg.set_value("system", "min_log_level", int(TNOLogger.min_level))
 	cfg.set_value("system", "last_saved_unix", Time.get_unix_time_from_system())
 
 	var err = cfg.save(CONFIG_PATH)
 	if err == OK:
-		print("[SettingsManager] Configuration written to EEPROM BIOS: %s" % CONFIG_PATH)
+		if TNOLogger.is_console_logging_enabled():
+			print("[SettingsManager] Configuration written to EEPROM BIOS: %s" % CONFIG_PATH)
 		settings_saved.emit()
 	else:
 		push_error("[SettingsManager] Failed to write settings to %s (Error %d)" % [CONFIG_PATH, err])

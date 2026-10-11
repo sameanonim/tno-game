@@ -47,6 +47,17 @@ uniform int map_mode = 0;
 uniform float zoom_level = 1.0;
 
 // ------------------------------------------------------------------------------
+// GLOBE PLANETARY PROJECTION (ZOOM-OUT WARP)
+// ------------------------------------------------------------------------------
+uniform bool enable_globe = true;
+uniform float globe_blend : hint_range(0.0, 1.0) = 0.0;
+uniform vec2 globe_center = vec2(0.5, 0.5);
+uniform float globe_radius : hint_range(0.1, 1.0) = 0.45;
+uniform float map_aspect : hint_range(1.0, 4.0) = 2.75;
+uniform vec4 atmosphere_rim_color : source_color = vec4(0.20, 1.00, 0.50, 1.0);
+uniform vec4 space_color : source_color = vec4(0.015, 0.03, 0.02, 1.0);
+
+// ------------------------------------------------------------------------------
 // 3. INTERACTIVE HIGHLIGHTS
 // ------------------------------------------------------------------------------
 uniform int hovered_province_id = 0;
@@ -398,10 +409,52 @@ vec4 get_sphere_glow_color(int bucket) {
 // FRAGMENT SHADING PIPELINE
 // ==============================================================================
 void fragment() {
+	vec2 cur_uv = UV;
+	float globe_rim_factor = 0.0;
+	float globe_shading = 1.0;
+
+	// Сферическая ортографическая проекция глобуса при отдалении
+	if (enable_globe && globe_blend > 0.001) {
+		vec2 d = UV - globe_center;
+		vec2 p = vec2(d.x * map_aspect, d.y) / globe_radius;
+		float r = length(p);
+
+		if (r > 1.0) {
+			float rim_dist = r - 1.0;
+			if (rim_dist < 0.12) {
+				float atmo = exp(-rim_dist * 35.0) * globe_blend;
+				vec3 atmo_col = mix(space_color.rgb, atmosphere_rim_color.rgb, atmo);
+				COLOR = vec4(atmo_col, atmo * globe_blend);
+				return;
+			} else {
+				if (globe_blend > 0.85) {
+					discard;
+				} else {
+					vec3 sp = mix(vec3(0.0), space_color.rgb, globe_blend);
+					COLOR = vec4(sp, globe_blend * 0.7);
+					return;
+				}
+			}
+		} else {
+			float z = sqrt(max(0.0, 1.0 - r * r));
+			vec3 sphere_norm = vec3(p.x, p.y, z);
+			float phi = asin(clamp(sphere_norm.y, -1.0, 1.0));
+			float lambda = atan(sphere_norm.x, sphere_norm.z);
+
+			float sphere_u = globe_center.x + (lambda / 3.14159265);
+			float sphere_v = 0.5 - (phi / 3.14159265);
+			vec2 sphere_uv = vec2(sphere_u, sphere_v);
+
+			cur_uv = mix(UV, sphere_uv, globe_blend);
+			globe_shading = mix(1.0, clamp(z * 1.15 + 0.15, 0.25, 1.15), globe_blend);
+			globe_rim_factor = pow(1.0 - z, 2.5) * globe_blend;
+		}
+	}
+
 	vec2 mask_size = vec2(textureSize(provinces_mask, 0));
 	vec2 texel = 1.0 / mask_size;
 
-	vec4 mask_col = texture(provinces_mask, UV);
+	vec4 mask_col = texture(provinces_mask, cur_uv);
 	int center_id = decode_province_id(mask_col);
 	float zoom_comp = max(zoom_level * 0.55, 0.35);
 
@@ -420,7 +473,7 @@ void fragment() {
 
 	// 1.2 Topographical Relief / Normal Map Hillshading
 	if (enable_relief_hillshade && !center_meta.is_water && center_id > 0) {
-		vec3 normal_raw = texture(world_normal, UV).rgb;
+		vec3 normal_raw = texture(world_normal, cur_uv).rgb;
 		if (length(normal_raw) > 0.05) {
 			vec3 norm = normalize(normal_raw * 2.0 - 1.0);
 			float n_dot_l = dot(norm, normalize(light_direction));
@@ -432,10 +485,10 @@ void fragment() {
 	// 1.3 Ocean Bathymetry & Tactical Radar Sonar Waves
 	if (center_meta.is_water) {
 		if (enable_ocean_bathymetry) {
-			float sonar_dist = length(UV - radar_center) * 60.0;
+			float sonar_dist = length(cur_uv - radar_center) * 60.0;
 			float sonar_ripple = sin(sonar_dist - TIME * 2.8);
 			float ripple_boost = smoothstep(0.82, 1.0, sonar_ripple) * 0.045;
-			float bathy_wave = sin(UV.y * 1400.0 + UV.x * 550.0 + TIME * 0.6) * 0.012;
+			float bathy_wave = sin(cur_uv.y * 1400.0 + cur_uv.x * 550.0 + TIME * 0.6) * 0.012;
 			final_color = mix(deep_water_color, shelf_water_color, 0.28 + bathy_wave);
 			final_color.rgb += vec3(0.02, 0.09, 0.15) * ripple_boost;
 		} else {
@@ -445,7 +498,7 @@ void fragment() {
 
 	// 1.4 Hydrographic Rivers Network
 	if (enable_rivers && !center_meta.is_water && center_id > 0) {
-		float r_sample = texture(rivers_mask, UV).r;
+		float r_sample = texture(rivers_mask, cur_uv).r;
 		if (r_sample > 0.05) {
 			float r_alpha = (enable_antialiased_borders ? smoothstep(0.05, 0.60, r_sample) : r_sample) * river_color.a;
 			final_color = mix(final_color, river_color, r_alpha);
@@ -497,7 +550,7 @@ void fragment() {
 
 			// 0. Inner Territorial Glow & Political Vignette Falloff Sampling
 			if ((enable_inner_border_glow || enable_political_vignette) && !center_meta.is_water) {
-				vec2 uv_inner = UV + dir * r_inner * texel;
+				vec2 uv_inner = cur_uv + dir * r_inner * texel;
 				int n_id_inner = decode_province_id(texture(provinces_mask, uv_inner));
 				if (n_id_inner != center_id) {
 					ProvinceMeta n_meta_inner = sample_province_meta(n_id_inner);
@@ -512,7 +565,7 @@ void fragment() {
 			}
 
 			// Sample at national/coastline radius
-			vec2 uv_nat = UV + dir * r_nat * texel;
+			vec2 uv_nat = cur_uv + dir * r_nat * texel;
 			int n_id_nat = decode_province_id(texture(provinces_mask, uv_nat));
 
 			if (n_id_nat != center_id) {
@@ -569,7 +622,7 @@ void fragment() {
 
 			// Sample at state radius
 			if (show_state_borders && !center_meta.is_water) {
-				vec2 uv_state = UV + dir * r_state * texel;
+				vec2 uv_state = cur_uv + dir * r_state * texel;
 				int n_id_state = decode_province_id(texture(provinces_mask, uv_state));
 
 				if (n_id_state != center_id) {
@@ -582,7 +635,7 @@ void fragment() {
 
 			// Sample at province radius (only if zoomed in sufficiently)
 			if (show_province_borders && prov_zoom_fade > 0.01 && !center_meta.is_water) {
-				vec2 uv_prov = UV + dir * r_prov * texel;
+				vec2 uv_prov = cur_uv + dir * r_prov * texel;
 				int n_id_prov = decode_province_id(texture(provinces_mask, uv_prov));
 
 				if (n_id_prov != center_id) {
@@ -830,9 +883,15 @@ void fragment() {
 	// 6. CRT SCANLINE POST-PROCESSING
 	// --------------------------------------------------------------------------
 	if (enable_crt_scanlines) {
-		float scan = 1.0 - scanline_strength * (0.5 + 0.5 * sin(UV.y * mask_size.y * 3.14159));
+		float scan = 1.0 - scanline_strength * (0.5 + 0.5 * sin(cur_uv.y * mask_size.y * 3.14159));
 		final_color.rgb *= scan;
 	}
+
+	// --------------------------------------------------------------------------
+	// 7. GLOBE PLANETARY SHADING & ATMOSPHERIC RIM
+	// --------------------------------------------------------------------------
+	final_color.rgb *= globe_shading;
+	final_color.rgb += atmosphere_rim_color.rgb * (globe_rim_factor * 0.45);
 
 	COLOR = final_color;
 }

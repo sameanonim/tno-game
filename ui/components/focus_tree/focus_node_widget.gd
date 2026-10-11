@@ -28,7 +28,7 @@ var is_locked: bool = false
 
 
 func _ready() -> void:
-	custom_minimum_size = Vector2(130, 110)
+	custom_minimum_size = Vector2(160, 145)
 	size = custom_minimum_size
 	mouse_filter = MOUSE_FILTER_STOP
 	mouse_default_cursor_shape = CURSOR_POINTING_HAND
@@ -67,9 +67,9 @@ func _build_ui() -> void:
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	add_child(vbox)
 
-	# Icon
+	# Icon (увеличенный размер 80x80)
 	icon_rect = TextureRect.new()
-	icon_rect.custom_minimum_size = Vector2(56, 56)
+	icon_rect.custom_minimum_size = Vector2(80, 80)
 	icon_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon_rect.mouse_filter = MOUSE_FILTER_IGNORE
@@ -81,14 +81,14 @@ func _build_ui() -> void:
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_label.max_lines_visible = 2
-	title_label.add_theme_font_size_override("font_size", 10)
+	title_label.add_theme_font_size_override("font_size", 11)
 	title_label.add_theme_color_override("font_color", Color(0.2, 0.9, 0.5, 1.0))
 	title_label.mouse_filter = MOUSE_FILTER_IGNORE
 	vbox.add_child(title_label)
 
 	# Progress Bar (visible only when active)
 	progress_bar = ProgressBar.new()
-	progress_bar.custom_minimum_size = Vector2(0, 4)
+	progress_bar.custom_minimum_size = Vector2(0, 5)
 	progress_bar.show_percentage = false
 	progress_bar.visible = false
 	progress_bar.mouse_filter = MOUSE_FILTER_IGNORE
@@ -97,7 +97,7 @@ func _build_ui() -> void:
 	# Cost / Days Label
 	cost_label = Label.new()
 	cost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	cost_label.add_theme_font_size_override("font_size", 9)
+	cost_label.add_theme_font_size_override("font_size", 10)
 	cost_label.add_theme_color_override("font_color", Color(0.5, 0.6, 0.5, 0.8))
 	cost_label.mouse_filter = MOUSE_FILTER_IGNORE
 	vbox.add_child(cost_label)

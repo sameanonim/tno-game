@@ -57,3 +57,39 @@ func test_math_utils_safe_calculations() -> void:
 
 	assert_approx_eq(MathUtils.round_to_decimals(3.14159, 2), 3.14, 0.001, "round_to_decimals 2 знака")
 	assert_approx_eq(MathUtils.smooth_step(0.0, 1.0, 0.5), 0.5, 0.001, "smooth_step середина")
+
+
+func test_logger_suppression() -> void:
+	var prev_state = TNOLogger.is_console_logging_enabled()
+	TNOLogger.set_console_logging(false)
+	assert_false(TNOLogger.is_console_logging_enabled(), "Консольный вывод должен быть отключен")
+	TNOLogger.mute()
+	assert_eq(TNOLogger.min_level, TNOLogger.Level.NONE, "Уровень логера должен быть NONE при mute()")
+	TNOLogger.unmute(TNOLogger.Level.WARN)
+	assert_eq(TNOLogger.min_level, TNOLogger.Level.WARN, "Уровень логера должен восстанавливаться при unmute()")
+	TNOLogger.set_console_logging(prev_state)
+
+
+func test_leader_portrait_authentic_mode() -> void:
+	var frame := LeaderPortraitFrame.new()
+	frame._apply_mode_dimensions()
+	assert_true(frame.authentic_portrait_mode, "По умолчанию портрет лидера должен отображаться в аутентичном режиме без искажений")
+	assert_eq(frame.custom_minimum_size, Vector2(156, 210), "Размер рамки досье должен соответствовать каноничному 156x210")
+	frame.free()
+
+
+func test_focus_widget_enlarged_dimensions() -> void:
+	var widget := FocusNodeWidget.new()
+	widget._ready()
+	assert_eq(widget.custom_minimum_size, Vector2(160, 145), "Размер виджета фокуса должен быть увеличен до 160x145")
+	assert_not_null(widget.icon_rect, "icon_rect должен быть инициализирован")
+	assert_eq(widget.icon_rect.custom_minimum_size, Vector2(80, 80), "Иконка фокуса должна иметь увеличенный размер 80x80")
+	widget.free()
+
+
+func test_map_globe_projection_properties() -> void:
+	var map_ctrl := MapController.new()
+	assert_true(map_ctrl.enable_globe_view, "Режим глобуса планеты должен быть включен по умолчанию")
+	assert_approx_eq(map_ctrl.globe_zoom_threshold, 0.85, 0.01, "Порог начала перехода в глобус 0.85")
+	assert_approx_eq(map_ctrl.globe_full_threshold, 0.38, 0.01, "Порог полного перехода в глобус 0.38")
+	map_ctrl.free()

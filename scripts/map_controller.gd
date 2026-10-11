@@ -98,6 +98,14 @@ signal territory_transferred(province_id: int, state_id: int, old_owner: String,
 @export var max_zoom: float = 4.5
 @export var tactical_zoom_threshold: float = 1.35
 
+@export_group("Planetary Globe View")
+@export var enable_globe_view: bool = true
+@export var globe_zoom_threshold: float = 0.85
+@export var globe_full_threshold: float = 0.38
+@export var globe_radius: float = 0.45
+var globe_blend: float = 0.0
+var globe_center: Vector2 = Vector2(0.5, 0.5)
+
 # ==============================================================================
 # INTERNAL STATE
 # ==============================================================================
@@ -309,6 +317,14 @@ func _initialize_map() -> void:
 		_shader_mat.set_shader_parameter("province_border_color", province_border_color)
 		_shader_mat.set_shader_parameter("coastline_color", coastline_color)
 		_shader_mat.set_shader_parameter("river_color", river_color)
+
+		if map_size.y > 0:
+			var aspect = float(map_size.x) / float(map_size.y)
+			_shader_mat.set_shader_parameter("map_aspect", aspect)
+			_shader_mat.set_shader_parameter("globe_radius", globe_radius)
+			_shader_mat.set_shader_parameter("globe_center", globe_center)
+			_shader_mat.set_shader_parameter("enable_globe", enable_globe_view)
+		_update_globe_projection()
 
 	map_initialized.emit(provinces_data.size(), map_size)
 
@@ -971,6 +987,7 @@ func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
 
 	if _shader_mat != null:
 		_shader_mat.set_shader_parameter("zoom_level", current_zoom)
+		_update_globe_projection()
 
 	if tactical_overlay != null:
 		tactical_overlay.set_zoom_level(current_zoom)
@@ -978,6 +995,10 @@ func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
 		map_markers_overlay.set_zoom_level(current_zoom)
 	if country_labels_overlay != null:
 		country_labels_overlay.set_zoom_level(current_zoom)
+		if globe_blend > 0.0:
+			country_labels_overlay.modulate.a = clampf(1.0 - globe_blend * 1.2, 0.0, 1.0)
+		else:
+			country_labels_overlay.modulate.a = 1.0
 
 	var should_be_tactical = (current_zoom >= tactical_zoom_threshold)
 	if should_be_tactical != is_tactical_view_active:
@@ -987,6 +1008,24 @@ func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
 		if map_markers_overlay != null:
 			map_markers_overlay.set_tactical_view_active(is_tactical_view_active)
 		tactical_view_toggled.emit(is_tactical_view_active)
+
+
+##
+## Динамическая интерполяция сферической проекции глобуса при отдалении камеры
+##
+func _update_globe_projection() -> void:
+	if not enable_globe_view or _shader_mat == null:
+		return
+	if current_zoom < globe_zoom_threshold:
+		globe_blend = clampf((globe_zoom_threshold - current_zoom) / (globe_zoom_threshold - globe_full_threshold), 0.0, 1.0)
+	else:
+		globe_blend = 0.0
+	_shader_mat.set_shader_parameter("globe_blend", globe_blend)
+	if map_size.y > 0:
+		var aspect = float(map_size.x) / float(map_size.y)
+		_shader_mat.set_shader_parameter("map_aspect", aspect)
+		_shader_mat.set_shader_parameter("globe_radius", globe_radius)
+		_shader_mat.set_shader_parameter("globe_center", globe_center)
 
 
 ##
@@ -1049,6 +1088,25 @@ func get_province_id_under_cursor() -> int:
 	var global_mouse = get_global_mouse_position()
 	var local_pos = to_local(global_mouse)
 	var pixel_pos = local_pos + (Vector2(map_size) * 0.5) if centered else local_pos
+
+	# Обратная проекция глобуса для точного выбора провинций на сфере
+	if globe_blend > 0.01 and map_size.y > 0 and map_size.x > 0:
+		var uv = pixel_pos / Vector2(map_size)
+		var d = uv - globe_center
+		var aspect = float(map_size.x) / float(map_size.y)
+		var p = Vector2(d.x * aspect, d.y) / globe_radius
+		var r = p.length()
+		if r <= 1.0:
+			var z = sqrt(maxf(0.0, 1.0 - r * r))
+			var phi = asin(clampf(p.y, -1.0, 1.0))
+			var lambda = atan2(p.x, z)
+			var sphere_u = globe_center.x + (lambda / PI)
+			var sphere_v = 0.5 - (phi / PI)
+			var mapped_uv = uv.lerp(Vector2(sphere_u, sphere_v), globe_blend)
+			pixel_pos = mapped_uv * Vector2(map_size)
+		elif globe_blend > 0.35:
+			return 0 # Курсор находится в космосе за границами планеты
+
 	var pixel = Vector2i(int(floor(pixel_pos.x)), int(floor(pixel_pos.y)))
 	return get_province_id_at_pixel(pixel)
 
