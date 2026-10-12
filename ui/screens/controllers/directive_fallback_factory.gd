@@ -58,10 +58,59 @@ static func populate_sample_directives(directive_tree_view: DirectiveTreeView, t
 			return
 
 	# Fallback на встроенное дерево при отсутствии внешних JSON
-	_register_wrrf_fallback_tree(mgr)
+	if c_tag == "WRS":
+		_register_wrrf_fallback_tree(mgr)
+	else:
+		_register_generic_fallback_tree(mgr, c_tag)
 
 	if directive_tree_view != null:
 		directive_tree_view.setup(p_state, turn_manager, mgr, turn_manager.focus_stage_controller)
+
+
+"""Регистрирует базовое древо директив для державы при отсутствии специализированного JSON.
+"""
+static func _register_generic_fallback_tree(mgr: DirectiveManager, tag: String) -> void:
+	var d_root: DirectiveResource = DirectiveResource.new()
+	d_root.directive_id = "dir_%s_stabilization" % tag.to_lower()
+	d_root.title = "[%s] Чрезвычайная стабилизация" % tag
+	d_root.category = "doctrine"
+	d_root.icon_symbol = "[★]"
+	d_root.grid_position = Vector2i(0, 1)
+	d_root.description = "Обеспечение базового функционирования государственных институтов и мобилизация ресурсов."
+	d_root.turns_required = 2
+	d_root.cost_initial_cap = 1
+	d_root.cost_initial_pc = 10.0
+	d_root.completion_effects = {"modify_stability": 0.05, "modify_manpower": 5000}
+	mgr.register_directive(d_root)
+
+	var d_econ: DirectiveResource = DirectiveResource.new()
+	d_econ.directive_id = "dir_%s_economy" % tag.to_lower()
+	d_econ.title = "[%s] Восстановление хозяйства" % tag
+	d_econ.category = "economy"
+	d_econ.icon_symbol = "[🏭]"
+	d_econ.grid_position = Vector2i(1, 0)
+	d_econ.prerequisites = [d_root.directive_id]
+	d_econ.description = "Запуск базовых производственных линий и поддержка населения."
+	d_econ.turns_required = 3
+	d_econ.cost_initial_cap = 1
+	d_econ.cost_initial_pc = 15.0
+	d_econ.completion_effects = {"modify_civilian_factories": 1, "modify_gdp_billions": 0.25}
+	mgr.register_directive(d_econ)
+
+	var d_mil: DirectiveResource = DirectiveResource.new()
+	d_mil.directive_id = "dir_%s_defense" % tag.to_lower()
+	d_mil.title = "[%s] Укрепление рубежей" % tag
+	d_mil.category = "military"
+	d_mil.icon_symbol = "[⚔]"
+	d_mil.grid_position = Vector2i(1, 2)
+	d_mil.prerequisites = [d_root.directive_id]
+	d_mil.description = "Организация обороны периметра и обучение гарнизонов."
+	d_mil.turns_required = 3
+	d_mil.cost_initial_cap = 1
+	d_mil.cost_initial_pc = 15.0
+	d_mil.completion_effects = {"modify_weapons": 2500, "modify_military_factories": 1}
+	mgr.register_directive(d_mil)
+
 
 
 """Регистрирует резервное древо директив WRRF при отсутствии внешних файлов.

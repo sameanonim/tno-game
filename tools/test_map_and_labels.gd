@@ -1,5 +1,8 @@
 extends SceneTree
 
+const GlobeProjectionMathScript = preload("res://core/systems/map/globe_projection_math.gd")
+
+
 func _init() -> void:
 	print("--- STARTING MAP, STATE LABELS & PROVINCE INSPECTOR TEST ---")
 
@@ -25,6 +28,31 @@ func _init() -> void:
 	print("[TEST 2/5] Loaded %d country labels and %d state labels: OK" % [
 		overlay.labels_db.size(), overlay.state_labels_db.size()
 	])
+
+	# 1.5. Test GlobeProjectionMath forward & inverse projection
+	var test_map_sz = Vector2i(5632, 2048)
+	var test_center_pt = Vector2(2816.0, 1024.0)
+	var proj_center = GlobeProjectionMathScript.project_map_to_globe(test_center_pt, test_map_sz, 1.0)
+	if not proj_center.is_visible or not is_equal_approx(proj_center.z, 1.0):
+		printerr("FAILED: GlobeProjectionMath center projection incorrect: %s" % [proj_center])
+		quit(1)
+		return
+
+	var inv_center = GlobeProjectionMathScript.project_globe_to_map(proj_center.position, test_map_sz, 1.0)
+	if (inv_center - test_center_pt).length() > 2.0:
+		printerr("FAILED: GlobeProjectionMath roundtrip mismatch: orig=%s, inv=%s" % [test_center_pt, inv_center])
+		quit(1)
+		return
+
+	var back_point = Vector2(100.0, 1024.0)
+	var proj_back = GlobeProjectionMathScript.project_map_to_globe(back_point, test_map_sz, 1.0)
+	if proj_back.is_visible:
+		printerr("FAILED: GlobeProjectionMath backface should not be visible: %s" % [proj_back])
+		quit(1)
+		return
+
+	overlay.set_globe_parameters(0.8, Vector2(0.5, 0.5), 0.45, test_map_sz)
+	print("[TEST 2.5/5] GlobeProjectionMath forward/inverse/culling & overlay globe sync: OK")
 
 	# 2. Test MapController province features loading & verification (No WST bug!)
 	var map_ctrl = MapController.new()

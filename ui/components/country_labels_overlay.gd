@@ -42,6 +42,12 @@ var country_presence: Dictionary = {} # Tag -> int (owned provinces)
 var zoom_level: float = 1.0
 var anim_time: float = 0.0
 
+# Параметры сферической проекции глобуса
+var globe_blend: float = 0.0
+var globe_center: Vector2 = Vector2(0.5, 0.5)
+var globe_radius: float = 0.45
+var map_size: Vector2i = Vector2i.ZERO
+
 
 func _ready() -> void:
 	z_index = 10
@@ -100,6 +106,19 @@ func load_state_labels_manifest(path: String = "res://map_data/state_labels.json
 func set_zoom_level(zoom: float) -> void:
 	zoom_level = maxf(0.1, zoom)
 	queue_redraw()
+
+
+##
+## Синхронизация параметров ортографической сферической проекции глобуса
+##
+func set_globe_parameters(blend: float, center: Vector2, radius: float, m_size: Vector2i) -> void:
+	var changed = (not is_equal_approx(globe_blend, blend)) or (globe_center != center) or (not is_equal_approx(globe_radius, radius)) or (map_size != m_size)
+	globe_blend = blend
+	globe_center = center
+	globe_radius = radius
+	map_size = m_size
+	if changed:
+		queue_redraw()
 
 
 ##
@@ -184,7 +203,7 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 	elif zoom_level >= 0.75:
 		current_lod = 2 # Региональные державы
 	else:
-		current_lod = 1 # Только сверхдержавы
+		current_lod = 1 # Только сверхдержавы (на глобусе видны только ключевые державы)
 
 	# Сортируем теги: сначала Tier 1 великие державы, затем Tier 2, затем Tier 3
 	var sorted_tags = labels_db.keys()
@@ -197,9 +216,6 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 		var provs_b = int(country_presence.get(b, 0))
 		return provs_a > provs_b
 	)
-
-	# Коэффициент масштаба текста: при отдалении размер уменьшается плавно
-	var scale_factor = clampf(1.0 / pow(zoom_level, 0.40), 0.60, 1.40)
 
 	for tag in sorted_tags:
 		var data: Dictionary = labels_db[tag]
@@ -215,7 +231,18 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 		var centroid_arr = data.get("centroid", [])
 		if centroid_arr.size() < 2:
 			continue
-		var center = Vector2(float(centroid_arr[0]), float(centroid_arr[1]))
+		var raw_center = Vector2(float(centroid_arr[0]), float(centroid_arr[1]))
+
+		# Проекция на поверхность глобуса с отсечением невидимого полушария
+		var proj = GlobeProjectionMath.project_map_to_globe(
+			raw_center, map_size, globe_blend, globe_center, globe_radius
+		)
+		if not proj.is_visible:
+			continue
+
+		var center: Vector2 = proj.position
+		var globe_alpha: float = proj.alpha
+		var foreshorten: float = proj.foreshortening
 
 		# Проверка попадания в видимый экран (Viewport Frustum Culling)
 		var screen_center = to_global(center)
@@ -240,25 +267,40 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 		var country_width = float(data.get("width", 200.0))
 		var country_height = float(data.get("height", 150.0))
 
-		# Максимально допустимый пролет текста (не более 55% ширины страны!)
-		var max_span = clampf(country_width * 0.55, 30.0, 650.0)
+		# Максимально допустимый пролет текста с учетом сжатия у лимба глобуса
+		var max_span = clampf(country_width * 0.55 * foreshorten, 25.0, 750.0)
 
-		# Расчет безопасного размера шрифта, строго умещающегося в страну
-		var base_size = float(data.get("base_font_size", 14)) * scale_factor
-		var test_size = int(round(clampf(base_size, 8.0, 30.0)))
+		# Целевой воспринимаемый размер шрифта на экране (Screen-Space Perceptual Scaling)
+		var base_data_size = float(data.get("base_font_size", 14))
+		var target_screen_px: float = 14.0
+		if tier == 1:
+			target_screen_px = clampf(14.0 + (country_width * 0.015), 14.0, 26.0)
+		elif tier == 2:
+			target_screen_px = clampf(11.0 + (country_width * 0.012), 11.0, 18.0)
+		else:
+			target_screen_px = 10.0
 
-		# Проверяем неразреженную ширину текста
+		# Локальный размер шрифта в координатах карты
+		var local_scale_size = target_screen_px / maxf(zoom_level, 0.15)
+		var desired_font_size = clampf(maxf(base_data_size, local_scale_size), 8.0, 110.0)
+		var test_size = int(round(desired_font_size))
+
+		# Проверяем неразреженную ширину текста и при необходимости масштабируем под границы страны
 		var unspaced_sz = font.get_string_size(display_text, HORIZONTAL_ALIGNMENT_CENTER, -1, test_size)
 		if unspaced_sz.x > max_span and unspaced_sz.x > 0.0:
 			var fit_ratio = max_span / unspaced_sz.x
 			test_size = int(round(clampf(float(test_size) * fit_ratio, 7.0, float(test_size))))
 
+		# Если даже при минимальном кегле размер на экране меньше 7.5 пикселей — пропускаем для чистоты карты
+		if float(test_size) * zoom_level < 7.5 and tier > 1:
+			continue
+
 		var effective_font_size = test_size
 
-		# Непрозрачность текста: при глубоком зуме названия стран плавно уступают место тактике
-		var text_alpha := 0.88
+		# Непрозрачность текста: при глубоком зуме названия уступают тактике, на глобусе учитывается лимб
+		var text_alpha := 0.90
 		if zoom_level >= 2.8:
-			text_alpha = clampf(0.88 - ((zoom_level - 2.8) * 0.40), 0.20, 0.88)
+			text_alpha = clampf(0.90 - ((zoom_level - 2.8) * 0.40), 0.20, 0.90)
 
 		var text_col = COL_HOI4_IVORY
 		if data.has("color"):
@@ -266,7 +308,9 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 			if c_arr is Array and c_arr.size() >= 3:
 				var country_col = Color(float(c_arr[0]), float(c_arr[1]), float(c_arr[2]), 1.0)
 				text_col = country_col.lerp(COL_HOI4_IVORY, 0.78)
-		text_col.a = text_alpha
+		text_col.a = text_alpha * globe_alpha
+		if text_col.a <= 0.03:
+			continue
 
 		# Проверка коллизии габаритов на экране
 		var final_unspaced = font.get_string_size(display_text, HORIZONTAL_ALIGNMENT_CENTER, -1, effective_font_size)
@@ -285,9 +329,9 @@ func _draw_country_names_hoi4(font: Font, occupied_rects: Array[Rect2], vp_rect:
 			continue
 
 		# Резервируем экранную зону с комфортным отступом
-		occupied_rects.append(screen_label_rect.grow_individual(24.0, 12.0, 24.0, 12.0))
+		occupied_rects.append(screen_label_rect.grow_individual(20.0, 10.0, 20.0, 10.0))
 
-		# Отрисовка безрамочной надписи в стиле HoI4
+		# Отрисовка безрамочной надписи в стиле HoI4 с динамической разрядкой букв
 		_draw_spaced_string_hoi4(font, center, display_text, effective_font_size, max_span, text_col)
 
 
@@ -410,10 +454,10 @@ func _draw_spaced_string_hoi4(
 		total_glyph_width += w
 
 	# Вычисляем расстояние между символами (tracking spacing)
-	# Ограничиваем трекинг, чтобы слово оставалось связным и не разлеталось на части
+	# Аутентичный HoI4/Paradox стиль: широкий трекинг для крупных держав
 	var available_gap_space = target_span - total_glyph_width
-	var min_gap = float(font_size) * 0.15
-	var max_gap = float(font_size) * 0.75
+	var min_gap = float(font_size) * 0.18
+	var max_gap = float(font_size) * 2.20
 	var spacing: float = min_gap
 
 	if char_count > 1 and available_gap_space > 0:
@@ -424,17 +468,19 @@ func _draw_spaced_string_hoi4(
 	var start_x: float = center.x - (final_width * 0.5)
 	var y_pos: float = center.y + (float(font_size) * 0.35)
 
-	# 1. Многослойная рельефная 8-точечная тень в стиле карт HoI4
+	# 1. Многослойная рельефная тень в стиле карт HoI4 (адаптирована под размер шрифта)
 	var shadow_col := Color(COL_HOI4_SHADOW.r, COL_HOI4_SHADOW.g, COL_HOI4_SHADOW.b, color.a * 0.95)
+	var shadow_dist = maxf(1.2, float(font_size) * 0.065)
+	var shadow_diag = shadow_dist * 0.707
 	var shadow_offsets = [
-		Vector2(1.5, 0.0),
-		Vector2(-1.5, 0.0),
-		Vector2(0.0, 1.5),
-		Vector2(0.0, -1.5),
-		Vector2(1.2, 1.2),
-		Vector2(-1.2, 1.2),
-		Vector2(1.2, -1.2),
-		Vector2(-1.2, -1.2)
+		Vector2(shadow_dist, 0.0),
+		Vector2(-shadow_dist, 0.0),
+		Vector2(0.0, shadow_dist),
+		Vector2(0.0, -shadow_dist),
+		Vector2(shadow_diag, shadow_diag),
+		Vector2(-shadow_diag, shadow_diag),
+		Vector2(shadow_diag, -shadow_diag),
+		Vector2(-shadow_diag, -shadow_diag)
 	]
 
 	for offset in shadow_offsets:

@@ -91,7 +91,7 @@ func _on_contender_mechanic_updated(_contender_key: String, _data: Dictionary) -
 	refresh_ui()
 
 
-func _on_post_cw_reform_updated(_reform_key: String, _value: float) -> void:
+func _on_post_cw_reform_updated(_contender: String, _data: Variant = null) -> void:
 	refresh_ui()
 
 

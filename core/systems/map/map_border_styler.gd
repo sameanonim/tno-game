@@ -13,7 +13,7 @@ extends RefCounted
 
 """Синхронизирует все униформы границ с шейдерным материалом.
 """
-static func sync_border_uniforms(mat: ShaderMaterial, c: MapController) -> void:
+static func sync_border_uniforms(mat: ShaderMaterial, c: Sprite2D) -> void:
 	if mat == null:
 		return
 	mat.set_shader_parameter("zoom_level", c.current_zoom)

@@ -28,7 +28,7 @@ var unification_mgr: RussianUnificationManager
 @onready var lbl_header_title: Label = $VBox/HeaderHUD/VBox/TitleLabel
 @onready var lbl_stage_info: Label = $VBox/HeaderHUD/VBox/HBox/StageLabel
 @onready var progress_stage: ProgressBar = $VBox/HeaderHUD/VBox/StageProgressBar
-@onready var lbl_control_stats: Label = $VBox/HeaderHUD/VBox/HBox/ControlStatsLabel
+@onready var lbl_control_stats: RichTextLabel = $VBox/HeaderHUD/VBox/HBox/ControlStatsLabel
 
 # 4 карты макро-регионов
 @onready var card_west_rus: PanelContainer = $VBox/MacroRegionsHBox/CardWestRussia
@@ -286,7 +286,7 @@ func refresh_ui() -> void:
 
 	if lbl_control_stats != null:
 		var macro_name = RussianUnificationManager.get_macro_region_name(RussianUnificationManager.get_macro_region(p_tag))
-		lbl_control_stats.text = _tr("SMUTA_SECTOR_STATS", "СЕКТОР: [color=#00e5ff]%s[/color] | ПОДКОНТРОЛЬНО РЕГИОНОВ: [color=#33ff66]%d[/color]") % [
+		lbl_control_stats.text = _tr("SMUTA_SECTOR_STATS", "СЕКТОР: [color=#00e5ff]%s[/color] | ПОДКОНТРОЛЬНО: [color=#33ff66]%d[/color]") % [
 			macro_name, total_my_provinces
 		]
 

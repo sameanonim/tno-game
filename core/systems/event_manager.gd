@@ -354,7 +354,7 @@ func resolve_event_option(event: GameEvent, option: Dictionary, state: CountrySt
 	var effects: Dictionary = _flatten_effects(raw_effects)
 
 	# 2. ПОЛИТИЧЕСКИЙ КАПИТАЛ И ЛЕГИТИМНОСТЬ
-	_apply_numeric_mod(effects, ["MOD_PC", "modify_pc", "add_political_power"], func(val: float) -> void:
+	_apply_numeric_mod(effects, ["MOD_PC", "modify_pc", "add_political_power", "modify_political_capital", "political_capital"], func(val: float) -> void:
 		state.political_capital = maxf(state.political_capital + val, 0.0)
 	)
 	_apply_numeric_mod(effects, ["MOD_LEGITIMACY", "modify_legitimacy"], func(val: float) -> void:
@@ -696,7 +696,7 @@ func _load_patterns_if_needed() -> void:
 	_patterns_loaded = true
 
 	const BASE_KNOWN_EFFECTS: Array[String] = [
-		"modify_pc", "MOD_PC", "add_political_power", "modify_gdp", "MOD_GDP", "modify_legitimacy", "MOD_LEGITIMACY",
+		"modify_pc", "MOD_PC", "add_political_power", "modify_political_capital", "political_capital", "modify_gdp", "MOD_GDP", "modify_legitimacy", "MOD_LEGITIMACY",
 		"modify_radicalization", "MOD_RADICALIZATION", "modify_stability", "MOD_STABILITY", "add_stability",
 		"modify_war_support", "MOD_WAR_SUPPORT", "add_war_support", "modify_reserves", "MOD_RESERVES",
 		"MOD_INFLATION", "modify_inflation", "MOD_DEBT", "modify_debt",

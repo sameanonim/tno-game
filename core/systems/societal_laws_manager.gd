@@ -357,7 +357,7 @@ static func synchronize_societal_metrics_with_state(state: CountryState) -> void
 
 	# 6. Общественная сплоченность -> Легитимность и сдерживание радикалов
 	var stab_effect = (coh - 40.0) * 0.05
-	state.legitimacy = clampf(state.legitimacy + stab_effect, 5.0, 99.0)
+	state.legitimacy = clampf(state.legitimacy + stab_effect, 0.0, 100.0)
 
 
 # ==============================================================================

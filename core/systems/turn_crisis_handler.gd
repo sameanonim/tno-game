@@ -91,8 +91,8 @@ static func check_game_over_conditions(turn_manager: TurnManager) -> void:
 		return
 
 	# 2. Тотальный крах легитимности и революция
-	if ps.legitimacy <= 0.0 and ps.radicalization >= 95.0:
-		trigger_game_over(turn_manager, false, "Тотальный крах государственности: легитимность рухнула до нуля, в стране бушует восстание и анархия.")
+	if ps.legitimacy <= 5.0 and ps.radicalization >= 95.0:
+		trigger_game_over(turn_manager, false, "Тотальный крах государственности: легитимность рухнула до критического минимума, в стране бушует восстание и анархия.")
 		return
 
 	# 3. Суверенный фискальный дефолт
@@ -160,6 +160,7 @@ static func trigger_game_over(turn_manager: TurnManager, victory: bool, reason: 
 		}
 	]
 	turn_manager.pending_modal_events.clear()
+	turn_manager.current_state = TurnManager.TurnState.WAITING_FOR_MODAL_EVENT
 	turn_manager.modal_event_opened.emit(ev)
 
 

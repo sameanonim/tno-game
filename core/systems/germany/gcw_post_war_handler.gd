@@ -97,7 +97,8 @@ static func execute_speer_reform(manager: GermanCivilWarManager, action_key: Str
 				player_state.political_capital -= 30.0
 				player_state.current_cap -= 1
 				manager.speer_g4_tresckow = clampf(manager.speer_g4_tresckow + 15.0, 0.0, 100.0)
-				player_state.army_professionalism = clampf(player_state.army_professionalism + 0.12, 0.0, 1.0)
+				player_state.army_readiness = clampf(player_state.army_readiness + 0.12, 0.0, 1.0)
+				player_state.army_morale = clampf(player_state.army_morale + 0.05, 0.0, 1.0)
 				res["success"] = true
 				res["message"] = "РЕФОРМА ТРЕСКОВА: Вермахт очищен от партийных комиссаров и преобразован в профессиональную армию."
 			else:

@@ -47,8 +47,16 @@ func _ready() -> void:
 	load_all()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		if instance == self:
+			instance = null
+
+
 static func get_instance() -> ContentLoader:
-	return instance
+	if instance != null and is_instance_valid(instance):
+		return instance
+	return null
 
 
 func load_all() -> bool:

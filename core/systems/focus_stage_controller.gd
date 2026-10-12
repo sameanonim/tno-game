@@ -581,7 +581,30 @@ func _audit_stage_transitions(_turn: int) -> void:
 	if country_state == null:
 		return
 
-	# 1. Проверка манифестных переходов (transitions)
+	# 1. Специфические сюжетные аудиты ключевых кризисов (приоритет над общими манифестами)
+	var effective_tag = country_tag.to_upper()
+	if effective_tag.is_empty() and country_state != null:
+		effective_tag = country_state.country_tag.to_upper()
+
+	if effective_tag in ["GER", "SPE", "BOR", "GOR", "HEY"]:
+		if _audit_germany_stage_transitions():
+			return
+	elif effective_tag == "USA":
+		if _audit_usa_stage_transitions():
+			return
+	elif effective_tag == "KOM":
+		var kom_target = CampaignTreeResolver.resolve_komi_tree(country_state, trees_manifest)
+		if not kom_target.is_empty():
+			if kom_target != current_tree_id:
+				print("[FocusStageController] KOM Переход: -> [%s]" % kom_target)
+				stage_transition_requested.emit(kom_target, "komi_stage_transition")
+				switch_focus_tree(kom_target, true)
+			return
+	else:
+		if _audit_russia_stage_transitions():
+			return
+
+	# 2. Проверка манифестных переходов (transitions)
 	for tr in manifest_transitions:
 		var target = str(tr.get("target_tree", ""))
 		if target.is_empty() or target == current_tree_id:
@@ -595,31 +618,17 @@ func _audit_stage_transitions(_turn: int) -> void:
 			switch_focus_tree(target, keep)
 			return
 
-	# 2. Специфические сюжетные аудиты ключевых кризисов
-	var effective_tag = country_tag.to_upper()
-	if effective_tag.is_empty() and country_state != null:
-		effective_tag = country_state.country_tag.to_upper()
-
-	if effective_tag in ["GER", "SPE", "BOR", "GOR", "HEY"]:
-		if _audit_germany_stage_transitions():
-			return
-	elif effective_tag == "USA":
-		if _audit_usa_stage_transitions():
-			return
-	else:
-		if _audit_russia_stage_transitions():
-			return
-
 
 ## Сюжетный аудит германского кризиса: Агония -> Гражданская война (GCW) -> Послевоенное древо
 func _audit_germany_stage_transitions() -> bool:
 	if country_state == null:
 		return false
 	var target: String = CampaignTreeResolver.resolve_germany_tree(country_state, turn_manager)
-	if not target.is_empty() and target != current_tree_id:
-		print("[FocusStageController] GCW Переход: -> [%s]" % target)
-		stage_transition_requested.emit(target, "gcw_stage_transition")
-		switch_focus_tree(target, true)
+	if not target.is_empty():
+		if target != current_tree_id:
+			print("[FocusStageController] GCW Переход: -> [%s]" % target)
+			stage_transition_requested.emit(target, "gcw_stage_transition")
+			switch_focus_tree(target, true)
 		return true
 	return false
 
@@ -629,10 +638,11 @@ func _audit_usa_stage_transitions() -> bool:
 	if country_state == null:
 		return false
 	var target: String = CampaignTreeResolver.resolve_usa_tree(country_state)
-	if not target.is_empty() and target != current_tree_id:
-		print("[FocusStageController] США Переход: -> [%s]" % target)
-		stage_transition_requested.emit(target, "us_stage_transition")
-		switch_focus_tree(target, true)
+	if not target.is_empty():
+		if target != current_tree_id:
+			print("[FocusStageController] США Переход: -> [%s]" % target)
+			stage_transition_requested.emit(target, "us_stage_transition")
+			switch_focus_tree(target, true)
 		return true
 	return false
 

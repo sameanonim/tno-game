@@ -759,6 +759,13 @@ func bootstrap_new_game(config: GameStartConfig) -> void:
 		get_tree().change_scene_to_file("res://ui/screens/terminal_main.tscn")
 
 
+func return_to_main_menu() -> void:
+	active_player_state = null
+	is_loading_saved_game = false
+	if is_inside_tree() and get_tree() != null:
+		get_tree().change_scene_to_file("res://ui/screens/main_menu.tscn")
+
+
 func _apply_difficulty(state: CountryState, diff: Difficulty) -> void:
 	match diff:
 		Difficulty.OBSERVER:

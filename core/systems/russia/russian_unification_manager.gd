@@ -1,8 +1,6 @@
 class_name RussianUnificationManager
 extends Node
 
-const JSONFileHelper = preload("res://core/utils/json_file_helper.gd")
-const CampaignTreeResolver = preload("res://core/systems/campaign_tree_resolver.gd")
 
 const TITLES_DATA_PATH: String = "res://data/russia/titles_and_events.json"
 static var _titles_data_cache: Dictionary = {}
@@ -215,7 +213,7 @@ static func get_stage_title(stage: SmutaStage) -> String:
 ## Категоризация идеологий для дипломатического объединения
 static func get_ideology_category(tag: String, country: CountryState) -> String:
 	var ideol = country.ruling_ideology.to_lower() if country != null else ""
-	var sub = country.sub_ideology.to_lower() if country != null else ""
+	var _sub = country.sub_ideology.to_lower() if country != null else ""
 	var leader = country.leader_name.to_lower() if country != null else ""
 	var clean_tag = tag.to_upper()
 
@@ -290,7 +288,7 @@ func can_advance_to_regional(country: CountryState) -> bool:
 
 
 ## Перевод на Стадию II: Региональная война
-func advance_to_regional(country: CountryState = null, turn_mgr: TurnManager = null) -> bool:
+func advance_to_regional(_country: CountryState = null, turn_mgr: TurnManager = null) -> bool:
 	if current_stage != SmutaStage.STAGE_1_WARLORD:
 		return false
 	current_stage = SmutaStage.STAGE_2_REGIONAL
@@ -882,13 +880,26 @@ func _switch_directives_tree(turn_manager: TurnManager, stage_suffix: String) ->
 	var clean_tag: String = player_tag.to_upper() if not player_tag.is_empty() else (country.country_tag.to_upper() if country != null else "")
 	var manifest: Dictionary = turn_manager.focus_stage_controller.trees_manifest if turn_manager.focus_stage_controller != null else {}
 
-	var best_tree: String = CampaignTreeResolver.get_best_candidate_for_category(country, stage_suffix, manifest, clean_tag)
+	# 1. Попытка разрешить дерево через сюжетный резольвер России
+	var best_tree: String = CampaignTreeResolver.resolve_russia_tree(country, manifest, clean_tag)
+
+	# 2. Попытка через категорию стадии (REGIONAL, SUPERREGIONAL, SMUTA)
+	if best_tree.is_empty():
+		var cat: String = stage_suffix.trim_prefix("_").to_upper()
+		best_tree = CampaignTreeResolver.get_best_candidate_for_category(country, cat, manifest, clean_tag)
+
+	# 3. Попытка по исходному суффиксу
+	if best_tree.is_empty():
+		best_tree = CampaignTreeResolver.get_best_candidate_for_category(country, stage_suffix, manifest, clean_tag)
 
 	if not best_tree.is_empty() and turn_manager.focus_stage_controller != null:
 		turn_manager.focus_stage_controller.switch_focus_tree(best_tree, true)
 		_log("РАЗВЕРНУТО НОВОЕ ДРЕВО ДИРЕКТИВ: %s" % best_tree)
 	elif turn_manager.focus_stage_controller != null:
-		_log("ПРЕДУПРЕЖДЕНИЕ: Дерево директив для стадии [%s] не найдено." % stage_suffix)
+		if stage_suffix.to_lower().contains("2wrw"):
+			_log("СТАДИЯ 2WRW: Продолжается выполнение суперрегионального древа директив.")
+		else:
+			_log("ПРЕДУПРЕЖДЕНИЕ: Дерево директив для стадии [%s] не найдено." % stage_suffix)
 
 
 func _log(msg: String) -> void:

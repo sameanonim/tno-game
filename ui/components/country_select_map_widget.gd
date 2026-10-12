@@ -14,8 +14,6 @@ extends Control
 
 signal country_selected(tag: String, dossier: Dictionary)
 signal country_hovered(tag: String, data: Dictionary)
-
-const MAP_CONTROLLER_SCRIPT = preload("res://scripts/map_controller.gd")
 const PROVINCE_SHADER = preload("res://shaders/province_map.gdshader")
 
 @onready var viewport_container: SubViewportContainer = $ViewportContainer

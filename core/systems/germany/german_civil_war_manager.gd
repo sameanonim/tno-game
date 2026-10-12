@@ -787,19 +787,19 @@ func _conclude_civil_war(victor_tag: String) -> void:
 	match victor_tag:
 		TAG_SPEER:
 			post_cw_tree_id = "GER_speer_post_cw_tree"
-			post_cw_path = "res://data/countries/GER/directives/tree_GER_speer_post_cw_tree.json"
+			post_cw_path = "res://data/countries/GER/directives/trees/GER_speer_post_cw_tree.json"
 		TAG_BORMANN:
 			post_cw_tree_id = "GER_bormann_post_cw_tree"
-			post_cw_path = "res://data/countries/GER/directives/tree_GER_bormann_post_cw_tree.json"
+			post_cw_path = "res://data/countries/GER/directives/trees/GER_bormann_post_cw_tree.json"
 		TAG_GOERING:
 			post_cw_tree_id = "GER_Germany_War_Tree"
-			post_cw_path = "res://data/countries/GER/directives/tree_GER_Germany_War_Tree.json"
+			post_cw_path = "res://data/countries/GER/directives/trees/GER_Germany_War_Tree.json"
 		TAG_HEYDRICH:
 			post_cw_tree_id = "GER_heydrich_successor"
-			post_cw_path = "res://data/countries/GER/directives/tree_GER_heydrich_successor.json"
+			post_cw_path = "res://data/countries/GER/directives/trees/GER_heydrich_successor.json"
 		_:
 			post_cw_tree_id = "GER_bormann_post_cw_tree"
-			post_cw_path = "res://data/countries/GER/directives/tree_GER_bormann_post_cw_tree.json"
+			post_cw_path = "res://data/countries/GER/directives/trees/GER_bormann_post_cw_tree.json"
 
 	# 2. Очистка фронтов гражданской войны
 	MilitaryEngine.clear_frontlines()
@@ -831,6 +831,8 @@ func _conclude_civil_war(victor_tag: String) -> void:
 			victor_state.set_flag("gcw_victor", victor_tag)
 			victor_state.set_flag("post_cw_phase", true)
 			victor_state.set_flag("current_focus_tree", post_cw_tree_id)
+			victor_state.story_flags.erase("gcw_active")
+			victor_state.story_flags.erase("gcw_erupted")
 			victor_state.active_directives.clear()
 
 		# Если игрок играл за претендента или Германию, объединяем тег в GER
@@ -845,6 +847,8 @@ func _conclude_civil_war(victor_tag: String) -> void:
 			player_state_ref.set_flag("gcw_victor", victor_tag)
 			player_state_ref.set_flag("post_cw_phase", true)
 			player_state_ref.set_flag("current_focus_tree", post_cw_tree_id)
+			player_state_ref.story_flags.erase("gcw_active")
+			player_state_ref.story_flags.erase("gcw_erupted")
 			player_state_ref.active_directives.clear()
 			turn_manager_ref.countries_world_state["GER"] = player_state_ref
 

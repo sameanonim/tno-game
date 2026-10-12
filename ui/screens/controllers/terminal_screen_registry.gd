@@ -15,14 +15,14 @@ extends RefCounted
 ## ==============================================================================
 
 
-static func _log(terminal: TerminalMain, msg: String) -> void:
+static func _log(terminal: Control, msg: String) -> void:
 	if terminal != null and terminal.label_log != null:
 		terminal.label_log.text = msg
 
 
 """Инициализирует и привязывает все национальные терминалы и панели механик к главному терминалу.
 """
-static func setup_national_screens(terminal: TerminalMain) -> void:
+static func setup_national_screens(terminal: Control) -> void:
 	if terminal == null or terminal.turn_manager == null or terminal.turn_manager.player_state == null:
 		return
 
@@ -151,7 +151,7 @@ static func setup_national_screens(terminal: TerminalMain) -> void:
 """Создает и стилизует контекстные кнопки национальных механик в заголовке карты.
 """
 static func _setup_map_hud_buttons(
-	terminal: TerminalMain,
+	terminal: Control,
 	is_warlord: bool,
 	is_german: bool,
 	is_usa: bool,
@@ -273,7 +273,7 @@ static func _setup_map_hud_buttons(
 
 """Обновляет заголовки вкладок и локализованный текст кнопок интерфейса терминала.
 """
-static func update_localized_ui(terminal: TerminalMain) -> void:
+static func update_localized_ui(terminal: Control) -> void:
 	if terminal == null:
 		return
 	var tc: TabContainer = terminal.tab_container
@@ -358,7 +358,7 @@ static func update_localized_ui(terminal: TerminalMain) -> void:
 
 """Инициализирует первичное состояние глобальной карты, сессии и театров.
 """
-static func setup_initial_game_state(terminal: TerminalMain) -> void:
+static func setup_initial_game_state(terminal: Control) -> void:
 	if terminal == null or terminal.turn_manager == null:
 		return
 

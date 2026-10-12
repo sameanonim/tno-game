@@ -109,20 +109,194 @@ static func resolve_russia_tree(eval_state: CountryState, trees_manifest: Dictio
 	if eval_state == null:
 		return ""
 
+	var c_tag: String = country_tag.to_upper().strip_edges()
+	if c_tag.is_empty():
+		c_tag = eval_state.country_tag.to_upper().strip_edges()
+	var l_name: String = eval_state.leader_name.to_lower()
+	var ideol: String = eval_state.ruling_ideology.to_lower()
+
+	# 1. Специфические ветвления для основных варлордов
+	match c_tag:
+		"WRS":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if l_name.contains("tukhachevsky") or l_name.contains("тухачевский") or eval_state.has_flag("wrs_tukhachevsky_chosen"):
+					return "WRS_tukhachevsky_superregional"
+				return "WRS_zhukov_superregional"
+			elif eval_state.has_flag("is_regional_unifier"):
+				if l_name.contains("tukhachevsky") or l_name.contains("тухачевский") or eval_state.has_flag("wrs_tukhachevsky_chosen"):
+					return "WRS_tukhachevsky_regional"
+				return "WRS_zhukov_regional"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+				if l_name.contains("tukhachevsky") or l_name.contains("тухачевский") or eval_state.has_flag("wrs_tukhachevsky_chosen"):
+					return "WRS_tukhachevsky_warlord"
+				return "WRS_zhukov_warlord"
+			elif eval_state.has_flag("bombings_ended"):
+				return "WRS_bombings_end"
+
+		"OMS":
+			if eval_state.has_flag("is_superregional_unifier"):
+				return "OMS_superregional_tree"
+			elif eval_state.has_flag("is_regional_unifier"):
+				return "OMS_regional_tree"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("bombings_ended"):
+				return "OMS_post_bombing_tree"
+			elif eval_state.has_flag("karbyshev_deceased") or l_name.contains("yazov") or l_name.contains("язов"):
+				return "OMS_initial_yazov_tree"
+
+		"SAM":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if l_name.contains("bunyachenko") or l_name.contains("буняченко") or eval_state.has_flag("sam_bunyachenko_leader"):
+					return "SAM_Superegional_Tree_Bunyachenko"
+				elif l_name.contains("oktan") or l_name.contains("октан") or l_name.contains("artsezo"):
+					return "SAM_Superegional_Tree_Artsezo"
+				return "SAM_Superegional_Tree_Zykov"
+			elif eval_state.has_flag("is_regional_unifier"):
+				if l_name.contains("bunyachenko") or l_name.contains("буняченко") or eval_state.has_flag("sam_bunyachenko_leader"):
+					return "SAM_Regional_Tree_Bunyachenko"
+				elif l_name.contains("oktan") or l_name.contains("октан") or l_name.contains("artsezo"):
+					return "SAM_Regional_Tree_Artsezo"
+				return "SAM_Regional_Tree_Zykov"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+				if l_name.contains("bunyachenko") or l_name.contains("буняченко"):
+					return "SAM_Smuta_Bunyachenko"
+				elif l_name.contains("oktan") or l_name.contains("artsezo"):
+					return "SAM_Smuta_Artsezo"
+				return "SAM_Smuta_Zykov"
+
+		"VYT":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if ideol.contains("liberal") or eval_state.has_flag("vyt_kadets"):
+					return "VYT_superregional_kadet_tree"
+				elif ideol.contains("solidarist") or eval_state.has_flag("vyt_solidarists"):
+					return "VYT_superregional_solidarist_tree"
+				return "VYT_superregional_shulgin_tree"
+			elif eval_state.has_flag("is_regional_unifier"):
+				return "VYT_regional_trees"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+				return "VYT_smuta_tree"
+			elif eval_state.has_flag("bombings_ended"):
+				return "VYT_post_bombing_tree"
+
+		"SVR":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if l_name.contains("yeltsin") or l_name.contains("ельцин"):
+					return "SVR_superregional_tree_yeltsin"
+				return "SVR_superregional_tree_batov"
+			elif eval_state.has_flag("is_regional_unifier"):
+				if l_name.contains("yeltsin") or l_name.contains("ельцин"):
+					return "SVR_regional_trees_yeltsin"
+				return "SVR_regional_trees_batov"
+
+		"TOM":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if eval_state.has_flag("salon_modernist"):
+					return "TOM_modernist_tree_superregional"
+				elif eval_state.has_flag("salon_decembrist"):
+					return "TOM_decembrist_tree_superregional"
+				elif eval_state.has_flag("salon_bastillard"):
+					return "TOM_bastillard_tree_superregional"
+				return "TOM_humanist_tree_superregional"
+			elif eval_state.has_flag("is_regional_unifier"):
+				if eval_state.has_flag("salon_modernist"):
+					return "TOM_modernist_tree_regional"
+				elif eval_state.has_flag("salon_decembrist"):
+					return "TOM_decembrist_tree_regional"
+				elif eval_state.has_flag("salon_bastillard"):
+					return "TOM_bastillard_tree_regional"
+				return "TOM_humanist_tree_regional"
+
+		"NOV":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if l_name.contains("shukshin") or l_name.contains("шукшин"):
+					return "NOV_novosibirsk_superregional_shukshin"
+				return "NOV_novosibirsk_superregional_pokryshkin"
+			elif eval_state.has_flag("is_regional_unifier"):
+				return "NOV_novosibirsk_regional"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+				return "NOV_novosibirsk_expansion"
+
+		"IRK":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if l_name.contains("bessonov") or l_name.contains("бессонов"):
+					return "IRK_state_superregional"
+				return "IRK_party_superregional"
+			elif eval_state.has_flag("is_regional_unifier"):
+				return "IRK_regional"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+				return "IRK_smuta"
+
+		"BRY":
+			if eval_state.has_flag("is_regional_unifier") or eval_state.has_flag("is_superregional_unifier"):
+				return "BRY_postwar"
+
+		"MAG":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if l_name.contains("werbell") or l_name.contains("вербелл"):
+					return "MAG_superregional_west_alaska_tree"
+				elif l_name.contains("petlin") or l_name.contains("петлин"):
+					return "MAG_superregional_petlin_tree"
+				return "MAG_superregional_matkovsky_tree"
+			elif eval_state.has_flag("is_regional_unifier"):
+				if l_name.contains("werbell") or l_name.contains("вербелл"):
+					return "MAG_west_alaska_regional_trees"
+				return "MAG_matkovsky_regional_tree"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+				return "MAG_siberia"
+
+		"CHT":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if l_name.contains("shepunov") or l_name.contains("шепунов"):
+					return "CHT_chita_stratocracy_superregional"
+				return "CHT_chita_imperial_superregional"
+			elif eval_state.has_flag("is_regional_unifier"):
+				return "CHT_chita_regional"
+
+		"AMR":
+			if eval_state.has_flag("is_superregional_unifier"):
+				return "AMR_superregional"
+			elif eval_state.has_flag("is_regional_unifier"):
+				return "AMR_regional"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+				return "AMR_expansion"
+
+		"KEM":
+			if eval_state.has_flag("is_superregional_unifier"):
+				if l_name.contains("lydia") or l_name.contains("лидия"):
+					return "KEM_superregional_lydia"
+				return "KEM_superregional_yuriy"
+			elif eval_state.has_flag("is_regional_unifier"):
+				return "KEM_regional"
+			elif eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+				return "KEM_expansion"
+
+		"TYM":
+			if eval_state.has_flag("is_superregional_unifier") or l_name.contains("khrushchev") or l_name.contains("хрущев"):
+				return "TYM_superregional_khrushchev"
+			return "TYM_superregional_kaganovich"
+
+		"ZLT":
+			return "ZLT_tree"
+
+	# 2. Общий категориальный резольвинг стадий для любых других варлордов
 	if eval_state.has_flag("is_national_unifier") or eval_state.has_flag("2wrw_active"):
-		var final_tree: String = get_best_candidate_for_category(eval_state, "FINAL", trees_manifest, country_tag)
+		var final_tree: String = get_best_candidate_for_category(eval_state, "FINAL", trees_manifest, c_tag)
 		if not final_tree.is_empty():
 			return final_tree
 
 	if eval_state.has_flag("is_superregional_unifier"):
-		var super_tree: String = get_best_candidate_for_category(eval_state, "SUPERREGIONAL", trees_manifest, country_tag)
+		var super_tree: String = get_best_candidate_for_category(eval_state, "SUPERREGIONAL", trees_manifest, c_tag)
 		if not super_tree.is_empty():
 			return super_tree
 
 	if eval_state.has_flag("is_regional_unifier"):
-		var reg_tree: String = get_best_candidate_for_category(eval_state, "REGIONAL", trees_manifest, country_tag)
+		var reg_tree: String = get_best_candidate_for_category(eval_state, "REGIONAL", trees_manifest, c_tag)
 		if not reg_tree.is_empty():
 			return reg_tree
+
+	if eval_state.has_flag("smuta_active") or eval_state.has_flag("is_smuta"):
+		var smuta_tree: String = get_best_candidate_for_category(eval_state, "SMUTA", trees_manifest, c_tag)
+		if not smuta_tree.is_empty():
+			return smuta_tree
 
 	return ""
 

@@ -393,7 +393,7 @@ func _on_modal_return_to_main_menu() -> void:
 		if gs.has_method("return_to_main_menu"):
 			gs.return_to_main_menu()
 			return
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	get_tree().change_scene_to_file("res://ui/screens/main_menu.tscn")
 
 
 func _on_game_over_modal_closed() -> void:

@@ -173,7 +173,7 @@ static func resolve_military_reports(turn_manager: TurnManager, military_reports
 				turn_manager.region_conquered.emit(reg_id, n_tag, p_tag)
 				regions_captured_count += 1
 
-		if rep.get("battle_incident") != null:
+		if rep.get("battle_incident") != null and rep["battle_incident"] is GameEvent:
 			var inc: GameEvent = rep["battle_incident"]
 			turn_manager.pending_modal_events.append(inc)
 

@@ -12,14 +12,14 @@ extends RefCounted
 ## ==============================================================================
 
 
-static func _log(terminal: TerminalMain, msg: String) -> void:
+static func _log(terminal: Control, msg: String) -> void:
 	if terminal != null and terminal.label_log != null:
 		terminal.label_log.text = msg
 
 
 """Подключает всю совокупность сигналов подсистем к главному терминалу.
 """
-static func connect_all_signals(terminal: TerminalMain) -> void:
+static func connect_all_signals(terminal: Control) -> void:
 	if terminal == null or terminal.turn_manager == null:
 		return
 
@@ -67,7 +67,7 @@ static func connect_all_signals(terminal: TerminalMain) -> void:
 
 """Подключает специализированные менеджеры подсистем (Смута, ГВГ, Фокусы, События, Разведка).
 """
-static func _connect_subsystems(terminal: TerminalMain, tm: TurnManager) -> void:
+static func _connect_subsystems(terminal: Control, tm: TurnManager) -> void:
 	if tm.focus_stage_controller != null:
 		tm.focus_stage_controller.stage_transition_requested.connect(func(target_tree_id: String, reason: String):
 			_log(terminal, terminal._tr_str("LOG_STAGE_TRANSITION", {"tree": target_tree_id, "reason": reason}, "СМЕНА ЭПОХИ: Переход на стадию директив [%s] (%s)" % [target_tree_id, reason]))
@@ -157,7 +157,7 @@ static func _connect_subsystems(terminal: TerminalMain, tm: TurnManager) -> void
 
 """Подключает сигналы элементов карты, панелей директив, экономики и решений.
 """
-static func _connect_map_and_panels(terminal: TerminalMain, tm: TurnManager) -> void:
+static func _connect_map_and_panels(terminal: Control, tm: TurnManager) -> void:
 	if terminal.super_event_modal != null and not terminal.super_event_modal.option_selected.is_connected(terminal._on_super_event_closed):
 		terminal.super_event_modal.option_selected.connect(terminal._on_super_event_closed)
 
@@ -284,7 +284,7 @@ static func _connect_map_and_panels(terminal: TerminalMain, tm: TurnManager) -> 
 
 """Подключает глобальные автолоады (локализация, настройки, конфигурация).
 """
-static func _connect_autoloads(terminal: TerminalMain) -> void:
+static func _connect_autoloads(terminal: Control) -> void:
 	if terminal.has_node("/root/LocalizationManager"):
 		var loc = terminal.get_node("/root/LocalizationManager")
 		if not loc.locale_changed.is_connected(terminal._on_locale_changed):

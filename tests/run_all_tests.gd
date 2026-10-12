@@ -25,6 +25,15 @@ const TestNarrativeEvents = preload("res://tests/test_narrative_events.gd")
 const TestDecisions = preload("res://tests/test_decisions.gd")
 const TestDraggableWindow = preload("res://tests/test_draggable_window.gd")
 const TestPoliticalMapColors = preload("res://tests/test_political_map_colors.gd")
+const TestWarlordFocusTrees = preload("res://tests/test_warlord_focus_trees.gd")
+const TestPhase0Audit = preload("res://tests/test_phase0_audit.gd")
+const TestGameFlow = preload("res://tests/test_game_flow.gd")
+const TestPhase2SystemsIntegration = preload("res://tests/test_phase2_systems_integration.gd")
+const TestPhase3CountryCampaigns = preload("res://tests/test_phase3_country_campaigns.gd")
+const TestPhase31KomiCampaign = preload("res://tests/test_phase3_1_komi_campaign.gd")
+const TestPhase32GermanyCampaign = preload("res://tests/test_phase3_2_germany_campaign.gd")
+const TestPhase33UsaCampaign = preload("res://tests/test_phase3_3_usa_campaign.gd")
+
 
 func _init() -> void:
 	print("================================================================")
@@ -41,6 +50,7 @@ func _init() -> void:
 		{"name": "DirectiveResource Suite", "instance": TestDirectiveResource.new()},
 		{"name": "FocusTreeData Suite", "instance": TestFocusTreeData.new()},
 		{"name": "TNOFocusTrees Suite", "instance": TestTNOFocusTrees.new()},
+		{"name": "WarlordFocusTrees Suite", "instance": TestWarlordFocusTrees.new()},
 		{"name": "ClausewitzEffects Suite", "instance": TestClausewitzEffects.new()},
 		{"name": "NuclearDefcon Suite", "instance": TestNuclearDefcon.new()},
 		{"name": "2WRWCampaign Suite", "instance": Test2WRWCampaign.new()},
@@ -50,7 +60,14 @@ func _init() -> void:
 		{"name": "SocietalLaws Suite", "instance": TestSocietalLaws.new()},
 		{"name": "NarrativeEvents Suite", "instance": TestNarrativeEvents.new()},
 		{"name": "Decisions Suite", "instance": TestDecisions.new()},
-		{"name": "DraggableWindow & EventPopup Suite", "instance": TestDraggableWindow.new()}
+		{"name": "DraggableWindow & EventPopup Suite", "instance": TestDraggableWindow.new()},
+		{"name": "Phase0Audit Suite", "instance": TestPhase0Audit.new()},
+		{"name": "GameFlow Suite", "instance": TestGameFlow.new()},
+		{"name": "Phase2SystemsIntegration Suite", "instance": TestPhase2SystemsIntegration.new()},
+		{"name": "Phase3CountryCampaigns Suite", "instance": TestPhase3CountryCampaigns.new()},
+		{"name": "Phase3.1 Komi Campaign Suite", "instance": TestPhase31KomiCampaign.new()},
+		{"name": "Phase3.2 Germany Campaign Suite", "instance": TestPhase32GermanyCampaign.new()},
+		{"name": "Phase3.3 USA Campaign Suite", "instance": TestPhase33UsaCampaign.new()}
 	]
 	
 	var total_passed: int = 0

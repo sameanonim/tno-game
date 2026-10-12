@@ -488,6 +488,10 @@ func set_player_state(st: CountryState) -> void:
 	countries_world_state[player_state.country_tag] = player_state
 	if russian_unification_manager != null:
 		russian_unification_manager.player_tag = player_state.country_tag
+	if german_civil_war_manager != null:
+		german_civil_war_manager.setup(self, map_controller, player_state)
+	if germany_campaign_manager != null:
+		germany_campaign_manager.initialize(german_civil_war_manager)
 	if focus_stage_controller != null and directive_manager != null and event_manager != null:
 		focus_stage_controller.setup(player_state, directive_manager, self, event_manager)
 	if _decision_manager_instance != null:
@@ -506,6 +510,10 @@ func load_world_data(
 
 ## Алиас для пошагового расчета (совместимость тестов и UI)
 func process_turn() -> void:
+	end_turn()
+
+
+func advance_turn() -> void:
 	end_turn()
 
 
@@ -656,6 +664,11 @@ func end_turn() -> void:
 		italy_empire_manager.process_turn(current_turn, target_ita_state, countries_world_state)
 
 
+	# 4.6. Проверка критических условий завершения партии
+	_check_game_over_conditions()
+	if current_state == TurnState.WAITING_FOR_MODAL_EVENT:
+		return
+
 	# 5. Фаза проверки нарративных событий и кризисов
 	current_state = TurnState.CHECKING_EVENTS
 	phase_changed.emit("CHECKING_EVENTS")
@@ -788,22 +801,55 @@ func _on_us_president_elected(election_result: Dictionary) -> void:
 	var cand_str = c_id.to_upper()
 	if cand_str.contains("JOHNSON") or cand_str.contains("LBJ"):
 		target_tree = "USA_LBJ_64"
+		if target_usa != null:
+			target_usa.set_flag("president_lbj", true)
+			target_usa.set_flag("president_johnson", true)
+			target_usa.set_flag("presidential_election_winner_1964", "LBJ")
 	elif cand_str.contains("KENNEDY") or cand_str.contains("RFK"):
 		target_tree = "USA_RFK_64"
+		if target_usa != null:
+			target_usa.set_flag("president_rfk", true)
+			target_usa.set_flag("president_kennedy", true)
+			target_usa.set_flag("presidential_election_winner_1964", "RFK")
 	elif cand_str.contains("WALLACE") and not cand_str.contains("BENNETT"):
 		target_tree = "USA_WAL_64"
+		if target_usa != null:
+			target_usa.set_flag("president_wal", true)
+			target_usa.set_flag("president_wallace", true)
+			target_usa.set_flag("presidential_election_winner_1964", "WALLACE")
 	elif cand_str.contains("BENNETT"):
 		target_tree = "USA_WFB_64"
+		if target_usa != null:
+			target_usa.set_flag("president_wfb", true)
+			target_usa.set_flag("president_bennett", true)
+			target_usa.set_flag("presidential_election_winner_1964", "BENNETT")
 	elif cand_str.contains("GOLDWATER"):
 		target_tree = "USA_GLD_68"
+		if target_usa != null:
+			target_usa.set_flag("president_gld", true)
+			target_usa.set_flag("president_goldwater", true)
+			target_usa.set_flag("presidential_election_winner_1968", "GOLDWATER")
 	elif cand_str.contains("HART"):
 		target_tree = "USA_Hart"
+		if target_usa != null:
+			target_usa.set_flag("president_hart", true)
+			target_usa.set_flag("presidential_election_winner_1968", "HART")
 	elif cand_str.contains("HARRINGTON"):
 		target_tree = "USA_HAR_68"
+		if target_usa != null:
+			target_usa.set_flag("president_har", true)
+			target_usa.set_flag("president_harrington", true)
+			target_usa.set_flag("presidential_election_winner_1968", "HARRINGTON")
 	elif cand_str.contains("SMITH") or cand_str.contains("MCS"):
 		target_tree = "USA_MCS_68"
+		if target_usa != null:
+			target_usa.set_flag("president_mcs", true)
+			target_usa.set_flag("president_smith", true)
+			target_usa.set_flag("presidential_election_winner_1968", "SMITH")
 	elif cand_str.contains("LEMAY"):
 		target_tree = "USA_LEMAY"
+		if target_usa != null:
+			target_usa.set_flag("president_lemay", true)
 
 	if player_state != null and player_state.country_tag == "USA" and focus_stage_controller != null and not target_tree.is_empty():
 		print("[TurnManager] ВЫБОРЫ США: Победа [%s] -> Переключение древа директив на [%s]" % [c_name, target_tree])

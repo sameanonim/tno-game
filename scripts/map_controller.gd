@@ -364,6 +364,7 @@ func _setup_tactical_overlay() -> void:
 		country_labels_overlay.set_labels_visible(show_country_labels)
 		country_labels_overlay.set_use_russian(use_russian_country_names)
 		country_labels_overlay.set_show_state_names(show_state_labels)
+		country_labels_overlay.set_globe_parameters(globe_blend, globe_center, globe_radius, map_size)
 		if country_labels_file_path != "":
 			country_labels_overlay.load_labels_manifest(country_labels_file_path)
 		if state_labels_file_path != "":
@@ -1055,10 +1056,8 @@ func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
 		map_markers_overlay.set_zoom_level(current_zoom)
 	if country_labels_overlay != null:
 		country_labels_overlay.set_zoom_level(current_zoom)
-		if globe_blend > 0.0:
-			country_labels_overlay.modulate.a = clampf(1.0 - globe_blend * 1.2, 0.0, 1.0)
-		else:
-			country_labels_overlay.modulate.a = 1.0
+		country_labels_overlay.set_globe_parameters(globe_blend, globe_center, globe_radius, map_size)
+		country_labels_overlay.modulate.a = 1.0
 
 	var should_be_tactical = (current_zoom >= tactical_zoom_threshold)
 	if should_be_tactical != is_tactical_view_active:
@@ -1081,11 +1080,15 @@ func _update_globe_projection() -> void:
 	else:
 		globe_blend = 0.0
 	_shader_mat.set_shader_parameter("globe_blend", globe_blend)
+	_shader_mat.set_shader_parameter("zoom_level", current_zoom)
 	if map_size.y > 0:
 		var aspect = float(map_size.x) / float(map_size.y)
 		_shader_mat.set_shader_parameter("map_aspect", aspect)
 		_shader_mat.set_shader_parameter("globe_radius", globe_radius)
 		_shader_mat.set_shader_parameter("globe_center", globe_center)
+
+	if country_labels_overlay != null:
+		country_labels_overlay.set_globe_parameters(globe_blend, globe_center, globe_radius, map_size)
 
 
 ##
@@ -1116,34 +1119,8 @@ func _update_camera_limits() -> void:
 	MapNavigationControllerScript.update_camera_limits(self, base_position, map_size, target_camera)
 
 
-func _adjust_zoom(factor: float, pivot_screen_pos: Vector2) -> void:
-	current_zoom = MapNavigationControllerScript.adjust_zoom(
-		self,
-		current_zoom,
-		factor,
-		min_zoom,
-		max_zoom,
-		pivot_screen_pos,
-		base_position,
-		map_size,
-		target_camera
-	)
-	_update_globe_view_state()
-
-
 func _update_globe_view_state() -> void:
-	if not enable_globe_view:
-		globe_blend = 0.0
-	else:
-		if current_zoom <= globe_zoom_threshold:
-			var range_val: float = maxf(globe_zoom_threshold - globe_full_threshold, 0.01)
-			globe_blend = clampf((globe_zoom_threshold - current_zoom) / range_val, 0.0, 1.0)
-		else:
-			globe_blend = 0.0
-
-	if _shader_mat != null:
-		_shader_mat.set_shader_parameter("globe_blend", globe_blend)
-		_shader_mat.set_shader_parameter("zoom_level", current_zoom)
+	_update_globe_projection()
 
 
 # ==============================================================================
@@ -1181,20 +1158,8 @@ func get_province_id_under_cursor() -> int:
 
 	# Обратная проекция глобуса для точного выбора провинций на сфере
 	if globe_blend > 0.01 and map_size.y > 0 and map_size.x > 0:
-		var uv = pixel_pos / Vector2(map_size)
-		var d = uv - globe_center
-		var aspect = float(map_size.x) / float(map_size.y)
-		var p = Vector2(d.x * aspect, d.y) / globe_radius
-		var r = p.length()
-		if r <= 1.0:
-			var z = sqrt(maxf(0.0, 1.0 - r * r))
-			var phi = asin(clampf(p.y, -1.0, 1.0))
-			var lambda = atan2(p.x, z)
-			var sphere_u = globe_center.x + (lambda / PI)
-			var sphere_v = 0.5 - (phi / PI)
-			var mapped_uv = uv.lerp(Vector2(sphere_u, sphere_v), globe_blend)
-			pixel_pos = mapped_uv * Vector2(map_size)
-		elif globe_blend > 0.35:
+		pixel_pos = GlobeProjectionMath.project_globe_to_map(pixel_pos, map_size, globe_blend, globe_center, globe_radius)
+		if pixel_pos.x < 0.0 or pixel_pos.y < 0.0:
 			return 0 # Курсор находится в космосе за границами планеты
 
 	var pixel = Vector2i(int(floor(pixel_pos.x)), int(floor(pixel_pos.y)))
