@@ -562,6 +562,12 @@ func execute_decision(decision_id: String) -> bool:
 	var eff: Dictionary = dec.get("effects", {})
 	_apply_effects(eff)
 
+	# Делегирование в уникальные механики варлордов (включая ЗРРФ)
+	if turn_manager != null and turn_manager.russian_unification_manager != null:
+		var rum = turn_manager.russian_unification_manager
+		if rum.warlord_mechanics != null and rum.warlord_mechanics.wrrf_manager != null:
+			rum.warlord_mechanics.wrrf_manager.execute_decision_action(decision_id)
+
 	decision_executed.emit(decision_id, eff)
 	decisions_updated.emit()
 	return true

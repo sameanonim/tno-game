@@ -28,6 +28,7 @@ signal mechanic_action_executed(action_id: String, details: Dictionary)
 const WARLORD_TABORITSKY = "KOM"
 const WARLORD_YAZOV = "OMS"
 const WARLORD_SABLIN = "BRY"
+const WARLORD_WRRF = "WRS"
 
 # ==============================================================================
 # СОСТОЯНИЕ: СЕРГЕЙ ТАБОРИЦКИЙ (ЧАСЫ РЕГЕНТА)
@@ -57,6 +58,11 @@ var sablin_idealism: float = 68.0 # Стартовый идеализм
 var sablin_soviet_democracy: float = 75.0 # 0..100%
 var sablin_revolutionary_enthusiasm: float = 80.0 # 0..100%
 
+# ==============================================================================
+# СОСТОЯНИЕ: ЗРРФ / ЗАПАДНОРУССКИЙ РЕВОЛЮЦИОННЫЙ ФРОНТ (ЖУКОВ / ТУХАЧЕВСКИЙ)
+# ==============================================================================
+var wrrf_manager: WRRFMechanicsManager = WRRFMechanicsManager.new()
+
 
 # ==============================================================================
 # ПРОВЕРКА АКТИВНОСТИ МЕХАНИК
@@ -73,6 +79,8 @@ static func get_active_mechanic_type(tag: String, country_state: CountryState = 
 		return "YAZOV"
 	elif clean_tag == WARLORD_SABLIN or leader.contains("sablin") or leader.contains("саблин"):
 		return "SABLIN"
+	elif clean_tag == WARLORD_WRRF or clean_tag == "WRRF" or leader.contains("zhukov") or leader.contains("жуков") or leader.contains("tukha") or leader.contains("тухач") or leader.contains("yegorov") or leader.contains("егоров") or leader.contains("voroshilov") or leader.contains("ворошил"):
+		return "WRRF"
 	return "GENERIC_WARLORD"
 
 
@@ -502,6 +510,11 @@ func process_turn(tag: String, country_state: CountryState) -> Dictionary:
 					country_state.legitimacy = clampf(country_state.legitimacy + 0.8, 0.0, 100.0)
 			report["idealism"] = sablin_idealism
 			report["democracy"] = sablin_soviet_democracy
+		"WRRF":
+			if wrrf_manager.player_state == null and country_state != null:
+				wrrf_manager.setup(country_state)
+			var wrrf_rep: Dictionary = wrrf_manager.process_turn(1)
+			report.merge(wrrf_rep)
 			
 	return report
 
@@ -530,7 +543,8 @@ func to_dict() -> Dictionary:
 			"idealism": sablin_idealism,
 			"democracy": sablin_soviet_democracy,
 			"enthusiasm": sablin_revolutionary_enthusiasm
-		}
+		},
+		"wrrf": wrrf_manager.to_dict()
 	}
 
 
@@ -556,3 +570,6 @@ func from_dict(data: Dictionary) -> void:
 		sablin_idealism = float(s.get("idealism", 68.0))
 		sablin_soviet_democracy = float(s.get("democracy", 75.0))
 		sablin_revolutionary_enthusiasm = float(s.get("enthusiasm", 80.0))
+
+	if data.has("wrrf") and data["wrrf"] is Dictionary:
+		wrrf_manager.from_dict(data["wrrf"])

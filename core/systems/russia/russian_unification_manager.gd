@@ -44,11 +44,13 @@ signal second_west_russian_war_progress(war_score: float, moscow_liberated: bool
 signal second_west_russian_war_concluded(victory: bool, outcome: String)
 signal german_nuclear_ultimatum_received(terms: Dictionary)
 
-# Сигналы уникальных механик варлордов (Таборицкий, Язов, Саблин)
+# Сигналы уникальных механик варлордов (Таборицкий, Язов, Саблин, ЗРРФ)
 signal midnight_clock_advanced(new_minutes: int, formatted_time: String)
 signal midnight_struck()
 signal great_trial_prepared(readiness_pct: float)
 signal sablin_balance_shifted(new_idealism: float)
+signal wrrf_power_struggle_updated(zhukov_pct: float, tukha_pct: float)
+signal wrrf_successor_chosen(successor_name: String, leader_id: String)
 
 # ==============================================================================
 # ДЕТЕРМИНИРОВАННЫЙ ГЕНЕРАТОР
@@ -151,6 +153,9 @@ func _init() -> void:
 	)
 	warlord_mechanics.great_trial_prepared.connect(func(r): great_trial_prepared.emit(r))
 	warlord_mechanics.sablin_balance_shifted.connect(func(i): sablin_balance_shifted.emit(i))
+	if warlord_mechanics.wrrf_manager != null:
+		warlord_mechanics.wrrf_manager.power_struggle_updated.connect(func(z, t): wrrf_power_struggle_updated.emit(z, t))
+		warlord_mechanics.wrrf_manager.successor_chosen.connect(func(name, id): wrrf_successor_chosen.emit(name, id))
 
 
 # ==============================================================================

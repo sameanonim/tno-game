@@ -7,6 +7,8 @@ extends SceneTree
 ##   godot --headless --path . -s "res://tests/run_all_tests.gd"
 ##
 const TestEconomyEngine = preload("res://tests/test_economy_engine.gd")
+const TestMacroeconomicFormulaEngine = preload("res://tests/test_macroeconomic_formula_engine.gd")
+const TestEconomyTierStrategies = preload("res://tests/test_economy_tier_strategies.gd")
 const TestCountryState = preload("res://tests/test_country_state.gd")
 const TestTurnManager = preload("res://tests/test_turn_manager.gd")
 const TestContentLoader = preload("res://tests/test_content_loader.gd")
@@ -33,6 +35,7 @@ const TestPhase3CountryCampaigns = preload("res://tests/test_phase3_country_camp
 const TestPhase31KomiCampaign = preload("res://tests/test_phase3_1_komi_campaign.gd")
 const TestPhase32GermanyCampaign = preload("res://tests/test_phase3_2_germany_campaign.gd")
 const TestPhase33UsaCampaign = preload("res://tests/test_phase3_3_usa_campaign.gd")
+const TestPhase34WRRFCampaign = preload("res://tests/test_phase3_4_wrrf_campaign.gd")
 
 
 func _init() -> void:
@@ -42,6 +45,8 @@ func _init() -> void:
 	
 	var suites: Array = [
 		{"name": "EconomyEngine Suite", "instance": TestEconomyEngine.new()},
+		{"name": "MacroeconomicFormulaEngine Suite", "instance": TestMacroeconomicFormulaEngine.new()},
+		{"name": "EconomyTierStrategies Suite", "instance": TestEconomyTierStrategies.new()},
 		{"name": "CountryState Suite", "instance": TestCountryState.new()},
 		{"name": "PoliticalMapColors Suite", "instance": TestPoliticalMapColors.new()},
 		{"name": "TurnManager Suite", "instance": TestTurnManager.new()},
@@ -67,7 +72,8 @@ func _init() -> void:
 		{"name": "Phase3CountryCampaigns Suite", "instance": TestPhase3CountryCampaigns.new()},
 		{"name": "Phase3.1 Komi Campaign Suite", "instance": TestPhase31KomiCampaign.new()},
 		{"name": "Phase3.2 Germany Campaign Suite", "instance": TestPhase32GermanyCampaign.new()},
-		{"name": "Phase3.3 USA Campaign Suite", "instance": TestPhase33UsaCampaign.new()}
+		{"name": "Phase3.3 USA Campaign Suite", "instance": TestPhase33UsaCampaign.new()},
+		{"name": "Phase3.4 WRRF Campaign Suite", "instance": TestPhase34WRRFCampaign.new()}
 	]
 	
 	var total_passed: int = 0
